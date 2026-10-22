@@ -70,12 +70,12 @@ function MenuWorkspaceItemForm({adapter,item,fixed,disabled,onCommit,photo,onDel
    <div className="mw-actions"><Btn kind="ghost" size="sm" aria-expanded={gallery} onClick={()=>setGallery(x=>!x)}>{gallery?'Chiudi galleria':'Scegli dalla galleria'}</Btn></div>
    {gallery&&window.MenuWorkspaceGallery&&<window.MenuWorkspaceGallery onPending={()=>{}} currentUrl={v.imageUrl} adapter={adapter} onPick={asset=>{set('imageUrl',asset.url);setGallery(false);}}/>}</section>}
   {window.MenuWorkspaceSales&&<window.MenuWorkspaceSales item={v} fixed={fixed} disabled={disabled} onChange={(key,value)=>set(key,value)}/>}
-  <fieldset className="mw-ed-visibility"><legend>Visibilità</legend>
-   <label className="mw-check"><input type="checkbox" checked={!!v.hidden} disabled={disabled} onChange={e=>set('hidden',e.target.checked)}/>Nascosto ai clienti</label>
+  {/* 22/10 sera: un piatto non si nasconde più (o c'è, o si elimina). Resta solo la disponibilità del giorno. */}
+  <fieldset className="mw-ed-visibility"><legend>Disponibilità</legend>
    <label className="mw-check"><input type="checkbox" checked={v.available===false} disabled={disabled} onChange={e=>set('available',!e.target.checked)}/>Esaurito</label>
   </fieldset>
   <details className="mw-inspector-group"><summary>Allergeni</summary><MenuWorkspaceCatalogs only="allergens" adapter={adapter} item={v} onChange={(key,value)=>set(key,value)}/></details>
-  <details className="mw-daily-advanced"><summary>Avanzate</summary>
+  <details className="mw-daily-advanced"><summary>Altre opzioni</summary>
    <MenuWorkspaceSchema fields={advanced} value={v} onChange={next=>buf.change(next)}/>
    <MenuWorkspaceVariants variants={v.variants||[]} onChange={variants=>set('variants',variants)}/>
    <MenuWorkspaceSchedule value={v.schedule} onChange={s=>set('schedule',s)}/>
@@ -85,11 +85,14 @@ function MenuWorkspaceItemForm({adapter,item,fixed,disabled,onCommit,photo,onDel
 }
 /* Menu, Sottomenu, Sezione: nome, visibile/nascosto, Elimina (D8). Il Menu ha anche Alla carta / Prezzo fisso col pannello esistente. */
 function MenuEditorLevelForm({kind,entity,menu,disabled,onCommit,onDelete,onFixedMutate,label}){
- const keys=kind==='menu'?['name','active']:['name','active'];
+ const keys=kind==='menu'?['name','description','type','active']:['name','description','active'];
  const buf=MW_USE_BUFFER(entity,keys,onCommit),v=buf.value;
  const fixed=kind==='menu'&&menu?.pricing==='fisso';
  return <div className="mw-ed-form" {...buf.bind}>
   <MenuWorkspaceField label={'Nome '+(kind==='menu'?'del menu':kind==='root'?'del sottomenu':'della sezione')} value={v.name} onChange={name=>buf.change({name})}/>
+  {/* 22/10 sera: tolta «Avanzate», la descrizione (prima solo lì) sta nella matita. */}
+  <MenuWorkspaceField label={'Descrizione '+(kind==='menu'?'del menu':kind==='root'?'del sottomenu':'della sezione')} value={v.description||''} onChange={description=>buf.change({description:description||null})}/>
+  {kind==='menu'&&<label className="mw-field"><span>Tipo di menu</span><select value={v.type||'main'} disabled={disabled} onChange={e=>buf.change({type:e.target.value})}>{[['main','Principale'],['lunch','Pranzo'],['dinner','Cena'],['seasonal','Stagionale'],['event','Evento'],['drinks','Bevande']].map(([t,l])=><option key={t} value={t}>{l}</option>)}</select></label>}
   <label className="mw-check mw-ed-toggle"><input type="checkbox" role="switch" checked={v.active!==false} disabled={disabled} onChange={e=>buf.change({active:e.target.checked})}/>{v.active!==false?'Visibile ai clienti':'Nascosto ai clienti'}</label>
   {kind==='menu'&&!fixed&&window.MenuPricingChoice&&<window.MenuPricingChoice value={menu.pricing} disabled={disabled} showNote={false} onChange={mode=>onFixedMutate(d=>window.TakoMenuFixed.setPricing(d.menus.find(m=>m.id===menu.id),mode))}/>}
   {fixed&&window.MenuFixedPricePanel&&<window.MenuFixedPricePanel menu={menu} mutate={onFixedMutate} disabled={disabled} onPreview={()=>{}}/>}

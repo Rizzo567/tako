@@ -148,3 +148,18 @@
 }
 /* Desktop: la testata di Avanzate ha la stessa altezza di quella dell'editor (pulsanti 36 px): la riga sotto non si sposta. */
 .mw-ed-head.mw-legacy-head>button{flex:none!important;width:auto!important;min-width:0!important;min-height:36px!important;height:36px;padding:0 16px!important;border-radius:var(--r-pill,999px)!important;font-size:14px!important;white-space:nowrap}
+/* 22/10 sera: lente e «+» nella testata, a sinistra di Pubblica (telefono: riga del logo; desktop: in alto a destra). Icone 36 px. */
+.mw-hdr-tools{display:flex;align-items:center;gap:6px;flex:none}
+.mw-hdr-tools>button{display:grid;place-items:center;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;border:1px solid var(--hairline);border-radius:var(--r-pill,999px);background:var(--raised,#fff);color:var(--ink);line-height:1;cursor:pointer;transition:background-color 140ms ease,transform 90ms ease}
+.mw-hdr-tools>button[aria-expanded=true]{background:var(--sunken,#f5f5f5)}
+.mw-hdr-tools>button:active{transform:scale(.96)}
+.mw-hdr-tools>button:disabled{opacity:.45;cursor:default}
+.mw-hdr-tools>button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mw-hdr-tools>button svg{width:17px;height:17px;display:block}
+.mobile-header-slot .mw-ed-head{gap:6px}
+.mobile-header-slot .mw-ed-head>button.mw-ed-publish-btn{padding:0 14px!important}
+/* La scritta Takomenu si stringe (proporzioni intatte) per lasciare posto a lente, «+» e Pubblica. */
+.mobile-header-brand{min-width:0}
+/* Riga sotto: solo Menu ▾ e Preset ▾; il nome del Menu si legge intero. */
+.mw-ed-grid .mw-studio-toolbuttons:empty{display:none}
+@media(min-width:900px){.mw-ed-grid .mw-universal-search:not(.is-searching){flex:0 1 280px;width:280px}}

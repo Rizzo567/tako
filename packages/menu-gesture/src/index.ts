@@ -14,6 +14,8 @@ export type GestureOptions = {
   restoreDomOnDrop?: boolean
   /** Diagnosi (Takomenu 22/10, `?gesturedebug=1`): stato della macchina del gesto e motivo di ogni annullo. Solo lettura. */
   debug?: (state: string, detail: string) => void
+  /** Takomenu 22/10 sera: tipi il cui elemento sollevato diventa una lastra di vetro (Liquid Glass come la barra in basso), 4 angoli tondi. */
+  glass?: (kind: string) => boolean
 }
 
 type Kind = ReorderDrop['kind']
@@ -190,6 +192,15 @@ export function createMenuGesture(opts:GestureOptions): { enterEditMode():void; 
     }
     ghost.setAttribute('data-menu-gesture-ghost',token);ghost.setAttribute('aria-hidden','true');ghost.setAttribute('inert','')
     Object.assign(ghost.style,{position:'fixed',left:'0',top:'0',margin:'0',width:item.box.width+'px',height:item.box.height+'px',minWidth:'0',maxWidth:'none',boxSizing:'border-box',transformOrigin:'50% 50%',visibility:'visible',willChange:'transform',pointerEvents:'none',boxShadow:'0 14px 30px rgba(0,0,0,.16)'})
+    if(opts.glass?.(item.kind)){
+      // Vetro: la lastra sborda di 8 px per lato (crescita ridotta: resta dentro lo schermo con i 4 angoli visibili) (il testo resta dov'era), sfondo bianco traslucido sfocato, riflesso sul bordo alto.
+      // --tako-edit-inv: su telefono l'iframe è rimpicciolito (~0,65): raggio e sfocatura restano a misura reale (20 px, 22 px).
+      const pad=(v:string)=>(parseFloat(v)||0)+7+'px',inv='var(--tako-edit-inv, 1)',blur=`blur(calc(22px * ${inv})) saturate(180%)`
+      Object.assign(ghost.style,{left:'-8px',width:item.box.width+16+'px',paddingLeft:pad(ghost.style.paddingLeft),paddingRight:pad(ghost.style.paddingRight),borderRadius:`calc(20px * ${inv})`,overflow:'hidden',
+        background:'linear-gradient(125deg,rgba(255,255,255,.72),rgba(247,248,250,.5) 50%,rgba(255,255,255,.74))',border:'1px solid rgba(255,255,255,.86)',
+        boxShadow:'inset 0 1px 0 #fff,inset 0 -1px 0 rgba(255,255,255,.44),0 0 0 .5px rgba(10,10,10,.07),0 18px 40px rgba(10,10,10,.16),0 4px 12px rgba(10,10,10,.07)'})
+      ghost.style.setProperty('backdrop-filter',blur);ghost.style.setProperty('-webkit-backdrop-filter',blur);ghost.setAttribute('data-gesture-glass','')
+    }
     ;(doc.body||root).append(ghost);return ghost
   }
   function hide(i:Item){css(i.el,i.saved,'opacity','0')}
@@ -207,7 +218,7 @@ export function createMenuGesture(opts:GestureOptions): { enterEditMode():void; 
     if(index<0||!i.el.parentNode)return
     mode(true)
     const ghost=clone(i)
-    drag={item:i,id:pointerId,touchId,keyboard,pointerType,fromGroup:i.group,fromIndex:index,parent:i.el.parentNode,next:i.el.nextSibling,originalGroup:i.el.getAttribute('data-edit-group')||i.group,group:i.group,index,anchorX:x-i.box.left,anchorY:y-i.box.top,x,y,lastX:x,lastY:y,ghost,scale:reduced?liftScale(i.box.width):1,scaleV:0,w:i.box.width,h:i.box.height,lift:liftScale(i.box.width)}
+    drag={item:i,id:pointerId,touchId,keyboard,pointerType,fromGroup:i.group,fromIndex:index,parent:i.el.parentNode,next:i.el.nextSibling,originalGroup:i.el.getAttribute('data-edit-group')||i.group,group:i.group,index,anchorX:x-i.box.left,anchorY:y-i.box.top,x,y,lastX:x,lastY:y,ghost,scale:reduced?liftScale(i.box.width):1,scaleV:0,w:i.box.width,h:i.box.height,lift:opts.glass?.(i.kind)?Math.min(liftScale(i.box.width),1+8/Math.max(1,i.box.width)):liftScale(i.box.width)}
     hide(i);css(root,rootSaved,'user-select','none');css(root,rootSaved,'-webkit-user-select','none')
     if(pointerId!==null)try{root.setPointerCapture(pointerId)}catch{/* pointer may have ended */}
     if(reduced||keyboard)ghost.style.outline='2px solid #444'

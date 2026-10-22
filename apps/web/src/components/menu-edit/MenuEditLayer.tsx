@@ -25,6 +25,9 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
   const [mode, setMode] = useState(false)
   const docRef = useRef(doc), menuRef = useRef(menuId), selRef = useRef<EditSelection>(null), modeRef = useRef(false), seqRef = useRef(0)
   const gestureRef = useRef<MenuGesture | null>(null), frameRef = useRef<HTMLDivElement>(null), pencilRef = useRef<HTMLButtonElement>(null), moveRef = useRef<HTMLButtonElement>(null)
+  // 22/10 sera: il tocco che seleziona fa comparire «Sposta»/«Modifica» proprio sotto il dito; il click di compatibilità che segue il
+  // touchend li premeva da solo (tremolio senza volerlo). Per un attimo dopo la comparsa i due pulsanti ignorano il click.
+  const shownAt = useRef(0), fresh = () => performance.now() - shownAt.current < 350
   const lastSpa = useRef<{ selection: EditSelection; editing: boolean } | null>(null), pendingFlash = useRef<string[]>([]), flashRef = useRef<() => void>(() => {})
   docRef.current = doc; menuRef.current = menuId; selRef.current = selection; modeRef.current = mode
 
@@ -55,7 +58,7 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     const debug = gestureDebugEnabled() ? createGestureDebugOverlay(document) : null
     root.style.setProperty('--edit-fast', MENU_MOTION.durationMs.fast + 'ms'); root.style.setProperty('--edit-micro', MENU_MOTION.durationMs.micro + 'ms'); root.style.setProperty('--edit-data', MENU_MOTION.durationMs.data + 'ms')
     const gesture = createMenuGesture({
-      root, itemSelector: '[data-edit-id]', reducedMotion: reduced(), restoreDomOnDrop: true,
+      root, itemSelector: '[data-edit-id]', reducedMotion: reduced(), restoreDomOnDrop: true, glass: kind => kind === 'dish',
       ...(debug ? { debug: (s: string, d: string) => debug.state(s, d) } : {}),
       canDrop: (item, toGroup) => canDropInto(item.kind, toGroup, menuRef.current),
       onTap: id => { const el = root.querySelector<HTMLElement>(`[data-edit-id="${CSS.escape(id)}"]`); if (el) select(selectionFromAttributes({ id, kind: el.getAttribute('data-edit-kind') })) },
@@ -130,6 +133,7 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     const frameEl = frameRef.current, pencil = pencilRef.current, move = moveRef.current
     if (!root || !frameEl || !pencil || !move) return
     if (!selection || mode) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); move.classList.add('tako-edit-hidden'); return }
+    shownAt.current = performance.now()
     let raf = 0, last = '', observed: HTMLElement | null = null
     const target = () => { for (const sel of frameSelectors(selection)) for (const el of Array.from(root.querySelectorAll<HTMLElement>(sel))) { const r = el.getBoundingClientRect(); if (r.width > 0 && r.height > 0) return { el, r } } return null }
     const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(() => schedule()) : null
@@ -176,11 +180,11 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
 
   return <>
     <div ref={frameRef} aria-hidden className="tako-edit-frame tako-edit-hidden" data-edit-frame/>
-    <button ref={pencilRef} type="button" className="tako-edit-pencil tako-edit-hidden" data-edit-pencil aria-label="Modifica" onClick={() => { if (selRef.current) post(outgoing.open(selRef.current)) }}>
+    <button ref={pencilRef} type="button" className="tako-edit-pencil tako-edit-hidden" data-edit-pencil aria-label="Modifica" onClick={() => { if (fresh()) return; if (selRef.current) post(outgoing.open(selRef.current)) }}>
       <svg aria-hidden width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/><path d="m13.5 6.5 4 4" stroke="currentColor" strokeWidth="2"/></svg>
       <span>Modifica</span>
     </button>
-    <button ref={moveRef} type="button" className="tako-edit-pencil tako-edit-move tako-edit-hidden" data-edit-move data-gesture-keep aria-label="Sposta: fai tremare gli elementi per riordinarli" onClick={() => { gestureRef.current?.enterEditMode?.() }}>
+    <button ref={moveRef} type="button" className="tako-edit-pencil tako-edit-move tako-edit-hidden" data-edit-move data-gesture-keep aria-label="Sposta: fai tremare gli elementi per riordinarli" onClick={() => { if (fresh()) return; gestureRef.current?.enterEditMode?.() }}>
       <svg aria-hidden width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
       <span>Sposta</span>
     </button>

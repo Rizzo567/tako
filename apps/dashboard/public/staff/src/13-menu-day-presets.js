@@ -140,7 +140,7 @@ function MenuDayPresetChips({dp,picked,onPick}){
    <li><button type="button" className="mw-dp-chip mw-dp-chip--action" style={{'--i':m.staggerMs.maximumItems-1}} aria-current={cur==='attuale'?'true':'false'} tabIndex={tabFor('attuale')} onClick={()=>onPick('attuale')}>Menu attuale</button></li>
   </ul>
   {creating&&<MenuDayPresetCreate dp={dp} onDone={()=>setCreating(false)}/>}
-  <div className="mw-dp-tray-foot"><MenuDayPresetSwitch label="Pubblica in automatico alle 6:00 nel suo giorno" checked={!!dp.settings.autoPublish} onChange={v=>dp.setAuto(v)}/>{dp.error&&<p className="mw-dp-error" role="alert">{dp.error}</p>}</div>
+  <div className="mw-dp-tray-foot"><MenuDayPresetSwitch label="Pubblica in automatico alle 6:00 nel suo giorno" checked={!!dp.settings.autoPublish} onChange={v=>dp.setAuto(v)}/>{/* 22/10 sera: tolta «Avanzate» (Impostazioni menu), spegnere i preset si fa da qui. */}<MenuDayPresetSwitch label="Preset attivi (spegnendo torni al menu unico)" checked={true} disabled={!!dp.pending} onChange={v=>{if(!v)dp.setEnabled(false);}}/>{dp.error&&<p className="mw-dp-error" role="alert">{dp.error}</p>}</div>
  </>;
 }
 function MenuDayPresetCreate({dp,onDone}){

@@ -1,0 +1,539 @@
+{
+ "fails": 0,
+ "results": [
+  {
+   "name": "390 testata: lente e «+» (36 px) a sinistra di Pubblica",
+   "ok": true,
+   "detail": {
+    "tools": [
+     {
+      "l": 206.0625,
+      "r": 242.0625,
+      "t": 7,
+      "w": 36,
+      "h": 36,
+      "label": "Cerca nel menu"
+     },
+     {
+      "l": 248.0625,
+      "r": 284.0625,
+      "t": 7,
+      "w": 36,
+      "h": 36,
+      "label": "Aggiungi sottomenu o piatto"
+     }
+    ],
+    "pub": {
+     "l": 290.0625,
+     "r": 376,
+     "t": 5,
+     "b": 45,
+     "w": 85.9375,
+     "h": 40
+    }
+   }
+  },
+  {
+   "name": "390 testata: stessa riga del logo, nessuna sovrapposizione, dentro lo schermo",
+   "ok": true,
+   "detail": {
+    "brand": {
+     "l": 14,
+     "r": 195.0625,
+     "t": 4,
+     "b": 46,
+     "w": 181.0625,
+     "h": 42
+    },
+    "pub": {
+     "l": 290.0625,
+     "r": 376,
+     "t": 5,
+     "b": 45,
+     "w": 85.9375,
+     "h": 40
+    },
+    "width": 390
+   }
+  },
+  {
+   "name": "390 riga: Menu ▾ (+ Preset ▾) senza lente/+/Avanzate",
+   "ok": true,
+   "detail": {
+    "buttons": [
+     "Menu selezionato",
+     "Preset: non attivi"
+    ],
+    "name": "Menu del giorno",
+    "full": true
+   }
+  },
+  {
+   "name": "390 nome del Menu intero («Menu del giorno»)",
+   "ok": true,
+   "detail": {
+    "buttons": [
+     "Menu selezionato",
+     "Preset: non attivi"
+    ],
+    "name": "Menu del giorno",
+    "full": true
+   }
+  },
+  {
+   "name": "390 niente «Avanzate»/«Torna al menu» nella pagina",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 nessuno scroll orizzontale",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 prezzo fisso: riquadro opzioni + piatti/Sottomenu col DOM trascinabile (niente formula~)",
+   "ok": true,
+   "detail": {
+    "box": true,
+    "formulaIds": 0,
+    "dishes": [
+     "items:00000000-0000-4000-8000-000000000010",
+     "items:00000000-0000-4000-8000-000000000010",
+     "items:00000000-0000-4000-8000-000000000010"
+    ],
+    "pills": [
+     "Primi",
+     "Secondi e panini",
+     "Contorni e insalate"
+    ],
+    "groups": [
+     "menus",
+     "pills:00000000-0000-4000-8000-000000000001",
+     "items:00000000-0000-4000-8000-000000000010",
+     "children:00000000-0000-4000-8000-000000000010"
+    ]
+   }
+  },
+  {
+   "name": "390 piatto ancora hidden:true → attenuato, nessuna etichetta «Nascosto»",
+   "ok": true,
+   "detail": {
+    "op": "0.45",
+    "label": "",
+    "text": "Risotto ai funghi"
+   }
+  },
+  {
+   "name": "390 PREZZO FISSO: piatto trascinato (pressione lunga) → onDrop + bozza aggiornata",
+   "ok": true,
+   "detail": [
+    "Risotto ai funghi",
+    "Lasagna",
+    "Pasta al pomodoro"
+   ]
+  },
+  {
+   "name": "390 piatto sollevato = vetro: 4 angoli ~20 px reali, blur+saturate, ombra",
+   "ok": true,
+   "detail": {
+    "mid": {
+     "inside": true,
+     "glass": true,
+     "r": [
+      "30.76px",
+      "30.76px",
+      "30.76px",
+      "30.76px"
+     ],
+     "bf": "blur(33.836px) saturate(1.8)",
+     "bg": "linear-gradient(125deg, rgba(255, 255, 255, 0.72), rgba(247, 248, 250, 0.5) 50%, rgba(255, 255, 255, 0.74))",
+     "sh": "rgb(255, 255, 255) 0px 1px 0px 0px inset, rgba(255, 255, 255, 0.44) 0px -1px 0px 0px inset, rgba(10, 10, 10, 0.07) 0px 0px 0px 0.5px, rgba(10, 10, 10, 0.16) 0px 18px 40px 0px, rgba(10, 10, 10, 0.07) 0px 4px 12px 0px"
+    },
+    "inv": 1.538,
+    "want": 31
+   }
+  },
+  {
+   "name": "390 in tremolio dopo il rilascio",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 «Sposta» nel prezzo fisso → tremolio",
+   "ok": true,
+   "detail": {
+    "sel": false,
+    "y": 31
+   }
+  },
+  {
+   "name": "390 PREZZO FISSO: piatto trascinato con «Sposta» → bozza aggiornata",
+   "ok": true,
+   "detail": [
+    "Cotoletta",
+    "Pollo arrosto"
+   ]
+  },
+  {
+   "name": "390 PREZZO FISSO: Sottomenu trascinato → ordine cambiato",
+   "ok": true,
+   "detail": {
+    "order0": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ],
+    "order1": [
+     "Secondi",
+     "Contorni",
+     "Primi"
+    ]
+   }
+  },
+  {
+   "name": "390 Sottomenu sollevato resta com'era (non vetro)",
+   "ok": true,
+   "detail": {
+    "inside": true,
+    "glass": false,
+    "r": [
+     "999px",
+     "999px",
+     "999px",
+     "999px"
+    ],
+    "bf": "none",
+    "bg": "none",
+    "sh": "rgba(0, 0, 0, 0.16) 0px 14px 30px 0px"
+   }
+  },
+  {
+   "name": "390 «Fine» esce dal tremolio, nessun residuo",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 nome «Alla carta» intero nel selettore",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 CARTA: piatto trascinato → bozza aggiornata",
+   "ok": true,
+   "detail": [
+    "Diavola",
+    "Capricciosa",
+    "Margherita"
+   ]
+  },
+  {
+   "name": "390 CARTA: Sottomenu trascinato → ordine cambiato",
+   "ok": true,
+   "detail": {
+    "o0": [
+     "Antipasti",
+     "Pizze"
+    ],
+    "o1": [
+     "Pizze",
+     "Antipasti"
+    ],
+    "pills": 2
+   }
+  },
+  {
+   "name": "390 «Modifica piatto»: nessun controllo «nascondi», «Esaurito» ed «Elimina piatto» presenti",
+   "ok": true,
+   "detail": "Modifica piattoNomeDescrizionePrezzo (€)FotoTrascina qui una fotoJPG, PNG o WebP · massimo 10 MBCaricaScegli dalla galleriaPrezzo promoFine promo (facoltativa)Ultime porzioniSolo oggiDisponibilitàEsauritoAllergeniCataloghi alimentariAllergeniAltre opzioniCostoPresentazioneNormaleCentratoLinkLink HTT"
+  },
+  {
+   "name": "390 lente in testata → campo di ricerca",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 «+» in testata → riquadro Aggiungi",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 nessun errore console",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "430 testata: lente e «+» (36 px) a sinistra di Pubblica",
+   "ok": true,
+   "detail": {
+    "tools": [
+     {
+      "l": 246.0625,
+      "r": 282.0625,
+      "t": 7,
+      "w": 36,
+      "h": 36,
+      "label": "Cerca nel menu"
+     },
+     {
+      "l": 288.0625,
+      "r": 324.0625,
+      "t": 7,
+      "w": 36,
+      "h": 36,
+      "label": "Aggiungi sottomenu o piatto"
+     }
+    ],
+    "pub": {
+     "l": 330.0625,
+     "r": 416,
+     "t": 5,
+     "b": 45,
+     "w": 85.9375,
+     "h": 40
+    }
+   }
+  },
+  {
+   "name": "430 testata: stessa riga del logo, nessuna sovrapposizione, dentro lo schermo",
+   "ok": true,
+   "detail": {
+    "brand": {
+     "l": 14,
+     "r": 224,
+     "t": 4,
+     "b": 46,
+     "w": 210,
+     "h": 42
+    },
+    "pub": {
+     "l": 330.0625,
+     "r": 416,
+     "t": 5,
+     "b": 45,
+     "w": 85.9375,
+     "h": 40
+    },
+    "width": 430
+   }
+  },
+  {
+   "name": "430 riga: Menu ▾ (+ Preset ▾) senza lente/+/Avanzate",
+   "ok": true,
+   "detail": {
+    "buttons": [
+     "Menu selezionato",
+     "Preset: non attivi"
+    ],
+    "name": "Menu del giorno",
+    "full": true
+   }
+  },
+  {
+   "name": "430 nome del Menu intero («Menu del giorno»)",
+   "ok": true,
+   "detail": {
+    "buttons": [
+     "Menu selezionato",
+     "Preset: non attivi"
+    ],
+    "name": "Menu del giorno",
+    "full": true
+   }
+  },
+  {
+   "name": "430 niente «Avanzate»/«Torna al menu» nella pagina",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "430 nessuno scroll orizzontale",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "430 prezzo fisso: riquadro opzioni + piatti/Sottomenu col DOM trascinabile (niente formula~)",
+   "ok": true,
+   "detail": {
+    "box": true,
+    "formulaIds": 0,
+    "dishes": [
+     "items:00000000-0000-4000-8000-000000000010",
+     "items:00000000-0000-4000-8000-000000000010",
+     "items:00000000-0000-4000-8000-000000000010"
+    ],
+    "pills": [
+     "Primi",
+     "Secondi e panini",
+     "Contorni e insalate"
+    ],
+    "groups": [
+     "menus",
+     "pills:00000000-0000-4000-8000-000000000001",
+     "items:00000000-0000-4000-8000-000000000010",
+     "children:00000000-0000-4000-8000-000000000010"
+    ]
+   }
+  },
+  {
+   "name": "430 piatto ancora hidden:true → attenuato, nessuna etichetta «Nascosto»",
+   "ok": true,
+   "detail": {
+    "op": "0.45",
+    "label": "",
+    "text": "Risotto ai funghi"
+   }
+  },
+  {
+   "name": "430 PREZZO FISSO: piatto trascinato (pressione lunga) → onDrop + bozza aggiornata",
+   "ok": true,
+   "detail": [
+    "Risotto ai funghi",
+    "Lasagna",
+    "Pasta al pomodoro"
+   ]
+  },
+  {
+   "name": "430 piatto sollevato = vetro: 4 angoli ~20 px reali, blur+saturate, ombra",
+   "ok": true,
+   "detail": {
+    "mid": {
+     "inside": true,
+     "glass": true,
+     "r": [
+      "27.9px",
+      "27.9px",
+      "27.9px",
+      "27.9px"
+     ],
+     "bf": "blur(30.69px) saturate(1.8)",
+     "bg": "linear-gradient(125deg, rgba(255, 255, 255, 0.72), rgba(247, 248, 250, 0.5) 50%, rgba(255, 255, 255, 0.74))",
+     "sh": "rgb(255, 255, 255) 0px 1px 0px 0px inset, rgba(255, 255, 255, 0.44) 0px -1px 0px 0px inset, rgba(10, 10, 10, 0.07) 0px 0px 0px 0.5px, rgba(10, 10, 10, 0.16) 0px 18px 40px 0px, rgba(10, 10, 10, 0.07) 0px 4px 12px 0px"
+    },
+    "inv": 1.395,
+    "want": 28
+   }
+  },
+  {
+   "name": "430 in tremolio dopo il rilascio",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "430 «Sposta» nel prezzo fisso → tremolio",
+   "ok": true,
+   "detail": {
+    "sel": false,
+    "y": 20
+   }
+  },
+  {
+   "name": "430 PREZZO FISSO: piatto trascinato con «Sposta» → bozza aggiornata",
+   "ok": true,
+   "detail": [
+    "Cotoletta",
+    "Pollo arrosto"
+   ]
+  },
+  {
+   "name": "430 PREZZO FISSO: Sottomenu trascinato → ordine cambiato",
+   "ok": true,
+   "detail": {
+    "order0": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ],
+    "order1": [
+     "Secondi",
+     "Contorni",
+     "Primi"
+    ]
+   }
+  },
+  {
+   "name": "430 Sottomenu sollevato resta com'era (non vetro)",
+   "ok": true,
+   "detail": {
+    "inside": true,
+    "glass": false,
+    "r": [
+     "999px",
+     "999px",
+     "999px",
+     "999px"
+    ],
+    "bf": "none",
+    "bg": "none",
+    "sh": "rgba(0, 0, 0, 0.16) 0px 14px 30px 0px"
+   }
+  },
+  {
+   "name": "430 «Fine» esce dal tremolio, nessun residuo",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "430 nessun errore console",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "1280 testata: lente, «+», Pubblica in alto a destra (stessa riga)",
+   "ok": true,
+   "detail": [
+    {
+     "l": 1052.0625,
+     "r": 1088.0625,
+     "t": 28,
+     "label": "Cerca nel menu"
+    },
+    {
+     "l": 1094.0625,
+     "r": 1130.0625,
+     "t": 28,
+     "label": "Aggiungi sottomenu o piatto"
+    },
+    {
+     "l": 1140.0625,
+     "r": 1230,
+     "t": 26,
+     "label": "Nessuna modifica da pubblicare"
+    }
+   ]
+  },
+  {
+   "name": "1280 niente «Avanzate»",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1280 nome del Menu intero",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1280 nessuno scroll orizzontale",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1280 PREZZO FISSO: piatto trascinato col mouse → bozza aggiornata",
+   "ok": true,
+   "detail": [
+    "Risotto ai funghi",
+    "Lasagna",
+    "Pasta al pomodoro"
+   ]
+  },
+  {
+   "name": "1280 ricerca «Prezzo fisso» → matita del Menu con opzioni, descrizione e tipo",
+   "ok": true,
+   "detail": "Modifica menuNome del menuDescrizione del menuTipo di menuPrincipalePranzoCenaStagionaleEventoBevandeVisibile ai clientiPrezzo fissoAlla cartaPrezzo fissoI prezzi dei piatti restano salvati: tornano se rimetti Alla carta.NomePrezzo (€)NotaC"
+  },
+  {
+   "name": "1280 nessun errore console",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}
