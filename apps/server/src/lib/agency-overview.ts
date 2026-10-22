@@ -3,7 +3,9 @@ export const AGENCY_LANGUAGES=['it','en','fr','de','es','pt','nl','pl','ru','ar'
 const text=(value:unknown)=>typeof value==='string'&&value.trim().length>0
 const rows=(value:any)=>Array.isArray(value)?value:[]
 const fingerprint=(entity:any)=>{let hash=2166136261;const source=JSON.stringify([entity.name,entity.description||'']);for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619)}return `v1:${(hash>>>0).toString(16)}`}
-/** Summarizes actual stored draft only; it never initializes or mutates a workspace. */
+/** Summarizes actual stored draft only; it never initializes or mutates a workspace.
+ * Stato «pubblicato/modifiche non pubblicate» (22/10): da `pending` = draft IS DISTINCT FROM published calcolato in SQL;
+ * righe senza `pending` (caricatori di prova) → regola di prima. `draft` resta nella query: serve a conteggi e traduzioni. */
 export function summarizeAgencyRestaurant(row:any){
  const draft=row.draft&&typeof row.draft==='object'?row.draft:null,menus=rows(draft?.menus)
  const entities=menus.flatMap(m=>[m,...rows(m.sections).flatMap(s=>[s,...rows(s.items)])])
@@ -17,6 +19,6 @@ export function summarizeAgencyRestaurant(row:any){
  const revision=row.revision==null?null:Number(row.revision),publishedRevision=row.published_revision==null?null:Number(row.published_revision)
  return {isTrial:row.settings?.takomenuTrial===true,trialLeadId:row.settings?.takomenuTrial===true?row.settings?.trialLeadId||null:null,id:String(row.id),name:String(row.name||''),slug:String(row.slug||''),logoUrl:draft?.design?.logoUrl||row.logo_url||null,
   menuCount:draft?menus.length:Number(row.menu_count||0),dishCount:draft?new Set(menus.flatMap(m=>rows(m.sections).flatMap(s=>rows(s.items).map(i=>i.id))).filter(Boolean)).size:Number(row.dish_count||0),
-  revision,publishedRevision,status:!draft?'unconfigured':publishedRevision===null?'unpublished':publishedRevision===revision?'published':'draft',
+  revision,publishedRevision,status:!draft?'unconfigured':publishedRevision===null?'unpublished':(typeof row.pending==='boolean'?!row.pending:publishedRevision===revision)?'published':'draft',
   translations,completeLanguages:translations.filter(t=>t.ready).length,requiredLanguages:AGENCY_LANGUAGES.length,updatedAt:row.updated_at instanceof Date?row.updated_at.toISOString():row.updated_at||null}
 }

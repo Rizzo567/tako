@@ -4,6 +4,8 @@ import { eq, asc, sql } from 'drizzle-orm'
 import { baselineLanguageConfiguration, normalizeBaselineTranslations } from './menu-workspace-languages.js'
 import { menuLayoutDefaults } from './menu-layout-defaults.js'
 import { workspaceSchema, type Workspace } from './menu-workspace-contract.js'
+import { applyOps, type Op, type OpResult } from '@tako/menu-ops'
+import { jsonEqual } from './menu-workspace-pending.js'
 export type WorkspaceRow={draft:Workspace;published:Workspace|null;revision:number;published_revision:number|null}
 export async function readWorkspace(tenant:string, connection:Pick<DB,'execute'>=db):Promise<WorkspaceRow|null>{
  const rows=await connection.execute(sql`SELECT draft,published,revision,published_revision FROM menu_workspaces WHERE restaurant_id=${tenant}`)
@@ -131,4 +133,49 @@ export async function mutateWorkspace(tenant:string,actor:string,expected:number
  * Prima le rotte chiamavano ensureWorkspace a ogni salvataggio/pubblicazione: un giro col DB in più ogni volta. */
 export async function withWorkspace<T>(tenant:string,run:()=>Promise<T>):Promise<T>{
  try{return await run()}catch(e){if(!(e instanceof WorkspaceMissing))throw e;await ensureWorkspace(tenant);return run()}
+}
+// ── Dashboard editor 22/10: bozza a operazioni (CONTRATTO §3). Scrive SOLO la bozza, sotto lock di riga, senza expectedRevision. ──
+export const DRAFT_VERSION_LABEL='Bozza dashboard'
+export const DISCARD_VERSION_LABEL='Bozza scartata'
+/** Al massimo una riga di storico «Bozza dashboard» ogni 30 minuti per locale (le op non scrivono più uno snapshot ciascuna). */
+export const DRAFT_VERSION_MINUTES=30
+/** Il documento risultante dalle op non supera workspaceSchema: 422, nessuna scrittura. */
+export class WorkspaceInvalid extends Error{constructor(public issues:string){super('Il menu risultante non è valido')}}
+export type DraftOpsResult={revision:number;publishedRevision:number|null;pending:boolean;results:OpResult[];versioned:boolean}
+export async function applyDraftOps(tenant:string,actor:string,ops:Op[],_clientId:string,connection:DB=db):Promise<DraftOpsResult>{
+ return connection.transaction(async tx=>{
+  const row=await lockWorkspace(tx,tenant)
+  if(!row)throw new WorkspaceMissing('Workspace missing')
+  const current=workspaceSchema.parse(row.draft)
+  const {workspace,results}=applyOps(current,ops)
+  const parsed=workspaceSchema.safeParse(workspace)
+  if(!parsed.success)throw new WorkspaceInvalid(parsed.error.issues.slice(0,5).map(i=>`${i.path.join('.')}: ${i.message}`).join('; '))
+  const w=parsed.data
+  const revision=Number(row.revision)
+  // Nessun cambiamento reale (op rifiutate o ripetute): nessuna scrittura, la revisione non sale.
+  if(jsonEqual(w,row.draft)){const pr=await tx.execute(sql`SELECT published_revision,(draft IS DISTINCT FROM published) AS pending FROM menu_workspaces WHERE restaurant_id=${tenant}`);return {revision,publishedRevision:pr[0]?.published_revision==null?null:Number(pr[0].published_revision),pending:pr[0]?.pending===true,results,versioned:false}}
+  await verifyOwnership(tx,tenant,w)
+  const doc=JSON.stringify(w)
+  const out=await tx.execute(sql`WITH u AS (UPDATE menu_workspaces SET draft=${doc}::jsonb,revision=revision+1,updated_at=now() WHERE restaurant_id=${tenant} RETURNING revision,published_revision,(draft IS DISTINCT FROM published) AS pending),
+  v AS (INSERT INTO menu_workspace_versions(id,restaurant_id,revision,label,snapshot,created_by) SELECT ${randomUUID()},${tenant},u.revision,${DRAFT_VERSION_LABEL},${doc}::jsonb,${actor} FROM u
+   WHERE NOT EXISTS (SELECT 1 FROM menu_workspace_versions WHERE restaurant_id=${tenant} AND label=${DRAFT_VERSION_LABEL} AND created_at>now()-make_interval(mins=>${DRAFT_VERSION_MINUTES})) RETURNING 1)
+  SELECT u.revision,u.published_revision,u.pending,(SELECT count(*)::int FROM v) AS versioned FROM u`)
+  const r=out[0]!
+  return {revision:Number(r.revision),publishedRevision:r.published_revision==null?null:Number(r.published_revision),pending:r.pending===true,results,versioned:Number(r.versioned)>0}
+ })
+}
+export class WorkspaceNotPublished extends WorkspaceConflict{}
+/** «Scarta le modifiche»: salva la bozza corrente come versione «Bozza scartata» (recuperabile dalle Versioni), poi bozza = pubblicato. */
+export async function discardDraft(tenant:string,actor:string,expectedRevision:number,connection:DB=db){
+ return connection.transaction(async tx=>{
+  const row=await lockWorkspace(tx,tenant)
+  if(!row)throw new WorkspaceMissing('Workspace missing')
+  if(Number(row.revision)!==expectedRevision)throw new WorkspaceConflict('Revision conflict')
+  if(row.published==null)throw new WorkspaceNotPublished('Menu mai pubblicato')
+  if(jsonEqual(row.draft,row.published))return {revision:Number(row.revision),discarded:false}
+  const revision=Number(row.revision)+1
+  await tx.execute(sql`WITH v AS (INSERT INTO menu_workspace_versions(id,restaurant_id,revision,label,snapshot,created_by) VALUES(${randomUUID()},${tenant},${Number(row.revision)},${DISCARD_VERSION_LABEL},${JSON.stringify(row.draft)}::jsonb,${actor}) RETURNING 1)
+  UPDATE menu_workspaces SET draft=published,revision=${revision},updated_at=now() WHERE restaurant_id=${tenant}`)
+  return {revision,discarded:true}
+ })
 }

@@ -13,7 +13,7 @@ import {isAgencyUser} from './agency-access.js'
 import {agencyOverviewQuery} from '../routes/agency.js'
 import {summarizeAgencyRestaurant} from './agency-overview.js'
 import {readWorkspace} from './menu-workspace-store.js'
-import {publishDiffBody} from './menu-workspace-read.js'
+import {publishDiffBody,workspaceBody,readWorkspaceStatus,statusBody,EMPTY_STATUS} from './menu-workspace-read.js'
 import {commonMenuLanguages,COMMON_MENU_LANGUAGES} from './menu-workspace-languages.js'
 import {foodCatalogs} from './menu-workspace-catalogs.js'
 import {readActiveOrders,readRooms,readWaiterCalls,readReservationsForDay,readDashboardStats,readRestaurantMe,readAgencyMe,type ReadResult} from './read-queries.js'
@@ -34,7 +34,7 @@ const SHARED_READS:Record<string,(user:any,query:Record<string,string|string[]>,
  '/api/restaurants/me':user=>readRestaurantMe(user.restaurantId),
  '/api/agency/me':(user,_query,env)=>readAgencyMe(user.id,env),
 }
-export const AUTHENTICATED_READ_PATHS:readonly string[]=['/api/auth/bootstrap','/api/agency/restaurants','/api/menu-workspace','/api/menu-workspace/presentation','/api/menu-workspace/publish/diff',...Object.keys(SHARED_READS)]
+export const AUTHENTICATED_READ_PATHS:readonly string[]=['/api/auth/bootstrap','/api/agency/restaurants','/api/menu-workspace','/api/menu-workspace/presentation','/api/menu-workspace/publish/diff','/api/menu-workspace/status',...Object.keys(SHARED_READS)]
 /** Come il querystring di Fastify: chiavi ripetute diventano array, nessun prototipo. */
 export function fastifyQuery(params:URLSearchParams){const q:Record<string,string|string[]>=Object.create(null);for(const [k,v] of params){const prev=q[k];q[k]=prev===undefined?v:Array.isArray(prev)?[...prev,v]:[prev,v]}return q}
 const cookies=(header:string|null)=>Object.fromEntries((header||'').split(';').flatMap(part=>{const at=part.indexOf('=');if(at<0)return [];try{return [[part.slice(0,at).trim(),decodeURIComponent(part.slice(at+1))]]}catch{return []}}))
@@ -60,10 +60,12 @@ export function createEdgeReadHandler(env=process.env){
    if(!['owner','manager','menu_editor'].includes(user.role))return {status:403,body:{error:{code:'FORBIDDEN',message:'Insufficient permissions'}}}
    // Stesso corpo della route (lib/menu-workspace-read.ts). Workspace mai creato: 501, lo crea l'operativa (ensureWorkspace).
    if(path==='/api/menu-workspace/publish/diff'){const row=await readWorkspace(tenant);if(!row)return {status:501,body:{error:{code:'LEGACY_READ',message:'Usare il servizio operativo'}}};return {status:200,body:publishDiffBody(row)}}
-   const [restaurant]=await db.select({name:restaurants.name}).from(restaurants).where(eq(restaurants.id,tenant));const presentation={restaurantName:restaurant?.name??'Menu',foodCatalogs}
+   // Stato leggero del dashboard editor (22/10): stesso corpo della route; workspace mai creato = stato vuoto (nessuna scrittura).
+   if(path==='/api/menu-workspace/status')return {status:200,body:statusBody((await readWorkspaceStatus(tenant))??EMPTY_STATUS)}
+   const [restaurant]=await db.select({name:restaurants.name,settings:restaurants.settings}).from(restaurants).where(eq(restaurants.id,tenant));const presentation={restaurantName:restaurant?.name??'Menu',foodCatalogs}
    if(path==='/api/menu-workspace/presentation')return {status:200,body:{data:presentation}}
    const workspace=await readWorkspace(tenant);if(!workspace)return {status:501,body:{error:{code:'LEGACY_READ',message:'Usare il servizio operativo'}}}
-   return {status:200,body:{data:commonMenuLanguages(workspace.draft),revision:workspace.revision,publishedRevision:workspace.published_revision,presentation}}
+   return {status:200,body:workspaceBody(workspace,restaurant)}
   }
   // Stesso contatore durevole del servizio operativo (100/min per IP). Over-limit → 429 senza dati.
   const overLimit=async()=>{const quota=await counter.consume(context.ip,60000);if(quota.current>100){headers.set('Retry-After',String(Math.ceil(quota.ttl/1000)));return true}return false}

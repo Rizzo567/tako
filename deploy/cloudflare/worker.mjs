@@ -142,7 +142,7 @@ const worker = {
       const cacheKey=isImage?new Request(new URL(path,request.url),{method:'GET'}):null;
       const cache=isImage&&typeof caches!=='undefined'?caches.default:null;
       if(cache&&cacheKey){const hit=await cache.match(cacheKey);if(hit)return request.method==='HEAD'?new Response(null,{status:hit.status,headers:hit.headers}):hit;}
-      const readPath=isImage||customerMenuPath(path)||['/api/auth/bootstrap','/api/agency/restaurants','/api/menu-workspace','/api/menu-workspace/presentation','/api/menu-workspace/publish/diff','/api/auth/me','/api/orders/active','/api/tables/rooms','/api/tables/waiter-calls','/api/reservations','/api/stats/dashboard','/api/restaurants/me','/api/agency/me'].includes(path);
+      const readPath=isImage||customerMenuPath(path)||['/api/auth/bootstrap','/api/agency/restaurants','/api/menu-workspace','/api/menu-workspace/presentation','/api/menu-workspace/publish/diff','/api/menu-workspace/status','/api/auth/me','/api/orders/active','/api/tables/rooms','/api/tables/waiter-calls','/api/reservations','/api/stats/dashboard','/api/restaurants/me','/api/agency/me'].includes(path);
       const readEnv=['GET','HEAD'].includes(request.method)&&readPath&&backendURL({...env,TAKO_EDGE_URL:env.TAKO_READ_EDGE_URL})?{...env,TAKO_EDGE_URL:env.TAKO_READ_EDGE_URL}:env;
       let response=await proxy(catalogRequest(request),readEnv);
       if([501,502,503,504].includes(response.status)&&readEnv!==env){const prior=response;response=await proxy(catalogRequest(request),env);const cookies=prior.headers.getSetCookie?.()||[];if(cookies.length){const headers=new Headers(response.headers);for(const cookie of cookies)headers.append('Set-Cookie',cookie);response=new Response(response.body,{status:response.status,headers})}}

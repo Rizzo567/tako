@@ -8,13 +8,14 @@ import { Buffer } from 'node:buffer'
 import { businessDate } from '../lib/menu-sales.js'
 import { readPdfDocuments, mergePdfDocuments, pdfDocumentsInputSchema, defaultPdfDocument, newShareToken, documentWorkspace, documentMenuIds, documentFilename, documentEtag, etagMatches, SHARE_TOKEN, type PdfDocument } from '../lib/menu-pdf-documents.js'
 import { z } from 'zod'
+import type { Op } from '@tako/menu-ops'
 import { db, restaurants, menuItems } from '@tako/db'
 import { sql, eq } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 import { workspaceSchema, type Workspace } from '../lib/menu-workspace-contract.js'
-import { ensureWorkspace, readWorkspace, mutateWorkspace, withWorkspace, WorkspaceConflict, WorkspaceOwnership, WorkspaceTrialLocked } from '../lib/menu-workspace-store.js'
+import { ensureWorkspace, readWorkspace, mutateWorkspace, withWorkspace, WorkspaceConflict, WorkspaceOwnership, WorkspaceTrialLocked, applyDraftOps, discardDraft, WorkspaceInvalid, WorkspaceNotPublished } from '../lib/menu-workspace-store.js'
 import { workspaceDiff } from '../lib/menu-workspace-schedule.js'
-import { publishDiffBody } from '../lib/menu-workspace-read.js'
+import { publishDiffBody, workspaceBody, readWorkspaceStatus, EMPTY_STATUS, statusBody } from '../lib/menu-workspace-read.js'
 import { foodCatalogs, stylePresets } from '../lib/menu-workspace-catalogs.js'
 import { imageObjectKey, remoteStorageConfig, remoteStorageEnabled, downloadRemoteImage } from '../lib/remote-image-store.js'
 import { digitalMenuUrl,renderDigitalQr } from '../lib/menu-workspace-qr.js'
@@ -30,17 +31,37 @@ const edit=requireRole('owner','manager','menu_editor')
 const publishedFromDraft={} as import('../lib/menu-workspace-contract.js').Workspace
 const revision=z.object({expectedRevision:z.number().int().positive()})
 const fail=(reply:import('fastify').FastifyReply,code:number,message:string)=>reply.code(code).send({error:{code:code===409?'CONFLICT':code===404?'NOT_FOUND':'VALIDATION',message}})
+/** 409 con la revisione attuale (CONTRATTO §3): il riquadro Pubblica/Scarta si ricarica e si riconferma. */
+const conflict=async(reply:import('fastify').FastifyReply,tenant:string)=>{const row=await readWorkspace(tenant);return reply.code(409).send({error:{code:'CONFLICT',message:'Versione cambiata'},currentRevision:row?Number(row.revision):null})}
+// Op di bozza (packages/menu-ops): forma validata qui, semantica in applyOps, documento finale rivalidato da workspaceSchema.
+const opId=z.string().min(1).max(100)
+const opAt=z.union([z.object({beforeId:opId}).strict(),z.object({afterId:opId}).strict()]).optional()
+const opKind=z.enum(['menu','section','item'])
+const opFields=z.record(z.string().max(100),z.unknown())
+const opSchema=z.discriminatedUnion('op',[
+ z.object({op:z.literal('set'),kind:opKind,id:opId,fields:opFields}).strict(),
+ z.object({op:z.literal('create'),kind:opKind,id:opId,parentId:opId.optional(),fields:opFields,at:opAt}).strict(),
+ z.object({op:z.literal('move'),kind:opKind,id:opId,toParentId:opId.nullable().optional(),at:opAt}).strict(),
+ z.object({op:z.literal('remove'),kind:opKind,id:opId}).strict(),
+ z.object({op:z.literal('reorder'),kind:z.enum(['menu','section']),parentId:opId.optional(),ids:z.array(opId).max(2000)}).strict(),
+ z.object({op:z.literal('manualOrder'),value:z.boolean()}).strict()])
+export const MAX_OPS_PER_REQUEST=50
+const opsBody=z.object({ops:z.array(opSchema).min(1).max(MAX_OPS_PER_REQUEST),clientId:z.string().min(1).max(100),seq:z.number().int().min(0).optional()})
 /** PDF multipli spenti per default (via di Manuel 21/10 sera: online solo il bot). Si accendono con TAKO_MENU_PDF_DOCUMENTS=1. */
 export const pdfDocumentsEnabled=()=>process.env.TAKO_MENU_PDF_DOCUMENTS==='1'
 const PDF_DOCS_PATH=/\/(?:pdf-documents|menu-pdf)(?:\/|\?|$)/
 const pdfDocsGate=async(req:{url:string},reply:any)=>{if(!pdfDocumentsEnabled()&&PDF_DOCS_PATH.test(req.url))return reply.code(404).header('Cache-Control','no-store').send({error:{code:'NOT_FOUND',message:'Non disponibile'}})}
 export async function menuWorkspaceRoutes(fastify:FastifyInstance){
  fastify.addHook('onRequest',pdfDocsGate)
- fastify.get('/',{preHandler:edit},async req=>{const tenant=req.user!.restaurantId;const row=await ensureWorkspace(tenant);const [restaurant]=await db.select({name:restaurants.name}).from(restaurants).where(eq(restaurants.id,tenant));return {data:commonMenuLanguages(row.draft),revision:row.revision,publishedRevision:row.published_revision,presentation:{restaurantName:restaurant?.name??'Menu',foodCatalogs}}})
+ fastify.get('/',{preHandler:edit},async req=>{const tenant=req.user!.restaurantId;const row=await ensureWorkspace(tenant);const [restaurant]=await db.select({name:restaurants.name,settings:restaurants.settings}).from(restaurants).where(eq(restaurants.id,tenant));return workspaceBody(row,restaurant)})
+ // Dashboard editor 22/10 (CONTRATTO §3): stato leggero (anche sull'edge di lettura), op di bozza, scarta bozza.
+ fastify.get('/status',{preHandler:edit},async req=>statusBody((await readWorkspaceStatus(req.user!.restaurantId))??EMPTY_STATUS))
+ fastify.post('/ops',{preHandler:edit},async(req,reply)=>{const body=opsBody.safeParse(req.body);if(!body.success)return fail(reply,400,body.error.issues[0]?.message??'Operazioni non valide');const tenant=req.user!.restaurantId;try{const r=await withWorkspace(tenant,()=>applyDraftOps(tenant,req.user!.id,body.data.ops as Op[],body.data.clientId));return {revision:r.revision,publishedRevision:r.publishedRevision,pending:r.pending,results:r.results,seq:body.data.seq}}catch(e){if(e instanceof WorkspaceInvalid)return reply.code(422).send({error:{code:'INVALID_DOCUMENT',message:'Modifica non applicata: il menu risultante non è valido',details:e.issues}});if(e instanceof WorkspaceOwnership)return fail(reply,404,'Risorsa non trovata');throw e}})
+ fastify.post('/discard',{preHandler:edit},async(req,reply)=>{const body=revision.safeParse(req.body);if(!body.success)return fail(reply,400,body.error.message);const tenant=req.user!.restaurantId;try{await withWorkspace(tenant,()=>discardDraft(tenant,req.user!.id,body.data.expectedRevision))}catch(e){if(e instanceof WorkspaceNotPublished)return reply.code(409).send({error:{code:'NOT_PUBLISHED',message:'Il menu non è mai stato pubblicato: non c\'è nulla a cui tornare'}});if(e instanceof WorkspaceConflict)return conflict(reply,tenant);throw e}const row=await ensureWorkspace(tenant);const [restaurant]=await db.select({name:restaurants.name,settings:restaurants.settings}).from(restaurants).where(eq(restaurants.id,tenant));return workspaceBody(row,restaurant)})
  fastify.get('/presentation',{preHandler:edit},async req=>{const [restaurant]=await db.select({name:restaurants.name}).from(restaurants).where(eq(restaurants.id,req.user!.restaurantId));return {data:{restaurantName:restaurant?.name??'Menu',foodCatalogs}}})
  fastify.put('/',{preHandler:edit},async(req,reply)=>{const body=revision.extend({workspace:workspaceSchema}).safeParse(req.body);if(!body.success)return fail(reply,400,body.error.message);const workspace=commonMenuLanguages(body.data.workspace);try{return await withWorkspace(req.user!.restaurantId,()=>mutateWorkspace(req.user!.restaurantId,req.user!.id,body.data.expectedRevision,workspace))}catch(e){if(e instanceof WorkspaceConflict)return fail(reply,409,'Il menu è cambiato: ricarica prima di salvare');if(e instanceof WorkspaceOwnership)return fail(reply,404,'Risorsa non trovata');throw e}})
  fastify.get('/publish/diff',{preHandler:edit},async req=>publishDiffBody(await ensureWorkspace(req.user!.restaurantId)))
- fastify.post('/publish',{preHandler:edit},async(req,reply)=>{const body=revision.safeParse(req.body);if(!body.success)return fail(reply,400,body.error.message);try{return await withWorkspace(req.user!.restaurantId,()=>mutateWorkspace(req.user!.restaurantId,req.user!.id,body.data.expectedRevision,publishedFromDraft,true,'Pubblicazione'))}catch(e){if(e instanceof WorkspaceTrialLocked)return reply.code(403).send({error:{code:'TRIAL_MENU_PRIVATE',message:e.message}});if(e instanceof WorkspaceConflict)return fail(reply,409,'Versione cambiata');if(e instanceof WorkspaceOwnership)return fail(reply,404,'Risorsa non trovata');throw e}})
+ fastify.post('/publish',{preHandler:edit},async(req,reply)=>{const body=revision.safeParse(req.body);if(!body.success)return fail(reply,400,body.error.message);try{return await withWorkspace(req.user!.restaurantId,()=>mutateWorkspace(req.user!.restaurantId,req.user!.id,body.data.expectedRevision,publishedFromDraft,true,'Pubblicazione'))}catch(e){if(e instanceof WorkspaceTrialLocked)return reply.code(403).send({error:{code:'TRIAL_MENU_PRIVATE',message:e.message}});if(e instanceof WorkspaceConflict)return conflict(reply,req.user!.restaurantId);if(e instanceof WorkspaceOwnership)return fail(reply,404,'Risorsa non trovata');throw e}})
  fastify.get('/versions',{preHandler:edit},async req=>({data:await db.execute(sql`SELECT id,label,revision,created_at AS "createdAt",created_by AS "createdBy" FROM menu_workspace_versions WHERE restaurant_id=${req.user!.restaurantId} ORDER BY created_at DESC LIMIT 200`)}))
  fastify.post('/versions',{preHandler:edit},async(req,reply)=>{const body=revision.extend({label:z.string().min(1).max(200)}).safeParse(req.body);if(!body.success)return fail(reply,400,body.error.message);const row=await ensureWorkspace(req.user!.restaurantId);try{return await mutateWorkspace(req.user!.restaurantId,req.user!.id,body.data.expectedRevision,row.draft,false,body.data.label)}catch(e){if(e instanceof WorkspaceConflict)return fail(reply,409,'Versione cambiata');throw e}})
  fastify.get('/versions/:id/diff',{preHandler:edit},async(req,reply)=>{const id=z.string().uuid().safeParse((req.params as {id:string}).id);if(!id.success)return fail(reply,404,'Versione non trovata');const rows=await db.execute(sql`SELECT snapshot FROM menu_workspace_versions WHERE id=${id.data} AND restaurant_id=${req.user!.restaurantId}`);if(!rows[0])return fail(reply,404,'Versione non trovata');return {data:workspaceDiff((await ensureWorkspace(req.user!.restaurantId)).draft,workspaceSchema.parse(rows[0].snapshot))}})
