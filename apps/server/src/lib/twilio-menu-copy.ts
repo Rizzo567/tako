@@ -28,6 +28,8 @@ Le modifiche grosse te le faccio confermare prima. Scrivi *cosa sai fare* quando
  dashboardLinkAgency:'La tua dashboard: {link}\nUtente: {utente}\n\nSe perdi la password chiedi alla tua agenzia.',
  dashboardNoAccount:'La tua dashboard: {link}\nPer i dati di accesso chiedi alla tua agenzia.',
  menuLink:'Il tuo menu digitale: {link}',
+ // notte 22/10: primo contatto col cervello acceso («cosa sai fare?», «come funziona?», «aiuto»): breve, con esempi.
+ brainHelp:'Posso cambiare il tuo menu da qui, scrivendo o con un vocale:\n• *prezzi*: «la carbonara a 12»\n• *finito* o *di nuovo disponibile*: «il tiramisù è finito»\n• *nascondere* o *mostrare* un piatto\n• *piatti nuovi*: «aggiungi la panna cotta a 5 nei Dolci»\n• *spostare* e *rinominare* piatti, Sottomenu e Menu\n• *leggere il menu*: «cosa c’è nei Primi?»\n• *annulla* per tornare indietro dall’ultima modifica',
  help:`Puoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.
 
 Scrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.

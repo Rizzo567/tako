@@ -236,4 +236,10 @@ export const CACCIA_CASES:CacciaCase[]=[
  cc('nascosti',QS,[Q('quali piatti ho nascosti?')],[],{fam:'bv-domande' as Family,note:'lettura: niente scritture'}),
  cc('nascosti',R,[T('la gricia a 12'),Q('perché non la vedo nel menu?')],[P('Gricia',12)],{mods:{hidden:['Gricia']},sera:{cmd:[1]},says:[{turn:2,re:/nascost/i}],
   note:'la gricia è nascosta: il prezzo si scrive, e alla domanda il bot dice che è nascosta'}),
+  // ---- fase 4 (coordinatore 05:36): primo contatto e piatto nuovo con Menu detto ----
+ cc('primo-contatto',R,[Q('buonasera, cosa sai fare?')],[],{fam:'bv-domande' as Family,says:[{turn:1,re:/prezz/i},{turn:1,re:/finit|disponibil/i},{turn:1,re:/nuov/i},{turn:1,re:/annulla/i}],note:'risposta breve del server su cosa sa fare'}),
+ cc('primo-contatto',R,[Q('come funziona?')],[],{fam:'bv-domande' as Family,says:[{turn:1,re:/prezz/i},{turn:1,re:/piatti nuovi/i}]}),
+ cc('primo-contatto',R,[Q('posso cambiare i prezzi da qui?')],[],{fam:'bv-domande' as Family,says:[{turn:1,re:/^(?:Sono l[\s\S]*?persona\.\s*)?Sì/},{turn:1,re:/«[^»]*\d[^»]*»/}],note:'«Sì» + un esempio'}),
+ cc('primo-contatto',R,[Q('che sai fare'),T('aiuto')],[],{fam:'bv-domande' as Family,says:[{turn:1,re:/prezz/i},{turn:2,re:/prezz/i}]}),
+ cc('nuovo-menu-detto','strutt',[T('a pranzo aggiungi la panna cotta a 5'),T('ok')],[],{says:[{turn:1,re:/sottomenu|Antipasti|Primi|Secondi/i},{turn:1,re:/^(?![\s\S]*Pizze)/},{turn:2,re:/^(?![\s\S]*Pizze)/}],note:'elenco solo dei sottomenu del Menu Pranzo; «ok» non ripete la domanda uguale'}),
 ]
