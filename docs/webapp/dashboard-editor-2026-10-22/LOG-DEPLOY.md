@@ -63,3 +63,8 @@ Rollback: operativo `cp $RB/rollback-v157.ts release/serverless/candidate/index.
 - Verifica `scripts/verify-dashboard-motion-1022.mjs` (390/430 DPR 3 touch + 1280): TUTTO VERDE; video `motion-1022/390-avanzate-e-voci.webm`. QA online (sessione agenzia, sola lettura) 8/8 ✓; Simulatore iPhone 17 Pro ricaricato: `motion-1022/SIM-iphone17pro.png`.
 - Deploy web: 5cce3d0c (16:22, solo rifinitura) → **66b3be5b-421e-4bea-9953-990f07dee420** (rifinitura + gesto iOS). Smoke: /staff 200, /api/auth/me 401, /menu-preview QA 200.
 - Rollback: `CI=true npx wrangler rollback b5facdde-4159-431a-83a1-da6dc4b02e72 --config deploy/cloudflare/wrangler.jsonc`.
+
+# LOG DEPLOY 22/10 ~17:00 — risposte strutturate del bot (fix/bot-formato-1022, 92584bf1)
+- tsc server verde; vitest dei file toccati: nessun test nuovo rosso rispetto alla base (35 rossi già prima per ECONNREFUSED, manca lo stack dev :3001+Postgres); 3 test aggiornati al nuovo formato.
+- 16:58 build PASS, lazy boot PASS, 0 `npm:@tako`, sha cb5f686f (copia `candidate-index-formato.ts`), diff col v158 = solo le righe del formato. Deploy → **v159**; smoke 401/403 ok.
+- 16:59 STOP: il numero di prova è collegato a **Victoria Bar** dalle 16:34 (il QA non ha nessun numero) → niente batterie né prova formato possibili senza scrivere su Victoria. Per regola **rollback** a v158: `rollback-v158.ts` (sha 2aee5de8) → **v160** (ezbr f6470fc2…, identico a v158), smoke 401/403 ok. Nessun messaggio WhatsApp arrivato mentre era online v159.
