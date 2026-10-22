@@ -52,3 +52,14 @@ Rollback: operativo `cp $RB/rollback-v157.ts release/serverless/candidate/index.
 - Deploy web → **b5facdde-4159-431a-83a1-da6dc4b02e72** (prima b588452d). Smoke: /staff 200, /api/auth/me 401, /menu-preview QA 200, meta OG presenti, immagine 200.
 - Rollback: `CI=true npx wrangler rollback b588452d-71c9-4f56-b36e-50f807cdb0c7 --config deploy/cloudflare/wrangler.jsonc`.
 - Sito root (worker `takomenu-marketing`, sorgente `~/Documents/brain/sites/takoitalia-coorda`): og/twitter:image → `takomenu-social-v2.jpg`, diff HTML solo le 2 righe immagine; versione **1faa6e11-a471-4cf6-a767-b61995b43606** (rollback `d326937b-bbb7-471b-8b8f-159d516949cb`).
+
+# LOG DEPLOY 22/10 notte — rifinitura editor telefono (barra vetro, riga unica, movimento) + merge gesto iOS
+
+- Barra in basso: lastra Liquid Glass a tutta larghezza (bottom 0, angoli alti 24 px, bassi dritti, padding safe-area, blur 22 px saturate 180 %, fallback bianco .92), voci compatte in alto, attiva su pillola chiara. Barra agenzia: Locali + Account («Lead» tolto solo dalla barra; rotta/sidebar desktop invariate).
+- Riga unica a 390 px: Menu ▾ (ellissi) · Preset ▾ · lente · + · Avanzate, alta 36 px. «Avanzate» ↔ «Torna al menu» (↔ «Fine»): stesso pulsante, slot fisso, larghezza animata (280 ms, retarget), testo in dissolvenza (220/180 ms); su telefono anche in Avanzate/Aspetto/Condividi «Pubblica» sta in testata (le voci non scendono), «Altre azioni» dentro il riquadro.
+- Voci Piatti/Aspetto/Condividi/PDF: pillola nera condivisa che scivola (transform 280 ms, retarget), contenuto uscente come copia inerte in dissolvenza (220 ms) + entrante in dissolvenza (280 ms) con altezza del riquadro animata; riga strumenti che si chiude/apre morbida. Reduced motion: tutto immediato.
+- Editor (iframe): pillole Sottomenu non più coperte — lo sfondo della testata sticky (192 px per l'hero) e la sfumatura sotto sono tolti solo con `data-menu-editing`; nel modo edit niente `<button disabled>` su chip Menu e righe piatto (aria-disabled + click bloccato). Pagina pubblica non ridistribuita.
+- Merge `origin/fix/gesto-ios-1022` (bdd5470d) prima del secondo deploy.
+- Verifica `scripts/verify-dashboard-motion-1022.mjs` (390/430 DPR 3 touch + 1280): TUTTO VERDE; video `motion-1022/390-avanzate-e-voci.webm`. QA online (sessione agenzia, sola lettura) 8/8 ✓; Simulatore iPhone 17 Pro ricaricato: `motion-1022/SIM-iphone17pro.png`.
+- Deploy web: 5cce3d0c (16:22, solo rifinitura) → **66b3be5b-421e-4bea-9953-990f07dee420** (rifinitura + gesto iOS). Smoke: /staff 200, /api/auth/me 401, /menu-preview QA 200.
+- Rollback: `CI=true npx wrangler rollback b5facdde-4159-431a-83a1-da6dc4b02e72 --config deploy/cloudflare/wrangler.jsonc`.
