@@ -56,3 +56,40 @@ Misura locale su M-series; l'edge Supabase va rimisurato sul QA (K4).
 - Copertura dei rami ≥ 95%: non misurata (manca `@vitest/coverage-v8`, niente install). I test coprono ogni op e ogni codice d'errore.
 - `tests/menu-workspace-presentation.test.ts` da aggiornare (vedi sopra) da chi ne ha il perimetro.
 - Misure S4 sull'edge vero (QA) al deploy.
+
+## Correzioni revisione (22/10, lato server)
+1. **Validazione op per op** (`applyOpsValidated` in `menu-workspace-store.ts`): prima il gruppo intero con un solo `safeParse`; solo se invalido si
+   rifà op per op. L'op che rende il documento invalido → `{ok:false,code:'FIELD',message}` e si scarta, le altre restano. Documento finale sempre
+   valido, una sola scrittura per richiesta. `WorkspaceInvalid` resta esportata (la rotta la importa) ma `applyDraftOps` non la lancia più.
+   `verifyOwnership` (id/immagini di un altro locale) resta per gruppo: 404, nessuna scrittura.
+2. **«Pubblica preset» dalla dashboard** passa da `applyBotChange(replaceMenuIds:[menuId])` come il job delle 06:00 e la chat: parte dal
+   pubblicato, si pubblica solo il Menu del preset, le bozze degli altri Menu restano in bozza (se la bozza di QUEL Menu era pendente: versione
+   «Bozza prima del preset …» + avviso, come in chat). Conflitto: `expectedRevision` (revisione della bozza vista dalla dashboard) è controllata
+   prima e **sotto lock** (nuovo campo opzionale `BotChange.expectedDraftRevision`, anche nel percorso legacy e nel ripiego legacy→parziale).
+   `PublishResult.revision` = nuova revisione della **bozza** (quella che la dashboard usa poi come expectedRevision); aggiunto `publishedRevision`.
+   Senza bozza pendente il percorso è identico a prima (due mutateWorkspace, revisione +2).
+3. **pending e «nessun cambiamento» su documenti normalizzati.** `applyDraftOps` confronta con `workspaceSchema.parse(row.draft)` (niente scritture a
+   vuoto) e calcola `pending` in JS contro `parse(published)`. Quando scrive la bozza e la colonna `published` è grezza (scritta prima di un campo con
+   default), la riscrive normalizzata nella stessa UPDATE (stesso contenuto, tabelle del menu non toccate) → il confronto SQL di `/status` resta valido.
+   `discardDraft` confronta normalizzato e scrive il pubblicato normalizzato in entrambe le colonne; se il contenuto è già uguale ma le colonne grezze
+   no, le riallinea senza versione né revisione. `mutateWorkspace(publish)` e il bot parziale scrivevano già documenti passati da zod in entrambe.
+   GET workspace: `pendingNormalized` (parse solo se il confronto grezzo dice «diverso»). **Documenti esistenti mai riscritti** (draft e published
+   grezzi ma uguali): il confronto SQL è già corretto (jsonb uguali) — coperto da test. Limite residuo: righe già oggi asimmetriche (bozza riscritta da
+   una vecchia `applyDraftOps`, pubblicato grezzo) danno `/status` pendente finché non arriva la prossima scrittura (op, Pubblica, Scarta, bot);
+   GET workspace dà già il valore giusto. `/status` resta una SELECT da ~100 byte (nessun parse lì, per scelta).
+   Nota: `pendingOf(raw)` nel bot e nelle traduzioni può dare un falso «pendente» su colonne asimmetriche → si prende il percorso parziale, che con
+   bozza = pubblicato dà lo stesso risultato: innocuo.
+4. **Avviso per `skippedInDraft`**: ogni voce saltata (tutte tranne `draft:invalid`, che ha già il suo avviso) → `menu_owner_notices`
+   (`draft_discarded`, Menu dell'elemento saltato, una volta per Menu e giorno, stesso meccanismo in sotto-transazione che non blocca). Testo
+   `SKIPPED_NOTICE` (Menu/Sezione/piatto, mai «categoria»).
+5. **Fusione in profondità** per `design`, `pdf`, `translationSettings` (`DEEP_MERGE_KEYS`): solo le sotto-chiavi cambiate dal bot, ricorsiva sugli
+   oggetti, array sostituiti. La bozza tiene `design.manualOrder` e gli stili non pubblicati.
+6. `lastLabel`: `ORDER BY created_at DESC, revision DESC`.
+7. **Non allineato, per scelta.** La versione «pubblicata» del bot resta a revisione D2 (non P2): `twilio-menu-fullmenu.ts` (`restore`) sceglie
+   l'ultima copia «menu intero»/«ripristinato» con `ORDER BY revision DESC`; con P2 < D+1 la versione «ripristinato» finirebbe sotto la copia di
+   sicurezza e un secondo «ripristina» ripristinerebbe di nuovo. Le versioni non hanno vincoli di unicità sulla revisione; `published_revision`
+   resta P2 (aritmetica A2). Test che fissa il comportamento.
+8. **Idempotenza dei retry `/ops`**: nessuno stato aggiunto (edge senza stato, niente colonna nuova). Le op sono per id generati dal client:
+   `set`/`move`/`reorder`/`manualOrder` sono idempotenti e anche `create` ripetuto con stesso id e stessi campi risponde `ok` (menu-ops), quindi un
+   retry non duplica e non scrive (revisione invariata). Unico caso non trasparente: `remove` ripetuto → `NOT_FOUND` (documento invariato). Il client
+   vede un errore su un'op già passata → ricarica, nessuna perdita né duplicato. `clientId`/`seq` restano solo eco. Test che lo fissa.

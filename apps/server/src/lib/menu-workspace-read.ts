@@ -18,15 +18,22 @@ import { foodCatalogs } from './menu-workspace-catalogs.js'
 import { pendingOf } from './menu-workspace-pending.js'
 /** Flag per locale del nuovo editor «Piatti» (default spento). */
 export const dashboardEditorEnabled=(settings:unknown)=>!!settings&&typeof settings==='object'&&(settings as {dashboardEditor?:unknown}).dashboardEditor===true
+/** pending per contenuto NORMALIZZATO: se le colonne grezze differiscono si confrontano i documenti passati da zod
+ * (un documento salvato prima di un campo con default non è «modificato»). Parse solo quando il confronto grezzo dice «diverso». */
+export function pendingNormalized(row:{draft:unknown;published:unknown}){
+ if(!pendingOf(row)||row.published==null)return pendingOf(row)
+ const d=workspaceSchema.safeParse(row.draft),p=workspaceSchema.safeParse(row.published)
+ return !(d.success&&p.success)||pendingOf({draft:d.data,published:p.data})
+}
 /** Corpo di GET /api/menu-workspace (route operativa ed edge di lettura): campi di prima + pending + dashboardEditor. */
 export function workspaceBody(row:WorkspaceRow,restaurant:{name?:string|null;settings?:unknown}|undefined){
- return {data:commonMenuLanguages(row.draft),revision:row.revision,publishedRevision:row.published_revision,pending:pendingOf(row),dashboardEditor:dashboardEditorEnabled(restaurant?.settings),presentation:{restaurantName:restaurant?.name??'Menu',foodCatalogs}}
+ return {data:commonMenuLanguages(row.draft),revision:row.revision,publishedRevision:row.published_revision,pending:pendingNormalized(row),dashboardEditor:dashboardEditorEnabled(restaurant?.settings),presentation:{restaurantName:restaurant?.name??'Menu',foodCatalogs}}
 }
 export type WorkspaceStatus={revision:number;publishedRevision:number|null;pending:boolean;lastLabel:string|null;lastAt:string|null}
 /** GET /api/menu-workspace/status: ~100 byte, solo SELECT. pending = draft IS DISTINCT FROM published (jsonb). Ultima etichetta = ultima riga di storico. */
 export async function readWorkspaceStatus(tenant:string,connection:Pick<DB,'execute'>=db):Promise<WorkspaceStatus|null>{
  const rows=await connection.execute(sql`SELECT w.revision,w.published_revision,(w.draft IS DISTINCT FROM w.published) AS pending,v.label,v.created_at
- FROM menu_workspaces w LEFT JOIN LATERAL (SELECT label,created_at FROM menu_workspace_versions WHERE restaurant_id=w.restaurant_id ORDER BY created_at DESC LIMIT 1) v ON true WHERE w.restaurant_id=${tenant}`)
+ FROM menu_workspaces w LEFT JOIN LATERAL (SELECT label,created_at FROM menu_workspace_versions WHERE restaurant_id=w.restaurant_id ORDER BY created_at DESC,revision DESC LIMIT 1) v ON true WHERE w.restaurant_id=${tenant}`)
  const r=rows[0];if(!r)return null
  const at=r.created_at as unknown
  return {revision:Number(r.revision),publishedRevision:r.published_revision==null?null:Number(r.published_revision),pending:r.pending===true,lastLabel:r.label==null?null:String(r.label),lastAt:at==null?null:at instanceof Date?at.toISOString():String(at)}

@@ -61,6 +61,20 @@ function changedKeys(a: Any, b: Any, skip: string) {
  return [...keys].filter(k => !jsonEqual(a?.[k], b?.[k]))
 }
 function setKeys(target: Any, source: Any, keys: string[]) { for (const k of keys) { if (source[k] === undefined) delete target[k]; else target[k] = clone(source[k]) } }
+const isPlain = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v)
+/** Chiavi del documento fuse per sotto-chiave (correzioni revisione 22/10, punto 5): se il bot tocca un campo di design,
+ * la bozza tiene gli altri (design.manualOrder, stili non pubblicati). Ricorsiva sui sotto-oggetti; gli array si sostituiscono. */
+export const DEEP_MERGE_KEYS = ['design', 'pdf', 'translationSettings']
+function mergeDeep(target: Any, base: Any, next: Any) {
+ for (const k of changedKeys(base, next, '')) {
+  if (isPlain(base?.[k]) && isPlain(next[k]) && isPlain(target[k])) mergeDeep(target[k], base[k], next[k])
+  else if (next[k] === undefined) delete target[k]
+  else target[k] = clone(next[k])
+ }
+}
+/** Voci di `skipped` che significano «modifica online ma non nella bozza» (avviso al titolare, punto 4). */
+export const significantSkipped = (skipped: string[]) => skipped.filter(s => s !== 'draft:invalid')
+export const SKIPPED_NOTICE = 'Una modifica da WhatsApp è online ma non è nella bozza della dashboard perché lì quel piatto, Sezione o Menu non c’è più o è stato cambiato: se pubblichi la bozza la modifica verrà tolta. Ricontrolla la bozza prima di pubblicare.'
 /** Inserisce `el` in `list` dopo il fratello precedente (in `order`) presente in `list`; altrimenti prima del successivo; altrimenti in fondo. */
 function insertNear(list: Any[], el: Any, order: Any[], at: number, accept: (x: Any) => boolean = () => true) {
  for (let i = at - 1; i >= 0; i--) { const k = list.findIndex(x => x.id === order[i].id && accept(x)); if (k >= 0) { list.splice(k + 1, 0, el); return } }
@@ -75,7 +89,10 @@ const findItem = (d: Any, id: string) => { for (const m of d.menus) for (const s
 export function mergeBotChange(baseIn: Workspace, nextIn: Workspace, draftIn: Workspace, opts: { replaceMenuIds?: string[] } = {}): MergeResult {
  const base = baseIn as Any, next = nextIn as Any, d = clone(draftIn) as Any, skipped: string[] = [], replacedPending: string[] = []
  // 1) campi del documento fuori dai menu (design, lingue, pdf…): cambiati dal bot → vince il bot.
- setKeys(d, next, changedKeys(base, next, 'menus'))
+ for (const k of changedKeys(base, next, 'menus')) {
+  if (DEEP_MERGE_KEYS.includes(k) && isPlain(base[k]) && isPlain(next[k]) && isPlain(d[k])) mergeDeep(d[k], base[k], next[k])
+  else setKeys(d, next, [k])
+ }
  // 2) Menu sostituiti per intero: si prende quello di next; se la bozza di quel Menu era diversa dal pubblicato, va segnalato.
  const replaced = new Set(opts.replaceMenuIds ?? [])
  for (const id of replaced) {
@@ -171,6 +188,8 @@ export type BotChange = {
  notice?: string
  /** Versioni da salvare prima (es. copia di sicurezza del menu intero). Senza bozza pendente = mutateWorkspace(bozza) come prima. */
  before?: { label: string; doc: Workspace }[]
+ /** Revisione della BOZZA vista dal titolare («Pubblica preset» dalla dashboard): diversa sotto lock → WorkspaceConflict. */
+ expectedDraftRevision?: number
  /** Trasformazione della bozza al posto della fusione (traduzioni: aggiunge solo ciò che manca). */
  draft?: (draft: Workspace) => Promise<Workspace> | Workspace
 }
@@ -199,6 +218,7 @@ export async function applyBotChange(tenant: string, actor: string, labels: [str
  if (!raw) throw new WorkspaceMissing('Revision conflict')
  const rawP = Number(raw.published_revision ?? raw.revision)
  if (!botDraftLegacy() && raw.published != null && rawP !== change.expectedPublishedRevision) throw conflict()
+ if (change.expectedDraftRevision !== undefined && Number(raw.revision) !== change.expectedDraftRevision) throw conflict()
  const computeNext = (published: Workspace) => {
   if (change.next) return change.next
   const w = clone(published) as Any
@@ -212,10 +232,20 @@ export async function applyBotChange(tenant: string, actor: string, labels: [str
    // La bozza è diventata pendente fra la lettura e il lock (dashboard): si ripete col percorso parziale.
    if (botDraftLegacy() || raw.published == null || !isConflict(e)) throw e
    const again = await readWorkspace(tenant, connection)
-   if (!again || !pendingOf(again) || Number(again.published_revision) !== change.expectedPublishedRevision) throw e
+   if (!again || !pendingOf(again) || Number(again.published_revision) !== change.expectedPublishedRevision || (change.expectedDraftRevision !== undefined && Number(again.revision) !== change.expectedDraftRevision)) throw e
   }
  }
  return partial(tenant, actor, labels, change, computeNext, connection)
+}
+
+/** Menu a cui appartiene la voce saltata ('item:<id>:…', 'section:<id>:…', 'menu:<id>:…'), cercata in next, base e bozza. */
+function menuOfSkipped(entry: string, ...docs: Workspace[]): string | null {
+ const [kind, id] = entry.split(':')
+ for (const w of docs) for (const m of w.menus) {
+  if (kind === 'menu' && m.id === id) return m.id
+  for (const s of m.sections) { if (kind === 'section' && s.id === id) return m.id; if (kind === 'item' && s.items.some(i => i.id === id)) return m.id }
+ }
+ return docs[0]?.menus[0]?.id ?? null
 }
 
 async function legacy(tenant: string, actor: string, labels: [string, string], change: BotChange, raw: WorkspaceRow, next: Workspace, connection: DB): Promise<BotChangeResult> {
@@ -232,6 +262,7 @@ async function partial(tenant: string, actor: string, labels: [string, string], 
   const row = await lockBotRow(tx, tenant)
   if (!row) throw new WorkspaceMissing('Revision conflict')
   if (row.published == null || Number(row.published_revision ?? row.revision) !== change.expectedPublishedRevision) throw conflict()
+  if (change.expectedDraftRevision !== undefined && row.revision !== change.expectedDraftRevision) throw conflict()
   const base = workspaceSchema.parse(row.published), draft = workspaceSchema.parse(row.draft)
   let next = workspaceSchema.parse(computeNext(base))
   const merged = change.draft ? { draft: await change.draft(clone(draft)), skipped: [] as string[], replacedPending: [] as string[] } : mergeBotChange(base, next, draft, { replaceMenuIds: change.replaceMenuIds })
@@ -264,6 +295,10 @@ async function partial(tenant: string, actor: string, labels: [string, string], 
   // Caso raro (bozza risultante invalida): la modifica del bot è online ma non nella bozza; un «Pubblica» la toglierebbe.
   // Non si scrive mai una bozza invalida: si avvisa il titolare (stessa tabella degli avvisi dei preset), così ricontrolla prima di pubblicare.
   if (skipped.includes('draft:invalid')) { const menuId = next.menus[0]?.id; if (menuId) await tx.transaction(async s => { await s.execute(sql`INSERT INTO menu_owner_notices(id,restaurant_id,kind,menu_id,service_day,message) VALUES(${randomUUID()},${tenant},'draft_discarded',${menuId},${new Date().toISOString().slice(0, 10)}::date,${'Una modifica da WhatsApp è già online ma non è entrata nella bozza della dashboard: ricontrolla la bozza prima di pubblicare, altrimenti la modifica verrebbe tolta.'}) ON CONFLICT DO NOTHING`) }).catch(() => undefined) }
+  // Modifica online ma non entrata nella bozza (bersaglio cancellato/spostato in bozza, Sezione non vuota, Menu sostituito):
+  // un «Pubblica» della bozza la toglierebbe. Avviso al titolare, stessa tabella e stesso meccanismo del caso sopra.
+  const lost = significantSkipped(skipped)
+  if (lost.length && !skipped.includes('draft:invalid')) { const menuId = menuOfSkipped(lost[0]!, base, next, draft); if (menuId) await tx.transaction(async s => { await s.execute(sql`INSERT INTO menu_owner_notices(id,restaurant_id,kind,menu_id,service_day,message) VALUES(${randomUUID()},${tenant},'draft_discarded',${menuId},${new Date().toISOString().slice(0, 10)}::date,${SKIPPED_NOTICE}) ON CONFLICT DO NOTHING`) }).catch(() => undefined) }
   const clean = jsonEqual(newDraft, next), D2 = D + steps, P2 = clean ? D2 : P + steps
   await writePublication(tx, tenant, next, new Date())
   await version(tx, tenant, actor, D2 - 1, labels[0], newDraft)

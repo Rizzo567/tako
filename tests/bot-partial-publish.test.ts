@@ -431,3 +431,70 @@ describe('conflitti e bordi della fusione', () => {
   expect(item(draft, ids.cacio)!.price).toBe(9); expect(item(draft, ids.pici)!.price).toBe(12); expect(item(draft, ids.tagliata)!.price).toBe(30)
  })
 })
+
+describe('correzioni revisione 22/10 (lato server)', () => {
+ it('punto 2 — «Pubblica preset» dalla dashboard (expectedRevision): pubblica solo il Menu del preset, le bozze degli altri Menu restano', async () => {
+  const ids = await fresh()
+  await P.activateDayPresets(ids.tenant, ids.pranzo, { kind: 'current' })
+  const preset = await P.saveDayPreset(ids.tenant, { menuId: ids.pranzo, weekday: 2, sections: [{ id: U(), name: 'Primi', items: [{ id: U(), name: 'Gnocchi', price: 12 }] }] as never })
+  await dash(ids.tenant, ids.actor, w => { w.menus[1].sections[0].items[0].price = 99 })
+  const r = await raw(ids.tenant)
+  await expect(P.publishDayPreset(ids.tenant, { presetId: preset.id, expectedRevision: r.revision - 1, actor: ids.actor })).rejects.toBeInstanceOf(S.WorkspaceConflict)
+  const out = await P.publishDayPreset(ids.tenant, { presetId: preset.id, expectedRevision: r.revision, actor: ids.actor })
+  const { r: after, draft, pub } = await docs(ids.tenant)
+  expect(byName(pub, 'Gnocchi')).toHaveLength(1); expect(byName(draft, 'Gnocchi')[0].id).toBe(byName(pub, 'Gnocchi')[0].id)
+  expect(item(pub, ids.tagliata)!.price).toBe(16) // bozza di Cena NON pubblicata
+  expect(item(draft, ids.tagliata)!.price).toBe(99) // e resta in bozza
+  expect(out.revision).toBe(after.revision); expect(out.publishedRevision).toBe(Number(after.published_revision))
+  expect(Number((await pg.client`SELECT price FROM menu_items WHERE id=${ids.tagliata}`)[0]!.price)).toBe(16)
+ })
+ it('punto 2 — conflitto sulla revisione della bozza anche sotto lock (expectedDraftRevision)', async () => {
+  const ids = await fresh()
+  await dash(ids.tenant, ids.actor, w => { w.menus[1].sections[0].items[0].price = 50 })
+  const view = (await B.readBotWorkspace(ids.tenant))!, r = await raw(ids.tenant)
+  await expect(B.applyBotChange(ids.tenant, ids.actor, ['a', 'b'], { expectedPublishedRevision: view.revision, expectedDraftRevision: r.revision - 1, next: C.workspaceSchema.parse(view.draft) })).rejects.toThrow('Revision conflict')
+  expect((await raw(ids.tenant)).revision).toBe(r.revision)
+ })
+ it('punto 4 — modifica online ma non nella bozza (piatto cancellato in bozza): avviso al titolare', async () => {
+  const ids = await fresh()
+  await dash(ids.tenant, ids.actor, w => { w.menus[0].sections[0].items = w.menus[0].sections[0].items.filter((i: any) => i.id !== ids.amatriciana) })
+  const { res } = await bot(ids.tenant, ids.actor, [{ kind: 'price', id: ids.amatriciana, price: 11 }])
+  expect(res.skippedInDraft).toContain('item:' + ids.amatriciana + ':missing')
+  const notices = await pg.client`SELECT kind,menu_id,message FROM menu_owner_notices WHERE restaurant_id=${ids.tenant}`
+  expect(notices).toHaveLength(1)
+  expect(notices[0]).toMatchObject({ kind: 'draft_discarded', menu_id: ids.pranzo, message: B.SKIPPED_NOTICE })
+  expect(B.SKIPPED_NOTICE).not.toMatch(/categori/i)
+ })
+ it('punto 4 — nessun salto: nessun avviso', async () => {
+  const ids = await fresh()
+  await dash(ids.tenant, ids.actor, w => { w.menus[1].sections[0].items[0].price = 30 })
+  const { res } = await bot(ids.tenant, ids.actor, [{ kind: 'price', id: ids.cacio, price: 9 }])
+  expect(res.skippedInDraft).toEqual([])
+  expect(await pg.client`SELECT 1 FROM menu_owner_notices WHERE restaurant_id=${ids.tenant}`).toHaveLength(0)
+ })
+ it('punto 5 — il bot tocca un campo di design: la bozza tiene manualOrder e gli stili non pubblicati', async () => {
+  const ids = await fresh()
+  await dash(ids.tenant, ids.actor, w => { w.design.manualOrder = true; w.design.font = 'serif'; w.menus[1].sections[0].items[0].price = 30 })
+  const view = (await B.readBotWorkspace(ids.tenant))!, next = structuredClone(C.workspaceSchema.parse(view.draft)) as any
+  next.design.primary = '#112233'
+  await B.applyBotChange(ids.tenant, ids.actor, ['a', 'b'], { expectedPublishedRevision: view.revision, next: C.workspaceSchema.parse(next) })
+  const { draft, pub } = await docs(ids.tenant)
+  expect(draft.design.primary).toBe('#112233'); expect(draft.design.manualOrder).toBe(true); expect(draft.design.font).toBe('serif')
+  expect(pub.design.primary).toBe('#112233'); expect(pub.design.manualOrder).not.toBe(true); expect(pub.design.font).toBe('sans')
+ })
+ it('punto 5 — fusione per sotto-chiave anche in pdf (unità)', () => {
+  const base: any = { menus: [], pdf: { a: 1, b: { x: 1, y: 1 } }, design: { k: 1 } }
+  const next: any = { menus: [], pdf: { a: 2, b: { x: 1, y: 1 } }, design: { k: 1 } }
+  const draft: any = { menus: [], pdf: { a: 1, b: { x: 9, y: 1 }, c: 3 }, design: { k: 1, manualOrder: true } }
+  const out: any = B.mergeBotChange(base, next, draft).draft
+  expect(out.pdf).toEqual({ a: 2, b: { x: 9, y: 1 }, c: 3 }); expect(out.design).toEqual({ k: 1, manualOrder: true })
+ })
+ it('punto 7 — la versione «pubblicata» del bot resta alla revisione della bozza (ordine per revisione di «ripristina menu di prima»)', async () => {
+  const ids = await fresh()
+  await dash(ids.tenant, ids.actor, w => { w.menus[1].sections[0].items[0].price = 30 })
+  await bot(ids.tenant, ids.actor, [{ kind: 'price', id: ids.cacio, price: 9 }])
+  const a = await raw(ids.tenant)
+  const [v] = await pg.client`SELECT revision FROM menu_workspace_versions WHERE restaurant_id=${ids.tenant} AND label='WhatsApp: pubblicazione automatica' ORDER BY created_at DESC LIMIT 1`
+  expect(v!.revision).toBe(a.revision); expect(a.revision).toBeGreaterThan(Number(a.published_revision))
+ })
+})

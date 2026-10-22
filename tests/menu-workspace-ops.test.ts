@@ -147,19 +147,88 @@ describe('dashboard editor: bozza a operazioni', () => {
     expect(Number((await row(A)).draft.menus[0].sections[0].items[0].price)).toBe(119)
   })
 
-  it('limiti e validazione: > 50 op, op malformate, documento finale invalido → 422 senza scritture parziali', async () => {
+  it('limiti e validazione: > 50 op, op malformate; op che rende il documento invalido → FIELD solo per lei, le altre restano', async () => {
     const list = Array.from({ length: 51 }, () => setPrice(A, 1))
     expect((await ops(A, list)).statusCode).toBe(400)
     expect((await ops(A, list.slice(0, 50))).statusCode).toBe(200)
     expect((await ops(A, [])).statusCode).toBe(400)
     expect((await ops(A, [{ op: 'set', kind: 'dish', id: A.itemId, fields: {} }])).statusCode).toBe(400)
     expect((await req(A, 'POST', '/ops', { ops: [setPrice(A, 2)] })).statusCode).toBe(400) // clientId mancante
+    // Correzioni revisione 22/10 (punto 1): validazione op per op, niente 422 per tutto il gruppo.
     const before = await row(A)
-    const bad = await ops(A, [setPrice(A, 3), { op: 'set', kind: 'item', id: A.itemId, fields: { name: '' } }])
-    expect(bad.statusCode).toBe(422)
-    expect(bad.json().error.code).toBe('INVALID_DOCUMENT')
+    const bad = await ops(A, [setPrice(A, 3), { op: 'set', kind: 'item', id: A.itemId, fields: { name: '' } }, { op: 'set', kind: 'item', id: A.itemId, fields: { description: 'Ok' } }])
+    expect(bad.statusCode).toBe(200)
+    const body = bad.json()
+    expect(body.results[0]).toEqual({ ok: true }); expect(body.results[1]).toMatchObject({ ok: false, code: 'FIELD' }); expect(body.results[2]).toEqual({ ok: true })
     const after = await row(A)
-    expect(after.revision).toBe(before.revision); expect(after.draft).toEqual(before.draft)
+    expect(after.revision).toBe(before.revision + 1)
+    const it0 = after.draft.menus[0].sections[0].items[0]
+    expect(Number(it0.price)).toBe(3); expect(it0.description).toBe('Ok'); expect(it0.name).toBe(before.draft.menus[0].sections[0].items[0].name)
+    // solo op invalide: nessuna scrittura
+    const only = await ops(A, [{ op: 'set', kind: 'item', id: A.itemId, fields: { name: '' } }])
+    expect(only.statusCode).toBe(200); expect(only.json().results[0]).toMatchObject({ ok: false, code: 'FIELD' })
+    expect((await row(A)).revision).toBe(after.revision)
+    // funzione pura: documento finale sempre valido
+    const ws = (await import('../apps/server/src/lib/menu-workspace-contract.js')).workspaceSchema
+    const pure = store.applyOpsValidated(ws.parse(after.draft), [{ op: 'set', kind: 'item', id: A.itemId, fields: { price: -5 } } as any, { op: 'set', kind: 'item', id: A.itemId, fields: { price: 4 } } as any])
+    expect(ws.safeParse(pure.workspace).success).toBe(true)
+  })
+
+  it('documenti grezzi (salvati prima di un campo con default): niente falso «pendente» né scritture a vuoto (punto 3)', async () => {
+    const [r] = await sql`insert into restaurants(name,slug,plan) values ('C','ops-c','pro') returning id`
+    const [u] = await sql`insert into users(restaurant_id,name,email,role,password_hash,email_verified) values (${r!.id},'Owner C','owner-c@isolated.test','owner','x',true) returning id`
+    const [m] = await sql`insert into menus(restaurant_id,name,type,active,position) values (${r!.id},'Menu C','main',true,0) returning id`
+    const [s] = await sql`insert into menu_sections(menu_id,name,position,active) values (${m!.id},'Primi',0,true) returning id`
+    const [i] = await sql`insert into menu_items(restaurant_id,section_id,name,price,available,position) values (${r!.id},${s!.id},'Piatto C',12,true,0) returning id`
+    const C: Seed = { id: r!.id, ownerId: u!.id, menuId: m!.id, sectionId: s!.id, itemId: i!.id }
+    await req(C, 'GET', '/')
+    // Simula documenti scritti prima del default `hidden`: la chiave manca in entrambe le colonne (grezze ma uguali).
+    const strip = (w: any) => { for (const mm of w.menus) for (const ss of mm.sections) for (const ii of ss.items) delete ii.hidden; return w }
+    const r0 = await row(C)
+    await sql`UPDATE menu_workspaces SET draft=${JSON.stringify(strip(r0.draft))}::jsonb,published=${JSON.stringify(strip(r0.published))}::jsonb WHERE restaurant_id=${C.id}`
+    expect((await row(C)).pending).toBe(false) // grezzi ma uguali: il confronto SQL è già corretto
+    // op che non cambia nulla: nessuna scrittura (prima: parse(raw)≠raw → scrittura e «pendente»)
+    const same = await ops(C, [setPrice(C, 12)])
+    expect(same.json()).toMatchObject({ pending: false, revision: r0.revision })
+    expect((await row(C)).revision).toBe(r0.revision)
+    // cambio e ritorno: bozza normalizzata, pubblicato riscritto normalizzato → SQL e JS dicono «non pendente»
+    expect((await ops(C, [setPrice(C, 13)])).json().pending).toBe(true)
+    const back = await ops(C, [setPrice(C, 12)])
+    expect(back.json().pending).toBe(false)
+    expect((await row(C)).pending).toBe(false)
+    expect((await req(C, 'GET', '/status')).json().pending).toBe(false)
+    expect((await req(C, 'GET', '/')).json().pending).toBe(false)
+    expect(Number((await sql`SELECT price FROM menu_items WHERE id=${C.itemId}`)[0]!.price)).toBe(12)
+    // colonne asimmetriche (bozza normalizzata, pubblicato grezzo): GET corretto; «Scarta» le riallinea senza versione
+    const r1 = await row(C)
+    await sql`UPDATE menu_workspaces SET published=${JSON.stringify(strip(r1.published))}::jsonb WHERE restaurant_id=${C.id}`
+    expect((await row(C)).pending).toBe(true)
+    expect((await req(C, 'GET', '/')).json().pending).toBe(false)
+    const v0 = await versions(C)
+    expect((await req(C, 'POST', '/discard', { expectedRevision: r1.revision })).statusCode).toBe(200)
+    expect((await row(C)).pending).toBe(false); expect(await versions(C)).toBe(v0)
+  })
+
+  it('retry della stessa richiesta /ops (clientId,seq): nessun duplicato, nessuna perdita (punto 8)', async () => {
+    const id = randomUUID()
+    const list = [{ op: 'create', kind: 'item', id, parentId: A.sectionId, fields: { name: 'Retry', price: 5 } }, setPrice(A, 41)]
+    const first = (await ops(A, list)).json()
+    expect(first.results).toEqual([{ ok: true }, { ok: true }])
+    const again = (await ops(A, list)).json()
+    // create ripetuto con lo stesso id e gli stessi campi: idempotente (ok), nessuna scrittura
+    expect(again.results).toEqual([{ ok: true }, { ok: true }])
+    expect(again.revision).toBe(first.revision)
+    expect((await row(A)).draft.menus[0].sections[0].items.filter((i: any) => i.id === id)).toHaveLength(1)
+    // remove ripetuto: il secondo è NOT_FOUND, documento invariato
+    const rm1 = (await ops(A, [{ op: 'remove', kind: 'item', id }])).json(), rm2 = (await ops(A, [{ op: 'remove', kind: 'item', id }])).json()
+    expect(rm1.results).toEqual([{ ok: true }]); expect(rm2.results[0]).toMatchObject({ ok: false, code: 'NOT_FOUND' }); expect(rm2.revision).toBe(rm1.revision)
+  })
+
+  it('/status: ultima etichetta con created_at uguale → revisione più alta (punto 6)', async () => {
+    const at = new Date().toISOString(), r = await row(B)
+    await sql`INSERT INTO menu_workspace_versions(id,restaurant_id,revision,label,snapshot,created_at) VALUES(${randomUUID()},${B.id},${r.revision + 50},'Più alta',${JSON.stringify(r.draft)}::jsonb,${at}),(${randomUUID()},${B.id},${r.revision + 49},'Più bassa',${JSON.stringify(r.draft)}::jsonb,${at})`
+    expect((await read.readWorkspaceStatus(B.id))!.lastLabel).toBe('Più alta')
+    await sql`DELETE FROM menu_workspace_versions WHERE restaurant_id=${B.id} AND label IN ('Più alta','Più bassa')`
   })
 
   it('ownership: id o immagine di un altro locale → 404 e nessuna scrittura', async () => {
