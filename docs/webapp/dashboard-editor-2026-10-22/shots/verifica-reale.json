@@ -1,6 +1,6 @@
 {
  "ambito": "Server Fastify VERO (startServer, TAKO_MODE=web, login vero) + Postgres embedded isolato (migrazioni vere + menu-day-presets.sql) + SPA compilata + renderer vero (esbuild) via proxy locale; bot = applyBotChange sullo stesso DB; Chrome headless 1280 e 390 emulato",
- "data": "2026-10-22T09:33:43.598Z",
+ "data": "2026-10-22T09:55:21.996Z",
  "locale": "26050ecd-2e55-4057-a4c5-bff2b449cd47 (finto)",
  "piatti": 41,
  "risultati": [
@@ -24,7 +24,7 @@
   },
   {
    "n": 4,
-   "scenario": "Rilascio simulato: move piatto in altra Sezione + reorder Sottomenu dopo snapshot provvisorio → DOM == SPA == server, manualOrder",
+   "scenario": "Rilascio simulato: move piatto in altra Sezione + reorder Sottomenu con fotografia dell’ordine nel rilascio del Sottomenu → DOM == SPA == server, manualOrder",
    "ok": true,
    "detail": "pillole DOM = SPA = server (Dolci › Antipasti › Primi › Specialità QA › Secondi › Contorni); Risotti: Carbonara, Risotto ai funghi, Risotto alla milanese, Risotto al nero; design.manualOrder=true solo in bozza"
   },
@@ -32,13 +32,13 @@
    "n": 5,
    "scenario": "Bot WhatsApp con bozza pendente (applyBotChange): pubblicato solo bot, bozza entrambe, notifica ≤ 6 s",
    "ok": true,
-   "detail": "revisioni 7/3 → 9/5 (partial=true); notifica dopo 3897 ms; stato «Modifiche non pubblicate»"
+   "detail": "revisioni 7/3 → 9/5 (partial=true); notifica dopo 3577 ms; stato «Modifiche non pubblicate»"
   },
   {
    "n": 6,
    "scenario": "«Pubblica» → riepilogo → «Pubblica ora»: pubblicato == bozza, «Pubblicato», PDF rigenerato",
    "ok": true,
-   "detail": "riepilogo: «Menu pubblico → bozza da pubblicareAggiunto · Fettuccine QACampoPubblicoDa pubblicareid—0a767fe8-b355-4862-9d4c-6aa3f72fe35eNome—Fettuccine …»; revisione 10=10; PDF rigenerato (200)"
+   "detail": "riepilogo: «Menu pubblico → bozza da pubblicareAggiunto · Fettuccine QACampoPubblicoDa pubblicareNome—Fettuccine QAPrezzo—0Aggiunto · Specialità QACampo…»; revisione 10=10; PDF rigenerato (200)"
   },
   {
    "n": 7,
@@ -56,7 +56,7 @@
    "n": 9,
    "scenario": "Mobile 390: apri, seleziona, matita = foglio dal basso, Pubblica in testata",
    "ok": true,
-   "detail": "foglio {\"top\":277,\"bottom\":851,\"h\":844}, Pubblica in testata a y=90 (a pagina scorsa y=-147); prezzo salvato dal telefono (6,5)"
+   "detail": "foglio {\"top\":342,\"bottom\":915,\"h\":844}, Pubblica in testata a y=90 (a pagina scorsa y=90); prezzo salvato dal telefono (6,5)"
   },
   {
    "n": 10,
@@ -74,8 +74,7 @@
  "risposteHttpErrore": [
   "401 GET /api/auth/bootstrap",
   "404 GET /loading/tako-loading.svg",
-  "404 GET /takomenu-public/branding/takomenu-wordmark-v2.svg",
-  "mobile: con il menu scorso «Pubblica» esce dallo schermo (y=-147): la testata non resta fissa"
+  "404 GET /takomenu-public/branding/takomenu-wordmark-v2.svg"
  ],
  "screenshot": [
   {

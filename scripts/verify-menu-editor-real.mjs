@@ -302,7 +302,7 @@ async function scenarios(R, F, owner) {
     return `scelte «+»: ${kinds.join('/')}; piatto in «Pasta fresca» (hidden=${created.hidden}), Sottomenu nascosto; DOM ${JSON.stringify(inDom)}; pubblicato intatto`
   })
 
-  await step(4, 'Rilascio simulato: move piatto in altra Sezione + reorder Sottomenu dopo snapshot provvisorio → DOM == SPA == server, manualOrder', async () => {
+  await step(4, 'Rilascio simulato: move piatto in altra Sezione + reorder Sottomenu con fotografia dell’ordine nel rilascio del Sottomenu → DOM == SPA == server, manualOrder', async () => {
     const f = await frameOf(page)
     const base = strip(await frameDoc(page))
     const menuOrder = await f.evaluate(() => [...document.querySelectorAll('[data-edit-kind="menu"]')].map(e => e.getAttribute('data-edit-id')))
@@ -310,16 +310,18 @@ async function scenarios(R, F, owner) {
     const snapshot = R.menuOps.manualOrderSnapshot(base, { menuOrder, sectionOrder: { [M.pranzo]: roots } })
     if (!snapshot.some(o => o.op === 'manualOrder' || o.fields?.manualOrder === true || o.kind === 'design')) notes.push('snapshot senza op manualOrder esplicita: ' + JSON.stringify(snapshot.map(o => o.op + ':' + (o.kind || ''))))
     await fromFrame(page, { type: 'tako-menu-edit-mode', editing: true }); await page.waitForSelector('.mw-ed-done', { timeout: 4000 })
-    await fromFrame(page, { type: 'tako-menu-edit-ops', provisional: true, seq: 101, ops: snapshot })
-    await wait(900)
-    if ((await docNow()).data.design.manualOrder !== undefined) throw new Error('le op provvisorie sono arrivate al server da sole')
-    const afterSnap = R.menuOps.applyOps(base, snapshot).workspace
+    // Protocollo dopo la revisione (22/10): niente op provvisorie; la fotografia viaggia insieme al primo rilascio di un Sottomenu,
+    // e solo se il documento non è già manuale (lo scenario 3 crea un Sottomenu, che lo rende già manuale).
+    const alreadyManual = base.design?.manualOrder === true
+    if (!alreadyManual && (await docNow()).data.design.manualOrder !== undefined) throw new Error('ordine manuale scritto prima del rilascio')
+    const snapOps = alreadyManual ? [] : snapshot
+    const afterSnap = R.menuOps.applyOps(base, snapOps).workspace
     const carbonara = itemByName(F, 'Carbonara'), firstRisotto = itemByName(F, 'Risotto ai funghi')
     const move = { op: 'move', kind: 'item', id: carbonara.id, toParentId: S.risotti, at: { beforeId: firstRisotto.id } }
     const afterMove = R.menuOps.applyOps(afterSnap, [move]).workspace
     const reorder = R.menuOps.dropToOps(afterMove, { id: S.dolci, kind: 'submenu', fromGroup: 'pills:' + M.pranzo, toGroup: 'pills:' + M.pranzo, toIndex: 0 })
     await fromFrame(page, { type: 'tako-menu-edit-ops', seq: 102, ops: [move] })
-    await fromFrame(page, { type: 'tako-menu-edit-ops', seq: 103, ops: reorder })
+    await fromFrame(page, { type: 'tako-menu-edit-ops', seq: 103, ops: [...snapOps, ...reorder] })
     await shot(page, 'reale-desktop-06-tremolio.png', 'Modalità tremolio, «Fine» in testata, rilascio applicato')
     await clickText(page, 'Fine'); await fromFrame(page, { type: 'tako-menu-edit-mode', editing: false })
     const g = await waitFor(async () => { const x = await docNow(); return x.data.design.manualOrder === true && x.data.menus.find(m => m.id === M.pranzo).sections.find(s => !s.parentSectionId)?.id === S.dolci ? x : null }, 10000, 'bozza del server con manualOrder e Dolci in testa')
