@@ -20,6 +20,7 @@ function ensureBoot(){return boot??=(async()=>{
  milestone('app_module_ready');
  const imageStore=await import(${JSON.stringify(new URL('../../apps/server/src/lib/image-store.ts',import.meta.url).pathname)});
  imageStore.configureImageInitializer(async()=>{milestone('before_image_initializer');const imageInitializer=await import(${JSON.stringify(initializerEntry)});const result=await imageInitializer.initializeEdgeImages();milestone('after_image_initializer');return result});
+ imageStore.configureImageQuotaInitializer(async()=>{milestone('before_image_quota_initializer');const imageInitializer=await import(${JSON.stringify(initializerEntry)});const result=await imageInitializer.initializeEdgeImageQuota();milestone('after_image_quota_initializer');return result});
  const fontInitializer=await import(${JSON.stringify(fontInitializerEntry)});
  milestone('after_initializer_imports');
  // Initializer export contracts are verified before deployment.

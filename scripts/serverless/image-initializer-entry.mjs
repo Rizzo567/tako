@@ -19,11 +19,11 @@ export function imageInitializerEntry({initializerEntry,databaseEntry,magickEntr
  return `import process from 'node:process';
 import postgres from 'postgres';
 import {databaseOptions} from ${JSON.stringify(databaseEntry)};
-import {initializeEdgeImages as initialize} from ${JSON.stringify(initializerEntry)};
+import {initializeEdgeImages as initialize,initializeEdgeImageQuota as initializeQuota} from ${JSON.stringify(initializerEntry)};
 const url='https://cdn.jsdelivr.net/npm/@imagemagick/magick-wasm@0.0.44/dist/x86/magick.wasm';
 const digest='b7d6710436b150dc5bd1ca04d80b6b7614c54854d7470f888f7e69a2a41b00e4';
 ${readPinnedWasm.toString()}
-let initialized;
+let initialized,quotaInitialized;
 function milestone(stage){console.log(JSON.stringify({scope:'candidate-image-boot',stage,memory:Deno.memoryUsage()}))}
 async function boundedWasm(){
  const abort=new AbortController(),timer=setTimeout(()=>abort.abort(),20000);
@@ -35,14 +35,29 @@ async function boundedWasm(){
   milestone('image_wasm_download_complete');return bytes;
  }finally{clearTimeout(timer)}
 }
-export function initializeEdgeImages(){
- return initialized??=(async()=>{
-  const env=process.env;
+function imageSeeds(env){
   if(env.TAKO_EXECUTION_RUNTIME!=='edge'||env.UPLOADS_DRIVER!=='supabase'||!env.DATABASE_URL||!env.SUPABASE_URL||!env.SUPABASE_SERVICE_ROLE_KEY)throw new Error('Edge image provider configuration required');
   const raw=env.TAKO_IMAGE_SEEDS_JSON;
   if(!raw||raw.length>65536)throw new Error('Image seed configuration required');
   const seeds=JSON.parse(raw);
   if(!Array.isArray(seeds)||!seeds.length||seeds.some(s=>!s||typeof s.tenantId!=='string'||typeof s.checkpoint!=='string'||Object.keys(s).some(k=>!['tenantId','checkpoint'].includes(k))))throw new Error('Invalid image seed configuration');
+  return seeds;
+}
+/** 22/10: solo registro quota (foto salvate senza ricodifica) — niente import magick-wasm, niente download/compilazione WASM.
+ *  Un errore non resta memorizzato: la richiesta successiva riprova. */
+export function initializeEdgeImageQuota(){
+ return quotaInitialized??=(async()=>{
+  const env=process.env;const seeds=imageSeeds(env);
+  milestone('image_quota_before_postgres_construct');
+  const connection=postgres(env.DATABASE_URL,databaseOptions(env));
+  try{
+   return await initializeQuota({env,seeds,milestone,query:async(statement,parameters)=>await connection.unsafe(statement,[...parameters])});
+  }catch(error){await connection.end({timeout:1}).catch(()=>{});throw error}
+ })().catch(error=>{quotaInitialized=undefined;throw error});
+}
+export function initializeEdgeImages(){
+ return initialized??=(async()=>{
+  const env=process.env;const seeds=imageSeeds(env);
   // Match canonical pool TLS policy; reject filesystem CA paths in Edge.
   milestone('image_before_postgres_construct');
   const connection=postgres(env.DATABASE_URL,databaseOptions(env));

@@ -3,6 +3,10 @@ import {imageInitializerEntry,readPinnedWasm} from '../scripts/serverless/image-
 it('packages no-args entry with fixed asset, readonly env, TLS policy and bounded fetch',()=>{
  const source=imageInitializerEntry({initializerEntry:'/fixture/initializer.ts',databaseEntry:'/fixture/client.ts'})
  expect(source).toContain('export function initializeEdgeImages()')
+ expect(source).toContain('export function initializeEdgeImageQuota()')
+ // l'avvio solo-quota non tocca magick/WASM
+ const quotaFn=source.slice(source.indexOf('export function initializeEdgeImageQuota()'),source.indexOf('export function initializeEdgeImages()'))
+ expect(quotaFn).not.toMatch(/magick|boundedWasm|wasm/i)
  expect(source).toContain("env.TAKO_IMAGE_SEEDS_JSON")
  expect(source).not.toContain('Deno.env.set')
  expect(source).toContain('databaseOptions(env)')

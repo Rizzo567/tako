@@ -51,6 +51,9 @@ let configuredEdgeCodec:EdgeImageCodec|undefined
 let configuredEdgeQuota:DurableImageQuota|undefined
 let configuredEdgeInitializer:(()=>Promise<unknown>)|undefined
 export function configureImageInitializer(initialize:()=>Promise<unknown>){configuredEdgeInitializer=initialize}
+/** 22/10: avvio del SOLO registro quota (senza WASM) per le foto salvate senza ricodifica; il codec resta pigro. */
+let configuredEdgeQuotaInitializer:(()=>Promise<unknown>)|undefined
+export function configureImageQuotaInitializer(initialize:()=>Promise<unknown>){configuredEdgeQuotaInitializer=initialize}
 export function configureImageQuota(quota:DurableImageQuota){configuredEdgeQuota=quota}
 export function configureImageCodec(codec:EdgeImageCodec){configuredEdgeCodec=codec}
 
@@ -176,6 +179,14 @@ export async function saveImageBuffer(restaurantId: string, buf: Buffer, opts: {
     return { code: 'INVALID_FILE_CONTENT', error: 'Il contenuto del file non è un\'immagine valida.' }
   }
 
+  // 22/10: con il passthrough l'inizializzatore completo (codec+quota) non gira → sull'edge a freddo la quota va preparata qui,
+  // senza WASM. Se fallisce resta il rifiuto EDGE_STORAGE_QUOTA_REQUIRED qui sotto (fail closed, come prima).
+  if(edge&&!configuredEdgeQuota){
+    try{
+      if(configuredEdgeQuotaInitializer)await configuredEdgeQuotaInitializer()
+      else if(configuredEdgeInitializer)await configuredEdgeInitializer()
+    }catch{}
+  }
   // Durable ledger is mandatory on Edge and optionally shared by Node after seed.
   if((edge||process.env['TAKO_DURABLE_IMAGE_QUOTA']==='1')&&!configuredEdgeQuota)return {code:'EDGE_STORAGE_QUOTA_REQUIRED',error:'Salvataggio immagini Edge non ancora disponibile.'}
 
