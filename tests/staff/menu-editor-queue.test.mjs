@@ -97,7 +97,7 @@ test('revisione remota diversa: coda vuota → rimpiazzo; coda piena → ack, ri
 test('evento reloaded segnala la pubblicazione altrui (bot) con etichetta',async()=>{
  const {q,srv,events}=setup();srv.doc.menus[0].sections[0].items[0].price=13;srv.revision=3;srv.published=3;
  q.remote({revision:3,publishedRevision:3,lastLabel:'WhatsApp: prezzo Carbonara'});await flush();await q.whenIdle();
- const ev=events.find(e=>e.type==='reloaded');assert.ok(ev.publishedChanged);assert.equal(ev.label,'WhatsApp: prezzo Carbonara');assert.deepEqual(Core.changedIds(ev.before,ev.after),['i1']);
+ const ev=events.find(e=>e.type==='reloaded');assert.ok(ev.publishedChanged);assert.equal(ev.label,'WhatsApp: prezzo Carbonara');assert.deepEqual(plain(Core.changedIds(ev.before,ev.after)),['i1']);
 });
 
 test('whenIdle aspetta la coda (Pubblica parte solo a coda vuota)',async()=>{

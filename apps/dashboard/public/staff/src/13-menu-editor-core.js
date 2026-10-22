@@ -63,10 +63,10 @@
    if(remoteSeen&&nextRev!==null&&(remoteSeen.revision>nextRev||remoteSeen.publishedRevision!==nextPub))reloadWanted=true;
    if(nextRev!==null)revision=nextRev;
    if(r&&typeof r.pending==='boolean')serverPending=r.pending;
-   const pubBefore=publishedRevision;publishedRevision=nextPub;
+   // Pubblicazione altrui scoperta dall'ack: la revisione pubblicata la aggiorna la ricarica, così l'evento «reloaded» la segnala.
+   if(nextPub!==publishedRevision)reloadWanted=true;
    sent.entries.forEach(e=>{const bad=rejected.some(x=>x.entry===e);e.done&&e.done(!bad);});
    if(rejected.length){reloadWanted=true;event({type:'rejected',codes:rejected.map(x=>x.code),ops:rejected.map(x=>x.entry.op)});}
-   if(pubBefore!==publishedRevision)reloadWanted=true;
    if(reloadWanted){reload();return;}
    if(rejected.length)recompute();else emit();
    if(outbox.length)schedule(0);else settle();

@@ -12,7 +12,7 @@ const same=async page=>{const d=await frameDoc(page);return !!d&&JSON.stringify(
 const converge=async(pages,ms=20000)=>{try{await waitFor(async()=>{for(const p of pages)if(!await same(p))return false;return true},ms,'convergenza');return 0}catch{let n=0;for(const p of pages)if(!await same(p))n++;return n}}
 const item=id=>srv.doc.menus.flatMap(m=>m.sections.flatMap(s=>s.items)).find(i=>i.id===id)
 async function scenario(name,fn){reset();const p1=await H.open('desktop'),p2=await H.open('desktop');const started=Date.now()
- try{for(const p of [p1,p2]){await p.waitForSelector('.mw-ed-stage');await tapFrame(p);await waitFor(()=>frameDoc(p),15000,'documento')}
+ try{for(const p of [p1,p2]){await p.waitForSelector('.mw-ed-stage');await tapFrame(p);await fromFrame(p,{type:'tako-menu-edit-ready'});await waitFor(()=>frameDoc(p),15000,'documento')}
   const extra=await fn(p1,p2)||{};const divergences=await converge(extra.pages||[p1,p2]);const ok=divergences===0&&extra.ok!==false
   out.push({scenario:name,ok,divergences,ms:Date.now()-started,...extra.detail?{detail:extra.detail}:{}});console.log(ok?'✓':'✗',name,divergences)}
  catch(e){out.push({scenario:name,ok:false,error:String(e.message||e)});console.log('✗',name,e.message)}

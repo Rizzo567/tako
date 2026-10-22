@@ -1,0 +1,225 @@
+{
+ "ambito": "SPA vera + renderer vero + API finta (Node), ruolo owner, Chrome headless; messaggi del layer iframe simulati",
+ "risultati": [
+  {
+   "scenario": "desktop: apri",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "desktop: seleziona + matita",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "desktop: modifica campi (Invio, casella) senza «Salva»",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "desktop: «+» a 4 scelte, op create, compare subito, selezionato, Menu/Sottomenu nascosti",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "desktop: gesto (provvisorie davanti al primo rilascio, «Fine» → exit)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "desktop: «Fine» senza rilasci annulla le provvisorie",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "desktop: Pubblica (coda vuota, riquadro, PDF aggiornato)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "desktop: Scarta le modifiche",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "desktop: notifica WhatsApp",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "desktop: errori 404 e offline",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "desktop: Avanzate e ritorno",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: apri",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: seleziona + matita",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: modifica campi (Invio, casella) senza «Salva»",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: «+» a 4 scelte, op create, compare subito, selezionato, Menu/Sottomenu nascosti",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: gesto (provvisorie davanti al primo rilascio, «Fine» → exit)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: «Fine» senza rilasci annulla le provvisorie",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: Pubblica (coda vuota, riquadro, PDF aggiornato)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: Scarta le modifiche",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: notifica WhatsApp",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: errori 404 e offline",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: Avanzate e ritorno",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "flag spento: schermata di oggi",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "nessun errore nel browser",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "screenshot": [
+  {
+   "file": "desktop-01-apri.png",
+   "vp": "desktop",
+   "label": "Apri Piatti: menu vero al centro, PDF pubblicato a destra"
+  },
+  {
+   "file": "desktop-02-matita.png",
+   "vp": "desktop",
+   "label": "Matita sul piatto: pop-over ancorato"
+  },
+  {
+   "file": "desktop-03-campo-salvato.png",
+   "vp": "desktop",
+   "label": "Campo confermato con Invio → op set, stato «Modifiche non pubblicate»"
+  },
+  {
+   "file": "desktop-04-piu-4-scelte.png",
+   "vp": "desktop",
+   "label": "«+» con Menu / Sottomenu / Sezione / Piatto, genitore preselezionato"
+  },
+  {
+   "file": "desktop-05-tremolio-fine.png",
+   "vp": "desktop",
+   "label": "Modalità tremolio: «Fine» in alto a destra"
+  },
+  {
+   "file": "desktop-06-pubblica.png",
+   "vp": "desktop",
+   "label": "Pubblica: elenco differenze, «Pubblica ora», «Scarta le modifiche»"
+  },
+  {
+   "file": "desktop-07-whatsapp.png",
+   "vp": "desktop",
+   "label": "Notifica «Aggiornato da WhatsApp: Cotoletta» + lampeggio"
+  },
+  {
+   "file": "desktop-08-offline.png",
+   "vp": "desktop",
+   "label": "Rete assente: «Non salvato, riprovo», la modifica resta in coda"
+  },
+  {
+   "file": "desktop-09-avanzate.png",
+   "vp": "desktop",
+   "label": "«Avanzate»: la lista di prima con selezione multipla, preset, prezzo fisso, ricerca"
+  },
+  {
+   "file": "mobile-01-apri.png",
+   "vp": "mobile",
+   "label": "Apri Piatti: menu vero al centro, pagina intera"
+  },
+  {
+   "file": "mobile-02-matita.png",
+   "vp": "mobile",
+   "label": "Matita sul piatto: foglio dal basso"
+  },
+  {
+   "file": "mobile-03-campo-salvato.png",
+   "vp": "mobile",
+   "label": "Campo confermato con Invio → op set, stato «Modifiche non pubblicate»"
+  },
+  {
+   "file": "mobile-04-piu-4-scelte.png",
+   "vp": "mobile",
+   "label": "«+» con Menu / Sottomenu / Sezione / Piatto, genitore preselezionato"
+  },
+  {
+   "file": "mobile-05-tremolio-fine.png",
+   "vp": "mobile",
+   "label": "Modalità tremolio: «Fine» in alto a destra"
+  },
+  {
+   "file": "mobile-06-pubblica.png",
+   "vp": "mobile",
+   "label": "Pubblica: elenco differenze, «Pubblica ora», «Scarta le modifiche»"
+  },
+  {
+   "file": "mobile-07-whatsapp.png",
+   "vp": "mobile",
+   "label": "Notifica «Aggiornato da WhatsApp: Cotoletta» + lampeggio"
+  },
+  {
+   "file": "mobile-08-offline.png",
+   "vp": "mobile",
+   "label": "Rete assente: «Non salvato, riprovo», la modifica resta in coda"
+  },
+  {
+   "file": "mobile-09-avanzate.png",
+   "vp": "mobile",
+   "label": "«Avanzate»: la lista di prima con selezione multipla, preset, prezzo fisso, ricerca"
+  },
+  {
+   "file": "desktop-10-flag-spento.png",
+   "vp": "desktop",
+   "label": "Flag spento: schermata Menu di oggi"
+  }
+ ],
+ "video": [
+  "video/flusso-dashboard-desktop.webm"
+ ]
+}

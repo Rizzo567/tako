@@ -1,0 +1,68 @@
+{
+ "ambito": "due pagine Chrome headless, SPA vera, API finta con applyOps lato server",
+ "scenari": [
+  {
+   "scenario": "elementi diversi in parallelo",
+   "ok": true,
+   "divergences": 0,
+   "ms": 5221,
+   "detail": "nessuna perdita"
+  },
+  {
+   "scenario": "stesso campo in parallelo",
+   "ok": true,
+   "divergences": 0,
+   "ms": 5262,
+   "detail": "vince l’ultimo arrivato: 30"
+  },
+  {
+   "scenario": "bot cambia pubblicato+bozza con coda piena",
+   "ok": true,
+   "divergences": 0,
+   "ms": 1362,
+   "detail": "notifica WhatsApp vista"
+  },
+  {
+   "scenario": "offline → online",
+   "ok": true,
+   "divergences": 0,
+   "ms": 2024,
+   "detail": "pillola offline vista"
+  },
+  {
+   "scenario": "404 bersaglio sparito",
+   "ok": true,
+   "divergences": 0,
+   "ms": 738
+  },
+  {
+   "scenario": "409 gerarchia (Sottomenu con figlie dentro un altro)",
+   "ok": true,
+   "divergences": 0,
+   "ms": 637
+  },
+  {
+   "scenario": "200 op consecutive",
+   "ok": true,
+   "divergences": 0,
+   "ms": 850,
+   "detail": {
+    "richieste": 4,
+    "dimensioni": [
+     50,
+     50,
+     50,
+     50
+    ],
+    "ordinato": true
+   }
+  },
+  {
+   "scenario": "Pubblica con modifica dell’altra scheda in mezzo (409 → riquadro aggiornato)",
+   "ok": true,
+   "divergences": 0,
+   "ms": 1328,
+   "detail": "riquadro aggiornato da solo true"
+  }
+ ]
+}

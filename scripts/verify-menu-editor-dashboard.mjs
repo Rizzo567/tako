@@ -61,7 +61,7 @@ export async function startHarness({flag=true}={}){
   const sect=d=>JSON.stringify(d.menus.map(m=>[m.id,m.name,m.active,m.sections.map(s=>[s.id,s.name,s.active,s.parentSectionId,s.items.map(i=>i.id)])]));if(!details.length&&(sect(srv.doc)!==sect(srv.published)||JSON.stringify(srv.doc.design)!==JSON.stringify(srv.published.design)))details.push({id:'struttura',action:'changed',label:'Ordine e struttura del menu',fields:[]});
   return {revision:srv.revision,details,added:details.filter(d=>d.action==='added'),removed:details.filter(d=>d.action==='removed'),changed:details.filter(d=>d.action==='changed')}}
  srv.bot=(id,fields,label='WhatsApp: modifica')=>{for(const d of [srv.doc,srv.published]){const r=Ops.applyOps(d,[{op:'set',kind:'item',id,fields}]);Object.assign(d,r.workspace)}srv.revision+=2;srv.publishedRevision=srv.revision;srv.label=label;srv.labelAt=new Date().toISOString()}
- srv.applyOps=ops=>{const r=Ops.applyOps(srv.doc,ops);const changed=JSON.stringify(r.workspace)!==JSON.stringify(srv.doc);srv.doc=JSON.parse(JSON.stringify(r.workspace));if(changed){srv.revision++;srv.label='Bozza dashboard';}return r.results}
+ srv.applyOps=ops=>{const r=Ops.applyOps(srv.doc,ops);const changed=JSON.stringify(r.workspace)!==JSON.stringify(srv.doc);srv.doc=JSON.parse(JSON.stringify(r.workspace));if(changed)srv.revision++;return r.results}
  const json=(res,data,status=200)=>{res.statusCode=status;res.setHeader('Content-Type','application/json');res.end(JSON.stringify(data))}
  const readBody=req=>new Promise(r=>{let b='';req.on('data',c=>b+=c);req.on('end',()=>{try{r(b?JSON.parse(b):null)}catch{r(null)}})})
  const failFor=p=>{const i=srv.fail.findIndex(f=>p.endsWith(f.path));if(i<0)return null;const f=srv.fail[i];if(--f.count<=0)srv.fail.splice(i,1);return f}
@@ -100,6 +100,8 @@ export async function startHarness({flag=true}={}){
   page.on('dialog',d=>d.accept())
   if(vp==='mobile')await page.emulate({viewport:{width:390,height:844,deviceScaleFactor:2,isMobile:true,hasTouch:true},userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1'})
   else await page.setViewport({width:1280,height:900,deviceScaleFactor:1})
+  // Due schede insieme (T7): ogni pagina si comporta da scheda visibile e con fuoco (poller e animazioni attivi).
+  const cdp=await page.createCDPSession();await cdp.send('Emulation.setFocusEmulationEnabled',{enabled:true}).catch(()=>{})
   await page.goto(base);await page.evaluate(()=>window.__mount());return page}
  const close=async()=>{await browser.close().catch(()=>{});await new Promise(r=>server.close(r));await rm(tmp,{recursive:true,force:true})}
  return {base,srv,browser,open,close,errors,Ops}
@@ -109,7 +111,7 @@ export async function startHarness({flag=true}={}){
 export const wait=ms=>new Promise(r=>setTimeout(r,ms))
 export async function frameOf(page){for(let i=0;i<100;i++){const f=page.frames().find(x=>x.url().includes('/menu-preview/'));if(f)return f;await wait(100)}throw new Error('iframe del menu assente')}
 /* Registra nel frame ciò che la SPA gli manda (documento e stato). */
-export async function tapFrame(page){const f=await frameOf(page);await f.waitForFunction(()=>document.readyState==='complete');await f.evaluate(()=>{if(window.__tap)return;window.__tap=true;window.__got=[];addEventListener('message',e=>{if(e.data&&typeof e.data.type==='string'){window.__got.push(e.data.type);if(e.data.document)window.__last=e.data;if(e.data.type==='tako-menu-edit-exit')window.__exit=(window.__exit||0)+1;}})});return f}
+export async function tapFrame(page){const f=await frameOf(page);await f.waitForFunction(()=>document.readyState==='complete',{polling:100});await f.evaluate(()=>{if(window.__tap)return;window.__tap=true;window.__got=[];addEventListener('message',e=>{if(e.data&&typeof e.data.type==='string'){window.__got.push(e.data.type);if(e.data.document)window.__last=e.data;if(e.data.type==='tako-menu-edit-exit')window.__exit=(window.__exit||0)+1;}})});return f}
 /* Messaggio dall'iframe alla SPA (come farebbe il layer di modifica §4). */
 export async function fromFrame(page,msg){const f=await frameOf(page);await f.evaluate(m=>parent.postMessage({v:1,...m},location.origin),msg);await wait(60)}
 export async function frameDoc(page){const f=await frameOf(page);return f.evaluate(()=>window.__last?.document||null)}
@@ -122,6 +124,7 @@ async function main(){
  const H=await startHarness();const {srv}=H;const results=[],shots=[]
  const ok=(name,detail='')=>{results.push({scenario:name,ok:true,detail});console.log('✓',name)}
  const shot=async(page,vp,name,label)=>{await wait(300);const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+0.5);assert.equal(overflow,false,vp+' '+name+': scroll orizzontale');const file=vp+'-'+name+'.png';await page.screenshot({path:resolve(shotsDir,file)});shots.push({file,vp,label})}
+ const sheetGone=page=>page.waitForFunction(()=>!document.querySelector('.mw-create-kind'),{timeout:6000}).catch(async e=>{await page.screenshot({path:resolve(DOCS,'shots/debug-sheet.png')});throw e});
  const click=async(page,text)=>{const done=await page.evaluate(t=>{const el=[...document.querySelectorAll('button,[role=radio]')].find(b=>b.offsetParent!==null&&!b.disabled&&(b.textContent.trim()===t||b.getAttribute('aria-label')===t));if(!el)return false;el.scrollIntoView({block:'center'});el.click();return true},text);assert.ok(done,'pulsante non trovato: '+text);await wait(250)}
  const typeIn=async(page,sel,val)=>{await page.$eval(sel,e=>{e.focus();e.select?.()});await page.keyboard.press('Backspace');await page.type(sel,val);await wait(60)}
  const status=page=>page.$eval('.mw-ed-status',e=>e.textContent).catch(()=>'')
@@ -131,7 +134,7 @@ async function main(){
    Object.assign(srv,{doc:fixture(),published:fixture(),revision:3,publishedRevision:3,fail:[],offline:false,flag:true});srv.pdf=[]
    const page=await H.open(vp);let recorder=null
    if(vp==='desktop')recorder=await page.screencast({path:resolve(videoDir,'flusso-dashboard-desktop.webm'),ffmpegPath:'/opt/homebrew/bin/ffmpeg'})
-   await page.waitForSelector('.mw-ed-stage');await tapFrame(page);await waitFor(()=>frameDoc(page),15000,'documento nell\'iframe')
+   await page.waitForSelector('.mw-ed-stage');await tapFrame(page);await fromFrame(page,{type:'tako-menu-edit-ready'});await waitFor(()=>frameDoc(page),15000,'documento nell\'iframe')
    assert.equal(await page.$('.mw-catalog-list'),null,'la vecchia lista non è al centro');assert.match(await status(page),/Pubblicato/)
    if(vp==='desktop'){await page.waitForSelector('.mw-ed-pdf .mw-pdf-viewer',{timeout:15000});assert.ok(srv.pdf.some(x=>x.preview===false),'PDF del pubblicato (preview:false)')}
    await shot(page,vp,'01-apri','Apri Piatti: menu vero al centro'+(vp==='desktop'?', PDF pubblicato a destra':', pagina intera'));ok(vp+': apri')
@@ -155,10 +158,10 @@ async function main(){
    await waitFor(()=>srv.doc.menus[0].sections[0].items.some(i=>i.name==='Tiramisù'),5000,'piatto creato')
    const created=srv.doc.menus[0].sections[0].items.find(i=>i.name==='Tiramisù');assert.equal(created.sectionId,undefined)
    await waitFor(()=>page.frames().find(x=>x.url().includes('/menu-preview/')).evaluate(id=>window.__last?.selection?.id===id&&window.__last.flash?.includes(id),created.id),5000,'nuovo piatto selezionato e lampeggiante')
-   await wait(900);await click(page,'Aggiungi sottomenu o piatto');await page.waitForSelector('.mw-create-kind');await click(page,'Sottomenu');await typeIn(page,'input[aria-label="Nome del sottomenu"]','Dolci');await click(page,'Salva')
-   await waitFor(()=>srv.doc.menus[0].sections.some(s=>s.name==='Dolci'&&s.active===false),5000,'sottomenu nascosto creato');await wait(900)
+   await sheetGone(page);await click(page,'Aggiungi sottomenu o piatto');await page.waitForSelector('.mw-create-kind');await click(page,'Sottomenu');await typeIn(page,'input[aria-label="Nome del sottomenu"]','Dolci');await click(page,'Salva')
+   await waitFor(()=>srv.doc.menus[0].sections.some(s=>s.name==='Dolci'&&s.active===false),5000,'sottomenu nascosto creato');await sheetGone(page)
    await click(page,'Aggiungi sottomenu o piatto');await page.waitForSelector('.mw-create-kind');await click(page,'Sezione');await typeIn(page,'input[aria-label="Nome della sezione"]','Al cucchiaio');await click(page,'Salva')
-   await waitFor(()=>srv.doc.menus[0].sections.some(s=>s.name==='Al cucchiaio'&&s.parentSectionId),5000,'sezione figlia creata');await wait(900)
+   await waitFor(()=>srv.doc.menus[0].sections.some(s=>s.name==='Al cucchiaio'&&s.parentSectionId),5000,'sezione figlia creata');await sheetGone(page)
    ok(vp+': «+» a 4 scelte, op create, compare subito, selezionato, Menu/Sottomenu nascosti')
    // Gesto: modalità tremolio, op provvisorie, rilascio, «Fine»
    await fromFrame(page,{type:'tako-menu-edit-mode',editing:true});await page.waitForSelector('.mw-ed-done')

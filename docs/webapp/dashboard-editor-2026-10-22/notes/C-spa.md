@@ -25,3 +25,12 @@
 ## Aperto
 - Layer di selezione/gesto nell'iframe (perimetro B): negli e2e i suoi messaggi sono simulati dal frame.
 - Pop-over ancorato all'elemento: usa `[data-edit-id]` dentro l'iframe (same-origin); senza attributi si ancora all'angolo dell'iframe.
+
+## Giro finale di verifica (22/10, ~11:25)
+- `node scripts/build-staff-web.mjs`: verde (34 sorgenti, `lib/menu-ops.js`).
+- `node --test tests/staff/*.test.mjs tests/web/staff-build.test.mjs tests/web/menu-workspace-frontend.test.mjs`: 37/37.
+- Altri `tests/web/*.test.mjs` che leggono la SPA: 13 rossi **identici sul commit di partenza 17324ef7** (test fermi a versioni precedenti della UI, non toccati); nessun rosso nuovo.
+- `scripts/verify-menu-editor-dashboard.mjs`: 24/24 scenari (desktop 1280 + mobile 390 emulato, flag spento compreso, 0 errori nel browser). Iframe = renderer vero con il layer `?edit=1` già sul ramo (07adb376); selezione/matita/rilascio inviati come messaggi del frame. Screenshot `shots/{desktop,mobile}-*.png`, video `video/flusso-dashboard-desktop.webm`, esito `shots/verifica-dashboard.json`.
+- `scripts/verify-menu-editor-concurrency.mjs`: 8/8 scenari, 0 divergenze client/server (`shots/verifica-concorrenza.json`).
+- Corretto durante il giro: (1) conferma immediata di caselle/pulsanti decisa dall'elemento dell'evento, non dal fuoco (Safari e clic programmatici non danno il fuoco); (2) pubblicazione del bot scoperta dall'ack di una op: la notifica «Aggiornato da WhatsApp» andava persa → ora la ricarica la segnala e l'etichetta si rilegge da `/status`; (3) stato «Modifiche non pubblicate/Pubblicato» visibile anche su telefono (la testata mobile mostra solo le azioni); (4) «Avanzate»/«Fine» come pillole con testo, campi del pop-over in stile Sobrio.
+- Nota per T7 reale: due schede headless vanno marcate «con fuoco» (`Emulation.setFocusEmulationEnabled`), altrimenti la scheda in secondo piano non interroga `/status` (come una scheda nascosta vera).

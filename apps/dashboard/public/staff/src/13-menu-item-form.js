@@ -12,13 +12,14 @@ function MW_USE_BUFFER(entity,keys,onCommit){
   const fields=window.TakoMenuEditorCore.changedFields(entity,{...entity,...pending},Object.keys(pending).filter(k=>keys.includes(k)));
   if(fields.name!==undefined&&!String(fields.name||'').trim()){delete fields.name;toast('Il nome non può essere vuoto',{type:'warn'});}
   if(Object.keys(fields).length)onCommit(fields);},[entity,keys,onCommit]);
- const later=useRef(false);
+ const later=useRef(false),source=useRef(null);
  const change=useCallback(next=>{const diff={};Object.keys(next).forEach(k=>{if(keys.includes(k)&&next[k]!==value[k])diff[k]=next[k];});if(!Object.keys(diff).length)return;
   editsRef.current={...editsRef.current,...diff};setEdits(editsRef.current);
   // Testo in digitazione → si conferma all'uscita/Invio; tutto il resto (casella, scelta, pulsante) subito.
-  if(!MW_ED_TEXTLIKE(window.document.activeElement)){later.current=true;}},[value,keys]);
+  // Si guarda l'elemento dell'evento (Safari non dà il fuoco a caselle e pulsanti al clic).
+  const from=source.current||window.document.activeElement;if(!MW_ED_TEXTLIKE(from)){later.current=true;}},[value,keys]);
  useEffect(()=>{if(later.current){later.current=false;commit();}});
- const bind={onBlur:e=>{if(MW_ED_TEXTLIKE(e.target))commit();},onKeyDown:e=>{if(e.key==='Enter'&&e.target.tagName==='INPUT'&&MW_ED_TEXTLIKE(e.target)){e.preventDefault();commit();}}};
+ const bind={onChangeCapture:e=>{source.current=e.target;},onClickCapture:e=>{source.current=e.target;},onBlur:e=>{if(MW_ED_TEXTLIKE(e.target))commit();},onKeyDown:e=>{if(e.key==='Enter'&&e.target.tagName==='INPUT'&&MW_ED_TEXTLIKE(e.target)){e.preventDefault();commit();}}};
  // Chiusura del pannello: ciò che è scritto non si perde.
  const commitRef=useRef(commit);commitRef.current=commit;useEffect(()=>()=>commitRef.current(),[]);
  return {value,change,commit,bind,dirty:Object.keys(edits).length>0};

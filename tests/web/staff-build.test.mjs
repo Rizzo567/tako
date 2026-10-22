@@ -14,7 +14,7 @@ test('hosted build compiles all source scripts in order, copies original design,
  const html=await readFile(join(result.out,'index.html'),'utf8');
  const script=html.match(/src="(app\.[a-f0-9]{12}\.js)"/);assert.ok(script);assert.equal(await readFile(join(result.out,script[1]),'utf8'),await readFile(join(result.out,'app.js'),'utf8'));assert.ok(html.includes('lib/react-18.3.1.production.min.js'));assert.ok(html.includes('lib/react-dom-18.3.1.production.min.js'));assert.ok(html.includes('src="boot.js"'));
  assert.equal(/text\/babel|lib\/babel|onclick=|<script\b(?![^>]*\bsrc=)/i.test(html),false);
- assert.deepEqual((await readdir(join(result.out,'lib'))).sort(),['menu-ops.js','pdfjs','react-18.3.1.production.min.js','react-dom-18.3.1.production.min.js','react-dom.js','react.js']);
+ assert.deepEqual((await readdir(join(result.out,'lib'))).sort(),['menu-ops.js','pdfjs','qrcode-1.5.4.min.js','react-18.3.1.production.min.js','react-dom-18.3.1.production.min.js','react-dom.js','react.js']);
  assert.equal(await readFile(join(result.out,'styles.css'),'utf8'),await readFile(join(source,'styles.css'),'utf8'));
  assert.equal(await readFile(join(source,'index.html'),'utf8'),before);
  assert.equal(await readFile(join(result.out,'src/menu-workspace.css'),'utf8'),await readFile(join(source,'src/menu-workspace.css'),'utf8'));

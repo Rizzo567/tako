@@ -28,3 +28,16 @@
 .mw-ed-pdf-updating{color:var(--muted)}
 .mw-ed-pdf-note{color:var(--muted);margin:0}
 @media(prefers-reduced-motion:reduce){.mw-ed-popover{transition:none}}
+.mw-ed-head{align-items:center}
+.mw-ed-head .mw-ed-status{font-size:14px;color:var(--muted)}
+.mw-ed-head .mw-ed-status[data-pending="1"]{color:var(--ink)}
+/* «Avanzate» / «Fine»: pillole con testo, non pulsanti tondi della toolbar. */
+.mw-studio-toolbuttons button.mw-ed-advanced,.mw-studio-toolbuttons button.mw-ed-done{display:inline-flex;align-items:center;justify-content:center;width:auto;height:40px;padding:0 16px;border-radius:var(--r-pill,999px);font-size:14px;line-height:1}
+.mw-studio-toolbuttons button.mw-ed-done{background:var(--ink);color:#fff;border-color:var(--ink)}
+@media(max-width:899px){.mw-ed-grid .mw-studio-toolbar{flex-wrap:wrap!important;row-gap:8px;justify-content:flex-start!important}.mw-ed-grid .mw-dp-spacer{display:none}.mw-studio-toolbuttons button.mw-ed-advanced,.mw-studio-toolbuttons button.mw-ed-done{padding:0 12px}}
+/* Campi del pop-over (fuori da .mw-drawer, montato su body). */
+.mw-ed-popover .mw-field{display:grid;gap:6px}
+.mw-ed-popover .mw-field input,.mw-ed-popover .mw-field select,.mw-ed-popover .mw-fields input,.mw-ed-popover .mw-fields select,.mw-ed-popover .mw-fields textarea{width:100%;min-width:0;min-height:40px;padding:8px 12px;border:1px solid var(--hairline);border-radius:12px;background:var(--surface,#fff);color:var(--ink);font:inherit;font-size:15px}
+.mw-ed-popover .mw-fields{display:grid;gap:10px}
+.mw-ed-popover .mw-field span{font-size:13px;color:var(--muted)}
+.mw-ed-popover details summary{cursor:pointer;font-weight:600;padding:6px 0}

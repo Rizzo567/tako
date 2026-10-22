@@ -43,7 +43,9 @@ function useMenuEditor({adapter,enabled,menuId,setMenuId,trial,onLeft}){
    if(e.type==='rejected')MW_ED_PILL('Modifica non applicata: l’elemento è cambiato');
    else if(e.type==='offline')MW_ED_PILL(e.auth?'Sessione scaduta: accedi di nuovo':'Non salvato, riprovo',{duration:600000});
    else if(e.type==='online')MW_ED_PILL('Modifiche salvate');
-   else if(e.type==='reloaded'&&e.publishedChanged&&!busyRef.current){const live=window.TakoMenuLive,changed=live?live.changedItems(e.before,e.after):[];const ids=C.changedIds(e.before,e.after);if(ids.length)doFlash(ids);MW_ED_PILL(live?live.message(e.label,changed):'Menu aggiornato');}
+   else if(e.type==='reloaded'&&e.publishedChanged&&!busyRef.current){const live=window.TakoMenuLive,changed=live?live.changedItems(e.before,e.after):[];const ids=C.changedIds(e.before,e.after);if(ids.length)doFlash(ids);
+    // Etichetta fresca dallo stato (la pubblicazione può essere arrivata con l'ack di una op, prima del poller).
+    Promise.resolve(adapter.status?adapter.status().then(st=>st?.lastLabel||e.label,()=>e.label):e.label).then(label=>MW_ED_PILL(live?live.message(label,changed):'Menu aggiornato'));}
   }});
   qRef.current=q;
   adapter.load().then(doc=>{if(alive)q.init(doc);}).catch(e=>{if(alive)setLoadError(e.message||'Impossibile caricare il menu');});
