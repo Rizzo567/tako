@@ -261,6 +261,9 @@ async function partial(tenant: string, actor: string, labels: [string, string], 
    backup = await version(tx, tenant, actor, D, change.draftBackupLabel, draft)
    if (change.notice) { const message = change.notice; await tx.transaction(async s => { await s.execute(sql`INSERT INTO menu_owner_notices(id,restaurant_id,kind,menu_id,service_day,message) VALUES(${randomUUID()},${tenant},'draft_discarded',${merged.replacedPending[0]!},${new Date().toISOString().slice(0, 10)}::date,${message.slice(0, 500)}) ON CONFLICT DO NOTHING`) }).catch(() => undefined) }
   }
+  // Caso raro (bozza risultante invalida): la modifica del bot è online ma non nella bozza; un «Pubblica» la toglierebbe.
+  // Non si scrive mai una bozza invalida: si avvisa il titolare (stessa tabella degli avvisi dei preset), così ricontrolla prima di pubblicare.
+  if (skipped.includes('draft:invalid')) { const menuId = next.menus[0]?.id; if (menuId) await tx.transaction(async s => { await s.execute(sql`INSERT INTO menu_owner_notices(id,restaurant_id,kind,menu_id,service_day,message) VALUES(${randomUUID()},${tenant},'draft_discarded',${menuId},${new Date().toISOString().slice(0, 10)}::date,${'Una modifica da WhatsApp è già online ma non è entrata nella bozza della dashboard: ricontrolla la bozza prima di pubblicare, altrimenti la modifica verrebbe tolta.'}) ON CONFLICT DO NOTHING`) }).catch(() => undefined) }
   const clean = jsonEqual(newDraft, next), D2 = D + steps, P2 = clean ? D2 : P + steps
   await writePublication(tx, tenant, next, new Date())
   await version(tx, tenant, actor, D2 - 1, labels[0], newDraft)
