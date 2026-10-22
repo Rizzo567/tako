@@ -77,3 +77,9 @@ Solo con `editing` attivo (mai nella pagina pubblica):
 ## 6. Bot (A2)
 
 `applyBotChange(tenant, actor, label, {expectedPublishedRevision, actions?, idSeed, replaceMenu?})` in `menu-workspace-bot.ts`, regole D5 del piano. Il bot legge il catalogo dal **pubblicato**, proposte/undo agganciati a `published_revision`, `dashboardPending` non più usato per bloccare. La bozza non si perde mai e non si pubblica mai al posto del bot.
+
+## Aggiunta A1 (22/10) — esposizione del flag e dettagli API
+- `dashboardEditor` arriva al client nel GET `/api/menu-workspace` (route operativa ed edge di lettura, stesso corpo): `/api/auth/bootstrap` dà al `menu_editor` solo `{id,name}` del locale.
+- Risposte additive: `/ops` → anche `seq` (eco); `/status` → campi in testa e anche in `data`; 422 di `/ops` → `{error:{code:'INVALID_DOCUMENT',message,details}}`; `/discard` su locale mai pubblicato → 409 `{error:{code:'NOT_PUBLISHED'}}`.
+- `create` con id esistente e campi coincidenti → `{ok:true}`; diversi → `{ok:false,code:'EXISTS'}`. `remove` di un Sottomenu elimina anche le sue Sezioni figlie.
+- `@tako/menu-ops` esporta anche `applyOp`, `cloneDocument` e i tipi `WsDocument`/`ManualOrderView`. Vettori condivisi: `packages/menu-ops/test/vectors.json` (`{version, vectors:[{name,input,ops,output,results,drop?,snapshot?}]}`).
