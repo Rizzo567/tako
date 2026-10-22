@@ -2,6 +2,7 @@
 // Layer di modifica dentro l'iframe /menu-preview/<menuId>?edit=1 (dashboard editor 22/10, PIANO D1/D8/D10, CONTRATTO §4–5).
 // Caricato in modo pigro solo da MenuPreview: la pagina pubblica non lo scarica mai. Selezione (riquadro + matita), messaggi
 // alla SPA, aggancio del motore del gesto (`gesture.ts`), lampeggio. Il renderer resta quello dei clienti in modo `editing`.
+import { flushSync } from 'react-dom'
 import './edit.css'
 import { useEffect, useRef, useState } from 'react'
 import { applyOps } from '../../../../../packages/menu-ops/src/index'
@@ -31,9 +32,12 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     selRef.current = next; setSelection(next)
     if (notify) post(outgoing.select(next))
   }
-  const sendOps = (ops: Op[]) => {
+  const sendOps = (ops: Op[], sync = false) => {
     if (!ops.length) return
-    try { setDoc(applyOps(docRef.current, ops).workspace) } catch { post(outgoing.error('APPLY_FAILED')); return }
+    // sync: rilascio del gesto. Il modulo ha già rimesso il DOM com'era (restoreDomOnDrop); qui React ridisegna nel nuovo ordine nello
+    // stesso task (nessun fotogramma con l'ordine vecchio) e il gesto si riaggancia subito ai nodi nuovi, così la molla di assestamento
+    // segue il piatto anche quando cambia Sezione.
+    try { const next = applyOps(docRef.current, ops).workspace; if (sync) { flushSync(() => setDoc(next)); docRef.current = next; gestureRef.current?.refresh() } else setDoc(next) } catch { post(outgoing.error('APPLY_FAILED')); return }
     post(outgoing.ops(ops, ++seqRef.current))
   }
 
@@ -49,10 +53,10 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     if (!root || state.disabled) return
     root.style.setProperty('--edit-fast', MENU_MOTION.durationMs.fast + 'ms'); root.style.setProperty('--edit-micro', MENU_MOTION.durationMs.micro + 'ms'); root.style.setProperty('--edit-data', MENU_MOTION.durationMs.data + 'ms')
     const gesture = createMenuGesture({
-      root, itemSelector: '[data-edit-id]', reducedMotion: reduced(),
+      root, itemSelector: '[data-edit-id]', reducedMotion: reduced(), restoreDomOnDrop: true,
       canDrop: (item, toGroup) => canDropInto(item.kind, toGroup, menuRef.current),
       onTap: id => { const el = root.querySelector<HTMLElement>(`[data-edit-id="${CSS.escape(id)}"]`); if (el) select(selectionFromAttributes({ id, kind: el.getAttribute('data-edit-kind') })) },
-      onDrop: (drop: ReorderDrop) => { let ops: Op[] = []; try { ops = dropOps(docRef.current, drop) } catch {} if (ops.length) sendOps(ops); else post(outgoing.error('DROP_IGNORED')) },
+      onDrop: (drop: ReorderDrop) => { let ops: Op[] = []; try { ops = dropOps(docRef.current, drop) } catch {} if (ops.length) sendOps(ops, true); else post(outgoing.error('DROP_IGNORED')) },
       onModeChange: editing => {
         setMode(editing); modeRef.current = editing
         if (editing) root.setAttribute('data-edit-jiggle', ''); else root.removeAttribute('data-edit-jiggle')

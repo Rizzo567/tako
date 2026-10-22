@@ -1,5 +1,5 @@
-// UNICO punto di import del motore del gesto (CONTRATTO-GESTO.md). I tipi restano quelli del contratto (copiati in gesture-stub.ts).
-// Passaggio al modulo vero: copiare il file in `packages/menu-gesture/src/index.ts`, poi sostituire SOLO la riga seguente con
-//   export { createMenuGesture } from '../../../../../packages/menu-gesture/src/index'
-export { createMenuGesture } from './gesture-stub'
-export type { GestureOptions, ReorderDrop, MenuGesture } from './gesture-stub'
+// UNICO punto di import del motore del gesto (CONTRATTO-GESTO.md). 22/10: modulo vero (packages/menu-gesture, consegna esterna con due
+// correzioni annotate in implementation-notes). Per tornare allo stub: `export { createMenuGesture } from './gesture-stub'`.
+export { createMenuGesture } from '../../../../../packages/menu-gesture/src/index'
+export type { GestureOptions, ReorderDrop } from '../../../../../packages/menu-gesture/src/index'
+export type { MenuGesture } from './gesture-stub'
