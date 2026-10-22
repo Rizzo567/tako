@@ -3,14 +3,15 @@
  * («Primi», «Secondi e panini», «Dolci e frutta»… e «Altre proposte» per quelle non riconosciute). La logica dei gruppi è la
  * stessa della pagina pubblica (copia generata `menu-public-groups.ts`, mai a mano). Qui: nomi pubblici per sezione e
  * riconoscimento LETTERALE delle sezioni nominate in un testo (vincoli del validatore, nessuna decisione). Modulo puro. */
-import {macroCategoryGroups} from './menu-public-groups.js'
+import {categoryGroups,macroCategoryGroups} from './menu-public-groups.js'
 import {plain,type SectionRef} from './twilio-menu-ai.js'
 import {sameSection} from './twilio-menu-structure.js'
 
 /** Nome pubblico (macro-categoria della pagina pubblica) di ogni sezione di un menu, sottocategorie comprese. */
-export function publicNames(menu:{sections:{id:string,name:string,parentSectionId?:string|null,items:{available?:boolean}[]}[]}):Map<string,string>{
+/** `manual` (dashboard editor 22/10): con `design.manualOrder` la pagina mostra i Sottomenu veri, senza accorpamenti. */
+export function publicNames(menu:{sections:{id:string,name:string,parentSectionId?:string|null,items:{available?:boolean}[]}[]},manual=false):Map<string,string>{
  const out=new Map<string,string>()
- for(const g of macroCategoryGroups(menu.sections.map(s=>({id:s.id,name:s.name,parentSectionId:s.parentSectionId??null,items:s.items}))))for(const s of [g.section,...g.children])out.set(s.id,String(g.section.name??''))
+ for(const g of (manual?categoryGroups:macroCategoryGroups)(menu.sections.map(s=>({id:s.id,name:s.name,parentSectionId:s.parentSectionId??null,items:s.items}))))for(const s of [g.section,...g.children])out.set(s.id,String(g.section.name??''))
  return out}
 
 const STOP=new Set(['della','delle','degli','dello','alla','alle','agli','allo','dalla','dalle','dagli','nella','nelle','negli','sezione','categoria'])

@@ -12,7 +12,7 @@ import {buildBrainContext,type BrainTurn} from './owner-brain-context.js'
 import {memoryBrainStore,consolidate,signalsFromTurn,memoryCommand,forget,memoryListText,reconcile,type BrainStore,type MemoryJudge} from './owner-brain-memory.js'
 
 export const catalogOf=(w:any)=>({refs:w.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>({id:i.id,name:i.name,price:i.price,available:i.available!==false,hidden:!!i.hidden,menu:m.name,section:s.name,sectionId:s.id,hasImage:!!i.imageUrl,featured:!!i.featured,tags:i.tags??[]} as MenuRef)))) as MenuRef[],
- sections:w.menus.flatMap((m:any)=>{const pub=publicNames(m);return m.sections.map((s:any)=>({id:s.id,name:s.name,menu:m.name,...(pub.get(s.id)?{pub:pub.get(s.id)}:{})} as SectionRef))}) as SectionRef[]})
+ sections:w.menus.flatMap((m:any)=>{const pub=publicNames(m,w.design?.manualOrder===true);return m.sections.map((s:any)=>({id:s.id,name:s.name,menu:m.name,...(pub.get(s.id)?{pub:pub.get(s.id)}:{})} as SectionRef))}) as SectionRef[]})
 
 export type EvalState={workspace:any,proposal:MenuAction[]|null,clarify:{question:string,itemIds:string[],actions?:MenuAction[],source?:string}|null}
 export type EvalTurn={reply:string|null,state:EvalState,path:'brain'|'fallback'|'memory'|'confirm',written:MenuAction[],decision?:BrainDecision,reason?:string,usage?:BrainUsage,tokensEstimated:number,latencyMs:number}
