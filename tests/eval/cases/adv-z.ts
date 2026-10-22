@@ -152,7 +152,7 @@ c(Z,'fino a fine mese la birra a 4',P('Birra',4),{alt:[[PR('Birra',4)],NONE]})
 fam='omonimi'
 c(Z,'il calzone a 9',P('Calzone',9))
 c(Z,'i calzoni a 10',NONE,{ask:[1],alt:[[P('Calzone',10),P('Calzone fritto',10)]]})
-c(Z,'nascondi i calzoni',[HI('Calzone'),HI('Calzone fritto')],{alt:[[HI('Calzone')]]})
+c(Z,'nascondi i calzoni',[HI('Calzone'),HI('Calzone fritto')],{ask:[1],alt:[[HI('Calzone')],NONE],note:'fase 3 (22/10): «i calzoni» è anche il nome del sottomenu Calzoni e corrisponde a due piatti: una domanda senza scrivere è legittima'})
 c(Z,'nascondi il calzone',HI('Calzone'))
 c(Z,'il calzone è finito',AV('Calzone'))
 c(Z,'sposta il calzone nelle pizze',MV('Calzone','Pizze'))

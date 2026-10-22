@@ -37,8 +37,29 @@ const CONVS:[string,T1[]][]=[
  ['lettura-paste-primi',[['quante paste ho nei primi?',{re:[String.raw`pesto`,String.raw`carbonara`],no:[String.raw`ragù|sugo|gnocchi`],diff:[]}]]],
  ['prezzo-insolito-no',[['il riso giallo a 80',{re:[ASK],no:[NODONE],diff:[]}],['no',{diff:[]}]]],
  ['anzi-rimettilo',[['il riso giallo a 9',{no:[String.raw`\?`],diff:[P('riso giallo',9)]}],['anzi rimettilo a 8',{no:[String.raw`\?`],diff:[]}]]],
- ['ok-a-domanda',[['togli la carbonara',{no:[String.raw`elimin`]}],['annulla',{diff:[]}]]],
+ // fase 3: dal vivo «annulla» di ripristino parte solo se la conversazione ha scritto (altrimenti annullerebbe la conversazione prima):
+ // qui il ripristino è «rimetti la pasta carbonara nel menu» (se non era stata tolta: «è già visibile»).
+ ['ok-a-domanda',[['togli la carbonara',{no:[String.raw`elimin`]}],['rimetti la pasta carbonara nel menu',{diff:[]}]]],
+ // ---- fase 3 (22/10 notte): i 3 KO dal vivo v149 con la storia prima + uso reale in sequenza (memoria a breve) ----
+ ['v149-patatine-crea-elimina',[['aggiungi le patatine fritte a 4 nei Piatti di prova',{no:[String.raw`\?`],diff:['create|patatine fritte|4|piatti di prova']}],['elimina le patatine fritte',{re:[String.raw`rispondi \*?s`],diff:['create|patatine fritte|4|piatti di prova']}],['sì',{diff:[]}]]],
+ ['v149-nuovo-dopo-eliminato',[['aggiungi patatine fritte a 4',{re:[String.raw`sottomenu`,String.raw`\b4\b`],no:[String.raw`prezz.*\?`,String.raw`Completo`],diff:[]}],['nei Primi del Menu di verifica',{no:[String.raw`\?`],diff:['create|patatine fritte|4|primi']}],['annulla',{diff:[]}]]],
+ ['v149-pesto-poi-anzi',[['alza il pesto di un euro',{re:[ASK],diff:[]}],['la pasta al pesto dei primi',{no:[String.raw`\?`],diff:[P('pasta al pesto',10)]}],['annulla',{diff:[]}],['il riso giallo a 9',{no:[String.raw`\?`],diff:[P('riso giallo',9)]}],['anzi rimettilo a 8',{no:[String.raw`\?`,String.raw`pesto`],diff:[]}]]],
+ ['v149b-annulla-dopo-scrittura',[['aggiungi le patatine fritte a 4 nei Piatti di prova',{no:[String.raw`\?`],diff:['create|patatine fritte|4|piatti di prova']}],['nei Piatti di prova',{diff:['create|patatine fritte|4|piatti di prova']}],['annulla',{no:[String.raw`non ho cambiato nulla`],diff:[]}]]],
+ ['sposta-dopo-creazione',[['aggiungi il vitello tonnato a 14 nei Piatti di prova',{no:[String.raw`\?`],diff:['create|vitello tonnato|14|piatti di prova']}],['no, nei Primi del Menu di verifica',{no:[String.raw`\?`],diff:['create|vitello tonnato|14|primi']}],['elimina il vitello tonnato',{re:[String.raw`rispondi \*?s`],diff:['create|vitello tonnato|14|primi']}],['sì',{diff:[]}]]],
+ ['lettura-poi-nuovo',[["cosa c'è nei primi?",{re:[String.raw`riso giallo`],diff:[]}],['aggiungi le trofie al pesto a 11 nei primi',{no:[String.raw`\?`],diff:['create|trofie al pesto|11|primi']}],['annulla',{diff:[]}]]],
+ ['pronome-dopo-scrittura',[['quanto costa la pasta carbonara?',{re:[String.raw`\b9\b`],diff:[]}],['alzala di un euro',{no:[String.raw`\?`],diff:[P('pasta carbonara',10)]}],['alzala ancora di 50 centesimi',{no:[String.raw`\?`],diff:[P('pasta carbonara',10.5)]}],['rimettila a 9',{no:[String.raw`\?`],diff:[]}]]],
+ ['tutti-e-due-dopo-scrittura',[['il riso giallo a 9 e la pasta carbonara a 10',{no:[String.raw`\?`],diff:[P('riso giallo',9),P('pasta carbonara',10)]}],['abbassali tutti e due di un euro',{no:[String.raw`\?`],diff:[]}]]],
+ ['finito-poi-tornato',[["c'è la pasta al ragù?",{re:[String.raw`rag[uù]`],diff:[]}],['è finita',{no:[String.raw`\?`],diff:['available|pasta al ragù|false']}],['no scusa, è tornata',{no:[String.raw`\?`],diff:[]}]]],
+ ['nascondi-poi-rimettilo',[['nascondi il tiramisù',{no:[String.raw`\?`],diff:['hidden|tiramisù|true']}],['rimettilo',{no:[String.raw`\?`],diff:[]}]]],
+ ['scrittura-poi-lettura-altro',[['la pasta al sugo a 10',{no:[String.raw`\?`],diff:[P('Pasta al sugo',10)]}],['quanto costa il riso giallo?',{re:[String.raw`\b8\b`],diff:[P('Pasta al sugo',10)]}],['mettilo a 9',{no:[String.raw`\?`],diff:[P('Pasta al sugo',10),P('riso giallo',9)]}],['annulla',{diff:[P('Pasta al sugo',10)]}],['la pasta al sugo a 9',{no:[String.raw`\?`],diff:[]}]]],
+ ['nuovo-solo-nome-lascia',[['aggiungi la frittatina',{re:[ASK],no:[String.raw`Completo`],diff:[]}],['lascia stare',{diff:[]}]]],
+ ['conta-primi',[['quanti piatti ho nei Primi del Menu di verifica?',{re:[String.raw`\b4\b|quattro`],no:[String.raw`Lasagna|Gnocchi`],diff:[]}]]],
+ ['evidenza-poi-togli',[['metti in evidenza il tiramisù',{no:[String.raw`\?`],diff:['featured|tiramisù|true']}],["toglilo dall'evidenza",{no:[String.raw`\?`],diff:[]}]]],
+ ['finito-nome-poi-pronome',[['il riso giallo è finito',{no:[String.raw`\?`],diff:['available|riso giallo|false']}],['quanto costa la pasta al pesto?',{re:[String.raw`\b9\b`],diff:['available|riso giallo|false']}],['il riso giallo è tornato',{no:[String.raw`\?`],diff:[]}]]],
 ]
-const turns:Turn[]=[],steps:Step[]=[];let n=0
-CONVS.forEach(([id,ts],k)=>{if(k)turns.push({wait:2});const base=n;for(const [m,x] of ts){turns.push({text:m});n++;steps.push({turn:n,base,conv:id,...(x?.diff?{diff:x.diff}:{}),...(x?.re?{re:x.re.map(r=>new RegExp(r,'i'))}:{}),...(x?.no?{no:x.no.map(r=>new RegExp(r,'i'))}:{})})}})
-export const QA_CONTINUA_CASES:(HaikuCase&{steps:Step[]})[]=[{id:'qa-continua',family:'bv-multiple' as Family,menu:'qavero',turns,changes:[],steps,source:'batteria dal vivo QA v145–v147 (27 conversazioni di fila, storia che continua)'} as any]
+// notte 22/10 (fase 3): la batteria dal vivo NON aspetta tra una conversazione e l'altra (2,5 s tra i messaggi): la variante «rapida»
+// è senza attese, così il contesto della conversazione prima pesa come dal vivo (il set con 2 minuti passava, il vivo no).
+function build(id:string,wait:number){const turns:Turn[]=[],steps:Step[]=[];let n=0
+CONVS.forEach(([cid,ts],k)=>{if(k&&wait)turns.push({wait});const base=n;for(const [m,x] of ts){turns.push({text:m});n++;steps.push({turn:n,base,conv:cid,...(x?.diff?{diff:x.diff}:{}),...(x?.re?{re:x.re.map(r=>new RegExp(r,'i'))}:{}),...(x?.no?{no:x.no.map(r=>new RegExp(r,'i'))}:{})})}})
+return {id,family:'bv-multiple' as Family,menu:'qavero',turns,changes:[],steps,source:'batteria dal vivo QA v145–v149 (27 conversazioni di fila, storia che continua'+(wait?', 2 min tra le conversazioni)':', senza attese come dal vivo)')} as any}
+export const QA_CONTINUA_CASES:(HaikuCase&{steps:Step[]})[]=[build('qa-continua',2),build('qa-continua-rapida',0)]

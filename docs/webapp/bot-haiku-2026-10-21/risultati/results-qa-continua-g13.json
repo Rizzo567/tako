@@ -1,0 +1,3284 @@
+{
+ "set": "qa-continua",
+ "metriche": {
+  "set": "qa-continua",
+  "modo": "record",
+  "conversazioni": 2,
+  "misurate": 2,
+  "nonMisurate": [],
+  "messaggi": 216,
+  "corrette": 2,
+  "percentuale": 100,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 0,
+  "domandePer10Messaggi": 1.7,
+  "domandeNonAttesePer10": 1.7,
+  "latenzaAnthropicMs": {
+   "p50": 2635,
+   "p95": 5296,
+   "chiamate": 191
+  },
+  "latenzaTurnoMs": {
+   "p50": 15,
+   "p95": 34,
+   "nota": "misurata dal vivo"
+  },
+  "chiamatePerMessaggio": 0.88,
+  "tokenMediPerMessaggio": {
+   "input": 693,
+   "output": 176,
+   "cacheRead": 8596,
+   "cacheWrite": 107
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 191,
+   "su": 191,
+   "percentuale": 100
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.05545,
+   "perMessaggioUsd": 0.000257,
+   "tetto": 0.4
+  },
+  "anthropic": {
+   "hit": 191,
+   "vere": 0,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 5.1
+ },
+ "codici": {},
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "qa-continua",
+   "family": "bv-multiple",
+   "menu": "qavero",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale sottomenu metto *Vitello tonnato* e a che prezzo?",
+    "Ok, lascio stare: non ho cambiato nulla.",
+    "Il *riso giallo* costa 8 €.\n\n*riso giallo*: *8,00 €* · disponibile",
+    "Il *riso giallo* costa 8 €.\n\n*riso giallo*: *8,00 €* · disponibile",
+    "*riso giallo*: prezzo da 8,00 € a *9,00 €*",
+    "Annullo l'ultima modifica sul *riso giallo*.\n\n*riso giallo*: com’era prima",
+    "La *pasta carbonara* costa 9 €.\n\n*pasta carbonara*: *9,00 €* · disponibile",
+    "*pasta carbonara*: prezzo da 9,00 € a *10,00 €*",
+    "Annullo l'ultima modifica sulla *pasta carbonara*.\n\n*pasta carbonara*: com’era prima",
+    "La *pasta al ragù* costa 10 €.\n\n*pasta al ragù*: *10,00 €* · disponibile",
+    "*pasta al ragù*: *nascosto* dal menu",
+    "*pasta al ragù*: di nuovo *visibile* nel menu",
+    "Sì, il *tiramisù* c'è nel menu, disponibile.\n\n*tiramisù*: *15,00 €* · disponibile",
+    "*tiramisù*: *finito*",
+    "*tiramisù*: di nuovo *disponibile*",
+    "Quanto costa *Patatine fritte*? E in quale Sottomenu le metto?",
+    "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Nuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*",
+    "Annullo l'ultima modifica: *Patatine fritte*.\n\n*Patatine fritte*: tolto (era stato aggiunto)",
+    "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Nuovo piatto *Patatine fritte* in *Primi*: *4,00 €*",
+    "Annullo l'ultima pubblicazione: *Patatine fritte*.\n\n*Patatine fritte*: tolto (era stato aggiunto)",
+    "A che prezzo metto *Vitello tonnato* in *Primi*? Scrivimi per esempio «vitello tonnato 12».",
+    "Nuovo piatto *Vitello tonnato* in *Primi*: *14,00 €*",
+    "Annullo l'ultima pubblicazione: *Vitello tonnato*.\n\n*Vitello tonnato*: tolto (era stato aggiunto)",
+    "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*?",
+    "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Ok, lascio stare: non ho cambiato nulla.",
+    "Il *Riso giallo* costa *8 €* e la *Pasta carbonara* costa *9 €*.\n\n*riso giallo*: *8,00 €* · disponibile\n*pasta carbonara*: *9,00 €* · disponibile",
+    "Aumentati di 0,50 € i prezzi di 2 piatti.\n\n*pasta carbonara*: prezzo da 9,00 € a *9,50 €*\n*riso giallo*: prezzo da 8,00 € a *8,50 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Annullo l'ultima pubblicazione: *pasta carbonara* e *riso giallo*. Torniamo ai prezzi di prima.\n\n*pasta carbonara*: com’era prima\n*riso giallo*: com’era prima",
+    "Aumentati di 0,50 € i prezzi di 4 piatti.\n\n*la parmigiana*: prezzo da 12,50 € a *13,00 €*\n*pasta al pesto*: prezzo da 9,00 € a *9,50 €*\n*pasta carbonara*: prezzo da 9,00 € a *9,50 €*\n*riso giallo*: prezzo da 8,00 € a *8,50 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Annullo l'ultima pubblicazione: *la parmigiana*, *pasta al pesto*, *pasta carbonara* e *riso giallo*.\n\n*la parmigiana*: com’era prima\n*pasta al pesto*: com’era prima\n*pasta carbonara*: com’era prima\n*riso giallo*: com’era prima",
+    "Aumentati di 0,50 € i prezzi di 4 piatti.\n\n*la parmigiana*: prezzo da 12,50 € a *13,00 €*\n*pasta al pesto*: prezzo da 9,00 € a *9,50 €*\n*pasta carbonara*: prezzo da 9,00 € a *9,50 €*\n*riso giallo*: prezzo da 8,00 € a *8,50 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Annullo l'ultima pubblicazione: *la parmigiana*, *pasta al pesto*, *pasta carbonara* e *riso giallo*. Tornano i prezzi di prima.\n\n*la parmigiana*: com’era prima\n*pasta al pesto*: com’era prima\n*pasta carbonara*: com’era prima\n*riso giallo*: com’era prima",
+    "Ok, metto il *Riso giallo* a *8,50 €*.\n\n*riso giallo*: prezzo da 8,00 € a *8,50 €*",
+    "Annullo l'ultima pubblicazione: *riso giallo*. Torna il prezzo di prima.\n\n*riso giallo*: com’era prima",
+    "Ok, metto la *Pasta al sugo* a *10,50 €*.\n\n*Pasta al sugo*: prezzo da 9,00 € a *10,50 €*",
+    "Annullo l'ultima pubblicazione: *Pasta al sugo*. Torna il prezzo di prima.\n\n*Pasta al sugo*: com’era prima",
+    "Nascondo *riso giallo* dal menu.\n\n*riso giallo*: *nascosto* dal menu",
+    "Rimetto *riso giallo* nel menu.\n\n*riso giallo*: di nuovo *visibile* nel menu",
+    "Segno la *Pasta al sugo* come esaurita.\n\n*Pasta al sugo*: *finito*",
+    "Rimetto la *Pasta al sugo* disponibile.\n\n*Pasta al sugo*: di nuovo *disponibile*",
+    "Elimino *Pasta al sugo* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Pasta al sugo*: da eliminare",
+    "Ok, annullo l'eliminazione di *Pasta al sugo*. Non la tocco.",
+    "Di quali piatti vuoi mettere il prezzo a zero? Dimmi il Menu o il Sottomenu, per esempio i *Primi* del *Menu cena*.",
+    "Ok, lascio stare: non ho cambiato nulla.",
+    "Quali *Primi* vuoi eliminare? Dimmi il Menu, per esempio il *Menu del giorno*?",
+    "Ok, lascio stare: non ho cambiato nulla.",
+    "Non ancora pubblicato, da confermare con OK:\n1. *riso giallo*: prezzo da 8,00 € a *9,00 €*\n2. *pasta carbonara*: prezzo da 9,00 € a *10,00 €*\n3. *Pasta al sugo*: prezzo da 9,00 € a *10,00 €*\n4. *tiramisù*: prezzo da 15,00 € a *16,00 €*",
+    "Perfetto, pubblico le modifiche ai prezzi del *riso giallo*, della *pasta carbonara*, della *Pasta al sugo* e del *tiramisù*.\n\n*riso giallo*: prezzo da 8,00 € a *9,00 €*\n*pasta carbonara*: prezzo da 9,00 € a *10,00 €*\n*Pasta al sugo*: prezzo da 9,00 € a *10,00 €*\n*tiramisù*: prezzo da 15,00 € a *16,00 €*",
+    "Ok, annullo l'ultima pubblicazione: *riso giallo*, *pasta carbonara*, *Pasta al sugo* e *tiramisù* tornano ai prezzi di prima.\n\n*Pasta al sugo*: com’era prima\n*tiramisù*: com’era prima\n*pasta carbonara*: com’era prima\n*riso giallo*: com’era prima",
+    "Intendi la *pasta al pesto* o la *Pasta al pesto e lasagna*?\n\n1. *pasta al pesto* (9,00 €)\n2. *Pasta al pesto e lasagna* (10,01 €)",
+    "*pasta al pesto*: prezzo da 9,00 € a *10,00 €*",
+    "Ok, annullo l'ultima pubblicazione: la *pasta al pesto* torna al prezzo di prima.\n\n*pasta al pesto*: com’era prima",
+    "Nei *Primi* del *Menu di verifica · web QA* ci sono 4 piatti:\n\n*la parmigiana*: *12,50 €* · disponibile\n*pasta al pesto*: *9,00 €* · disponibile\n*pasta carbonara*: *9,00 €* · disponibile\n*riso giallo*: *8,00 €* · disponibile",
+    "Nei *Primi* del *Menu di verifica · web QA* ci sono 2 piatti:\n\n*pasta al pesto*: *9,00 €* · disponibile\n*pasta carbonara*: *9,00 €* · disponibile",
+    "Intendi *riso giallo* a *80 €*? Il prezzo attuale è più basso.",
+    "Ok, lascio stare: non ho cambiato nulla.",
+    "*riso giallo*: prezzo da 8,00 € a *9,00 €*",
+    "*riso giallo*: prezzo da 9,00 € a *8,00 €*",
+    "*Carbonara* è già nascosto dal menu.",
+    "*pasta carbonara* è già visibile nel menu.",
+    "Aggiungo *Patatine fritte* a 4 € nei *Piatti di prova*.\n\nNuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*",
+    "Elimino *Patatine fritte* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Patatine fritte*: da eliminare",
+    "Ok, elimino *Patatine fritte* dal menu.\n\n*Patatine fritte*: *eliminato* dal menu",
+    "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Nuovo piatto *Patatine fritte* in *Primi*: *4,00 €*",
+    "Ok, annullo l'ultima pubblicazione: *Patatine fritte*.\n\n*Patatine fritte*: tolto (era stato aggiunto)",
+    "Intendi *pasta al pesto* o *Pasta al pesto e lasagna*?\n\n1. *pasta al pesto* (9,00 €)\n2. *Pasta al pesto e lasagna* (10,01 €)",
+    "*pasta al pesto*: prezzo da 9,00 € a *10,00 €*",
+    "Ok, annullo l'ultima pubblicazione: *pasta al pesto*.\n\n*pasta al pesto*: com’era prima",
+    "Ok, *riso giallo* a *9,00 €*.\n\n*riso giallo*: prezzo da 8,00 € a *9,00 €*",
+    "*riso giallo*: prezzo da 9,00 € a *8,00 €*",
+    "Ok, aggiungo *Patatine fritte* a *4,00 €* nei *Piatti di prova*.\n\nNuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*",
+    "C'è già *Patatine fritte* nei *Piatti di prova*: lo aggiorno o ne creo un altro?",
+    "*Patatine fritte*: tolto (era stato aggiunto)",
+    "Ok, aggiungo *Vitello tonnato* a *14,00 €* nei *Piatti di prova*.\n\nNuovo piatto *Vitello tonnato* in *Piatti di prova*: *14,00 €*",
+    "*Vitello tonnato*: spostato in *Primi*",
+    "Elimino *Vitello tonnato* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Vitello tonnato*: da eliminare",
+    "Ok, elimino *Vitello tonnato* dal menu.\n\n*Vitello tonnato*: *eliminato* dal menu",
+    "Nei *Primi* del Menu di verifica ci sono *la parmigiana*, *pasta al pesto*, *pasta carbonara* e *riso giallo*.\n\n*pasta al pesto*: *9,00 €* · disponibile\n*pasta carbonara*: *9,00 €* · disponibile\n*la parmigiana*: *12,50 €* · disponibile\n*riso giallo*: *8,00 €* · disponibile",
+    "Nuovo piatto *Trofie al pesto* in *Primi*: *11,00 €*",
+    "Ok, annullo l'ultima pubblicazione: *Trofie al pesto*.\n\n*Trofie al pesto*: tolto (era stato aggiunto)",
+    "La *pasta carbonara* costa *9,00 €*.\n\n*pasta carbonara*: *9,00 €* · disponibile",
+    "*pasta carbonara*: prezzo da 9,00 € a *10,00 €*",
+    "*pasta carbonara*: prezzo da 10,00 € a *10,50 €*",
+    "*pasta carbonara*: prezzo da 10,50 € a *9,00 €*",
+    "Aumentati di 1,00 € i prezzi di 2 piatti.\n\n*riso giallo*: prezzo da 8,00 € a *9,00 €*\n*pasta carbonara*: prezzo da 9,00 € a *10,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Abbassati di 1,00 € i prezzi di 2 piatti.\n\n*pasta carbonara*: prezzo da 10,00 € a *9,00 €*\n*riso giallo*: prezzo da 9,00 € a *8,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Sì, la *pasta al ragù* c'è nel menu: *10,00 €* · disponibile.\n\n*pasta al ragù*: *10,00 €* · disponibile",
+    "*pasta al ragù*: *finito*",
+    "Ok, rimetto *pasta al ragù* disponibile.\n\n*pasta al ragù*: di nuovo *disponibile*",
+    "Nascondo il *tiramisù* dal menu.\n\n*tiramisù*: *nascosto* dal menu",
+    "*tiramisù*: di nuovo *visibile* nel menu",
+    "Ok, imposto *Pasta al sugo* a *10,00 €*.\n\n*Pasta al sugo*: prezzo da 9,00 € a *10,00 €*",
+    "Il *riso giallo* costa *8,00 €*.\n\n*riso giallo*: *8,00 €* · disponibile",
+    "*riso giallo*: prezzo da 8,00 € a *9,00 €*",
+    "Ok, annullo l'ultima modifica sul *riso giallo*.\n\n*riso giallo*: com’era prima",
+    "Ok, imposto *Pasta al sugo* a *9,00 €*.\n\n*Pasta al sugo*: prezzo da 10,00 € a *9,00 €*",
+    "In quale sottomenu metto *Frittatina* e a che prezzo?",
+    "Ok, lascio stare.",
+    "Nei *Primi* del *Menu di verifica · web QA* ci sono 4 piatti:\n\n*la parmigiana*: *12,50 €* · disponibile\n*pasta al pesto*: *9,00 €* · disponibile\n*pasta carbonara*: *9,00 €* · disponibile\n*riso giallo*: *8,00 €* · disponibile",
+    "Metto il *tiramisù* in evidenza.\n\n*tiramisù*: *in evidenza*",
+    "Tolgo il *tiramisù* dall'evidenza.\n\n*tiramisù*: non più in evidenza",
+    "Segno il *riso giallo* come esaurito.\n\n*riso giallo*: *finito*",
+    "La *pasta al pesto* costa *9,00 €*.\n\n*pasta al pesto*: *9,00 €* · disponibile",
+    "Rimetto il *riso giallo* disponibile.\n\n*riso giallo*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "aggiungi il vitello tonnato",
+    "annulla",
+    "[+2 min]",
+    "quanto costa il riso giallo?",
+    "[+2 min]",
+    "quanto costa il riso giallo?",
+    "alzalo di un euro",
+    "annulla",
+    "[+2 min]",
+    "quanto costa la pasta carbonara?",
+    "mettila a 10",
+    "annulla",
+    "[+2 min]",
+    "quanto costa la pasta al ragù?",
+    "toglila",
+    "rimettila",
+    "[+2 min]",
+    "c'è il tiramisù?",
+    "è finito",
+    "è tornato",
+    "[+2 min]",
+    "aggiungi le patatine fritte",
+    "4",
+    "nei Piatti di prova",
+    "annulla",
+    "[+2 min]",
+    "aggiungi patatine fritte a 4",
+    "nei Primi del Menu di verifica",
+    "annulla",
+    "[+2 min]",
+    "aggiungi il vitello tonnato nei Primi del Menu di verifica",
+    "14",
+    "annulla",
+    "[+2 min]",
+    "aggiungi patatine fritte a 4",
+    "sì",
+    "lascia stare",
+    "[+2 min]",
+    "quanto costano il riso giallo e la pasta carbonara?",
+    "alzali tutti e due di 50 centesimi",
+    "annulla",
+    "[+2 min]",
+    "alza di 50 centesimi i primi del Menu di verifica",
+    "annulla",
+    "[+2 min]",
+    "alza di 50 centesimi i primi",
+    "annulla",
+    "[+2 min]",
+    "il riso giallo a otto e cinquanta",
+    "annulla",
+    "[+2 min]",
+    "la pasta al sugo a dieci euro e mezzo",
+    "annulla",
+    "[+2 min]",
+    "nascondi il riso giallo",
+    "mostralo di nuovo",
+    "[+2 min]",
+    "la pasta al sugo è finita",
+    "la pasta al sugo è tornata",
+    "[+2 min]",
+    "elimina la pasta al sugo",
+    "annulla",
+    "[+2 min]",
+    "metti tutto a zero",
+    "no",
+    "[+2 min]",
+    "elimina tutti i primi",
+    "no",
+    "[+2 min]",
+    "riso giallo a 9, pasta carbonara a 10, pasta al sugo a 10, tiramisù a 16",
+    "👍",
+    "annulla",
+    "[+2 min]",
+    "alza il pesto di un euro",
+    "la pasta al pesto dei primi",
+    "annulla",
+    "[+2 min]",
+    "cosa c'è nei primi?",
+    "[+2 min]",
+    "quante paste ho nei primi?",
+    "[+2 min]",
+    "il riso giallo a 80",
+    "no",
+    "[+2 min]",
+    "il riso giallo a 9",
+    "anzi rimettilo a 8",
+    "[+2 min]",
+    "togli la carbonara",
+    "rimetti la pasta carbonara nel menu",
+    "[+2 min]",
+    "aggiungi le patatine fritte a 4 nei Piatti di prova",
+    "elimina le patatine fritte",
+    "sì",
+    "[+2 min]",
+    "aggiungi patatine fritte a 4",
+    "nei Primi del Menu di verifica",
+    "annulla",
+    "[+2 min]",
+    "alza il pesto di un euro",
+    "la pasta al pesto dei primi",
+    "annulla",
+    "il riso giallo a 9",
+    "anzi rimettilo a 8",
+    "[+2 min]",
+    "aggiungi le patatine fritte a 4 nei Piatti di prova",
+    "nei Piatti di prova",
+    "annulla",
+    "[+2 min]",
+    "aggiungi il vitello tonnato a 14 nei Piatti di prova",
+    "no, nei Primi del Menu di verifica",
+    "elimina il vitello tonnato",
+    "sì",
+    "[+2 min]",
+    "cosa c'è nei primi?",
+    "aggiungi le trofie al pesto a 11 nei primi",
+    "annulla",
+    "[+2 min]",
+    "quanto costa la pasta carbonara?",
+    "alzala di un euro",
+    "alzala ancora di 50 centesimi",
+    "rimettila a 9",
+    "[+2 min]",
+    "il riso giallo a 9 e la pasta carbonara a 10",
+    "abbassali tutti e due di un euro",
+    "[+2 min]",
+    "c'è la pasta al ragù?",
+    "è finita",
+    "no scusa, è tornata",
+    "[+2 min]",
+    "nascondi il tiramisù",
+    "rimettilo",
+    "[+2 min]",
+    "la pasta al sugo a 10",
+    "quanto costa il riso giallo?",
+    "mettilo a 9",
+    "annulla",
+    "la pasta al sugo a 9",
+    "[+2 min]",
+    "aggiungi la frittatina",
+    "lascia stare",
+    "[+2 min]",
+    "quanti piatti ho nei Primi del Menu di verifica?",
+    "[+2 min]",
+    "metti in evidenza il tiramisù",
+    "toglilo dall'evidenza",
+    "[+2 min]",
+    "il riso giallo è finito",
+    "quanto costa la pasta al pesto?",
+    "il riso giallo è tornato"
+   ],
+   "clarifications": 18,
+   "unexpectedClarifications": 18,
+   "llmCalls": 96,
+   "llmMisses": 0,
+   "llmTokens": 1039851,
+   "latencyMs": [
+    163.7,
+    39.7,
+    28.7,
+    23.4,
+    25,
+    20.5,
+    17.8,
+    17.3,
+    24.4,
+    38.4,
+    13.2,
+    12.5,
+    16.6,
+    13.1,
+    13.9,
+    27,
+    8.4,
+    14.4,
+    15.3,
+    34.7,
+    14.5,
+    16.4,
+    25.2,
+    13.3,
+    14.2,
+    20.9,
+    72.8,
+    7.7,
+    15.1,
+    57.4,
+    16.3,
+    25.8,
+    14.5,
+    27.2,
+    16,
+    28.8,
+    14.4,
+    24.1,
+    13.8,
+    23.7,
+    20.5,
+    48.7,
+    18.8,
+    6.9,
+    17.3,
+    14.6,
+    12.7,
+    17,
+    15.7,
+    38.4,
+    18.5,
+    14.5,
+    21.8,
+    25,
+    13,
+    14.8,
+    13.1,
+    18.6,
+    13.1,
+    22.3,
+    11.3,
+    21.9,
+    13.1,
+    21.2,
+    6.1,
+    20.8,
+    14.2,
+    12.8,
+    13.1,
+    20.3,
+    25.3,
+    12.5,
+    18,
+    12.7,
+    18.3,
+    14.3,
+    8.2,
+    18.9,
+    23.8,
+    6,
+    16.9,
+    12.7,
+    24.4,
+    14.1,
+    12,
+    12.5,
+    10.8,
+    11.7,
+    30.7,
+    39.4,
+    13.3,
+    11.3,
+    18.4,
+    19.9,
+    11.9,
+    17.3,
+    13.3,
+    10.8,
+    13.4,
+    16,
+    13.2,
+    5.6,
+    14.1,
+    16.8,
+    19.3,
+    17.2,
+    11.9,
+    18.3
+   ],
+   "recordedLlmMs": 283168,
+   "usedLlm": true,
+   "source": "batteria dal vivo QA v145–v149 (27 conversazioni di fila, storia che continua, 2 min tra le conversazioni)",
+   "nonMisurato": false
+  },
+  {
+   "id": "qa-continua-rapida",
+   "family": "bv-multiple",
+   "menu": "qavero",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale sottomenu metto *Vitello tonnato* e a che prezzo?",
+    "Ok, lascio stare: non ho cambiato nulla.",
+    "Il *riso giallo* costa 8 €.\n\n*riso giallo*: *8,00 €* · disponibile",
+    "Il *riso giallo* costa 8 €.\n\n*riso giallo*: *8,00 €* · disponibile",
+    "*riso giallo*: prezzo da 8,00 € a *9,00 €*",
+    "Ok, annullo l'ultima modifica sul *riso giallo*.\n\n*riso giallo*: com’era prima",
+    "La *pasta carbonara* costa *9 €*.\n\n*pasta carbonara*: *9,00 €* · disponibile",
+    "*pasta carbonara*: prezzo da 9,00 € a *10,00 €*",
+    "Ok, annullo l'ultima modifica sulla *pasta carbonara*.\n\n*pasta carbonara*: com’era prima",
+    "La *pasta al ragù* costa *10 €*.\n\n*pasta al ragù*: *10,00 €* · disponibile",
+    "*pasta al ragù*: *nascosto* dal menu",
+    "*pasta al ragù*: di nuovo *visibile* nel menu",
+    "Sì, il *tiramisù* c'è nel menu, disponibile.\n\n*tiramisù*: *15,00 €* · disponibile",
+    "*tiramisù*: *finito*",
+    "*tiramisù*: di nuovo *disponibile*",
+    "Quanto costano le *Patatine fritte*? In quale Sottomenu le metto?",
+    "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Nuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*",
+    "Ok, annullo l'ultima modifica: *Patatine fritte*.\n\n*Patatine fritte*: tolto (era stato aggiunto)",
+    "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Nuovo piatto *Patatine fritte* in *Primi*: *4,00 €*",
+    "Ok, annullo l'ultima modifica: *Patatine fritte*.\n\n*Patatine fritte*: tolto (era stato aggiunto)",
+    "Quanto costa il *Vitello tonnato*?",
+    "Nuovo piatto *Vitello tonnato* in *Primi*: *14,00 €*",
+    "Ok, annullo l'ultima pubblicazione: *Vitello tonnato*.\n\n*Vitello tonnato*: tolto (era stato aggiunto)",
+    "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Scegli il sottomenu per *Patatine fritte* (4,00 €): rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Ok, lascio stare: non ho cambiato nulla.",
+    "Il *Riso giallo* costa *8 €* e la *Pasta carbonara* costa *9 €*.\n\n*riso giallo*: *8,00 €* · disponibile\n*pasta carbonara*: *9,00 €* · disponibile",
+    "Aumentati di 0,50 € i prezzi di 2 piatti.\n\n*pasta carbonara*: prezzo da 9,00 € a *9,50 €*\n*riso giallo*: prezzo da 8,00 € a *8,50 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Ok, annullo l'ultima pubblicazione: *pasta carbonara* e *riso giallo*.\n\n*pasta carbonara*: com’era prima\n*riso giallo*: com’era prima",
+    "Aumentati di 0,50 € i prezzi di 4 piatti.\n\n*la parmigiana*: prezzo da 12,50 € a *13,00 €*\n*pasta al pesto*: prezzo da 9,00 € a *9,50 €*\n*pasta carbonara*: prezzo da 9,00 € a *9,50 €*\n*riso giallo*: prezzo da 8,00 € a *8,50 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Ok, annullo l'ultima pubblicazione: *la parmigiana*, *pasta al pesto*, *pasta carbonara* e *riso giallo*.\n\n*la parmigiana*: com’era prima\n*pasta al pesto*: com’era prima\n*pasta carbonara*: com’era prima\n*riso giallo*: com’era prima",
+    "Aumentati di 0,50 € i prezzi di 4 piatti.\n\n*la parmigiana*: prezzo da 12,50 € a *13,00 €*\n*pasta al pesto*: prezzo da 9,00 € a *9,50 €*\n*pasta carbonara*: prezzo da 9,00 € a *9,50 €*\n*riso giallo*: prezzo da 8,00 € a *8,50 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Ok, annullo l'ultima pubblicazione: *la parmigiana*, *pasta al pesto*, *pasta carbonara* e *riso giallo*.\n\n*la parmigiana*: com’era prima\n*pasta al pesto*: com’era prima\n*pasta carbonara*: com’era prima\n*riso giallo*: com’era prima",
+    "Ok, il *Riso giallo* passa a *8,50 €*.\n\n*riso giallo*: prezzo da 8,00 € a *8,50 €*",
+    "Ok, annullo l'ultima pubblicazione: *riso giallo*.\n\n*riso giallo*: com’era prima",
+    "Ok, la *Pasta al sugo* passa a *10,50 €*.\n\n*Pasta al sugo*: prezzo da 9,00 € a *10,50 €*",
+    "Ok, annullo l'ultima pubblicazione: *Pasta al sugo*.\n\n*Pasta al sugo*: com’era prima",
+    "Nascondo il *Riso giallo* dal menu.\n\n*riso giallo*: *nascosto* dal menu",
+    "Rimetto il *Riso giallo* nel menu.\n\n*riso giallo*: di nuovo *visibile* nel menu",
+    "Ok, segno la *Pasta al sugo* come esaurita.\n\n*Pasta al sugo*: *finito*",
+    "Ok, rimetto la *Pasta al sugo* disponibile.\n\n*Pasta al sugo*: di nuovo *disponibile*",
+    "Elimino *Pasta al sugo* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Pasta al sugo*: da eliminare",
+    "Ok, annullo l'eliminazione di *Pasta al sugo*. Non elimino nulla.",
+    "Quali piatti vuoi mettere a zero? Dimmi il nome di un piatto o di un Menu.",
+    "Ok, lascio stare.",
+    "In quale Menu vuoi eliminare i Primi? Il Sottomenu Primi c'è sia nel *Menu di verifica* sia nel *Menu cena*.",
+    "Ok, lascio stare.",
+    "Non ancora pubblicato, da confermare con OK:\n1. *tiramisù*: prezzo da 15,00 € a *16,00 €*\n2. *riso giallo*: prezzo da 8,00 € a *9,00 €*\n3. *pasta carbonara*: prezzo da 9,00 € a *10,00 €*\n4. *Pasta al sugo*: prezzo da 9,00 € a *10,00 €*",
+    "Ok, pubblico le modifiche ai prezzi.\n\n*tiramisù*: prezzo da 15,00 € a *16,00 €*\n*riso giallo*: prezzo da 8,00 € a *9,00 €*\n*pasta carbonara*: prezzo da 9,00 € a *10,00 €*\n*Pasta al sugo*: prezzo da 9,00 € a *10,00 €*",
+    "Ok, annullo l'ultima modifica ai prezzi.\n\n*Pasta al sugo*: com’era prima\n*tiramisù*: com’era prima\n*pasta carbonara*: com’era prima\n*riso giallo*: com’era prima",
+    "Intendi *pasta al pesto* o *Pasta al pesto e lasagna*?\n\n1. *pasta al pesto* (9,00 €)\n2. *Pasta al pesto e lasagna* (10,01 €)",
+    "*pasta al pesto*: prezzo da 9,00 € a *10,00 €*",
+    "Ok, annullo l'ultima pubblicazione: *pasta al pesto* torna com'era prima.\n\n*pasta al pesto*: com’era prima",
+    "Nei *Primi* del *Menu di verifica · web QA* ci sono 4 piatti:\n\n*la parmigiana*: *12,50 €* · disponibile\n*pasta al pesto*: *9,00 €* · disponibile\n*pasta carbonara*: *9,00 €* · disponibile\n*riso giallo*: *8,00 €* · disponibile",
+    "Nei *Primi* del *Menu di verifica · web QA* ci sono 2 piatti:\n\n*pasta al pesto*: *9,00 €* · disponibile\n*pasta carbonara*: *9,00 €* · disponibile",
+    "Intendi *80 €* per il *riso giallo*, o *8 €*? Dimmi il prezzo giusto.",
+    "Ok, lascio stare: non ho cambiato nulla.",
+    "*riso giallo*: prezzo da 8,00 € a *9,00 €*",
+    "*riso giallo*: prezzo da 9,00 € a *8,00 €*",
+    "*Carbonara* è già nascosto dal menu.",
+    "*pasta carbonara* è già visibile nel menu.",
+    "Aggiungo *Patatine fritte* ai *Piatti di prova*.\n\nNuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*",
+    "Elimino *Patatine fritte* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Patatine fritte*: da eliminare",
+    "Ok, elimino *Patatine fritte* dal menu.\n\n*Patatine fritte*: *eliminato* dal menu",
+    "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Nuovo piatto *Patatine fritte* in *Primi*: *4,00 €*",
+    "Ok, annullo l'ultima modifica: *Patatine fritte*.\n\n*Patatine fritte*: tolto (era stato aggiunto)",
+    "Intendi *pasta al pesto* o *Pasta al pesto e lasagna*?\n\n1. *pasta al pesto* (9,00 €)\n2. *Pasta al pesto e lasagna* (10,01 €)",
+    "*pasta al pesto*: prezzo da 9,00 € a *10,00 €*",
+    "Ok, annullo l'ultima modifica: *pasta al pesto*.\n\n*pasta al pesto*: com’era prima",
+    "Ok, metto *riso giallo* a *9 €*.\n\n*riso giallo*: prezzo da 8,00 € a *9,00 €*",
+    "*riso giallo*: prezzo da 9,00 € a *8,00 €*",
+    "Ok, aggiungo *Patatine fritte* a *4 €* in *Piatti di prova*.\n\nNuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*",
+    "Intendi aggiungere di nuovo *Patatine fritte* in *Piatti di prova*?",
+    "*Patatine fritte*: tolto (era stato aggiunto)",
+    "Ok, aggiungo *Vitello tonnato* a *14 €* in *Piatti di prova*.\n\nNuovo piatto *Vitello tonnato* in *Piatti di prova*: *14,00 €*",
+    "*Vitello tonnato*: spostato in *Primi*",
+    "Elimino *Vitello tonnato* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Vitello tonnato*: da eliminare",
+    "Ok, elimino *Vitello tonnato* dal menu.\n\n*Vitello tonnato*: *eliminato* dal menu",
+    "Nei *Primi* del Menu di verifica ci sono *la parmigiana*, *pasta al pesto*, *pasta carbonara* e *riso giallo*.\n\n*la parmigiana*: *12,50 €* · disponibile\n*pasta al pesto*: *9,00 €* · disponibile\n*pasta carbonara*: *9,00 €* · disponibile\n*riso giallo*: *8,00 €* · disponibile",
+    "Nuovo piatto *Trofie al pesto* in *Primi*: *11,00 €*",
+    "Ok, annullo l'ultima pubblicazione: *Trofie al pesto*.\n\n*Trofie al pesto*: tolto (era stato aggiunto)",
+    "La *pasta carbonara* costa *9,00 €*.\n\n*pasta carbonara*: *9,00 €* · disponibile",
+    "*pasta carbonara*: prezzo da 9,00 € a *10,00 €*",
+    "*pasta carbonara*: prezzo da 10,00 € a *10,50 €*",
+    "*pasta carbonara*: prezzo da 10,50 € a *9,00 €*",
+    "Aumentati di 1,00 € i prezzi di 2 piatti.\n\n*riso giallo*: prezzo da 8,00 € a *9,00 €*\n*pasta carbonara*: prezzo da 9,00 € a *10,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Abbassati di 1,00 € i prezzi di 2 piatti.\n\n*pasta carbonara*: prezzo da 10,00 € a *9,00 €*\n*riso giallo*: prezzo da 9,00 € a *8,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Sì, la *pasta al ragù* c'è ed è disponibile a *10,00 €*.\n\n*pasta al ragù*: *10,00 €* · disponibile",
+    "*pasta al ragù*: *finito*",
+    "Ok, *pasta al ragù* è di nuovo disponibile.\n\n*pasta al ragù*: di nuovo *disponibile*",
+    "Nascondo il *tiramisù* dal menu.\n\n*tiramisù*: *nascosto* dal menu",
+    "*tiramisù*: di nuovo *visibile* nel menu",
+    "Ok, cambio il prezzo della *Pasta al sugo* a 10 €.\n\n*Pasta al sugo*: prezzo da 9,00 € a *10,00 €*",
+    "Il *riso giallo* costa *8,00 €*.\n\n*riso giallo*: *8,00 €* · disponibile",
+    "*riso giallo*: prezzo da 8,00 € a *9,00 €*",
+    "Annullo l'ultima modifica: *riso giallo*.\n\n*riso giallo*: com’era prima",
+    "Ok, cambio il prezzo della *Pasta al sugo* a 9 €.\n\n*Pasta al sugo*: prezzo da 10,00 € a *9,00 €*",
+    "Intendi la *Frittata di zucchine* o la *Frittata di patate*?\n\n1. *Frittata di zucchine* (0,00 €)\n2. *Frittata di patate* (0,00 €)",
+    "Ok, lascio stare.",
+    "Nei *Primi* del *Menu di verifica · web QA* ci sono 4 piatti:\n\n*la parmigiana*: *12,50 €* · disponibile\n*pasta al pesto*: *9,00 €* · disponibile\n*pasta carbonara*: *9,00 €* · disponibile\n*riso giallo*: *8,00 €* · disponibile",
+    "Metto in evidenza il *tiramisù*.\n\n*tiramisù*: *in evidenza*",
+    "Tolgo il *tiramisù* dall'evidenza.\n\n*tiramisù*: non più in evidenza",
+    "Segno il *riso giallo* come finito.\n\n*riso giallo*: *finito*",
+    "La *pasta al pesto* costa *9,00 €*.\n\n*pasta al pesto*: *9,00 €* · disponibile",
+    "Rimetto il *riso giallo* disponibile.\n\n*riso giallo*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "aggiungi il vitello tonnato",
+    "annulla",
+    "quanto costa il riso giallo?",
+    "quanto costa il riso giallo?",
+    "alzalo di un euro",
+    "annulla",
+    "quanto costa la pasta carbonara?",
+    "mettila a 10",
+    "annulla",
+    "quanto costa la pasta al ragù?",
+    "toglila",
+    "rimettila",
+    "c'è il tiramisù?",
+    "è finito",
+    "è tornato",
+    "aggiungi le patatine fritte",
+    "4",
+    "nei Piatti di prova",
+    "annulla",
+    "aggiungi patatine fritte a 4",
+    "nei Primi del Menu di verifica",
+    "annulla",
+    "aggiungi il vitello tonnato nei Primi del Menu di verifica",
+    "14",
+    "annulla",
+    "aggiungi patatine fritte a 4",
+    "sì",
+    "lascia stare",
+    "quanto costano il riso giallo e la pasta carbonara?",
+    "alzali tutti e due di 50 centesimi",
+    "annulla",
+    "alza di 50 centesimi i primi del Menu di verifica",
+    "annulla",
+    "alza di 50 centesimi i primi",
+    "annulla",
+    "il riso giallo a otto e cinquanta",
+    "annulla",
+    "la pasta al sugo a dieci euro e mezzo",
+    "annulla",
+    "nascondi il riso giallo",
+    "mostralo di nuovo",
+    "la pasta al sugo è finita",
+    "la pasta al sugo è tornata",
+    "elimina la pasta al sugo",
+    "annulla",
+    "metti tutto a zero",
+    "no",
+    "elimina tutti i primi",
+    "no",
+    "riso giallo a 9, pasta carbonara a 10, pasta al sugo a 10, tiramisù a 16",
+    "👍",
+    "annulla",
+    "alza il pesto di un euro",
+    "la pasta al pesto dei primi",
+    "annulla",
+    "cosa c'è nei primi?",
+    "quante paste ho nei primi?",
+    "il riso giallo a 80",
+    "no",
+    "il riso giallo a 9",
+    "anzi rimettilo a 8",
+    "togli la carbonara",
+    "rimetti la pasta carbonara nel menu",
+    "aggiungi le patatine fritte a 4 nei Piatti di prova",
+    "elimina le patatine fritte",
+    "sì",
+    "aggiungi patatine fritte a 4",
+    "nei Primi del Menu di verifica",
+    "annulla",
+    "alza il pesto di un euro",
+    "la pasta al pesto dei primi",
+    "annulla",
+    "il riso giallo a 9",
+    "anzi rimettilo a 8",
+    "aggiungi le patatine fritte a 4 nei Piatti di prova",
+    "nei Piatti di prova",
+    "annulla",
+    "aggiungi il vitello tonnato a 14 nei Piatti di prova",
+    "no, nei Primi del Menu di verifica",
+    "elimina il vitello tonnato",
+    "sì",
+    "cosa c'è nei primi?",
+    "aggiungi le trofie al pesto a 11 nei primi",
+    "annulla",
+    "quanto costa la pasta carbonara?",
+    "alzala di un euro",
+    "alzala ancora di 50 centesimi",
+    "rimettila a 9",
+    "il riso giallo a 9 e la pasta carbonara a 10",
+    "abbassali tutti e due di un euro",
+    "c'è la pasta al ragù?",
+    "è finita",
+    "no scusa, è tornata",
+    "nascondi il tiramisù",
+    "rimettilo",
+    "la pasta al sugo a 10",
+    "quanto costa il riso giallo?",
+    "mettilo a 9",
+    "annulla",
+    "la pasta al sugo a 9",
+    "aggiungi la frittatina",
+    "lascia stare",
+    "quanti piatti ho nei Primi del Menu di verifica?",
+    "metti in evidenza il tiramisù",
+    "toglilo dall'evidenza",
+    "il riso giallo è finito",
+    "quanto costa la pasta al pesto?",
+    "il riso giallo è tornato"
+   ],
+   "clarifications": 18,
+   "unexpectedClarifications": 18,
+   "llmCalls": 95,
+   "llmMisses": 0,
+   "llmTokens": 1027849,
+   "latencyMs": [
+    13.2,
+    11.2,
+    12.5,
+    10.9,
+    11.7,
+    12.4,
+    13.1,
+    10.7,
+    13.2,
+    11.9,
+    11.3,
+    10,
+    12.4,
+    10.5,
+    11.2,
+    18.7,
+    6.8,
+    10.6,
+    14.1,
+    13.5,
+    11.8,
+    12.7,
+    22.8,
+    9.9,
+    13.2,
+    12.7,
+    7.2,
+    5.3,
+    14.9,
+    35.7,
+    13.2,
+    19.1,
+    11.4,
+    17.9,
+    14.7,
+    21.5,
+    12.9,
+    21,
+    12.9,
+    19.5,
+    18.1,
+    16.5,
+    18.1,
+    5.8,
+    15.6,
+    13.4,
+    14.2,
+    21.7,
+    12.8,
+    33,
+    17.4,
+    13.4,
+    20.8,
+    22.9,
+    12.9,
+    13.9,
+    12.9,
+    15,
+    16,
+    32.8,
+    19.9,
+    18.9,
+    13.1,
+    20.2,
+    5.8,
+    19.5,
+    14.2,
+    12.2,
+    11.9,
+    19.5,
+    22.1,
+    12.3,
+    17.8,
+    11.1,
+    19.3,
+    12.5,
+    8.9,
+    19.1,
+    22.1,
+    7.6,
+    17.2,
+    13.7,
+    18,
+    13,
+    13.1,
+    10.4,
+    11.5,
+    10.3,
+    23.1,
+    33.6,
+    14.8,
+    10.7,
+    19.8,
+    19,
+    10.6,
+    17.7,
+    12,
+    11.5,
+    12.8,
+    17.5,
+    11.7,
+    5.3,
+    14.2,
+    17,
+    17.4,
+    16.8,
+    13,
+    16.5
+   ],
+   "recordedLlmMs": 308175,
+   "usedLlm": true,
+   "source": "batteria dal vivo QA v145–v149 (27 conversazioni di fila, storia che continua, senza attese come dal vivo)",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "qa-continua",
+   "hash": "c38c4a336ed58da4",
+   "source": "hit",
+   "status": 200,
+   "ms": 5080,
+   "usage": {
+    "input": 49,
+    "output": 616,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "07f5699c100e3136",
+   "source": "hit",
+   "status": 200,
+   "ms": 2013,
+   "usage": {
+    "input": 209,
+    "output": 188,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "734d2eead50eebe5",
+   "source": "hit",
+   "status": 200,
+   "ms": 2487,
+   "usage": {
+    "input": 121,
+    "output": 107,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "655b59036f3a1cb8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1490,
+   "usage": {
+    "input": 173,
+    "output": 107,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "85dc2cd50aca6eb3",
+   "source": "hit",
+   "status": 200,
+   "ms": 2707,
+   "usage": {
+    "input": 296,
+    "output": 182,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "c4ec5043f81827eb",
+   "source": "hit",
+   "status": 200,
+   "ms": 1301,
+   "usage": {
+    "input": 308,
+    "output": 108,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "9689f3e048b91279",
+   "source": "hit",
+   "status": 200,
+   "ms": 2815,
+   "usage": {
+    "input": 436,
+    "output": 185,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "7668ebc6f603ec40",
+   "source": "hit",
+   "status": 200,
+   "ms": 4677,
+   "usage": {
+    "input": 451,
+    "output": 108,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "cd223cc8155edd0c",
+   "source": "hit",
+   "status": 200,
+   "ms": 3811,
+   "usage": {
+    "input": 533,
+    "output": 116,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "7f4c2dc9032d896c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2712,
+   "usage": {
+    "input": 495,
+    "output": 185,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "05b13c0c7f7c4baa",
+   "source": "hit",
+   "status": 200,
+   "ms": 2646,
+   "usage": {
+    "input": 772,
+    "output": 154,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "6bc9a86464f87015",
+   "source": "hit",
+   "status": 200,
+   "ms": 2398,
+   "usage": {
+    "input": 540,
+    "output": 183,
+    "cacheRead": 9267,
+    "cacheWrite": 587
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "136f36c633dd6968",
+   "source": "hit",
+   "status": 200,
+   "ms": 5058,
+   "usage": {
+    "input": 514,
+    "output": 200,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "17724024950e2eb9",
+   "source": "hit",
+   "status": 200,
+   "ms": 1798,
+   "usage": {
+    "input": 619,
+    "output": 186,
+    "cacheRead": 9267,
+    "cacheWrite": 587
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "0864ffb6a4f84e61",
+   "source": "hit",
+   "status": 200,
+   "ms": 2168,
+   "usage": {
+    "input": 623,
+    "output": 204,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "224d361747a6d7fa",
+   "source": "hit",
+   "status": 200,
+   "ms": 3015,
+   "usage": {
+    "input": 919,
+    "output": 207,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e5d9000affca643b",
+   "source": "hit",
+   "status": 200,
+   "ms": 2411,
+   "usage": {
+    "input": 679,
+    "output": 187,
+    "cacheRead": 9267,
+    "cacheWrite": 588
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "c926843f2347d32f",
+   "source": "hit",
+   "status": 200,
+   "ms": 3653,
+   "usage": {
+    "input": 677,
+    "output": 220,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "2c637169ef15ac40",
+   "source": "hit",
+   "status": 200,
+   "ms": 1904,
+   "usage": {
+    "input": 671,
+    "output": 131,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "7af35fe9e1d0eaca",
+   "source": "hit",
+   "status": 200,
+   "ms": 2007,
+   "usage": {
+    "input": 717,
+    "output": 279,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "d1cf251830d4562c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2221,
+   "usage": {
+    "input": 1148,
+    "output": 279,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "1b47acb3a140a1a3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1391,
+   "usage": {
+    "input": 771,
+    "output": 209,
+    "cacheRead": 9267,
+    "cacheWrite": 578
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "43c7eeb3bb09845a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1712,
+   "usage": {
+    "input": 776,
+    "output": 181,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e0bd20bf9c59a428",
+   "source": "hit",
+   "status": 200,
+   "ms": 2322,
+   "usage": {
+    "input": 955,
+    "output": 213,
+    "cacheRead": 9267,
+    "cacheWrite": 578
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "42f02a2af76b0661",
+   "source": "hit",
+   "status": 200,
+   "ms": 3456,
+   "usage": {
+    "input": 942,
+    "output": 356,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ae13f22b296e18f8",
+   "source": "hit",
+   "status": 200,
+   "ms": 2703,
+   "usage": {
+    "input": 1420,
+    "output": 433,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "a55dd6f8bc5a47d2",
+   "source": "hit",
+   "status": 200,
+   "ms": 2857,
+   "usage": {
+    "input": 1140,
+    "output": 226,
+    "cacheRead": 9845,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "295455d2745b5049",
+   "source": "hit",
+   "status": 200,
+   "ms": 2961,
+   "usage": {
+    "input": 1160,
+    "output": 189,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "09505e648d734603",
+   "source": "hit",
+   "status": 200,
+   "ms": 2862,
+   "usage": {
+    "input": 1209,
+    "output": 196,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "95919e9e441f0ce9",
+   "source": "hit",
+   "status": 200,
+   "ms": 3291,
+   "usage": {
+    "input": 1143,
+    "output": 191,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e4604c22c7aca0b3",
+   "source": "hit",
+   "status": 200,
+   "ms": 2394,
+   "usage": {
+    "input": 1220,
+    "output": 199,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "b6656980f375bd85",
+   "source": "hit",
+   "status": 200,
+   "ms": 2229,
+   "usage": {
+    "input": 1141,
+    "output": 182,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "2c06b242bb7ac9bc",
+   "source": "hit",
+   "status": 200,
+   "ms": 1887,
+   "usage": {
+    "input": 1103,
+    "output": 182,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "988204cf43592539",
+   "source": "hit",
+   "status": 200,
+   "ms": 2906,
+   "usage": {
+    "input": 1073,
+    "output": 180,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "084a6cafe094acb4",
+   "source": "hit",
+   "status": 200,
+   "ms": 2705,
+   "usage": {
+    "input": 938,
+    "output": 184,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "373104a2d525ec70",
+   "source": "hit",
+   "status": 200,
+   "ms": 6420,
+   "usage": {
+    "input": 809,
+    "output": 195,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "1ab01c8f3829bb63",
+   "source": "hit",
+   "status": 200,
+   "ms": 7058,
+   "usage": {
+    "input": 684,
+    "output": 213,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "6e33c7160e799c38",
+   "source": "hit",
+   "status": 200,
+   "ms": 22912,
+   "usage": {
+    "input": 775,
+    "output": 193,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "5cf4447b66c3740e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1988,
+   "usage": {
+    "input": 657,
+    "output": 187,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "14d487343b49a2f3",
+   "source": "hit",
+   "status": 200,
+   "ms": 3443,
+   "usage": {
+    "input": 936,
+    "output": 210,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "7357f90b29b954dd",
+   "source": "hit",
+   "status": 200,
+   "ms": 2517,
+   "usage": {
+    "input": 704,
+    "output": 183,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "186e7c7eefc241d2",
+   "source": "hit",
+   "status": 200,
+   "ms": 3568,
+   "usage": {
+    "input": 583,
+    "output": 431,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "465beee9ad9c1f59",
+   "source": "hit",
+   "status": 200,
+   "ms": 2974,
+   "usage": {
+    "input": 771,
+    "output": 236,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "f7b1eab1dcbfebf6",
+   "source": "hit",
+   "status": 200,
+   "ms": 2936,
+   "usage": {
+    "input": 875,
+    "output": 228,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ec40f523f2086a80",
+   "source": "hit",
+   "status": 200,
+   "ms": 2785,
+   "usage": {
+    "input": 900,
+    "output": 182,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "f9f9c5db4ffa76a6",
+   "source": "hit",
+   "status": 200,
+   "ms": 2635,
+   "usage": {
+    "input": 1222,
+    "output": 160,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "de06edca9b212aed",
+   "source": "hit",
+   "status": 200,
+   "ms": 2524,
+   "usage": {
+    "input": 1011,
+    "output": 187,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "a403d9181c27b1e1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2336,
+   "usage": {
+    "input": 1314,
+    "output": 187,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "b8a6bd8ce1a009f6",
+   "source": "hit",
+   "status": 200,
+   "ms": 3199,
+   "usage": {
+    "input": 933,
+    "output": 200,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "0ea4813c2493a0ab",
+   "source": "hit",
+   "status": 200,
+   "ms": 4683,
+   "usage": {
+    "input": 920,
+    "output": 172,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "8ea8871bc073c392",
+   "source": "hit",
+   "status": 200,
+   "ms": 1534,
+   "usage": {
+    "input": 981,
+    "output": 160,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e658c9b7b359ee99",
+   "source": "hit",
+   "status": 200,
+   "ms": 1444,
+   "usage": {
+    "input": 1045,
+    "output": 153,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "45217fd2b4603054",
+   "source": "hit",
+   "status": 200,
+   "ms": 1749,
+   "usage": {
+    "input": 1096,
+    "output": 114,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "496701de042c9dd7",
+   "source": "hit",
+   "status": 200,
+   "ms": 2129,
+   "usage": {
+    "input": 1035,
+    "output": 183,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "1b20b6bbe93eafcf",
+   "source": "hit",
+   "status": 200,
+   "ms": 1481,
+   "usage": {
+    "input": 1310,
+    "output": 183,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e1ffc7b4ba4e57cf",
+   "source": "hit",
+   "status": 200,
+   "ms": 2854,
+   "usage": {
+    "input": 791,
+    "output": 212,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "1303b81fd56333bc",
+   "source": "hit",
+   "status": 200,
+   "ms": 3055,
+   "usage": {
+    "input": 1115,
+    "output": 212,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "676339dea53db085",
+   "source": "hit",
+   "status": 200,
+   "ms": 2028,
+   "usage": {
+    "input": 697,
+    "output": 185,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ea1dabc24e3021e8",
+   "source": "hit",
+   "status": 200,
+   "ms": 4657,
+   "usage": {
+    "input": 655,
+    "output": 198,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "652f67641b95f05a",
+   "source": "hit",
+   "status": 200,
+   "ms": 2420,
+   "usage": {
+    "input": 739,
+    "output": 183,
+    "cacheRead": 9267,
+    "cacheWrite": 587
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "edf0f3cd978e4f32",
+   "source": "hit",
+   "status": 200,
+   "ms": 1811,
+   "usage": {
+    "input": 625,
+    "output": 198,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "63f430d74a8b5c3e",
+   "source": "hit",
+   "status": 200,
+   "ms": 2527,
+   "usage": {
+    "input": 634,
+    "output": 189,
+    "cacheRead": 9267,
+    "cacheWrite": 587
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "92c2b05489192505",
+   "source": "hit",
+   "status": 200,
+   "ms": 1914,
+   "usage": {
+    "input": 631,
+    "output": 181,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "9eb597db3a5ba8ef",
+   "source": "hit",
+   "status": 200,
+   "ms": 1545,
+   "usage": {
+    "input": 952,
+    "output": 156,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "54b8a1f58a3f13bd",
+   "source": "hit",
+   "status": 200,
+   "ms": 3331,
+   "usage": {
+    "input": 757,
+    "output": 184,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "c805ee5c95a783de",
+   "source": "hit",
+   "status": 200,
+   "ms": 1931,
+   "usage": {
+    "input": 1057,
+    "output": 183,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ae96ba3263f57201",
+   "source": "hit",
+   "status": 200,
+   "ms": 3933,
+   "usage": {
+    "input": 718,
+    "output": 189,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ec701fffca2071df",
+   "source": "hit",
+   "status": 200,
+   "ms": 2768,
+   "usage": {
+    "input": 703,
+    "output": 183,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "72dbdbaf7d16a5a1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2061,
+   "usage": {
+    "input": 727,
+    "output": 204,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "b674497940e87352",
+   "source": "hit",
+   "status": 200,
+   "ms": 3307,
+   "usage": {
+    "input": 739,
+    "output": 230,
+    "cacheRead": 9854,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "12c18b60dad62624",
+   "source": "hit",
+   "status": 200,
+   "ms": 4040,
+   "usage": {
+    "input": 641,
+    "output": 206,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "2fe4bd6909e87e43",
+   "source": "hit",
+   "status": 200,
+   "ms": 2920,
+   "usage": {
+    "input": 731,
+    "output": 273,
+    "cacheRead": 9267,
+    "cacheWrite": 588
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e82c5e169359d8dd",
+   "source": "hit",
+   "status": 200,
+   "ms": 3403,
+   "usage": {
+    "input": 1095,
+    "output": 238,
+    "cacheRead": 9855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "3ffa767c5789a879",
+   "source": "hit",
+   "status": 200,
+   "ms": 2500,
+   "usage": {
+    "input": 729,
+    "output": 184,
+    "cacheRead": 9267,
+    "cacheWrite": 588
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ef299107bf37a1ec",
+   "source": "hit",
+   "status": 200,
+   "ms": 3100,
+   "usage": {
+    "input": 702,
+    "output": 157,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e08ca3091998f252",
+   "source": "hit",
+   "status": 200,
+   "ms": 2685,
+   "usage": {
+    "input": 818,
+    "output": 203,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "6d03fbff393172d1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2358,
+   "usage": {
+    "input": 797,
+    "output": 190,
+    "cacheRead": 9267,
+    "cacheWrite": 588
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "666bd32b40047619",
+   "source": "hit",
+   "status": 200,
+   "ms": 1882,
+   "usage": {
+    "input": 783,
+    "output": 111,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "cdd3698da6200f5d",
+   "source": "hit",
+   "status": 200,
+   "ms": 2895,
+   "usage": {
+    "input": 730,
+    "output": 277,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "23e3a273a3755a01",
+   "source": "hit",
+   "status": 200,
+   "ms": 3979,
+   "usage": {
+    "input": 1120,
+    "output": 269,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "6190d6e639a2e11a",
+   "source": "hit",
+   "status": 200,
+   "ms": 2731,
+   "usage": {
+    "input": 821,
+    "output": 268,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "94a50b3fda1353f1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2537,
+   "usage": {
+    "input": 1241,
+    "output": 268,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "03233d74c3ffa3cc",
+   "source": "hit",
+   "status": 200,
+   "ms": 1497,
+   "usage": {
+    "input": 865,
+    "output": 126,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ca49175b42e13f77",
+   "source": "hit",
+   "status": 200,
+   "ms": 3445,
+   "usage": {
+    "input": 744,
+    "output": 185,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "0a458b2147d083e3",
+   "source": "hit",
+   "status": 200,
+   "ms": 3933,
+   "usage": {
+    "input": 744,
+    "output": 183,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "94c1edffd9a6d61c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2103,
+   "usage": {
+    "input": 703,
+    "output": 189,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "2a9473ea18c3adf9",
+   "source": "hit",
+   "status": 200,
+   "ms": 1909,
+   "usage": {
+    "input": 738,
+    "output": 110,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "699ebdb103fb3275",
+   "source": "hit",
+   "status": 200,
+   "ms": 2323,
+   "usage": {
+    "input": 732,
+    "output": 185,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "b4db8360b99956e0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1817,
+   "usage": {
+    "input": 611,
+    "output": 189,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "9803cb7e5f31e188",
+   "source": "hit",
+   "status": 200,
+   "ms": 2233,
+   "usage": {
+    "input": 601,
+    "output": 177,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "49b9826cd1d096a6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1848,
+   "usage": {
+    "input": 577,
+    "output": 204,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "aeaf9ab62ee1acff",
+   "source": "hit",
+   "status": 200,
+   "ms": 1992,
+   "usage": {
+    "input": 656,
+    "output": 181,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "3344c72ff024674b",
+   "source": "hit",
+   "status": 200,
+   "ms": 3228,
+   "usage": {
+    "input": 650,
+    "output": 185,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "1a561adf72f91694",
+   "source": "hit",
+   "status": 200,
+   "ms": 1919,
+   "usage": {
+    "input": 668,
+    "output": 177,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "6f609145c7a6f41a",
+   "source": "hit",
+   "status": 200,
+   "ms": 2420,
+   "usage": {
+    "input": 644,
+    "output": 111,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "c6a2721bdc46ad21",
+   "source": "hit",
+   "status": 200,
+   "ms": 2966,
+   "usage": {
+    "input": 645,
+    "output": 181,
+    "cacheRead": 9843,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "c38c4a336ed58da4",
+   "source": "hit",
+   "status": 200,
+   "ms": 5080,
+   "usage": {
+    "input": 49,
+    "output": 616,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "07f5699c100e3136",
+   "source": "hit",
+   "status": 200,
+   "ms": 2013,
+   "usage": {
+    "input": 209,
+    "output": 188,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "601b78a811cdd61d",
+   "source": "hit",
+   "status": 200,
+   "ms": 1613,
+   "usage": {
+    "input": 121,
+    "output": 107,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "dfc8cce7921d23ca",
+   "source": "hit",
+   "status": 200,
+   "ms": 2232,
+   "usage": {
+    "input": 173,
+    "output": 107,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "5cdb898f628fd484",
+   "source": "hit",
+   "status": 200,
+   "ms": 1804,
+   "usage": {
+    "input": 296,
+    "output": 185,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "d72bdffa6b00dede",
+   "source": "hit",
+   "status": 200,
+   "ms": 1205,
+   "usage": {
+    "input": 311,
+    "output": 109,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "246365180926e719",
+   "source": "hit",
+   "status": 200,
+   "ms": 1977,
+   "usage": {
+    "input": 440,
+    "output": 188,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "5d1331199dc08ede",
+   "source": "hit",
+   "status": 200,
+   "ms": 2369,
+   "usage": {
+    "input": 458,
+    "output": 109,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "2eb4e0797e0d4c64",
+   "source": "hit",
+   "status": 200,
+   "ms": 1994,
+   "usage": {
+    "input": 541,
+    "output": 116,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "3ab650e76ae28e37",
+   "source": "hit",
+   "status": 200,
+   "ms": 4261,
+   "usage": {
+    "input": 503,
+    "output": 186,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "f2c974be1cab9305",
+   "source": "hit",
+   "status": 200,
+   "ms": 3880,
+   "usage": {
+    "input": 781,
+    "output": 150,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "1b57c9029d1e75e9",
+   "source": "hit",
+   "status": 200,
+   "ms": 7224,
+   "usage": {
+    "input": 544,
+    "output": 186,
+    "cacheRead": 9854,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "421491e64822d5c4",
+   "source": "hit",
+   "status": 200,
+   "ms": 2774,
+   "usage": {
+    "input": 518,
+    "output": 198,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0c3ca5cf39cce622",
+   "source": "hit",
+   "status": 200,
+   "ms": 3302,
+   "usage": {
+    "input": 622,
+    "output": 186,
+    "cacheRead": 9854,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "74ce3ed17bd358f5",
+   "source": "hit",
+   "status": 200,
+   "ms": 2944,
+   "usage": {
+    "input": 626,
+    "output": 188,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "82f276ae26739088",
+   "source": "hit",
+   "status": 200,
+   "ms": 2345,
+   "usage": {
+    "input": 906,
+    "output": 128,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "d7de614fdd8dc181",
+   "source": "hit",
+   "status": 200,
+   "ms": 1885,
+   "usage": {
+    "input": 654,
+    "output": 190,
+    "cacheRead": 9855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "8a8b1433b731b449",
+   "source": "hit",
+   "status": 200,
+   "ms": 2247,
+   "usage": {
+    "input": 655,
+    "output": 199,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "1f44c857a29a5b8c",
+   "source": "hit",
+   "status": 200,
+   "ms": 11846,
+   "usage": {
+    "input": 702,
+    "output": 131,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "98086ee6b23c709e",
+   "source": "hit",
+   "status": 200,
+   "ms": 3037,
+   "usage": {
+    "input": 745,
+    "output": 277,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0567ec90468a59ce",
+   "source": "hit",
+   "status": 200,
+   "ms": 2431,
+   "usage": {
+    "input": 1174,
+    "output": 277,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "afe540bbfc0f9143",
+   "source": "hit",
+   "status": 200,
+   "ms": 2630,
+   "usage": {
+    "input": 799,
+    "output": 197,
+    "cacheRead": 9267,
+    "cacheWrite": 578
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "d61b3851edc9be04",
+   "source": "hit",
+   "status": 200,
+   "ms": 6428,
+   "usage": {
+    "input": 792,
+    "output": 427,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "065fe76e51508851",
+   "source": "hit",
+   "status": 200,
+   "ms": 12112,
+   "usage": {
+    "input": 1347,
+    "output": 476,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "1418cd1bba941138",
+   "source": "hit",
+   "status": 200,
+   "ms": 2953,
+   "usage": {
+    "input": 971,
+    "output": 216,
+    "cacheRead": 9267,
+    "cacheWrite": 578
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "5059ae065a20b373",
+   "source": "hit",
+   "status": 200,
+   "ms": 4261,
+   "usage": {
+    "input": 989,
+    "output": 150,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "491efe86e3384308",
+   "source": "hit",
+   "status": 200,
+   "ms": 2786,
+   "usage": {
+    "input": 1187,
+    "output": 216,
+    "cacheRead": 9845,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0b89ee1bd05b288a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1923,
+   "usage": {
+    "input": 1194,
+    "output": 189,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "33461878ff702442",
+   "source": "hit",
+   "status": 200,
+   "ms": 1902,
+   "usage": {
+    "input": 1184,
+    "output": 187,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "31d67d299724ae62",
+   "source": "hit",
+   "status": 200,
+   "ms": 3478,
+   "usage": {
+    "input": 1115,
+    "output": 191,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a11318c41a2a7974",
+   "source": "hit",
+   "status": 200,
+   "ms": 3230,
+   "usage": {
+    "input": 1192,
+    "output": 190,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "c3d35e157fd7b8fa",
+   "source": "hit",
+   "status": 200,
+   "ms": 1716,
+   "usage": {
+    "input": 1104,
+    "output": 184,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "ac1540417cdfe537",
+   "source": "hit",
+   "status": 200,
+   "ms": 4881,
+   "usage": {
+    "input": 1068,
+    "output": 184,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "9b2f6da945ac3a82",
+   "source": "hit",
+   "status": 200,
+   "ms": 19344,
+   "usage": {
+    "input": 1052,
+    "output": 183,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "777a83f0a45c4eb7",
+   "source": "hit",
+   "status": 200,
+   "ms": 2618,
+   "usage": {
+    "input": 920,
+    "output": 187,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "3a9de8538b1c45d3",
+   "source": "hit",
+   "status": 200,
+   "ms": 5880,
+   "usage": {
+    "input": 791,
+    "output": 197,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "91ee7dbc1090ef5a",
+   "source": "hit",
+   "status": 200,
+   "ms": 2661,
+   "usage": {
+    "input": 678,
+    "output": 170,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "76f107a088edfb05",
+   "source": "hit",
+   "status": 200,
+   "ms": 2552,
+   "usage": {
+    "input": 723,
+    "output": 181,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "90fa89ad28a62f57",
+   "source": "hit",
+   "status": 200,
+   "ms": 4169,
+   "usage": {
+    "input": 626,
+    "output": 448,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "7f986e04335234db",
+   "source": "hit",
+   "status": 200,
+   "ms": 5198,
+   "usage": {
+    "input": 1223,
+    "output": 150,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "ea30d31a89012a4f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2433,
+   "usage": {
+    "input": 705,
+    "output": 181,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "864f4034c12a6081",
+   "source": "hit",
+   "status": 200,
+   "ms": 5188,
+   "usage": {
+    "input": 610,
+    "output": 427,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "18cb2bacccaa1b6d",
+   "source": "hit",
+   "status": 200,
+   "ms": 3234,
+   "usage": {
+    "input": 796,
+    "output": 182,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "cd626683e3434207",
+   "source": "hit",
+   "status": 200,
+   "ms": 5296,
+   "usage": {
+    "input": 815,
+    "output": 182,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "6f32d44351abf9af",
+   "source": "hit",
+   "status": 200,
+   "ms": 4993,
+   "usage": {
+    "input": 791,
+    "output": 198,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "6ec4acb8c6eb5c62",
+   "source": "hit",
+   "status": 200,
+   "ms": 3122,
+   "usage": {
+    "input": 1129,
+    "output": 156,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "08aa4009f8e6679b",
+   "source": "hit",
+   "status": 200,
+   "ms": 4109,
+   "usage": {
+    "input": 895,
+    "output": 187,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "9fdcebd56a67c662",
+   "source": "hit",
+   "status": 200,
+   "ms": 4496,
+   "usage": {
+    "input": 1198,
+    "output": 187,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "73a5f77a9908af66",
+   "source": "hit",
+   "status": 200,
+   "ms": 3548,
+   "usage": {
+    "input": 819,
+    "output": 196,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "02d9c577c5ced2a3",
+   "source": "hit",
+   "status": 200,
+   "ms": 3869,
+   "usage": {
+    "input": 800,
+    "output": 219,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "28ad28c02216da1e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1816,
+   "usage": {
+    "input": 884,
+    "output": 160,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "36721cc46b1b0d9d",
+   "source": "hit",
+   "status": 200,
+   "ms": 3052,
+   "usage": {
+    "input": 959,
+    "output": 148,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "ded54ccf46383675",
+   "source": "hit",
+   "status": 200,
+   "ms": 1304,
+   "usage": {
+    "input": 1010,
+    "output": 109,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "e50681ad75b4b9f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1597,
+   "usage": {
+    "input": 952,
+    "output": 253,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "72986e1e9e452df5",
+   "source": "hit",
+   "status": 200,
+   "ms": 1955,
+   "usage": {
+    "input": 1297,
+    "output": 181,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "11e33d59ec3b5ee8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1492,
+   "usage": {
+    "input": 747,
+    "output": 191,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "1d08dd4749526137",
+   "source": "hit",
+   "status": 200,
+   "ms": 3880,
+   "usage": {
+    "input": 1050,
+    "output": 191,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "3866e6f8f3f6c966",
+   "source": "hit",
+   "status": 200,
+   "ms": 2533,
+   "usage": {
+    "input": 699,
+    "output": 206,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "bb8366eab8560cc9",
+   "source": "hit",
+   "status": 200,
+   "ms": 2247,
+   "usage": {
+    "input": 659,
+    "output": 193,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "03a8f9640cfca30a",
+   "source": "hit",
+   "status": 200,
+   "ms": 3300,
+   "usage": {
+    "input": 742,
+    "output": 183,
+    "cacheRead": 9854,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "d68e8677ed60802b",
+   "source": "hit",
+   "status": 200,
+   "ms": 2862,
+   "usage": {
+    "input": 628,
+    "output": 201,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "ee9fc6afa0d1e267",
+   "source": "hit",
+   "status": 200,
+   "ms": 3243,
+   "usage": {
+    "input": 629,
+    "output": 186,
+    "cacheRead": 9854,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "3ac2221838a1ff66",
+   "source": "hit",
+   "status": 200,
+   "ms": 2951,
+   "usage": {
+    "input": 623,
+    "output": 178,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "15c4f73d115b9ab1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1311,
+   "usage": {
+    "input": 941,
+    "output": 156,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "463dcaddf21e8885",
+   "source": "hit",
+   "status": 200,
+   "ms": 2844,
+   "usage": {
+    "input": 749,
+    "output": 184,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "5d09b44e92f5eeba",
+   "source": "hit",
+   "status": 200,
+   "ms": 2954,
+   "usage": {
+    "input": 1049,
+    "output": 184,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "8399894cee4e3037",
+   "source": "hit",
+   "status": 200,
+   "ms": 3249,
+   "usage": {
+    "input": 710,
+    "output": 186,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0f22b4ed816e7c97",
+   "source": "hit",
+   "status": 200,
+   "ms": 2390,
+   "usage": {
+    "input": 692,
+    "output": 183,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "077f48086549d9cc",
+   "source": "hit",
+   "status": 200,
+   "ms": 3079,
+   "usage": {
+    "input": 721,
+    "output": 201,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "7f9e46b002eda90f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2947,
+   "usage": {
+    "input": 730,
+    "output": 175,
+    "cacheRead": 9854,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "77cf7bf0862aa0e8",
+   "source": "hit",
+   "status": 200,
+   "ms": 3754,
+   "usage": {
+    "input": 625,
+    "output": 203,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "21f10f49f86f94c7",
+   "source": "hit",
+   "status": 200,
+   "ms": 4964,
+   "usage": {
+    "input": 712,
+    "output": 303,
+    "cacheRead": 9267,
+    "cacheWrite": 588
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "bf3648fec290303c",
+   "source": "hit",
+   "status": 200,
+   "ms": 3183,
+   "usage": {
+    "input": 1107,
+    "output": 157,
+    "cacheRead": 9855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "45953801dc82895c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2011,
+   "usage": {
+    "input": 713,
+    "output": 184,
+    "cacheRead": 9855,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "959f3605e31246be",
+   "source": "hit",
+   "status": 200,
+   "ms": 2020,
+   "usage": {
+    "input": 686,
+    "output": 157,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "113e5f4047a75bec",
+   "source": "hit",
+   "status": 200,
+   "ms": 2336,
+   "usage": {
+    "input": 805,
+    "output": 290,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "fe1053b1cf41e75a",
+   "source": "hit",
+   "status": 200,
+   "ms": 2525,
+   "usage": {
+    "input": 784,
+    "output": 190,
+    "cacheRead": 9267,
+    "cacheWrite": 588
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "c7311b39987d72cf",
+   "source": "hit",
+   "status": 200,
+   "ms": 1205,
+   "usage": {
+    "input": 770,
+    "output": 111,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "6d7d6b04ad75c9d6",
+   "source": "hit",
+   "status": 200,
+   "ms": 2646,
+   "usage": {
+    "input": 730,
+    "output": 274,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0214efe5644e61e1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2280,
+   "usage": {
+    "input": 821,
+    "output": 293,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "4d375e2761391e93",
+   "source": "hit",
+   "status": 200,
+   "ms": 2543,
+   "usage": {
+    "input": 1266,
+    "output": 293,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "02c7059670d19340",
+   "source": "hit",
+   "status": 200,
+   "ms": 1816,
+   "usage": {
+    "input": 865,
+    "output": 124,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "daf7edd256322943",
+   "source": "hit",
+   "status": 200,
+   "ms": 1588,
+   "usage": {
+    "input": 742,
+    "output": 187,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "e05040e35a2d84be",
+   "source": "hit",
+   "status": 200,
+   "ms": 1684,
+   "usage": {
+    "input": 744,
+    "output": 183,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "42747f5277b24182",
+   "source": "hit",
+   "status": 200,
+   "ms": 3236,
+   "usage": {
+    "input": 703,
+    "output": 192,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "e2098cac4b89c45d",
+   "source": "hit",
+   "status": 200,
+   "ms": 1539,
+   "usage": {
+    "input": 741,
+    "output": 110,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "3f2839aa719a6f46",
+   "source": "hit",
+   "status": 200,
+   "ms": 1879,
+   "usage": {
+    "input": 735,
+    "output": 181,
+    "cacheRead": 9267,
+    "cacheWrite": 574
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "998ee11373332fcf",
+   "source": "hit",
+   "status": 200,
+   "ms": 2029,
+   "usage": {
+    "input": 610,
+    "output": 192,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "f5361a845a90d0fb",
+   "source": "hit",
+   "status": 200,
+   "ms": 2019,
+   "usage": {
+    "input": 603,
+    "output": 152,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "76152062328604b9",
+   "source": "hit",
+   "status": 200,
+   "ms": 2885,
+   "usage": {
+    "input": 624,
+    "output": 201,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "496dbc0eb26ed653",
+   "source": "hit",
+   "status": 200,
+   "ms": 1770,
+   "usage": {
+    "input": 701,
+    "output": 178,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "9a4a804ce5bf8c9f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2025,
+   "usage": {
+    "input": 695,
+    "output": 185,
+    "cacheRead": 9267,
+    "cacheWrite": 576
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a9456e63821c4a44",
+   "source": "hit",
+   "status": 200,
+   "ms": 1609,
+   "usage": {
+    "input": 713,
+    "output": 175,
+    "cacheRead": 9841,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "96e36706333f8f10",
+   "source": "hit",
+   "status": 200,
+   "ms": 2021,
+   "usage": {
+    "input": 684,
+    "output": 111,
+    "cacheRead": 9843,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0b2a3f541dff4b7d",
+   "source": "hit",
+   "status": 200,
+   "ms": 2129,
+   "usage": {
+    "input": 685,
+    "output": 181,
+    "cacheRead": 9843,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}

@@ -373,6 +373,9 @@ export function cleanDraft(draft:unknown,o:{wrote:boolean,numbers:number[]}):str
  // 22/10: mai «non posso / non ho un comando» verso il titolare: la frase cade, il resto della bozza resta.
  if(/\bnon posso\b|non ho un comando|non riesco a\b/i.test(s)){s=s.split(/(?<=[.!?])\s+/).filter(x=>!/\bnon posso\b|non ho un comando|non riesco a\b/i.test(x)).join(' ').trim();if(!s)return null}
  if(!o.wrote&&claimsWrite(s))return null
+ // fase 3 (tono, QA v145 «Vuoi che ti dica altro?»): le frasi di cortesia finali a vuoto cadono (risposte corte e chiare).
+ {const FILLER=/^(?:vuoi (?:che ti dica (?:altro|qualcos\w*)|altro|fare altro|cambiare altro|altre informazioni)|ti serve altro|serve altro|posso aiutarti(?: in| con)? (?:altro|qualcos\w*)|hai bisogno d.altro|c.è altro|desideri altro)[^.!?\n]*\?$/i
+  for(let k=0;k<2;k++){const m=s.match(/([.!?])\s+([^.!?\n]*\?)\s*$/);if(!m||!FILLER.test(m[2]!.trim()))break;s=s.slice(0,m.index!+1).trim()}}
  // Codici interni del contesto («p5», «c2») mai al titolare.
  if(/\b[pc]\d{1,3}\b/i.test(s))return null
  const allowed=new Set(o.numbers.map(n=>Math.round(n*100)/100))

@@ -33,6 +33,8 @@ export function brainGate(o:{text:string,proposalKind:string|null,choiceOptions:
 }
 
 /** C'è almeno un turno negli ultimi 30 minuti? (tabelle assenti → no) */
+/** fase 3 (memoria a breve): l'ultima risposta del bot con l'ora, per i pronomi risolti dal server prima del modello. */
+export async function lastBotTurn(tx:Exec,tenant:string,phone:string,now=Date.now()):Promise<BrainTurn|null>{try{return lastBot(await sqlBrainStore(tx).readHistory(tenant,phone,now))??null}catch{return null}}
 export async function hasFreshHistory(tx:Exec,tenant:string,phone:string,now=Date.now()){try{return (await sqlBrainStore(tx).readHistory(tenant,phone,now)).length>0}catch{return false}}
 
 /** «dimentica X» / «cosa hai imparato?»: deterministico, sincrono (TwiML). null = non è un comando di memoria. */

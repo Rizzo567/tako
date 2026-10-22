@@ -2,50 +2,50 @@
  "set": "notte-caccia",
  "metriche": {
   "set": "notte-caccia",
-  "modo": "replay",
-  "conversazioni": 1,
-  "misurate": 1,
+  "modo": "record",
+  "conversazioni": 4,
+  "misurate": 4,
   "nonMisurate": [],
-  "messaggi": 3,
-  "corrette": 1,
+  "messaggi": 13,
+  "corrette": 4,
   "percentuale": 100,
   "gravi": 0,
   "graviSicurezza": 0,
   "graviAltri": 0,
   "medi": 0,
-  "domandePer10Messaggi": 6.7,
-  "domandeNonAttesePer10": 6.7,
+  "domandePer10Messaggi": 5.4,
+  "domandeNonAttesePer10": 3.1,
   "latenzaAnthropicMs": {
-   "p50": 4495,
-   "p95": 5497,
-   "chiamate": 3
+   "p50": 1911,
+   "p95": 2919,
+   "chiamate": 5
   },
   "latenzaTurnoMs": {
-   "p50": 5652,
-   "p95": 6060,
-   "nota": "harness + latenza Haiku registrata"
+   "p50": 20,
+   "p95": 3021,
+   "nota": "misurata dal vivo"
   },
-  "chiamatePerMessaggio": 1,
+  "chiamatePerMessaggio": 0.38,
   "tokenMediPerMessaggio": {
-   "input": 253,
-   "output": 612,
-   "cacheRead": 9841,
+   "input": 121,
+   "output": 61,
+   "cacheRead": 3810,
    "cacheWrite": 0
   },
   "cacheHit": {
-   "chiamateConCacheRead": 3,
-   "su": 3,
+   "chiamateConCacheRead": 5,
+   "su": 5,
    "percentuale": 100
   },
   "costo": {
-   "spesoGiroUsd": 0,
-   "equivalenteLiveUsd": 0.001289,
-   "perMessaggioUsd": 0.00043,
+   "spesoGiroUsd": 0.000886,
+   "equivalenteLiveUsd": 0.001051,
+   "perMessaggioUsd": 0.000081,
    "tetto": 0.1
   },
   "anthropic": {
-   "hit": 3,
-   "vere": 0,
+   "hit": 1,
+   "vere": 4,
    "mock": 0,
    "assenti": 0,
    "rifiutateTetto": 0,
@@ -53,87 +53,227 @@
    "rateLimited": 0
   },
   "groqChat": 0,
-  "durataGiroS": 1.5
+  "durataGiroS": 11.4
  },
  "codici": {},
  "unknownSql": [],
  "verdicts": [
   {
-   "id": "cc-qv-03",
-   "family": "bv-multiple",
-   "menu": "qavero",
+   "id": "cc-giornata-05",
+   "family": "bv-elimina",
+   "menu": "romana",
    "success": true,
    "fails": [],
    "expected": [
-    "create|frittatina|3.5|primi"
+    "available|Cicoria ripassata|false",
+    "create|rigatoni con la pajata|14|primi",
+    "delete|Rigatoni con la pajata",
+    "price|Saltimbocca alla romana|16"
    ],
    "actual": [
-    "create|frittatina|3.5|primi"
+    "available|Cicoria ripassata|false",
+    "create|rigatoni con la pajata|14|primi",
+    "delete|Rigatoni con la pajata",
+    "price|Saltimbocca alla romana|16"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi aggiungere una nuova *Frittatina* o una delle frittate già nel menu?",
-    "In quale Sottomenu metto la *Frittatina* a 3,50 €?",
-    "Nuovo piatto *Frittatina* in *Primi*: *3,50 €*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Rigatoni con la pajata* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Rigatoni con la pajata*: da eliminare",
+    "Ok, elimino *Rigatoni con la pajata* dal menu.\n\n*Rigatoni con la pajata*: *eliminato* dal menu",
+    "Ok, il *Saltimbocca alla romana* passa a 16 €.\n\n*Saltimbocca alla romana*: prezzo da 15,00 € a *16,00 €*",
+    "*Rigatoni con la pajata* l’hai eliminato poco fa: non è più nel menu. Per rimetterlo scrivimi «rimetti rigatoni con la pajata».",
+    "*Rigatoni con la pajata* l’hai eliminato poco fa. Lo rimetto nei *Primi* a *14,00 €* come prima? Rispondi *sì*, oppure scrivimi prezzo e sottomenu (per esempio «14 euro nei primi»).",
+    "Nuovo piatto *Rigatoni con la pajata* in *Primi*: *14,00 €*",
+    "Ok, segno la *Cicoria ripassata* come esaurita.\n\n*Cicoria ripassata*: *finito*",
+    "Figurati! Se ti serve altro, scrivimi pure."
    ],
    "turns": [
-    "aggiungi la frittatina",
-    "3,50",
-    "nei primi"
+    "elimina i rigatoni con la pajata",
+    "sì",
+    "il saltimbocca a 16",
+    "❓ quanto costa la pajata?",
+    "rimetti i rigatoni con la pajata",
+    "14 euro nei primi",
+    "la cicoria è finita",
+    "❓ grazie"
    ],
    "clarifications": 2,
-   "unexpectedClarifications": 2,
-   "llmCalls": 3,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
    "llmMisses": 0,
-   "llmTokens": 32116,
+   "llmTokens": 41827,
    "latencyMs": [
-    154.8,
-    45.4,
-    32.3
+    85.6,
+    2890.5,
+    1994.5,
+    12.9,
+    13.6,
+    19.4,
+    3020.7,
+    1924.8
    ],
-   "recordedLlmMs": 11512,
+   "recordedLlmMs": 9377,
    "usedLlm": true,
    "source": "caccia notte 22/10 (fixture esistenti)",
-   "note": "Primi in due Menu: vale quello alla carta visibile (Menu di verifica), il fisso no",
+   "note": "piatto eliminato e poi citato: al turno 4 non deve dire che costa 14 (non c'è più); «rimetti» = ricrearlo (prezzo chiesto o ripreso) oppure ripristino dello stesso piatto (alt)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cc-scaduta-01",
+   "family": "bv-elimina",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Panna cotta* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Panna cotta*: da eliminare",
+    "Non c'è niente in sospeso da confermare. Dimmi cosa vuoi modificare nel menu."
+   ],
+   "turns": [
+    "elimina la panna cotta",
+    "[+40 min]",
+    "sì"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10072,
+   "latencyMs": [
+    20.2,
+    21.3
+   ],
+   "recordedLlmMs": 1047,
+   "usedLlm": true,
+   "source": "caccia notte 22/10 (fixture esistenti)",
+   "note": "«sì» 40 minuti dopo: proposta scaduta, mai eliminare; dirlo e chiedere di nuovo",
+   "nonMisurato": false
+  },
+  {
+   "id": "cc-prezzo-03",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nUn prezzo non può essere negativo, quindi *non ho cambiato nulla*. Intendevi «il caffè a 5»?"
+   ],
+   "turns": [
+    "il caffè a -5"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    14.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "source": "caccia notte 22/10 (fixture esistenti)",
+   "note": "prezzo negativo: mai scritto",
+   "nonMisurato": false
+  },
+  {
+   "id": "cc-conferme-01",
+   "family": "bv-elimina",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "delete|Crostata di visciole"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Crostata di visciole* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Crostata di visciole*: da eliminare",
+    "Per eliminare mi serve un *sì* scritto: rispondi *sì* per confermare oppure *annulla*."
+   ],
+   "turns": [
+    "elimina la crostata di visciole",
+    "👍"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    10.1,
+    12.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "source": "caccia notte 22/10 (fixture esistenti)",
+   "note": "DUBBIO: 👍 come «sì» a un'eliminazione: elimina oppure chiede un sì scritto; mai ignorarlo in silenzio",
    "nonMisurato": false
   }
  ],
  "chiamate": [
   {
-   "conv": "cc-qv-03",
-   "hash": "3c915e5465605208",
-   "source": "hit",
+   "conv": "cc-giornata-05",
+   "hash": "3c6374e9e0ff68cb",
+   "source": "real",
    "status": 200,
-   "ms": 5497,
+   "ms": 2680,
    "usage": {
-    "input": 46,
-    "output": 795,
-    "cacheRead": 9841,
+    "input": 166,
+    "output": 187,
+    "cacheRead": 9908,
     "cacheWrite": 0
    }
   },
   {
-   "conv": "cc-qv-03",
-   "hash": "01c836d014785c66",
-   "source": "hit",
+   "conv": "cc-giornata-05",
+   "hash": "3f84e12dbc331ab7",
+   "source": "real",
    "status": 200,
-   "ms": 1520,
+   "ms": 1911,
    "usage": {
-    "input": 210,
-    "output": 200,
-    "cacheRead": 9841,
+    "input": 236,
+    "output": 189,
+    "cacheRead": 9891,
     "cacheWrite": 0
    }
   },
   {
-   "conv": "cc-qv-03",
-   "hash": "b9ad919d3d15dc15",
+   "conv": "cc-giornata-05",
+   "hash": "6a2145cbb46ffa4d",
+   "source": "real",
+   "status": 200,
+   "ms": 2919,
+   "usage": {
+    "input": 546,
+    "output": 184,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cc-giornata-05",
+   "hash": "0929cafb13d70adb",
+   "source": "real",
+   "status": 200,
+   "ms": 1867,
+   "usage": {
+    "input": 591,
+    "output": 111,
+    "cacheRead": 9910,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cc-scaduta-01",
+   "hash": "63e08cbff24c1d7e",
    "source": "hit",
    "status": 200,
-   "ms": 4495,
+   "ms": 1047,
    "usage": {
-    "input": 502,
-    "output": 840,
-    "cacheRead": 9841,
+    "input": 38,
+    "output": 126,
+    "cacheRead": 9908,
     "cacheWrite": 0
    }
   }
