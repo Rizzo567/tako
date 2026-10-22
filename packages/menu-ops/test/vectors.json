@@ -1,0 +1,5492 @@
+{
+ "version": 1,
+ "vectors": [
+  {
+   "name": "set piatto + sezione + menu",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "set",
+     "kind": "item",
+     "id": "i1",
+     "fields": {
+      "price": 13,
+      "hidden": true
+     }
+    },
+    {
+     "op": "set",
+     "kind": "section",
+     "id": "s2a",
+     "fields": {
+      "name": "Carne"
+     }
+    },
+    {
+     "op": "set",
+     "kind": "menu",
+     "id": "m2",
+     "fields": {
+      "active": false
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 13,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          },
+          "hidden": true
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": false,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    },
+    {
+     "ok": true
+    },
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "set campo vietato",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "set",
+     "kind": "item",
+     "id": "i1",
+     "fields": {
+      "translations": {}
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": false,
+     "code": "FIELD",
+     "message": "campo non modificabile: translations"
+    }
+   ]
+  },
+  {
+   "name": "create piatti con ancore",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "create",
+     "kind": "item",
+     "id": "n1",
+     "parentId": "s1",
+     "fields": {
+      "name": "Cacio e pepe",
+      "price": 10
+     }
+    },
+    {
+     "op": "create",
+     "kind": "item",
+     "id": "n2",
+     "parentId": "s1",
+     "fields": {
+      "name": "Pesto"
+     },
+     "at": {
+      "beforeId": "i2"
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "n2",
+          "name": "Pesto",
+          "description": null,
+          "price": 0,
+          "imageUrl": null,
+          "allergens": [],
+          "tags": [],
+          "additives": [],
+          "available": true,
+          "hidden": false,
+          "featured": false,
+          "displayMode": "normal",
+          "externalLink": null,
+          "priceDisplay": null,
+          "kitchenStation": null,
+          "prepTimeMinutes": 10,
+          "costPrice": null,
+          "calories": null,
+          "variants": [],
+          "translations": {}
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         },
+         {
+          "id": "n1",
+          "name": "Cacio e pepe",
+          "description": null,
+          "price": 10,
+          "imageUrl": null,
+          "allergens": [],
+          "tags": [],
+          "additives": [],
+          "available": true,
+          "hidden": false,
+          "featured": false,
+          "displayMode": "normal",
+          "externalLink": null,
+          "priceDisplay": null,
+          "kitchenStation": null,
+          "prepTimeMinutes": 10,
+          "costPrice": null,
+          "calories": null,
+          "variants": [],
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    },
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "create sottomenu e sezione figlia",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "create",
+     "kind": "section",
+     "id": "r9",
+     "parentId": "m1",
+     "fields": {
+      "name": "Contorni",
+      "active": false
+     }
+    },
+    {
+     "op": "create",
+     "kind": "section",
+     "id": "c9",
+     "parentId": "m1",
+     "fields": {
+      "name": "Di verdure",
+      "parentSectionId": "s2"
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "c9",
+        "parentSectionId": "s2",
+        "name": "Di verdure",
+        "description": null,
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "r9",
+        "parentSectionId": null,
+        "name": "Contorni",
+        "description": null,
+        "active": false,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    },
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "create menu",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "create",
+     "kind": "menu",
+     "id": "m3",
+     "fields": {
+      "name": "Bevande",
+      "active": false
+     },
+     "at": {
+      "beforeId": "m2"
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m3",
+      "name": "Bevande",
+      "description": null,
+      "type": "main",
+      "active": false,
+      "translations": {},
+      "sections": []
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "create ripetuto (idempotente) e EXISTS",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "create",
+     "kind": "item",
+     "id": "n1",
+     "parentId": "s1",
+     "fields": {
+      "name": "X"
+     }
+    },
+    {
+     "op": "create",
+     "kind": "item",
+     "id": "n1",
+     "parentId": "s1",
+     "fields": {
+      "name": "X"
+     }
+    },
+    {
+     "op": "create",
+     "kind": "item",
+     "id": "n1",
+     "parentId": "s1",
+     "fields": {
+      "name": "Y"
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         },
+         {
+          "id": "n1",
+          "name": "X",
+          "description": null,
+          "price": 0,
+          "imageUrl": null,
+          "allergens": [],
+          "tags": [],
+          "additives": [],
+          "available": true,
+          "hidden": false,
+          "featured": false,
+          "displayMode": "normal",
+          "externalLink": null,
+          "priceDisplay": null,
+          "kitchenStation": null,
+          "prepTimeMinutes": 10,
+          "costPrice": null,
+          "calories": null,
+          "variants": [],
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    },
+    {
+     "ok": true
+    },
+    {
+     "ok": false,
+     "code": "EXISTS"
+    }
+   ]
+  },
+  {
+   "name": "create figlia di figlia",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "create",
+     "kind": "section",
+     "id": "z",
+     "parentId": "m1",
+     "fields": {
+      "name": "Z",
+      "parentSectionId": "s2a"
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": false,
+     "code": "HIERARCHY",
+     "message": "profondità massima 2"
+    }
+   ]
+  },
+  {
+   "name": "move piatto in altro Menu",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "move",
+     "kind": "item",
+     "id": "i1",
+     "toParentId": "t1",
+     "at": {
+      "beforeId": "j1"
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "move ancora mancante = in fondo",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "move",
+     "kind": "item",
+     "id": "i1",
+     "at": {
+      "beforeId": "ghost"
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         },
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "move sottomenu con figlie",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "move",
+     "kind": "section",
+     "id": "s2",
+     "at": {
+      "beforeId": "s1"
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "move sezione in altro sottomenu",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "move",
+     "kind": "section",
+     "id": "s2a",
+     "toParentId": "s1"
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s1",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "move sottomenu con figlie sotto altro (HIERARCHY)",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "move",
+     "kind": "section",
+     "id": "s2",
+     "toParentId": "s1"
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": false,
+     "code": "HIERARCHY",
+     "message": "un Sottomenu con Sezioni non diventa Sezione"
+    }
+   ]
+  },
+  {
+   "name": "remove sottomenu a cascata + NOT_FOUND",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "remove",
+     "kind": "section",
+     "id": "s2"
+    },
+    {
+     "op": "remove",
+     "kind": "section",
+     "id": "s2a"
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    },
+    {
+     "ok": false,
+     "code": "NOT_FOUND"
+    }
+   ]
+  },
+  {
+   "name": "reorder tollerante",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "reorder",
+     "kind": "section",
+     "parentId": "m1",
+     "ids": [
+      "s3",
+      "x",
+      "s1"
+     ]
+    },
+    {
+     "op": "reorder",
+     "kind": "menu",
+     "ids": [
+      "m2"
+     ]
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    },
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "manualOrder",
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "manualOrder",
+     "value": true
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b",
+     "manualOrder": true
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "drop piatto",
+   "drop": {
+    "id": "i1",
+    "kind": "dish",
+    "fromGroup": "items:s1",
+    "toGroup": "items:s1",
+    "toIndex": 1
+   },
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "move",
+     "kind": "item",
+     "id": "i1",
+     "toParentId": "s1",
+     "at": {
+      "beforeId": "i3"
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "drop piatto in sezione vuota",
+   "drop": {
+    "id": "i1",
+    "kind": "dish",
+    "fromGroup": "items:s1",
+    "toGroup": "items:s2b",
+    "toIndex": 0
+   },
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "move",
+     "kind": "item",
+     "id": "i1",
+     "toParentId": "s2b"
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         }
+        ]
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "drop sezione",
+   "drop": {
+    "id": "s2b",
+    "kind": "section",
+    "fromGroup": "children:s2",
+    "toGroup": "children:s2",
+    "toIndex": 0
+   },
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "move",
+     "kind": "section",
+     "id": "s2b",
+     "toParentId": "s2",
+     "at": {
+      "beforeId": "s2a"
+     }
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "drop sottomenu",
+   "drop": {
+    "id": "s2",
+    "kind": "submenu",
+    "fromGroup": "pills:m1",
+    "toGroup": "pills:m1",
+    "toIndex": 2
+   },
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "reorder",
+     "kind": "section",
+     "parentId": "m1",
+     "ids": [
+      "s1",
+      "s3",
+      "s2",
+      "s2a",
+      "s2b"
+     ]
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "drop menu",
+   "drop": {
+    "id": "m2",
+    "kind": "menu",
+    "fromGroup": "menus",
+    "toGroup": "menus",
+    "toIndex": 0
+   },
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "reorder",
+     "kind": "menu",
+     "ids": [
+      "m2",
+      "m1"
+     ]
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    }
+   ]
+  },
+  {
+   "name": "snapshot ordine manuale",
+   "snapshot": {
+    "menuOrder": [
+     "m2",
+     "m1"
+    ],
+    "sectionOrder": {
+     "m1": [
+      "s3",
+      "s2b",
+      "s1"
+     ]
+    }
+   },
+   "input": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       }
+      ]
+     },
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b"
+    }
+   },
+   "ops": [
+    {
+     "op": "reorder",
+     "kind": "menu",
+     "ids": [
+      "m2",
+      "m1"
+     ]
+    },
+    {
+     "op": "reorder",
+     "kind": "section",
+     "parentId": "m1",
+     "ids": [
+      "s3",
+      "s2",
+      "s2b",
+      "s2a",
+      "s1"
+     ]
+    },
+    {
+     "op": "manualOrder",
+     "value": true
+    }
+   ],
+   "output": {
+    "schemaVersion": 1,
+    "menus": [
+     {
+      "id": "m2",
+      "name": "Cena",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "t1",
+        "parentSectionId": null,
+        "name": "Antipasti",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "j1",
+          "name": "Bruschetta",
+          "price": 5,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "m1",
+      "name": "Pranzo",
+      "active": true,
+      "translations": {},
+      "sections": [
+       {
+        "id": "s3",
+        "parentSectionId": null,
+        "name": "Dolci",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s2",
+        "parentSectionId": null,
+        "name": "Secondi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i4",
+          "name": "Saltimbocca",
+          "price": 15,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s2b",
+        "parentSectionId": "s2",
+        "name": "Di pesce",
+        "active": true,
+        "translations": {},
+        "items": []
+       },
+       {
+        "id": "s2a",
+        "parentSectionId": "s2",
+        "name": "Di carne",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i5",
+          "name": "Tagliata",
+          "price": 18,
+          "translations": {}
+         }
+        ]
+       },
+       {
+        "id": "s1",
+        "parentSectionId": null,
+        "name": "Primi",
+        "active": true,
+        "translations": {},
+        "items": [
+         {
+          "id": "i1",
+          "name": "Carbonara",
+          "price": 12,
+          "translations": {
+           "en": {
+            "name": "Carbonara"
+           }
+          }
+         },
+         {
+          "id": "i2",
+          "name": "Amatriciana",
+          "price": 11,
+          "translations": {}
+         },
+         {
+          "id": "i3",
+          "name": "Gricia",
+          "price": 10,
+          "translations": {}
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "design": {
+     "primary": "#ed725b",
+     "manualOrder": true
+    }
+   },
+   "results": [
+    {
+     "ok": true
+    },
+    {
+     "ok": true
+    },
+    {
+     "ok": true
+    }
+   ]
+  }
+ ]
+}

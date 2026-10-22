@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config'
 // Avvia prima `pnpm dev` (o almeno server + DB), poi `pnpm test`.
 export default defineConfig({
   test: {
-    include: ['tests/**/*.test.ts'],
+    include: ['tests/**/*.test.ts', 'packages/menu-ops/test/**/*.test.ts'],
     testTimeout: 20000,
     hookTimeout: 30000,
     fileParallelism: false,

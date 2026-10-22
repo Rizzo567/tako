@@ -43,3 +43,11 @@ export const GROUP = {
   /** Piatti di una Sezione o Sottomenu */
   items: (sectionId: string) => `items:${sectionId}`,
 } as const
+
+// ── Aggiunta A1 (additiva): Workspace strutturale minimo, nessun import da apps/server. ──
+export type WsItem = { id: string; [k: string]: unknown }
+export type WsSection = { id: string; parentSectionId?: string | null; items: WsItem[]; [k: string]: unknown }
+export type WsMenu = { id: string; sections: WsSection[]; [k: string]: unknown }
+export type WsDocument = { menus: WsMenu[]; design?: { manualOrder?: boolean; [k: string]: unknown }; [k: string]: unknown }
+/** Ordine visto oggi (pillole + Menu) da fotografare al primo riordino (addendum 22/10). */
+export type ManualOrderView = { menuOrder: string[]; sectionOrder: Record<string, string[]> }
