@@ -1,0 +1,149 @@
+{
+ "ambito": "Server Fastify VERO (startServer, TAKO_MODE=web, login vero) + Postgres embedded isolato (migrazioni vere + menu-day-presets.sql) + SPA compilata + renderer vero (esbuild) via proxy locale; bot = applyBotChange sullo stesso DB; Chrome headless 1280 e 390 emulato",
+ "data": "2026-10-22T09:33:43.598Z",
+ "locale": "26050ecd-2e55-4057-a4c5-bff2b449cd47 (finto)",
+ "piatti": 41,
+ "risultati": [
+  {
+   "n": 1,
+   "scenario": "Login titolare → Piatti: menu al centro, PDF del pubblicato a destra, «Pubblicato»",
+   "ok": true,
+   "detail": "stato «Pubblicato», PDF dal server 200 application/pdf, 41 piatti nel fixture"
+  },
+  {
+   "n": 2,
+   "scenario": "Tocco piatto → riquadro + matita → prezzo nel pannello → bozza ≠ pubblicato sul server",
+   "ok": true,
+   "detail": "matita «Modifica piatto «Burrata»»; GET /api/menu-workspace: bozza 11.5, pubblicato 9, pending=true"
+  },
+  {
+   "n": 3,
+   "scenario": "«+» → Piatto in una Sezione figlia e «+» → Sottomenu (nascosto): compaiono, server coerente",
+   "ok": true,
+   "detail": "scelte «+»: Menu/Sottomenu/Sezione/Piatto; piatto in «Pasta fresca» (hidden=false), Sottomenu nascosto; DOM {\"dish\":true,\"subState\":\"inactive\",\"dishState\":null}; pubblicato intatto"
+  },
+  {
+   "n": 4,
+   "scenario": "Rilascio simulato: move piatto in altra Sezione + reorder Sottomenu dopo snapshot provvisorio → DOM == SPA == server, manualOrder",
+   "ok": true,
+   "detail": "pillole DOM = SPA = server (Dolci › Antipasti › Primi › Specialità QA › Secondi › Contorni); Risotti: Carbonara, Risotto ai funghi, Risotto alla milanese, Risotto al nero; design.manualOrder=true solo in bozza"
+  },
+  {
+   "n": 5,
+   "scenario": "Bot WhatsApp con bozza pendente (applyBotChange): pubblicato solo bot, bozza entrambe, notifica ≤ 6 s",
+   "ok": true,
+   "detail": "revisioni 7/3 → 9/5 (partial=true); notifica dopo 3897 ms; stato «Modifiche non pubblicate»"
+  },
+  {
+   "n": 6,
+   "scenario": "«Pubblica» → riepilogo → «Pubblica ora»: pubblicato == bozza, «Pubblicato», PDF rigenerato",
+   "ok": true,
+   "detail": "riepilogo: «Menu pubblico → bozza da pubblicareAggiunto · Fettuccine QACampoPubblicoDa pubblicareid—0a767fe8-b355-4862-9d4c-6aa3f72fe35eNome—Fettuccine …»; revisione 10=10; PDF rigenerato (200)"
+  },
+  {
+   "n": 7,
+   "scenario": "«Scarta le modifiche» dopo una nuova modifica → bozza == pubblicato",
+   "ok": true,
+   "detail": "bozza == pubblicato, Tiramisù 6; versioni «Bozza scartata»: 1"
+  },
+  {
+   "n": 8,
+   "scenario": "Flag spento → schermata «Menu di oggi» (vecchia lista), nessun errore console",
+   "ok": true,
+   "detail": "lista di oggi, nessun .mw-ed-*; console pulita (solo risorse: 2)"
+  },
+  {
+   "n": 9,
+   "scenario": "Mobile 390: apri, seleziona, matita = foglio dal basso, Pubblica in testata",
+   "ok": true,
+   "detail": "foglio {\"top\":277,\"bottom\":851,\"h\":844}, Pubblica in testata a y=90 (a pagina scorsa y=-147); prezzo salvato dal telefono (6,5)"
+  },
+  {
+   "n": 10,
+   "scenario": "Ruolo cameriere (dipendente): rotte /ops, /status, /discard, /publish → 403",
+   "ok": true,
+   "detail": "{\"ops\":403,\"status\":403,\"discard\":403,\"publish\":403,\"workspace\":403}"
+  },
+  {
+   "n": 11,
+   "scenario": "Nessun errore JavaScript nel browser (desktop)",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "risposteHttpErrore": [
+  "401 GET /api/auth/bootstrap",
+  "404 GET /loading/tako-loading.svg",
+  "404 GET /takomenu-public/branding/takomenu-wordmark-v2.svg",
+  "mobile: con il menu scorso «Pubblica» esce dallo schermo (y=-147): la testata non resta fissa"
+ ],
+ "screenshot": [
+  {
+   "file": "reale-desktop-01-apri.png",
+   "label": "Login vero → Piatti: menu vero al centro, PDF pubblicato a destra, «Pubblicato»"
+  },
+  {
+   "file": "reale-desktop-02-selezione.png",
+   "label": "Tocco su «Burrata»: riquadro e matita"
+  },
+  {
+   "file": "reale-desktop-03-prezzo.png",
+   "label": "Prezzo cambiato nel pop-over → «Modifiche non pubblicate»"
+  },
+  {
+   "file": "reale-desktop-04-piu-piatto.png",
+   "label": "«+» → Piatto con genitore preselezionato"
+  },
+  {
+   "file": "reale-desktop-05-creati.png",
+   "label": "Piatto «Fettuccine QA» e Sottomenu «Specialità QA» creati"
+  },
+  {
+   "file": "reale-desktop-06-tremolio.png",
+   "label": "Modalità tremolio, «Fine» in testata, rilascio applicato"
+  },
+  {
+   "file": "reale-desktop-07-ordine.png",
+   "label": "Dopo il rilascio: Dolci primo Sottomenu, Carbonara dentro Risotti"
+  },
+  {
+   "file": "reale-desktop-08-whatsapp.png",
+   "label": "Bot WhatsApp con bozza pendente: notifica, bozza conservata"
+  },
+  {
+   "file": "reale-desktop-09-pubblica.png",
+   "label": "Riepilogo Pubblica dal server vero"
+  },
+  {
+   "file": "reale-desktop-10-pubblicato.png",
+   "label": "Pubblicato: stato e PDF aggiornato"
+  },
+  {
+   "file": "reale-desktop-11-scartato.png",
+   "label": "Scarta le modifiche → Pubblicato"
+  },
+  {
+   "file": "reale-desktop-12-flag-spento.png",
+   "label": "Flag spento: schermata Menu di oggi"
+  },
+  {
+   "file": "reale-mobile-01-apri.png",
+   "label": "Telefono 390: menu vero a pagina intera"
+  },
+  {
+   "file": "reale-mobile-02-selezione.png",
+   "label": "Tocco: riquadro + matita"
+  },
+  {
+   "file": "reale-mobile-03-foglio.png",
+   "label": "Matita: foglio dal basso"
+  },
+  {
+   "file": "reale-mobile-04-pubblica.png",
+   "label": "Pubblica in testata (telefono)"
+  }
+ ],
+ "video": [
+  "video/flusso-reale-desktop.webm"
+ ]
+}
