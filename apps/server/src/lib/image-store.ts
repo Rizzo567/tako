@@ -11,7 +11,7 @@ import { readFile } from 'node:fs/promises'
 import { galleryInventory } from './menu-workspace-gallery.js'
 import { DurableImageQuota } from './durable-image-quota.js'
 import { persistEdgeImage } from './edge-image-persistence.js'
-import { inspectStaticImage } from './static-image-policy.js'
+import { inspectStaticImage, STATIC_IMAGE_LIMITS } from './static-image-policy.js'
 import { remoteStorageEnabled, remoteImageUsage, uploadRemoteImage, downloadRemoteImage } from './remote-image-store.js'
 
 export const UPLOADS_DIR = process.env['UPLOADS_DIR'] ?? './uploads'
@@ -71,13 +71,75 @@ export async function downscaleOversizedImage(buf:Buffer,maxSourcePixels=50_000_
  const side=Math.max(size.width,size.height);return sharp(buf,{limitInputPixels:maxSourcePixels}).rotate().resize({width:side,height:side,fit:'inside'}).jpeg({quality:90}).toBuffer()
 }
 
+/** 22/10/2026 — foto WhatsApp e «CPU Time exceeded» (HTTP 546 WORKER_RESOURCE_LIMIT) sull'edge.
+ * Misurato dai log edge: 21/10 12:42:30 e 22/10 08:08:43/08:09:21 la funzione muore «CPU Time exceeded» ~1,2-1,5 s dopo
+ * `image_install_complete`, cioè dentro il codec ImageMagick WASM (compilazione dei 15 MB + riduzione + ricodifica).
+ * Una foto WhatsApp tipica (JPEG 1080×1920, 66 KB = 2,07 MP, appena sopra il tetto di 2 MP) faceva DUE passate WASM.
+ * Qui: un'immagine già entro limiti ragionevoli si salva così com'è, senza WASM. Restano la validazione strutturale
+ * (inspectStaticImage: magic bytes, dimensioni dalle intestazioni, niente animazioni) e la pulizia dei metadati in JS
+ * (EXIF/XMP/IPTC/commenti nel JPEG, chunk di testo/eXIf/tIME nel PNG). Se serve davvero ruotare (EXIF Orientation≠1),
+ * convertire (CMYK, WebP con EXIF/XMP) o ridurre, ritorna null e si passa al codec come prima. */
+export const PASSTHROUGH_LIMITS=Object.freeze({bytes:3*1024*1024,side:2560,pixels:4_200_000})
+const JPEG_KEEP_APP=new Set([0xe0,0xe2,0xee]) // JFIF, ICC_PROFILE, Adobe (trasformazione colore)
+const PNG_DROP=new Set(['tEXt','zTXt','iTXt','eXIf','tIME'])
+/** Orientamento EXIF (tag 0x0112) da un segmento APP1; null = EXIF illeggibile (nel dubbio si va al codec). */
+function exifOrientation(b:Buffer,start:number,end:number):number|null{
+ if(end-start<14||b.toString('ascii',start,start+6)!=='Exif\0\0')return 1 // APP1 XMP o altro: nessun orientamento
+ const t=start+6,le=b.toString('ascii',t,t+2)==='II';if(!le&&b.toString('ascii',t,t+2)!=='MM')return null
+ const u16=(o:number)=>o+2<=end?(le?b.readUInt16LE(o):b.readUInt16BE(o)):-1,u32=(o:number)=>o+4<=end?(le?b.readUInt32LE(o):b.readUInt32BE(o)):-1
+ if(u16(t+2)!==42)return null;const ifd=u32(t+4);if(ifd<8||t+ifd+2>end)return null
+ const n=u16(t+ifd);if(n<0)return null
+ for(let i=0;i<n;i++){const e=t+ifd+2+i*12;if(e+12>end)return null;if(u16(e)===0x0112)return u16(e+8)}
+ return 1
+}
+/** Immagine salvabile senza ricodifica (vedi sopra), già ripulita dai metadati; null = serve il codec. Mai lancia. */
+export function passthroughImage(buf:Buffer):Buffer|null{
+ try{
+  if(!buf.length||buf.length>PASSTHROUGH_LIMITS.bytes)return null
+  const info=inspectStaticImage(buf,PASSTHROUGH_LIMITS.pixels),mime=sniffImageMime(buf)
+  if(!mime||!ALLOWED_MIME_TYPES.has(mime)||mime!=='image/'+info.format)return null
+  if(Math.max(info.width,info.height)>PASSTHROUGH_LIMITS.side)return null
+  // PNG/WebP restano sotto il tetto storico di 2 MP: il PDF li decodifica (pdfkit / pdf-webp-codec con quel tetto).
+  if(info.format!=='jpeg'&&info.width*info.height>STATIC_IMAGE_LIMITS.pixels)return null
+  let out:Buffer
+  if(info.format==='jpeg'){
+   const parts:Buffer[]=[buf.subarray(0,2)];let p=2,scan=-1
+   while(p+4<=buf.length){
+    if(buf[p]!==0xff)return null;let q=p+1;while(buf[q]===0xff)q++;const marker=buf[q]!,seg=q+1
+    if(marker===0xd8||marker===0xd9||marker===0x01||(marker>=0xd0&&marker<=0xd7))return null // fuori posto prima della scansione
+    const len=buf.readUInt16BE(seg),end=seg+len;if(len<2||end>buf.length)return null
+    if(marker===0xda){scan=p;break}
+    if(marker>=0xc0&&marker<=0xcf&&marker!==0xc4&&marker!==0xc8&&marker!==0xcc){const comps=buf[seg+7];if(comps!==1&&comps!==3)return null} // CMYK/YCCK → codec
+    if(marker===0xe1){const o=exifOrientation(buf,seg+2,end);if(o===null||o>1)return null}
+    if(marker===0xfe||(marker>=0xe0&&marker<=0xef&&!JPEG_KEEP_APP.has(marker))){p=end;continue}
+    parts.push(buf.subarray(p,end));p=end
+   }
+   // Dati compressi copiati intatti fino all'EOI finale; byte in coda dopo l'EOI → codec (niente contenuto nascosto).
+   if(scan<0||buf[buf.length-2]!==0xff||buf[buf.length-1]!==0xd9)return null
+   parts.push(buf.subarray(scan));out=Buffer.concat(parts)
+  }else if(info.format==='png'){
+   const parts:Buffer[]=[buf.subarray(0,8)];let p=8
+   while(p+12<=buf.length){const size=buf.readUInt32BE(p),type=buf.toString('ascii',p+4,p+8),end=p+12+size;if(end>buf.length)return null;if(!PNG_DROP.has(type))parts.push(buf.subarray(p,end));p=end;if(type==='IEND')break}
+   out=Buffer.concat(parts) // eventuali byte dopo IEND scartati
+  }else{
+   const vp8x=buf.indexOf('VP8X',12,'ascii');if(vp8x===12&&(buf[20]!&0x0c))return null // EXIF/XMP nel WebP → codec
+   out=buf
+  }
+  const check=inspectStaticImage(out,PASSTHROUGH_LIMITS.pixels);if(check.width!==info.width||check.height!==info.height||check.format!==info.format)return null
+  return out
+ }catch{return null}
+}
+
 export type SaveImageResult = { url: string } | { error: string; code: string }
 
 // Valida (magic bytes) + re-encode (sharp) + quota + scrive su disco. Ritorna l'URL
 // pubblico (/uploads/<rest>/<file>) o un errore leggibile. Buffer già in memoria
 // (il chiamante impone il limite di dimensione: 10MB multipart, o il media WhatsApp).
-export async function saveImageBuffer(restaurantId: string, buf: Buffer): Promise<SaveImageResult> {
-  try { inspectStaticImage(buf) } catch (error) {
+// `passthrough` (solo canale WhatsApp, 22/10): immagine già entro PASSTHROUGH_LIMITS → salvata senza ricodifica.
+export async function saveImageBuffer(restaurantId: string, buf: Buffer, opts: { passthrough?: boolean } = {}): Promise<SaveImageResult> {
+  const direct = opts.passthrough ? passthroughImage(buf) : null
+  if (direct) buf = direct
+  else try { inspectStaticImage(buf) } catch (error) {
     const code=error instanceof Error?error.message:'INVALID_FILE_CONTENT'
     return {code,error:code==='ANIMATION_NOT_SUPPORTED'?'Sono accettate solo immagini statiche JPG, PNG e WebP.':code==='INPUT_PIXEL_LIMIT'?'Immagine oltre il limite di 2 megapixel.':code==='INPUT_BYTE_LIMIT'?'Immagine oltre il limite di 10 MB.':'Immagine non valida.'}
   }
@@ -89,7 +151,8 @@ export async function saveImageBuffer(restaurantId: string, buf: Buffer): Promis
   let outputMime=realMime
   const edge=process.env['TAKO_EXECUTION_RUNTIME']==='edge'
   if(edge&&!remoteStorageEnabled())return {code:'EDGE_STORAGE_REQUIRED',error:'Storage non configurato.'}
-  try {
+  if (direct) out = direct
+  else try {
     if(edge){
       if(!configuredEdgeCodec&&configuredEdgeInitializer)await configuredEdgeInitializer()
       if(!configuredEdgeCodec)return {code:'EDGE_CODEC_REQUIRED',error:'Elaborazione immagini non configurata.'}

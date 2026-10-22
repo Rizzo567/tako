@@ -1204,13 +1204,20 @@ const jobTimeoutMs=()=>Number(process.env.TAKO_WHATSAPP_JOB_TIMEOUT_MS)||90_000,
 function withTimeout<T>(work:Promise<T>,ms:number,fallback:T):Promise<T>{let timer:ReturnType<typeof setTimeout>|undefined;return Promise.race([work,new Promise<T>(resolve=>{timer=setTimeout(()=>resolve(fallback),ms)})]).finally(()=>clearTimeout(timer))}
 const storedUpload=(tenant:string,url:string)=>url.startsWith(`/uploads/${tenant}/`)&&/^[A-Za-z0-9_-]{16}\.(jpg|png|webp)$/.test(url.slice(`/uploads/${tenant}/`.length))
 /** Scarica (se serve), riduce i JPEG oltre 2 MP e salva nella galleria del locale: stessa pipeline della dashboard. */
-async function prepareUpload(tenant:string,source:{mediaUrl:string}|{bytes:Uint8Array,type:string}):Promise<{url:string}|{error:string}>{
- const work=(async():Promise<{url:string}|{error:string}>=>{const {saveImageBuffer,downscaleOversizedImage}=await import('../lib/image-store.js')
-  let media:{bytes:Uint8Array,type:string};try{media='bytes' in source?source:await downloadTwilioMedia(source.mediaUrl,process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'')}catch{return{error:'foto non più scaricabile da WhatsApp'}}
+/** 22/10: foto già entro i limiti (es. WhatsApp 1080×1920, 66 KB) → salvata senza codec WASM (passthroughImage), che sull'edge
+ *  sforava «CPU Time exceeded» (HTTP 546) e lasciava il titolare senza risposta. Ogni esito negativo che non dipende dalla foto
+ *  inviata (download, codec, storage, eccezione, tempo scaduto) finisce anche in tako_whatsapp_errors (kind photo_failed). */
+async function prepareUpload(tenant:string,source:{mediaUrl:string}|{bytes:Uint8Array,type:string},phone?:string):Promise<{url:string}|{error:string}>{
+ let stage='avvio'
+ const fail=async(error:string,detail:string)=>{await reportFailure({kind:'photo_failed',tenant,phone,detail:stage+': '+detail});return{error}}
+ const work=(async():Promise<{url:string}|{error:string}>=>{const {saveImageBuffer,downscaleOversizedImage,passthroughImage}=await import('../lib/image-store.js')
+  stage='download';let media:{bytes:Uint8Array,type:string};try{media='bytes' in source?source:await downloadTwilioMedia(source.mediaUrl,process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'')}catch(error){return fail('foto non più scaricabile da WhatsApp',error instanceof Error?error.message:'Error')}
   const problem=photoProblem(media.bytes,media.type);if(problem)return{error:problem.split('\n')[0]!.replace(/\.$/,'')}
-  let bytes:Buffer;try{bytes=await downscaleOversizedImage(Buffer.from(media.bytes),downscaleSourcePixels)}catch{return{error:'foto troppo grande da elaborare'}}
-  if(!bytes.length)return{error:'foto troppo grande da elaborare'};const saved=await saveImageBuffer(tenant,bytes);return 'url' in saved?{url:saved.url}:{error:saved.error}})().catch(()=>({error:'elaborazione della foto non riuscita'}))
- return withTimeout(work,photoTimeoutMs(),{error:'elaborazione della foto troppo lenta'})
+  const raw=Buffer.from(media.bytes);let bytes:Buffer
+  if(passthroughImage(raw))bytes=raw;else{stage='riduzione';try{bytes=await downscaleOversizedImage(raw,downscaleSourcePixels)}catch(error){return fail('foto troppo grande da elaborare',error instanceof Error?error.message:'Error')}}
+  if(!bytes.length)return fail('foto troppo grande da elaborare','riduzione vuota');stage='salvataggio';const saved=await saveImageBuffer(tenant,bytes,{passthrough:true});return 'url' in saved?{url:saved.url}:saved.code==='STORAGE_FULL'?{error:saved.error}:fail(saved.error,saved.code)})().catch(error=>fail('elaborazione della foto non riuscita',error instanceof Error?error.message:'Error'))
+ const result=await withTimeout(work,photoTimeoutMs(),null)
+ return result??fail('elaborazione della foto troppo lenta','tempo scaduto')
 }
 const photoRef=(command:any,mediaUrl:string)=>command?.kind==='photo'&&command.mediaUrl===mediaUrl||command?.kind==='batch'&&Array.isArray(command.actions)&&command.actions.some((a:any)=>a?.kind==='image'&&a.mediaUrl===mediaUrl)
 const withUrl=(command:any,mediaUrl:string,url:string)=>command.kind==='photo'?{...command,url}:{...command,actions:command.actions.map((a:any)=>a?.kind==='image'&&a.mediaUrl===mediaUrl?{...a,url}:a)}
@@ -1218,7 +1225,7 @@ const withUrl=(command:any,mediaUrl:string,url:string)=>command.kind==='photo'?{
  *  Codec WASM e pubblicazione nello stesso worker edge superavano i limiti del runtime (14/10, Victoria): mai più insieme. */
 async function attachPhoto(ctx:Ctx,media:{mediaUrl:string,bytes:Uint8Array,type:string},budget:Budget):Promise<string|null>{
  const open=await db.execute(sql`SELECT command FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND expires_at>now()`);if(!photoRef(open[0]?.command,media.mediaUrl))return null
- const saved=await prepareUpload(ctx.tenant,{bytes:media.bytes,type:media.type});if(budget.expired)return null
+ const saved=await prepareUpload(ctx.tenant,{bytes:media.bytes,type:media.type},ctx.phone);if(budget.expired)return null
  return db.transaction(async tx=>{await lock(tx,ctx.phone);const rows=await tx.execute(sql`SELECT command FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND expires_at>now() FOR UPDATE`),command=rows[0]?.command;if(!photoRef(command,media.mediaUrl))return null
   if('error' in saved){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);return fill(copy.photoPrepareFailed,{motivo:saved.error.replace(/\.$/,'').toLowerCase()})}
   await tx.execute(sql`UPDATE tako_whatsapp_proposals SET command=${JSON.stringify(withUrl(command,media.mediaUrl,saved.url))}::jsonb WHERE phone=${ctx.phone}`);return null})
@@ -1228,7 +1235,7 @@ export async function resolveTurn(ctx:Ctx,text:string,turn:Exclude<Turn,string>,
  const note='llm' in turn?turn.note:undefined,r=await resolveTurnCore(ctx,text,turn,key,ai,budget);return note&&r?r+'\n\n'+note:r}
 async function resolveTurnCore(ctx:Ctx,text:string,turn:Exclude<Turn,string>,key:string,ai:GroqOptions={},budget:Budget={expired:false}):Promise<string>{
  if('upload' in turn){const uploads=new Map<string,string>()
-  for(const a of turn.upload){const saved=await prepareUpload(ctx.tenant,{mediaUrl:a.mediaUrl})
+  for(const a of turn.upload){const saved=await prepareUpload(ctx.tenant,{mediaUrl:a.mediaUrl},ctx.phone)
    if('error' in saved)return fill(copy.photoUploadFailed,{motivo:saved.error.replace(/\.$/,'').toLowerCase()});uploads.set(a.id,saved.url)}
   if(budget.expired)return ''
   try{const done=await turnFor(ctx,'conferma',{uploads,isExpired:()=>budget.expired,beginWrite:()=>beginWrite(budget)});return typeof done==='string'?done:copy.failed}catch{return copy.photoPublishFailed}}
@@ -1288,7 +1295,7 @@ async function jobMessage(kind:'audio'|'text'|'image',ctx:Ctx,body:string,form:R
  const bs=await readBotSettings(db,ctx.tenant),brainOn=kind!=='image'&&bs.brain;if(bs.brain)budget.engine=bs.engine
  const ai:GroqOptions={meter:recordUsage,onWait:()=>quietPhones.has(ctx.phone)||brainOn?undefined:sendWhatsApp(accountSid,token,process.env.TWILIO_WHATSAPP_NUMBER||'',ctx.phone,copy.wait).catch(()=>{})}
  try{if(kind==='image'){if(Number(form.NumMedia)>1)prefix=copy.photoFirstOnly;const media=await downloadTwilioMedia(form.MediaUrl0||'',accountSid,token),problem=photoProblem(media.bytes,media.type||form.MediaContentType0||'');const photo={mediaUrl:form.MediaUrl0||'',mediaType:media.type}
-   if(problem)response=problem;else{const turn=await db.transaction(async tx=>{await lock(tx,ctx.phone);const live=await linkedContext(tx,ctx.phone);if(!live)return '';await propose(tx,live,0,{kind:'photo',...photo});return text?menuTurn(tx,live,text,{isExpired:()=>budget.expired,beginWrite:()=>beginWrite(budget)}):copy.photoAsk});response=typeof turn==='string'?turn:await resolveTurn(ctx,text,turn,key,ai,budget);if(response&&!budget.expired)response=await attachPhoto(ctx,{...photo,bytes:media.bytes,type:media.type},budget).catch(()=>null)??response}}
+   if(problem)response=problem;else{const turn=await db.transaction(async tx=>{await lock(tx,ctx.phone);const live=await linkedContext(tx,ctx.phone);if(!live)return '';await propose(tx,live,0,{kind:'photo',...photo});return text?menuTurn(tx,live,text,{isExpired:()=>budget.expired,beginWrite:()=>beginWrite(budget)}):copy.photoAsk});response=typeof turn==='string'?turn:await resolveTurn(ctx,text,turn,key,ai,budget);if(response&&!budget.expired)response=await attachPhoto(ctx,{...photo,bytes:media.bytes,type:media.type},budget).catch(async error=>{await reportFailure({kind:'photo_failed',tenant:ctx.tenant,phone:ctx.phone,detail:'allegato: '+(error instanceof Error?error.message:'Error')});return null})??response}}
   else{if(kind==='audio'){if(!key)throw new Error('AI not configured');const [media,vocab]=await Promise.all([downloadTwilioMedia(form.MediaUrl0||'',accountSid,token),whisperVocab(ctx.tenant)]);text=await transcribeAudio(media.bytes,/^audio\//i.test(media.type)?media.type:whatsappAudioType(form.MediaContentType0,form.Body)||media.type,key,ai,vocab)}
    if(kind==='audio'&&!text&&brainOn)text='[vocale senza parole]'
    if(kind==='audio'&&!text)response=copy.voiceEmpty;else{if(kind==='audio'){

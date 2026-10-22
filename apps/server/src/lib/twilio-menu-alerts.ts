@@ -13,7 +13,8 @@ export const alertPhone=process.env.TAKO_WHATSAPP_ALERT_PHONE||''
 export const unansweredKinds=new Set(['job_timeout','job_failed','webhook_error','send_failed','test_fault'])
 /** Errori che non contano per la regola «≥3 in 10 minuti» (l'avviso stesso non deve generare avvisi). */
 const selfKinds=['alert_send_failed','alert_undelivered','alert_failed']
-export type FailureKind='job_timeout'|'job_failed'|'webhook_error'|'send_failed'|'test_fault'|'menusmart_forward'|'usage_record_failed'|'alert_send_failed'|'alert_undelivered'|'alert_failed'
+/** photo_failed (22/10): foto del titolare non elaborata per un motivo nostro (download, codec, storage, tempo); il titolare ha già la risposta. */
+export type FailureKind='photo_failed'|'job_timeout'|'job_failed'|'webhook_error'|'send_failed'|'test_fault'|'menusmart_forward'|'usage_record_failed'|'alert_send_failed'|'alert_undelivered'|'alert_failed'
 export type Failure={kind:FailureKind,tenant?:string|null,phone?:string|null,detail?:string}
 const burstThreshold=3 // in 10 minuti; finestra avvisi: 1 ora (nelle query)
 const clean=(s:string|undefined)=>(s??'').replace(/whatsapp:\+?\d+/g,'whatsapp:…').replace(/\+?\d{9,15}/g,'…').slice(0,160)
