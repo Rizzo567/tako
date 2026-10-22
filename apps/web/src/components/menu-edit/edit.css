@@ -12,6 +12,9 @@
 .tako-edit-pencil:hover{background:var(--edit-ink-hover,#262626)}
 .tako-edit-pencil:focus-visible{outline:2px solid #fff;box-shadow:0 0 0 4px var(--edit-ink,#0a0a0a)}
 @media (pointer:coarse){.tako-edit-pencil{height:44px;min-width:44px;padding:0 16px;font-size:14px}}
+/* Telefono (22/10 sera): la dashboard rimpicciolisce l'iframe (--tako-edit-inv = 1/scala, scritto dalla SPA): matita e riquadro restano a misura di dito. */
+@media (pointer:coarse){.tako-edit-pencil{height:calc(44px * var(--tako-edit-inv,1));min-width:calc(44px * var(--tako-edit-inv,1));padding:0 calc(16px * var(--tako-edit-inv,1));gap:calc(6px * var(--tako-edit-inv,1));font-size:calc(14px * var(--tako-edit-inv,1))}.tako-edit-pencil svg{width:calc(16px * var(--tako-edit-inv,1));height:calc(16px * var(--tako-edit-inv,1))}}
+.tako-edit-frame{border-width:calc(2px * var(--tako-edit-inv,1))}
 .tako-edit-hidden{display:none!important}
 /* Lampeggio breve degli elementi indicati dalla SPA (nuovi, aggiornati da WhatsApp). */
 @keyframes tako-edit-flash{0%{box-shadow:0 0 0 0 rgba(10,10,10,0)}45%{box-shadow:0 0 0 4px rgba(10,10,10,.22)}100%{box-shadow:0 0 0 0 rgba(10,10,10,0)}}

@@ -31,6 +31,8 @@ const MW_ED_CAN_EDIT=()=>['owner','manager','menu_editor'].includes(window.__tak
 const MW_ED_UUID=()=>(crypto.randomUUID?crypto.randomUUID():'10000000-1000-4000-8000-100000000000'.replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16)));
 const MW_ED_PILL=(message,opts={})=>window.TakoMenuLive?.toast?.show({message,...opts});
 const MW_ED_LABEL={menu:'menu',root:'sottomenu',child:'sezione',item:'piatto'};
+/* Larghezza logica del menu nel riquadro su telefono (22/10 sera): 600 px resi in ~390 → scala ~0,65. */
+const MW_ED_LOGICAL=600;
 /* Pubblica/Scarta aspettano la coda al massimo 8 s: senza rete il riquadro si libera con un messaggio (le op restano in coda). */
 const MW_ED_IDLE_MS=8000,MW_ED_OFFLINE_TEXT='Non salvato, riprovo: controlla la connessione';
 const MW_ED_OFFLINE=()=>{const e=new Error(MW_ED_OFFLINE_TEXT);e.offline=true;return e;};
@@ -65,6 +67,9 @@ function useMenuEditor({adapter,enabled,menuId,setMenuId,trial,onLeft}){
  // Menu scelto inesistente (creato da un'altra scheda, eliminato): il primo.
  useEffect(()=>{if(view&&!menu&&menus[0])setMenuId(menus[0].id);},[view,menu]);
  useEffect(()=>{if(!view||!selection)return;if(!window.TakoMenuEditorCore.locate(view,selection.kind,selection.id)){setSelection(null);setPanel(null);}},[view]);
+ // 22/10 sera: cambiando Menu non resta nulla di selezionato (tranne l'elemento appena creato dal «+», che va mostrato).
+ const keepSelRef=useRef(false),prevMenuRef=useRef(menuId);
+ useEffect(()=>{if(prevMenuRef.current===menuId)return;prevMenuRef.current=menuId;if(keepSelRef.current){keepSelRef.current=false;return;}setSelection(null);setPanel(null);},[menuId]);
  const push=useCallback(ops=>qRef.current?qRef.current.push(ops):Promise.resolve(false),[]);
  const can=MW_ED_CAN_EDIT();
  const statusText=!snap?'Caricamento…':snap.pending?'Modifiche non pubblicate':'Pubblicato';
@@ -107,9 +112,11 @@ function useMenuEditor({adapter,enabled,menuId,setMenuId,trial,onLeft}){
   const ov=orderViewRef.current;if(kind==='category'&&view.design?.manualOrder!==true&&ov&&window.TakoMenuOps?.manualOrderSnapshot){try{const snap=window.TakoMenuOps.manualOrderSnapshot(view,ov);if(snap.length)push(snap);}catch{}}
   // Conferma locale immediata: l'elemento è già nella vista, il foglio si chiude senza aspettare il server (offline compreso);
   // un rifiuto successivo lo toglie con la ricarica e la pillola.
-  push(op);if(kind==='menu')setMenuId(id);setSelection(sel);doFlash([id]);reveal(sel.kind,sel.id);return true;};
+  push(op);if(kind==='menu'){keepSelRef.current=true;setMenuId(id);}setSelection(sel);doFlash([id]);reveal(sel.kind,sel.id);return true;};
  const frameRef=useRef(null),orderViewRef=useRef(null);
- const reveal=(kind,id)=>{setSelection({kind,id});window.setTimeout(()=>{try{const el=frameRef.current?.contentDocument?.querySelector(`[data-edit-id="${id}"],[data-item-id="${id}"],#workspace-section-${id}`);el?.scrollIntoView({block:'center',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}catch{}},120);};
+ const reveal=(kind,id)=>{setSelection({kind,id});window.setTimeout(()=>{try{const w=frameRef.current?.contentWindow,el=frameRef.current?.contentDocument?.querySelector(`[data-edit-id="${id}"],[data-item-id="${id}"],#workspace-section-${id}`);if(!w||!el)return;
+  // Scorre solo dentro l'iframe (la pagina della dashboard su telefono è ferma).
+  const r=el.getBoundingClientRect();w.scrollTo({top:Math.max(0,w.scrollY+r.top-(w.innerHeight-Math.min(r.height,w.innerHeight))/2),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}catch{}},120);};
  return {orderViewRef,enabled,ready:!!snap,loadError,snap,view,menus,menu,menuId,selection,setSelection,editing,setEditing,flash,panel,setPanel,review,setReview,push,can,trial,statusText,
   openPublish,confirmPublish,discard,create,sheetDefaults,reveal,frameRef,doFlash,
   queue:()=>qRef.current,setMenuIdFromFrame:setMenuId,
@@ -135,15 +142,35 @@ function MenuEditorStage({ed,adapter,mobile}){
    case 'tako-menu-edit-select':cur.setSelection(d.kind?{kind:d.kind,id:d.id}:null);if(!d.kind||cur.panel?.id!==d.id)cur.setPanel(null);break;
    case 'tako-menu-edit-open':if(!cur.can)break;cur.setSelection({kind:d.kind,id:d.id});cur.setPanel({kind:d.kind,id:d.id});break;
    case 'tako-menu-edit-ops':if(!q||!cur.can||!Array.isArray(d.ops))break;if(d.provisional)q.provisional(d.ops);else{q.promote();q.push(d.ops);}break;
-   case 'tako-menu-edit-mode':cur.setEditing(!!d.editing);if(!d.editing&&q)q.dropProvisional();break;
+   case 'tako-menu-edit-mode':cur.setEditing(!!d.editing);if(!d.editing){if(q)q.dropProvisional();cur.setSelection(null);cur.setPanel(null);}break;
    case 'tako-menu-edit-menu':if(typeof d.menuId==='string')cur.setMenuIdFromFrame?.(d.menuId);break;
    case 'tako-menu-edit-view':if(d.view&&Array.isArray(d.view.menuOrder))cur.orderViewRef.current=d.view;break;
    case 'tako-menu-edit-error':console.warn('Menu modificabile:',d.code);break;
   }};window.addEventListener('message',onMessage);return()=>window.removeEventListener('message',onMessage);},[]);
+ /* Telefono (22/10 sera): il riquadro sta tutto fra testata e barra in basso (la pagina non scorre) e il menu dentro è
+    rimpicciolito: larghezza logica MW_ED_LOGICAL px resa nella larghezza dello schermo. Il browser converte da solo le coordinate
+    di tocco nell'iframe trasformato; matita e riquadro dentro l'iframe si ingrandiscono di 1/scala (--tako-edit-inv). */
+ const stageRef=useRef(null),[fit,setFit]=useState(null);
+ React.useLayoutEffect(()=>{if(!mobile){setFit(null);return;}const el=stageRef.current;if(!el)return;
+  const scroller=el.closest('.screen-scroll');let raf=0;
+  const run=()=>{raf=0;if(!el.isConnected)return;const w=el.clientWidth;if(!w)return;
+   const sr=scroller?scroller.getBoundingClientRect():{top:0},top=el.getBoundingClientRect().top-sr.top+(scroller?scroller.scrollTop:0);
+   const pad=scroller?parseFloat(getComputedStyle(scroller).paddingBottom)||0:0,avail=(scroller?scroller.clientHeight:window.innerHeight)-top-pad;
+   const h=Math.max(260,Math.floor(avail)),scale=Math.min(1,Math.round(w/MW_ED_LOGICAL*1000)/1000);
+   setFit(f=>f&&f.w===w&&f.h===h&&f.scale===scale?f:{w,h,scale});};
+  const schedule=()=>{if(!raf)raf=requestAnimationFrame(run);};
+  run();scroller?.classList.add('mw-ed-noscroll');if(scroller)scroller.scrollTop=0;
+  const ro=typeof ResizeObserver==='function'?new ResizeObserver(schedule):null;ro?.observe(el);if(scroller)ro?.observe(scroller);const head=el.parentElement;if(head)ro?.observe(head);
+  window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);
+  return()=>{if(raf)cancelAnimationFrame(raf);ro?.disconnect();window.removeEventListener('resize',schedule);window.visualViewport?.removeEventListener('resize',schedule);scroller?.classList.remove('mw-ed-noscroll');};},[mobile,!!ed.loadError]);
+ const applyInv=useCallback(()=>{try{const de=frame.current?.contentDocument?.documentElement;if(de){if(fitRef.current&&fitRef.current.scale<1)de.style.setProperty('--tako-edit-inv',String(Math.round(1/fitRef.current.scale*1000)/1000));else de.style.removeProperty('--tako-edit-inv');}}catch{}},[]);
+ const fitRef=useRef(fit);fitRef.current=fit;
+ useEffect(()=>{applyInv();},[fit]);
  if(ed.loadError)return <Card><p role="alert">{ed.loadError}</p><Btn onClick={()=>ed.queue()?.reload()}>Riprova</Btn></Card>;
- return <section className={'mw-ed-stage'+(mobile?' is-mobile':'')} aria-label="Menu modificabile">
+ const frameStyle={visibility:ed.ready?'visible':'hidden',...(fit?{width:fit.w/fit.scale+'px',height:fit.h/fit.scale+'px',transform:fit.scale<1?`scale(${fit.scale})`:'none'}:{})};
+ return <section ref={stageRef} className={'mw-ed-stage'+(mobile?' is-mobile':'')+(fit?' is-fit':'')} style={fit?{'--mw-ed-h':fit.h+'px'}:undefined} aria-label="Menu modificabile">
   {!ed.ready&&<TakoLoading label="Caricamento menu…" variant="page"/>}
-  <iframe ref={frame} className="mw-ed-frame" title="Menu modificabile" src={src} onLoad={post} style={{visibility:ed.ready?'visible':'hidden'}}/>
+  <iframe ref={frame} className="mw-ed-frame" title="Menu modificabile" src={src} onLoad={()=>{applyInv();post();}} style={frameStyle}/>
   {ed.panel&&ed.view&&<MenuEditorPanel ed={ed} adapter={adapter} mobile={mobile}/>}
   {ed.review&&<MenuEditorPublishDialog ed={ed}/>}
  </section>;

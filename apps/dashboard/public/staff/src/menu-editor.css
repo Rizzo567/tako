@@ -47,3 +47,34 @@
 
 /* Telefono: testata con stato e «Pubblica» sempre visibile mentre si scorre il menu (verifica reale 22/10). */
 .mw-ed-sticky{position:sticky;top:0;z-index:20;background:var(--surface,#fff);box-shadow:0 1px 0 rgba(0,0,0,.06)}
+
+/* ── Ritocchi telefono 22/10 sera (feedback iPhone di Manuel) ── */
+/* Pubblica: pillola compatta larga quanto la scritta; grigio e non cliccabile senza modifiche, nero con modifiche. */
+.mw-ed-head.mw-primary-actions{width:auto!important;flex-wrap:nowrap;justify-content:flex-end;margin:0}
+.mw-ed-head>button.mw-ed-publish-btn,.mw-primary-actions.mw-ed-head>button.mw-ed-publish-btn{flex:none!important;width:auto!important;min-width:0!important;min-height:36px!important;height:36px;padding:0 16px!important;border-radius:var(--r-pill,999px)!important;font-size:14px!important;white-space:nowrap}
+.mw-ed-publish-btn:disabled{background:var(--btn-disabled-bg,#e5e5e5)!important;color:var(--btn-disabled-fg,#8a8a8a)!important;cursor:not-allowed;box-shadow:none!important}
+.mw-ed-publish-btn[data-pending="1"]:not(:disabled){background:var(--ink,#0a0a0a)!important;color:#fff!important}
+.mw-ed-sticky>div{justify-content:flex-end!important;margin-bottom:8px!important}
+/* Telefono: riquadro del menu fisso fra testata e barra in basso; il menu dentro è rimpicciolito (larghezza logica 600 px)
+   e scorre solo lì dentro. Altezza e scala le calcola MenuEditorStage (style inline); qui solo il contenitore. */
+.mw-ed-stage.is-mobile.is-fit{height:var(--mw-ed-h,60dvh);min-height:0;margin-bottom:0}
+.mw-ed-stage.is-fit .mw-ed-frame{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none}
+.screen-scroll.mw-ed-noscroll{overflow-y:hidden!important;overscroll-behavior:none}
+/* «← Torna al menu» / «Avanzate» su telefono: mai oltre il bordo, si va a capo. */
+@media(max-width:899px){
+ .mw-studio-toolbar{flex-wrap:wrap!important;row-gap:8px;min-width:0;max-width:100%}
+ .mw-studio-toolbar>*{min-width:0;max-width:100%}
+ .mw-studio-toolbuttons{flex-wrap:wrap;justify-content:flex-end;min-width:0;max-width:100%}
+ .mw-studio-toolbuttons button.mw-ed-advanced,.mw-studio-toolbuttons button.mw-ed-done{white-space:normal;height:auto!important;min-height:40px;max-width:100%;text-align:center;line-height:1.2;padding:8px 12px}
+}
+/* Fogli dal basso (Modifica piatto / sottomenu / sezione / menu): solo scorrimento verticale, niente più largo dello schermo. */
+.mw-drawer.mw-bottom-sheet{overflow-x:hidden;max-width:100vw}
+.mw-bottom-sheet .mw-drawer-content{overflow-x:hidden!important;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;min-width:0;max-width:100%}
+.mw-bottom-sheet .mw-drawer-content *{min-width:0;max-width:100%;box-sizing:border-box}
+.mw-bottom-sheet .mw-drawer-content input,.mw-bottom-sheet .mw-drawer-content textarea,.mw-bottom-sheet .mw-drawer-content select{width:100%}
+.mw-bottom-sheet .mw-drawer-content input[type=checkbox],.mw-bottom-sheet .mw-drawer-content input[type=radio]{width:18px;flex:none}
+.mw-bottom-sheet .mw-drawer-content :is(p,span,strong,small,label,h4,summary,button){overflow-wrap:anywhere}
+.mw-bottom-sheet .mw-actions button{min-width:0!important}
+.mw-bottom-sheet .mw-photo-zone{flex-wrap:wrap}
+.mw-bottom-sheet .mw-photo-pick{flex:1 1 180px}
+.mw-ed-stage.is-mobile{margin-left:-14px;margin-right:-14px}

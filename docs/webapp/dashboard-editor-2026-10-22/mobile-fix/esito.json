@@ -1,0 +1,443 @@
+{
+ "at": "2026-10-22T13:24:47.538Z",
+ "fails": 0,
+ "results": [
+  {
+   "name": "390 ingresso pulito",
+   "ok": true,
+   "detail": {
+    "frame": false,
+    "pencil": false,
+    "ghosts": 0,
+    "indicator": 0,
+    "bad": []
+   }
+  },
+  {
+   "name": "390 niente scroll orizzontale (ingresso)",
+   "ok": true,
+   "detail": {
+    "sw": 390,
+    "iw": 390,
+    "ok": true
+   }
+  },
+  {
+   "name": "390 Pubblica grigio disattivato",
+   "ok": true,
+   "detail": {
+    "disabled": true,
+    "label": "Nessuna modifica da pubblicare",
+    "bg": "rgb(229, 229, 229)",
+    "w": 90,
+    "status": false
+   }
+  },
+  {
+   "name": "390 pagina dashboard non scorre",
+   "ok": true,
+   "detail": {
+    "pageScroll": 0,
+    "overflowY": "hidden",
+    "stageBottom": 824,
+    "scrollerBottom": 844,
+    "ih": 844,
+    "scale": 0.65
+   }
+  },
+  {
+   "name": "390 riquadro dentro lo schermo",
+   "ok": true,
+   "detail": {
+    "pageScroll": 0,
+    "overflowY": "hidden",
+    "stageBottom": 824,
+    "scrollerBottom": 844,
+    "ih": 844,
+    "scale": 0.65
+   }
+  },
+  {
+   "name": "390 menu rimpicciolito (600 px logici)",
+   "ok": true,
+   "detail": {
+    "iw": 600,
+    "sh": 1076,
+    "ih": 911,
+    "scale": 0.65
+   }
+  },
+  {
+   "name": "390 menu scorre dentro il riquadro",
+   "ok": true,
+   "detail": {
+    "iw": 600,
+    "sh": 1076,
+    "ih": 911
+   }
+  },
+  {
+   "name": "390 scroll interno ok, pagina ferma",
+   "ok": true,
+   "detail": {
+    "y": 165,
+    "max": 165,
+    "ps": 0
+   }
+  },
+  {
+   "name": "390 tap → riquadro sul piatto",
+   "ok": true,
+   "detail": {
+    "vis": true,
+    "dx": 0,
+    "dy": 0,
+    "dw": 0,
+    "pencilH": 67.671875,
+    "pencilNearTop": true
+   }
+  },
+  {
+   "name": "390 matita a misura di dito (≥ 44 px reali)",
+   "ok": true,
+   "detail": {
+    "realH": 43.98671875
+   }
+  },
+  {
+   "name": "390 foglio senza scroll orizzontale",
+   "ok": true,
+   "detail": {
+    "title": "Modifica piatto",
+    "cSW": 388,
+    "cCW": 388,
+    "dSW": 388,
+    "dCW": 388,
+    "ox": "hidden",
+    "wide": [],
+    "doc": true
+   }
+  },
+  {
+   "name": "390 Pubblica nero dopo una modifica",
+   "ok": true,
+   "detail": {
+    "disabled": false,
+    "label": "Pubblica le modifiche",
+    "bg": "rgb(10, 10, 10)",
+    "w": 90,
+    "status": false
+   }
+  },
+  {
+   "name": "390 pressione lunga solleva (ghost)",
+   "ok": true,
+   "detail": {
+    "lifted": 1
+   }
+  },
+  {
+   "name": "390 ghost segue il dito con la scala",
+   "ok": true,
+   "detail": {
+    "ghostPos": {
+     "cy": 489.3629913330078
+    },
+    "fingerInFrame": 488.96298076923085
+   }
+  },
+  {
+   "name": "390 rilascio: ordine cambiato e op inviata",
+   "ok": true,
+   "detail": {
+    "opsAfter": 2,
+    "callsBefore": 1
+   }
+  },
+  {
+   "name": "390 dopo il rilascio niente ghost/opacità residue",
+   "ok": true,
+   "detail": {
+    "ghosts": 0,
+    "hidden": 0
+   }
+  },
+  {
+   "name": "390 dopo «Fine» pulito",
+   "ok": true,
+   "detail": {
+    "fine": true,
+    "frame": false,
+    "pencil": false,
+    "ghosts": 0,
+    "indicator": 0,
+    "bad": []
+   }
+  },
+  {
+   "name": "390 dopo cambio Menu pulito",
+   "ok": true,
+   "detail": {
+    "frame": false,
+    "pencil": false,
+    "ghosts": 0,
+    "indicator": 0,
+    "bad": []
+   }
+  },
+  {
+   "name": "390 «Torna al menu» intero, niente scroll orizzontale",
+   "ok": true,
+   "detail": {
+    "left": 110,
+    "right": 247.453125,
+    "iw": 390,
+    "sw": 390,
+    "ssw": 390,
+    "scw": 390
+   }
+  },
+  {
+   "name": "430 ingresso pulito",
+   "ok": true,
+   "detail": {
+    "frame": false,
+    "pencil": false,
+    "ghosts": 0,
+    "indicator": 0,
+    "bad": []
+   }
+  },
+  {
+   "name": "430 niente scroll orizzontale (ingresso)",
+   "ok": true,
+   "detail": {
+    "sw": 430,
+    "iw": 430,
+    "ok": true
+   }
+  },
+  {
+   "name": "430 Pubblica grigio disattivato",
+   "ok": true,
+   "detail": {
+    "disabled": true,
+    "label": "Nessuna modifica da pubblicare",
+    "bg": "rgb(229, 229, 229)",
+    "w": 90,
+    "status": false
+   }
+  },
+  {
+   "name": "430 pagina dashboard non scorre",
+   "ok": true,
+   "detail": {
+    "pageScroll": 0,
+    "overflowY": "hidden",
+    "stageBottom": 912,
+    "scrollerBottom": 932,
+    "ih": 932,
+    "scale": 0.7166639200846354
+   }
+  },
+  {
+   "name": "430 riquadro dentro lo schermo",
+   "ok": true,
+   "detail": {
+    "pageScroll": 0,
+    "overflowY": "hidden",
+    "stageBottom": 912,
+    "scrollerBottom": 932,
+    "ih": 932,
+    "scale": 0.7166639200846354
+   }
+  },
+  {
+   "name": "430 menu rimpicciolito (600 px logici)",
+   "ok": true,
+   "detail": {
+    "iw": 600,
+    "sh": 1076,
+    "ih": 1013,
+    "scale": 0.7166639200846354
+   }
+  },
+  {
+   "name": "430 menu scorre dentro il riquadro",
+   "ok": true,
+   "detail": {
+    "iw": 600,
+    "sh": 1076,
+    "ih": 1013
+   }
+  },
+  {
+   "name": "430 scroll interno ok, pagina ferma",
+   "ok": true,
+   "detail": {
+    "y": 63,
+    "max": 63,
+    "ps": 0
+   }
+  },
+  {
+   "name": "430 tap → riquadro sul piatto",
+   "ok": true,
+   "detail": {
+    "vis": true,
+    "dx": 0,
+    "dy": 0,
+    "dw": 0,
+    "pencilH": 61.375,
+    "pencilNearTop": true
+   }
+  },
+  {
+   "name": "430 matita a misura di dito (≥ 44 px reali)",
+   "ok": true,
+   "detail": {
+    "realH": 43.9852480951945
+   }
+  },
+  {
+   "name": "430 foglio senza scroll orizzontale",
+   "ok": true,
+   "detail": {
+    "title": "Modifica piatto",
+    "cSW": 428,
+    "cCW": 428,
+    "dSW": 428,
+    "dCW": 428,
+    "ox": "hidden",
+    "wide": [],
+    "doc": true
+   }
+  },
+  {
+   "name": "430 Pubblica nero dopo una modifica",
+   "ok": true,
+   "detail": {
+    "disabled": false,
+    "label": "Pubblica le modifiche",
+    "bg": "rgb(10, 10, 10)",
+    "w": 90,
+    "status": false
+   }
+  },
+  {
+   "name": "430 pressione lunga solleva (ghost)",
+   "ok": true,
+   "detail": {
+    "lifted": 1
+   }
+  },
+  {
+   "name": "430 ghost segue il dito con la scala",
+   "ok": true,
+   "detail": {
+    "ghostPos": {
+     "cy": 419.15162658691406
+    },
+    "fingerInFrame": 418.19374999999997
+   }
+  },
+  {
+   "name": "430 rilascio: ordine cambiato e op inviata",
+   "ok": true,
+   "detail": {
+    "opsAfter": 4,
+    "callsBefore": 3
+   }
+  },
+  {
+   "name": "430 dopo il rilascio niente ghost/opacità residue",
+   "ok": true,
+   "detail": {
+    "ghosts": 0,
+    "hidden": 0
+   }
+  },
+  {
+   "name": "430 dopo «Fine» pulito",
+   "ok": true,
+   "detail": {
+    "fine": true,
+    "frame": false,
+    "pencil": false,
+    "ghosts": 0,
+    "indicator": 0,
+    "bad": []
+   }
+  },
+  {
+   "name": "430 dopo cambio Menu pulito",
+   "ok": true,
+   "detail": {
+    "frame": false,
+    "pencil": false,
+    "ghosts": 0,
+    "indicator": 0,
+    "bad": []
+   }
+  },
+  {
+   "name": "430 «Torna al menu» intero, niente scroll orizzontale",
+   "ok": true,
+   "detail": {
+    "left": 110,
+    "right": 247.453125,
+    "iw": 430,
+    "sw": 430,
+    "ssw": 430,
+    "scw": 430
+   }
+  },
+  {
+   "name": "1280 ingresso pulito",
+   "ok": true,
+   "detail": {
+    "frame": false,
+    "pencil": false,
+    "ghosts": 0,
+    "indicator": 0,
+    "bad": []
+   }
+  },
+  {
+   "name": "1280 niente scroll orizzontale (ingresso)",
+   "ok": true,
+   "detail": {
+    "sw": 1280,
+    "iw": 1280,
+    "ok": true
+   }
+  },
+  {
+   "name": "1280 Pubblica grigio disattivato",
+   "ok": true,
+   "detail": {
+    "disabled": true,
+    "label": "Nessuna modifica da pubblicare",
+    "bg": "rgb(229, 229, 229)",
+    "w": 90,
+    "status": false
+   }
+  },
+  {
+   "name": "1280 desktop invariato (niente scala)",
+   "ok": true,
+   "detail": {
+    "fit": false,
+    "transform": "",
+    "w": 814,
+    "sw": 814
+   }
+  },
+  {
+   "name": "1280 clic → riquadro",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "errors": []
+}

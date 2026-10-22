@@ -31,3 +31,13 @@ Online prima: operativo v157 (= v151 + fix foto), lettura v29 (ezbr d2af569b), w
 - 14:50 QA: foto tolta dal riso giallo via `POST /api/menu-workspace/ops` (imageUrl null) + Pubblica (API dashboard, login QA) → rev 3117, pubblicato senza foto, API pubblica senza il file.
 
 Rollback: operativo `cp $RB/rollback-v157.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs`; lettura `cp $RB/rollback-read-v28.ts release/serverless/read-candidate/index.ts && node scripts/translations/deploy-projection.mjs --read`; web `CI=true npx wrangler rollback 20ba6b07-4229-4e2a-afa1-2832bd113786 --config deploy/cloudflare/wrangler.jsonc`; pubblico `CI=true npx wrangler rollback 037f6b68-8d34-4d2b-a2a1-0b2e39322033 --config deploy/cloudflare/wrangler-public.jsonc`; spegnimento editor per tutti `node scripts/set-dashboard-editor-flag.mjs --all off --yes`.
+
+---
+
+# LOG DEPLOY 22/10 sera — ritocchi telefono dashboard editor (feedback iPhone di Manuel)
+
+- Cause: pillola azzurra = indicatore della pillola attiva del renderer (`data-category-indicator`); doppione sospeso = ghost del gesto rimasto sollevato (originale a opacity 0 + clone `position:fixed`) quando su iPhone il pointerup non arriva: il timer della pressione lunga sollevava l'elemento a dito alzato.
+- Correzioni: niente indicatore/pillola piena in modalità modifica; gesto con chiusura su touchend/touchcancel, tetto 900 ms all'atterraggio (+ timer di riserva), pulizia ghost orfani/opacità residue a ogni refresh e all'avvio, `exitEditMode` pulisce; selezione azzerata al cambio Menu e a «Fine». Telefono: riquadro fisso fra testata e barra (pagina `overflow-y:hidden`), iframe largo 600 px logici scalato (~0,65 a 390, ~0,72 a 430), matita/riquadro ×1/scala; fogli solo verticali; Pubblica compatto grigio/nero senza scritta di stato; «← Torna al menu» va a capo.
+- Verifica `scripts/verify-editor-mobile-fix.mjs` (emulazione iPhone 390×844 e 430×932 DPR 3 touch + desktop 1280): TUTTO VERDE, screenshot in `mobile-fix/`.
+- Deploy web → **b588452d-71c9-4f56-b36e-50f807cdb0c7** (prima 362c80a8). Smoke: /staff 200, /api/auth/me 401, /menu-preview QA 200 col bundle nuovo. Edge, bot, pubblico non toccati.
+- Rollback: `CI=true npx wrangler rollback 362c80a8-81e5-4068-a29d-f2f3439e949e --config deploy/cloudflare/wrangler.jsonc`.

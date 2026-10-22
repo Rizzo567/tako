@@ -27,6 +27,7 @@ type Landing = { started:number; id:string; ghost:HTMLElement; x:number; y:numbe
 
 const TAU = Math.PI * 2
 const EPS = .025
+const LANDING_MAX_MS = 900
 const KINDS = new Set(['menu','submenu','section','dish'])
 let serial = 0
 /** Takomenu 22/10: ×1,10 come l'icona iPhone, ma una riga larga quanto il menu non cresce più di ~12 px per lato (resterebbe tagliata dal bordo). */
@@ -55,6 +56,7 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
   const style=doc.createElement('style')
   style.textContent=`[data-menu-gesture-owner="${token}"]{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition-property:none!important;animation:none!important}[data-menu-gesture-owner="${token}"]:focus-visible{outline:2px solid #252525;outline-offset:4px}[data-menu-gesture-owner="${token}"][data-menu-gesture-edit]{cursor:grab!important}[data-menu-gesture-owner="${token}"][data-menu-gesture-static]{outline:2px solid #555;outline-offset:3px}[data-menu-gesture-ghost="${token}"]{pointer-events:none!important;z-index:2147483000!important;contain:layout style;user-select:none!important}`
   ;(doc.head||root).append(style)
+  for(const g of Array.from(doc.querySelectorAll('[data-menu-gesture-ghost]')))g.remove()
   const live=doc.createElement('div'), instructions=doc.createElement('div')
   const hidden='position:fixed;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;pointer-events:none'
   live.style.cssText=hidden;live.setAttribute('role','status');live.setAttribute('aria-live','polite');live.setAttribute('aria-atomic','true')
@@ -246,6 +248,8 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     if(d.id!==null)try{root.releasePointerCapture(d.id)}catch{/* already released */}
     css(root,rootSaved,'user-select',rootSaved.styles.get('user-select')?.[0]||'');css(root,rootSaved,'-webkit-user-select',rootSaved.styles.get('-webkit-user-select')?.[0]||'')
     landing={started:view.performance.now(),id:d.item.id,ghost:d.ghost,x:d.x-d.anchorX,y:d.y-d.anchorY,vx:0,vy:0,scale:d.scale,scaleV:d.scaleV,w:d.w,h:d.h}
+    // Rete di sicurezza anche se i fotogrammi si fermano (iframe in secondo piano, rAF sospeso su iOS).
+    {const mine=landing;view.setTimeout(()=>{if(!dead&&landing===mine)endLanding()},LANDING_MAX_MS+300)}
     clickUntil=view.performance.now()+450
     announce(cancel?'Spostamento annullato.':changed?`Spostato in posizione ${d.index+1}.`:'Posizione invariata.')
     if(reduced)endLanding();else requestFrame()
@@ -343,11 +347,18 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
         ;[l.x,l.vx]=spring(l.x,l.vx,tx,dt,19);[l.y,l.vy]=spring(l.y,l.vy,ty,dt,19);[l.scale,l.scaleV]=spring(l.scale,l.scaleV,1,dt,19)
         const amplitude=Math.min(1.8,1.9/Math.max(1,Math.hypot(l.w,l.h)/2)*180/Math.PI),angle=editing&&!reduced&&time-l.started>50?Math.sin(time/255*TAU+i.phase)*amplitude:0
         l.ghost.style.transform=`translate3d(${l.x}px,${l.y}px,0) rotate(${angle}deg) scale(${l.scale})`
-        if(reduced||(Math.abs(l.x-tx)+Math.abs(l.y-ty)<.5&&Math.abs(l.vx)+Math.abs(l.vy)<10&&Math.abs(l.scale-1)<.002))endLanding();else busy=true
+        // Takomenu 22/10 sera: tetto di durata, un atterraggio non resta mai sospeso (ghost visto su iPhone).
+        if(reduced||time-l.started>LANDING_MAX_MS||(Math.abs(l.x-tx)+Math.abs(l.y-ty)<.5&&Math.abs(l.vx)+Math.abs(l.vy)<10&&Math.abs(l.scale-1)<.002))endLanding();else busy=true
       }
     }
     if(exitAt&&time-exitAt>=90){exitAt=0;exitAngles.clear()}
     if((editing&&!reduced)||busy||exitAt)raf=view.requestAnimationFrame(frame);else previousTime=0
+  }
+  /** Takomenu 22/10 sera: nessun residuo visibile. Ghost senza trascinamento/atterraggio vivo e originali lasciati a opacity 0 si ripuliscono. */
+  function sweep() {
+    const live=new Set([drag?.ghost,landing?.ghost].filter(Boolean))
+    for(const g of Array.from(doc.querySelectorAll<HTMLElement>('[data-menu-gesture-ghost]')))if(!live.has(g))g.remove()
+    for(const i of items)if(i!==drag?.item&&i.id!==landing?.id&&i.el.style.opacity==='0'&&i.saved.styles.has('opacity'))reveal(i)
   }
   function refresh() {
     if(dead)return
@@ -387,9 +398,9 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     if(root.matches('[data-edit-group-id]'))groups.unshift({el:root,id:root.dataset.editGroupId!,axis:(root.dataset.editAxis||'y') as Group['axis'],kind:items.find(i=>i.group===root.dataset.editGroupId)?.kind||null,box:box(root.getBoundingClientRect())})
     if(pending){const p=pending,i=items.find(x=>x.el===p.item.el);if(i)p.item=i;else clearPending()}
     if(landing){const i=items.find(i=>i.id===landing!.id);if(i)hide(i)}
-    measure();requestFrame()
+    sweep();measure();requestFrame()
   }
-  function exitEditMode(){if(dead)return;clearPending();if(drag)finish(true);mode(false)}
+  function exitEditMode(){if(dead)return;clearPending();if(drag)finish(true);endLanding();mode(false);sweep()}
   function destroy() {
     if(dead)return
     clearPending();if(drag)finish(true);endLanding();mode(false);dead=true
@@ -413,6 +424,14 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
   // Native touch scrolling is allowed until the hold has completed. Register before
   // touchstart (not after lift), so iOS can honour preventDefault on the first move.
   listen(doc,'touchmove',((e:TouchEvent)=>{if(drag&&!drag.keyboard&&e.cancelable)e.preventDefault()}) as EventListener,{passive:false})
+  // Takomenu 22/10 sera: su iPhone il pointerup può non arrivare (cattura persa nell'iframe): la fine del tocco chiude comunque.
+  // Takomenu 22/10 sera: su iPhone il pointerup può non arrivare (cattura persa nell'iframe). Senza, il timer della pressione lunga
+  // sollevava l'elemento a dito già alzato (ghost sospeso, originale nascosto). Fine del tocco: si aspetta il pointerup normale
+  // per un attimo, poi pressione annullata e trascinamento chiuso comunque.
+  const touchEnd=(cancel:boolean)=>((e:TouchEvent)=>{if(e.touches.length)return;const p=pending,d=drag;if(!(p&&p.pointerType==='touch')&&!(d&&!d.keyboard&&d.pointerType==='touch'))return
+    view.setTimeout(()=>{if(dead)return;if(p&&pending===p)clearPending();if(d&&drag===d)finish(cancel)},60)}) as EventListener
+  listen(doc,'touchend',touchEnd(false),true)
+  listen(doc,'touchcancel',touchEnd(true),true)
   listen(root,'contextmenu',((e:Event)=>{if(pending||drag||editing)e.preventDefault()}) as EventListener)
   if(opts.reducedMotion===undefined)listen(media,'change',((e:MediaQueryListEvent)=>{reduced=e.matches;refresh();if(reduced)endLanding()}) as EventListener)
   refresh()
