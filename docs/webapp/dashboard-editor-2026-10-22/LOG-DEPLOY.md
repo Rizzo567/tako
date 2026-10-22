@@ -68,3 +68,33 @@ Rollback: operativo `cp $RB/rollback-v157.ts release/serverless/candidate/index.
 - tsc server verde; vitest dei file toccati: nessun test nuovo rosso rispetto alla base (35 rossi già prima per ECONNREFUSED, manca lo stack dev :3001+Postgres); 3 test aggiornati al nuovo formato.
 - 16:58 build PASS, lazy boot PASS, 0 `npm:@tako`, sha cb5f686f (copia `candidate-index-formato.ts`), diff col v158 = solo le righe del formato. Deploy → **v159**; smoke 401/403 ok.
 - 16:59 STOP: il numero di prova è collegato a **Victoria Bar** dalle 16:34 (il QA non ha nessun numero) → niente batterie né prova formato possibili senza scrivere su Victoria. Per regola **rollback** a v158: `rollback-v158.ts` (sha 2aee5de8) → **v160** (ezbr f6470fc2…, identico a v158), smoke 401/403 ok. Nessun messaggio WhatsApp arrivato mentre era online v159.
+
+# LOG DEPLOY 22/10 17:47–18:45 — risposte strutturate (fase 1) + foto per nome/eredità + 3 numeri (fase 2)
+
+Numero di prova FITTIZIO `whatsapp:+3900000221022` collegato SOLO al QA (controllato a ogni script). Victoria mai scritta.
+QA: revisione 3125 → 3193 nel pomeriggio. Rispetto alla fotografia della batteria v158: foto del riso giallo tolta (14:50, voluta) e nel
+Menu del giorno Carbonara, Polpette, Frittata di zucchine, Frittata di patate da nascosti a visibili. Identico alla fotografia v161 (17:0x). Non ripristinato a mano.
+
+**Fase 1** — `candidate-index-formato.ts` (sha cb5f686f) → **v163** pronto in 11 s. Smoke 401/403/«riso giallo» 8 € (4,9 s).
+Prova formato (sostituzione Menu del giorno + annulla): risposta a blocchi (titolo, sottomenu in grassetto, un piatto per riga, nascosti in fondo), annulla ok, QA identico.
+Visto: «primi carbonara e pasta e fagioli» → la pasta e fagioli viene scartata in silenzio (con «primi pasta e fagioli e gnocchi al ragù» invece si crea): parsing della frase, non il formato. Da guardare.
+Batterie v163: **29/29**, v163b: **29/29**, 0 GRAVI, QA identico.
+
+**Fase 2** — branch `fix/bot-formato-1022`:
+- `lib/menu-photo-inherit.ts` (nuovo): `dishKey` (= `plain`: minuscole, accenti, punteggiatura, spazi), `photoTargetsByName`, `groupOf`, `inheritPhotos(before,next)`, `inheritedNote`.
+- Foto con didascalia: `menuTurn` (dishMatches → tutti gli omonimi, mai più `sameName`) e `resolveTurnCore` (nome identico o candidati tutti omonimi → tutti, senza domanda; nomi diversi → domanda/IA come prima, poi estensione agli omonimi). Download/upload una volta per media.
+  Risposta con ≥2 piatti: «*Confermato.* Foto messa su:» + «• Menu › Sezione › Piatto» per riga (`photoPlacesText`).
+- Eredità: `inheritPhotos` prima di `applyBotChange` nei tre percorsi WhatsApp (conferma, automatico, cervello `applyNow` → anche sostituzione giornaliera) e nel menu intero; il record di annulla lo include. Piatto nuovo o da nascosto a visibile, senza foto, con omonimo con foto → eredita; mai sopra una foto esistente; nota «*Piatto*: foto presa da <Menu>».
+  «Più recente» senza date per piatto: foto messa in questa stessa modifica, poi la più condivisa fra gli omonimi, poi la prima in ordine di menu (deviazione conservativa).
+- Numeri WhatsApp del titolare per locale 2 → **3** (`OWNER_PHONES_MAX`, messaggi «tre numeri», commento + riserva `MW_OWA_MAX=3` in dashboard: non ridistribuita, legge `max` dal server; test e `verify-owner-whatsapp-panel.mjs` aggiornati).
+- Test: `tests/menu-photo-per-nome-1022.test.ts` 9/9 verdi; nlu verde; tsc verde. `twilio-menu-ai-flow` / `twilio-owner-link`: rossi identici alla base (ECONNREFUSED, manca lo stack dev; owner-link 32/34 rossi prima e dopo).
+- Build PASS, lazy boot PASS, 0 `npm:@tako`, sha 8be4967e (copia `candidate-index-foto-nome.ts`); diff col v163: solo menu-photo-inherit (nuovo), twilio-menu(-ai,-copy), owner-brain-r (solo rinomina dishKey→dishKey2 del bundler), edge-image-initializer (nome cartella).
+- 18:14 deploy → **v164** pronto in 18 s. Smoke 401/403/bot ok. Victoria (account agenzia, SOLA LETTURA): pannello WhatsApp `max 3`, 2 numeri collegati → terzo aggiungibile; nessun numero aggiunto.
+- Prova dal vivo sul QA: sostituzione giornaliera con «riso giallo» → omonimo nel Menu del giorno; foto con didascalia «riso giallo» → «Confermato. Foto messa su: • Menu di verifica · web QA › Primi › riso giallo • Menu del giorno › Primi › Riso giallo», entrambi con la foto; «annulla» → foto tolta da entrambi.
+  Poi Menu del giorno rimesso con la sostituzione originale + «elimina Riso giallo del Menu del giorno» sì (QA identico). Foto sul solo riso giallo → sostituzione con Riso giallo → creato con la foto ereditata, nota «*Riso giallo*: foto presa da Menu di verifica · web QA»; «annulla» → tolto. Foto del riso giallo tolta via API dashboard QA (ops imageUrl null + Pubblica, rev 3375). QA identico alla fotografia v163b.
+- Il bot NON crea un omonimo con «aggiungi riso giallo nei Primi del Menu cena» («Nessuna modifica: il menu è già così»): comportamento di prima, annotato.
+
+Rollback: fase 2 → fase 1: `cp $RB/rollback-v163-formato.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs && node scripts/serverless/wait-edge-ready.mjs`; tutto → v158: `rollback-v158.ts`. (RB=~/.config/tako-webapp/rollback-edge-20261022)
+- Batterie v164: **29/29**, v164b: **29/29**, 0 GRAVI, QA identico. Online: **v164**.
+- 18:42 numero fittizio tolto dal QA via API dashboard (login QA, DELETE /api/menu-workspace/whatsapp/owner): `tako_whatsapp_links` senza righe per quel numero, QA senza numeri.
+- Nota: la richiesta urgente «3 numeri subito» era già coperta: v164 (che contiene OWNER_PHONES_MAX=3) è online dalle 18:14:29, Victoria `max 3` verificato in lettura alle ~18:15. Nessun mini-deploy separato.

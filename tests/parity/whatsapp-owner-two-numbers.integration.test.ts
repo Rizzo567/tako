@@ -81,21 +81,22 @@ describe('WhatsApp del titolare: due numeri per locale su Postgres vero', () => 
     expect((await state()).numbers.map((n: any) => n.phone)).toEqual(['+393330000091'])
   })
 
-  it('migrazione idempotente; poi due numeri sì, il terzo no; scollega uno lascia l’altro', async () => {
+  it('migrazione idempotente; poi tre numeri sì (22/10), il quarto no; scollega uno lascia l’altro', async () => {
     await applySql('whatsapp-owner-two-numbers.sql'); await applySql('whatsapp-owner-two-numbers.sql')
     const indexes = (await sql`select indexname from pg_indexes where tablename='tako_whatsapp_links'`).map(r => r.indexname)
     expect(indexes).not.toContain('tako_whatsapp_links_one_per_restaurant')
     expect(indexes).toContain('tako_whatsapp_links_restaurant')
     expect((await save('3330000092', 'b@example.com')).statusCode).toBe(200)
-    const third = await save('3330000093', 'c@example.com')
-    expect(third.statusCode).toBe(409); expect(third.json().error.code).toBe('OWNER_PHONES_LIMIT')
-    expect((await state()).numbers.map((n: any) => [n.phone, n.email, n.status])).toEqual([['+393330000091', 'a@example.com', 'pending'], ['+393330000092', 'b@example.com', 'pending']])
+    expect((await save('3330000093', 'c@example.com')).statusCode).toBe(200)
+    const fourth = await save('3330000094', 'd@example.com')
+    expect(fourth.statusCode).toBe(409); expect(fourth.json().error.code).toBe('OWNER_PHONES_LIMIT')
+    expect((await state()).numbers.map((n: any) => [n.phone, n.email, n.status])).toEqual([['+393330000091', 'a@example.com', 'pending'], ['+393330000092', 'b@example.com', 'pending'], ['+393330000093', 'c@example.com', 'pending']])
     // proposte per telefono: scollegare il primo cancella solo le sue
     await sql`insert into tako_whatsapp_proposals(phone,restaurant_id,actor_id,revision,command,expires_at) values ('whatsapp:+393330000091',${tenant},${owner},1,'{}'::jsonb,now()+interval '1 hour'),('whatsapp:+393330000092',${tenant},${owner},1,'{}'::jsonb,now()+interval '1 hour')`
     expect((await app.inject({ method: 'DELETE', url: '/api/menu-workspace/whatsapp/owner', headers: as(owner, tenant) })).statusCode).toBe(400)
     const r = await app.inject({ method: 'DELETE', url: '/api/menu-workspace/whatsapp/owner?phone=%2B393330000091', headers: as(owner, tenant) })
     expect(r.statusCode).toBe(200)
-    expect(r.json().data.numbers.map((n: any) => n.phone)).toEqual(['+393330000092'])
+    expect(r.json().data.numbers.map((n: any) => n.phone)).toEqual(['+393330000092', '+393330000093'])
     expect((await sql`select phone from tako_whatsapp_proposals order by phone`).map(x => x.phone)).toEqual(['whatsapp:+393330000092'])
   })
 

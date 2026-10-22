@@ -11,7 +11,8 @@ const TAG=args.find((a,i)=>!a.startsWith('--')&&(oi<0||i!==oi+1))||new Date().to
 const sleep=ms=>new Promise(r=>setTimeout(r,ms))
 
 // ---------- numero / firma ----------
-const phone=JSON.parse(fs.readFileSync(path.join(cfg,'owner-service-qa-backup.json'),'utf8'))?.link?.phone
+// 22/10: TAKO_QA_PHONE (es. whatsapp:+3900000221022, numero fittizio collegato solo al QA) al posto del numero di backup; il controllo «solo QA» resta.
+const phone=process.env.TAKO_QA_PHONE||JSON.parse(fs.readFileSync(path.join(cfg,'owner-service-qa-backup.json'),'utf8'))?.link?.phone
 const link=await q(`SELECT restaurant_id FROM tako_whatsapp_links WHERE phone='${phone.replace(/'/g,"''")}'`)
 if(link.length!==1||link[0].restaurant_id!==QA)throw new Error('numero non collegato solo al QA: mi fermo')
 const tw=parseEnv(fs.readFileSync(path.join(cfg,'twilio-menu.env'),'utf8'))
