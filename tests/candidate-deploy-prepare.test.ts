@@ -13,6 +13,8 @@ it('accepts only complete scoped candidate configuration',()=>{
 it('includes the bot engine env names in both closed lists (Haiku 21/10)',async()=>{
  const {candidateEntry}=await import('../scripts/serverless/candidate-entry.mjs')
  const entry=candidateEntry({appEntry:'/a.ts',initializerEntry:'/i.ts',fontInitializerEntry:'/f.ts',bridgeEntry:'/b.ts'})
+ // 22/10: foto salvate senza ricodifica → avvio solo-quota registrato accanto a quello completo (codec WASM)
+ expect(entry).toContain('imageStore.configureImageQuotaInitializer(');expect(entry).toContain('initializeEdgeImageQuota()')
  for(const key of ['ANTHROPIC_API_KEY','TAKO_BOT_ENGINE_DEFAULT','GROQ_API_KEY']){
   expect(entry).toContain(`'${key}'`)
  }

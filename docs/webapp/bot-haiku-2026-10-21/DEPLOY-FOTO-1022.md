@@ -53,3 +53,33 @@ cp $RB/candidate-index-v151.ts release/serverless/candidate/index.ts && node scr
   sforare la CPU. Da misurare sull'edge; eventuale passo successivo: riduzione lato client/worker o rifiuto con messaggio.
 - Un crash per risorse resta non catturabile: nessuna riga errori in quel caso (il 546 si vede solo nei log edge).
 - Il guasto foto ora conta per l'avviso «≥3 errori in 10 minuti» a Manuel (max 1 all'ora).
+
+## Esito deploy 22/10 13:45 (giorno, autorizzato da Manuel) — KO, rollback a v151
+- 13:44 online API v154 ezbr 7221cb7b (= bundle v151). Build PASS, lazy boot PASS (sha 6dec8505…), diff sezioni: solo
+  image-store.ts, twilio-menu.ts, edge-image-initializer.ts (nome cartella temp); alerts = solo tipo. Copia `candidate-index-foto-1022.ts`
+  in `~/.config/tako-webapp/rollback-edge-20261022/`.
+- 13:45 deploy → API **v155** ezbr 51ccee47, pronto in 13 s. Smoke: /api/auth/me 401, webhook senza firma 403, bot risponde (4,6 s).
+- 13:46 foto-probe con didascalia: HTTP 200 ma «*Foto non pubblicata*: salvataggio immagini edge non ancora disponibile»;
+  riso giallo QA resta senza foto; 2 righe `photo_failed` «salvataggio: EDGE_STORAGE_QUOTA_REQUIRED» (11:46:20 UTC).
+- **Causa (bug del fix):** con il passthrough (`direct`) non si chiama più `configuredEdgeInitializer()`, che in
+  `edge-image-initializer.ts:44` configura sia il codec sia la QUOTA durevole (`configureImageQuota`). Su edge a freddo
+  `configuredEdgeQuota` resta undefined → `EDGE_STORAGE_QUOTA_REQUIRED`. Correzione: separare l'init della quota dal codec
+  (o chiamare l'initializer/un init solo-quota anche nel ramo passthrough, senza compilare il WASM) + test che lo copra a freddo.
+- 13:46 **rollback** `rollback-v151.ts` → API **v156** ezbr 7221cb7b (identico a v154), pronto in 15 s. Smoke 401/403/bot 8 € OK.
+  QA invariato (nessuna foto scritta → niente da togliere). Batterie non eseguite.
+
+## Esito deploy 22/10 13:56 (secondo tentativo, commit 45f63d36) — OK, online v157
+- Fix: `initializeEdgeImageQuota` (edge-image-initializer.ts) = stessi controlli in sola lettura (seed + funzioni SQL) +
+  `configureImageQuota`, senza codec/WASM; esportato dall'entry immagini (nessun import magick, nessun download WASM, errore
+  non memorizzato) e registrato in candidate-entry con `configureImageQuotaInitializer`. `saveImageBuffer` sull'edge senza
+  quota lo chiama prima del controllo quota (fallback: initializer completo; se fallisce resta EDGE_STORAGE_QUOTA_REQUIRED).
+  Test edge a freddo (initializer completo e codec che esplodono) → foto salvata; senza il fix il test fallisce.
+- Build PASS, lazy boot PASS (sha 4ac41fb1…), diff vs v151: image-store, twilio-menu, edge-image-initializer, fetch-bridge
+  (= coda del bundle con l'entry: solo le due tappe `*_image_quota_initializer`). Copia `candidate-index-foto-1022b.ts`.
+- deploy → **v157**, pronto in 19 s. Smoke: /api/auth/me 401, webhook senza firma 403, bot «riso giallo 8 €».
+- foto-probe: HTTP 200 «Confermato… riso giallo: nuova foto», pubblicato `/uploads/26050ecd…/KNij0J7PwgCe79ow.jpg`
+  → 200 image/jpeg 66 009 byte. `solo`: HTTP 200 «Per quale piatto è?» → ANNULLA ok.
+- «togli la foto al riso giallo» → il bot NON sa togliere le foto («Le foto dei piatti non si tolgono da qui»): la foto
+  resta sul riso giallo del QA (da togliere dalla dashboard QA; niente SQL). Possibile funzione bot da aggiungere.
+- Batteria dal vivo ×2 (v157-foto-a / -b): 27/27 e 27/27, 0 GRAVI, QA identico. `tako_whatsapp_errors`: 0 righe nuove.
+- Rollback pronto: `~/.config/tako-webapp/rollback-edge-20261022/rollback-v151.ts` (procedura sopra).

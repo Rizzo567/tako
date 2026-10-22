@@ -67,4 +67,26 @@ describe('passthroughImage / saveImageBuffer({passthrough})',()=>{
   const rotated=await sharp(await sharp(photo).resize(600).toBuffer()).withMetadata({orientation:6}).jpeg().toBuffer()
   expect(await m.saveImageBuffer(tenant,rotated,{passthrough:true})).toHaveProperty('url');expect(codec).toHaveBeenCalledTimes(1)
  })
+ // 22/10 13:45 — deploy v155 KO: sull'edge a freddo nessuno aveva preparato la quota (lo faceva solo l'inizializzatore
+ // completo con il WASM, che il passthrough salta) → «salvataggio immagini edge non ancora disponibile».
+ it('edge a freddo: quota preparata dall\'avvio SOLO quota, inizializzatore WASM e codec mai chiamati, foto salvata',async()=>{
+  vi.resetModules();vi.stubEnv('TAKO_EXECUTION_RUNTIME','edge');vi.stubEnv('UPLOADS_DRIVER','supabase')
+  const m=await import('../apps/server/src/lib/image-store.js'),photo=await whatsappLike()
+  const full=vi.fn(async()=>{throw new Error('il WASM non deve essere caricato per questa foto')})
+  const quotaOnly=vi.fn(async()=>{m.configureImageQuota({} as any)})
+  m.configureImageInitializer(full);m.configureImageQuotaInitializer(quotaOnly)
+  const saved=await m.saveImageBuffer(tenant,photo,{passthrough:true})
+  expect(saved).toMatchObject({url:expect.stringMatching(/\.jpg$/)})
+  expect(quotaOnly).toHaveBeenCalledTimes(1);expect(full).not.toHaveBeenCalled()
+  expect(store.uploads).toHaveLength(1)
+  // seconda foto: quota già pronta, nessun nuovo avvio
+  await m.saveImageBuffer(tenant,await sharp(photo).resize(500).jpeg().toBuffer(),{passthrough:true});expect(quotaOnly).toHaveBeenCalledTimes(1)
+ })
+ it('edge a freddo, avvio quota guasto: rifiuto pulito EDGE_STORAGE_QUOTA_REQUIRED (fail closed), niente upload',async()=>{
+  vi.resetModules();vi.stubEnv('TAKO_EXECUTION_RUNTIME','edge');vi.stubEnv('UPLOADS_DRIVER','supabase')
+  const m=await import('../apps/server/src/lib/image-store.js')
+  m.configureImageQuotaInitializer(vi.fn(async()=>{throw new Error('db giù')}))
+  expect(await m.saveImageBuffer(tenant,await whatsappLike(),{passthrough:true})).toMatchObject({code:'EDGE_STORAGE_QUOTA_REQUIRED'})
+  expect(store.uploads).toEqual([])
+ })
 })
