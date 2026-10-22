@@ -10,3 +10,5 @@ Prezzi Haiku 5.5 (skill claude-api, cache 06/10/2026): input 0,10 $/M · output 
 | **Totale notte** | | | | | | **~0,223 $** (tetto 3,00 $) |
 
 Costo per messaggio misurato: ~0,0003 $ (cache read ~8–9k token per chiamata, 1,2 chiamate/messaggio). 500 msg/mese ≈ 0,15 $ ≈ 0,14 € per locale (senza cache, caso peggiore, ≈ 0,50 €). Nessun deploy → collaudo QA 0 $.
+
+| 22/10 23:11–07:00 | run notturna caccia ai bug (5 set nuovi, ~60 giri di regressione; prove dal vivo QA ~800 msg fuori registro) | — | — | — | ~99% hit | ~0,99 (registro 1,78 → 2,77 $; tetto notte 8 $) |

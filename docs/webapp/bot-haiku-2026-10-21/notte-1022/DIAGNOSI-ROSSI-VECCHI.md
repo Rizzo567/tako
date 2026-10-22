@@ -1,0 +1,27 @@
+# Diagnosi rossi vecchi (agente analisi, 23:48) — quasi tutti BUG VERI lato server (il modello aveva capito)
+
+Casi già corretti (errore del caso): adv-z.ts z-dialetto-011 (alt NONE), banco-vero.ts bv-correzioni-005 (alt NONE), fixed-checks.ts (pf-piatto-nuovo-08: frasi su opzione/Completo/prezzo fisso non contano come domanda di prezzo).
+
+| Caso | Diagnosi | Correzione proposta |
+|---|---|---|
+| Fix A (z-asr-005, z-r2-spezzati-003) | validatore declassa in silenzio a clarify senza motivo (`owner-brain-plan.ts:423`), il modello rimanda lo stesso piano → «Non ho cambiato nulla.» + elenco SENZA domanda. Rete in `twilio-menu.ts:~869` scatta solo con cifre `/\d/` (non «dieci», «sei e cinque») | (1) a :423 motivo vero (piatto non nominato/prezzo non detto) e con un solo candidato chiedere «Intendi *X* a N €? Rispondi sì»; (2) rete: `g9Prices(text).length` al posto di `/\d/`, accettare anche 1 candidato |
+| z-asr-005 «la pizza en duja a dieci» | + «en duja» non riconosciuto come 'nduja (`phoneticHits` non forte) | in `phoneticHits` confronta anche due parole vicine unite con vocale iniziale caduta; forte solo se unico |
+| z-interruzioni-008 «sì e anche il tiramisù» | GRAVE: modello giusto; server rifiuta `conferma_con_altro` poi `conferma_non_esplicita` → «sì» ignorato | `owner-brain-r.ts` ~155: con eliminazione in attesa e messaggio che inizia con sì → conferma il sospeso, il resto come richiesta nuova (elimina tiramisù chiede il suo sì) |
+| z-interruzioni-011 (e 010) «solo il babà» → «sì» | su eliminazione in attesa «solo il babà» non restringe; diventa domanda senza azioni salvate, il sì cade nel giro domande | `twilio-menu.ts` caso change ~839: ramo «correzioni aggiornano il riepilogo» anche per why==='delete' con sottoinsieme → ripropone eliminazione col solo babà |
+| z-interruzioni-017 cassata → «6» | piatto senza prezzo → type 'missing' → clarify muto a :423, bozza persa | ricavare la bozza anche su 'missing'; numero secco su domanda con bozza crea il piatto senza modello |
+| z-asr-009 «bacalà fritto» | `piatto_ambiguo` con Calzone fritto rivale per «fritto» | `rivalDishes`/`dominatedBy` (`owner-brain-plan.ts:157-175`): rivale solo se combaciano anche le parole distintive, doppie normalizzate |
+| z-omonimi-003 «nascondi i calzoni» | «calzoni» ≠ «Calzone» | singolare/plurale (-e/-i, -a/-e, -o/-i) nella testa del nome |
+| z-rinomine-002 «e mettilo a 6» dopo rinomina | `rimando_incerto` | risolutore rimandi usa le rinomine appena fatte (stesso id) |
+| z-rinomine-009 «rinomina… e nascondilo» | `azione_fuori_portata` | verbo con pronome attaccato (-lo/-la/-li) eredita il piatto della frase precedente |
+| Giudice (z-emoji-001, z-nascosti-012, z-interruzioni-010) | `isQuestion` in `judge.ts` esclude domande vere con «Non trovo…/Non ho capito…» o «Ok…confermare» | contare come domanda se la frase che chiude ha «?» (giudice condiviso: attenzione agli altri set) |
+| bv-correzioni-002 | (1) chiede «c'è già» su nome contenuto in uno più lungo (per regole = piatto nuovo); (2) «No, ho detto togli boh» fa scattare guardia «no/ho detto» (`twilio-menu.ts` ~846) che butta TUTTO il sospeso (tiramisù perso) | regola `doppio_falso` anche al primo turno; risposta che corregge UNA domanda tiene le parti chiare e le altre domande |
+| bv-deixis-003 | chiede «c'è già la parmigiana a 10» con stesso nome e prezzo | `owner-brain-plan.ts` ~325: scarta la domanda se l'azione non cambia nulla |
+| bv-correzioni-003 | validatore dà piano giusto (parmigiana 15 + promo tiramisù 3) ma risposta «promo di la parmigiana 15 > pieno 10»: percorso promo deterministico `twilio-menu.ts:378` (`parseSalesText`) prende tutto come piatto | percorso promo veloce solo per messaggi con un piatto; con cervello acceso, se fallisce la sua validazione → cervello |
+| bv-correzioni-004 | chiede tra «la parmigiana» visibile (nome uguale) e gemella nascosta | nome detto = piatto visibile (articolo a parte) vince sul nascosto |
+| bv-categorie-001 | `categoria_non_detta`: non conta i sottomenu creati nello stesso piano | `namedSectionMismatch` conta le create_section del piano |
+| bv-asr-003/005 «Bu costa 40» dopo «Bo a 50» | suono debole → sempre chiedere | `validateBrainPlanCore`: suono debole vale come nominato se è il piatto dell'ultima modifica/ultimo messaggio (≤10 min); bv-asr-002 resta protetto |
+| str-v-08 (anche visibilita) | `sottomenu_in_piu_menu` anche se il messaggio dice «della cena» | `structureActions` (`owner-brain-plan.ts:645`): Menu dal messaggio (nome o pranzo/cena); chiedere solo se 0 o >1 |
+| lng-mig-3/4 «13.000» | varianza: a volte aggiunge «Rispondi OK per pubblicare» con domande incerte | con domande incerte togliere «Rispondi OK…» dalla bozza, chiusura col testo del server; verificare che «OK» non pubblichi 13 € senza conferma |
+| ps-06 «la ghisa a dodici» | chiede «Quale piatto?» senza proporre Gricia | se domanda generica, il server aggiunge i candidati a suono debole («Intendi *Gricia*?») |
+| test `twilio-menu-hold.test.ts` | test superato: `holdFromMessage` ora restituisce anche `seen: []` | aggiungere `seen:[]` all'attesa |
+| test `twilio-menu-ai-flow.test.ts` «common phrases» | BUG: «nel piatto di verifica scrivi: guanciale croccante» → `unreadWords` (`twilio-menu-reading.ts:84`, chiamato da `twilio-menu.ts:421`) non conta testo descrizione né «scrivi» | in `unreadWords` contare lette le parole della descrizione e il verbo «scrivi» |

@@ -6,6 +6,45 @@ Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINAL
 
 
 
+## 0nonies. RUN NOTTURNA 22/10 (23:11→07:30) — caccia ai bug: edge v151
+
+**Online:** edge `tako-operational-candidate` **v151** (commit 72dcad41, ezbr 871c9466…); worker dashboard `takomenu-web` **20ba6b07** (solo il webhook Twilio cambiato); lettura v28 e worker pubblico invariati.
+
+**Provato:** ~380 conversazioni nuove (~750 messaggi) in 5 set nuovi — `notte-1022` (73), `notte-caccia` (121), `qa-continua` (batteria dal vivo con storia continua, fixture `qavero`), e due set scritti «a occhi chiusi» da agenti che non vedevano le correzioni: `notte-cieco` (72 conv, 119 msg) e `notte-finale` (73 conv, 112 msg) — più ~11 giri della batteria dal vivo sul QA (27 conversazioni ciascuno, ~800 messaggi veri via webhook firmato).
+
+**Bug corretti (strutturali, ognuno con casi permanenti):** sicurezza prezzi di gruppo (0 €, ±50% → riepilogo+OK) e prezzi singoli assurdi/negativi (mai scritti senza sì); nessuna scrittura dopo lo scadere del tempo del turno e mai «non disponibile» a scrittura partita; pronomi dopo una lettura o una scrittura risolti dal server («quanto costa X?» → «mettila/alzalo/toglila», «anzi rimettilo»); «tutti e due» sui due piatti della risposta di prima; relativi in lettere («de cinquanta centesimi», «mezzo euro in più»); piatto nuovo: risposta parziale tenuta («4» = prezzo), mai sottomenu ereditato da conversazioni vecchie né Menu nascosto non detto, elenchi senza sottomenu vuoti e solo del Menu detto; «annulla» con domanda aperta chiude solo la domanda e non dice mai «non ho cambiato nulla» se un turno prima ha scritto; gruppi per sottomenu («alza le pizze di 50 centesimi», «nascondi tutti i dolci» = interruttore del sottomenu, OK multi-Menu); letture dei sottomenu composte dai dati, nomi inventati tolti; primo contatto («cosa sai fare?», «posso cambiare i prezzi?») dal server; «sì e anche il tiramisù», «solo il babà»; listino incollato; vecchi rossi chiusi (z-asr-005, z-interruzioni-008/011/017, z-rinomine-002/009, bv-asr-003/005, bv-correzioni-002/003, bv-deixis-003, str-v-08, lng-mig-3/4, ps-06, i 2 test twilio-menu). Dettaglio: `implementation-notes.md` 43–51.
+
+| Set | v140 (prima) | v151 (dopo) |
+|---|---|---|
+| multiturno | 38/38 | 38/38 |
+| adv-sera | 227/227 | 227/227 |
+| prezzofisso | 74/75 | 75/75 |
+| banco | 84/92 (5 GRAVI) | 90/92 (1 GRAVE vecchio) |
+| adv150 | 137/150 | 150/150 |
+| lunghi | 40/42 | 42/42 |
+| struttura | 93/94 | 94/94 |
+| visibilita | 19/20 | 20/20 |
+| parlato | 29/30 | 30/30 |
+| playground | 20/20 | 20/20 |
+| victoria | 10/10 | 10/10 |
+| notte-1022 (nuovo) | 53/57 al primo giro | 73/73 |
+| notte-caccia (nuovo) | 49/63, 5 GRAVI | 121/121 |
+| notte-cieco (cieco) | 60/72, 4 GRAVI (v144) | 72/72 |
+| notte-finale (cieco n.2) | 68/73 (v150) | 70/73 |
+| batteria dal vivo QA | 21/27 (v145) | v150: 27/27 ×2 · v151: 27/27 ×2 |
+| proprietà multi-turno | 0 violazioni | 0 violazioni |
+
+**Aperti (rischio per i clienti):**
+- bv-correzioni-004 (vecchio): frase vocale ambigua che corregge una promo («…mettila a 10») — la promo del tiramisù a 3 € può restare; raro.
+- bv-categorie-001: fa una domanda invece di agire (nessuna scrittura sbagliata).
+- notte-finale: «a pranzo aggiungi la panna cotta a 5» senza Dolci nel Pranzo → chiede il sottomenu invece di proporre di creare «Dolci»; «aggiungi lo Spritz Hugo» chiede il sottomenu anche se «Aperitivi» è ovvio; «👍» non basta per eliminare (scelta voluta: serve un sì scritto).
+- Varianza dal vivo: a volte dopo «la pasta al pesto dei primi» richiede tra *pasta al pesto* e *Pasta al pesto e lasagna* (nessuna scrittura sbagliata).
+- Dopo ogni deploy Supabase impiega ~15–70 s ad attivare la versione: è la piattaforma, non il codice. Il worker ora tiene viva la richiesta fino a ~45 s e le risposte immediate arrivano via REST se in ritardo; oltre resta un rischio → deploy solo di notte, poi `scripts/serverless/wait-edge-ready.mjs`.
+
+**Rollback:** `RB=~/.config/tako-webapp/rollback-edge-20261021; cp $RB/rollback-v150.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs && node scripts/serverless/wait-edge-ready.mjs` (anche rollback-v149/v146/v140). Worker: `CI=true npx wrangler rollback 49846043-0b54-4759-bb28-9013ca33ca3e --config deploy/cloudflare/wrangler.jsonc`.
+
+**Spesa Anthropic notte:** ~1,00 $ di banchi (registro 1,78 → 2,77 $) + pochi centesimi di prove dal vivo; tetto 8 $.
+
 ## 0octies. AGGIORNAMENTO 22/10 notte — bot multi-turno a prova di bug: edge v140
 
 Bug dal vivo segnalati da Manuel sul QA (21/10 sera, v137):
