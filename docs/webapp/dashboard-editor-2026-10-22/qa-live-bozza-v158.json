@@ -1,0 +1,55 @@
+{
+ "tag": "v158",
+ "at": "2026-10-22T12:39:10.292Z",
+ "fatal": null,
+ "restored": true,
+ "ok": 10,
+ "total": 10,
+ "results": [
+  {
+   "id": "a-bozza-scritta",
+   "ok": true,
+   "detail": "pending=true"
+  },
+  {
+   "id": "b-pubblicato-solo-B",
+   "ok": true,
+   "detail": "Ok, metto la *Pasta al sugo* a *11 €*. *Pasta al sugo*: prezzo da 9,00 € a *11,00 €*"
+  },
+  {
+   "id": "b-bozza-A+B",
+   "ok": true
+  },
+  {
+   "id": "b-niente-dashboardPending",
+   "ok": true,
+   "detail": "Ok, metto la *Pasta al sugo* a *11 €*. *Pasta al sugo*: prezzo da 9,00 € a *11,00 €*"
+  },
+  {
+   "id": "c-pubblicato-solo-C",
+   "ok": true,
+   "detail": "Ok, metto la *Pasta al pesto e lasagna* a *13,01 €*. *Pasta al pesto e lasagna*: prezzo da 10,01 € a *13,01 €*"
+  },
+  {
+   "id": "c-bozza-senza-A",
+   "ok": true
+  },
+  {
+   "id": "e-annulla-C",
+   "ok": true,
+   "detail": "Ok, annullo l'ultima pubblicazione: *Pasta al pesto e lasagna*. *Pasta al pesto e lasagna*: com’era prima"
+  },
+  {
+   "id": "e-bozza-ancora-pendente",
+   "ok": true
+  },
+  {
+   "id": "d-pubblica-tutto",
+   "ok": true
+  },
+  {
+   "id": "f-QA-identico",
+   "ok": true
+  }
+ ]
+}
