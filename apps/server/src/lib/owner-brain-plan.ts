@@ -6,6 +6,7 @@
  * G6 prezzi implausibili → conferma scritta). I fatti nella risposta li scrive il server DOPO la rilettura (composeReply).
  * Se Groq è giù, la quota è finita, il JSON non è valido o la chiamata è lenta → {path:'fallback'}: il route usa il
  * percorso deterministico attuale, invariato. */
+import {parseInsert,sameName} from './owner-brain-svuota.js'
 import {randomUUID} from 'node:crypto'
 import {allOfSections,namedSections} from './owner-brain-sections.js'
 import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,relativeDelta,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
@@ -769,6 +770,10 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
   const menu=(input.menus??[]).find(m=>m.name===sec!.menu),fixed=menu?.pricing==='fisso'
   const names=String(a.text??'').split(/\s*[;\n]\s*/).map(x=>x.replace(/[*_~`]/g,'').trim()).filter(Boolean).slice(0,40)
   if(!names.length)return{actions:[],notes:[],ask:'piatti_mancanti'}
+  // 22/10 (QA «primi carbonara e pasta e fagioli» → solo Carbonara): un piatto detto dal titolare per QUESTO sottomenu che il modello ha
+  // lasciato fuori si aggiunge (mai scartato in silenzio). Lettura del server delle liste per sottomenu (owner-brain-svuota.ts).
+  try{const said0=parseInsert(input.message,input.sections.filter(x=>x.menu===sec!.menu),input.menus??[],(input.refs??[]).map(r=>r.name)).lists.find(l=>l.secId===sec!.id)?.names??[]
+   for(const n of said0)if(!names.some(x=>sameName(x,n)||plain(x).includes(plain(n))||plain(n).includes(plain(x))))names.push(n.charAt(0).toLocaleUpperCase('it')+n.slice(1))}catch{/* lettura facoltativa */}
   // 21/10 sera: dentro una sessione di modifica dei piatti di oggi vale anche per un Menu alla carta (i nuovi vogliono il prezzo).
   const inSession=(input.pending as any)?.session?.menu===sec!.menu
   if(!fixed&&!inSession)return{actions:[],notes:[],ask:'sostituzione_alla_carta'}

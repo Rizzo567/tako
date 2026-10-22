@@ -48,7 +48,9 @@ function checkDiff(d,expect){const ss=d.map(x=>x.s),res=expect.map(e=>new RegExp
 // ---------- conversazioni ----------
 // turno: {m, re:[regex che la risposta DEVE avere], no:[regex che NON deve avere], diff:[...] (stato atteso rispetto all'inizio della conv; omesso = non controllato)}
 // restore: comandi finali per rimettere il QA (fanno parte della conversazione; anche loro controllati con diff:[])
-const ASK=String.raw`\?|rispondi|dimmi`, NODONE=String.raw`\b(fatto|aggiornat|cambiat|pubblicat|messo|alzat|nascost)\w*`
+const ASK=String.raw`\?|rispondi|dimmi`
+// 22/10 sera: i 7 piatti del Menu del giorno del QA nascosti, tranne quelli in `keep`
+const GIORNO=['Lasagna','Carbonara','Gnocchi al ragù','Cotoletta','Polpette','Frittata di zucchine','Frittata di patate'],HIDE7=(keep=[])=>GIORNO.filter(n=>!keep.includes(n)).map(n=>'^'+n+String.raw`\|hidden\|false→true$`), NODONE=String.raw`\b(fatto|aggiornat|cambiat|pubblicat|messo|alzat|nascost)\w*`
 const C=[
  {id:'annulla-domanda-aperta',desc:'«annulla» mentre il bot aspetta la risposta alla sua domanda (piatto nuovo senza dati): niente scritture, niente domanda ripetuta',
   t:[{m:'aggiungi il vitello tonnato',re:[ASK],diff:[]},{m:'annulla',literal:true,no:[String.raw`sottomenu.*\?|prezzo.*\?`],diff:[]}]},
@@ -105,6 +107,21 @@ const C=[
  {id:'lettura-paste-primi',desc:'«quante paste ho nei primi?» → solo pasta al pesto e pasta carbonara (non pasta al ragù/sugo di Piatti di prova)',t:[{m:'quante paste ho nei primi?',re:[String.raw`pesto`,String.raw`carbonara`],no:[String.raw`ragù|sugo|gnocchi`],diff:[]}]},
  {id:'prezzo-insolito-no',desc:'«il riso giallo a 80» → aspetta l\'OK senza scrivere → «no» → niente',t:[{m:'il riso giallo a 80',re:[ASK],no:[NODONE],diff:[]},{m:'no',diff:[]}]},
  {id:'anzi-rimettilo',desc:'«il riso giallo a 9» → 9 € → «anzi rimettilo a 8» → 8 €',t:[{m:'il riso giallo a 9',no:[String.raw`\?`],diff:[String.raw`^riso giallo\|price\|8→9$`]},{m:'anzi rimettilo a 8',no:[String.raw`\?`],diff:[]}]},
+ // 22/10 sera — REGOLA D'USO (decisione Manuel dopo Victoria): «svuota il menu X» = piatti nascosti, sottomenu e prezzi fissi intatti, subito;
+ // «nei primi inserisci A, B» = visibili/creati nel Menu di cui si parla, gli altri non si toccano. Menu del giorno del QA (prezzo fisso).
+ {id:'svuota-annulla',desc:'«svuota il menu del giorno» → i 7 piatti nascosti subito, nessuna domanda → «annulla» → com’era',
+  t:[{m:'svuota il menu del giorno',re:[String.raw`svuotat`,String.raw`annulla`],no:[ASK],diff:HIDE7()},{m:'annulla',diff:[]}]},
+ {id:'svuota-inserisci-un-messaggio',desc:'«svuota il menu del giorno e nei primi inserisci carbonara e gnocchi al ragù» → solo loro visibili → annulla',
+  t:[{m:'svuota il menu del giorno e nei primi inserisci carbonara e gnocchi al ragù',re:[String.raw`Carbonara`,String.raw`Gnocchi`],no:[ASK],diff:HIDE7(['Carbonara','Gnocchi al ragù'])},{m:'annulla',diff:[]}]},
+ {id:'svuota-poi-inserisci-contesto',desc:'svuota → «nei secondi metti polpette e frittata di patate» (Menu dalla conversazione) → visibili → la regola stessa rimette gli altri',
+  t:[{m:'svuota il menu del giorno',no:[ASK],diff:HIDE7()},{m:'nei secondi metti polpette e frittata di patate',re:[String.raw`Polpette`],no:[ASK],diff:HIDE7(['Polpette','Frittata di patate'])},
+     {m:'nel menu del giorno nei primi inserisci lasagna, carbonara e gnocchi al ragù e nei secondi cotoletta e frittata di zucchine',no:[ASK],diff:[]}]},
+ {id:'inserisci-nuovo-annulla',desc:'«nel menu del giorno nei primi inserisci la pasta e fagioli» → nuova senza prezzo, gli altri restano visibili → annulla la toglie',
+  t:[{m:'nel menu del giorno nei primi inserisci la pasta e fagioli',re:[String.raw`Pasta e fagioli`],no:[ASK],diff:[String.raw`^\+Pasta e fagioli\|Primi\|Menu del giorno\|0$`]},{m:'annulla',diff:[]}]},
+ {id:'grave-b7-nascondi-tutti',desc:'(Victoria B7, GRAVE) «il menù del giorno si deve vedere ma devi nascondere tutti i piatti» → tutti nascosti subito (prima: elenco di 5 e «tutti» parziale)',
+  t:[{m:'il menù del giorno si deve vedere ma devi nascondere tutti i piatti',no:[ASK],diff:HIDE7()},{m:'annulla',diff:[]}]},
+ {id:'grave-k2-pasta-e-fagioli',desc:'(K2, GRAVE) «nel menu del giorno primi carbonara e pasta e fagioli» → Carbonara + Pasta e fagioli (nuova), Lasagna e Gnocchi nascosti → annulla',
+  t:[{m:'nel menu del giorno primi carbonara e pasta e fagioli',re:[String.raw`Pasta e fagioli`],no:[ASK],diff:[String.raw`^Lasagna\|hidden\|false→true$`,String.raw`^Gnocchi al ragù\|hidden\|false→true$`,String.raw`^\+Pasta e fagioli\|Primi\|Menu del giorno\|0$`]},{m:'annulla',diff:[]}]},
  {id:'ok-a-domanda',desc:'«togli la carbonara» (pasta carbonara visibile / Carbonara del Menu del giorno già nascosta) → nasconde la pasta carbonara o chiede; «ok»/risposta non deve scrivere altro',
   t:[{m:'togli la carbonara',no:[String.raw`elimin`]}],restoreIfChanged:['annulla']},
 ]

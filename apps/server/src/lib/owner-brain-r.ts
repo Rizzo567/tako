@@ -400,7 +400,7 @@ export const changeFacts=(actions:MenuAction[],before:MenuRef[],sections:Section
 export function pendingFacts(why:BatchWhy,actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]){const all=withNewSections(sections,actions)
  const head=why==='delete'?'Da eliminare, serve il tuo sì:':why==='section'?'Sottomenu nuovo, serve il tuo sì:':'Non ancora pubblicato, da confermare con OK:'
  return head+'\n'+actions.map((a,i)=>(i+1)+'. '+(a.kind==='delete'?'*'+(refs.find(r=>r.id===a.id)?itemLabel(refs.find(r=>r.id===a.id)!,refs):'?')+'*: da eliminare':describeAction(a,refs,all))).join('\n')}
-export const candidateFacts=(ids:string[],refs:MenuRef[])=>ids.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r).map((r,i)=>`${i+1}. *${itemLabel(r,refs)}* (${num(r.price)})`).join('\n')
+export const candidateFacts=(ids:string[],refs:MenuRef[])=>ids.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r).map((r,i)=>`${i+1}. *${itemLabel(r,refs)}*${r.price>0?` (${num(r.price)})`:''}`).join('\n') // 22/10 Victoria: niente «(0,00 €)» per i piatti dei Menu a prezzo fisso
 export function holdFacts(h:Hold,refs:MenuRef[],sections:SectionRef[]){const all=withNewSections(sections,h.actions),out:string[]=[]
  if(h.actions.length)out.push('Non ancora pubblicato:\n'+h.actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,all)).join('\n'))
  for(const a of (h.asks??(h.ask?[h.ask]:[])) as any[])if(a.type==='choose'&&Array.isArray(a.options))out.push('«'+String(a.word).slice(0,60)+'»:\n'+candidateFacts(a.options,refs))
