@@ -82,6 +82,18 @@ const C=[
  {id:'finito-tornato',desc:'«la pasta al sugo è finita» → non disponibile; «la pasta al sugo è tornata» → disponibile',t:[{m:'la pasta al sugo è finita',no:[String.raw`\?`],diff:[String.raw`^Pasta al sugo\|available\|true→false$`]},{m:'la pasta al sugo è tornata',no:[String.raw`\?`],diff:[]}]},
  {id:'elimina-poi-annulla',desc:'«elimina la pasta al sugo» → chiede il sì, niente scritto → «annulla» → scarta, niente scritto',t:[{m:'elimina la pasta al sugo',re:[String.raw`sì|si\b`],diff:[]},{m:'annulla',literal:true,diff:[]}]},
  {id:'vietato-tutto-zero',desc:'«metti tutto a zero» → deve chiedere conferma (OK/sì) senza scrivere → «no» → niente',t:[{m:'metti tutto a zero',re:[ASK],no:[NODONE],diff:[]},{m:'no',diff:[]}]},
+ // QA v153 22/10 (GRAVE): una modifica, poi una domanda a opzioni numerate che nomina lo stesso piatto, poi «no» → il bot annullava la
+ // modifica («*Pasta al sugo*: com’era prima»). Il «no» chiude la domanda: il QA resta com'è dopo la modifica; poi si rimette a mano.
+ {id:'modifica-domanda-no',desc:'«la pasta al sugo è finita» → esaurita; «elimina tutti i primi» → domanda senza scrivere; «no» → NON annulla l\'esaurita',
+  t:[{m:'la pasta al sugo è finita',no:[String.raw`\?`],diff:[String.raw`^Pasta al sugo\|available\|true→false$`]},
+     {m:'elimina tutti i primi',re:[ASK],diff:[String.raw`^Pasta al sugo\|available\|true→false$`]},
+     {m:'no',no:[String.raw`com.era prima`],diff:[String.raw`^Pasta al sugo\|available\|true→false$`]},
+     {m:'la pasta al sugo è tornata',no:[String.raw`\?`],diff:[]}]},
+ {id:'modifica-domanda-no-paste',desc:'come sopra con «elimina tutte le paste» (domanda che nomina di sicuro la Pasta al sugo) → «no» → NON annulla',
+  t:[{m:'la pasta al sugo è finita',no:[String.raw`\?`],diff:[String.raw`^Pasta al sugo\|available\|true→false$`]},
+     {m:'elimina tutte le paste',re:[ASK],diff:[String.raw`^Pasta al sugo\|available\|true→false$`]},
+     {m:'no',no:[String.raw`com.era prima`],diff:[String.raw`^Pasta al sugo\|available\|true→false$`]},
+     {m:'la pasta al sugo è tornata',no:[String.raw`\?`],diff:[]}]},
  {id:'vietato-elimina-primi',desc:'«elimina tutti i primi» → chiede il sì senza scrivere → «no» → niente',t:[{m:'elimina tutti i primi',re:[ASK],diff:[]},{m:'no',diff:[]}]},
  {id:'riepilogo-pollice',desc:'4 prezzi in un messaggio → aspetta l\'OK senza scrivere → «👍» pubblica tutti e 4 → «annulla» li toglie',
   t:[{m:'riso giallo a 9, pasta carbonara a 10, pasta al sugo a 10, tiramisù a 16',re:[String.raw`\bok\b`],diff:[]},

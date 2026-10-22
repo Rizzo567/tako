@@ -44,6 +44,10 @@ export function confirmBlocked(message:string,refs:{name:string}[]=[]){const p=p
 // Richiesta di annullamento: deve esserci nel messaggio (il modello non annulla di sua iniziativa).
 const UNDO_CUE=/\b(annull\w*|torna\w* (?:indietro|come prima|com era)|tornare indietro|indietro|com era|come prima|com eri|anzi no|anzi|ho sbagliato|sbagliato|sbagliata|errore|rimett\w* (?:tutto )?(?:a )?(?:posto|come)|disfa\w*|lascia\w* (?:stare|perdere)|non (?:lo |la |li |le )?volevo|ripristin\w*|no no|era giusto|andava bene)\b|^(?:no|scusa|aspetta|ops)(?: (?:no|scusa|aspetta|ops))*$/
 export const undoRequested=(message:string)=>UNDO_CUE.test(plain(message))
+// QA v153 22/10 (vietato-elimina-primi): annullare l'ultima pubblicazione a partire da una domanda aperta solo su richiesta ESPLICITA
+// («annulla», «torna com'era», «ripristina»…). Un «no», «no no», «scusa», «lascia stare», «anzi» = rifiuto della domanda, mai un annullo.
+const EXPLICIT_UNDO_CUE=/\b(annull\w*|torna\w* (?:indietro|come prima|com era)|tornare indietro|com era|come prima|rimett\w* (?:tutto )?(?:a )?(?:posto|come)|disfa\w*|ripristin\w*)\b/
+export const explicitUndoRequested=(message:string)=>EXPLICIT_UNDO_CUE.test(plain(message))
 const YES_HEAD=/^(?:s[iì]|ok|okay|va bene|certo|confermo|esatto|perfetto)\b,?\s+(?:e|ed|ma|poi|e poi|pero)\s+(?:anche\s+)?/
 const ONLY_CANCEL=/^(?:(?:no|ah|allora|aspetta|scusa|ok)\s+)*(?:annulla(?: tutto)?|lascia (?:stare|perdere)|niente|no|non (?:farlo|pubblicare)|no grazie|lascia stare tutto)$/
 // R5.1 (nota 64): «no, il caviale lascialo stare» → il caviale (nuovo o in sospeso) non si crea. Vincolo sul testo, non interpretazione.
@@ -154,7 +158,8 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  // notte 22/10 (QA v147 GRAVE: «aggiungi il vitello tonnato» → domanda → «annulla» → annullata una modifica della conversazione PRIMA): con una
  // domanda aperta «annulla» chiude SOLO la domanda, sempre.
  if(!changeActs.length&&(pend?.kind==='ask'||pend?.kind==='hold'||pend?.kind==='other')&&ONLY_CANCEL.test(plain(message)))return{kind:'cancel'}
- if(control.includes('undo_last')){if(!o.undoOK)return reject('annulla_scaduto');if(!undoRequested(message))return reject('annulla_senza_richiesta');if(rawActs.length||control.length>1)return reject('annulla_con_altro');return{kind:'undo'}}
+ // QA v153 22/10: con una domanda del bot aperta, «annulla l'ultima» solo se chiesto esplicitamente (un «no»/«scusa»/«ho sbagliato» risponde alla domanda).
+ if(control.includes('undo_last')){if(!o.undoOK)return reject('annulla_scaduto');if(!undoRequested(message)||((pend?.kind==='ask'||pend?.kind==='hold'||pend?.kind==='other')&&!explicitUndoRequested(message)))return reject('annulla_senza_richiesta');if(rawActs.length||control.length>1)return reject('annulla_con_altro');return{kind:'undo'}}
  if(control.includes('confirm_pending')){
   // R9: con una TUA domanda aperta (brain_ask) non c'è nulla da confermare: la risposta va scritta come piano con le azioni della richiesta originale.
   if(pend?.kind==='ask')return reject('conferma_di_domanda',pend.ask.twins?.map(t=>t.id)??pend.ask.ids,pend.ask.actions??[])

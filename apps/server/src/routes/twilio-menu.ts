@@ -42,7 +42,7 @@ import {linkMarkers} from '../lib/twilio-menu-ai.js'
 import {ownerAccount,ownerEmailSchema,dashboardUrl,publicMenuUrl,markPasswordDelivered} from '../lib/whatsapp-owner-account.js'
 import {webEmailEnabled} from '../lib/web-email-enabled.js'
 import {uniformDelta,uniformReply,pruneWroteDraft} from '../lib/owner-brain-r.js'
-import {fixTruncatedNumbers,undoRequested,ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,noopFacts,wholeGroup,wholeGroupText,draftOfUnappliedChange,draftAsksOkOnDate,fixedDishFact,HIDE_WHOLE_MENU_Q,isAffirmative,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
+import {fixTruncatedNumbers,undoRequested,explicitUndoRequested,ignoredInQuestion,sameQuestion,sameDishName,type Twin,EXPLICIT_SECTION,negatedName,pendOf,decideTurn,cleanDraft,numbersIn,changeFacts,pendingFacts,candidateFacts,holdFacts,reasonText,NOTHING,noopFacts,wholeGroup,wholeGroupText,draftOfUnappliedChange,draftAsksOkOnDate,fixedDishFact,HIDE_WHOLE_MENU_Q,isAffirmative,type Outcome,type BatchWhy,type BrainAsk} from '../lib/owner-brain-r.js'
 import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,groupPercent,priceSheet,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,sectionGroupWord,pureDrop,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
@@ -709,7 +709,9 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   // fase 3 (QA v149b: «4» → creato → «nei Piatti di prova» → «Quale piatto…?» → «annulla» → «non ho cambiato nulla» = FALSO): «annulla» su
   // una domanda aperta la chiude; se la domanda segue una scrittura di pochi minuti fa SULLO STESSO argomento (piatto scritto, o sottomenu
   // di un piatto appena creato, nominato nella domanda o nella richiesta che l'ha fatta nascere), annulla anche quella scrittura.
-  if(engine==='haiku'&&askP&&!pre&&!preReply&&!sessNow&&undoRequested(text)&&plain(text).split(' ').length<=4&&!(askP.actions??[]).length&&!(askP as any).session&&!!undoRec&&!undoRec.full&&Date.now()-Number(undoRec.at)<=3*60*1000){const about=' '+plain(String(askP.question??'')+' '+String(askP.source??''))+' '
+  // QA v153 22/10 (vietato-elimina-primi, GRAVE): «no» alla domanda «Quali primi vuoi eliminare: *Pasta al sugo*…?» annullava la modifica
+  // di prima sulla Pasta al sugo (undoRequested accetta un «no» secco). Qui solo una richiesta ESPLICITA di annullo: un rifiuto chiude la domanda.
+  if(engine==='haiku'&&askP&&!pre&&!preReply&&!sessNow&&explicitUndoRequested(text)&&plain(text).split(' ').length<=4&&!(askP.actions??[]).length&&!(askP as any).session&&!!undoRec&&!undoRec.full&&Date.now()-Number(undoRec.at)<=3*60*1000){const about=' '+plain(String(askP.question??'')+' '+String(askP.source??''))+' '
    if(undoRec.items.some(i=>[String(i.after?.name??i.before?.name??''),!i.before?sections.find(x=>x.id===i.sectionId)?.name??'':''].map(plain).some(k=>k.length>=3&&about.includes(' '+k+' ')))){pre={actions:[],why:'annulla'};closePend=true}}
   if(closePend){pend=null;answered=false;(base as any).pendingCommand=null}
   if(pre)answered=true}
