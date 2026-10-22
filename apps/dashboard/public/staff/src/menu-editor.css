@@ -41,3 +41,6 @@
 .mw-ed-popover .mw-fields{display:grid;gap:10px}
 .mw-ed-popover .mw-field span{font-size:13px;color:var(--muted)}
 .mw-ed-popover details summary{cursor:pointer;font-weight:600;padding:6px 0}
+
+/* Telefono: testata con stato e «Pubblica» sempre visibile mentre si scorre il menu (verifica reale 22/10). */
+.mw-ed-sticky{position:sticky;top:0;z-index:20;background:var(--surface,#fff);box-shadow:0 1px 0 rgba(0,0,0,.06)}

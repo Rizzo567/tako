@@ -37,6 +37,12 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     post(outgoing.ops(ops, ++seqRef.current, provisional))
   }
 
+  // Ordine visto ora, per la fotografia dell'ordine manuale fatta dalla SPA alla creazione di un Menu o Sottomenu dal «+».
+  useEffect(() => {
+    if (!doc || doc?.design?.manualOrder === true) return
+    try { post(outgoing.view(currentOrderView(doc, new Date().getHours()))) } catch {}
+  }, [doc])
+
   // Motore del gesto: tocco breve = selezione, pressione lunga = modalità tremolio, rilascio = op.
   useEffect(() => {
     if (!root || state.disabled) return

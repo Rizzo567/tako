@@ -41,6 +41,8 @@ export const outgoing = {
   ops: (ops: Op[], seq: number, provisional = false) => ({ type: 'tako-menu-edit-ops' as const, v: 1 as const, ops, seq, ...(provisional ? { provisional: true } : {}) }),
   mode: (editing: boolean) => ({ type: 'tako-menu-edit-mode' as const, v: 1 as const, editing }),
   menu: (menuId: string) => ({ type: 'tako-menu-edit-menu' as const, v: 1 as const, menuId }),
+  /** Ordine che il cliente vede ora (solo con documento non manuale): la SPA lo usa per la fotografia quando si crea un Menu o un Sottomenu. */
+  view: (view: { menuOrder: string[]; sectionOrder: Record<string, string[]> }) => ({ type: 'tako-menu-edit-view' as const, v: 1 as const, view }),
   error: (code: string) => ({ type: 'tako-menu-edit-error' as const, v: 1 as const, code }),
 }
 

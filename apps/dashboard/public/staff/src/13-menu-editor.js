@@ -93,10 +93,13 @@ function useMenuEditor({adapter,enabled,menuId,setMenuId,trial,onLeft}){
   else if(kind==='category'){const root=selection&&window.TakoMenuEditorCore.locate(view,selection.kind,selection.id)?.root;const last=root&&menu.sections.filter(s=>s.id===root.id||s.parentSectionId===root.id).at(-1);op={op:'create',kind:'section',id,parentId:menuId,fields:{name,active:false},...(last&&root.id&&menu.sections.some(s=>s.id===root.id)?{at:{afterId:last.id}}:{})};sel={kind:'section',id};}
   else if(kind==='section'){const kids=menu.sections.filter(s=>s.parentSectionId===parentId);const after=(kids.at(-1)||menu.sections.find(s=>s.id===parentId))?.id;op={op:'create',kind:'section',id,parentId:menuId,fields:{name,parentSectionId:parentId},...(after?{at:{afterId:after}}:{})};sel={kind:'section',id};}
   else{const anchor=selection?.kind==='item'&&window.TakoMenuEditorCore.locate(view,'item',selection.id)?.section.id===sectionId?selection.id:null;op={op:'create',kind:'item',id,parentId:sectionId,fields:{name,description:description||null,price:price||0},...(anchor?{at:{afterId:anchor}}:{})};sel={kind:'item',id};}
+  // Creare un Menu o un Sottomenu = il ristoratore decide l'ordine: il locale passa all'ordine manuale (fotografia dell'ordine visto),
+  // così il nuovo elemento compare col suo nome e non dentro una pillola accorpata (default 22/10, annotato).
+  const ov=orderViewRef.current;if((kind==='menu'||kind==='category')&&view.design?.manualOrder!==true&&ov&&window.TakoMenuOps?.manualOrderSnapshot){try{const snap=window.TakoMenuOps.manualOrderSnapshot(view,ov);if(snap.length)push(snap);}catch{}}
   const done=push(op);if(kind==='menu')setMenuId(id);setSelection(sel);doFlash([id]);reveal(sel.kind,sel.id);return done;};
- const frameRef=useRef(null);
+ const frameRef=useRef(null),orderViewRef=useRef(null);
  const reveal=(kind,id)=>{setSelection({kind,id});window.setTimeout(()=>{try{const el=frameRef.current?.contentDocument?.querySelector(`[data-edit-id="${id}"],[data-item-id="${id}"],#workspace-section-${id}`);el?.scrollIntoView({block:'center',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}catch{}},120);};
- return {enabled,ready:!!snap,loadError,snap,view,menus,menu,menuId,selection,setSelection,editing,setEditing,flash,panel,setPanel,review,setReview,push,can,trial,statusText,
+ return {orderViewRef,enabled,ready:!!snap,loadError,snap,view,menus,menu,menuId,selection,setSelection,editing,setEditing,flash,panel,setPanel,review,setReview,push,can,trial,statusText,
   openPublish,confirmPublish,discard,create,sheetDefaults,reveal,frameRef,doFlash,
   queue:()=>qRef.current,setMenuIdFromFrame:setMenuId,
   whenIdle:()=>qRef.current?qRef.current.whenIdle():Promise.resolve(),
@@ -121,6 +124,7 @@ function MenuEditorStage({ed,adapter,mobile}){
    case 'tako-menu-edit-ops':if(!q||!cur.can||!Array.isArray(d.ops))break;if(d.provisional)q.provisional(d.ops);else{q.promote();q.push(d.ops);}break;
    case 'tako-menu-edit-mode':cur.setEditing(!!d.editing);if(!d.editing&&q)q.dropProvisional();break;
    case 'tako-menu-edit-menu':if(typeof d.menuId==='string')cur.setMenuIdFromFrame?.(d.menuId);break;
+   case 'tako-menu-edit-view':if(d.view&&Array.isArray(d.view.menuOrder))cur.orderViewRef.current=d.view;break;
    case 'tako-menu-edit-error':console.warn('Menu modificabile:',d.code);break;
   }};window.addEventListener('message',onMessage);return()=>window.removeEventListener('message',onMessage);},[]);
  if(ed.loadError)return <Card><p role="alert">{ed.loadError}</p><Btn onClick={()=>ed.queue()?.reload()}>Riprova</Btn></Card>;
