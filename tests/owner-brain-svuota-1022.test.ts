@@ -248,6 +248,9 @@ export const BATTERIA:Case[]=[
  {id:'r02',turns:['nel menu del pranzo primi pasta e fagioli e lasagna'],menu:'Menu Giorno',exact:{Primi:['Pasta e fagioli','Lasagna']}},
  {id:'r03',turns:['stasera a cena metti primi: risotto ai funghi porcini e pappardelle al cinghiale, secondi metti tagliata di manzo con rucola e grana e orata al forno, contorni patate al forno e insalata mista'],menu:'Menu Cena',exact:{Primi:['Risotto ai funghi porcini','Pappardelle al cinghiale'],Secondi:['Tagliata di manzo con rucola e grana','Orata al forno'],Contorni:['Patate al forno','Insalata mista']}},
  // NON sono la regola: nessuna scrittura dal server (il modello finto non scrive)
+ {id:'n11',turns:['nel menu cena nei contorni inserisci zucchine fritte','svuota primi'],menu:'Menu Cena',has:{Contorni:['Zucchine fritte'],Primi:['Risotto ai funghi porcini']},model:[2]},
+ {id:'n12',turns:['svuota i secondi della cena'],noWrite:true,model:[1]},
+ {id:'n13',turns:['nel menu cena nei primi inserisci carbonara','aggiungi il tiramisù nei dolci'],menu:'Menu Cena',has:{Primi:['Carbonara']},model:[2]},
  {id:'n01',turns:['togli tutti i primi del menu cena'],noWrite:true,model:[1]},
  {id:'n02',turns:['togli le linguine'],noWrite:true,model:[1]},
  {id:'n03',turns:['nascondi il menu cena'],noWrite:true,model:[1]},

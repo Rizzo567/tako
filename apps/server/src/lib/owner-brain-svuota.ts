@@ -77,7 +77,8 @@ function notWholeMenu(p:string,secNames:string[]):boolean{
 export function clearIntent(text:string,secNames:string[]=[]):boolean{
  const p=plain(text);if(!p||NEG.test(p))return false
  if(/\b(?:finit\w*|esaurit\w*|disponibil\w*|prezz\w*|euro|foto|promo\w*|evidenz\w*|allergen\w*|descrizion\w*|nascost\w*|modific\w*|ultim[oaie]|indietro)\b|\b(?:hai|ho|abbiamo)\s+(?:fatto|messo|cambiato|aggiunto|inserito|scritto)\b|\bcom e(?:ra)?\b|\bcome prima\b/.test(p))return false
- if(/\bsvuot\w*\b/.test(p))return !/\bsvuot\w*\s+(?:i|gli|le|il|la)\s+(?:primi|secondi|contorni|dolci|antipasti|pizze)\b/.test(p)||false
+ // «svuota primi», «svuota i secondi della cena»: un sottomenu, non il Menu intero (resta il percorso di prima)
+ if(/\bsvuot\w*\b/.test(p))return !p.split(' ').some(w=>COURSES.includes(w)||secNames.some(x=>plain(x).split(' ').length===1&&sameSection(x,w)))
  if(!CLEAR_V.test(p)||!/\btutt[oaie]\b/.test(p))return false
  if(/\btutt[oaie] e (?:due|tre|2|3)\b|\bentramb\w*/.test(p))return false
  return !notWholeMenu(p,secNames)}
@@ -255,7 +256,7 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
  if(said.length===1)return runOn(said[0]!,text,o,follow)
  if(said.length>1){const ask=said.filter(m=>clr||o.sections.some(s=>s.menu===m.name));return askMenu(ask.length?ask:said,text)}
  const ctx=contextMenu(o.history,o.menus)
- if(ctx)return runOn(ctx,text,o,follow)
+ if(ctx)return runOn(ctx,text,o,follow,true)
  // nessun Menu: per svuotare, i Menu con piatti visibili; per inserire, i Menu a prezzo fisso con i sottomenu detti
  if(clr){const c=o.menus.filter(m=>o.refs.some(r=>r.menu===m.name&&!r.hidden));if(c.length===1)return runOn(c[0]!,text,o,false);if(!c.length)return{kind:'info',text:'Non c’è nessun piatto visibile da togliere: il menu è già vuoto.'};return askMenu(c,text)}
  const fixed=o.menus.filter(m=>m.pricing==='fisso'),cands=fixed.filter(m=>{const ip=parseInsert(text,o.sections.filter(s=>s.menu===m.name),o.menus,vocab);return ip.lists.length>0&&ip.lists.every(l=>!!l.secId)})
@@ -265,7 +266,7 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
 function askMenu(ms:RuleMenu[],text:string):RuleResult{const opts=ms.slice(0,4)
  const q=opts.length===2?'Nel '+mLabel(opts[0]!.name)+' o nel '+mLabel(opts[1]!.name)+'?':'In quale Menu? '+orList(opts.map(m=>mLabel(m.name)))+'?'
  return{kind:'ask',question:q,wait:{kind:'menu',text:text.slice(0,600),options:opts.map(m=>m.id)}}}
-function runOn(menu:RuleMenu,text:string,o:RuleInput,answer:boolean):RuleResult|null{
+function runOn(menu:RuleMenu,text:string,o:RuleInput,answer:boolean,fromCtx=false):RuleResult|null{
  const info=infoOf(menu,o.sections,o.refs),secNames=info.secs.map(s=>s.name),vocab=o.refs.map(r=>r.name)
  const allNames=secNames.length?secNames:[...new Set(o.sections.map(s=>s.name))],sp=splitClearInsert(text,allNames)
  let clr=false,insText=text,clearText=text
@@ -280,6 +281,8 @@ function runOn(menu:RuleMenu,text:string,o:RuleInput,answer:boolean):RuleResult|
   // «nei primi inserisci» senza nomi: si chiedono i nomi (una riga)
   if(!clr&&!parse.loose.length&&parse.lists.length===1&&!parse.lists[0]!.names.length&&parse.lists[0]!.secId){const s=info.secs.find(x=>x.id===parse.lists[0]!.secId)!;return{kind:'ask',question:'Cosa inserisco nei *'+s.name+'* del '+mLabel(menu.name)+'? Scrivimi i piatti, per esempio «carbonara, lasagne».',wait:{kind:'names',menuId:menu.id,secId:s.id}}}
   parse={lists:parse.lists.filter(l=>l.names.length||!l.secId),loose:parse.loose}}
+ // Menu preso dalla conversazione ma il sottomenu detto è di un ALTRO Menu («aggiungi il tiramisù nei dolci» dopo la cena): non è la regola
+ if(fromCtx&&parse.lists.some(l=>!l.secId&&o.sections.some(x=>x.menu!==menu.name&&sameSection(x.name,l.word))))return null
  if(!clr){if(!parse.lists.length&&!parse.loose.length)return null
   // senza sottomenu detto si va avanti solo con un Menu a prezzo fisso detto, o con nomi che sono tutti piatti di questo Menu
   if(!parse.lists.length&&!(menusIn(text,o.menus).some(m=>m.id===menu.id)&&menu.pricing==='fisso')&&!parse.loose.every(n=>!!findExisting(n,null,info.items))&&!answer)return null}
