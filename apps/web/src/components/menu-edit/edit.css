@@ -1,6 +1,12 @@
 /* Vista di modifica (dashboard editor 22/10): solo stile Sobrio (bianco/grigi, nero principale, pillole). Caricato col layer. */
 [data-menu-edit-root]{--edit-ink:#0a0a0a;--edit-ink-hover:#262626;--edit-line:#e5e5e5;--edit-soft:#f5f5f5;--edit-muted:#525252;--edit-fast:180ms;--edit-micro:140ms;--edit-data:600ms}
 [data-menu-edit-root] [data-edit-id],[data-menu-edit-root] [data-edit-select]{cursor:pointer;-webkit-touch-callout:none}
+/* iPhone (22/10, gesto): tenere premuto non deve aprire lente/selezione/anteprima/trascinamento immagine di iOS, che rubano il tocco.
+   Il bottone disattivato della riga del piatto non deve essere il bersaglio del tocco (WebKit non manda eventi ai controlli disattivati):
+   il tocco arriva all'<article> trascinabile. touch-action: niente doppio tocco per lo zoom, lo scroll resta. */
+[data-menu-edit-root] [data-edit-id],[data-menu-edit-root] [data-edit-id] *,[data-menu-edit-root] [data-edit-select],[data-menu-edit-root] [data-edit-select] *{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-user-drag:none;-webkit-tap-highlight-color:transparent}
+[data-menu-edit-root] [data-edit-id]{touch-action:manipulation}
+[data-menu-edit-root] [data-edit-id] img,[data-menu-edit-root] [data-edit-id] button:disabled:not([data-edit-id]){pointer-events:none}
 [data-menu-edit-root] [data-edit-id]:focus,[data-menu-edit-root] [data-edit-select]:focus{outline:none}
 [data-menu-edit-root] [data-edit-id]:focus-visible,[data-menu-edit-root] [data-edit-select]:focus-visible{outline:2px solid var(--edit-ink);outline-offset:3px}
 /* Contenitori vuoti: area di rilascio visibile solo in modalità tremolio. */
