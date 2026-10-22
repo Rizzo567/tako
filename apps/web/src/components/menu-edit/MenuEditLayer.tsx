@@ -9,6 +9,7 @@ import { applyOps } from '../../../../../packages/menu-ops/src/index'
 import type { Op } from '../../../../../packages/menu-ops/src/types'
 import { MENU_MOTION } from '@/lib/menu-motion'
 import { createMenuGesture, type MenuGesture, type ReorderDrop } from './gesture'
+import { createGestureDebugOverlay, gestureDebugEnabled } from './debug-overlay'
 import { outgoing, sameSelection, type EditSelection } from './protocol'
 import { canDropInto, currentOrderView, dropOps, frameSelectors, keyAction, pencilLabel, selectionFromAttributes } from './selection'
 
@@ -51,9 +52,11 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
   // Motore del gesto: tocco breve = selezione, pressione lunga = modalità tremolio, rilascio = op.
   useEffect(() => {
     if (!root || state.disabled) return
+    const debug = gestureDebugEnabled() ? createGestureDebugOverlay(document) : null
     root.style.setProperty('--edit-fast', MENU_MOTION.durationMs.fast + 'ms'); root.style.setProperty('--edit-micro', MENU_MOTION.durationMs.micro + 'ms'); root.style.setProperty('--edit-data', MENU_MOTION.durationMs.data + 'ms')
     const gesture = createMenuGesture({
       root, itemSelector: '[data-edit-id]', reducedMotion: reduced(), restoreDomOnDrop: true,
+      ...(debug ? { debug: (s: string, d: string) => debug.state(s, d) } : {}),
       canDrop: (item, toGroup) => canDropInto(item.kind, toGroup, menuRef.current),
       onTap: id => { const el = root.querySelector<HTMLElement>(`[data-edit-id="${CSS.escape(id)}"]`); if (el) select(selectionFromAttributes({ id, kind: el.getAttribute('data-edit-kind') })) },
       onDrop: (drop: ReorderDrop) => { let ops: Op[] = []; try { ops = dropOps(docRef.current, drop) } catch {} if (ops.length) sendOps(ops, true); else post(outgoing.error('DROP_IGNORED')) },
@@ -64,7 +67,7 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       },
     })
     gestureRef.current = gesture
-    return () => { gesture.destroy(); gestureRef.current = null; root.removeAttribute('data-edit-jiggle') }
+    return () => { gesture.destroy(); debug?.destroy(); gestureRef.current = null; root.removeAttribute('data-edit-jiggle') }
   }, [root, state.disabled])
 
   // Stato dalla SPA: selezione e uscita dal tremolio solo quando cambiano lato SPA (niente eco che sovrascrive un clic recente).

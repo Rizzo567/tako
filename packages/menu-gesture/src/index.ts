@@ -12,6 +12,8 @@ export type GestureOptions = {
   /** Integrazione Takomenu (22/10): al rilascio rimette il DOM com'era PRIMA di onDrop; il chiamante (React) ridisegna nel nuovo ordine.
    *  Senza, React troverebbe nodi spostati da fuori e andrebbe in errore (removeChild) quando un piatto cambia Sezione. */
   restoreDomOnDrop?: boolean
+  /** Diagnosi (Takomenu 22/10, `?gesturedebug=1`): stato della macchina del gesto e motivo di ogni annullo. Solo lettura. */
+  debug?: (state: string, detail: string) => void
 }
 
 type Kind = ReorderDrop['kind']
@@ -21,13 +23,15 @@ type Saved = { styles:Map<string,[string,string]>; attrs:Map<string,string|null>
 type Item = { el:HTMLElement; id:string; kind:Kind; group:string; box:Box; spring:Spring; phase:number; angle:number; saved:Saved; base:string; parent:HTMLElement|null }
 type Group = { el:HTMLElement; id:string; axis:'x'|'y'|'grid'; kind:Kind|null; box:Box }
 type Scroller = { el:HTMLElement; box:Box; x:number; y:number; maxX:number; maxY:number; allowX:boolean; allowY:boolean }
-type Pending = { item:Item; id:number; x:number; y:number; timer:number; pointerType:string; sx:number; sy:number }
-type Drag = { item:Item; id:number|null; keyboard:boolean; pointerType:string; fromGroup:string; fromIndex:number; parent:Node; next:Node|null; originalGroup:string; group:string; index:number; anchorX:number; anchorY:number; x:number; y:number; lastX:number; lastY:number; ghost:HTMLElement; scale:number; scaleV:number; w:number; h:number; lift:number }
+type Pending = { item:Item; id:number; touchId:number|null; x:number; y:number; timer:number; pointerType:string; sx:number; sy:number; t0:number }
+type Drag = { item:Item; id:number|null; touchId:number|null; keyboard:boolean; pointerType:string; fromGroup:string; fromIndex:number; parent:Node; next:Node|null; originalGroup:string; group:string; index:number; anchorX:number; anchorY:number; x:number; y:number; lastX:number; lastY:number; ghost:HTMLElement; scale:number; scaleV:number; w:number; h:number; lift:number }
 type Landing = { started:number; id:string; ghost:HTMLElement; x:number; y:number; vx:number; vy:number; scale:number; scaleV:number; w:number; h:number }
 
 const TAU = Math.PI * 2
 const EPS = .025
 const LANDING_MAX_MS = 900
+/** Takomenu 22/10 (iPhone): dopo questo tempo a dito fermo i micro-movimenti (entro la tolleranza) non avviano più lo scroll nativo. */
+const HOLD_GUARD_MS = 120
 const KINDS = new Set(['menu','submenu','section','dish'])
 let serial = 0
 /** Takomenu 22/10: ×1,10 come l'icona iPhone, ma una riga larga quanto il menu non cresce più di ~12 px per lato (resterebbe tagliata dal bordo). */
@@ -54,7 +58,7 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
   const listeners:Array<()=>void>=[]
   const rootSaved:Saved={styles:new Map(),attrs:new Map()}
   const style=doc.createElement('style')
-  style.textContent=`[data-menu-gesture-owner="${token}"]{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition-property:none!important;animation:none!important}[data-menu-gesture-owner="${token}"]:focus-visible{outline:2px solid #252525;outline-offset:4px}[data-menu-gesture-owner="${token}"][data-menu-gesture-edit]{cursor:grab!important}[data-menu-gesture-owner="${token}"][data-menu-gesture-static]{outline:2px solid #555;outline-offset:3px}[data-menu-gesture-ghost="${token}"]{pointer-events:none!important;z-index:2147483000!important;contain:layout style;user-select:none!important}`
+  style.textContent=`[data-menu-gesture-owner="${token}"]{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition-property:none!important;animation:none!important}[data-menu-gesture-owner="${token}"] *{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none}[data-menu-gesture-owner="${token}"]:focus-visible{outline:2px solid #252525;outline-offset:4px}[data-menu-gesture-owner="${token}"][data-menu-gesture-edit]{cursor:grab!important}[data-menu-gesture-owner="${token}"][data-menu-gesture-static]{outline:2px solid #555;outline-offset:3px}[data-menu-gesture-ghost="${token}"]{pointer-events:none!important;z-index:2147483000!important;contain:layout style;user-select:none!important}`
   ;(doc.head||root).append(style)
   for(const g of Array.from(doc.querySelectorAll('[data-menu-gesture-ghost]')))g.remove()
   const live=doc.createElement('div'), instructions=doc.createElement('div')
@@ -145,10 +149,17 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     }
     requestFrame()
   }
-  function clearPending() {
+  const dbg=(state:string,detail='')=>{try{opts.debug?.(state,detail)}catch{/* diagnosi mai bloccante */}}
+  function clearPending(reason='') {
     if(!pending)return
     view.clearTimeout(pending.timer);pending=null
+    dbg('idle','pressione annullata: '+(reason||'?'))
   }
+  /** iOS/WebKit: con Pointer Events un tocco su un elemento che consente il pan riceve pointercancel al primo micro-scroll o al
+   * riconoscitore nativo della pressione lunga; i <button disabled> non ricevono eventi pointer. Il tocco passa quindi SOLO dagli
+   * eventi touch (come SortableJS / dnd-kit TouchSensor); i Pointer Events restano per mouse e penna. */
+  const touchApi='ontouchstart' in view
+  const viaTouch=(e:PointerEvent)=>touchApi&&e.pointerType==='touch'
   function mode(value:boolean) {
     if(editing===value)return
     editing=value
@@ -184,19 +195,21 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     const i=items.find(i=>i.id===landing!.id);if(i)reveal(i)
     landing.ghost.remove();landing=null
   }
-  function begin(i:Item,pointerId:number|null,x:number,y:number,pointerType:string,keyboard=false) {
-    clearPending();endLanding();measure()
+  function begin(i:Item,pointerId:number|null,x:number,y:number,pointerType:string,keyboard=false,touchId:number|null=null) {
+    if(pending)view.clearTimeout(pending.timer)
+    pending=null;endLanding();measure()
     const g=groupBy(i.group);if(!g)return
     const index=direct(g).indexOf(i)
     if(index<0||!i.el.parentNode)return
     mode(true)
     const ghost=clone(i)
-    drag={item:i,id:pointerId,keyboard,pointerType,fromGroup:i.group,fromIndex:index,parent:i.el.parentNode,next:i.el.nextSibling,originalGroup:i.el.getAttribute('data-edit-group')||i.group,group:i.group,index,anchorX:x-i.box.left,anchorY:y-i.box.top,x,y,lastX:x,lastY:y,ghost,scale:reduced?liftScale(i.box.width):1,scaleV:0,w:i.box.width,h:i.box.height,lift:liftScale(i.box.width)}
+    drag={item:i,id:pointerId,touchId,keyboard,pointerType,fromGroup:i.group,fromIndex:index,parent:i.el.parentNode,next:i.el.nextSibling,originalGroup:i.el.getAttribute('data-edit-group')||i.group,group:i.group,index,anchorX:x-i.box.left,anchorY:y-i.box.top,x,y,lastX:x,lastY:y,ghost,scale:reduced?liftScale(i.box.width):1,scaleV:0,w:i.box.width,h:i.box.height,lift:liftScale(i.box.width)}
     hide(i);css(root,rootSaved,'user-select','none');css(root,rootSaved,'-webkit-user-select','none')
     if(pointerId!==null)try{root.setPointerCapture(pointerId)}catch{/* pointer may have ended */}
     if(reduced||keyboard)ghost.style.outline='2px solid #444'
     announce(`${i.el.getAttribute('aria-label')||i.el.textContent?.trim().slice(0,70)||i.id} preso. Posizione ${index+1}.`)
     cacheScrollers();renderGhost();requestFrame()
+    dbg('drag','sollevato '+i.kind+' '+i.id)
   }
   function renderGhost() {
     if(!drag)return
@@ -244,7 +257,7 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     if(cancel&&root.contains(d.item.el)&&d.parent.isConnected){
       flip(()=>{d.parent.insertBefore(d.item.el,d.next?.parentNode===d.parent?d.next:null);d.item.group=d.originalGroup;d.item.el.setAttribute('data-edit-group',d.originalGroup)})
     }
-    drag=null
+    drag=null;dbg(editing?'edit':'idle',cancel?'trascinamento annullato':'rilasciato')
     if(d.id!==null)try{root.releasePointerCapture(d.id)}catch{/* already released */}
     css(root,rootSaved,'user-select',rootSaved.styles.get('user-select')?.[0]||'');css(root,rootSaved,'-webkit-user-select',rootSaved.styles.get('-webkit-user-select')?.[0]||'')
     landing={started:view.performance.now(),id:d.item.id,ghost:d.ghost,x:d.x-d.anchorX,y:d.y-d.anchorY,vx:0,vy:0,scale:d.scale,scaleV:d.scaleV,w:d.w,h:d.h}
@@ -279,31 +292,81 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
       if(next)insert(next,step>0?0:direct(next).length)
     }
   }
-  function onDown(event:PointerEvent) {
-    if(dead||event.button!==0||!event.isPrimary||drag)return
-    const i=itemFor(event.target)
-    if(!i){clearPending();if(editing)exitEditMode();return}
-    if(isControl(event.target,i))return
-    clearPending()
-    if(editing){event.preventDefault();begin(i,event.pointerId,event.clientX,event.clientY,event.pointerType);return}
-    const p:Pending={item:i,id:event.pointerId,x:event.clientX,y:event.clientY,timer:0,pointerType:event.pointerType,sx:view.scrollX,sy:view.scrollY}
+  function arm(i:Item,id:number,touchId:number|null,x:number,y:number,pointerType:string) {
+    const p:Pending={item:i,id,touchId,x,y,timer:0,pointerType,sx:view.scrollX,sy:view.scrollY,t0:view.performance.now()}
     pending=p
-    p.timer=view.setTimeout(()=>{if(pending===p&&root.contains(i.el))begin(i,p.id,p.x,p.y,p.pointerType)},Math.max(0,opts.longPressMs??1000))
+    p.timer=view.setTimeout(()=>{
+      if(pending!==p)return
+      if(!root.contains(i.el)){clearPending('elemento non più nel documento');return}
+      begin(i,touchId===null?p.id:null,p.x,p.y,p.pointerType,false,touchId)
+    },Math.max(0,opts.longPressMs??1000))
+    dbg('pending','attesa pressione su '+i.kind+' '+i.id)
+  }
+  function onDown(event:PointerEvent) {
+    if(dead||viaTouch(event)||event.button!==0||!event.isPrimary||drag)return
+    const i=itemFor(event.target)
+    if(!i){clearPending('tocco fuori');if(editing)exitEditMode();return}
+    if(isControl(event.target,i))return
+    clearPending('nuovo tocco')
+    if(editing){event.preventDefault();begin(i,event.pointerId,event.clientX,event.clientY,event.pointerType);return}
+    arm(i,event.pointerId,null,event.clientX,event.clientY,event.pointerType)
   }
   function onMove(event:PointerEvent) {
-    if(pending&&event.pointerId===pending.id&&Math.hypot(event.clientX-pending.x,event.clientY-pending.y)>slop())clearPending()
+    if(viaTouch(event))return
+    if(pending&&pending.touchId===null&&event.pointerId===pending.id&&Math.hypot(event.clientX-pending.x,event.clientY-pending.y)>slop())clearPending('pointer mosso oltre tolleranza')
     if(!drag||event.pointerId!==drag.id)return
     if(event.cancelable)event.preventDefault()
     drag.x=event.clientX;drag.y=event.clientY;renderGhost();target();requestFrame()
   }
   function onUp(event:PointerEvent) {
-    if(pending&&event.pointerId===pending.id){const p=pending;clearPending();if(root.contains(p.item.el)){opts.onTap?.(p.item.id)}return} // Takomenu 22/10: dopo un tocco breve il click resta (pillole e Menu devono cambiare pagina); il click si blocca solo dopo un trascinamento
+    if(viaTouch(event))return
+    if(pending&&pending.touchId===null&&event.pointerId===pending.id){const p=pending;clearPending('tap');if(root.contains(p.item.el)){opts.onTap?.(p.item.id)}return} // Takomenu 22/10: dopo un tocco breve il click resta (pillole e Menu devono cambiare pagina); il click si blocca solo dopo un trascinamento
     if(drag&&event.pointerId===drag.id)finish(false)
   }
-  function onCancel(event:PointerEvent) { if(pending?.id===event.pointerId)clearPending();if(drag?.id===event.pointerId)finish(true) }
+  function onCancel(event:PointerEvent) { if(viaTouch(event))return;if(pending&&pending.touchId===null&&pending.id===event.pointerId)clearPending('pointercancel');if(drag&&drag.id===event.pointerId)finish(true) }
+  const touchOf=(list:TouchList,id:number|null):Touch|null=>{if(id===null)return null;for(let n=0;n<list.length;n++)if(list[n].identifier===id)return list[n];return null}
+  function onTouchStart(event:TouchEvent) {
+    if(dead)return
+    if(event.touches.length>1){clearPending('secondo dito');return}
+    if(drag)return
+    const t=event.changedTouches[0];if(!t)return
+    const i=itemFor(event.target)
+    if(!i){clearPending('tocco fuori');if(editing)exitEditMode();return}
+    if(isControl(event.target,i))return
+    clearPending('nuovo tocco')
+    if(editing){if(event.cancelable)event.preventDefault();begin(i,null,t.clientX,t.clientY,'touch',false,t.identifier);return}
+    arm(i,-1,t.identifier,t.clientX,t.clientY,'touch')
+  }
+  function onTouchMove(event:TouchEvent) {
+    const p=pending
+    if(p&&p.touchId!==null){
+      const t=touchOf(event.changedTouches,p.touchId)
+      if(t){
+        const moved=Math.hypot(t.clientX-p.x,t.clientY-p.y)
+        if(moved>slop())clearPending(`dito mosso ${Math.round(moved)}px > ${Math.round(slop())}`)
+        // Dito fermo che trema: dopo HOLD_GUARD_MS il micro-movimento non deve avviare lo scroll nativo. Prima resta libero, così
+        // uno scorrimento normale che parte su un piatto scorre sempre.
+        else if(event.cancelable&&view.performance.now()-p.t0>=HOLD_GUARD_MS)event.preventDefault()
+      }
+    }
+    const d=drag
+    if(!d||d.keyboard)return
+    if(event.cancelable)event.preventDefault()
+    const t=touchOf(event.changedTouches,d.touchId)
+    if(t){d.x=t.clientX;d.y=t.clientY;renderGhost();target();requestFrame()}
+  }
+  function onTouchEnd(event:TouchEvent,cancel:boolean) {
+    const p=pending
+    if(p&&p.touchId!==null&&touchOf(event.changedTouches,p.touchId)){
+      clearPending(cancel?'touchcancel (iOS ha preso il tocco)':'tap')
+      if(!cancel&&root.contains(p.item.el))opts.onTap?.(p.item.id)
+    }
+    const d=drag
+    if(d&&d.touchId!==null&&touchOf(event.changedTouches,d.touchId)){if(event.cancelable)event.preventDefault();finish(cancel)}
+  }
   function onKeys(event:KeyboardEvent) {
     if(event.key==='Escape'){
-      if(drag){event.preventDefault();finish(true)}else if(pending){clearPending()}else if(editing){event.preventDefault();exitEditMode()}
+      if(drag){event.preventDefault();finish(true)}else if(pending){clearPending('Escape')}else if(editing){event.preventDefault();exitEditMode()}
       return
     }
     const i=itemFor(event.target);if(!i||isControl(event.target,i))return
@@ -318,8 +381,9 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
    * sposta lo scroll di 1–2 px: la pressione lunga si annulla solo se lo scroll del documento va oltre la tolleranza. */
   function onScroll(event:Event) {
     const p=pending
-    if(p){const own=event.target===doc||event.target===doc.scrollingElement
-      if(!own||Math.hypot(view.scrollX-p.sx,view.scrollY-p.sy)>slop())clearPending()}
+    // Tocco: decide solo la distanza del dito (onTouchMove). Lo scroll nativo che resta entro la tolleranza non annulla.
+    if(p&&p.touchId===null){const own=event.target===doc||event.target===doc.scrollingElement
+      if(!own||Math.hypot(view.scrollX-p.sx,view.scrollY-p.sy)>slop())clearPending('scroll')}
     if(dead)return;measure();if(drag)target(true)
   }
   /** Tolleranza di movimento in px del documento: 10 px reali sullo schermo anche quando la SPA rimpicciolisce l'iframe
@@ -377,7 +441,7 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     for(const i of items)if(!nodes.includes(i.el))restore(i.el,i.saved)
     if(drag&&!nodes.includes(drag.item.el)){drag.ghost.remove();drag=null;css(root,rootSaved,'user-select',rootSaved.styles.get('user-select')?.[0]||'');css(root,rootSaved,'-webkit-user-select',rootSaved.styles.get('-webkit-user-select')?.[0]||'')}
     // Takomenu 22/10: un ri-render durante la pressione (es. la selezione che compare al tocco) non deve annullare la pressione lunga.
-    if(pending&&!nodes.includes(pending.item.el))clearPending()
+    if(pending&&!nodes.includes(pending.item.el))clearPending('elemento ridisegnato')
     items=nodes.map(el=>{
       let i=previous.get(el)
       if(!i){
@@ -406,14 +470,14 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
       return{el,id,axis,kind:inferred as Kind|null,box:box(el.getBoundingClientRect())}
     })
     if(root.matches('[data-edit-group-id]'))groups.unshift({el:root,id:root.dataset.editGroupId!,axis:(root.dataset.editAxis||'y') as Group['axis'],kind:items.find(i=>i.group===root.dataset.editGroupId)?.kind||null,box:box(root.getBoundingClientRect())})
-    if(pending){const p=pending,i=items.find(x=>x.el===p.item.el);if(i)p.item=i;else clearPending()}
+    if(pending){const p=pending,i=items.find(x=>x.el===p.item.el);if(i)p.item=i;else clearPending('elemento ridisegnato')}
     if(landing){const i=items.find(i=>i.id===landing!.id);if(i)hide(i)}
     sweep();measure();requestFrame()
   }
-  function exitEditMode(){if(dead)return;clearPending();if(drag)finish(true);endLanding();mode(false);sweep()}
+  function exitEditMode(){if(dead)return;clearPending('uscita modifica');if(drag)finish(true);endLanding();mode(false);sweep()}
   function destroy() {
     if(dead)return
-    clearPending();if(drag)finish(true);endLanding();mode(false);dead=true
+    clearPending('distrutto');if(drag)finish(true);endLanding();mode(false);dead=true
     view.cancelAnimationFrame(raf);view.clearTimeout(announceTimer);raf=0
     for(const remove of listeners)remove()
     for(const i of items)restore(i.el,i.saved)
@@ -423,28 +487,25 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
   listen(doc,'pointermove',onMove as EventListener,{passive:false})
   listen(doc,'pointerup',onUp as EventListener)
   listen(doc,'pointercancel',onCancel as EventListener)
-  listen(root,'lostpointercapture',((e:PointerEvent)=>{if(drag?.id===e.pointerId)finish(true)}) as EventListener)
+  listen(root,'lostpointercapture',((e:PointerEvent)=>{if(drag&&drag.id!==null&&drag.id===e.pointerId)finish(true)}) as EventListener)
   listen(doc,'pointerdown',((e:PointerEvent)=>{if(editing&&!root.contains(e.target as Node))exitEditMode()}) as EventListener)
   listen(root,'click',((e:MouseEvent)=>{if(view.performance.now()<clickUntil){e.preventDefault();e.stopImmediatePropagation()}}) as EventListener,true)
   listen(doc,'keydown',onKeys as EventListener)
   listen(doc,'scroll',onScroll as EventListener,true)
-  listen(view,'blur',(()=>{clearPending();if(drag)finish(true)}) as EventListener)
-  listen(doc,'visibilitychange',(()=>{if(doc.hidden){clearPending();if(drag)finish(true)}}) as EventListener)
+  listen(view,'blur',(()=>{clearPending('finestra senza fuoco (blur)');if(drag)finish(true)}) as EventListener)
+  listen(doc,'visibilitychange',(()=>{if(doc.hidden){clearPending('pagina nascosta');if(drag)finish(true)}}) as EventListener)
   let lastWidth=view.innerWidth
   // Solo un cambio di larghezza (rotazione) annulla la pressione: su iPhone l'iframe cambia altezza da solo (barre di Safari, riquadro ricalcolato).
-  listen(view,'resize',(()=>{if(view.innerWidth!==lastWidth){lastWidth=view.innerWidth;clearPending()}measure()}) as EventListener)
-  // Native touch scrolling is allowed until the hold has completed. Register before
-  // touchstart (not after lift), so iOS can honour preventDefault on the first move.
-  listen(doc,'touchmove',((e:TouchEvent)=>{if(drag&&!drag.keyboard&&e.cancelable)e.preventDefault()}) as EventListener,{passive:false})
-  // Takomenu 22/10 sera: su iPhone il pointerup può non arrivare (cattura persa nell'iframe): la fine del tocco chiude comunque.
-  // Takomenu 22/10 sera: su iPhone il pointerup può non arrivare (cattura persa nell'iframe). Senza, il timer della pressione lunga
-  // sollevava l'elemento a dito già alzato (ghost sospeso, originale nascosto). Fine del tocco: si aspetta il pointerup normale
-  // per un attimo, poi pressione annullata e trascinamento chiuso comunque.
-  const touchEnd=(cancel:boolean)=>((e:TouchEvent)=>{if(e.touches.length)return;const p=pending,d=drag;if(!(p&&p.pointerType==='touch')&&!(d&&!d.keyboard&&d.pointerType==='touch'))return
-    view.setTimeout(()=>{if(dead)return;if(p&&pending===p)clearPending();if(d&&drag===d)finish(cancel)},60)}) as EventListener
-  listen(doc,'touchend',touchEnd(false),true)
-  listen(doc,'touchcancel',touchEnd(true),true)
-  listen(root,'contextmenu',((e:Event)=>{if(pending||drag||editing)e.preventDefault()}) as EventListener)
+  listen(view,'resize',(()=>{if(view.innerWidth!==lastWidth){lastWidth=view.innerWidth;clearPending('rotazione')}measure()}) as EventListener)
+  // Tocco (iOS/Android/emulazione): eventi touch non passivi, così preventDefault vale per il micro-scroll e per il trascinamento.
+  listen(root,'touchstart',onTouchStart as EventListener,{passive:false})
+  listen(doc,'touchmove',onTouchMove as EventListener,{passive:false})
+  listen(doc,'touchend',((e:TouchEvent)=>onTouchEnd(e,false)) as EventListener,{passive:false})
+  listen(doc,'touchcancel',((e:TouchEvent)=>onTouchEnd(e,true)) as EventListener,{passive:false})
+  // Niente selezione di testo né trascinamento nativo (immagini, link) mentre si tiene premuto o si trascina.
+  listen(doc,'selectstart',((e:Event)=>{if(pending||drag)e.preventDefault()}) as EventListener)
+  listen(root,'dragstart',((e:Event)=>{if(pending||drag||editing)e.preventDefault()}) as EventListener)
+  listen(root,'contextmenu',((e:Event)=>{if(pending||drag||editing||itemFor(e.target))e.preventDefault()}) as EventListener)
   if(opts.reducedMotion===undefined)listen(media,'change',((e:MediaQueryListEvent)=>{reduced=e.matches;refresh();if(reduced)endLanding()}) as EventListener)
   refresh()
   return{exitEditMode,refresh,destroy}
