@@ -65,15 +65,15 @@ async function serverLib(){
 }
 
 async function bundle(dir){
+ const WEB=resolve(root,'apps/web/src/components')
  const entries={
-  public:`import React from 'react';import {createRoot} from 'react-dom/client';import {DigitalMenu} from './src/components/DigitalMenu';createRoot(document.getElementById('root')).render(<DigitalMenu restaurantId={window.__restaurantId}/>)`,
-  surface:`import React from 'react';import {createRoot} from 'react-dom/client';import {MenuEditSurface,editRendererProps} from './src/components/MenuPreview';const f=window.__fixture;function App(){const [menuId,setMenuId]=React.useState(f.menuId);return <MenuEditSurface props={editRendererProps(f.doc,menuId,f.presentation,setMenuId)}/>}createRoot(document.getElementById('root')).render(<App/>)`,
-  preview:`import React from 'react';import {createRoot} from 'react-dom/client';import {MenuPreview} from './src/components/MenuPreview';createRoot(document.getElementById('root')).render(<MenuPreview menuId={decodeURIComponent(location.pathname.split('/').pop())}/>)`,
+  public:`import React from 'react';import {createRoot} from 'react-dom/client';import {DigitalMenu} from '${WEB}/DigitalMenu.tsx';createRoot(document.getElementById('root')).render(<DigitalMenu restaurantId={window.__restaurantId}/>)`,
+  surface:`import React from 'react';import {createRoot} from 'react-dom/client';import {MenuEditSurface,editRendererProps} from '${WEB}/MenuPreview.tsx';const f=window.__fixture;function App(){const [menuId,setMenuId]=React.useState(f.menuId);return <MenuEditSurface props={editRendererProps(f.doc,menuId,f.presentation,setMenuId)}/>}createRoot(document.getElementById('root')).render(<App/>)`,
+  preview:`import React from 'react';import {createRoot} from 'react-dom/client';import {MenuPreview} from '${WEB}/MenuPreview.tsx';createRoot(document.getElementById('root')).render(<MenuPreview menuId={decodeURIComponent(location.pathname.split('/').pop())}/>)`,
  }
  const src=join(dir,'src');await mkdir(src,{recursive:true})
  for(const [name,code] of Object.entries(entries))await writeFile(join(src,name+'.tsx'),code)
- await build({entryPoints:Object.keys(entries).map(n=>join(src,n+'.tsx')),outdir:join(dir,'out'),bundle:true,splitting:true,format:'esm',jsx:'automatic',loader:{'.ttf':'dataurl','.woff2':'dataurl'},alias:{'@':resolve(root,'apps/web/src')},nodePaths:[resolve(root,'apps/web/node_modules'),resolve(root,'node_modules')],define:{'process.env.NODE_ENV':'"production"','process.env.NEXT_PUBLIC_API_URL':'""'},external:['/takomenu-public/*','/uploads/*'],logLevel:'error',
-  plugins:[{name:'entries-in-web',setup(b){b.onResolve({filter:/^\.\/src\/components\//},a=>({path:resolve(root,'apps/web',a.path)}))}}]})
+ await build({entryPoints:Object.keys(entries).map(n=>join(src,n+'.tsx')),outdir:join(dir,'out'),bundle:true,splitting:true,format:'esm',jsx:'automatic',loader:{'.ttf':'dataurl','.woff2':'dataurl'},alias:{'@':resolve(root,'apps/web/src')},nodePaths:[resolve(root,'apps/web/node_modules'),resolve(root,'node_modules')],define:{'process.env.NODE_ENV':'"production"','process.env.NEXT_PUBLIC_API_URL':'""'},external:['/takomenu-public/*','/uploads/*'],logLevel:'error'})
 }
 
 const TYPES={'.js':'text/javascript','.css':'text/css','.woff2':'font/woff2','.woff':'font/woff','.ttf':'font/ttf','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp','.json':'application/json'}
@@ -106,7 +106,7 @@ async function main(){
   return send(404,'text/plain','')
  }catch(e){res.statusCode=500;res.end(String(e?.stack||e))}})
  await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}`
- const browser=await puppeteer.launch({executablePath:CHROME,headless:true,args:['--no-sandbox','--hide-scrollbars','--font-render-hinting=none','--disable-lcd-text']})
+ const browser=await puppeteer.launch({executablePath:CHROME,headless:true,args:['--no-sandbox','--hide-scrollbars','--font-render-hinting=none','--disable-lcd-text','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows','--disable-gpu','--disable-gpu-rasterization'],protocolTimeout:60000})
  const setFixture=fx=>{
   const parsed=lib.workspaceSchema.parse(fx.raw),workspace=lib.publicWorkspace(parsed,new Date(),{ignoreSchedules:true}),restaurantId=u(999),def=lib.defaultPublicMenu(workspace.menus)
   const presentation={restaurantName:'Trattoria di prova',foodCatalogs:{allergens:[],traits:[],additives:[]}}
@@ -132,11 +132,15 @@ async function main(){
      const editPills=await edit.$$eval('[data-category]',els=>els.map(e=>e.getAttribute('data-category')))
      if(JSON.stringify(pills)!==JSON.stringify(editPills))results.identical.push({fixture:fx.key,width:label,error:'pillole diverse',pills,editPills})
      for(let i=0;i<pills.length;i++){
-      if(i>0){for(const pg of [pub,edit]){await pg.click(`[data-category="${pills[i]}"]`);await settle(pg)}}
-      const [a,b]=[await pub.screenshot({fullPage:true}),await edit.screenshot({fullPage:true})]
-      const r=await compare(cmp,a,b),name=`identico-${fx.key}-${label}-p${i+1}`
+      if(i>0){for(const pg of [pub,edit]){await pg.bringToFront();await pg.$eval(`[data-category="${pills[i]}"]`,e=>e.click());await settle(pg)}}
+      await pub.bringToFront();const a=await pub.screenshot({fullPage:true});await edit.bringToFront();const b=await edit.screenshot({fullPage:true});await cmp.bringToFront()
+      let r=await compare(cmp,a,b),retried=0
+      // Rumore di rasterizzazione (antialias di un bordo, 1 px non ripetibile): si riscattano entrambe le pagine fino a 2 volte.
+      // Una differenza vera di markup/stile si ripete sempre e resta rossa.
+      while(r.changed&&retried<2){retried++;await wait(300);await pub.bringToFront();const a2=await pub.screenshot({fullPage:true});await edit.bringToFront();const b2=await edit.screenshot({fullPage:true});await cmp.bringToFront();r={...await compare(cmp,a2,b2),firstTry:r.changed}}
+      const name=`identico-${fx.key}-${label}-p${i+1}`
       if(i===0||r.changed){await writeFile(join(OUT,name+'-pubblica.png'),a);await writeFile(join(OUT,name+'-modifica.png'),b)}
-      results.identical.push({fixture:fx.key,width:label,pill:i+1,changedPixels:r.changed,size:[r.sizeA,r.sizeB],firstDiff:r.first})
+      results.identical.push({fixture:fx.key,width:label,pill:i+1,changedPixels:r.changed,size:[r.sizeA,r.sizeB],firstDiff:r.first,...(retried?{retried,firstTry:r.firstTry}:{})})
       console.log(`${r.changed?'NO  ':'OK  '} identico ${fx.key} ${label}px pillola ${i+1}/${pills.length}: ${r.changed} pixel diversi`)
      }
     }finally{await Promise.all([pub.close(),edit.close(),cmp.close()])}
@@ -181,9 +185,10 @@ async function main(){
     sel=await last('tako-menu-edit-select');box=await frameBox();check(`${label}: Esc → select {kind:null}, riquadro nascosto`,sel&&sel.kind===null&&!box.frame,sel)
     // titolo del Sottomenu
     await clear();const t=await rectOf(`[data-edit-select="section:${ids.root}"]`);const tat={x:iframeOffset.x+t.x+t.w/2,y:iframeOffset.y+t.y+t.h/2}
+    const hit=await frame.evaluate((x,y)=>{const e=document.elementFromPoint(x,y);return e?e.tagName+(e.getAttribute('data-edit-select')?'['+e.getAttribute('data-edit-select')+']':'')+' '+String(e.className).slice(0,40):null},t.x+t.w/2,t.y+t.h/2)
     if(emu.hasTouch)await pg.touchscreen.tap(tat.x,tat.y);else await pg.mouse.click(tat.x,tat.y)
     await wait(250);sel=await last('tako-menu-edit-select');box=await frameBox()
-    check(`${label}: titolo del Sottomenu → select {kind:section}, riquadro sul titolo`,sel?.kind==='section'&&sel.id===ids.root&&!!box.frame&&Math.abs(box.frame.w-(t.w+8))<2,{sel,frame:box.frame,title:t})
+    check(`${label}: titolo del Sottomenu → select {kind:section}, riquadro sul titolo`,sel?.kind==='section'&&sel.id===ids.root&&!!box.frame&&Math.abs(box.frame.w-(t.w+8))<2,{sel,frame:box.frame,title:t,hit,msgs:(await msgs()).map(m=>m.type+':'+(m.kind??''))})
     check(`${label}: matita del Sottomenu dice «sottomenu»`,/^Modifica sottomenu/.test(box.label||''),box.label)
     // tastiera: Tab porta al prossimo elemento e lo seleziona, Invio = matita
     await clear();await pg.keyboard.press('Tab');await wait(150);sel=await last('tako-menu-edit-select')
@@ -192,12 +197,13 @@ async function main(){
     const op2=await last('tako-menu-edit-open');check(`${label}: tastiera Invio sul titolo della Sezione figlia → open {kind:section}`,op2?.kind==='section'&&op2.id===ids.child2,op2)
     box=await frameBox();check(`${label}: matita della Sezione figlia dice «sezione»`,/^Modifica sezione/.test(box.label||''),box.label)
     // clic fuori deseleziona
-    await clear();const outside=await frame.evaluate(()=>{const b=document.querySelector('[data-menu-edit-root]').getBoundingClientRect();return {x:b.x+6,y:Math.min(innerHeight-20,b.y+innerHeight/2)}})
+    await clear();const outside=await frame.evaluate(()=>{const b=document.querySelector('[data-menu-edit-root]').getBoundingClientRect();return {x:b.x+6,y:Math.round(innerHeight/2)}})
     if(emu.hasTouch)await pg.touchscreen.tap(iframeOffset.x+outside.x,iframeOffset.y+outside.y);else await pg.mouse.click(iframeOffset.x+outside.x,iframeOffset.y+outside.y)
     await wait(150);sel=await last('tako-menu-edit-select');check(`${label}: clic fuori → deseleziona`,sel&&sel.kind===null,{sel,outside})
     // flash dalla SPA
-    await pg.evaluate(id=>window.__send({flash:[id]}),ids.dish);await wait(60)
-    const flashed=await frame.evaluate(id=>document.querySelector(`[data-edit-id="${id}"]`)?.hasAttribute('data-edit-flash'),ids.dish);check(`${label}: flash della SPA → lampeggio dell'elemento`,flashed)
+    await frame.evaluate(id=>{window.__flashSeen=false;const el=document.querySelector(`[data-edit-id="${id}"]`);new MutationObserver(()=>{if(el.hasAttribute('data-edit-flash'))window.__flashSeen=true}).observe(el,{attributes:true,attributeFilter:['data-edit-flash']})},ids.dish)
+    await pg.evaluate(id=>window.__send({flash:[id]}),ids.dish);await wait(400)
+    const flashed=await frame.evaluate(()=>window.__flashSeen);check(`${label}: flash della SPA → lampeggio dell'elemento`,flashed)
     await pg.evaluate(()=>window.__send({flash:[]}))
     if(label!=='1280'){await pg.close();continue}
     // logica dati del riordino: onDrop dello stub (Piatto in un'altra Sezione, in testa) → op move + DOM nell'ordine nuovo

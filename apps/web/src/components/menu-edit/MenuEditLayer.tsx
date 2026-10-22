@@ -23,7 +23,7 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
   const [mode, setMode] = useState(false)
   const docRef = useRef(doc), menuRef = useRef(menuId), selRef = useRef<EditSelection>(null), modeRef = useRef(false), seqRef = useRef(0)
   const gestureRef = useRef<MenuGesture | null>(null), frameRef = useRef<HTMLDivElement>(null), pencilRef = useRef<HTMLButtonElement>(null)
-  const lastSpa = useRef<{ selection: EditSelection; editing: boolean } | null>(null), pendingFlash = useRef<string[]>([])
+  const lastSpa = useRef<{ selection: EditSelection; editing: boolean } | null>(null), pendingFlash = useRef<string[]>([]), flashRef = useRef<() => void>(() => {})
   docRef.current = doc; menuRef.current = menuId; selRef.current = selection; modeRef.current = mode
 
   const select = (next: EditSelection, notify = true) => {
@@ -79,7 +79,10 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     const editable = (target: EventTarget | null) => { const el = (target as Element | null)?.closest?.(EDITABLE) as HTMLElement | null; return el && root.contains(el) ? el : null }
     const fromEl = (el: HTMLElement) => selectionFromAttributes({ id: el.getAttribute('data-edit-id'), kind: el.getAttribute('data-edit-kind'), select: el.getAttribute('data-edit-select') })
     // Clic fuori (anche fuori dalla colonna del menu sugli schermi larghi) = deseleziona; la matita non conta come «fuori».
-    const onClick = (e: MouseEvent) => { if (modeRef.current) return; const el = editable(e.target); if (el) select(fromEl(el)); else if (!(e.target as Element)?.closest?.('.tako-edit-pencil')) select(null) }
+    // Il «fuori» si decide sul pointerdown (punto reale del dito): il clic sintetico del tocco può essere spostato dal browser
+    // (touch adjustment) su un elemento vicino non selezionabile e deselezionerebbe per sbaglio.
+    const onClick = (e: MouseEvent) => { if (modeRef.current) return; const el = editable(e.target); if (el) select(fromEl(el)) }
+    const onDown = (e: PointerEvent) => { if (modeRef.current || e.button > 0) return; if (!editable(e.target) && !(e.target as Element)?.closest?.('.tako-edit-pencil')) select(null) }
     const onFocus = (e: FocusEvent) => { if (modeRef.current) return; const el = editable(e.target); if (el && el === e.target) select(fromEl(el)) }
     const onKey = (e: KeyboardEvent) => {
       const action = keyAction(e.key, { selected: !!selRef.current, handled: e.defaultPrevented, picking: !!root.querySelector('[data-gesture-picked]') })
@@ -87,8 +90,8 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       else if (action === 'deselect') { e.preventDefault(); select(null) }
     }
     const onDocKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !e.defaultPrevented && !root.contains(e.target as Node) && selRef.current) select(null) }
-    document.addEventListener('click', onClick); root.addEventListener('focusin', onFocus); root.addEventListener('keydown', onKey); document.addEventListener('keydown', onDocKey)
-    return () => { document.removeEventListener('click', onClick); root.removeEventListener('focusin', onFocus); root.removeEventListener('keydown', onKey); document.removeEventListener('keydown', onDocKey) }
+    document.addEventListener('click', onClick); document.addEventListener('pointerdown', onDown); root.addEventListener('focusin', onFocus); root.addEventListener('keydown', onKey); document.addEventListener('keydown', onDocKey)
+    return () => { document.removeEventListener('click', onClick); document.removeEventListener('pointerdown', onDown); root.removeEventListener('focusin', onFocus); root.removeEventListener('keydown', onKey); document.removeEventListener('keydown', onDocKey) }
   }, [root, state.disabled])
 
   // Dopo ogni ri-render (documento nuovo, cambio pagina fra pillole, cambio Menu): riaggancio del gesto e lampeggio.
@@ -103,13 +106,15 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       const ms = reduced() ? MENU_MOTION.durationMs.data : MENU_MOTION.durationMs.fast * 2
       for (const el of found) { el.removeAttribute('data-edit-flash'); void el.offsetWidth; el.setAttribute('data-edit-flash', ''); setTimeout(() => el.removeAttribute('data-edit-flash'), ms) }
     }
+    flashRef.current = flash
     const settle = () => { frame = 0; gestureRef.current?.refresh(); flash() }
     const observer = new MutationObserver(() => { if (!frame) frame = requestAnimationFrame(settle) })
     observer.observe(root, { childList: true, subtree: true })
     frame = requestAnimationFrame(settle)
     return () => { observer.disconnect(); if (frame) cancelAnimationFrame(frame) }
   }, [root])
-  useEffect(() => { if (root) requestAnimationFrame(() => { gestureRef.current?.refresh() }) }, [doc, state.tick])
+  // Documento o stato nuovi senza cambi di DOM (stesso contenuto): riaggancio e lampeggio comunque al frame successivo.
+  useEffect(() => { if (!root) return; const id = requestAnimationFrame(() => { gestureRef.current?.refresh(); flashRef.current() }); return () => cancelAnimationFrame(id) }, [doc, state.tick])
 
   // Riquadro e matita: seguono l'elemento (scroll, transizioni di pagina, ri-render) leggendo un solo rettangolo per frame.
   useEffect(() => {
@@ -128,12 +133,12 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       last = key
       const radius = parseFloat(getComputedStyle(t.el).borderTopLeftRadius) || 10
       frameEl.style.transform = `translate3d(${r.left - pad}px,${r.top - pad}px,0)`; frameEl.style.width = r.width + pad * 2 + 'px'; frameEl.style.height = r.height + pad * 2 + 'px'; frameEl.style.borderRadius = Math.min(radius + pad, 999) + 'px'
+      frameEl.classList.remove('tako-edit-hidden'); pencil.classList.remove('tako-edit-hidden')
       const pw = pencil.offsetWidth || 44, ph = pencil.offsetHeight || 32
       const x = Math.max(4, Math.min(innerWidth - pw - 4, r.right + pad - pw + 6)), y = Math.max(4, r.top - pad - ph / 2)
       pencil.style.transform = `translate3d(${x}px,${y}px,0)`
       const name = (t.el.querySelector('h3')?.textContent || t.el.textContent || '').trim().slice(0, 60)
       pencil.setAttribute('aria-label', pencilLabel(selection.kind, name, t.el.getAttribute('data-edit-kind') === 'section' || !!t.el.closest('[data-edit-kind="section"]')))
-      frameEl.classList.remove('tako-edit-hidden'); pencil.classList.remove('tako-edit-hidden')
     }
     tick()
     return () => cancelAnimationFrame(raf)
