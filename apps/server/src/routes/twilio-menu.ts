@@ -47,7 +47,8 @@ import {fixTruncatedNumbers,undoRequested,explicitUndoRequested,ignoredInQuestio
 import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,groupPercent,priceSheet,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,sectionGroupWord,pureDrop,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
-import {ruleTurn,ruleReply,dailyReplaceParse,type RuleWait,type RuleReport} from '../lib/owner-brain-svuota.js'
+import {ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,type RuleWait,type RuleReport} from '../lib/owner-brain-svuota.js'
+const mLabelOf=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+n.trim()+'*':'Menu *'+n.trim()+'*'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
 const digest=(s:string)=>createHash('sha256').update(s).digest('hex')
 async function permitted(tx:Pick<DB,'execute'>,actor:string,tenant:string){const rows=await tx.execute(sql`SELECT u.id,u.restaurant_id,u.role,r.active FROM users u JOIN restaurants r ON r.id=${tenant} WHERE u.id=${actor} AND u.active=true`);const u=rows[0];if(!u||!u.active)return false;if(isAgencyUser(actor))return true;if(u.restaurant_id===tenant&&u.role==='owner')return true;const membership=await tx.execute(sql`SELECT role FROM web_location_memberships WHERE user_id=${actor} AND restaurant_id=${tenant}`);return membership[0]?.role==='owner'}
@@ -621,13 +622,21 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   // modello (owner-brain-svuota.ts); con un Menu ambiguo una domanda di una riga. Anche la sostituzione «stasera a cena primi: …» detta
   // con il Menu (bug 16:37 «trovo più sottomenu Primi», 17:48 «pasta e fagioli» persa) è letta dal server.
   let ruleDone=false
-  if(!sess||sess.applied){const ruleWait=((askP as any)?.rule??null) as RuleWait|null
+  // Risposta alla proposta «Elimino il Menu X intero?»: «sì» scritto → eliminato (annulla 10 minuti); «no»/«annulla» → niente.
+  const delM=cmd?.kind==='batch'&&cmd.why==='delete'&&Array.isArray(cmd.actions)&&cmd.actions.length===1&&cmd.actions[0]?.kind==='delete_menu'&&cmd.actions[0]?.withItems?cmd.actions[0] as Extract<MenuAction,{kind:'delete_menu'}>:null
+  if(delM&&base.menus.some(m=>m.id===delM.menuId)){const pt=plain(text)
+   if(/^(?:s[iì]|si si|sì sì|si confermo|confermo|si elimina|si eliminalo|elimina|eliminalo|si cancellalo|cancellalo|ok si|si ok|si certo|certo)(?:\s+(?:grazie|pure|dai|tutto))?$/.test(pt)){pre={actions:[delM],why:'regola-elimina'};ruleDone=true}
+   else if(/^(?:ok|okay|oki|va bene|perfetto|vai|procedi|d accordo|esatto|giusto|fallo|confermo tutto)$/.test(pt)){preReply='Per eliminare il '+mLab(delM.name)+' intero mi serve un *sì* scritto: rispondi *sì* per eliminarlo, oppure *no*.';ruleDone=true}
+   else if(/^(?:no|non|annulla|lascia stare|lascia perdere|niente|fermo|aspetta|no grazie|no no|non eliminare|non eliminarlo|no lascia stare)\b/.test(pt)){preReply='Ok, non elimino niente: il '+mLab(delM.name)+' resta com\u2019è.';closePend=true;ruleDone=true}}
+  if(!ruleDone&&(!sess||sess.applied)){const ruleWait=((askP as any)?.rule??null) as RuleWait|null
    let hist:{role:string,text:string,at:number}[]=[];try{hist=await sqlBrainStore(db).readHistory(ctx.tenant,ctx.phone,Date.now())}catch{/* senza cronologia: solo il Menu detto */}
    const draftName=askP?.draft?.name&&!askP.draft.sectionId?String(askP.draft.name):null
    const rr=ruleTurn({text,menus:base.menus,sections,refs,history:hist,wait:ruleWait,draftName})
    if(rr){ruleDone=true;if(askP){closePend=true;pend=null;answered=false;(base as any).pendingCommand=null}
     if(rr.kind==='apply'){pre={actions:rr.actions,why:'regola'};ruleRep=rr.report}
     else if(rr.kind==='info')preReply=rr.text
+    // «elimina il menu pranzo» (correzione Manuel 22/10): il Menu intero, SOLO col «sì» scritto (proposta di eliminazione in attesa)
+    else if(rr.kind==='delete_menu'){const q=deleteMenuQuestion(rr),act={kind:'delete_menu',menuId:rr.menu.id,name:rr.menu.name,withItems:true,items:rr.items} as MenuAction;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:[act],requiresTypedOk:true,why:'delete'})});preReply=q;closePend=false}
     else{const q=rr.question,w=rr.wait;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,rule:w} as any)});preReply=q;closePend=false}}
    else if(ruleWait){closePend=true;pend=null;answered=false;(base as any).pendingCommand=null}
    else if(!askP&&!rn){const dr=dailyReplaceParse(text,base.menus,sections,refs)
@@ -1059,7 +1068,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    // Sostituzione dei piatti di oggi («stasera primi …»): si applica subito, «annulla» entro 10 minuti è la rete (banco prezzofisso 21/10).
    const asksOk=engine==='haiku'&&!answered&&draftAsksOkOnDate(effective,String(finalRun.decision.draft??''),text)
    // regola svuota/inserisci (22/10): si applica subito, «annulla» entro 10 minuti è la rete (decisione Manuel: niente domande)
-   const why=pre?.why==='regola'?null:approval(effective,refs,text,answered)??(asksOk?'recap':null)
+   const why=pre?.why==='regola'||pre?.why==='regola-elimina'?null:approval(effective,refs,text,answered)??(asksOk?'recap':null)
    // Eliminazioni insieme ad altre modifiche (Y1): le parti chiare si pubblicano subito, le eliminazioni aspettano il «sì».
    if(why==='delete'){const dels=effective.filter(a=>a.kind==='delete'&&!a.undoCreate),rest=effective.filter(a=>!dels.includes(a))
     if(rest.length&&!approval(rest,refs,text,answered)){const r=await applyNow(rest);await propose(tx,ctx,r.revision,{kind:'batch',actions:dels,requiresTypedOk:true,why:'delete'});return say([r.facts,pendingFacts('delete',dels,refs,sections)].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}}
@@ -1071,6 +1080,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(why&&engine==='haiku'&&wholeGroup(effective,refs,sections)){await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why});return wholeGroupText(wholeGroup(effective,refs,sections)!)}
    if(why){await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why});const whole=engine==='haiku'?wholeGroup(effective,refs,sections):null;return say([zeroN?'Metto a *0 €* '+(zeroN===1?'1 piatto':zeroN+' piatti')+': con 0 € nel menu il prezzo non si vede. Rispondi *OK* per confermare oppure *annulla*.':'',whole?wholeGroupText(whole):pendingFacts(why,effective,refs,sections),already].filter(Boolean).join('\n\n'),false,pricesOf(effective))}
    const r=await applyNow(effective)
+   if(pre?.why==='regola-elimina'&&r.allOk){const a0=effective[0] as any;return 'Fatto: il '+mLabelOf(String(a0?.name??''))+' è eliminato, con i suoi sottomenu e piatti.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.'}
    if(pre?.why==='regola'&&ruleRep)return ruleReply(ruleRep,refs.filter(x=>x.menu===ruleRep!.menu),effective,true,r.inherited+(r.allOk?'':'\n\n'+r.facts))
    // Prova dal vivo 21/10: aumento/ribasso uniforme applicato subito → solo il testo del server (la bozza prometteva un riepilogo e
    // nominava come «lasciati fuori» piatti che invece erano stati cambiati).

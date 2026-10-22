@@ -1,6 +1,6 @@
 {
- "casi": 84,
- "frasi": 135,
+ "casi": 98,
+ "frasi": 161,
  "violazioni": 0,
  "casiKO": [],
  "risposte": [
@@ -459,6 +459,102 @@
     "*Menu Cena svuotato*\n\nHo nascosto tutti i 6 piatti visibili. I sottomenu (Primi, Secondi e Contorni) e i prezzi fissi restano come sono.\n\nOra scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
     "*Menu Cena aggiornato*\n\n*Primi*\n• Carbonara (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
     "*Menu Cena aggiornato*\n\n*Secondi*\n• Orata al forno\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ]
+  },
+  {
+   "id": "d01",
+   "replies": [
+    "Elimino il *Menu Giorno* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 9 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu giorno»."
+   ]
+  },
+  {
+   "id": "d02",
+   "replies": [
+    "Elimino il *Menu Giorno* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 9 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu giorno».",
+    "Fatto: il *Menu Giorno* è eliminato, con i suoi sottomenu e piatti.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ]
+  },
+  {
+   "id": "d03",
+   "replies": [
+    "Elimino il *Menu Giorno* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 9 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu giorno».",
+    "Ok, non elimino niente: il *Menu Giorno* resta com’è."
+   ]
+  },
+  {
+   "id": "d04",
+   "replies": [
+    "Elimino il *Menu Giorno* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 9 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu giorno».",
+    "Ok, non elimino niente: il *Menu Giorno* resta com’è."
+   ]
+  },
+  {
+   "id": "d05",
+   "replies": [
+    "Elimino il *Menu Cena* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 11 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu cena».",
+    "Fatto: il *Menu Cena* è eliminato, con i suoi sottomenu e piatti.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Ok, annullo l’ultima modifica.\n\n*Risotto ai funghi porcini*: com’era prima\n*Pappardelle al cinghiale*: com’era prima\n*Linguine vongole e pomodorini*: com’era prima\n*Tagliatelle panna, speck e zucchine*: com’era prima\n*Tagliata di manzo con rucola e grana*: com’era prima\n*Orata al forno*: com’era pri"
+   ]
+  },
+  {
+   "id": "d06",
+   "replies": [
+    "Elimino il *Menu Cena* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 11 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu cena»."
+   ]
+  },
+  {
+   "id": "d07",
+   "replies": [
+    "Elimino il *Menu Giorno* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 9 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu giorno».",
+    "Per eliminare il *Menu Giorno* intero mi serve un *sì* scritto: rispondi *sì* per eliminarlo, oppure *no*."
+   ]
+  },
+  {
+   "id": "d07b",
+   "replies": [
+    "Elimino il *Menu Giorno* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 9 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu giorno».",
+    "Per eliminare il *Menu Giorno* intero mi serve un *sì* scritto: rispondi *sì* per eliminarlo, oppure *no*.",
+    "Fatto: il *Menu Giorno* è eliminato, con i suoi sottomenu e piatti.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ]
+  },
+  {
+   "id": "d08",
+   "replies": [
+    "Quale Menu elimino? *Menu Giorno*, *Menu Cena*, Menu *Alla carta* o Menu *Drinks*?",
+    "Elimino il *Menu Cena* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 11 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu cena».",
+    "Fatto: il *Menu Cena* è eliminato, con i suoi sottomenu e piatti.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ]
+  },
+  {
+   "id": "d09",
+   "replies": [
+    "*Menu Giorno svuotato*\n\nHo nascosto tutti i 6 piatti visibili. I sottomenu (Primi, Secondi e Contorni) e i prezzi fissi restano come sono.\n\nOra scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ]
+  },
+  {
+   "id": "d10",
+   "replies": [
+    "*Menu Cena svuotato*\n\nHo nascosto tutti i 6 piatti visibili. I sottomenu (Primi, Secondi e Contorni) e i prezzi fissi restano come sono.\n\nOra scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ]
+  },
+  {
+   "id": "d11",
+   "replies": [
+    "*Menu Cena svuotato*\n\nHo nascosto 5 piatti. I sottomenu (Primi, Secondi e Contorni) e i prezzi fissi restano come sono.\n\nOra scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne».\n\nRestano visibili: *Patate al forno*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ]
+  },
+  {
+   "id": "d12",
+   "replies": [
+    "Elimino il *Menu Giorno* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 9 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu giorno».",
+    "Fatto: il *Menu Giorno* è eliminato, con i suoi sottomenu e piatti.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ]
+  },
+  {
+   "id": "d13",
+   "replies": [
+    "Elimino il *Menu Giorno* intero? Spariscono i sottomenu *Primi*, *Secondi* e *Contorni*, 9 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu giorno».",
+    "Per eliminare mi serve un *sì* scritto: rispondi *sì* per confermare oppure *annulla*."
    ]
   },
   {

@@ -175,7 +175,7 @@ export const withNewSections=(sections:SectionRef[],actions:MenuAction[]):Sectio
 export function describeAction(a:MenuAction,refs:MenuRef[],sections:SectionRef[]=[]){
  if(isStructAction(a)){const sec=(id:string)=>sections.find(s=>s.id===id)?.name??'?'
   if(a.kind==='create_menu')return 'Nuovo Menu *'+safe(a.name)+'*'
-  if(a.kind==='delete_menu')return 'Tolto il Menu vuoto *'+safe(a.name)+'*'
+  if(a.kind==='delete_menu')return a.withItems?'Menu *'+safe(a.name)+'*: *eliminato* (con sottomenu e piatti)':'Tolto il Menu vuoto *'+safe(a.name)+'*'
   // «del Menu *Menu cena*» → «del *Menu cena*» quando il nome comincia già con «Menu».
   const mn=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+safe(n.trim())+'*':'Menu *'+safe(n.trim())+'*'
   if(a.kind==='set_formula')return a.isNew?'Nuova opzione *'+safe(a.name)+'* nel '+mn(a.menuName)+': *'+euro(a.price)+'*':'*'+safe(a.name)+'* del '+mn(a.menuName)+': '+(typeof a.before==='number'?'da '+euro(a.before)+' a ':'')+'*'+euro(a.price)+'*'

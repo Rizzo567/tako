@@ -13,10 +13,10 @@ import {sameSection} from './twilio-menu-structure.js'
 import {namedMenus,dishCourse,fixSpelling} from './owner-brain-sera.js'
 
 export type RuleMenu={id:string,name:string,pricing?:'carta'|'fisso',active?:boolean}
-export type RuleWait={kind:'menu',text:string,options:string[]}|{kind:'names',menuId:string,secId:string}
+export type RuleWait={kind:'menu',text:string,options:string[],del?:boolean}|{kind:'names',menuId:string,secId:string}
 export type RuleSection={secId:string,name:string,created:string[],shown:string[],already:string[]}
 export type RuleReport={menu:string,fixed:boolean,cleared:string[],deleteWord:boolean,sections:RuleSection[],unknownSecs:{word:string,names:string[]}[],notPlaced:string[],notFound?:string[],kept?:string[]}
-export type RuleResult={kind:'apply',menu:RuleMenu,actions:MenuAction[],report:RuleReport}|{kind:'ask',question:string,wait:RuleWait}|{kind:'info',text:string}
+export type RuleResult={kind:'delete_menu',menu:RuleMenu,items:number,sections:string[]}|{kind:'apply',menu:RuleMenu,actions:MenuAction[],report:RuleReport}|{kind:'ask',question:string,wait:RuleWait}|{kind:'info',text:string}
 
 // ---------- Menu di cui si parla ----------
 const LUNCH=/ (?:pranzo|pranzi|mezzogiorno|mezzo giorno) /,DINNER=/ (?:cena|cene|stasera|stassera|sera|serale) /
@@ -82,6 +82,16 @@ export function clearIntent(text:string,secNames:string[]=[]):boolean{
  if(!CLEAR_V.test(p)||!/\btutt[oaie]\b/.test(p))return false
  if(/\btutt[oaie] e (?:due|tre|2|3)\b|\bentramb\w*/.test(p))return false
  return !notWholeMenu(p,secNames)}
+
+/** Correzione di Manuel 22/10 sera: «togli tutto il menu pranzo», «elimina il menu pranzo», «cancella il menù cena» = il MENU intero da
+ * eliminare (con il «sì» scritto), NON lo svuotamento. «tutti i piatti del menu X», «svuota», «nascondi tutto», «togli tutto dal menu X»,
+ * «… tranne …» restano lo svuotamento. */
+export function deleteMenuIntent(text:string):boolean{const p=plain(text);if(!p||NEG.test(p))return false
+ if(/\b(?:piatt\w*|tranne|eccetto|a parte|salvo|nascond\w*|svuot\w*|foto|prezz\w*|sottomenu|sezion\w*|categori\w*)\b/.test(p))return false
+ return /\b(?:togli\w*|toglie\w*|lev[ai]\w*|levare|elimin\w*|cancell\w*|rimuov\w*|butta\w*)\s+(?:(?:proprio|anche|pure|completamente|del tutto)\s+)?(?:tutto\s+)?(?:(?:il|l)\s+)?(?:intero\s+)?menu\b/.test(p)}
+const delMenuResult=(m:RuleMenu,o:{sections:SectionRef[],refs:MenuRef[]}):RuleResult=>({kind:'delete_menu',menu:m,items:o.refs.filter(r=>r.menu===m.name).length,sections:o.sections.filter(s=>s.menu===m.name).map(s=>s.name)})
+export function deleteMenuQuestion(r:{menu:RuleMenu,items:number,sections:string[]}):string{
+ return 'Elimino il '+mLabel(r.menu.name)+' intero? Spariscono '+(r.sections.length?'i sottomenu '+andList(r.sections.map(x=>'*'+x+'*'))+', ':'')+(r.items===1?'1 piatto':r.items+' piatti')+(r.menu.pricing==='fisso'?' e i prezzi fissi':'')+'. Rispondi *sì* per eliminarlo, oppure *no*.\n\nSe vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del '+r.menu.name.replace(/^men[uù]\s+/i,'menu ').toLowerCase()+'».'}
 
 // ---------- lettura delle liste ----------
 type Tok={w:string,raw:string}
@@ -232,7 +242,7 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
  // 1) risposta alla domanda della regola
  if(o.wait?.kind==='menu'){const opts=o.menus.filter(m=>o.wait!.kind==='menu'&&(o.wait as any).options.includes(m.id)),num=p.match(/^(?:il |la |nel |numero )?(\d)$/)
   const hit=num?opts[Number(num[1])-1]:menusIn(text,opts).length===1?menusIn(text,opts)[0]:(()=>{const m=menusIn(text,o.menus);return m.length===1?m[0]:undefined})()
-  if(hit)return runOn(hit,o.wait.text,o,true)
+  if(hit)return (o.wait as any).del?delMenuResult(hit,o):runOn(hit,o.wait.text,o,true)
   return null}
  if(o.wait?.kind==='names'){const m=o.menus.find(x=>x.id===(o.wait as any).menuId),s=o.sections.find(x=>x.id===(o.wait as any).secId)
   if(m&&s&&!OTHER.test(p)&&!hasDigits(p)&&!CLEAR_V.test(p)&&!/\?/.test(text)){const info=infoOf(m,o.sections,o.refs),names=splitNames(tokens(text).filter((x,i,a)=>!menuSpans(a,o.menus).has(i)),vocab)
@@ -242,6 +252,9 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
  // 2) bozza in sospeso («In quale sottomenu metto Nodino…?») + un Menu a prezzo fisso detto («nono devi guardare menu cena»)
  if(o.draftName&&!/\b(?:lascia\w*|stare|perdere|niente|no|annull\w*|basta)\b/.test(p)){const ms=menusIn(text,o.menus);if(ms.length===1&&ms[0]!.pricing==='fisso'&&!hasDigits(p)){const info=infoOf(ms[0]!,o.sections,o.refs),ip=parseInsert(text,info.secs,o.menus,vocab),secId=ip.lists.find(l=>l.secId)?.secId??null
    return applyResult(info,{lists:secId?[{secId,word:'',names:[o.draftName]}]:[],loose:secId?[]:[o.draftName]},null,vocab,text)}}
+ // «elimina il menu pranzo» / «togli tutto il menu pranzo»: eliminazione del Menu (con il sì), mai lo svuotamento
+ if(deleteMenuIntent(text)){const ms=menusIn(text,o.menus);if(ms.length===1)return delMenuResult(ms[0]!,o)
+  const c=ms.length>1?ms:o.menus;const a=askMenu(c,text) as any;a.question=a.question.replace(/^In quale Menu\?/,'Quale Menu elimino?');a.wait.del=true;return a}
  const clr=clearIntent(text,allSecNames)||(()=>{const sp=splitClearInsert(text,allSecNames);return !!sp.insert&&clearIntent(sp.clear,allSecNames)})()
  // seguito senza verbo subito dopo una risposta della regola («e nei contorni patate al forno»): è ancora un inserimento
  const lastBot=[...o.history].filter(t=>t.role==='bot').sort((a,b)=>b.at-a.at)[0]?.text??''

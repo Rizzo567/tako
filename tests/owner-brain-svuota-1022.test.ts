@@ -13,7 +13,7 @@ vi.mock('../apps/server/src/lib/menu-workspace-store.ts',async()=>(await import(
 import {closeHarness,createRouteBot,installNet} from './eval/route-harness.js'
 import {brainSql,resetBrainTables} from './eval/adapters/new-bot.js'
 import {createFakeHaiku,A,P,type Planner,type FakeCtx} from './eval/fake-haiku.js'
-import {clearIntent,sameName,menusIn,splitNames,parseInsert,ruleTurn,contextMenu,dailyReplaceParse} from '../apps/server/src/lib/owner-brain-svuota.js'
+import {deleteMenuIntent,clearIntent,sameName,menusIn,splitNames,parseInsert,ruleTurn,contextMenu,dailyReplaceParse} from '../apps/server/src/lib/owner-brain-svuota.js'
 import {candidateFacts} from '../apps/server/src/lib/owner-brain-r.js'
 import {dropInventedGroups,replaceReply} from '../apps/server/src/routes/twilio-menu.js'
 import type {Conversation,EvalMenu,Turn} from './eval/types.js'
@@ -59,18 +59,23 @@ const allVis=(w:any,menu:string)=>M(w,menu).sections.flatMap((s:any)=>s.items.fi
 const shape=(w:any)=>JSON.stringify(w.menus.map((m:any)=>({id:m.id,name:m.name,active:m.active??true,pricing:m.pricing??null,formulas:m.formulas??[],sections:m.sections.map((s:any)=>({id:s.id,name:s.name,active:s.active??true,parent:s.parentSectionId??null}))})))
 const itemsOf=(w:any,menu:string)=>JSON.stringify(M(w,menu).sections.map((s:any)=>s.items))
 const ids=(w:any)=>new Set(w.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>i.id))))
-export type Case={id:string,turns:(string|{voice:string})[],menu?:string,exact?:Record<string,string[]>,has?:Record<string,string[]>,allHidden?:boolean,keepVisible?:boolean,noWrite?:boolean,said?:string[],reply?:RegExp,ask?:number[],model?:number[],undoTo?:number}
+export type Case={id:string,turns:(string|{voice:string})[],menu?:string,exact?:Record<string,string[]>,has?:Record<string,string[]>,allHidden?:boolean,keepVisible?:boolean,noWrite?:boolean,said?:string[],reply?:RegExp,ask?:number[],model?:number[],undoTo?:number,del?:{menu:string,confirm?:number}}
 function violations(c:Case,r:{replies:string[],menus:any[]}):string[]{const out:string[]=[],w0=r.menus[0],wN=r.menus[r.menus.length-1]
  for(let t=1;t<r.menus.length;t++){const a=r.menus[t-1],b=r.menus[t]
-  if(shape(a)!==shape(b))out.push(`t${t}: Menu/sottomenu/prezzi fissi cambiati`)
-  const txt=c.turns[t-1];if(!(typeof txt==='string'&&/annulla/.test(txt)))for(const x of ids(a))if(!ids(b).has(x))out.push(`t${t}: piatto eliminato ${x}`)
-  if(c.menu)for(const m of a.menus)if(m.name!==c.menu&&itemsOf(a,m.name)!==itemsOf(b,m.name))out.push(`t${t}: toccato un altro Menu (${m.name})`)
+  const txt0=c.turns[t-1],tt=typeof txt0==='string'?txt0:txt0.voice,menusA=a.menus.map((m:any)=>m.id),menusB=b.menus.map((m:any)=>m.id)
+  // INVARIANTE: un Menu sparisce SOLO dopo «Elimino il Menu … intero? Rispondi sì» e un «sì» scritto
+  if(menusA.some((x:string)=>!menusB.includes(x))&&!(/^s[iì](?![a-z])/i.test(tt.trim())&&/Elimino il .* intero\?|mi serve un \*sì\* scritto/.test(r.replies[t-2]??'')))out.push(`t${t}: Menu eliminato senza il sì`)
+  const okShape=(c.del?.confirm===t&&!M(b,c.del.menu)&&JSON.stringify(a.menus.filter((m:any)=>m.name!==c.del!.menu))===JSON.stringify(b.menus))||(/annulla/.test(tt)&&c.del)
+  if(shape(a)!==shape(b)&&!okShape)out.push(`t${t}: Menu/sottomenu/prezzi fissi cambiati`)
+  const txt=c.turns[t-1];if(!(typeof txt==='string'&&/annulla/.test(txt))&&c.del?.confirm!==t)for(const x of ids(a))if(!ids(b).has(x))out.push(`t${t}: piatto eliminato ${x}`)
+  if(c.menu)for(const m of a.menus)if(m.name!==c.menu&&M(b,m.name)&&itemsOf(a,m.name)!==itemsOf(b,m.name))out.push(`t${t}: toccato un altro Menu (${m.name})`)
   const rep=r.replies[t-1]??''
   if(!(c.model??[]).includes(t)&&/MODELLO/.test(rep))out.push(`t${t}: il messaggio è andato al modello`)
   if((c.ask??[]).includes(t)&&!/\?/.test(rep))out.push(`t${t}: attesa una domanda, risposta «${rep.slice(0,80)}»`)
   if(!(c.ask??[]).includes(t)&&/\?\s*$/.test(rep.trim())&&!(c.model??[]).includes(t))out.push(`t${t}: domanda inattesa «${rep.slice(0,90)}»`)}
  if(c.noWrite&&JSON.stringify(w0)!==JSON.stringify(wN))out.push('scrittura inattesa')
  if(c.undoTo!==undefined&&JSON.stringify(r.menus[c.undoTo].menus)!==JSON.stringify(wN.menus))out.push('«annulla» non ha rimesso com’era prima dell’ultima modifica')
+ if(c.del?.confirm&&M(wN,c.del.menu)&&c.undoTo===undefined)out.push('Menu non eliminato dopo il sì')
  if(c.menu&&c.allHidden&&allVis(wN,c.menu).length)out.push('restano visibili: '+allVis(wN,c.menu).join(', '))
  if(c.menu&&c.keepVisible){const before=allVis(w0,c.menu).map(plainT),after=allVis(wN,c.menu).map(plainT);for(const x of before)if(!after.includes(x))out.push('«inserisci» ha nascosto '+x)}
  if(c.menu)for(const [sec,names] of Object.entries(c.exact??{})){const v=vis(wN,c.menu,sec).map(plainT).sort(),e=names.map(plainT).sort();if(JSON.stringify(v)!==JSON.stringify(e))out.push(`${sec}: visibili [${v}] attesi [${e}]`)}
@@ -83,8 +88,11 @@ function violations(c:Case,r:{replies:string[],menus:any[]}):string[]{const out:
 // ---------------- unit: funzioni pure ----------------
 describe('regola svuota/inserisci — funzioni pure',()=>{
  it('clearIntent: il Menu intero sì, un sottomenu o un gruppo di piatti no',()=>{
-  for(const t of ['togli tutto il menu di pranzo','svuota il menu cena','togli tutti i piatti del pranzo','nascondi tutto','leva tutti i piatti','Nel menu cena dobbiamo cambiare tutto il menù, nascondi tutto','Il menù cena si deve vedere ma devi nascondere tutti i piatti','elimina tutti i piatti del menu cena','togli tutto quanto dalla cena','svuotalo'])expect(clearIntent(t,['Primi','Secondi','Contorni']),t).toBe(true)
+  for(const t of ['togli tutti i piatti del menu di pranzo','svuota il menu cena','togli tutti i piatti del pranzo','nascondi tutto','leva tutti i piatti','Nel menu cena dobbiamo cambiare tutto il menù, nascondi tutto','Il menù cena si deve vedere ma devi nascondere tutti i piatti','elimina tutti i piatti del menu cena','togli tutto quanto dalla cena','svuotalo'])expect(clearIntent(t,['Primi','Secondi','Contorni']),t).toBe(true)
   for(const t of ['togli tutti i primi','togli tutte le linguine','togli tutto dai secondi','togli tutto quello che hai fatto','togli tutte le foto','togli tutti i prezzi','non togliere tutto','tutto esaurito','togli tutti e due','rimetti tutto com era','togli tutti i piatti nascosti','nascondi il menu cena','togli la carbonara'])expect(clearIntent(t,['Primi','Secondi','Contorni']),t).toBe(false)})
+ it('deleteMenuIntent: «tutto il menu X»/«il menu X» = eliminare il Menu; «tutti i piatti del menu X» no',()=>{
+  for(const t of ['togli tutto il menu pranzo','elimina il menu pranzo','cancella il menù cena','togli il menu di pranzo','leva tutto il menu della cena','rimuovi completamente il menu cena'])expect(deleteMenuIntent(t),t).toBe(true)
+  for(const t of ['togli tutti i piatti del menu pranzo','leva tutti i piatti dal menu cena','svuota il menu cena','nascondi tutto il menu cena','togli tutto il menu cena tranne le patate','non eliminare il menu pranzo','togli tutto dal menu pranzo','elimina la carbonara dal menu cena'])expect(deleteMenuIntent(t),t).toBe(false)})
  it('sameName: omonimo con articoli, «di», plurali, una lettera; nome diverso = piatto nuovo',()=>{
   expect(sameName('nodino di burro e salvia','Nodino burro e salvia')).toBe(true)
   expect(sameName('le lasagne','Lasagna')).toBe(true)
@@ -174,13 +182,13 @@ describe('regola svuota/inserisci — route (casi Victoria 22/10)',()=>{
 const V=(voice:string)=>({voice})
 export const BATTERIA:Case[]=[
  // svuota
- {id:'s01',turns:['togli tutto il menu cena'],menu:'Menu Cena',allHidden:true},
+ {id:'s01',turns:['togli tutti i piatti del menu cena'],menu:'Menu Cena',allHidden:true},
  {id:'s02',turns:['svuota il menu cena'],menu:'Menu Cena',allHidden:true},
  {id:'s03',turns:['togli tutti i piatti della cena'],menu:'Menu Cena',allHidden:true},
  {id:'s04',turns:['nascondi tutto il menu di stasera'],menu:'Menu Cena',allHidden:true},
  {id:'s05',turns:['leva tutti i piatti dal menù cena'],menu:'Menu Cena',allHidden:true},
  {id:'s06',turns:[V('allora nel menu della cena togli tutto che dobbiamo rifarlo')],menu:'Menu Cena',allHidden:true},
- {id:'s07',turns:['togli tutto il menu di pranzo'],menu:'Menu Giorno',allHidden:true},
+ {id:'s07',turns:['togli tutti i piatti dal pranzo'],menu:'Menu Giorno',allHidden:true},
  {id:'s08',turns:['svuota il pranzo'],menu:'Menu Giorno',allHidden:true},
  {id:'s09',turns:['Nel menu cena dobbiamo cambiare tutto il menù, nascondi tutto'],menu:'Menu Cena',allHidden:true},
  {id:'s10',turns:['Il menù cena si deve vedere ma devi nascondere tutti i piatti'],menu:'Menu Cena',allHidden:true},
@@ -235,7 +243,7 @@ export const BATTERIA:Case[]=[
  {id:'i37',turns:['svuota il menu cena','nei primi inserisci carbonara','nei primi inserisci anche le lasagne'],menu:'Menu Cena',exact:{Primi:['Carbonara','Lasagne']}},
  {id:'i38',turns:['svuota il menu cena','ok adesso nei primi inserisci carbonara, nei secondi orata al forno e nei contorni insalata mista grazie'],menu:'Menu Cena',exact:{Primi:['Carbonara'],Secondi:['Orata al forno'],Contorni:['Insalata mista']}},
  {id:'o01',turns:['oggi nel menu cena nei primi inserisci carbonara'],menu:'Menu Cena',keepVisible:true,has:{Primi:['Carbonara']}},
- {id:'o02',turns:['togli tutto il menu di oggi a pranzo'],menu:'Menu Giorno',allHidden:true},
+ {id:'o02',turns:['leva tutti i piatti del menu di oggi a pranzo'],menu:'Menu Giorno',allHidden:true},
  {id:'o03',turns:['svuota il menu cena','nei primi inserici carbonara e lasagne'],menu:'Menu Cena',exact:{Primi:['Carbonara','Lasagne']}},
  {id:'o04',turns:['svuota il menu cena','nei primi agiungi la carbonara'],menu:'Menu Cena',exact:{Primi:['Carbonara']}},
  {id:'o05',turns:['svuota la cena'],menu:'Menu Cena',allHidden:true},
@@ -243,6 +251,21 @@ export const BATTERIA:Case[]=[
  {id:'o07',turns:['svuota il pranzo','nei primi inserisci pasta e fagioli, nei secondi arrosto di vitello','e nei contorni patate al forno'],menu:'Menu Giorno',exact:{Primi:['Pasta e fagioli'],Secondi:['Arrosto di vitello'],Contorni:['Patate al forno']}},
  {id:'o08',turns:['svuota il menu cena','nei primi inserisci carbonara','i secondi restano uguali'],menu:'Menu Cena',exact:{Primi:['Carbonara'],Secondi:[]},model:[3]},
  {id:'o09',turns:['svuota il menu cena','nei primi inserisci carbonara','e nei secondi orata al forno'],menu:'Menu Cena',exact:{Primi:['Carbonara'],Secondi:['Orata al forno']}},
+ // correzione Manuel 22/10 sera: «tutto il menu X» / «il menu X» = ELIMINARE il Menu, solo col «sì» scritto
+ {id:'d01',turns:['togli tutto il menu pranzo'],menu:'Menu Giorno',noWrite:true,ask:[1],reply:/Elimino il \*Menu Giorno\* intero\?/},
+ {id:'d02',turns:['elimina il menu pranzo','sì'],menu:'Menu Giorno',ask:[1],del:{menu:'Menu Giorno',confirm:2}},
+ {id:'d03',turns:['elimina il menu pranzo','no'],menu:'Menu Giorno',noWrite:true,ask:[1]},
+ {id:'d04',turns:['elimina il menu pranzo','annulla'],menu:'Menu Giorno',noWrite:true,ask:[1]},
+ {id:'d05',turns:['togli tutto il menu cena','si','annulla'],menu:'Menu Cena',ask:[1],del:{menu:'Menu Cena',confirm:2},undoTo:0},
+ {id:'d06',turns:['cancella il menù della cena'],menu:'Menu Cena',noWrite:true,ask:[1]},
+ {id:'d07',turns:['togli tutto il menu di pranzo','ok'],menu:'Menu Giorno',noWrite:true,ask:[1],reply:/sì\* scritto/},
+ {id:'d07b',turns:['togli tutto il menu di pranzo','ok','sì'],menu:'Menu Giorno',ask:[1],del:{menu:'Menu Giorno',confirm:3}},
+ {id:'d08',turns:['elimina il menu','cena','sì'],menu:'Menu Cena',ask:[1,2],del:{menu:'Menu Cena',confirm:3}},
+ {id:'d09',turns:['togli tutti i piatti del menu pranzo'],menu:'Menu Giorno',allHidden:true},
+ {id:'d10',turns:['leva tutti i piatti dal menu cena'],menu:'Menu Cena',allHidden:true},
+ {id:'d11',turns:['togli tutto il menu cena tranne le patate al forno'],menu:'Menu Cena',exact:{Contorni:['Patate al forno'],Primi:[],Secondi:[]}},
+ {id:'d12',turns:[V('allora togli tutto il menu del pranzo'),'sì'],menu:'Menu Giorno',ask:[1],del:{menu:'Menu Giorno',confirm:2}},
+ {id:'d13',turns:['elimina il menu pranzo','👍'],menu:'Menu Giorno',noWrite:true,ask:[1]},
  // sostituzione giornaliera (resta com'è, letta dal server col Menu detto)
  {id:'r01',turns:['stasera a cena primi: carbonara e pasta e fagioli, secondi orata al forno'],menu:'Menu Cena',exact:{Primi:['Carbonara','Pasta e fagioli'],Secondi:['Orata al forno'],Contorni:['Patate al forno','Insalata mista']}},
  {id:'r02',turns:['nel menu del pranzo primi pasta e fagioli e lasagna'],menu:'Menu Giorno',exact:{Primi:['Pasta e fagioli','Lasagna']}},
