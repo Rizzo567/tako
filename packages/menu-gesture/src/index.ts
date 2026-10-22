@@ -22,13 +22,15 @@ type Item = { el:HTMLElement; id:string; kind:Kind; group:string; box:Box; sprin
 type Group = { el:HTMLElement; id:string; axis:'x'|'y'|'grid'; kind:Kind|null; box:Box }
 type Scroller = { el:HTMLElement; box:Box; x:number; y:number; maxX:number; maxY:number; allowX:boolean; allowY:boolean }
 type Pending = { item:Item; id:number; x:number; y:number; timer:number; pointerType:string }
-type Drag = { item:Item; id:number|null; keyboard:boolean; pointerType:string; fromGroup:string; fromIndex:number; parent:Node; next:Node|null; originalGroup:string; group:string; index:number; anchorX:number; anchorY:number; x:number; y:number; lastX:number; lastY:number; ghost:HTMLElement; scale:number; scaleV:number; w:number; h:number }
+type Drag = { item:Item; id:number|null; keyboard:boolean; pointerType:string; fromGroup:string; fromIndex:number; parent:Node; next:Node|null; originalGroup:string; group:string; index:number; anchorX:number; anchorY:number; x:number; y:number; lastX:number; lastY:number; ghost:HTMLElement; scale:number; scaleV:number; w:number; h:number; lift:number }
 type Landing = { started:number; id:string; ghost:HTMLElement; x:number; y:number; vx:number; vy:number; scale:number; scaleV:number; w:number; h:number }
 
 const TAU = Math.PI * 2
 const EPS = .025
 const KINDS = new Set(['menu','submenu','section','dish'])
 let serial = 0
+/** Takomenu 22/10: ×1,10 come l'icona iPhone, ma una riga larga quanto il menu non cresce più di ~12 px per lato (resterebbe tagliata dal bordo). */
+function liftScale(width:number):number { return Math.min(1.1,1+24/Math.max(1,width)) }
 function box(r:DOMRect):Box { return {left:r.left,top:r.top,width:r.width,height:r.height,right:r.right,bottom:r.bottom} }
 function phase(id:string):number { let h=2166136261; for(let i=0;i<id.length;i++)h=Math.imul(h^id.charCodeAt(i),16777619);h^=h>>>16;h=Math.imul(h,0x85ebca6b);h^=h>>>13;h=Math.imul(h,0xc2b2ae35);h^=h>>>16;return (h>>>0)/4294967296*TAU }
 /** Exact critically damped spring, stable across variable refresh rates. */
@@ -187,7 +189,7 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     if(index<0||!i.el.parentNode)return
     mode(true)
     const ghost=clone(i)
-    drag={item:i,id:pointerId,keyboard,pointerType,fromGroup:i.group,fromIndex:index,parent:i.el.parentNode,next:i.el.nextSibling,originalGroup:i.el.getAttribute('data-edit-group')||i.group,group:i.group,index,anchorX:x-i.box.left,anchorY:y-i.box.top,x,y,lastX:x,lastY:y,ghost,scale:reduced?1.1:1,scaleV:0,w:i.box.width,h:i.box.height}
+    drag={item:i,id:pointerId,keyboard,pointerType,fromGroup:i.group,fromIndex:index,parent:i.el.parentNode,next:i.el.nextSibling,originalGroup:i.el.getAttribute('data-edit-group')||i.group,group:i.group,index,anchorX:x-i.box.left,anchorY:y-i.box.top,x,y,lastX:x,lastY:y,ghost,scale:reduced?liftScale(i.box.width):1,scaleV:0,w:i.box.width,h:i.box.height,lift:liftScale(i.box.width)}
     hide(i);css(root,rootSaved,'user-select','none');css(root,rootSaved,'-webkit-user-select','none')
     if(pointerId!==null)try{root.setPointerCapture(pointerId)}catch{/* pointer may have ended */}
     if(reduced||keyboard)ghost.style.outline='2px solid #444'
@@ -332,7 +334,7 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
       else i.spring={x:0,y:0,vx:0,vy:0}
       renderItem(i,time)
     }
-    if(drag){[drag.scale,drag.scaleV]=reduced?[1.1,0]:spring(drag.scale,drag.scaleV,1.1,dt,28);renderGhost();autoScroll(dt);busy=true}
+    if(drag){[drag.scale,drag.scaleV]=reduced?[drag.lift,0]:spring(drag.scale,drag.scaleV,drag.lift,dt,28);renderGhost();autoScroll(dt);busy=true}
     if(landing){
       const l=landing,i=items.find(i=>i.id===l.id)
       if(!i||!root.contains(i.el)){endLanding()}
@@ -353,7 +355,8 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     const previous=new Map(items.map(i=>[i.el,i]))
     for(const i of items)if(!nodes.includes(i.el))restore(i.el,i.saved)
     if(drag&&!nodes.includes(drag.item.el)){drag.ghost.remove();drag=null;css(root,rootSaved,'user-select',rootSaved.styles.get('user-select')?.[0]||'');css(root,rootSaved,'-webkit-user-select',rootSaved.styles.get('-webkit-user-select')?.[0]||'')}
-    clearPending()
+    // Takomenu 22/10: un ri-render durante la pressione (es. la selezione che compare al tocco) non deve annullare la pressione lunga.
+    if(pending&&!nodes.includes(pending.item.el))clearPending()
     items=nodes.map(el=>{
       let i=previous.get(el)
       if(!i){
@@ -382,6 +385,7 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
       return{el,id,axis,kind:inferred as Kind|null,box:box(el.getBoundingClientRect())}
     })
     if(root.matches('[data-edit-group-id]'))groups.unshift({el:root,id:root.dataset.editGroupId!,axis:(root.dataset.editAxis||'y') as Group['axis'],kind:items.find(i=>i.group===root.dataset.editGroupId)?.kind||null,box:box(root.getBoundingClientRect())})
+    if(pending){const p=pending,i=items.find(x=>x.el===p.item.el);if(i)p.item=i;else clearPending()}
     if(landing){const i=items.find(i=>i.id===landing!.id);if(i)hide(i)}
     measure();requestFrame()
   }
