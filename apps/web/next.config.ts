@@ -22,6 +22,8 @@ const nextConfig: NextConfig = {
     ]
   },
   devIndicators: false,
+  // Vista di modifica del menu (22/10): il layer importa packages/menu-ops (TypeScript fuori da apps/web).
+  experimental: { externalDir: true },
 }
 
 export default nextConfig

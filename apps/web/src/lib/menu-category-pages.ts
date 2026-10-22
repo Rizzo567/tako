@@ -22,6 +22,16 @@ export function categoryGroups<T extends CategorySection>(sections: T[]): Catego
   return [...groups.values()]
 }
 
+/** Ordine manuale (dashboard editor 22/10, `design.manualOrder===true`): pillole = Sottomenu veri, con i loro nomi,
+ *  nell'ordine del documento, senza accorpamenti. Stessa funzione di `categoryGroups`, nome esplicito per il renderer. */
+export const manualCategoryGroups = categoryGroups
+
+/** Ordine delle sezioni come lo mostra oggi la pagina (pillole nell'ordine visto, ogni radice seguita dalle sue figlie).
+ *  Serve alla fotografia dell'ordine manuale (`manualOrderSnapshot`): stesse funzioni della pagina pubblica. */
+export function visibleSectionOrder<T extends CategorySection>(sections: T[], manual = false): string[] {
+  return (manual ? categoryGroups(sections) : macroCategoryGroups(sections)).flatMap(g => [g.section.id, ...g.children.map(c => c.id)])
+}
+
 export function macroCategoryGroups<T extends CategorySection>(sections:T[]):CategoryGroup<T>[] {
   const groups=new Map(categoryGroups(sections).map(g=>[g.id,g]))
   const normalize=(name:string)=>name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim()
