@@ -181,23 +181,25 @@ describe('job delle 06:00 con orologio finto', () => {
   expect(mine(await P.runDayPresetAutopublish({ now: at('2026-10-27T04:00:00Z') }))).toEqual([])
  })
 
- it('bozza non pubblicata alle 06:00: va persa, ma resta una versione recuperabile e un avviso', async () => {
+ it('bozza non pubblicata sul menu del preset alle 06:00: va persa, ma resta una versione recuperabile e un avviso', async () => {
   const ids = await seed()
   await P.activateDayPresets(ids.tenant, ids.pranzo, { kind: 'current' })
   await P.saveDayPreset(ids.tenant, { menuId: ids.pranzo, weekday: 2, sections: [section('Primi', [{ name: 'Gnocchi', price: 12 }])] as never })
   await P.setDayPresetAutoPublish(ids.tenant, ids.pranzo, true, { now: at('2026-10-19T10:00:00Z') })
   const row = await published(ids.tenant), draft = C.workspaceSchema.parse(row.draft)
-  draft.menus.find(m => m.id === ids.cena)!.sections[0]!.items[0]!.price = 99 // modifica non pubblicata su un altro menu
+  // dashboard editor 22/10: il preset tocca SOLO il suo Menu; la bozza va salvata come versione solo se riguarda quel Menu
+  // (bozza su un altro Menu = resta intatta: tests/bot-partial-publish.test.ts scenario 9).
+  draft.menus.find(m => m.id === ids.pranzo)!.sections[0]!.items[0]!.price = 99 // modifica non pubblicata sul menu del preset
   await S.mutateWorkspace(ids.tenant, ids.actor, row.revision, draft, false, 'Bozza titolare')
   const [result] = (await P.runDayPresetAutopublish({ now: at('2026-10-20T04:00:00Z') })).filter(o => o.restaurantId === ids.tenant)
   expect(result).toMatchObject({ status: 'published' })
   const after = await published(ids.tenant)
   expect(after.revision).toBe(after.published_revision)
-  expect(C.workspaceSchema.parse(after.draft).menus.find(m => m.id === ids.cena)!.sections[0]!.items[0]!.price).toBe(16)
+  expect(C.workspaceSchema.parse(after.draft).menus.find(m => m.id === ids.pranzo)!.sections[0]!.items[0]!.name).toBe('Gnocchi')
   const run = (await pg.client`SELECT discarded_draft_version_id FROM menu_day_preset_runs WHERE restaurant_id=${ids.tenant}`)[0]!
   const version = (await pg.client`SELECT label,snapshot FROM menu_workspace_versions WHERE id=${run.discarded_draft_version_id}`)[0]!
   expect(version.label).toBe('Bozza non pubblicata, sostituita dal preset «Martedì» alle 06:00')
-  expect(C.workspaceSchema.parse(version.snapshot).menus.find(m => m.id === ids.cena)!.sections[0]!.items[0]!.price).toBe(99)
+  expect(C.workspaceSchema.parse(version.snapshot).menus.find(m => m.id === ids.pranzo)!.sections[0]!.items[0]!.price).toBe(99)
   expect((await P.listOwnerNotices(ids.tenant)).map(n => n.kind)).toEqual(['draft_discarded'])
  })
 
