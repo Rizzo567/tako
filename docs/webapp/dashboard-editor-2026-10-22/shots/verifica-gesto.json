@@ -1,0 +1,146 @@
+{
+  "data": "2026-10-22T10:59:11.659Z",
+  "ambito": "dashboard vera (server Fastify + Postgres locale + SPA compilata + renderer vero), modulo packages/menu-gesture, Chrome headless 1280 mouse + 390 tocco emulato",
+  "risultati": [
+    {
+      "n": "G1",
+      "scenario": "Pressione 1 s → sollevamento (×1,10, righe larghe ≤ 12 px per lato) + tremolio degli altri; prima di 1 s nulla",
+      "ok": true,
+      "detail": {
+        "elementi": 6,
+        "ampiezzaGradi": 1.8,
+        "periodoMs": 256,
+        "fasiDiverse": true,
+        "scalaSollevato": 1.043,
+        "primaDi1s": {
+          "jiggle": false,
+          "ghost": false
+        },
+        "dopoRilascio": true,
+        "fine": true
+      }
+    },
+    {
+      "n": "G2",
+      "scenario": "Piatto trascinato in un'altra Sezione (Carbonara: Primi → Risotti) con molla; bozza sul server",
+      "ok": true,
+      "detail": {
+        "bozza": [
+          "Carbonara",
+          "Risotto ai funghi",
+          "Risotto alla milanese",
+          "Risotto al nero"
+        ],
+        "manualOrder": null
+      }
+    },
+    {
+      "n": "G3",
+      "scenario": "Menu trascinato a sinistra (Cena prima di Pranzo) → ordine manuale in bozza",
+      "ok": true,
+      "detail": {
+        "bozza": [
+          "Cena",
+          "Pranzo",
+          "Menu del giorno"
+        ],
+        "dom": [
+          "Cena",
+          "Pranzo",
+          "Menu del giorno"
+        ]
+      }
+    },
+    {
+      "n": "G4",
+      "scenario": "Sottomenu su più righe: Dolci portato al primo posto delle pillole",
+      "ok": true,
+      "detail": {
+        "righeDiPillole": 3,
+        "radici": [
+          "Dolci",
+          "Antipasti",
+          "Primi",
+          "Secondi",
+          "Contorni"
+        ]
+      }
+    },
+    {
+      "n": "G5",
+      "scenario": "«Fine» → il tremolio si ferma (≈90 ms), niente più elementi in modalità",
+      "ok": true,
+      "detail": {
+        "edit": 0,
+        "rot": false
+      }
+    },
+    {
+      "n": "G6",
+      "scenario": "Ricarica pagina → ordine salvato in bozza (Menu, Sottomenu, piatto spostato)",
+      "ok": true,
+      "detail": {
+        "menuPrimo": "Cena",
+        "pilloleUgualiBozza": 5,
+        "statoTestata": "Modifiche non pubblicate"
+      }
+    },
+    {
+      "n": "G7",
+      "scenario": "Pubblica → pubblicato nell'ordine nuovo; pagina dei clienti (renderer pubblico, sola lettura) nell'ordine nuovo",
+      "ok": true,
+      "detail": {
+        "pubblicato": {
+          "menus": [
+            "Cena",
+            "Pranzo",
+            "Menu del giorno"
+          ],
+          "sottomenu": [
+            "Dolci",
+            "Antipasti",
+            "Primi",
+            "Secondi",
+            "Contorni"
+          ]
+        },
+        "paginaClienti": [
+          "Dolci",
+          "Antipasti",
+          "Primi",
+          "Secondi",
+          "Contorni"
+        ]
+      }
+    },
+    {
+      "n": "G8",
+      "scenario": "Telefono (tocco emulato): pressione 1 s → tremolio, piatto in un'altra Sezione, «Fine»",
+      "ok": true,
+      "detail": {
+        "tremolio": {
+          "elementi": 6,
+          "ampiezzaGradi": 1.8,
+          "periodoMs": 248,
+          "fasiDiverse": true,
+          "scalaSollevato": 1.068
+        },
+        "pastaFresca": [
+          "Amatriciana",
+          "Tagliatelle al ragù",
+          "Ravioli burro e salvia",
+          "Pappardelle al cinghiale",
+          "Gnocchi alla sorrentina"
+        ],
+        "fine": true
+      }
+    },
+    {
+      "n": "G9",
+      "scenario": "Nessun errore JavaScript (né di React su nodi spostati)",
+      "ok": true,
+      "detail": "console pulita"
+    }
+  ],
+  "note": []
+}

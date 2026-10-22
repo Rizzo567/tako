@@ -1,6 +1,6 @@
 {
  "ambito": "Server Fastify VERO (startServer, TAKO_MODE=web, login vero) + Postgres embedded isolato (migrazioni vere + menu-day-presets.sql) + SPA compilata + renderer vero (esbuild) via proxy locale; bot = applyBotChange sullo stesso DB; Chrome headless 1280 e 390 emulato",
- "data": "2026-10-22T09:55:21.996Z",
+ "data": "2026-10-22T10:58:17.707Z",
  "locale": "26050ecd-2e55-4057-a4c5-bff2b449cd47 (finto)",
  "piatti": 41,
  "risultati": [
@@ -32,7 +32,7 @@
    "n": 5,
    "scenario": "Bot WhatsApp con bozza pendente (applyBotChange): pubblicato solo bot, bozza entrambe, notifica ≤ 6 s",
    "ok": true,
-   "detail": "revisioni 7/3 → 9/5 (partial=true); notifica dopo 3577 ms; stato «Modifiche non pubblicate»"
+   "detail": "revisioni 7/3 → 9/5 (partial=true); notifica dopo 3287 ms; stato «Modifiche non pubblicate»"
   },
   {
    "n": 6,

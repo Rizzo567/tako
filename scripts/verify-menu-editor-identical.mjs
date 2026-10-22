@@ -73,7 +73,10 @@ async function bundle(dir){
  }
  const src=join(dir,'src');await mkdir(src,{recursive:true})
  for(const [name,code] of Object.entries(entries))await writeFile(join(src,name+'.tsx'),code)
- await build({entryPoints:Object.keys(entries).map(n=>join(src,n+'.tsx')),outdir:join(dir,'out'),bundle:true,splitting:true,format:'esm',jsx:'automatic',loader:{'.ttf':'dataurl','.woff2':'dataurl'},alias:{'@':resolve(root,'apps/web/src')},nodePaths:[resolve(root,'apps/web/node_modules'),resolve(root,'node_modules')],define:{'process.env.NODE_ENV':'"production"','process.env.NEXT_PUBLIC_API_URL':'""'},external:['/takomenu-public/*','/uploads/*'],logLevel:'error'})
+ await build({entryPoints:Object.keys(entries).map(n=>join(src,n+'.tsx')),outdir:join(dir,'out'),bundle:true,splitting:true,format:'esm',jsx:'automatic',loader:{'.ttf':'dataurl','.woff2':'dataurl'},alias:{'@':resolve(root,'apps/web/src')},nodePaths:[resolve(root,'apps/web/node_modules'),resolve(root,'node_modules')],define:{'process.env.NODE_ENV':'"production"','process.env.NEXT_PUBLIC_API_URL':'""'},external:['/takomenu-public/*','/uploads/*'],logLevel:'error',
+  // 22/10: qui si controllano pixel e logica dati del layer (onDrop → op) attraverso l'aggancio di prova dello stub; il gesto vero
+  // (packages/menu-gesture) ha la sua verifica con puntatore e video: scripts/verify-menu-gesture-real.mjs.
+  plugins:[{name:'gesture-stub',setup(b){b.onResolve({filter:/packages\/menu-gesture\/src\/index$/},()=>({path:resolve(root,'apps/web/src/components/menu-edit/gesture-stub.ts')}))}}]})
 }
 
 const TYPES={'.js':'text/javascript','.css':'text/css','.woff2':'font/woff2','.woff':'font/woff','.ttf':'font/ttf','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp','.json':'application/json'}

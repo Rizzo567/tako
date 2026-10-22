@@ -5,54 +5,63 @@
    "scenario": "elementi diversi in parallelo",
    "ok": true,
    "divergences": 0,
-   "ms": 5196,
+   "ms": 5205,
    "detail": "nessuna perdita"
   },
   {
    "scenario": "stesso campo in parallelo",
    "ok": true,
    "divergences": 0,
-   "ms": 5219,
+   "ms": 5248,
    "detail": "vince l’ultimo arrivato: 20"
   },
   {
    "scenario": "bot cambia pubblicato+bozza con coda piena",
    "ok": true,
    "divergences": 0,
-   "ms": 1447,
+   "ms": 1398,
    "detail": "notifica WhatsApp vista"
   },
   {
    "scenario": "offline → online",
    "ok": true,
    "divergences": 0,
-   "ms": 2012,
+   "ms": 2140,
    "detail": "pillola offline vista"
   },
   {
    "scenario": "404 bersaglio sparito",
    "ok": true,
    "divergences": 0,
-   "ms": 759
+   "ms": 810
   },
   {
    "scenario": "409 gerarchia (Sottomenu con figlie dentro un altro)",
    "ok": true,
    "divergences": 0,
-   "ms": 630
+   "ms": 780
   },
   {
    "scenario": "200 op consecutive",
    "ok": true,
    "divergences": 0,
-   "ms": 860,
+   "ms": 1768,
    "detail": {
-    "richieste": 4,
+    "richieste": 13,
     "dimensioni": [
      50,
-     50,
-     50,
-     50
+     21,
+     12,
+     13,
+     13,
+     11,
+     12,
+     12,
+     12,
+     12,
+     13,
+     11,
+     8
     ],
     "ordinato": true
    }
@@ -61,7 +70,7 @@
    "scenario": "Pubblica con modifica dell’altra scheda in mezzo (409 → riquadro aggiornato)",
    "ok": true,
    "divergences": 0,
-   "ms": 1340,
+   "ms": 1840,
    "detail": "riquadro aggiornato da solo true"
   }
  ]

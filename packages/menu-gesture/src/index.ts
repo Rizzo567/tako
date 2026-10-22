@@ -293,7 +293,7 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     drag.x=event.clientX;drag.y=event.clientY;renderGhost();target();requestFrame()
   }
   function onUp(event:PointerEvent) {
-    if(pending&&event.pointerId===pending.id){const p=pending;clearPending();if(root.contains(p.item.el)){clickUntil=view.performance.now()+350;opts.onTap?.(p.item.id)}return}
+    if(pending&&event.pointerId===pending.id){const p=pending;clearPending();if(root.contains(p.item.el)){opts.onTap?.(p.item.id)}return} // Takomenu 22/10: dopo un tocco breve il click resta (pillole e Menu devono cambiare pagina); il click si blocca solo dopo un trascinamento
     if(drag&&event.pointerId===drag.id)finish(false)
   }
   function onCancel(event:PointerEvent) { if(pending?.id===event.pointerId)clearPending();if(drag?.id===event.pointerId)finish(true) }
