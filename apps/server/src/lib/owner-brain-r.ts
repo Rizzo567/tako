@@ -23,7 +23,7 @@ export type BrainAsk={kind:'brain_ask',question:string,ids:string[],actions:Menu
 export type Pend={kind:'batch',actions:MenuAction[],why:BatchWhy}|{kind:'hold',actions:MenuAction[],hold:Hold}|{kind:'ask',ask:BrainAsk}|{kind:'other'}|null
 export function pendOf(cmd:any):Pend{
  if(!cmd||typeof cmd!=='object')return null
- if(cmd.kind==='batch'&&Array.isArray(cmd.actions)){const a=cmd.actions as MenuAction[];return{kind:'batch',actions:a,why:cmd.why??(a.some(x=>x.kind==='delete')?'delete':a.some(x=>x.kind==='create_section')?'section':'recap')}}
+ if(cmd.kind==='batch'&&Array.isArray(cmd.actions)){const a=cmd.actions as MenuAction[];return{kind:'batch',actions:a,why:cmd.why??(a.some(x=>x.kind==='delete'&&!(x as any).soft)?'delete':a.some(x=>x.kind==='create_section')?'section':'recap')}}
  if(cmd.kind==='hold'&&Array.isArray(cmd.actions))return{kind:'hold',actions:cmd.actions,hold:cmd as Hold}
  if(cmd.kind==='brain_ask')return{kind:'ask',ask:cmd as BrainAsk}
  return{kind:'other'}}
@@ -122,7 +122,7 @@ const STRUCT_REASON:Record<string,string>={
  sottomenu_da_trovare:'il sottomenu nominato non c\u2019è nel Menu indicato: usa il codice cN di un sottomenu esistente o chiedi quale',
  prezzo_nuovo_alla_carta:'nel Menu alla carta un piatto nuovo vuole il prezzo: se il titolare l\u2019ha detto scrivilo nel text dopo il nome («Lasagna 12»), altrimenti chiedi in UNA domanda il prezzo di quel piatto (intent=clarify), nessuna azione',
  piatti_mancanti:'replace_section_items vuole in text i piatti detti dal titolare, separati da «;»',
- sostituzione_alla_carta:'la sostituzione dei piatti del giorno vale solo nei Menu a prezzo fisso: in un Menu alla carta chiedi cosa vuole fare (nascondere o aggiungere piatti), nessuna azione',
+ sostituzione_alla_carta:'la sostituzione dei piatti del giorno vale solo nei Menu a prezzo fisso: in un Menu alla carta chiedi cosa vuole fare (togliere o aggiungere piatti), nessuna azione',
  nome_piatto:'in text vanno solo i nomi dei piatti detti, senza verbi né frasi',
  nome_non_detto:'in text c\u2019è un piatto che il titolare non ha detto: usa solo i nomi detti (il server ritrova da solo il piatto esistente: «cotoletta» = Cotoletta alla milanese)',
  piatto_ambiguo_sostituzione:'un nome detto corrisponde a più piatti dello stesso sottomenu: chiedi in UNA domanda quale (con i nomi), nessuna azione'}
@@ -310,7 +310,7 @@ export function sameQuestion(a:string,b:string){const w=(s:string)=>new Set(plai
  * la chiude; una parte senza verbi («e la parmigiana») continua quella di prima. Piatti non nominati (pronomi) non si controllano. */
 const OTHER_VERB=/\b(?:nascond\w*|togli\w*|lev[ai]\w*|mett\w*|aggiung\w*|spost\w*|rinomin\w*|finit\w*|esaurit\w*|evidenza|aument\w*|abbass\w*|cambi\w*|port[aio]\w*|rimett\w*|costa\w*|prezzo)\b|\b(?:a|costa)\s+\d/
 export function deleteScopeProblem(message:string,actions:MenuAction[],refs:MenuRef[]):string[]{
- const dels=actions.filter(a=>a.kind==='delete'&&!a.undoCreate).map(a=>(a as any).id as string);if(!dels.length)return[]
+ const dels=actions.filter(a=>a.kind==='delete'&&!a.undoCreate&&!a.soft).map(a=>(a as any).id as string);if(!dels.length)return[] // soft (22/10 notte): sostituzione/«togli», non il verbo «elimina»
  const parts=message.split(/[,;]|\s+(?:e|ed|poi|anche)\s+/i).map(x=>plain(x)).filter(Boolean);let cur:'del'|'other'|null=null;const scope=new Map<string,Set<string>>()
  for(const p of parts){const del=DELETE_RE.test(p),other=OTHER_VERB.test(p.replace(DELETE_RE,' '));if(del)cur='del';else if(other)cur='other'
   for(const r of refs)if((' '+p+' ').includes(' '+plain(r.name)+' ')||plain(r.name).split(' ').some(w=>w.length>=4&&(' '+p+' ').includes(' '+w+' '))){const s=scope.get(r.id)??new Set();s.add(del&&other&&!new RegExp('\\b'+plain(r.name).split(' ')[0]!+'\\b').test(p.slice(p.search(DELETE_RE)))?'other':cur??'none');scope.set(r.id,s)}}
@@ -427,13 +427,15 @@ export function noopFacts(actions:MenuAction[],effective:MenuAction[],refs:MenuR
 export function wholeGroup(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):{kind:'hidden'|'delete',label:string,count:number}|null{
  if(actions.length<3)return null
  const kind=actions.every(a=>a.kind==='hidden'&&a.value)?'hidden' as const:actions.every(a=>a.kind==='delete'&&!a.undoCreate)?'delete' as const:null;if(!kind)return null
- const ids=new Set(actions.map(a=>(a as any).id as string)),covered=(r:MenuRef)=>ids.has(r.id)||(kind==='hidden'&&r.hidden)
+ const ids=new Set(actions.map(a=>(a as any).id as string)),soft=actions.every(a=>(a as any).soft),covered=(r:MenuRef)=>ids.has(r.id)||((kind==='hidden'||soft)&&r.hidden) // 22/10 notte: «togli tutti i primi» = eliminazione di massa → sempre il sì
  const menus=[...new Set(refs.map(r=>r.menu))]
  for(const m of menus){const items=refs.filter(r=>r.menu===m);if(items.length>=3&&items.every(covered)&&items.some(r=>ids.has(r.id)))return{kind,label:'tutto il '+(/^men[uù]\b/i.test(m.trim())?m.trim():'Menu '+m.trim()),count:items.filter(r=>ids.has(r.id)).length}}
  for(const s of sections){const items=refs.filter(r=>r.sectionId===s.id);if(items.length>=3&&items.every(covered)&&items.some(r=>ids.has(r.id)))return{kind,label:'tutto il sottomenu '+s.name.trim()+(menus.length>1?' ('+s.menu.trim()+')':''),count:items.filter(r=>ids.has(r.id)).length}}
  return null
 }
-export const wholeGroupText=(w:{kind:'hidden'|'delete',label:string,count:number})=>(w.kind==='hidden'?'Nascondo':'Elimino')+' *'+w.label+'* ('+w.count+(w.count===1?' piatto':' piatti')+')? Rispondi *sì*. Non ho ancora cambiato nulla.'
+// 22/10 notte: i piatti tolti si eliminano (mai nascosti): la domanda dice che il Menu/sottomenu resta.
+export const wholeGroupText=(w:{kind:'hidden'|'delete',label:string,count:number})=>{const g=w.label.replace(/^tutto il /,''),sub=/^sottomenu /.test(g)
+ return 'Elimino '+(w.count===1?'il piatto':'tutti i '+w.count+' piatti')+' del *'+g+'*? '+(sub?'Il sottomenu resta.':'Il Menu e i sottomenu restano.')+' Rispondi *sì*. Non ho ancora cambiato nulla.'}
 
 // run Haiku 21/10 (parlato sporco): Whisper su un ristoratore che biascica tronca i numeri («dodic», «diciott e cinquant»,
 // «cinque e mezz»). Il modello li capisce, il controllo «prezzo detto» no: si completano le parole-numero troncate SOLO quando

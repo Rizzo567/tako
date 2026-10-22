@@ -1,12 +1,14 @@
 /** Regola d'uso 22/10/2026 (decisione Manuel dopo la prova con Gio, Victoria Bar). Modulo PURO: niente DB, niente rete, niente modello.
- * - «togli tutto il menu di pranzo», «svuota il menu cena», «togli tutti i piatti del pranzo», «nascondi tutto» = NASCONDE tutti i piatti
- *   visibili di quel Menu. Sottomenu, Menu e prezzi fissi restano; mai eliminazioni; nessuna domanda di conferma («annulla» 10 minuti).
+ * CORREZIONE 22/10 notte (Manuel, vincolante): per i piatti «nascondere» non esiste più → i piatti tolti si ELIMINANO definitivamente.
+ * - «togli tutti i piatti del menu pranzo», «svuota il menu cena», «leva tutti i piatti…», «nascondi tutto» = ELIMINA tutti i piatti di quel
+ *   Menu. Sottomenu, Menu e prezzi fissi restano; subito, nessuna domanda («annulla» 10 minuti li ricrea identici: snapshot dei Menu).
+ * - «togli tutto il menu pranzo» / «elimina il menu pranzo» = il Menu intero, SOLO col «sì» scritto (deleteMenuIntent).
  * - «nei primi inserisci A, B, C», «nei secondi D e E», «contorni F» (anche tutto insieme, anche in vocale) = nel sottomenu del Menu di cui
- *   si parla: piatto omonimo esistente → di nuovo visibile (con la sua foto), nuovo → creato senza prezzo (Menu a prezzo fisso).
- *   «Inserisci» NON nasconde gli altri piatti (la sostituzione giornaliera «oggi a pranzo primi …» resta com'è).
+ *   si parla: omonimo già lì → non si duplica (un vecchio piatto nascosto da prima torna nel menu), nuovo → creato senza prezzo (Menu a
+ *   prezzo fisso). «Inserisci» NON tocca gli altri piatti (la sostituzione giornaliera «oggi a pranzo primi …» elimina i non nominati).
  * - Menu: quello detto nel messaggio («a cena», «menu del giorno», «pranzo» → il Menu del pranzo/giorno), altrimenti l'ultimo nominato
  *   nella conversazione; se resta ambiguo una domanda di una riga («Nel *Menu Giorno* o nel *Menu Cena*?»).
- * Invarianti (batteria avversaria 22/10): mai sottomenu o Menu eliminati/nascosti, mai piatti di altri Menu, ogni nome detto è inserito o
+ * Invarianti (batteria avversaria 22/10): mai sottomenu o Menu eliminati/nascosti (senza il «sì»), mai piatti di altri Menu, mai «hidden» prodotto, ogni nome detto è inserito o
  * segnalato nella risposta, prezzi fissi intatti, «annulla» rimette esattamente com'era (undo generico della pubblicazione). */
 import {plain,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
 import {sameSection} from './twilio-menu-structure.js'
@@ -211,9 +213,9 @@ export function buildInsert(info:MenuInfo,parse:InsertParse,vocab:string[]):Inse
  for(const n of parse.loose)place(n,null)
  return{actions,sections,unknownSecs,notPlaced,touched,needsPrice}}
 
-/** Azioni dello svuotamento: ogni piatto VISIBILE del Menu nascosto (tranne `keep`); sottomenu e Menu non si toccano mai. */
+/** Azioni dello svuotamento: ogni piatto del Menu ELIMINATO (anche i vecchi nascosti; tranne `keep`); sottomenu e Menu non si toccano mai. */
 export function buildClear(info:MenuInfo,keep:Set<string>=new Set()):{actions:MenuAction[],names:string[]}{
- const vis=info.items.filter(r=>!r.hidden&&!keep.has(r.id));return{actions:vis.map(r=>({kind:'hidden',id:r.id,value:true}) as MenuAction),names:vis.map(r=>r.name)}}
+ const all=info.items.filter(r=>!keep.has(r.id));return{actions:all.map(r=>({kind:'delete',id:r.id,soft:true}) as MenuAction),names:all.map(r=>r.name)}}
 
 // ---------- turno intero ----------
 export type RuleInput={text:string,menus:RuleMenu[],sections:SectionRef[],refs:MenuRef[],history:{role:string,text:string,at:number}[],
@@ -271,7 +273,7 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
  const ctx=contextMenu(o.history,o.menus)
  if(ctx)return runOn(ctx,text,o,follow,true)
  // nessun Menu: per svuotare, i Menu con piatti visibili; per inserire, i Menu a prezzo fisso con i sottomenu detti
- if(clr){const c=o.menus.filter(m=>o.refs.some(r=>r.menu===m.name&&!r.hidden));if(c.length===1)return runOn(c[0]!,text,o,false);if(!c.length)return{kind:'info',text:'Non c’è nessun piatto visibile da togliere: il menu è già vuoto.'};return askMenu(c,text)}
+ if(clr){const c=o.menus.filter(m=>o.refs.some(r=>r.menu===m.name));if(c.length===1)return runOn(c[0]!,text,o,false);if(!c.length)return{kind:'info',text:'Non c’è nessun piatto da togliere: il menu è già vuoto.'};return askMenu(c,text)}
  const fixed=o.menus.filter(m=>m.pricing==='fisso'),cands=fixed.filter(m=>{const ip=parseInsert(text,o.sections.filter(s=>s.menu===m.name),o.menus,vocab);return ip.lists.length>0&&ip.lists.every(l=>!!l.secId)})
  if(cands.length===1)return runOn(cands[0]!,text,o,false)
  if(cands.length>1)return askMenu(cands,text)
@@ -285,7 +287,7 @@ function runOn(menu:RuleMenu,text:string,o:RuleInput,answer:boolean,fromCtx=fals
  let clr=false,insText=text,clearText=text
  if(sp.insert.trim()&&sp.clear.trim()&&clearIntent(sp.clear,allNames)){clr=true;insText=sp.insert;clearText=sp.clear}
  else if(clearIntent(text,allNames)){clr=true;insText='';clearText=text}
- // «togli tutto tranne la carbonara»: i piatti detti dopo «tranne» restano visibili
+ // «togli tutto tranne la carbonara»: i piatti detti dopo «tranne» restano
  let keepNames:string[]=[]
  if(clr){const m=clearText.match(/\b(?:tranne|eccetto|a parte|salvo|meno che|tranne che)\b(.*)$/i);if(m){keepNames=splitNames(tokens(m[1]!),vocab);clearText=clearText.slice(0,m.index)}}
  const p=plain(insText)
@@ -307,12 +309,12 @@ function applyResult(info:MenuInfo,parse:InsertParse,clear:{deleteWord:boolean,k
  // Menu alla carta: un piatto nuovo vuole il prezzo → resta il percorso di prima (domanda del prezzo), salvo lo svuotamento
  if(b.needsPrice.length&&!clear)return null
  const keep=new Set(b.touched),notFound:string[]=[]
- for(const n of clear?.keep??[]){const ex=findExisting(n,null,info.items);if(ex&&!ex.hidden)keep.add(ex.id);else notFound.push(newName(n,vocab))}
+ for(const n of clear?.keep??[]){const ex=findExisting(n,null,info.items);if(ex)keep.add(ex.id);else notFound.push(newName(n,vocab))}
  const cl=clear?buildClear(info,keep):{actions:[],names:[]}
  const actions=[...cl.actions,...b.actions]
  const report:RuleReport={menu:info.menu.name,fixed:info.menu.pricing==='fisso',cleared:cl.names,deleteWord:!!clear?.deleteWord,sections:b.sections,unknownSecs:b.unknownSecs,notPlaced:[...b.notPlaced,...b.needsPrice],notFound,kept:[...keep].filter(id=>!b.touched.has(id)).map(id=>info.items.find(r=>r.id===id)?.name??'').filter(Boolean)}
  if(!actions.length){
-  if(clear&&!b.sections.length)return{kind:'info',text:'Il '+mLabel(info.menu.name)+' è già vuoto: nessun piatto visibile, non ho cambiato nulla. Scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne».'}
+  if(clear&&!b.sections.length)return{kind:'info',text:'Il '+mLabel(info.menu.name)+' è già vuoto: nessun piatto, non ho cambiato nulla. Scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne».'}
   return{kind:'info',text:ruleReply(report,info.items,[],false)}}
  return{kind:'apply',menu:info.menu,actions,report}}
 
@@ -320,26 +322,27 @@ function applyResult(info:MenuInfo,parse:InsertParse,clear:{deleteWord:boolean,k
 /** Testo della risposta: titolo per Menu, blocchi per sottomenu con un piatto per riga, note su ciò che non è entrato, «annulla». */
 export function ruleReply(r:RuleReport,itemsBefore:MenuRef[],actions:MenuAction[],wrote=true,extra=''):string{
  const out:string[]=[],secNames=[...new Set(itemsBefore.map(i=>i.sectionId))]
- const visibleAfter=(secId:string)=>{const vis=itemsBefore.filter(i=>i.sectionId===secId&&!actions.some(a=>a.kind==='hidden'&&(a as any).id===i.id&&(a as any).value)&&(!i.hidden||actions.some(a=>a.kind==='hidden'&&(a as any).id===i.id&&!(a as any).value))).map(i=>i.name)
+ const visibleAfter=(secId:string)=>{const vis=itemsBefore.filter(i=>i.sectionId===secId&&!actions.some(a=>(a.kind==='delete'||a.kind==='hidden'&&(a as any).value)&&(a as any).id===i.id)&&(!i.hidden||actions.some(a=>a.kind==='hidden'&&(a as any).id===i.id&&!(a as any).value))).map(i=>i.name)
   return [...vis,...actions.filter(a=>a.kind==='create'&&a.sectionId===secId).map(a=>(a as any).name as string)]}
  void secNames
  const ins=r.sections.filter(s=>s.created.length||s.shown.length||s.already.length)
  if(r.cleared.length&&!ins.length){
   out.push('*'+(/^men[uù]\b/i.test(r.menu.trim())?r.menu.trim():'Menu '+r.menu.trim())+' svuotato*')
   const secs=[...new Set(itemsBefore.map(i=>i.section??'').filter(Boolean))]
-  out.push('Ho nascosto '+(r.kept?.length?(r.cleared.length===1?'1 piatto':r.cleared.length+' piatti'):r.cleared.length===1?'l’unico piatto visibile':'tutti i '+r.cleared.length+' piatti visibili')+(r.deleteWord?' (nascosti, non eliminati: tornano quando li rimetti)':'')+'. '+(secs.length?'I sottomenu ('+andList(secs)+')':'I sottomenu')+(r.fixed?' e i prezzi fissi restano':' restano')+' come sono.')
+  out.push('Ho eliminato '+(r.kept?.length?(r.cleared.length===1?'1 piatto':r.cleared.length+' piatti'):r.cleared.length===1?'l’unico piatto':(/^(?:8|11)/.test(String(r.cleared.length))?'tutti gli ':'tutti i ')+r.cleared.length+' piatti')+'. '+(secs.length?'I sottomenu ('+andList(secs)+')':'I sottomenu')+(r.fixed?' e i prezzi fissi restano':' restano')+' come sono.')
+  out.push('Eliminati: '+r.cleared.join(', ')+'.')
   out.push('Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne».')}
  else if(ins.length&&!wrote&&ins.every(x=>!x.created.length&&!x.shown.length)){const alr=ins.flatMap(x=>x.already.map(n=>'*'+n+'*'+' ('+x.name+')'))
   out.push((alr.length===1?alr[0]+' è già nel ':andList(alr)+' sono già nel ')+mLabel(r.menu)+': non ho cambiato nulla.')}
  else if(ins.length){
   out.push('*'+(/^men[uù]\b/i.test(r.menu.trim())?r.menu.trim():'Menu '+r.menu.trim())+' aggiornato*')
-  if(r.cleared.length)out.push('Ho nascosto gli altri '+(r.cleared.length===1?'piatto':r.cleared.length+' piatti')+' del menu'+(r.deleteWord?' (nascosti, non eliminati)':'')+'.')
+  if(r.cleared.length)out.push('Ho eliminato gli altri '+(r.cleared.length===1?'piatto':r.cleared.length+' piatti')+' del menu. Eliminati: '+r.cleared.join(', ')+'.')
   for(const s of ins){const vis=visibleAfter(s.secId),created=new Set(s.created)
    out.push('*'+s.name+'*\n'+(vis.length?vis.map(n=>'• '+n+(created.has(n)?' (nuovo)':'')).join('\n'):'• nessun piatto'))}
   }
  const secList=andList([...new Set(itemsBefore.map(i=>i.section??'').filter(Boolean))].map(x=>'*'+x+'*'))
  for(const u of r.unknownSecs)out.push('Non ho messo '+andList(u.names.map(n=>'*'+n+'*'))+': nel '+mLabel(r.menu)+' non c’è il sottomenu *'+capW(u.word)+'*'+(secList?' (ci sono '+secList+')':'')+'. Dimmi in quale metterl'+(u.names.length>1?'i':'o')+'.')
- if(r.kept?.length)out.push('Restano visibili: '+andList(r.kept.map(n=>'*'+n+'*'))+'.')
+ if(r.kept?.length)out.push('Restano: '+andList(r.kept.map(n=>'*'+n+'*'))+'.')
  if(r.notFound?.length)out.push('Non trovo nel '+mLabel(r.menu)+' '+andList(r.notFound.map(n=>'*'+n+'*'))+': non l'+(r.notFound.length>1?'i':'o')+' ho toccat'+(r.notFound.length>1?'i':'o')+'.')
  if(r.notPlaced.length)out.push('Non ho messo '+andList(r.notPlaced.map(n=>'*'+n+'*'))+': dimmi in quale sottomenu'+(secList?' ('+secList.replace(/ e (?=\*[^*]+\*$)/,' o ')+')':'')+', per esempio «nei '+(plain([...new Set(itemsBefore.map(i=>i.section??'').filter(Boolean))][0]??'primi'))+' inserisci '+r.notPlaced[0]!.toLowerCase()+'».')
  if(extra)out.push(extra)

@@ -212,7 +212,15 @@ export function mergeMenuActions(previous:MenuAction[],delta:MenuAction[],remove
  const replacementKeys=new Set(delta.map(actionKey)),retained=previous.filter((a,i)=>!remove.includes(i+1)||replacementKeys.has(actionKey(a))),byKey=new Map(retained.map(a=>[actionKey(a),a]));for(const a of delta)byKey.set(actionKey(a),a);return [...byKey.values()]
 }
 /** Count actual field changes, not repeated instructions or values already in the published menu. */
+/** 22/10 notte (decisione Manuel, vincolante): per i piatti «nascondere» non esiste più. Ogni «nascondi/togli/leva X» (set_hidden true,
+ * da qualunque percorso: modello, sostituzione, svuota, pronome) diventa l'ELIMINAZIONE del piatto, subito (soft: niente «sì», «annulla»
+ * 10 minuti la rimette identica: snapshot dei Menu). Le altre azioni sullo stesso piatto cadono (il piatto non c'è più). Idempotente. */
+export function noHide(actions:MenuAction[]):MenuAction[]{
+ const out=actions.map(a=>a.kind==='hidden'&&a.value?({kind:'delete',id:a.id,soft:true,...((a as any).fromReplace?{fromReplace:true}:{})} as MenuAction):a)
+ const gone=new Set(out.flatMap(a=>a.kind==='delete'?[a.id]:[]))
+ return out.filter(a=>a.kind==='delete'||!('id' in a)||!gone.has((a as any).id))}
 export function effectiveMenuActions(actions:MenuAction[],workspace:any):MenuAction[]{
+ actions=noHide(actions)
  const items=new Map<string,any>(workspace.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,i]))));
  const sections=new Map<string,any>(workspace.menus.flatMap((m:any)=>m.sections.map((s:any)=>[s.id,s])))
  const where=new Map<string,string>(workspace.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,s.id]))))

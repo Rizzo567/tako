@@ -800,7 +800,8 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
    if(!hit&&c.length>1)return{actions:[],notes:[],ask:'piatto_ambiguo_sostituzione'}
    if(hit){used.add(hit.id);if(hit.hidden)actions.push({kind:'hidden',id:hit.id,value:false,fromReplace:true} as any);if(!fixed&&cartaPrice&&cartaPrice>0&&Math.abs(cartaPrice-hit.price)>=0.005)actions.push({kind:'price',id:hit.id,price:cartaPrice,fromReplace:true} as any)}
    else{if(!replaceWordsSaid(nm,said))return{actions:[],notes:[],ask:'nome_non_detto'};if(!fixed&&!(cartaPrice&&cartaPrice>0))return{actions:[],notes:[],ask:'prezzo_nuovo_alla_carta'};actions.push({kind:'create',sectionId:sec!.id,name:nm,price:fixed?0:cartaPrice!,description:null,fromReplace:true} as any)}}
-  for(const r of inSec)if(!used.has(r.id)&&!r.hidden)actions.push({kind:'hidden',id:r.id,value:true,fromReplace:true} as any)
+  // 22/10 notte (decisione Manuel): i piatti NON nominati del sottomenu si ELIMINANO (anche quelli già nascosti), mai nascosti.
+  for(const r of inSec)if(!used.has(r.id))actions.push({kind:'delete',id:r.id,soft:true,fromReplace:true} as any)
   notes.push('sostituzione:'+sec!.id+':'+names.map(x=>x.replace(/[:;]/g,' ')).join(';'))}
  // Mostrare/nascondere un intero Menu o Sottomenu (decisione Manuel 21/10). Già così → niente azione, nota per la risposta.
  for(const a of raw){if(!a||a.action!=='set_menu_visible')continue;const k=menuKey(String(a.menu??a.name??''));const m=(input.menus??[]).find(x=>menuKey(x.name)===k)??(input.menus??[]).find(x=>k.length>=3&&(menuKey(x.name).includes(k)||k.includes(menuKey(x.name))))

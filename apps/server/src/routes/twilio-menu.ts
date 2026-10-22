@@ -39,7 +39,7 @@ import {readBotBrain,readBotSettings,engineKey,botEngineOf,type BotEngine} from 
 import {phoneticHits,looseSoundAlike} from '../lib/twilio-menu-phonetic.js'
 import {HAIKU_MODEL} from '../lib/owner-brain-anthropic.js'
 import {linkIntent,botQuestion} from '../lib/twilio-menu-nlu.js'
-import {linkMarkers} from '../lib/twilio-menu-ai.js'
+import {linkMarkers,noHide} from '../lib/twilio-menu-ai.js'
 import {ownerAccount,ownerEmailSchema,dashboardUrl,publicMenuUrl,markPasswordDelivered} from '../lib/whatsapp-owner-account.js'
 import {webEmailEnabled} from '../lib/web-email-enabled.js'
 import {uniformDelta,uniformReply,pruneWroteDraft} from '../lib/owner-brain-r.js'
@@ -121,8 +121,8 @@ const bold=(names:string[])=>names.map(n=>'*'+safe(n)+'*').join(', ')
 function storedActions(command:any,refs:MenuRef[],sections:SectionRef[]):MenuAction[]|null{
  if(command?.kind==='fullmenu')return null
  if(command?.kind==='batch'&&Array.isArray(command.actions)){const fresh=new Set(command.actions.filter((a:any)=>a.kind==='create_section').map((a:any)=>a.newSectionId)),okSec=(id:string)=>sections.some(s=>s.id===id)||fresh.has(id)
-  return command.actions.every((a:any)=>a.kind==='special'||a.kind==='create_section'||a.kind==='create_menu'||a.kind==='delete_menu'||a.kind==='set_menu_active'||a.kind==='rename_menu'||((a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing')&&typeof a.menuId==='string')||((a.kind==='delete_section'||a.kind==='set_section_active')&&sections.some(s=>s.id===a.sectionId))||(a.kind==='rename_section'?sections.some(s=>s.id===a.sectionId):a.kind==='create'?okSec(a.sectionId):a.kind==='move'?okSec(a.sectionId)&&refs.some(r=>r.id===a.id):refs.some(r=>r.id===a.id)))?command.actions:null}
- const legacy=command as MenuCommand|null;if(!legacy||typeof (legacy as any).name!=='string')return null;const matches=legacy?refs.filter(r=>normalizeMenuText(r.name)===normalizeMenuText(legacy.name)):[];if(!legacy||matches.length!==1)return null;return[legacy.kind==='price'?{kind:'price',id:matches[0]!.id,price:legacy.price}:{kind:legacy.kind,id:matches[0]!.id,value:legacy.value}]
+  return command.actions.every((a:any)=>a.kind==='special'||a.kind==='create_section'||a.kind==='create_menu'||a.kind==='delete_menu'||a.kind==='set_menu_active'||a.kind==='rename_menu'||((a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing')&&typeof a.menuId==='string')||((a.kind==='delete_section'||a.kind==='set_section_active')&&sections.some(s=>s.id===a.sectionId))||(a.kind==='rename_section'?sections.some(s=>s.id===a.sectionId):a.kind==='create'?okSec(a.sectionId):a.kind==='move'?okSec(a.sectionId)&&refs.some(r=>r.id===a.id):refs.some(r=>r.id===a.id)))?noHide(command.actions):null}
+ const legacy=command as MenuCommand|null;if(!legacy||typeof (legacy as any).name!=='string')return null;const matches=legacy?refs.filter(r=>normalizeMenuText(r.name)===normalizeMenuText(legacy.name)):[];if(!legacy||matches.length!==1)return null;return noHide([legacy.kind==='price'?{kind:'price',id:matches[0]!.id,price:legacy.price}:{kind:legacy.kind,id:matches[0]!.id,value:legacy.value}] as MenuAction[])
 }
 type TurnOpts={brainOff?:boolean,planned?:{revision:number,plan:MenuPlan,proposalRevision?:string},plannedFull?:{revision:number,job:FullMenuJob,extraction:FullMenuExtraction},voice?:boolean,isExpired?:()=>boolean,beginWrite?:()=>boolean,uploads?:Map<string,string>,exclude?:Excluded[]}
 type TurnState={text?:string,exclude:Excluded[],note?:string,brain?:boolean,postDraft?:CreateDraft,postBatch?:any,alsoVerb?:'featured'|'hidden',seen?:string[],batchClosed?:boolean}
@@ -434,9 +434,8 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  // G6: prezzo implausibile (oltre 500 € o almeno 8 volte quello attuale: lo zero in più; round 2: 3× bloccava prezzi veri) → conferma scritta, mai online diretto.
  const implausible=actions.some(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special')&&(a.price>500||(a.kind==='price'&&(()=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&a.price>=8*r.price})())))
  // Fase B: eliminare chiede SEMPRE conferma («Elimino X dal menu? Rispondi sì»), anche da sola.
- const needsApproval=(!!batch&&!st.postBatch&&!st.batchClosed)||actions.length>3||implausible||actions.some(a=>a.kind==='delete'&&!a.undoCreate);
- // «elimina/cancella/rimuovi X»: nascosto, mai eliminato (17/10); lo si dice una volta nella risposta.
- {const hid=actions.find(a=>a.kind==='hidden'&&a.value);if(hid&&/\brimuov\w*/i.test(normalizeMenuText(text))&&!DELETE_VERB.test(normalizeMenuText(text).replace(/[^a-z0-9]+/g,' '))&&'id' in hid){const r=refs.find(x=>x.id===hid.id);if(r)tail=[tail,fill(copy.hiddenNotDeletedPlain,{piatto:safe(r.name).toLowerCase()})].filter(Boolean).join('\n\n')}}
+ const needsApproval=(!!batch&&!st.postBatch&&!st.batchClosed)||actions.length>3||implausible||actions.some(a=>a.kind==='delete'&&!a.undoCreate&&!a.soft);
+ // 22/10 notte: «nascondere» un piatto non esiste più (noHide in effectiveMenuActions): niente nota «l'ho nascosto».
  const withTail=(s:string)=>tail?s+'\n\n'+tail:s
  if(needsApproval){await propose(tx,ctx,row.revision,{kind:'batch',actions,requiresTypedOk:true});const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`);return withTail(proposalText(String(restaurant[0]?.name),actions,refs,sections)+afterText(workspace))}
  const photos=actions.filter((a):a is Extract<MenuAction,{kind:'image'}>=>a.kind==='image'),ready=new Map<string,string>([...photos.flatMap(a=>a.url&&storedUpload(tenant,a.url)?[[a.id,a.url] as [string,string]]:[]),...(uploads??[])]);
@@ -501,7 +500,7 @@ function groupPriceRisk(actions:MenuAction[],refs:MenuRef[]):boolean{const ps=ac
  * (opzione conservativa: il playground 17 «aumenta tutte le pizze di un euro» attende riepilogo + OK); un intero menu o sottomenu
  * nascosto piatto per piatto chiede sempre conferma. */
 function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered=false,strict=false,sections:SectionRef[]=[]):BatchWhy|null{
- if(actions.some(a=>a.kind==='delete'&&!a.undoCreate))return 'delete'
+ if(actions.some(a=>a.kind==='delete'&&!a.undoCreate&&!a.soft))return 'delete'
  const structOnly=strict&&actions.length>0&&actions.every(a=>a.kind==='create_menu'||a.kind==='create_section'||a.kind==='delete_menu'||a.kind==='delete_section'||a.kind==='set_menu_active'||a.kind==='set_section_active')
  // Sostituzione giornaliera dei piatti di un sottomenu (menu fisso) e opzioni di prezzo: subito; togliere un'opzione = conferma.
  if(strict&&actions.length>0&&actions.every(a=>(a as any).fromReplace||isStructAction(a))&&actions.some(a=>(a as any).fromReplace||a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing'))return actions.some(a=>a.kind==='delete_formula')?'recap':null
@@ -1037,7 +1036,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   let wroteActs:MenuAction[]=[],lastRev=row.revision
   // R10: senza scrittura, mai la stessa domanda dell'ultima risposta (riepilogo rimandato uguale): restano i fatti.
   const groupNames=[...base.menus.map(m=>m.name),...sections.map(x=>x.name),...((out as any).actions??[]).flatMap((a:any)=>a.kind==='create_section'||a.kind==='create_menu'||a.kind==='rename_section'||a.kind==='rename_menu'?[String(a.name??'')]:[])]
-  const say=(facts:string,wrote:boolean,extra:number[]=[])=>{let d=(noDraft||actedDraft(finalRun))&&!wrote?null:cleanDraft(finalRun.decision.draft,{wrote,numbers:numbersOK(finalRun,extra)});if(engine==='haiku')d=dropInventedGroups(d,groupNames,askText);if(d&&wrote&&engine==='haiku'){d=d.split(/(?<=[.!?])\s+/).filter(x=>!/\?\s*$/.test(x.trim())&&!/\b(?:rispondi|confermi|conferma)\b/i.test(x)).join(' ').trim()||null};if(d&&wrote&&engine==='haiku')d=finalRun.decision.notes?.includes('ripristino_come_spostamento')?null:pruneWroteDraft(d,wroteActs,refs);if(d&&!wrote&&facts&&lastQ&&sectionTurn&&sameQuestion(d,lastQ))d=null;return [d,facts].filter(Boolean).join('\n\n')||NOTHING}
+  const say=(facts:string,wrote:boolean,extra:number[]=[])=>{let d=(noDraft||actedDraft(finalRun))&&!wrote?null:cleanDraft(finalRun.decision.draft,{wrote,numbers:numbersOK(finalRun,extra)});if(engine==='haiku')d=dropInventedGroups(d,groupNames,askText);if(d&&wrote&&engine==='haiku'){d=d.split(/(?<=[.!?])\s+/).filter(x=>!/\?\s*$/.test(x.trim())&&!/\b(?:rispondi|confermi|conferma)\b/i.test(x)).join(' ').trim()||null};if(d&&wrote&&engine==='haiku')d=finalRun.decision.notes?.includes('ripristino_come_spostamento')?null:pruneWroteDraft(d,wroteActs,refs);if(d&&!wrote&&facts&&lastQ&&sectionTurn&&sameQuestion(d,lastQ))d=null;if(d)d=noHiddenTalk(d,[...wroteActs,...(((out as any).actions??[]) as MenuAction[])]);return [d,facts].filter(Boolean).join('\n\n')||NOTHING}
   const pricesOf=(acts:MenuAction[])=>acts.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price as number]:[]).concat(acts.flatMap(a=>'id' in a?[refs.find(r=>r.id===(a as any).id)?.price??-1]:[]))
   // Scrive e pubblica, poi rilegge dal DB: i fatti della risposta sono quelli riletti.
   const applyNow=async(effective:MenuAction[],label:[string,string]=['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica']):Promise<{facts:string,allOk:boolean,revision:number,inherited:string}>=>{
@@ -1053,7 +1052,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?unsavedText(failed.map(a=>describeAction(a,refs,sections))):'',out.kind==='change'&&out.after&&out.after.type==='read'&&!(effective.some(a=>a.kind==='create')&&((out.after as any).ids??[]).some((id:string)=>!effective.some(e=>'id' in e&&(e as any).id===id)))?planText(out.after,after.refs,after.sections):'',inheritedNote(inh)].filter(Boolean).join('\n\n')
    lastRev=reread?.revision??saved.revision+1
    return{facts,allOk:!failed.length,revision:reread?.revision??saved.revision+1,inherited:inheritedNote(inh)}}
-  const publish=async(actions:MenuAction[]):Promise<string>=>{let effective=effectiveMenuActions(actions,workspace)
+  const publish=async(actions:MenuAction[]):Promise<string>=>{actions=noHide(actions);let effective=effectiveMenuActions(actions,workspace)
    // notte 22/10 (cieco b2 «nascondi tutti i dolci» → nascosti piatto per piatto, due frasi uguali): «tutti i <sottomenu>» nascosto per
    // intero = il sottomenu nascosto (un interruttore, si rimette con «rendi visibile»), con UNA domanda del server.
    let wholeSec:{name:string,menu:string,items:number}|null=null
@@ -1070,7 +1069,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    // regola svuota/inserisci (22/10): si applica subito, «annulla» entro 10 minuti è la rete (decisione Manuel: niente domande)
    const why=pre?.why==='regola'||pre?.why==='regola-elimina'?null:approval(effective,refs,text,answered)??(asksOk?'recap':null)
    // Eliminazioni insieme ad altre modifiche (Y1): le parti chiare si pubblicano subito, le eliminazioni aspettano il «sì».
-   if(why==='delete'){const dels=effective.filter(a=>a.kind==='delete'&&!a.undoCreate),rest=effective.filter(a=>!dels.includes(a))
+   if(why==='delete'){const dels=effective.filter(a=>a.kind==='delete'&&!a.undoCreate&&!a.soft),rest=effective.filter(a=>!dels.includes(a))
     if(rest.length&&!approval(rest,refs,text,answered)){const r=await applyNow(rest);await propose(tx,ctx,r.revision,{kind:'batch',actions:dels,requiresTypedOk:true,why:'delete'});return say([r.facts,pendingFacts('delete',dels,refs,sections)].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}}
    // notte 22/10 (cc-prezzo-01 «la carbonara a 1300»): prezzo fuori scala = una DOMANDA del server (sì / prezzo giusto), mai la bozza
    // del modello che diceva «Rispondi OK per pubblicare» come se fosse un riepilogo qualunque.
@@ -1091,7 +1090,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    // run Haiku 21/10 (decisione Manuel): solo struttura → testo del server, chiaro su cosa vedono i clienti (niente bozza del modello).
    if(engine==='haiku'&&r.allOk&&effective.some(a=>(a as any).fromReplace))return replaceReply(effective,refs,sections,r.inherited) // 22/10: nota foto PRIMA di «annulla»
    if(engine==='haiku'&&r.allOk&&effective.every(isStructAction)&&effective.some(a=>a.kind==='create_menu'||a.kind==='create_section'||a.kind==='set_menu_active'||a.kind==='set_section_active'||a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing'))return structureReply(effective,refs,sections,new Set(base.menus.filter(m=>!m.active).map(m=>m.name)))
-   return say([r.facts,already].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
+   // 22/10 notte: piatti eliminati con «togli/leva/nascondi» (subito, senza «sì»): la rete è «annulla» entro 10 minuti.
+   return say([r.facts,already,effective.some(a=>a.kind==='delete'&&(a as any).soft)&&r.allOk?UNDO_HINT:''].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
   const core=async():Promise<string>=>{switch(out.kind){
    case 'undo':{const before=structuredClone(workspace) as any,res=applyUndo(workspace,undoRec!);if(!res.ok)return fill(copy.undoConflict,{piatti:res.changed.slice(0,4).map(n=>'*'+safe(n)+'*').join(', ')})
     const next=workspaceSchema.parse(workspace),saved=await applyBotChange(ctx.tenant,ctx.actor,['WhatsApp: annullamento','WhatsApp: annullamento pubblicato'],{expectedPublishedRevision:live.revision,next},tx as unknown as DB);await writeUndo(tx,ctx.phone,null);await writeLast(tx,ctx.phone,null);await drop()
@@ -1101,7 +1101,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // 22/10 (QA foto su due omonimi): stesso nome in più Menu → il Menu accanto al nome; testo del server (mai un solo Menu citato dal modello).
     const allN=[...res.restored,...res.removed],dupN=(n:string)=>allN.filter(x=>plain(x)===plain(n)).length>1,used=new Set<string>()
     const lab=(n:string)=>{if(!dupN(n))return safe(n);const it=(undoRec!.items??[]).find(i=>!used.has(i.id)&&String(i.before?.name??i.after?.name??'')===n);if(!it)return safe(n);used.add(it.id);const m=refs.find(r=>r.id===it.id)?.menu;return safe(n)+(m?' ('+safe(m)+')':'')}
-    const lines=[...res.restored.map(n=>fill(copy.undoRestored,{piatto:lab(n)})),...res.removed.map(n=>fill(copy.undoRemoved,{piatto:lab(n)})),...fx].join('\n')
+    const fm=undoRec!.full?.names.restoredMenus,lines=[...res.restored.map((n,i)=>fill(copy.undoRestored,{piatto:fm&&fm[i]&&dupN(n)?safe(n)+' ('+safe(fm[i]!)+')':lab(n)})),...res.removed.map(n=>fill(copy.undoRemoved,{piatto:lab(n)})),...fx].join('\n')
     if(engine==='haiku')return ['Ok, annullo l’ultima modifica.',lines].filter(Boolean).join('\n\n')
     return say(lines,true)}
    // notte 22/10 (n-annulla-domanda): chiudere una domanda o una bozza non è «annullare l’ultima pubblicazione»: testo fisso, mai la bozza.
@@ -1537,20 +1537,25 @@ function structureReply(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[
 // 22/10: più voci non salvate → una per riga (prima «a; b; c» su una riga).
 const unsavedText=(xs:string[])=>xs.length>1?'Non salvato:\n'+xs.map(x=>'• '+x).join('\n'):'Non salvato: '+xs[0]
 
-/** Riepilogo della sostituzione giornaliera (menu a prezzo fisso): per sottomenu, i piatti di oggi e quelli nascosti. */
+/** 22/10 notte (decisione Manuel «eliminare, non nascondere»): la bozza del modello non dice mai che un PIATTO è «nascosto» (i piatti tolti
+ * sono eliminati; i fatti del server lo dicono). Restano le frasi sulla visibilità di Menu/Sottomenu quando il turno la cambia davvero. */
+export function noHiddenTalk(d:string,acts:MenuAction[]):string|null{
+ if(acts.some(a=>a.kind==='set_menu_active'||a.kind==='set_section_active'||(a.kind==='create_section'&&(a as any).hidden)||a.kind==='create_menu'))return d
+ const keep=d.split(/(?<=[.!?])\s+/).filter(x=>!/\b(?:nascost\w*|nascond\w*)\b/i.test(x));return keep.join(' ').trim()||null}
+/** Riepilogo della sostituzione giornaliera (menu a prezzo fisso): per sottomenu, i piatti di oggi; in fondo gli eliminati (22/10 notte). */
 export function replaceReply(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[],extra=''):string{
  const bySec=new Map<string,{shown:string[],hidden:string[]}>(),get=(id:string)=>{let v=bySec.get(id);if(!v){v={shown:[],hidden:[]};bySec.set(id,v)}return v}
- for(const a of actions as any[]){if(a.kind==='create')get(a.sectionId).shown.push(a.name);else if(a.kind==='hidden'){const r=refs.find(x=>x.id===a.id);if(!r)continue;(a.value?get(r.sectionId??'').hidden:get(r.sectionId??'').shown).push(r.name)}}
- for(const r of refs){const v=bySec.get(r.sectionId??'');if(v&&!r.hidden&&!(actions as any[]).some(a=>a.id===r.id)&&!v.shown.includes(r.name))v.shown.push(r.name)}
+ for(const a of actions as any[]){if(a.kind==='create')get(a.sectionId).shown.push(a.name);else if(a.kind==='delete'){const r=refs.find(x=>x.id===a.id);if(r)get(r.sectionId??'').hidden.push(r.name)}else if(a.kind==='hidden'){const r=refs.find(x=>x.id===a.id);if(!r)continue;(a.value?get(r.sectionId??'').hidden:get(r.sectionId??'').shown).push(r.name)}}
+ for(const r of refs){const v=bySec.get(r.sectionId??'');if(v&&!r.hidden&&!(actions as any[]).some(a=>a.id===r.id&&(a.kind==='delete'||a.kind==='hidden'))&&!v.shown.includes(r.name))v.shown.push(r.name)}
  // 22/10 (richiesta Manuel, screenshot Victoria): messaggio strutturato, non un blocco unico. Per Menu un titolo in grassetto, per
- // sottomenu il nome in grassetto e un piatto per riga; i nascosti in fondo su una riga sola; righe vuote tra i blocchi.
+ // sottomenu il nome in grassetto e un piatto per riga; gli eliminati in fondo su una riga sola; righe vuote tra i blocchi.
  const byMenu=new Map<string,string[]>(),hidden:string[]=[]
  for(const [id,v] of bySec){const s=sections.find(x=>x.id===id),menu=(s?.menu??'').trim(),blocks=byMenu.get(menu)??[]
   blocks.push('*'+safe(s?.name??'')+'*\n'+(v.shown.length?v.shown.map(x=>'• '+safe(x)).join('\n'):'• nessun piatto'));byMenu.set(menu,blocks)
   for(const h of v.hidden)if(!hidden.includes(h))hidden.push(h)}
  const out:string[]=[]
  for(const [menu,blocks] of byMenu)out.push('*'+(menu?(/^men[uù]\b/i.test(menu)?safe(menu):'Menu '+safe(menu)):'Menu')+' aggiornato*',...blocks)
- if(hidden.length)out.push('Nascosti (tornano quando li rimetti):\n'+hidden.map(safe).join(', '))
+ if(hidden.length)out.push('Eliminati: '+hidden.map(safe).join(', '))
  if(extra)out.push(extra)
  return out.join('\n\n')+'\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.'
 }

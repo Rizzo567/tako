@@ -1,7 +1,8 @@
 // Sostituzione del contenuto di UN menu con un menu intero (Feature 1). Funzione pura sul documento:
 // - piatti già presenti (stesso nome o quasi, sameOnboardingDish) si aggiornano mantenendo id, nome e traduzioni;
 // - piatti nuovi si creano; categorie nuove si creano;
-// - i piatti del menu che non compaiono vengono NASCOSTI (hidden), mai eliminati;
+// - i piatti del menu che non compaiono vengono ELIMINATI (22/10 notte, decisione Manuel: per i piatti «nascondere» non esiste più;
+//   si torna indietro con «ripristina il menu di prima», che rimette la copia di sicurezza);
 // - gli altri menu (Drinks, menu fisso…) non si toccano.
 import {randomUUID} from 'node:crypto'
 import {sameOnboardingDish,onboardingDishKey} from './onboarding-dish-name.js'
@@ -43,12 +44,12 @@ export function buildMenuContent(menu:Menu,rows:FullMenuRow[]):{sections:Section
   }else{item=newItem(row);summary.created.push({name:item.name,price:item.price,section:target.name});summary.newTexts.push(item.name);if(item.description)summary.newTexts.push(item.description)}
   placed.set(target.id,[...(placed.get(target.id)??[]).filter(i=>i.id!==item.id),item])
  }
- // Dishes the owner listed come first, in the order said; the others stay in the menu, hidden.
+ // Dishes the owner listed come first, in the order said; the others are DELETED (summary.hidden = deleted names, field kept for callers).
  for(const section of sections){
   const first=placed.get(section.id)??[],firstIds=new Set(first.map(i=>i.id))
   const rest=section.items.filter(i=>!firstIds.has(i.id))
-  for(const i of rest){if(!used.has(i.id)&&!i.hidden)summary.hidden.push(i.name);if(!used.has(i.id))i.hidden=true}
-  section.items=[...first,...rest]
+  for(const i of rest)if(!used.has(i.id))summary.hidden.push(i.name)
+  section.items=[...first,...rest.filter(i=>used.has(i.id))]
  }
  const order=[...touched,...sections.filter(s=>!touched.includes(s))]
  summary.sections=touched.map(s=>({name:s.name,items:(placed.get(s.id)??[]).map(i=>({name:i.name,price:i.price,description:i.description??''}))}))

@@ -1,6 +1,7 @@
 // Regola d'uso 22/10/2026 (decisione Manuel dopo la prova con Gio, Victoria Bar) + bug delle chat del pomeriggio (BUG-CHAT-VICTORIA-1022.md).
-// «svuota / togli tutto il menu X» = piatti nascosti, sottomenu e prezzi fissi intatti; «nei primi inserisci A, B» = visibili/creati, gli
-// altri non si toccano. Unit test delle funzioni pure + route vero (DB e modello finti: il modello risponde «MODELLO» e non scrive mai,
+// CORREZIONE 22/10 notte (Manuel, vincolante): per i piatti «nascondere» non esiste più. «svuota / togli tutti i piatti del menu X» = piatti
+// ELIMINATI, sottomenu e prezzi fissi intatti; sostituzione giornaliera = i non nominati ELIMINATI; «togli/nascondi X» = X eliminato;
+// «nei primi inserisci A, B» = creati (omonimo già lì: non si duplica), gli altri non si toccano. Mai un piatto «hidden» prodotto dal bot. Unit test delle funzioni pure + route vero (DB e modello finti: il modello risponde «MODELLO» e non scrive mai,
 // così ogni scrittura viene dal server) + BATTERIA AVVERSARIA (frasi scritte e trascrizioni di vocali) con invarianti a programma.
 // Fixture «vicx»: locale INVENTATO con la forma di Victoria (Menu Giorno e Menu Cena a prezzo fisso con Primi/Secondi/Contorni, omonimi
 // tra Menu, piatti nascosti da ieri), nessun dato vero.
@@ -18,6 +19,9 @@ import {candidateFacts} from '../apps/server/src/lib/owner-brain-r.js'
 import {dropInventedGroups,replaceReply} from '../apps/server/src/routes/twilio-menu.js'
 import type {Conversation,EvalMenu,Turn} from './eval/types.js'
 import {workspaceSchema} from '../apps/server/src/lib/menu-workspace-contract.js'
+import {noHide,effectiveMenuActions} from '../apps/server/src/lib/twilio-menu-ai.js'
+import {sectionReplace} from '../apps/server/src/lib/owner-brain-sera.js'
+import {buildMenuContent} from '../apps/server/src/lib/menu-replace.js'
 
 const realFetch=globalThis.fetch
 afterAll(()=>closeHarness())
@@ -45,7 +49,17 @@ function vicx():EvalMenu{n=0
 // ---------------- route ----------------
 // Modello finto: «annulla» = undo_last (come il vero); tutto il resto = chiacchiera «MODELLO» senza azioni (se la regola non prende il
 // messaggio, NON si scrive niente: lo vede la batteria).
-const plannerOf=(extra?:(c:FakeCtx)=>any):Planner=>c=>{const m=plainT(c.message);if(/^(?:annulla|annulla l ultima|torna come prima)$/.test(m))return P('change',[A('undo_last')],'Ok, annullo.');return extra?.(c)??P('chat',[],'MODELLO')}
+const plannerOf=(extra?:(c:FakeCtx)=>any):Planner=>c=>{const m=plainT(c.message);if(/^(?:annulla|annulla l ultima|torna come prima)$/.test(m))return P('change',[A('undo_last')],'Ok, annullo.');if(c.pending&&/^(?:si|sì)$/.test(m))return P('change',[A('confirm_pending')],'Fatto.');return extra?.(c)??P('chat',[],'MODELLO')}
+// Modello finto «verosimile» (casi `like`): «togli/leva/nascondi X» = set_hidden true (come il prompt), «elimina/cancella X» = delete_item,
+// «X è finita» = set_available false. Il Menu detto nel messaggio restringe i piatti. Così si prova la conversione del SERVER.
+const likePlanner:Planner=plannerOf(c=>{const m=plainT(c.message),menu=/cena|stasera/.test(m)?'cena':/pranzo|giorno/.test(m)?'giorno':''
+ const hits=c.items.filter(i=>{const sec=c.sections.find(s=>s.name===i.section&&(!menu||plainT(s.menu).includes(menu)));return !!sec&&(' '+m+' ').includes(' '+plainT(i.name)+' ')})
+ const its=menu?hits:hits.filter((i,k)=>hits.findIndex(j=>plainT(j.name)===plainT(i.name))===k)
+ if(!its.length)return null
+ if(/\b(?:finit\w*|esaurit\w*)\b/.test(m))return P('change',its.map(i=>A('set_available',{item:i.code,value:false})),'Segnato finito.')
+ if(/^(?:elimina|cancella)\b/.test(m))return P('change',its.map(i=>A('delete_item',{item:i.code})),'Elimino?')
+ if(/^(?:togli|leva|nascondi|levami|toglimi)\b/.test(m))return P('change',its.map(i=>A('set_hidden',{item:i.code,value:true})),'Ho nascosto il piatto.')
+ return null})
 async function play(turns0:(Turn|string)[],planner:Planner=plannerOf(),menu:EvalMenu=vicx()){const turns=turns0.map(t=>typeof t==='string'?{text:t}:t) as Turn[]
  const fake=createFakeHaiku(planner);installNet(null,realFetch,fake);resetBrainTables();process.env.ANTHROPIC_API_KEY='eval-anthropic-key'
  const c:Conversation={id:'svuota',family:'manuel',menu:'vicx',turns,changes:[]}
@@ -59,7 +73,7 @@ const allVis=(w:any,menu:string)=>M(w,menu).sections.flatMap((s:any)=>s.items.fi
 const shape=(w:any)=>JSON.stringify(w.menus.map((m:any)=>({id:m.id,name:m.name,active:m.active??true,pricing:m.pricing??null,formulas:m.formulas??[],sections:m.sections.map((s:any)=>({id:s.id,name:s.name,active:s.active??true,parent:s.parentSectionId??null}))})))
 const itemsOf=(w:any,menu:string)=>JSON.stringify(M(w,menu).sections.map((s:any)=>s.items))
 const ids=(w:any)=>new Set(w.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>i.id))))
-export type Case={id:string,turns:(string|{voice:string})[],menu?:string,exact?:Record<string,string[]>,has?:Record<string,string[]>,allHidden?:boolean,keepVisible?:boolean,noWrite?:boolean,said?:string[],reply?:RegExp,ask?:number[],model?:number[],undoTo?:number,del?:{menu:string,confirm?:number}}
+export type Case={id:string,turns:(string|{voice:string})[],menu?:string,like?:boolean,gone?:string[],kept?:string[],exact?:Record<string,string[]>,has?:Record<string,string[]>,allHidden?:boolean,keepVisible?:boolean,noWrite?:boolean,said?:string[],reply?:RegExp,ask?:number[],model?:number[],undoTo?:number,del?:{menu:string,confirm?:number}}
 function violations(c:Case,r:{replies:string[],menus:any[]}):string[]{const out:string[]=[],w0=r.menus[0],wN=r.menus[r.menus.length-1]
  for(let t=1;t<r.menus.length;t++){const a=r.menus[t-1],b=r.menus[t]
   const txt0=c.turns[t-1],tt=typeof txt0==='string'?txt0:txt0.voice,menusA=a.menus.map((m:any)=>m.id),menusB=b.menus.map((m:any)=>m.id)
@@ -67,7 +81,14 @@ function violations(c:Case,r:{replies:string[],menus:any[]}):string[]{const out:
   if(menusA.some((x:string)=>!menusB.includes(x))&&!(/^s[iì](?![a-z])/i.test(tt.trim())&&/Elimino il .* intero\?|mi serve un \*sì\* scritto/.test(r.replies[t-2]??'')))out.push(`t${t}: Menu eliminato senza il sì`)
   const okShape=(c.del?.confirm===t&&!M(b,c.del.menu)&&JSON.stringify(a.menus.filter((m:any)=>m.name!==c.del!.menu))===JSON.stringify(b.menus))||(/annulla/.test(tt)&&c.del)
   if(shape(a)!==shape(b)&&!okShape)out.push(`t${t}: Menu/sottomenu/prezzi fissi cambiati`)
-  const txt=c.turns[t-1];if(!(typeof txt==='string'&&/annulla/.test(txt))&&c.del?.confirm!==t)for(const x of ids(a))if(!ids(b).has(x))out.push(`t${t}: piatto eliminato ${x}`)
+  // 22/10 notte: eliminare piatti è la regola (svuota, sostituzione, «togli X»), ma SOLO nel Menu del caso; mai con «inserisci» (keepVisible),
+  // mai senza Menu del caso, mai un Menu/sottomenu.
+  const txt=c.turns[t-1];if(!(typeof txt==='string'&&/annulla/.test(txt))&&c.del?.confirm!==t){const inMenu=c.menu&&M(a,c.menu)?new Set(M(a,c.menu).sections.flatMap((s:any)=>s.items.map((i:any)=>i.id))):new Set()
+   for(const x of ids(a))if(!ids(b).has(x)&&(!inMenu.has(x)||c.keepVisible||c.noWrite))out.push(`t${t}: piatto eliminato fuori regola ${x}`)}
+  // INVARIANTE: il bot non produce MAI un piatto nascosto (hidden:true che prima non c'era)
+  // (un «annulla» che rimette un vecchio piatto nascosto di prima non conta: era già nascosto in uno stato precedente)
+  {const hidA=new Set(r.menus.slice(0,t).flatMap((w:any)=>w.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.filter((i:any)=>i.hidden).map((i:any)=>i.id)))))
+   for(const m of b.menus)for(const s of m.sections)for(const i of s.items)if(i.hidden&&!hidA.has(i.id))out.push(`t${t}: piatto nascosto dal bot ${i.name}`)}
   if(c.menu)for(const m of a.menus)if(m.name!==c.menu&&M(b,m.name)&&itemsOf(a,m.name)!==itemsOf(b,m.name))out.push(`t${t}: toccato un altro Menu (${m.name})`)
   const rep=r.replies[t-1]??''
   if(!(c.model??[]).includes(t)&&/MODELLO/.test(rep))out.push(`t${t}: il messaggio è andato al modello`)
@@ -76,9 +97,14 @@ function violations(c:Case,r:{replies:string[],menus:any[]}):string[]{const out:
  if(c.noWrite&&JSON.stringify(w0)!==JSON.stringify(wN))out.push('scrittura inattesa')
  if(c.undoTo!==undefined&&JSON.stringify(r.menus[c.undoTo].menus)!==JSON.stringify(wN.menus))out.push('«annulla» non ha rimesso com’era prima dell’ultima modifica')
  if(c.del?.confirm&&M(wN,c.del.menu)&&c.undoTo===undefined)out.push('Menu non eliminato dopo il sì')
- if(c.menu&&c.allHidden&&allVis(wN,c.menu).length)out.push('restano visibili: '+allVis(wN,c.menu).join(', '))
+ // allHidden (nome storico) = Menu SVUOTATO: nessun piatto (nemmeno i vecchi nascosti), sottomenu intatti (shape)
+ if(c.menu&&c.allHidden&&M(wN,c.menu).sections.some((s:any)=>s.items.length))out.push('restano piatti: '+M(wN,c.menu).sections.flatMap((s:any)=>s.items.map((i:any)=>i.name)).join(', '))
  if(c.menu&&c.keepVisible){const before=allVis(w0,c.menu).map(plainT),after=allVis(wN,c.menu).map(plainT);for(const x of before)if(!after.includes(x))out.push('«inserisci» ha nascosto '+x)}
- if(c.menu)for(const [sec,names] of Object.entries(c.exact??{})){const v=vis(wN,c.menu,sec).map(plainT).sort(),e=names.map(plainT).sort();if(JSON.stringify(v)!==JSON.stringify(e))out.push(`${sec}: visibili [${v}] attesi [${e}]`)}
+ if(c.menu)for(const [sec,names] of Object.entries(c.exact??{})){const v=vis(wN,c.menu,sec).map(plainT).sort(),e=names.map(plainT).sort();if(JSON.stringify(v)!==JSON.stringify(e))out.push(`${sec}: visibili [${v}] attesi [${e}]`)
+  // sottomenu cambiato dal bot = niente piatti nascosti rimasti (svuota/sostituzione eliminano anche i vecchi nascosti)
+  const s0=M(w0,c.menu).sections.find((x:any)=>x.name===sec),sN=M(wN,c.menu).sections.find((x:any)=>x.name===sec);if(JSON.stringify(s0.items)!==JSON.stringify(sN.items)&&sN.items.some((i:any)=>i.hidden))out.push(`${sec}: restano nascosti ${sN.items.filter((i:any)=>i.hidden).map((i:any)=>i.name)}`)}
+ for(const x of c.gone??[])if(wN.menus.some((m:any)=>m.name===c.menu&&m.sections.some((s:any)=>s.items.some((i:any)=>plainT(i.name)===plainT(x)))))out.push('non eliminato: '+x)
+ for(const x of c.kept??[])if(!wN.menus.some((m:any)=>m.sections.some((s:any)=>s.items.some((i:any)=>plainT(i.name)===plainT(x)))))out.push('eliminato per sbaglio: '+x)
  if(c.menu)for(const [sec,names] of Object.entries(c.has??{})){const v=vis(wN,c.menu,sec).map(plainT);for(const x of names)if(!v.includes(plainT(x)))out.push(`${sec}: manca ${x}`)}
  const allReplies=plainT(r.replies.join(' '))
  if(c.menu)for(const x of c.said??[]){const inMenu=allVis(wN,c.menu).some((y:string)=>plainT(y)===plainT(x));if(!inMenu&&!allReplies.includes(plainT(x)))out.push('nome scartato in silenzio: '+x)}
@@ -144,6 +170,32 @@ describe('regola svuota/inserisci — funzioni pure',()=>{
  it('K3: nota della foto ereditata PRIMA di «Per tornare come prima…»',()=>{
   const t=replaceReply([{kind:'hidden',id:'x',value:false} as any],[{id:'x',name:'Riso giallo',price:0,available:true,hidden:true,menu:'Menu del giorno',sectionId:'p'}],[{id:'p',name:'Primi',menu:'Menu del giorno'}],'*Riso giallo*: foto presa da Menu di verifica')
   expect(t.indexOf('foto presa da')).toBeLessThan(t.indexOf('Per tornare come prima'))})
+ // ---- CORREZIONE 22/10 notte: eliminare, non nascondere ----
+ it('noHide: set_hidden true → eliminazione subito (soft), le altre azioni sullo stesso piatto cadono; «rimetti» e «finito» restano',()=>{
+  const out=noHide([{kind:'hidden',id:'a',value:true},{kind:'price',id:'a',price:3},{kind:'hidden',id:'b',value:false},{kind:'available',id:'c',value:false},{kind:'hidden',id:'d',value:true,fromReplace:true} as any])
+  expect(out).toEqual([{kind:'delete',id:'a',soft:true},{kind:'hidden',id:'b',value:false},{kind:'available',id:'c',value:false},{kind:'delete',id:'d',soft:true,fromReplace:true}])
+  const w={menus:[{id:'m',name:'M',sections:[{id:'s',name:'S',items:[{id:'a',name:'A',price:1,hidden:false},{id:'b',name:'B',price:1,hidden:true}]}]}]}
+  expect(effectiveMenuActions([{kind:'hidden',id:'a',value:true},{kind:'hidden',id:'b',value:true}],w)).toEqual([{kind:'delete',id:'a',soft:true},{kind:'delete',id:'b',soft:true}])
+  expect(effectiveMenuActions([{kind:'hidden',id:'zzz',value:true}],w)).toEqual([])})
+ it('svuota: ogni piatto del Menu (anche i vecchi nascosti) eliminato, nessun hidden; «tranne» resta',()=>{
+  const w=vicx(),cena=(w.menus as any[]).find(m=>m.name==='Menu Cena'),menus=(w.menus as any[]).map(m=>({id:m.id,name:m.name,pricing:m.pricing}))
+  const sections=(w.menus as any[]).flatMap(m=>m.sections.map((s:any)=>({id:s.id,name:s.name,menu:m.name})))
+  const refs=(w.menus as any[]).flatMap(m=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>({id:i.id,name:i.name,price:i.price,available:true,hidden:!!i.hidden,menu:m.name,section:s.name,sectionId:s.id}))))
+  const r=ruleTurn({text:'svuota il menu cena',menus,sections,refs,history:[]}) as any
+  expect(r.kind).toBe('apply');expect(r.actions.every((a:any)=>a.kind==='delete'&&a.soft)).toBe(true)
+  expect(r.actions.map((a:any)=>a.id).sort()).toEqual(cena.sections.flatMap((s:any)=>s.items.map((i:any)=>i.id)).sort())
+  const k=ruleTurn({text:'togli tutto il menu cena tranne le patate al forno',menus,sections,refs,history:[]}) as any
+  expect(k.actions.length).toBe(10);expect(k.actions.some((a:any)=>refs.find((x:any)=>x.id===a.id)?.name==='Patate al forno')).toBe(false)})
+ it('sostituzione giornaliera: i non nominati del sottomenu ELIMINATI (anche nascosti), i nominati restano, i nuovi a 0 €',()=>{
+  const refs=[{id:'a',name:'Lasagna',price:0,available:true,hidden:false,menu:'G',sectionId:'p'},{id:'b',name:'Pasta al pomodoro',price:0,available:true,hidden:false,menu:'G',sectionId:'p'},{id:'c',name:'Pasta e fagioli',price:0,available:true,hidden:true,menu:'G',sectionId:'p'},{id:'z',name:'Altro',price:0,available:true,hidden:false,menu:'G',sectionId:'s'}]
+  const r=sectionReplace('p',['Lasagna','Carbonara'],refs as any,true)
+  expect(r.actions).toEqual([{kind:'create',sectionId:'p',name:'Carbonara',price:0,description:null,fromReplace:true},{kind:'delete',id:'b',soft:true,fromReplace:true},{kind:'delete',id:'c',soft:true,fromReplace:true}])
+  const t=replaceReply(r.actions,refs as any,[{id:'p',name:'Primi',menu:'Menu Giorno'}])
+  expect(t).toMatch(/\*Primi\*\n• Carbonara\n• Lasagna|\*Primi\*\n• Lasagna\n• Carbonara|Carbonara/);expect(t).toMatch(/Eliminati: Pasta al pomodoro, Pasta e fagioli/);expect(t).not.toMatch(/[Nn]ascost/)})
+ it('menu intero (foto/PDF) che sostituisce un Menu: i piatti non elencati ELIMINATI, mai hidden',()=>{
+  const menu={id:'m',name:'M',sections:[{id:'s',name:'Primi',parentSectionId:null,items:[{id:'a',name:'Lasagna',price:9,hidden:false},{id:'b',name:'Gnocchi',price:9,hidden:false},{id:'c',name:'Vecchio',price:9,hidden:true}]}]} as any
+  const b=buildMenuContent(menu,[{name:'Lasagna',price:10,section:'Primi',description:null} as any])
+  expect(b.sections[0]!.items.map((i:any)=>i.name)).toEqual(['Lasagna']);expect(b.summary.hidden.sort()).toEqual(['Gnocchi','Vecchio']);expect(b.sections.flatMap((s:any)=>s.items).some((i:any)=>i.hidden)).toBe(false)})
 })
 
 // ---------------- route: casi della chat di Victoria ----------------
@@ -171,7 +223,7 @@ describe('regola svuota/inserisci — route (casi Victoria 22/10)',()=>{
  it('K2: nel percorso del modello un piatto detto e lasciato fuori dalla sostituzione viene aggiunto («pasta e fagioli»)',async()=>{
   const pl=plannerOf(c=>{const m=plainT(c.message);if(/carbonara e pasta e fagioli/.test(m)){const sec=c.sections.find(s=>s.name==='Primi'&&/giorno/i.test(s.menu))!;return P('change',[A('replace_section_items',{section:sec.code,menu:'Menu Giorno',text:'Carbonara'})],'Fatto.')}return null})
   const r=await play(['oggi primi carbonara e pasta e fagioli'],pl)
-  expect(vis(r.menus[1],'Menu Giorno','Primi').map(plainT).sort()).toEqual(['carbonara','pasta e fagioli'])})
+  expect(vis(r.menus[1],'Menu Giorno','Primi').map(plainT).sort(),r.replies[0]).toEqual(['carbonara','pasta e fagioli'])})
  it('K4: annullo di una modifica su due omonimi in due Menu = testo del server, Menu accanto al nome',async()=>{
   const pl=plannerOf(c=>{if(/patate/.test(plainT(c.message))){const its=c.items.filter(i=>i.name==='Patate al forno');return P('change',its.map(i=>A('set_hidden',{item:i.code,value:true})),'Ok, tolte dal *Menu Giorno*.')}return null})
   const r=await play(['togli le patate al forno da tutti e due i menu','annulla'],pl)
@@ -195,7 +247,7 @@ export const BATTERIA:Case[]=[
  {id:'s11',turns:['svuota il menu','la cena'],menu:'Menu Cena',allHidden:true,ask:[1]},
  {id:'s12',turns:['togli tutto','pranzo'],menu:'Menu Giorno',allHidden:true,ask:[1]},
  {id:'s13',turns:['nel menu cena nei contorni inserisci zucchine fritte','ora togli tutto'],menu:'Menu Cena',allHidden:true},
- {id:'s14',turns:['elimina tutti i piatti del menu cena'],menu:'Menu Cena',allHidden:true,reply:/non eliminati/},
+ {id:'s14',turns:['elimina tutti i piatti del menu cena'],menu:'Menu Cena',allHidden:true,reply:/Ho eliminato tutti gli 11 piatti/},
  {id:'s15',turns:['togli tutto il menu cena tranne le patate al forno'],menu:'Menu Cena',exact:{Primi:[],Secondi:[],Contorni:['Patate al forno']}},
  {id:'s16',turns:['svuota il menu cena','annulla'],menu:'Menu Cena',undoTo:0},
  {id:'s17',turns:['svuota il menu cena','svuota il menu cena'],menu:'Menu Cena',allHidden:true,reply:/già vuoto/},
@@ -284,6 +336,24 @@ export const BATTERIA:Case[]=[
  {id:'n08',turns:['rimetti tutto com era'],noWrite:true,model:[1]},
  {id:'n09',turns:['togli tutte le foto'],noWrite:true,model:[1]},
  {id:'n10',turns:['non togliere niente dal menu cena'],noWrite:true,model:[1]},
+ // CORREZIONE 22/10 notte: «togli/leva/nascondi X» = ELIMINATO (modello verosimile: set_hidden → il server elimina), «finito» resta
+ {id:'x01',turns:['togli la lasagna'],menu:'Menu Giorno',like:true,gone:['Lasagna'],model:[1],reply:/eliminat/},
+ {id:'x02',turns:['nascondi la lasagna'],menu:'Menu Giorno',like:true,gone:['Lasagna'],model:[1],reply:/eliminat/},
+ {id:'x03',turns:['leva le polpette al sugo'],menu:'Menu Giorno',like:true,gone:['Polpette al sugo'],model:[1]},
+ {id:'x04',turns:['togli la lasagna','annulla'],menu:'Menu Giorno',like:true,undoTo:0,model:[1]},
+ {id:'x05',turns:['la lasagna è finita'],menu:'Menu Giorno',like:true,kept:['Lasagna'],model:[1]},
+ {id:'x06',turns:['elimina la lasagna'],menu:'Menu Giorno',like:true,kept:['Lasagna'],ask:[1],model:[1]},
+ {id:'x07',turns:['elimina la lasagna','sì'],menu:'Menu Giorno',like:true,gone:['Lasagna'],ask:[1],model:[1,2]},
+ {id:'x08',turns:['togli gli spinaci al burro'],menu:'Menu Giorno',like:true,gone:['Spinaci al burro'],kept:['Lasagna','Patate al forno'],model:[1]},
+ {id:'x09',turns:['togli la tagliata di manzo con rucola e grana e le orata al forno'],menu:'Menu Cena',like:true,gone:['Tagliata di manzo con rucola e grana','Orata al forno'],model:[1]},
+ // sostituzione giornaliera: i non nominati ELIMINATI (anche i vecchi nascosti), la risposta li elenca
+ {id:'r04',turns:['stasera a cena primi: carbonara'],menu:'Menu Cena',exact:{Primi:['Carbonara']},gone:['Risotto ai funghi porcini','Tagliatelle panna, speck e zucchine'],reply:/Eliminati: .*Risotto ai funghi porcini/},
+ {id:'r05',turns:['nel menu del pranzo secondi cotoletta alla milanese','annulla'],menu:'Menu Giorno',undoTo:0},
+ {id:'r06',turns:['nel menu del pranzo primi lasagna e carbonara'],menu:'Menu Giorno',exact:{Primi:['Lasagna','Carbonara']},kept:['Lasagna'],gone:['Pasta al pomodoro','Pasta e fagioli']},
+ // svuota: testo «Ho eliminato … Eliminati: …», nessun «nascost»
+ {id:'s21',turns:['svuota il menu cena'],menu:'Menu Cena',allHidden:true,reply:/^\*Menu Cena svuotato\*\n\nHo eliminato tutti gli 11 piatti\./},
+ {id:'s22',turns:['togli tutti i piatti del menu cena','annulla'],menu:'Menu Cena',undoTo:0},
+ {id:'s23',turns:['svuota il menu cena e nei primi inserisci risotto ai funghi porcini'],menu:'Menu Cena',exact:{Primi:['Risotto ai funghi porcini'],Secondi:[],Contorni:[]}},
 ]
 
 describe('BATTERIA AVVERSARIA regola svuota/inserisci (22/10)',()=>{
@@ -292,7 +362,7 @@ describe('BATTERIA AVVERSARIA regola svuota/inserisci (22/10)',()=>{
   try{writeFileSync(new URL('../docs/webapp/bot-haiku-2026-10-21/notte-1022/batteria-svuota-1022.json',import.meta.url),JSON.stringify({casi:BATTERIA.length,frasi,violazioni:bad.reduce((a,r)=>a+r.v.length,0),casiKO:bad.map(r=>({id:r.id,v:r.v,replies:r.replies})),risposte:results.map(r=>({id:r.id,replies:r.replies}))},null,1))}catch{}
   console.log(`BATTERIA svuota/inserisci: ${BATTERIA.length} casi, ${frasi} frasi, ${bad.length} casi con violazioni`)})
  for(const c of BATTERIA)it(c.id+' '+c.turns.map(t=>typeof t==='string'?t:'🎤'+t.voice).join(' → ').slice(0,120),async()=>{
-  const r=await play(c.turns.map(t=>typeof t==='string'?{text:t}:t))
+  const r=await play(c.turns.map(t=>typeof t==='string'?{text:t}:t),c.like?likePlanner:plannerOf())
   const v=violations(c,r);results.push({id:c.id,v,replies:r.replies.map(x=>x.slice(0,300))})
   expect(v,r.replies.join('\n---\n')).toEqual([])})
 })

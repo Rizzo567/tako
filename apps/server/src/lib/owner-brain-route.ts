@@ -76,7 +76,7 @@ export async function brainPlan(db:Exec,o:{menus?:{id:string,name:string,section
  const bot=lastBot(history),clarify=ask?{question:String(ask.question??'').slice(0,300),itemIds:(Array.isArray(ask.ids)?ask.ids:[]).filter((id:unknown):id is string=>typeof id==='string'&&o.refs.some(r=>r.id===id)),source:typeof ask.source==='string'?ask.source:undefined,...(Array.isArray(ask.twins)&&ask.twins.length?{twins:ask.twins.filter((t:any)=>t&&o.refs.some(r=>r.id===t.id)),actions:Array.isArray(ask.actions)?ask.actions:[]}:{})}:choice?.length?{question:(bot?.text??'Quale piatto intendi?').slice(0,300),itemIds:choice,source:bot?ownerBefore(history,bot.at)?.text:undefined}:null
  const proposal:MenuAction[]|null=cmd?.kind==='batch'&&Array.isArray(cmd.actions)?cmd.actions:null
  // Fase R: perché aspetta, parti incerte (hold) e domanda aperta del modello (brain_ask) nel contesto.
- const proposalWhy=proposal?(cmd.why??(proposal.some(a=>a.kind==='delete')?'delete':proposal.some(a=>a.kind==='create_section')?'section':'recap')):null
+ const proposalWhy=proposal?(cmd.why??(proposal.some(a=>a.kind==='delete'&&!(a as any).soft)?'delete':proposal.some(a=>a.kind==='create_section')?'section':'recap')):null
  const hold=cmd?.kind==='hold'&&Array.isArray(cmd.actions)?{actions:cmd.actions as MenuAction[],asks:(Array.isArray(cmd.asks)?cmd.asks:cmd.ask?[cmd.ask]:[]).map((q:any)=>({word:String(q.word??q.name??''),itemIds:(Array.isArray(q.options)?q.options:q.action?.id?[q.action.id]:q.id?[q.id]:[]).filter((id:unknown):id is string=>typeof id==='string'&&o.refs.some(r=>r.id===id))})),source:typeof cmd.source==='string'?cmd.source:undefined}:null
 
  // Bozza di aggiunta non finita (A1.1): nel contesto, e i suoi nomi/prezzi valgono come detti dal titolare per le creazioni.

@@ -305,7 +305,7 @@ export function sessionName(said:string,inSec:MenuRef[],vocab:string[]):{name:st
  // Accenti come nei nomi del locale («ragu» → «ragù» se c'è un piatto con «ragù»).
  const acc=new Map(vocab.flatMap(v=>v.split(/\s+/)).filter(w=>plain(w)!==w.toLowerCase()).map(w=>[plain(w),w.toLowerCase()] as const))
  return{name:capW(fixSpelling(base,vocab).split(' ').map(w=>acc.get(plain(w))??w).join(' ')),existing:null,price}}
-/** Azioni della sostituzione di un sottomenu (riusa gli esistenti, crea i nuovi — a 0 € nei menu fissi —, nasconde gli altri, mai elimina).
+/** Azioni della sostituzione di un sottomenu (riusa gli esistenti, crea i nuovi — a 0 € nei menu fissi —, ELIMINA gli altri: 22/10 notte).
  *  `noPrice` = piatti nuovi alla carta senza prezzo (la sessione li chiede prima di applicare). */
 export function sectionReplace(secId:string,names:string[],refs:MenuRef[],fixed:boolean,prices:Record<string,number>={}):{actions:MenuAction[],noPrice:string[]}{
  const inSec=refs.filter(r=>r.sectionId===secId),used=new Set<string>(),actions:MenuAction[]=[],noPrice:string[]=[]
@@ -313,7 +313,8 @@ export function sectionReplace(secId:string,names:string[],refs:MenuRef[],fixed:
   if(hit){used.add(hit.id);if(hit.hidden)actions.push({kind:'hidden',id:hit.id,value:false,fromReplace:true} as any);const pr=prices[n];if(!fixed&&pr&&Math.abs(pr-hit.price)>=0.005)actions.push({kind:'price',id:hit.id,price:pr,fromReplace:true} as any);continue}
   const pr=prices[n];if(!fixed&&!(pr&&pr>0)){noPrice.push(n);continue}
   actions.push({kind:'create',sectionId:secId,name:n,price:fixed?0:pr!,description:null,fromReplace:true} as any)}
- for(const r of inSec)if(!used.has(r.id)&&!r.hidden)actions.push({kind:'hidden',id:r.id,value:true,fromReplace:true} as any)
+ // 22/10 notte (decisione Manuel): i piatti NON nominati del sottomenu si ELIMINANO (anche quelli già nascosti), mai nascosti.
+ for(const r of inSec)if(!used.has(r.id))actions.push({kind:'delete',id:r.id,soft:true,fromReplace:true} as any)
  return{actions,noPrice}}
 
 // ---------- listino incollato ----------

@@ -6,7 +6,7 @@
  * (antipasti → primi → secondi → contorni → dolci → bevande); mai due categorie con lo stesso nome. */
 
 export type StructAction=
- |{kind:'delete',id:string,undoCreate?:boolean} // undoCreate: «no, X lascialo stare» subito dopo averlo aggiunto (senza conferma)
+ |{kind:'delete',id:string,undoCreate?:boolean,soft?:boolean} // soft (22/10 notte, decisione Manuel «eliminare, non nascondere»): «togli/leva/nascondi X», svuota, sostituzione = eliminazione subito, «annulla» 10 minuti; undoCreate: «no, X lascialo stare» subito dopo averlo aggiunto (senza conferma)
  |{kind:'rename',id:string,name:string}
  |{kind:'move',id:string,sectionId:string}
  |{kind:'create_section',newSectionId:string,name:string,menuId:string,menuName?:string,parentSectionId?:string,parentName?:string,hidden?:boolean}
