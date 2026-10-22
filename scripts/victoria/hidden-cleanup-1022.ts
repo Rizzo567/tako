@@ -38,7 +38,8 @@ async function main(args=process.argv.slice(2)){
  const out:Record<string,any>={}
  for(const [k,id] of targets){const r=rows[k],p=plan[k]!,pub=workspaceSchema.parse(r.published)
   if(!p.published.length&&!p.draftOnly.length){out[k]={skipped:'nessun piatto nascosto'};continue}
-  const owner=(await db.execute(sql`SELECT user_id FROM web_location_memberships WHERE restaurant_id=${id} ORDER BY created_at LIMIT 1`))[0] as any
+  // attore della versione: il titolare (membership) o, nel QA senza membership, l'attore del bot collegato al locale
+  const owner=((await db.execute(sql`SELECT user_id FROM web_location_memberships WHERE restaurant_id=${id} ORDER BY created_at LIMIT 1`))[0] as any)??((await db.execute(sql`SELECT actor_id AS user_id FROM tako_whatsapp_links WHERE restaurant_id=${id} ORDER BY created_at LIMIT 1`))[0] as any)
   if(!owner?.user_id)throw Error(k+': nessun titolare per la versione')
   const saved=await applyBotChange(id,String(owner.user_id),['Pulizia 22/10: piatti nascosti eliminati (bozza)','Pulizia 22/10: piatti nascosti eliminati'],
    {expectedPublishedRevision:p.publishedRevision,actions:p.published.map(h=>({kind:'delete',id:h.id}) as any),draft:d=>withoutHidden(d)})

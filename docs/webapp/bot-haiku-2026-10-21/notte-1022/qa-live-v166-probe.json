@@ -1,0 +1,88 @@
+{
+ "tag": "v166-probe",
+ "at": "2026-10-22T19:35:06.893Z",
+ "stopped": null,
+ "finalDiff": [],
+ "ok": 4,
+ "total": 4,
+ "results": [
+  {
+   "id": "lettura-prezzo",
+   "desc": "«quanto costa il riso giallo?» → 8 €, nessuna scrittura",
+   "turns": [
+    {
+     "m": "quanto costa il riso giallo?",
+     "reply": "Il *riso giallo* costa 8 €. *riso giallo*: *8,00 €* · disponibile",
+     "ms": 5380,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "nascondi-elimina",
+   "desc": "(22/10 notte) «nascondi il riso giallo» = togli → ELIMINATO, mai nascosto; «annulla» → identico",
+   "turns": [
+    {
+     "m": "nascondi il riso giallo",
+     "reply": "*riso giallo*: *eliminato* dal menu Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 5241,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *riso giallo*: com’era prima",
+     "ms": 3903,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "togli-elimina",
+   "desc": "(22/10 notte) «togli la pasta al pesto e lasagna» → eliminata subito con «annulla»; «annulla» → identica",
+   "turns": [
+    {
+     "m": "togli la pasta al pesto e lasagna",
+     "reply": "*Pasta al pesto e lasagna*: *eliminato* dal menu Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 7065,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Pasta al pesto e lasagna*: com’era prima",
+     "ms": 3509,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "svuota-annulla",
+   "desc": "«svuota il menu del giorno» → i 7 piatti ELIMINATI subito, nessuna domanda → «annulla» → com’era (identico)",
+   "turns": [
+    {
+     "m": "svuota il menu del giorno",
+     "reply": "*Menu del giorno svuotato* Ho eliminato tutti i 7 piatti. I sottomenu (Primi e Secondi) e i prezzi fissi restano come sono. Eliminati: Lasagna, Carbonara, Gnocchi al ragù, Cotoletta, Polpette, Frittata di zucchine, Frittata di patate. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne». Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2560,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Carbonara*: com’era prima *Gnocchi al ragù*: com’era prima *Cotoletta*: com’era prima *Polpette*: com’era prima *Frittata di zucchine*: com’era prima *Frittata di patate*: com’era prima",
+     "ms": 4330,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  }
+ ]
+}
