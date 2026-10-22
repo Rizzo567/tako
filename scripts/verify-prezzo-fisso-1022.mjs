@@ -84,17 +84,15 @@ async function phone(width,height,tag,full){
   const want=Math.round(20*inv)
   check(`${tag} piatto sollevato = vetro: 4 angoli ~20 px reali, blur+saturate, ombra`,mid&&mid.glass&&mid.inside&&mid.r.every(r=>Math.abs(parseFloat(r)-want)<=2)&&/blur/.test(mid.bf)&&/saturate/.test(mid.bf)&&/rgba/.test(mid.sh),{mid,inv,want})
   check(`${tag} in tremolio dopo il rilascio`,await jiggle())
-  // 2. PIATTO in un'altra Sezione/Sottomenu (pagina Secondi) con «Sposta» già attivo
+  // 2. PIATTO nella pagina Secondi con pressione lunga
   await fine()
   const pid=U(11);await f.evaluate(id=>document.querySelector(`[data-edit-id="${id}"]`).click(),pid);await sleep(700)
   await f.evaluate(id=>document.querySelector(`[data-edit-id="${id}"]`).scrollIntoView({block:'center'}),U(110));await sleep(300)
-  for(let t=0;t<3;t++){await tap(await at(`[data-edit-id="${U(110)}"] h3`));await sleep(300);if(await f.evaluate(()=>!document.querySelector('[data-edit-move]').classList.contains('tako-edit-hidden')))break}
-  await tap(await at('[data-edit-move]'))
-  check(`${tag} «Sposta» nel prezzo fisso → tremolio`,await jiggle(),await f.evaluate(()=>({sel:!document.querySelector('[data-edit-move]').classList.contains('tako-edit-hidden'),y:scrollY})))
+  // 22/10 tarda sera: via «Sposta», il tremolio parte solo con la pressione lunga (longDrag).
   const c=await at(`[data-edit-id="${U(110)}"] h3`),d=await at(`[data-edit-id="${U(111)}"]`)
   await longDrag(c,{x:c.x,y:d.y+d.h*.4})
   await waitFor(()=>sec(U(1),U(11)).items.at(-1).id===U(110),6000).catch(()=>{})
-  check(`${tag} PREZZO FISSO: piatto trascinato con «Sposta» → bozza aggiornata`,sec(U(1),U(11)).items.at(-1).id===U(110),sec(U(1),U(11)).items.map(i=>i.name))
+  check(`${tag} PREZZO FISSO: piatto trascinato (Secondi, pressione lunga) → bozza aggiornata`,sec(U(1),U(11)).items.at(-1).id===U(110),sec(U(1),U(11)).items.map(i=>i.name))
   // 3. SOTTOMENU (pillola) nel prezzo fisso, sollevato NON in vetro (resta com'era)
   await f.evaluate(()=>scrollTo(0,0));await sleep(300)
   const pills=await f.evaluate(()=>[...document.querySelectorAll('[data-edit-kind="submenu"]')].map(e=>e.getAttribute('data-edit-id')))

@@ -1,0 +1,140 @@
+{
+ "fails": 0,
+ "results": [
+  {
+   "name": "tap piatto → riquadro + «Modifica» visibili",
+   "ok": true,
+   "detail": {
+    "frame": true,
+    "pencil": true
+   }
+  },
+  {
+   "name": "nessun «Sposta» (iframe e SPA)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "tap breve non attiva il tremolio",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "PREZZO FISSO: pressione lunga 1 s (±5 px) sul piatto → tremolio e trascinamento → bozza aggiornata",
+   "ok": true,
+   "detail": [
+    "Risotto ai funghi",
+    "Lasagna",
+    "Pasta al pomodoro",
+    "Gnocchi",
+    "Ravioli",
+    "Tortellini",
+    "Carbonara",
+    "Amatriciana"
+   ]
+  },
+  {
+   "name": "in tremolio dopo il rilascio",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "in tremolio riquadro/«Modifica» nascosti",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "trovato punto vuoto nell'iframe",
+   "ok": true,
+   "detail": {
+    "x": 195,
+    "y": 317.82500000000005,
+    "tag": "SECTION"
+   }
+  },
+  {
+   "name": "scroll in tremolio (da zona vuota) → resta in tremolio",
+   "ok": true,
+   "detail": {
+    "y0": 0,
+    "y1": 254
+   }
+  },
+  {
+   "name": "scroll in tremolio → la pagina scorre",
+   "ok": true,
+   "detail": {
+    "y0": 0,
+    "y1": 254
+   }
+  },
+  {
+   "name": "ancora in tremolio prima del tocco vuoto",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "tocco su zona vuota → esce dal tremolio",
+   "ok": true,
+   "detail": {
+    "x": 195,
+    "y": 317.82500000000005,
+    "tag": "SECTION"
+   }
+  },
+  {
+   "name": "tocco su zona vuota → nessuna selezione (riquadro e «Modifica» nascosti)",
+   "ok": true,
+   "detail": {
+    "frame": false,
+    "pencil": false
+   }
+  },
+  {
+   "name": "nessun residuo (ghost/opacità 0)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "Sottomenu: pressione lunga → tremolio e trascinamento → ordine cambiato",
+   "ok": true,
+   "detail": {
+    "o0": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ],
+    "o1": [
+     "Secondi",
+     "Contorni",
+     "Primi"
+    ]
+   }
+  },
+  {
+   "name": "in tremolio dopo il Sottomenu",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "«Fine» trovato",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "«Fine» esce dal tremolio",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "«Modifica» apre la scheda del piatto",
+   "ok": true,
+   "detail": "Modifica piattoNomeDescrizioneFotoTrascina qui una fotoJPG, PNG o WebP · massimo 10 MBCaricaScegli dalla galleriaUltime porzioniSolo oggiDisponibilitàEsauritoAl"
+  },
+  {
+   "name": "nessun errore di pagina",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}

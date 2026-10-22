@@ -24,9 +24,10 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
   const [selection, setSelection] = useState<EditSelection>(null)
   const [mode, setMode] = useState(false)
   const docRef = useRef(doc), menuRef = useRef(menuId), selRef = useRef<EditSelection>(null), modeRef = useRef(false), seqRef = useRef(0)
-  const gestureRef = useRef<MenuGesture | null>(null), frameRef = useRef<HTMLDivElement>(null), pencilRef = useRef<HTMLButtonElement>(null), moveRef = useRef<HTMLButtonElement>(null)
-  // 22/10 sera: il tocco che seleziona fa comparire «Sposta»/«Modifica» proprio sotto il dito; il click di compatibilità che segue il
-  // touchend li premeva da solo (tremolio senza volerlo). Per un attimo dopo la comparsa i due pulsanti ignorano il click.
+  const gestureRef = useRef<MenuGesture | null>(null), frameRef = useRef<HTMLDivElement>(null), pencilRef = useRef<HTMLButtonElement>(null)
+  // 22/10 sera: il tocco che seleziona fa comparire «Modifica» proprio sotto il dito; il click di compatibilità che segue il
+  // touchend lo premeva da solo. Per un attimo dopo la comparsa la matita ignora il click. (22/10 tarda sera: via «Sposta»,
+  // il tremolio parte solo con la pressione lunga di ~1 s.)
   const shownAt = useRef(0), fresh = () => performance.now() - shownAt.current < 350
   const lastSpa = useRef<{ selection: EditSelection; editing: boolean } | null>(null), pendingFlash = useRef<string[]>([]), flashRef = useRef<() => void>(() => {})
   docRef.current = doc; menuRef.current = menuId; selRef.current = selection; modeRef.current = mode
@@ -95,6 +96,11 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     const onClick = (e: MouseEvent) => { if (modeRef.current) return; const el = editable(e.target); if (el) select(fromEl(el)) }
     const onDown = (e: PointerEvent) => { if (modeRef.current || e.button > 0) return; if (!editable(e.target) && !(e.target as Element)?.closest?.('.tako-edit-pencil')) select(null) }
     const onFocus = (e: FocusEvent) => { if (modeRef.current) return; const el = editable(e.target); if (el && el === e.target) select(fromEl(el)) }
+    // Tremolio sul telefono: un tocco su zona vuota (né piatto, né Sottomenu, né Menu) esce dal tremolio (lo decide il gesto, che
+    // ascolta prima) e non seleziona nulla: si toglie anche la selezione rimasta da prima. Uno scroll non esce (il gesto lo ignora).
+    let outsideTouch = false
+    const onTouchStart = (e: TouchEvent) => { outsideTouch = modeRef.current && e.touches.length === 1 && !editable(e.target) && !(e.target as Element)?.closest?.('.tako-edit-pencil') }
+    const onTouchEnd = () => { if (outsideTouch && !modeRef.current) select(null); outsideTouch = false }
     const onKey = (e: KeyboardEvent) => {
       const action = keyAction(e.key, { selected: !!selRef.current, handled: e.defaultPrevented, picking: !!root.querySelector('[data-gesture-picked]') })
       if (action === 'open' && editable(e.target)) { e.preventDefault(); post(outgoing.open(selRef.current!)) }
@@ -102,7 +108,8 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     }
     const onDocKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !e.defaultPrevented && !root.contains(e.target as Node) && selRef.current) select(null) }
     document.addEventListener('click', onClick); document.addEventListener('pointerdown', onDown); root.addEventListener('focusin', onFocus); root.addEventListener('keydown', onKey); document.addEventListener('keydown', onDocKey)
-    return () => { document.removeEventListener('click', onClick); document.removeEventListener('pointerdown', onDown); root.removeEventListener('focusin', onFocus); root.removeEventListener('keydown', onKey); document.removeEventListener('keydown', onDocKey) }
+    document.addEventListener('touchstart', onTouchStart, { passive: true }); document.addEventListener('touchend', onTouchEnd, { passive: true })
+    return () => { document.removeEventListener('touchstart', onTouchStart); document.removeEventListener('touchend', onTouchEnd); document.removeEventListener('click', onClick); document.removeEventListener('pointerdown', onDown); root.removeEventListener('focusin', onFocus); root.removeEventListener('keydown', onKey); document.removeEventListener('keydown', onDocKey) }
   }, [root, state.disabled])
 
   // Dopo ogni ri-render (documento nuovo, cambio pagina fra pillole, cambio Menu): riaggancio del gesto e lampeggio.
@@ -130,9 +137,9 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
   // Riquadro e matita: seguono l'elemento. Niente ciclo a ogni frame: si ricalcola (un solo rAF alla volta) solo su scroll,
   // resize, cambi di dimensione (ResizeObserver), mutazioni del DOM e fine delle transizioni di pagina.
   useEffect(() => {
-    const frameEl = frameRef.current, pencil = pencilRef.current, move = moveRef.current
-    if (!root || !frameEl || !pencil || !move) return
-    if (!selection || mode) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); move.classList.add('tako-edit-hidden'); return }
+    const frameEl = frameRef.current, pencil = pencilRef.current
+    if (!root || !frameEl || !pencil) return
+    if (!selection || mode) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); return }
     shownAt.current = performance.now()
     let raf = 0, last = '', observed: HTMLElement | null = null
     const target = () => { for (const sel of frameSelectors(selection)) for (const el of Array.from(root.querySelectorAll<HTMLElement>(sel))) { const r = el.getBoundingClientRect(); if (r.width > 0 && r.height > 0) return { el, r } } return null }
@@ -142,7 +149,7 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       if (document.hidden) return
       const t = target()
       if (t?.el !== observed) { if (observed) resize?.unobserve(observed); observed = t?.el || null; if (observed) resize?.observe(observed) }
-      if (!t) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); move.classList.add('tako-edit-hidden'); last = ''; return }
+      if (!t) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); last = ''; return }
       const pad = 4, { r } = t, key = `${r.left}|${r.top}|${r.width}|${r.height}`
       if (key === last) return
       // Si è mosso: si segue anche al frame dopo (animazioni WAAPI senza eventi) finché resta fermo.
@@ -153,10 +160,6 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       const pw = pencil.offsetWidth || 44, ph = pencil.offsetHeight || 32
       const x = Math.max(4, Math.min(innerWidth - pw - 4, r.right + pad - pw + 6)), y = Math.max(4, r.top - pad - ph / 2)
       pencil.style.transform = `translate3d(${x}px,${y}px,0)`
-      // «Sposta» (22/10 notte): in alto a SINISTRA del riquadro, stessa pillola della matita; mai sovrapposto alla matita.
-      move.classList.remove('tako-edit-hidden')
-      const mw = move.offsetWidth || 44, mx = Math.max(4, Math.min(x - mw - 8, r.left - pad - 6))
-      move.style.transform = `translate3d(${mx}px,${y}px,0)`
       const name = (t.el.querySelector('h3')?.textContent || t.el.textContent || '').trim().slice(0, 60)
       pencil.setAttribute('aria-label', pencilLabel(selection.kind, name, t.el.getAttribute('data-edit-kind') === 'section' || !!t.el.closest('[data-edit-kind="section"]')))
     }
@@ -183,10 +186,6 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     <button ref={pencilRef} type="button" className="tako-edit-pencil tako-edit-hidden" data-edit-pencil aria-label="Modifica" onClick={() => { if (fresh()) return; if (selRef.current) post(outgoing.open(selRef.current)) }}>
       <svg aria-hidden width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/><path d="m13.5 6.5 4 4" stroke="currentColor" strokeWidth="2"/></svg>
       <span>Modifica</span>
-    </button>
-    <button ref={moveRef} type="button" className="tako-edit-pencil tako-edit-move tako-edit-hidden" data-edit-move data-gesture-keep aria-label="Sposta: fai tremare gli elementi per riordinarli" onClick={() => { if (fresh()) return; gestureRef.current?.enterEditMode?.() }}>
-      <svg aria-hidden width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-      <span>Sposta</span>
     </button>
   </>
 }

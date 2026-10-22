@@ -61,7 +61,7 @@ await run('durante l\'attesa: pointercancel, scroll, mousedown/click, resize di 
   assert.ok(l.some(e => e[0] === 'mode' && e[1] === true), JSON.stringify(l.filter(e => e[0] === 'dbg'))); await t.page.close()
 })
 const touch2 = (t, type, pts) => t.cdp.send('Input.dispatchTouchEvent', { type, touchPoints: pts.map(q => ({ radiusX: 8, radiusY: 8, force: 1, ...q })) })
-await run('enterEditMode («Sposta») → tremolio senza pressione; dito fermo non solleva; 8 px reali → sollevato SUBITO; piatto in stessa Sezione e in altra Sezione → onDrop', async () => {
+await run('enterEditMode() (API, nessun pulsante in UI) → tremolio senza pressione; dito fermo non solleva; 8 px reali → sollevato SUBITO; piatto in stessa Sezione e in altra Sezione → onDrop', async () => {
   const t = await fresh()
   await t.frame.evaluate(() => window.__gesture.enterEditMode()); await sleep(100)
   let l = await t.log(); assert.deepEqual(l.filter(e => e[0] === 'mode').map(e => e[1]), [true])
