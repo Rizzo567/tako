@@ -19,7 +19,12 @@ import { commonMenuLanguages } from './menu-workspace-languages.js'
 import { foodCatalogs } from './menu-workspace-catalogs.js'
 import { pendingOf } from './menu-workspace-pending.js'
 /** Flag per locale del nuovo editor «Piatti» (default spento). */
-export const dashboardEditorEnabled=(settings:unknown)=>!!settings&&typeof settings==='object'&&(settings as {dashboardEditor?:unknown}).dashboardEditor===true
+/** Decisione di Manuel 22/10: editor nuovo ACCESO di default per tutti i locali. Emergenza: `settings.dashboardEditor=false` spegne il
+ *  singolo locale (scripts/set-dashboard-editor-flag.mjs <id> off), `TAKO_DASHBOARD_EDITOR=off` sull'edge spegne tutti. */
+export const dashboardEditorEnabled=(settings:unknown)=>{
+ if(typeof process!=='undefined'&&process.env?.TAKO_DASHBOARD_EDITOR==='off')return false
+ return !(settings&&typeof settings==='object'&&(settings as {dashboardEditor?:unknown}).dashboardEditor===false)
+}
 /** pending per contenuto NORMALIZZATO: se le colonne grezze differiscono si confrontano i documenti passati da zod
  * (un documento salvato prima di un campo con default non è «modificato»). Parse solo quando il confronto grezzo dice «diverso». */
 export function pendingNormalized(row:{draft:unknown;published:unknown}){
