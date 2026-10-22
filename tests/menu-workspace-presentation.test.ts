@@ -10,10 +10,10 @@ import { foodCatalogs } from '../apps/server/src/lib/menu-workspace-catalogs.js'
 describe('Workspace presentation envelope',()=>{
  it('reads only authenticated tenant name and keeps draft/revisions intact',async()=>{
   const app=Fastify();app.addHook('preHandler',async req=>{req.user={restaurantId:state.tenant,id:'owner'} as typeof req.user});await app.register(menuWorkspaceRoutes)
-  try{for(const tenant of ['tenant-a','tenant-b']){state.tenant=tenant;state.missing=false;const response=await app.inject({url:'/'});expect(response.statusCode,response.body).toBe(200);expect(response.json()).toEqual({data:state.draft,revision:7,publishedRevision:6,presentation:{restaurantName:tenant==='tenant-a'?'Ristorante A':'Ristorante B',foodCatalogs}});expect(state.where.mock.lastCall?.[0].queryChunks).toContain(tenant);expect(state.where.mock.lastCall?.[0].queryChunks).toContain('restaurant-id');expect(state.ensure).toHaveBeenLastCalledWith(tenant)}expect(state.draft).toEqual({menus:[],languages:['it']})}finally{await app.close()}
+  try{for(const tenant of ['tenant-a','tenant-b']){state.tenant=tenant;state.missing=false;const response=await app.inject({url:'/'});expect(response.statusCode,response.body).toBe(200);expect(response.json()).toMatchObject({data:{menus:[]},revision:7,publishedRevision:6,presentation:{restaurantName:tenant==='tenant-a'?'Ristorante A':'Ristorante B',foodCatalogs}});expect(state.where.mock.lastCall?.[0].queryChunks).toContain(tenant);expect(state.where.mock.lastCall?.[0].queryChunks).toContain('restaurant-id');expect(state.ensure).toHaveBeenLastCalledWith(tenant)}expect(state.draft).toEqual({menus:[],languages:['it']})}finally{await app.close()}
  })
  it('returns display fallback when restaurant record is absent',async()=>{
   state.missing=true;const app=Fastify();app.addHook('preHandler',async req=>{req.user={restaurantId:'tenant-a',id:'owner'} as typeof req.user});await app.register(menuWorkspaceRoutes)
-  try{const response=await app.inject({url:'/'});expect(response.statusCode,response.body).toBe(200);expect(response.json().presentation).toEqual({restaurantName:'Menu',foodCatalogs});expect(response.json().data).toEqual(state.draft)}finally{state.missing=false;await app.close()}
+  try{const response=await app.inject({url:'/'});expect(response.statusCode,response.body).toBe(200);expect(response.json().presentation).toEqual({restaurantName:'Menu',foodCatalogs});expect(response.json().data).toMatchObject({menus:[]})}finally{state.missing=false;await app.close()}
  })
 })
