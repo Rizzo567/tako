@@ -305,15 +305,17 @@ export function welcomeFromWorkspace(restaurant:string,w:unknown){
 }
 export function localDate(timezone:string,now=new Date()){let zone='Europe/Rome';try{new Intl.DateTimeFormat('en',{timeZone:timezone});zone=timezone}catch{}const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now).map(v=>[v.type,v.value]));return{zone,date:`${p.year}-${p.month}-${p.day}`}}
 // Applica azioni già validate a un workspace (da ri-validare con workspaceSchema prima di salvare). Restituisce i nomi toccati.
-export function applyActions(w:any,actions:MenuAction[],opts:{uploads?:Map<string,string>,timezone?:string,now?:Date}={}){
+// newId (dashboard editor 22/10): generatore di id iniettabile (id deterministici per pubblicato e bozza); default randomUUID come prima.
+export function applyActions(w:any,actions:MenuAction[],opts:{uploads?:Map<string,string>,timezone?:string,now?:Date,newId?:()=>string}={}){
+ const newId=opts.newId??randomUUID
  const items=new Map<string,any>(w.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,i])))),names:string[]=[]
  for(const a of orderActions(actions)){
   if(isStructAction(a)){const n=applyStructAction(w,a);if(!names.includes(n))names.push(n);continue}
-  if(a.kind==='create'){const section=w.menus.flatMap((m:any)=>m.sections).find((s:any)=>s.id===a.sectionId);if(!section)throw new Error('Section missing');section.items.push({id:randomUUID(),name:a.name,price:a.price,description:a.description});names.push(a.name);continue}
+  if(a.kind==='create'){const section=w.menus.flatMap((m:any)=>m.sections).find((s:any)=>s.id===a.sectionId);if(!section)throw new Error('Section missing');section.items.push({id:newId(),name:a.name,price:a.price,description:a.description});names.push(a.name);continue}
   if(a.kind==='special'){const {zone,date}=localDate(opts.timezone??'Europe/Rome',opts.now),schedule={timezone:zone,enabled:true,windows:[{weekdays:[0,1,2,3,4,5,6],start:'00:00',end:'00:00'}],from:date,until:date}
    const menu=w.menus.find((m:any)=>m.active!==false&&(m.type??'main')==='main')??w.menus.find((m:any)=>m.active!==false);if(!menu)throw new Error('Menu missing')
-   let section=menu.sections.find((s:any)=>!s.parentSectionId&&plain(s.name)===plain(dailySectionName));if(!section){section={id:randomUUID(),name:dailySectionName,items:[]};menu.sections.unshift(section)}
-   section.active=true;section.schedule=schedule;section.items.push({id:randomUUID(),name:a.name,price:a.price,description:a.description,schedule});names.push(a.name);continue}
+   let section=menu.sections.find((s:any)=>!s.parentSectionId&&plain(s.name)===plain(dailySectionName));if(!section){section={id:newId(),name:dailySectionName,items:[]};menu.sections.unshift(section)}
+   section.active=true;section.schedule=schedule;section.items.push({id:newId(),name:a.name,price:a.price,description:a.description,schedule});names.push(a.name);continue}
   const item=items.get(a.id);if(!item)throw new Error('Item missing');if(!names.includes(item.name))names.push(item.name)
   if(a.kind==='price')item.price=a.price;else if(a.kind==='available')item.available=a.value;else if(a.kind==='hidden')item.hidden=a.value;else if(a.kind==='featured')item.featured=a.value
   else if(a.kind==='description')item.description=a.text;else if(a.kind==='image'){const url=opts.uploads?.get(a.id);if(!url)throw new Error('Upload missing');item.imageUrl=url}

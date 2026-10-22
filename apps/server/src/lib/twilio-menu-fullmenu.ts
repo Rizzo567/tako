@@ -3,7 +3,7 @@
 // Stati nella stessa riga di tako_whatsapp_proposals (jsonb, nessuna migrazione): doubt → where → confirm, oppure replay.
 import {sql} from 'drizzle-orm'
 import type {DB} from '@tako/db'
-import {mutateWorkspace} from './menu-workspace-store.js'
+import {applyBotChange} from './menu-workspace-bot.js'
 import {workspaceSchema,type Workspace} from './menu-workspace-contract.js'
 import {safe,type MenuRef} from './twilio-menu-ai.js'
 import {copy,fullMenuCopy,fill} from './twilio-menu-copy.js'
@@ -106,9 +106,8 @@ async function apply(tx:Tx,ctx:Ctx,w:Workspace,revision:number,full:FullMenuProp
  }
  const {workspace:changed,summary}=replaceMenuContent(w,d.menuId,rows),next=workspaceSchema.parse(changed),connection=tx as unknown as DB
  // Safety copy first (a labelled version of the menu as it is now), then draft, then publication: one transaction.
- expired(isExpired);const snapshot=await mutateWorkspace(ctx.tenant,ctx.actor,revision,workspaceSchema.parse(w),false,snapshotLabel+d.menuId,connection)
- expired(isExpired);const saved=await mutateWorkspace(ctx.tenant,ctx.actor,snapshot.revision,next,false,'WhatsApp: menu intero (bozza)',connection)
- expired(isExpired);await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,'WhatsApp: menu intero pubblicato',connection)
+ // dashboard editor 22/10: solo quel Menu, in pubblicato e bozza; se la bozza di quel Menu aveva modifiche, prima se ne salva una versione + avviso.
+ expired(isExpired);await applyBotChange(ctx.tenant,ctx.actor,['WhatsApp: menu intero (bozza)','WhatsApp: menu intero pubblicato'],{expectedPublishedRevision:revision,next,replaceMenuIds:[d.menuId],before:[{label:snapshotLabel+d.menuId,doc:workspaceSchema.parse(w)}],draftBackupLabel:'Bozza prima di WhatsApp (menu intero '+menu.name+')',notice:'Da WhatsApp è arrivato il menu intero «'+menu.name+'»: le modifiche non pubblicate di quel Menu sono state sostituite. Le trovi in Storico versioni.'},connection)
  expired(isExpired);await dropProposal(tx,ctx)
  // Translations never block the publication: only NEW texts are queued; the public menu shows Italian meanwhile.
  void enqueueNewTextTranslations(ctx.tenant,summary.newTexts).catch(()=>{})
@@ -122,8 +121,7 @@ async function restore(tx:Tx,ctx:Ctx,w:Workspace,revision:number,isExpired?:()=>
  const menuId=label.slice(snapshotLabel.length),parsed=workspaceSchema.safeParse(last.snapshot);if(!parsed.success)return fullMenuCopy.restoreNone
  const restored=restoreMenuFrom(w,parsed.data,menuId);if(!restored)return fullMenuCopy.restoreNone
  const next=workspaceSchema.parse(restored),connection=tx as unknown as DB,name=w.menus.find(m=>m.id===menuId)?.name??'Menu'
- expired(isExpired);const saved=await mutateWorkspace(ctx.tenant,ctx.actor,revision,next,false,'WhatsApp: ripristino menu di prima (bozza)',connection)
- expired(isExpired);await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,restoredLabel+menuId,connection)
+ expired(isExpired);await applyBotChange(ctx.tenant,ctx.actor,['WhatsApp: ripristino menu di prima (bozza)',restoredLabel+menuId],{expectedPublishedRevision:revision,next,replaceMenuIds:[menuId],draftBackupLabel:'Bozza prima di WhatsApp (ripristino '+name+')',notice:'Da WhatsApp è stato ripristinato il menu di prima «'+name+'»: le modifiche non pubblicate di quel Menu sono state sostituite. Le trovi in Storico versioni.'},connection)
  await dropProposal(tx,ctx)
  return fill(fullMenuCopy.restored,{menu:name})
 }

@@ -11,6 +11,8 @@ import { workspaceSchema, type Workspace } from './menu-workspace-contract.js'
 import { COMMON_MENU_LANGUAGES } from './menu-workspace-languages.js'
 import { translationFingerprint, groqTranslationProvider, translationGroqKey, type TranslationProvider } from './menu-workspace-translate.js'
 import { mutateWorkspace, readWorkspace, WorkspaceConflict } from './menu-workspace-store.js'
+import { applyBotChange } from './menu-workspace-bot.js'
+import { pendingOf } from './menu-workspace-pending.js'
 
 type Conn = Pick<DB,'execute'>
 const LANGUAGE = /^[a-z]{2,3}(-[a-z0-9]{2,8})?$/
@@ -165,15 +167,31 @@ async function markAttempt(connection: Conn, tenant: string, lang: string, keys:
  const rows = await connection.execute(sql`UPDATE menu_text_translations SET attempts=attempts+1,status=CASE WHEN attempts+1>=3 THEN 'failed' ELSE 'pending' END,updated_at=now() WHERE restaurant_id=${tenant} AND lang=${lang} AND status='pending' AND text_key IN (SELECT jsonb_array_elements_text(${JSON.stringify(keys)}::jsonb)) RETURNING status`) as unknown as { status: string }[]
  return rows.filter(r => r.status === 'failed').length
 }
-/** Scrive le traduzioni appena pronte nel documento. Con una bozza pendente tocca solo la bozza
- * (la pubblicazione del titolare le porterà online); altrimenti bozza + pubblicazione. */
+/** Scrive le traduzioni appena pronte nel documento: senza bozza pendente bozza + pubblicazione (come prima); con bozza
+ * pendente nelle due copie separatamente (la bozza non si pubblica); mai pubblicato = solo bozza. */
 export async function writeCachedTranslations(tenant: string, connection: DB = db, actor?: string): Promise<boolean> {
  for (let attempt = 0; attempt < 2; attempt++) {
   const row = await readWorkspace(tenant, connection)
   if (!row) return false
   const draft = workspaceSchema.parse(row.draft)
+  // dashboard editor 22/10: «pulito» per contenuto (pendingOf), non per revisione. Con bozza pendente le traduzioni vanno
+  // in entrambe le copie (add-only), senza pubblicare la bozza: applyBotChange col pubblicato tradotto + bozza tradotta.
+  const clean = !pendingOf(row)
+  if (!clean && row.published) {
+   const published = workspaceSchema.parse(row.published)
+   const pubChanged = await applyCachedTranslations(tenant, published, connection)
+   try {
+    if (pubChanged) {
+     await applyBotChange(tenant, actor || SYSTEM_ACTOR, ['Traduzioni automatiche', 'Traduzioni automatiche'], { expectedPublishedRevision: Number(row.published_revision ?? row.revision), next: workspaceSchema.parse(published), draft: async d => { await applyCachedTranslations(tenant, d, connection); return d } }, connection)
+     return true
+    }
+    if (!await applyCachedTranslations(tenant, draft, connection)) return false
+    await mutateWorkspace(tenant, actor || SYSTEM_ACTOR, row.revision, workspaceSchema.parse(draft), false, 'Traduzioni automatiche', connection)
+    return true
+   } catch (e) { if (!(e instanceof WorkspaceConflict)) throw e }
+   continue
+  }
   if (!await applyCachedTranslations(tenant, draft, connection)) return false
-  const clean = row.published_revision === row.revision
   try {
    await connection.transaction(async tx => {
     const t = tx as unknown as DB

@@ -10,6 +10,7 @@ import { z } from 'zod'
 import { db, type DB } from '@tako/db'
 import { workspaceSchema, type Workspace } from './menu-workspace-contract.js'
 import { mutateWorkspace, readWorkspace, WorkspaceConflict } from './menu-workspace-store.js'
+import { applyBotChange } from './menu-workspace-bot.js'
 import { enqueueNewTextTranslations, readTranslationCache, fillTranslationsFromCache, seedTranslationCache, sectionEntities, allLanguages, workspaceTexts, SYSTEM_ACTOR } from './menu-text-translations.js'
 import { hasSuppliedMenuPdf } from './supplied-menu-pdf.js'
 import { stampOnlyToday } from './menu-sales.js'
@@ -226,8 +227,11 @@ export async function publishDayPreset(restaurantId: string, input: { presetId: 
  if (!preset.itemCount) throw new DayPresetError('EMPTY', `Il preset «${preset.name}» è vuoto: resta online il menu attuale`)
  const row = await workspaceOf(restaurantId, connection)
  if (input.expectedRevision !== undefined && input.expectedRevision !== row.revision) throw new WorkspaceConflict('Revision conflict')
- const pending = row.published_revision !== row.revision
- const base = workspaceSchema.parse(mode === 'auto' ? (row.published ?? row.draft) : row.draft)
+ // dashboard editor 22/10: il job delle 06:00 e la chat («metti online…», senza expectedRevision) toccano SOLO il Menu del
+ // preset, nel pubblicato e nella bozza (applyBotChange); la bozza degli altri Menu resta. «Pubblica questo preset» dalla
+ // dashboard (con expectedRevision) resta com'era: parte dalla bozza e pubblica.
+ const partial = mode === 'auto' || input.expectedRevision === undefined
+ const base = workspaceSchema.parse(partial ? (row.published ?? row.draft) : row.draft)
  const menu = menuOf(base, preset.menuId)
  // Traduzioni: quelle già nel documento entrano in cache (mai ritradotte), quelle in cache completano il preset.
  await seedTranslationCache(restaurantId, workspaceSchema.parse(row.draft), connection)
@@ -244,20 +248,22 @@ export async function publishDayPreset(restaurantId: string, input: { presetId: 
  const result = await connection.transaction(async tx => {
   const t = tx as unknown as DB
   let discarded: string | null = null
-  if (mode === 'auto' && pending) {
-   discarded = randomUUID()
-   await tx.execute(sql`INSERT INTO menu_workspace_versions(id,restaurant_id,revision,label,snapshot,created_by) VALUES(${discarded},${restaurantId},${row.revision},${`Bozza non pubblicata, sostituita dal preset «${preset.name}» alle 06:00`},${JSON.stringify(row.draft)}::jsonb,${null})`)
-  }
   if (mode === 'auto') {
    const ids = sections.flatMap(s => s.items.map(i => ({ id: i.id, available: i.available })))
    if (ids.length) await tx.execute(sql`UPDATE menu_items m SET available=x.available FROM jsonb_to_recordset(${JSON.stringify(ids)}::jsonb) AS x(id uuid,available boolean) WHERE m.restaurant_id=${restaurantId} AND m.id=x.id AND m.available IS DISTINCT FROM x.available`)
   }
-  await mutateWorkspace(restaurantId, actor, row.revision, next, false, label, t)
-  const published = await mutateWorkspace(restaurantId, actor, row.revision + 1, next, true, label, t)
+  let published: { revision: number }
+  if (partial) {
+   const done = await applyBotChange(restaurantId, actor, [label, label], { expectedPublishedRevision: Number(row.published_revision ?? row.revision), next, replaceMenuIds: [preset.menuId], draftBackupLabel: mode === 'auto' ? `Bozza non pubblicata, sostituita dal preset «${preset.name}» alle 06:00` : `Bozza prima del preset «${preset.name}»` }, t)
+   discarded = done.draftBackupVersionId; published = { revision: done.publishedRevision }
+  } else {
+   await mutateWorkspace(restaurantId, actor, row.revision, next, false, label, t)
+   published = await mutateWorkspace(restaurantId, actor, row.revision + 1, next, true, label, t)
+  }
   await tx.execute(sql`INSERT INTO menu_day_preset_settings(restaurant_id,menu_id,enabled,online_preset_id,online_at) VALUES(${restaurantId},${preset.menuId},true,${preset.id},now()) ON CONFLICT(restaurant_id,menu_id) DO UPDATE SET online_preset_id=excluded.online_preset_id,online_at=excluded.online_at,updated_at=now()`)
   return { revision: published.revision, discarded }
  })
- if (result.discarded) notices.push(await addOwnerNotice(connection, { restaurantId, kind: 'draft_discarded', menuId: preset.menuId, serviceDay: input.serviceDayLabel ?? null, message: `Alle 06:00 è andato online il preset «${preset.name}»: la bozza non pubblicata è stata sostituita. La trovi in Storico versioni.` }))
+ if (result.discarded) notices.push(await addOwnerNotice(connection, { restaurantId, kind: 'draft_discarded', menuId: preset.menuId, serviceDay: input.serviceDayLabel ?? null, message: `${mode === 'auto' ? 'Alle 06:00 è' : 'È'} andato online il preset «${preset.name}»: le modifiche non pubblicate di quel Menu sono state sostituite. Le trovi in Storico versioni.` }))
  if (hasSuppliedMenuPdf(restaurantId)) notices.push(await addOwnerNotice(connection, { restaurantId, kind: 'supplied_pdf', menuId: preset.menuId, serviceDay: input.serviceDayLabel ?? new Date().toISOString().slice(0, 10), message: 'Il PDF del locale è quello caricato a mano: non segue il preset. Il menu digitale e il QR sono aggiornati.' }))
  // Le traduzioni dei testi mai visti partono in coda e non bloccano: finché mancano si mostra l'italiano.
  await enqueueNewTextTranslations(restaurantId, workspaceTexts(sectionEntities(sections)), { sourceLanguage: next.defaultLanguage, languages, connection }).catch(() => undefined)

@@ -4,7 +4,9 @@ import {sql} from 'drizzle-orm'
 import {createHash,randomBytes,randomUUID} from 'node:crypto'
 import {requireRole} from '../middleware/auth.js'
 import {isAgencyUser} from '../lib/agency-access.js'
-import {readWorkspace,mutateWorkspace,WorkspaceTrialLocked} from '../lib/menu-workspace-store.js'
+import {WorkspaceTrialLocked} from '../lib/menu-workspace-store.js'
+// dashboard editor 22/10: il bot legge il PUBBLICATO (revisione = published_revision) e pubblica solo la sua modifica (menu-workspace-bot.ts).
+import {readBotWorkspace,applyBotChange} from '../lib/menu-workspace-bot.js'
 import {workspaceSchema,type Workspace} from '../lib/menu-workspace-contract.js'
 import {Buffer} from 'node:buffer'
 import {g9DishMentioned,plain,withNewSections,describeAction,priceChoice,effectiveMenuActions,mergeMenuActions,appliedMenuText,groqPendingMenuPlan,validatePendingMenuPlan,validateMenuPlan,groqMenuPlan,groqDishPick,validateDishPick,dishMatches,itemLabel,photoProblem,downscaleSourcePixels,applyActions,planText,welcomeText,safe,localDate,capabilityText,readText,GroqBusy,type GroqOptions,type UsageEvent,downloadTwilioMedia,transcribeAudio,whisperPrompt,sendWhatsApp,proposalText,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from '../lib/twilio-menu-ai.js'
@@ -69,7 +71,7 @@ const aiKey=(phone:string)=>'ai:'+phone
 async function discloseOnce(tx:Tx,phone:string):Promise<boolean>{const rows=await tx.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${aiKey(phone)}`);if(rows?.length)return false;await tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${aiKey(phone)},${'1'}) ON CONFLICT DO NOTHING`);return true}
 // activated_at NULL = pre-collegamento dalla dashboard: il numero è già di Takomenu (mai inoltrato a MenuSmart) e il primo messaggio lo attiva.
 async function linkedContext(tx:Tx,phone:string):Promise<Ctx|null>{const links=await tx.execute(sql`SELECT restaurant_id,actor_id,activated_at FROM tako_whatsapp_links WHERE phone=${phone}`),link=links[0];return link&&await permitted(tx,String(link.actor_id),String(link.restaurant_id))?{phone,tenant:String(link.restaurant_id),actor:String(link.actor_id),pending:link.activated_at==null}:null}
-async function welcomeFor(tx:Tx,tenant:string){const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`),current=await readWorkspace(tenant,tx),catalog=current?catalogOf(workspaceSchema.parse(current.draft)):{refs:[],sections:[]};return welcomeText(String(restaurant[0]?.name),catalog.refs,catalog.sections)}
+async function welcomeFor(tx:Tx,tenant:string){const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`),current=await readBotWorkspace(tenant,tx),catalog=current?catalogOf(workspaceSchema.parse(current.draft)):{refs:[],sections:[]};return welcomeText(String(restaurant[0]?.name),catalog.refs,catalog.sections)}
 // 19/10 (decisione Manuel): link della dashboard con le credenziali del titolare e link del menu digitale pubblico.
 // La password in chiaro va solo nei messaggi «riservati», mandati via REST e mai salvati (né in tako_whatsapp_messages né in memoria).
 type MediaJob={job:'audio'|'image',key:string}
@@ -96,7 +98,7 @@ async function resolveLinks(tx:Tx,ctx:Ctx,text:string):Promise<string>{if(!text|
 async function linkTurn(tx:Tx,ctx:Ctx,body:string):Promise<{say:string,secret?:string,deliver?:string}|null>{
  const intent=linkIntent(body);if(!intent)return null
  // 19/10 sera: se la frase nomina un piatto del catalogo del locale non è una richiesta di link.
- const current=await readWorkspace(ctx.tenant,tx),names=current?catalogOf(workspaceSchema.parse(current.draft)).refs.map(r=>r.name):[]
+ const current=await readBotWorkspace(ctx.tenant,tx),names=current?catalogOf(workspaceSchema.parse(current.draft)).refs.map(r=>r.name):[]
  if(names.length&&!linkIntent(body,names))return null
  return intent==='menu'?{say:menuLinkText(ctx.tenant)}:dashboardTurn(tx,ctx)}
 // 19/10 sera: un invio fallito non ferma i messaggi successivi (il link del menu parte comunque); la password del primo messaggio
@@ -156,7 +158,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  // 17/10 (vocale di Manuel): risposta alla domanda di una richiesta multipla in sospeso (`hold`): completa TUTTA la richiesta.
  let holdPick:MenuAction[]|null=null,tail=''
  if(!opts.planned&&!opts.plannedFull){const hr=(await tx.execute(sql`SELECT command,revision FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now()`))?.[0],hold=(hr?.command as any)?.kind==='hold'?hr!.command as Hold:null
-  if(hold){const row0=await readWorkspace(ctx.tenant,tx);if(!row0||!row0.published||row0.revision!==row0.published_revision||Number(hr!.revision)!==row0.revision){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);return copy.menuChanged}
+  if(hold){const row0=await readBotWorkspace(ctx.tenant,tx);if(!row0||!row0.published||row0.revision!==row0.published_revision||Number(hr!.revision)!==row0.revision){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);return copy.menuChanged}
    const cat0=catalogOf(workspaceSchema.parse(row0.draft)),ans=holdAnswer(text,hold,cat0.refs)
    if(ans==='cancel'){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);return copy.cancelled}
    if(ans&&ans.remaining?.length){const next:Hold={kind:'hold',actions:ans.actions,asks:ans.remaining,...(hold.notes?.length?{notes:hold.notes}:{})};await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);await propose(tx,ctx,row0.revision,next);return (ans.note?ans.note+'\n\n':'')+holdQuestion(next,cat0.refs,cat0.sections)}
@@ -179,13 +181,13 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  if(!holdPick&&!planned&&!opts.plannedFull&&isUndoRequest(text)){const waiting=await tx.execute(sql`SELECT 1 FROM tako_whatsapp_proposals WHERE phone=${phone} AND expires_at>now()`)
   if(!waiting.length){undoRec=await readUndo(tx,phone);if(undoRec&&Date.now()-Number(undoRec.at)>undoWindowMs){await writeUndo(tx,phone,null);return copy.undoExpired}}}
  if(reply==='cancel'&&!holdPick&&!undoRec){const waiting=await tx.execute(sql`SELECT 1 FROM tako_whatsapp_proposals WHERE phone=${phone} AND expires_at>now()`);if(!waiting.length&&!revertLast)return copy.nothingToCancel;if(waiting.length){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return copy.cancelled}}if(!holdPick&&helpWords.includes(normalized))return copy.help;
- const row=await readWorkspace(tenant,tx);if(!row||!row.published)return copy.notPublished;if(row.revision!==row.published_revision)return copy.dashboardPending;const workspace=workspaceSchema.parse(row.draft),{refs,sections}=catalogOf(workspace);
+ const row=await readBotWorkspace(tenant,tx);if(!row||!row.published)return copy.notPublished;if(row.revision!==row.published_revision)return copy.dashboardPending;const workspace=workspaceSchema.parse(row.draft),{refs,sections}=catalogOf(workspace);
  // A7.13 (anzino-030): «no, al contrario» dopo due prezzi cambiati insieme = i due prezzi scambiati (anche con Groq giù).
  let swapPick:MenuAction[]|null=null
  if(!holdPick&&!planned&&!opts.plannedFull&&!undoRec&&/^(?:(?:no|anzi|scusa|ops)\s+)*(?:e\s+)?(?:al contrario|il contrario|viceversa|sono invertiti|invertiti|invertili|scambiali|al rovescio|li ho invertiti|ho invertito|e il contrario)$/.test(normalized)){const u=await readUndo(tx,phone)
   if(u&&!u.full&&Date.now()-Number(u.at)<=undoWindowMs&&u.items.length===2&&u.items.every(i=>i.before&&i.after&&Number(i.before.price)!==Number(i.after.price))){const [a,b]=u.items.map(i=>refs.find(r=>r.id===i.id));if(a&&b&&a.price!==b.price)swapPick=[{kind:'price',id:a.id,price:b.price},{kind:'price',id:b.id,price:a.price}]}}
  if(undoRec){const res=applyUndo(workspace,undoRec);if(!res.ok)return fill(copy.undoConflict,{piatti:res.changed.slice(0,4).map(n=>'*'+safe(n)+'*').join(', ')})
-  const next=workspaceSchema.parse(workspace);if(opts.isExpired?.()||(opts.beginWrite&&!opts.beginWrite()))throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(tenant,actor,row.revision,next,false,'WhatsApp: annullamento',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await mutateWorkspace(tenant,actor,saved.revision,next,true,'WhatsApp: annullamento pubblicato',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await writeUndo(tx,phone,null);await writeLast(tx,phone,null);return undoText(res)}
+  const next=workspaceSchema.parse(workspace);if(opts.isExpired?.()||(opts.beginWrite&&!opts.beginWrite()))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(tenant,actor,['WhatsApp: annullamento','WhatsApp: annullamento pubblicato'],{expectedPublishedRevision:row.revision,next},tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await writeUndo(tx,phone,null);await writeLast(tx,phone,null);return undoText(res)}
  // Menu intero (Feature 1) e comandi dei preset (Feature 2): prima delle modifiche singole, null = flusso di prima.
  if(!planned&&!holdPick){const presetReply=opts.plannedFull?null:await presetChatCommand(tx,ctx,text);if(presetReply)return presetReply
   const settings=(await restaurantSettings())[0]?.settings as any
@@ -220,7 +222,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
   if((proposal.command as any)?.requiresTypedOk&&!/^(?:(?:ok|okay|si|conferma|confermo|va|bene|procedi|pubblica)\s*)+$/.test(normalized))return copy.typedOk;const actions=Number(proposal.revision)===row.revision?storedActions(proposal.command,refs,sections):null;if(!actions){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return copy.menuChanged}
   const photos=actions.filter((a):a is Extract<MenuAction,{kind:'image'}>=>a.kind==='image'),ready=new Map<string,string>([...photos.flatMap(a=>a.url&&storedUpload(tenant,a.url)?[[a.id,a.url] as [string,string]]:[]),...(uploads??[])]);if(photos.some(a=>!ready.has(a.id)))return{upload:photos.filter(a=>!ready.has(a.id))}
   const beforeW=structuredClone(workspace),restaurant=await restaurantSettings(),names=applyActions(workspace,actions,{uploads:ready,timezone:String((restaurant[0]?.settings as any)?.timezone??'Europe/Rome')}),next=workspaceSchema.parse(workspace)
-  if(opts.isExpired?.()||(opts.beginWrite&&!opts.beginWrite()))throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(tenant,actor,row.revision,next,false,'WhatsApp: bozza confermata',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await mutateWorkspace(tenant,actor,saved.revision,next,true,'WhatsApp: pubblicazione confermata',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));void names;return appliedMenuText(actions,refs,sections)}
+  if(opts.isExpired?.()||(opts.beginWrite&&!opts.beginWrite()))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(tenant,actor,['WhatsApp: bozza confermata','WhatsApp: pubblicazione confermata'],{expectedPublishedRevision:row.revision,next},tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));void names;return appliedMenuText(actions,refs,sections)}
  // Cervello (17/10, perimetro N; settings.botBrain, spento di default): il modello capisce per primo con il contesto (cronologia,
  // memoria, scelta in sospeso). Restano deterministici: riepiloghi, foto, bozze, annulla, parte incerta («tojibo»), scelte già chiare.
  // Fase B (17/10): eliminare, rinominare, spostare, creare/rinominare categorie detti in modo esplicito: deterministici.
@@ -437,7 +439,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  if(photos.some(a=>!ready.has(a.id))){await propose(tx,ctx,row.revision,{kind:'batch',actions,autoApply:true});return{upload:photos.filter(a=>!ready.has(a.id))}}
  const waItems=new Map(workspace.menus.flatMap(m=>m.sections.flatMap(sec=>sec.items.map(i=>[i.id,structuredClone(i)] as const)))),memo=actions.slice(preUndoLen),undo=undoFor(memo,id=>waItems.get(id) as any);
  const beforeW=structuredClone(workspace),restaurant=await restaurantSettings();applyActions(workspace,actions,{uploads:ready,timezone:String((restaurant[0]?.settings as any)?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace);
- if(opts.isExpired?.()||(opts.beginWrite&&!opts.beginWrite()))throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(tenant,actor,row.revision,next,false,'WhatsApp: aggiornamento automatico',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await mutateWorkspace(tenant,actor,saved.revision,next,true,'WhatsApp: pubblicazione automatica',tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);if(st.postDraft)await propose(tx,ctx,saved.revision+1,st.postDraft);else if(st.postBatch)await propose(tx,ctx,saved.revision+1,st.postBatch);await rememberRenames(tx,tenant,actions,refs,(await restaurantSettings())[0]?.settings);await writeLast(tx,phone,!reverted&&memo.length&&memo.every(a=>a.kind==='move')?{kind:'last',actions:memo,undo:memo.map(a=>({kind:'move',id:(a as any).id,sectionId:refs.find(r=>r.id===(a as any).id)?.sectionId??(a as any).sectionId}) as MenuAction),revision:saved.revision+1,at:Date.now()}:!reverted&&undo&&(memo.length===1||memo.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag'))?{kind:'last',actions:memo,undo,revision:saved.revision+1,at:Date.now()}:null);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));return withTail(appliedMenuText(actions,refs,sections)+afterText(next)+(st.postDraft?'\n\n'+createQuestion(st.postDraft,catalogOf(next).sections):st.postBatch?'\n\n'+copy.batchStill:''))
+ if(opts.isExpired?.()||(opts.beginWrite&&!opts.beginWrite()))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(tenant,actor,['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica'],{expectedPublishedRevision:row.revision,next},tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);if(st.postDraft)await propose(tx,ctx,saved.revision+1,st.postDraft);else if(st.postBatch)await propose(tx,ctx,saved.revision+1,st.postBatch);await rememberRenames(tx,tenant,actions,refs,(await restaurantSettings())[0]?.settings);await writeLast(tx,phone,!reverted&&memo.length&&memo.every(a=>a.kind==='move')?{kind:'last',actions:memo,undo:memo.map(a=>({kind:'move',id:(a as any).id,sectionId:refs.find(r=>r.id===(a as any).id)?.sectionId??(a as any).sectionId}) as MenuAction),revision:saved.revision+1,at:Date.now()}:!reverted&&undo&&(memo.length===1||memo.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag'))?{kind:'last',actions:memo,undo,revision:saved.revision+1,at:Date.now()}:null);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));return withTail(appliedMenuText(actions,refs,sections)+afterText(next)+(st.postDraft?'\n\n'+createQuestion(st.postDraft,catalogOf(next).sections):st.postBatch?'\n\n'+copy.batchStill:''))
 }
 /** Fase B (B3.2): dopo «rinomina boh in Bollito» il vecchio nome resta un alias del piatto nella memoria del ristorante
  * (solo col cervello acceso), così «boh» continua a funzionare. Mai verso un nome che è di un altro piatto. */
@@ -450,7 +452,7 @@ async function rememberRenames(tx:Tx,tenant:string,actions:MenuAction[],refs:Men
 async function brainEntry(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,settings:any):Promise<Turn|null>{
  const pr=(await tx.execute(sql`SELECT command FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now()`))?.[0]?.command as any
  if(pr?.kind==='photo'||pr?.kind==='fullmenu')return null
- const row=await readWorkspace(ctx.tenant,tx);if(!row||!row.published)return copy.notPublished;if(row.revision!==row.published_revision)return copy.dashboardPending
+ const row=await readBotWorkspace(ctx.tenant,tx);if(!row||!row.published)return copy.notPublished;if(row.revision!==row.published_revision)return copy.dashboardPending
  const workspace=workspaceSchema.parse(row.draft),{refs}=catalogOf(workspace)
  const mem=await memoryTurn(tx,ctx.tenant,text,refs);if(mem!==null)return mem
  const presetReply=await presetChatCommand(tx,ctx,text);if(presetReply)return presetReply
@@ -519,7 +521,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  // notte 22/10 (cc-conferme-02): 👍 / 👌 / ✅ da soli valgono «ok» (prima «Per "👍" mi manca un dettaglio»); per eliminare serve un sì scritto.
  const thumbs=budget.engine==='haiku'&&/^(?:\u{1F44D}|\u{1F44C}|\u2705|\u{1F197})[\u{1F3FB}-\u{1F3FF}\uFE0F]*$/u.test(text0.trim())
  budget.brain=true;const text=thumbs?'ok':(budget.engine==='haiku'?fixTruncatedNumbers(text0):text0).trim()||'[messaggio vuoto]'
- const row=await readWorkspace(ctx.tenant);if(!row)throw new Error('Workspace missing');if(!row.published)return copy.notPublished;if(row.revision!==row.published_revision)return copy.dashboardPending
+ const row=await readBotWorkspace(ctx.tenant);if(!row)throw new Error('Workspace missing');if(!row.published)return copy.notPublished;if(row.revision!==row.published_revision)return copy.dashboardPending
  const {refs,sections}=catalogOf(workspaceSchema.parse(row.draft))
  if(text.length>30000||refs.length>1500)return copy.brainDown
  const pr=(await db.execute(sql`SELECT command,revision FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now()`))[0]
@@ -993,7 +995,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(menuHit.length===1&&/\bmenu\b/.test(pq)){const m=menuHit[0];out={kind:'change',actions:[{kind:'set_menu_active',menuId:m.id,name:m.name,value:false,items:(m.sections as any[]).reduce((n:number,x:any)=>n+x.items.length,0)} as MenuAction]}}}}
  let conflict=false
  const result=await db.transaction(async tx=>{await lock(tx,ctx.phone)
-  const live=await readWorkspace(ctx.tenant,tx);if(!live||!live.published||live.revision!==row.revision||live.revision!==live.published_revision){conflict=!!live?.published&&live.revision===live.published_revision;return copy.menuChanged}
+  const live=await readBotWorkspace(ctx.tenant,tx);if(!live||!live.published||live.revision!==row.revision||live.revision!==live.published_revision){conflict=!!live?.published&&live.revision===live.published_revision;return copy.menuChanged}
   const pr2=(await tx.execute(sql`SELECT command,revision FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now() FOR UPDATE`))[0]
   if(JSON.stringify(pr2&&Number(pr2.revision)===row.revision?pr2.command:null)!==JSON.stringify(cmd)){conflict=true;return copy.menuChanged}
   const workspace=workspaceSchema.parse(live.draft),settings=(await tx.execute(sql`SELECT settings FROM restaurants WHERE id=${ctx.tenant}`))[0]?.settings as any
@@ -1008,12 +1010,12 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   const applyNow=async(effective:MenuAction[],label:[string,string]=['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica']):Promise<{facts:string,allOk:boolean,revision:number}>=>{
    wroteActs=[...wroteActs,...effective]
    const beforeW=structuredClone(workspace);applyActions(workspace,effective,{uploads:new Map(),timezone:String(settings?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace)
-   if(!beginWrite(budget))throw new Error('WhatsApp turn expired');const saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,label[0],tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired');await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,label[1],tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired')
+   if(!beginWrite(budget))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(ctx.tenant,ctx.actor,[label[0],label[1]],{expectedPublishedRevision:live.revision,next},tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired')
    const waItems=new Map(beforeW.menus.flatMap((m:any)=>m.sections.flatMap((sec:any)=>sec.items.map((i:any)=>[i.id,structuredClone(i)] as const)))),back=undoFor(effective,id=>waItems.get(id) as any)
    await drop();await rememberRenames(tx,ctx.tenant,effective,refs,settings);await writeLast(tx,ctx.phone,back?{kind:'last',actions:effective,undo:back,revision:saved.revision+1,at:Date.now()}:null);const rec=undoRecordFor(beforeW,next);await writeUndo(tx,ctx.phone,rec);await trackChange(tx,ctx.phone,rec)
    // notte 22/10 (cc-giornata-05): i piatti eliminati restano 30 minuti tra i «ripristinabili» (nome, prezzo, sottomenu di prima).
    {const dels=effective.filter(a=>a.kind==='delete'&&waItems.has((a as any).id)).map(a=>({id:(a as any).id as string,before:waItems.get((a as any).id),sectionId:refs.find(r=>r.id===(a as any).id)?.sectionId??undefined}));if(dels.length)await trackChange(tx,ctx.phone,{at:Date.now(),items:dels} as any)}
-   const reread=await readWorkspace(ctx.tenant,tx),after=reread?.published?catalogOf(workspaceSchema.parse(reread.published)):catalogOf(next),{ok,failed}=verifyApplied(effective,after.refs)
+   const reread=await readBotWorkspace(ctx.tenant,tx),after=reread?.published?catalogOf(workspaceSchema.parse(reread.published)):catalogOf(next),{ok,failed}=verifyApplied(effective,after.refs)
    inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run:finalRun,applied:ok.length>0,key,meter:ai.meter,engine}))
    const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?'Non salvato: '+failed.map(a=>describeAction(a,refs,sections)).join('; '):'',out.kind==='change'&&out.after&&out.after.type==='read'&&!(effective.some(a=>a.kind==='create')&&((out.after as any).ids??[]).some((id:string)=>!effective.some(e=>'id' in e&&(e as any).id===id)))?planText(out.after,after.refs,after.sections):''].filter(Boolean).join('\n\n')
    lastRev=reread?.revision??saved.revision+1
@@ -1056,7 +1058,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    return say([r.facts,already].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
   const core=async():Promise<string>=>{switch(out.kind){
    case 'undo':{const before=structuredClone(workspace) as any,res=applyUndo(workspace,undoRec!);if(!res.ok)return fill(copy.undoConflict,{piatti:res.changed.slice(0,4).map(n=>'*'+safe(n)+'*').join(', ')})
-    const next=workspaceSchema.parse(workspace),saved=await mutateWorkspace(ctx.tenant,ctx.actor,live.revision,next,false,'WhatsApp: annullamento',tx as unknown as DB);await mutateWorkspace(ctx.tenant,ctx.actor,saved.revision,next,true,'WhatsApp: annullamento pubblicato',tx as unknown as DB);await writeUndo(tx,ctx.phone,null);await writeLast(tx,ctx.phone,null);await drop()
+    const next=workspaceSchema.parse(workspace),saved=await applyBotChange(ctx.tenant,ctx.actor,['WhatsApp: annullamento','WhatsApp: annullamento pubblicato'],{expectedPublishedRevision:live.revision,next},tx as unknown as DB);await writeUndo(tx,ctx.phone,null);await writeLast(tx,ctx.phone,null);await drop()
     // notte 22/10 (n-pf annulla): annullare il prezzo di un'opzione (Completo, Solo primo…) mostra il prezzo tornato, non solo la bozza.
     const prevF=new Map<string,number>(((before.menus??[]) as any[]).flatMap(m=>((m.formulas??[]) as any[]).map(f=>[String(f.id),Number(f.price)] as [string,number])))
     const fx=((next as any).menus??[] as any[]).flatMap((m:any)=>((m.formulas??[]) as any[]).filter(f=>prevF.has(String(f.id))&&Math.abs(prevF.get(String(f.id))!-Number(f.price))>=0.005).map(f=>'*'+safe(f.name)+'* del *'+safe(m.name)+'*: di nuovo *'+Number(f.price).toFixed(2).replace('.',',')+' €*'))
@@ -1243,7 +1245,7 @@ async function resolveTurnCore(ctx:Ctx,text:string,turn:Exclude<Turn,string>,key
  const haiku=budget.engine==='haiku'
  if(haiku&&!turn.brain&&!turn.photo&&!turn.fullmenu)turn={...turn,brain:true}
  const brainKey=haiku?engineKey('haiku'):key
- if(!(turn.brain||(haiku&&turn.fullmenu)?brainKey:key))return 'brain' in turn&&turn.brain?copy.brainDown:copy.noAi;const row=await readWorkspace(ctx.tenant);if(!row)throw new Error('Workspace missing');const {refs,sections}=catalogOf(workspaceSchema.parse(row.draft))
+ if(!(turn.brain||(haiku&&turn.fullmenu)?brainKey:key))return 'brain' in turn&&turn.brain?copy.brainDown:copy.noAi;const row=await readBotWorkspace(ctx.tenant);if(!row)throw new Error('Workspace missing');const {refs,sections}=catalogOf(workspaceSchema.parse(row.draft))
  if(turn.photo){const candidates=candidatesFor(text,refs);if(!candidates.length)return fill(copy.photoNotFound,{nome:text.slice(0,80)});// PIANO bot-haiku: cervello su Haiku → nessuna chiamata Groq neanche per la foto di un piatto: un solo candidato (o un solo nome
   // identico) = quel piatto, altrimenti si chiede quale (mai una scelta a caso).
   const exact=candidates.filter(r=>plain(r.name)===plain(text)),pick:{type:'dish',id:string}|{type:'clarify',ids:string[]}=haiku?(candidates.length===1||exact.length===1?{type:'dish',id:(exact.length===1?exact[0]!:candidates[0]!).id}:{type:'clarify',ids:candidates.slice(0,5).map(r=>r.id)}):validateDishPick((await groqDishPick(text,candidates,key,[],ai)).content,refs);if(pick.type==='clarify')return pick.ids.length?fill(copy.photoWhich,{opzioni:bold(pick.ids.map(id=>itemLabel(refs.find(r=>r.id===id)!,refs)))}):fill(copy.photoNotFound,{nome:text.slice(0,80)})
@@ -1287,7 +1289,7 @@ async function runJob(kind:'audio'|'text'|'image',ctx:Ctx,sid:string,body:string
  if(problem)await reportFailure({kind:problem,tenant:ctx.tenant,phone:ctx.phone,detail:kind})
 }
 // 17/10: nomi di piatti e categorie del locale nel `prompt` di Whisper (nessun token LLM in più). Errore → parole di servizio.
-async function whisperVocab(tenant:string):Promise<string>{try{const row=await readWorkspace(tenant);if(!row)return '';const c=catalogOf(workspaceSchema.parse(row.published??row.draft));return whisperPrompt(c.refs,c.sections)}catch{return ''}}
+async function whisperVocab(tenant:string):Promise<string>{try{const row=await readBotWorkspace(tenant);if(!row)return '';const c=catalogOf(workspaceSchema.parse(row.published??row.draft));return whisperPrompt(c.refs,c.sections)}catch{return ''}}
 async function jobMessage(kind:'audio'|'text'|'image',ctx:Ctx,body:string,form:Record<string,string>,budget:Budget):Promise<string>{
  const key=process.env.GROQ_API_KEY||'',accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'';let text=body,prefix='',response:string
  // Fase R: col cervello acceso nessun testo fisso d'attesa né d'errore: solo «non disponibile» (copy.brainDown).
