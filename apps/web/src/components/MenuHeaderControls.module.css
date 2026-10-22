@@ -109,3 +109,11 @@
 
 /* Canonical Takomenu lettering inherits contrast on every restaurant theme. */
 .productWordmark{display:block;width:210px;max-width:76vw;height:42px;background:currentColor;mask:url(/takomenu-public/branding/takomenu-wordmark-v2.svg) center/contain no-repeat;-webkit-mask:url(/takomenu-public/branding/takomenu-wordmark-v2.svg) center/contain no-repeat}
+
+/* Editor della dashboard (22/10 notte), solo con data-menu-editing / editCategoryGrid: senza hero lo sfondo della testata
+   sticky (alto 192 px per la copertina) e la sfumatura sotto coprivano le pillole dei Sottomenu. Qui lo sfondo finisce con la
+   testata e niente sfumatura: pillole sempre intere e leggibili. La pagina pubblica non ha questi attributi e non cambia. */
+.stickyHeader[data-menu-editing]>.headerBackdrop{inset:-20px -20px 0;height:auto;mask-image:none;-webkit-mask-image:none}
+.stickyHeader[data-menu-editing]::after{display:none}
+.stickyHeader[data-menu-editing]{margin-bottom:14px!important}
+.categoryGrid.editCategoryGrid{margin-top:0}

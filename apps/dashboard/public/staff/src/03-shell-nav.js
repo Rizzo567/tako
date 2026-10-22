@@ -53,7 +53,7 @@ function homeRoute(role) { return menuOnlyOwner(role) ? "menu" : (typeof window 
 function greetName(name) { const n = String(name || "").trim(); if (!n || n === "—") return ""; const m = n.match(/^Titolare di\s+(.+)$/i); return m ? m[1] : n.split(" ")[0]; }
 function mobilePrimary(role) {
   return role === "owner" && typeof window !== "undefined" && window.__takomenuAgency === true
-    ? ["agency", "agency_leads", "account"] : (MOBILE_PRIMARY[role] || []);
+    ? ["agency", "account"] /* 22/10 notte: «Lead» tolto dalla barra (rotta e schermata restano) */ : (MOBILE_PRIMARY[role] || []);
 }
 function canNavigate(role, id) {
   if(id === "account") return ["owner","menu_editor"].includes(role);
@@ -406,7 +406,7 @@ function HomeIndicator({ dark }) {
   return <div style={{ position: "absolute", bottom: 8, left: "50%", transform: "translateX(-50%)", width: 134, height: 5, borderRadius: 99, background: dark ? "rgba(255,255,255,.5)" : "rgba(42,31,26,.32)", zIndex: 45, pointerEvents: "none" }} />;
 }
 
-/* floating glass tab bar */
+/* barra in basso: lastra di vetro a tutta larghezza (stile in sobrio.css) */
 function BottomBar({ route, go, role, badges, openDrawer, dark }) {
   const prim = mobilePrimary(role).filter(id => canNavigate(role, id)).map(findItem);
   const compact = false;

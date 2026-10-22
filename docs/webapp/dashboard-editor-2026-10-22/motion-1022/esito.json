@@ -1,0 +1,1015 @@
+{
+ "fails": 0,
+ "results": [
+  {
+   "name": "390 niente scroll orizzontale",
+   "ok": true,
+   "detail": {
+    "sw": 390,
+    "iw": 390,
+    "ssw": 390,
+    "scw": 390
+   }
+  },
+  {
+   "name": "390 voci vicine alla testata (≤ 12 px)",
+   "ok": true,
+   "detail": {
+    "hdrB": 52,
+    "tabsT": 56
+   }
+  },
+  {
+   "name": "390 riga unica (Menu, Preset, lente, +, Avanzate)",
+   "ok": true,
+   "detail": {
+    "n": 5,
+    "tops": [
+     105,
+     105,
+     105,
+     105,
+     105
+    ],
+    "hs": [
+     36,
+     36,
+     36,
+     36,
+     36
+    ],
+    "right": 376,
+    "left": 14,
+    "label": "Menu pranzo",
+    "ell": "ellipsis"
+   }
+  },
+  {
+   "name": "390 riga compatta (altezza ≤ 36, select con ellissi)",
+   "ok": true,
+   "detail": {
+    "n": 5,
+    "tops": [
+     105,
+     105,
+     105,
+     105,
+     105
+    ],
+    "hs": [
+     36,
+     36,
+     36,
+     36,
+     36
+    ],
+    "right": 376,
+    "left": 14,
+    "label": "Menu pranzo",
+    "ell": "ellipsis"
+   }
+  },
+  {
+   "name": "390 Avanzate → «Torna al menu»",
+   "ok": true,
+   "detail": {
+    "lab": "Torna al menu"
+   }
+  },
+  {
+   "name": "390 Avanzate: larghezza animata (a metà fra prima e dopo)",
+   "ok": true,
+   "detail": {
+    "w0": 86,
+    "mid": {
+     "w": 114.390625,
+     "texts": [
+      [
+       "Avanzate",
+       "0.722734"
+      ],
+      [
+       "Torna al menu",
+       "0.867044"
+      ]
+     ]
+    },
+    "w1": 118
+   }
+  },
+  {
+   "name": "390 Avanzate: dissolvenza del testo (due scritte a metà)",
+   "ok": true,
+   "detail": [
+    [
+     "Avanzate",
+     "0.722734"
+    ],
+    [
+     "Torna al menu",
+     "0.867044"
+    ]
+   ]
+  },
+  {
+   "name": "390 Avanzate: altri elementi fermi (rettangoli identici)",
+   "ok": true,
+   "detail": {
+    "before": {
+     "picker": [
+      14,
+      105,
+      66,
+      36
+     ],
+     "preset": [
+      86,
+      105,
+      82,
+      36
+     ],
+     "buttons": [
+      [
+       174,
+       105,
+       36,
+       36
+      ],
+      [
+       216,
+       105,
+       36,
+       36
+      ]
+     ],
+     "slot": [
+      258,
+      105,
+      118,
+      36
+     ],
+     "tabs": [
+      35.8,
+      56,
+      318.3,
+      41
+     ]
+    },
+    "after": {
+     "picker": [
+      14,
+      105,
+      66,
+      36
+     ],
+     "preset": [
+      86,
+      105,
+      82,
+      36
+     ],
+     "buttons": [
+      [
+       174,
+       105,
+       36,
+       36
+      ],
+      [
+       216,
+       105,
+       36,
+       36
+      ]
+     ],
+     "slot": [
+      258,
+      105,
+      118,
+      36
+     ],
+     "tabs": [
+      35.8,
+      56,
+      318.3,
+      41
+     ]
+    }
+   }
+  },
+  {
+   "name": "390 nessuna copia residua dopo la dissolvenza",
+   "ok": true,
+   "detail": {
+    "ghost": 0
+   }
+  },
+  {
+   "name": "390 clic rapidi ×3 ritargettano (fine su «Avanzate», editor, elementi fermi)",
+   "ok": true,
+   "detail": {
+    "lab2": "Avanzate"
+   }
+  },
+  {
+   "name": "390 voci: pillola scivola (a metà fra le due voci) e arriva su Aspetto",
+   "ok": true,
+   "detail": {
+    "x0": 4,
+    "xm": 67,
+    "x1": 72,
+    "ax": 72
+   }
+  },
+  {
+   "name": "390 contenuto nuovo a riposo opaco",
+   "ok": true,
+   "detail": {
+    "panelOp": "1"
+   }
+  },
+  {
+   "name": "390 voci: clic rapidi ritargettano senza code",
+   "ok": true,
+   "detail": {
+    "xr": 234.7,
+    "xe": 255,
+    "axe": 255
+   }
+  },
+  {
+   "name": "390 riga strumenti riaperta su Piatti",
+   "ok": true,
+   "detail": {
+    "open": "1",
+    "h": 36
+   }
+  },
+  {
+   "name": "390 niente scroll orizzontale (dopo i cambi)",
+   "ok": true,
+   "detail": {
+    "sw": 390,
+    "iw": 390,
+    "ssw": 390,
+    "scw": 390
+   }
+  },
+  {
+   "name": "390 pillole Sottomenu intere all'apertura (sotto la testata, niente sfondo/sfumatura sopra)",
+   "ok": true,
+   "detail": {
+    "hb": 93,
+    "bb": 93,
+    "after": "none",
+    "ps": [
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 157,
+      "hit": true
+     }
+    ]
+   }
+  },
+  {
+   "name": "390 pillole Sottomenu intere dopo scorrimento",
+   "ok": true,
+   "detail": {
+    "hb": 93,
+    "bb": 93,
+    "after": "none",
+    "ps": [
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 157,
+      "hit": true
+     }
+    ]
+   }
+  },
+  {
+   "name": "390 barra: lastra a tutta larghezza, angoli alti 22–28, bassi dritti, bottom 0, vetro",
+   "ok": true,
+   "detail": {
+    "l": 0,
+    "r": 0,
+    "b": 0,
+    "h": 59,
+    "tl": "24px",
+    "bl": "0px",
+    "bf": "blur(22px) saturate(1.8)",
+    "labels": [
+     "Menu",
+     "Account"
+    ],
+    "items": [
+     7,
+     7
+    ]
+   }
+  },
+  {
+   "name": "390 barra: Menu + Account (niente Lead/Assistente), voci in alto",
+   "ok": true,
+   "detail": {
+    "l": 0,
+    "r": 0,
+    "b": 0,
+    "h": 59,
+    "tl": "24px",
+    "bl": "0px",
+    "bf": "blur(22px) saturate(1.8)",
+    "labels": [
+     "Menu",
+     "Account"
+    ],
+    "items": [
+     7,
+     7
+    ]
+   }
+  },
+  {
+   "name": "390 riquadro scorre dietro la lastra",
+   "ok": true,
+   "detail": {
+    "stageB": 843,
+    "navT": 785,
+    "hdrB": 52,
+    "tabsT": 146,
+    "hdrH": 52
+   }
+  },
+  {
+   "name": "390 reduced motion: pillola subito sulla voce, niente copie in dissolvenza",
+   "ok": true,
+   "detail": {
+    "rx": 72,
+    "rax": 72
+   }
+  },
+  {
+   "name": "390 tastiera: Invio su Avanzate, fuoco resta sul pulsante",
+   "ok": true,
+   "detail": {
+    "focus": true,
+    "lab": "Torna al menu"
+   }
+  },
+  {
+   "name": "430 niente scroll orizzontale",
+   "ok": true,
+   "detail": {
+    "sw": 430,
+    "iw": 430,
+    "ssw": 430,
+    "scw": 430
+   }
+  },
+  {
+   "name": "430 voci vicine alla testata (≤ 12 px)",
+   "ok": true,
+   "detail": {
+    "hdrB": 52,
+    "tabsT": 56
+   }
+  },
+  {
+   "name": "430 riga unica (Menu, Preset, lente, +, Avanzate)",
+   "ok": true,
+   "detail": {
+    "n": 5,
+    "tops": [
+     105,
+     105,
+     105,
+     105,
+     105
+    ],
+    "hs": [
+     36,
+     36,
+     36,
+     36,
+     36
+    ],
+    "right": 416,
+    "left": 14,
+    "label": "Menu pranzo",
+    "ell": "ellipsis"
+   }
+  },
+  {
+   "name": "430 riga compatta (altezza ≤ 36, select con ellissi)",
+   "ok": true,
+   "detail": {
+    "n": 5,
+    "tops": [
+     105,
+     105,
+     105,
+     105,
+     105
+    ],
+    "hs": [
+     36,
+     36,
+     36,
+     36,
+     36
+    ],
+    "right": 416,
+    "left": 14,
+    "label": "Menu pranzo",
+    "ell": "ellipsis"
+   }
+  },
+  {
+   "name": "430 Avanzate → «Torna al menu»",
+   "ok": true,
+   "detail": {
+    "lab": "Torna al menu"
+   }
+  },
+  {
+   "name": "430 Avanzate: larghezza animata (a metà fra prima e dopo)",
+   "ok": true,
+   "detail": {
+    "w0": 86,
+    "mid": {
+     "w": 115.640625,
+     "texts": [
+      [
+       "Avanzate",
+       "0.641795"
+      ],
+      [
+       "Torna al menu",
+       "0.931606"
+      ]
+     ]
+    },
+    "w1": 118
+   }
+  },
+  {
+   "name": "430 Avanzate: dissolvenza del testo (due scritte a metà)",
+   "ok": true,
+   "detail": [
+    [
+     "Avanzate",
+     "0.641795"
+    ],
+    [
+     "Torna al menu",
+     "0.931606"
+    ]
+   ]
+  },
+  {
+   "name": "430 Avanzate: altri elementi fermi (rettangoli identici)",
+   "ok": true,
+   "detail": {
+    "before": {
+     "picker": [
+      14,
+      105,
+      106,
+      36
+     ],
+     "preset": [
+      126,
+      105,
+      82,
+      36
+     ],
+     "buttons": [
+      [
+       214,
+       105,
+       36,
+       36
+      ],
+      [
+       256,
+       105,
+       36,
+       36
+      ]
+     ],
+     "slot": [
+      298,
+      105,
+      118,
+      36
+     ],
+     "tabs": [
+      55.8,
+      56,
+      318.3,
+      41
+     ]
+    },
+    "after": {
+     "picker": [
+      14,
+      105,
+      106,
+      36
+     ],
+     "preset": [
+      126,
+      105,
+      82,
+      36
+     ],
+     "buttons": [
+      [
+       214,
+       105,
+       36,
+       36
+      ],
+      [
+       256,
+       105,
+       36,
+       36
+      ]
+     ],
+     "slot": [
+      298,
+      105,
+      118,
+      36
+     ],
+     "tabs": [
+      55.8,
+      56,
+      318.3,
+      41
+     ]
+    }
+   }
+  },
+  {
+   "name": "430 nessuna copia residua dopo la dissolvenza",
+   "ok": true,
+   "detail": {
+    "ghost": 0
+   }
+  },
+  {
+   "name": "430 clic rapidi ×3 ritargettano (fine su «Avanzate», editor, elementi fermi)",
+   "ok": true,
+   "detail": {
+    "lab2": "Avanzate"
+   }
+  },
+  {
+   "name": "430 voci: pillola scivola (a metà fra le due voci) e arriva su Aspetto",
+   "ok": true,
+   "detail": {
+    "x0": 4,
+    "xm": 67,
+    "x1": 72,
+    "ax": 72
+   }
+  },
+  {
+   "name": "430 contenuto nuovo a riposo opaco",
+   "ok": true,
+   "detail": {
+    "panelOp": "1"
+   }
+  },
+  {
+   "name": "430 voci: clic rapidi ritargettano senza code",
+   "ok": true,
+   "detail": {
+    "xr": 234.7,
+    "xe": 255,
+    "axe": 255
+   }
+  },
+  {
+   "name": "430 riga strumenti riaperta su Piatti",
+   "ok": true,
+   "detail": {
+    "open": "1",
+    "h": 36
+   }
+  },
+  {
+   "name": "430 niente scroll orizzontale (dopo i cambi)",
+   "ok": true,
+   "detail": {
+    "sw": 430,
+    "iw": 430,
+    "ssw": 430,
+    "scw": 430
+   }
+  },
+  {
+   "name": "430 pillole Sottomenu intere all'apertura (sotto la testata, niente sfondo/sfumatura sopra)",
+   "ok": true,
+   "detail": {
+    "hb": 93,
+    "bb": 93,
+    "after": "none",
+    "ps": [
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 157,
+      "hit": true
+     }
+    ]
+   }
+  },
+  {
+   "name": "430 pillole Sottomenu intere dopo scorrimento",
+   "ok": true,
+   "detail": {
+    "hb": 93,
+    "bb": 93,
+    "after": "none",
+    "ps": [
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 157,
+      "hit": true
+     }
+    ]
+   }
+  },
+  {
+   "name": "430 barra: lastra a tutta larghezza, angoli alti 22–28, bassi dritti, bottom 0, vetro",
+   "ok": true,
+   "detail": {
+    "l": 0,
+    "r": 0,
+    "b": 0,
+    "h": 59,
+    "tl": "24px",
+    "bl": "0px",
+    "bf": "blur(22px) saturate(1.8)",
+    "labels": [
+     "Menu",
+     "Account"
+    ],
+    "items": [
+     7,
+     7
+    ]
+   }
+  },
+  {
+   "name": "430 barra: Menu + Account (niente Lead/Assistente), voci in alto",
+   "ok": true,
+   "detail": {
+    "l": 0,
+    "r": 0,
+    "b": 0,
+    "h": 59,
+    "tl": "24px",
+    "bl": "0px",
+    "bf": "blur(22px) saturate(1.8)",
+    "labels": [
+     "Menu",
+     "Account"
+    ],
+    "items": [
+     7,
+     7
+    ]
+   }
+  },
+  {
+   "name": "430 riquadro scorre dietro la lastra",
+   "ok": true,
+   "detail": {
+    "stageB": 931,
+    "navT": 873,
+    "hdrB": 52,
+    "tabsT": 146,
+    "hdrH": 52
+   }
+  },
+  {
+   "name": "430 reduced motion: pillola subito sulla voce, niente copie in dissolvenza",
+   "ok": true,
+   "detail": {
+    "rx": 72,
+    "rax": 72
+   }
+  },
+  {
+   "name": "430 tastiera: Invio su Avanzate, fuoco resta sul pulsante",
+   "ok": true,
+   "detail": {
+    "focus": true,
+    "lab": "Torna al menu"
+   }
+  },
+  {
+   "name": "1280 niente scroll orizzontale",
+   "ok": true,
+   "detail": {
+    "sw": 1280,
+    "iw": 1280,
+    "ssw": 1280,
+    "scw": 1280
+   }
+  },
+  {
+   "name": "1280 riga unica (Menu, Preset, lente, +, Avanzate)",
+   "ok": true,
+   "detail": {
+    "n": 5,
+    "tops": [
+     162,
+     162,
+     162,
+     162,
+     162
+    ],
+    "hs": [
+     40,
+     40,
+     40,
+     40,
+     40
+    ],
+    "right": 866,
+    "left": 50,
+    "label": "Menu pranzo",
+    "ell": "ellipsis"
+   }
+  },
+  {
+   "name": "1280 Avanzate → «Torna al menu»",
+   "ok": true,
+   "detail": {
+    "lab": "Torna al menu"
+   }
+  },
+  {
+   "name": "1280 Avanzate: larghezza animata (a metà fra prima e dopo)",
+   "ok": true,
+   "detail": {
+    "w0": 92,
+    "mid": {
+     "w": 122.578125,
+     "texts": [
+      [
+       "Avanzate",
+       "0.6415"
+      ],
+      [
+       "Torna al menu",
+       "0.93177"
+      ]
+     ]
+    },
+    "w1": 125
+   }
+  },
+  {
+   "name": "1280 Avanzate: dissolvenza del testo (due scritte a metà)",
+   "ok": true,
+   "detail": [
+    [
+     "Avanzate",
+     "0.6415"
+    ],
+    [
+     "Torna al menu",
+     "0.93177"
+    ]
+   ]
+  },
+  {
+   "name": "1280 Avanzate: altri elementi fermi (rettangoli identici)",
+   "ok": true,
+   "detail": {
+    "before": {
+     "picker": [
+      50,
+      162,
+      200,
+      40
+     ],
+     "preset": [
+      262,
+      162,
+      148,
+      40
+     ],
+     "buttons": [
+      [
+       645,
+       162,
+       40,
+       40
+      ],
+      [
+       693,
+       162,
+       40,
+       40
+      ]
+     ],
+     "slot": [
+      741,
+      162,
+      125,
+      40
+     ],
+     "tabs": [
+      302,
+      96,
+      312,
+      46
+     ]
+    },
+    "after": {
+     "picker": [
+      50,
+      162,
+      200,
+      40
+     ],
+     "preset": [
+      262,
+      162,
+      148,
+      40
+     ],
+     "buttons": [
+      [
+       645,
+       162,
+       40,
+       40
+      ],
+      [
+       693,
+       162,
+       40,
+       40
+      ]
+     ],
+     "slot": [
+      741,
+      162,
+      125,
+      40
+     ],
+     "tabs": [
+      302,
+      96,
+      312,
+      46
+     ]
+    }
+   }
+  },
+  {
+   "name": "1280 nessuna copia residua dopo la dissolvenza",
+   "ok": true,
+   "detail": {
+    "ghost": 0
+   }
+  },
+  {
+   "name": "1280 clic rapidi ×3 ritargettano (fine su «Avanzate», editor, elementi fermi)",
+   "ok": true,
+   "detail": {
+    "lab2": "Avanzate"
+   }
+  },
+  {
+   "name": "1280 voci: pillola scivola (a metà fra le due voci) e arriva su Aspetto",
+   "ok": true,
+   "detail": {
+    "x0": 5,
+    "xm": 84.7,
+    "x1": 91,
+    "ax": 91
+   }
+  },
+  {
+   "name": "1280 contenuto nuovo a riposo opaco",
+   "ok": true,
+   "detail": {
+    "panelOp": "1"
+   }
+  },
+  {
+   "name": "1280 voci: clic rapidi ritargettano senza code",
+   "ok": true,
+   "detail": {
+    "xr": 32.9,
+    "xe": 5,
+    "axe": 5
+   }
+  },
+  {
+   "name": "1280 riga strumenti riaperta su Piatti",
+   "ok": true,
+   "detail": {
+    "open": "1",
+    "h": 58
+   }
+  },
+  {
+   "name": "1280 niente scroll orizzontale (dopo i cambi)",
+   "ok": true,
+   "detail": {
+    "sw": 1280,
+    "iw": 1280,
+    "ssw": 1280,
+    "scw": 1280
+   }
+  },
+  {
+   "name": "1280 pillole Sottomenu intere all'apertura (sotto la testata, niente sfondo/sfumatura sopra)",
+   "ok": true,
+   "detail": {
+    "hb": 93,
+    "bb": 93,
+    "after": "none",
+    "ps": [
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 157,
+      "hit": true
+     }
+    ]
+   }
+  },
+  {
+   "name": "1280 pillole Sottomenu intere dopo scorrimento",
+   "ok": true,
+   "detail": {
+    "hb": 93,
+    "bb": 93,
+    "after": "none",
+    "ps": [
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 107,
+      "hit": true
+     },
+     {
+      "top": 157,
+      "hit": true
+     }
+    ]
+   }
+  },
+  {
+   "name": "errori console",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}

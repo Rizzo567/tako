@@ -53,24 +53,98 @@
   .sb-spin { animation-duration: 1.6s; }
 }
 
-/* ── 22/10 sera: barra in basso come la tab bar Liquid Glass di iOS 26 ──
-   Capsula flottante staccata dai bordi, vetro traslucido (il contenuto si vede sfocato dietro), bassa e compatta subito sopra
-   la safe-area; voce attiva su una pillola interna più chiara. Il contenuto scorre DIETRO la capsula. */
+/* ── 22/10 notte: barra in basso = lastra di vetro Liquid Glass a tutta larghezza ──
+   Da bordo a bordo, angoli alti arrotondati e bassi dritti; scende fino al fondo (bottom:0) e riempie la safe-area, così in
+   Safari iOS 26 continua dietro la barra indirizzi galleggiante come un unico blocco di vetro. Voci compatte in alto,
+   voce attiva su pillola chiara. Il contenuto scorre DIETRO la lastra (padding in fondo alle pagine). */
 .app-live.mobile .mobile-bottom-nav.tab-glass{
- position:absolute!important;left:18px!important;right:18px!important;bottom:calc(env(safe-area-inset-bottom,0px) + 6px)!important;
- margin:0!important;height:58px!important;min-height:58px!important;padding:4px!important;gap:4px;border-radius:999px!important;
- background:rgba(255,255,255,.6)!important;
+ position:absolute!important;left:0!important;right:0!important;bottom:0!important;
+ margin:0!important;height:auto!important;min-height:0!important;padding:6px 12px calc(env(safe-area-inset-bottom,0px) + 6px)!important;gap:4px;
+ align-items:flex-start!important;border-radius:24px 24px 0 0!important;
+ background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(255,255,255,.58))!important;
  -webkit-backdrop-filter:blur(22px) saturate(180%)!important;backdrop-filter:blur(22px) saturate(180%)!important;
- border:.5px solid rgba(255,255,255,.75)!important;
- box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -.5px 0 rgba(0,0,0,.04),0 0 0 .5px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.05)!important;
+ border:0!important;border-top:.5px solid rgba(255,255,255,.85)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 .5px rgba(255,255,255,.35),0 -.5px 0 rgba(0,0,0,.07),0 -8px 28px rgba(0,0,0,.08)!important;
  animation:tab-glass-in 420ms cubic-bezier(.22,1,.36,1) both;z-index:40!important}
 @supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){.app-live.mobile .mobile-bottom-nav.tab-glass{background:rgba(255,255,255,.92)!important}}
-.app-live.mobile .mobile-bottom-nav.tab-glass .bb-tab{min-height:0!important;height:100%;padding:0!important;gap:2px!important;justify-content:center;border-radius:999px;transition:background-color 180ms ease}
-.app-live.mobile .mobile-bottom-nav.tab-glass .bb-tab.is-on{background:rgba(255,255,255,.85);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.06)}
-.app-live.mobile .mobile-bottom-nav.tab-glass .nav-ico svg{width:22px;height:22px}
+.app-live.mobile .mobile-bottom-nav.tab-glass .bb-tab{flex:1 1 0;min-height:0!important;height:46px;padding:0!important;gap:2px!important;justify-content:center;border-radius:999px;transition:background-color 180ms ease,box-shadow 180ms ease}
+.app-live.mobile .mobile-bottom-nav.tab-glass .bb-tab.is-on{background:rgba(255,255,255,.9);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.07)}
+.app-live.mobile .mobile-bottom-nav.tab-glass .bb-tab:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.app-live.mobile .mobile-bottom-nav.tab-glass .nav-ico svg{width:21px;height:21px}
 .app-live.mobile .mobile-bottom-nav.tab-glass .bb-tab>span:last-child{font-size:10px!important;line-height:12px}
-@keyframes tab-glass-in{from{transform:translateY(calc(100% + 24px));opacity:0}to{transform:none;opacity:1}}
-@media(prefers-reduced-motion:reduce){.app-live.mobile .mobile-bottom-nav.tab-glass{animation:none}}
-/* Le pagine lasciano spazio alla capsula in fondo; l'editor del menu no: il riquadro arriva fino in fondo e scorre dietro. */
-.app-live.mobile .screen-scroll{padding-bottom:calc(20px + 58px + 12px + env(safe-area-inset-bottom,0px))!important}
+@keyframes tab-glass-in{from{transform:translateY(100%);opacity:0}to{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.app-live.mobile .mobile-bottom-nav.tab-glass{animation:none}.app-live.mobile .mobile-bottom-nav.tab-glass .bb-tab{transition:none}}
+/* Le pagine lasciano spazio alla lastra in fondo (6 + 46 + 6 + safe-area); l'editor del menu no: il riquadro arriva fino in fondo e scorre dietro. */
+.app-live.mobile .screen-scroll{padding-top:4px!important;padding-bottom:calc(20px + 58px + env(safe-area-inset-bottom,0px))!important}
+/* 22/10 notte: tutto più in alto — testata, briciola, voci e riga strumenti con spazi verticali più stretti. */
+.app-live.mobile .mobile-header-shell>header{padding:2px 14px 4px!important;min-height:52px!important}
+.app-live.mobile .mobile-local-breadcrumb{margin:0 0 6px!important;line-height:1.2}
+.app-live.mobile .mobile-local-breadcrumb button{padding:2px 0!important}
 .app-live.mobile .screen-scroll.mw-ed-noscroll{padding-bottom:0!important}
+
+/* ── 22/10 notte: workspace Menu senza scatti ── */
+/* Voci Piatti/Aspetto/Condividi/PDF: pillola nera condivisa che scivola (standard 280 ms), testo che cambia colore (fast 180 ms). */
+.mw-studio-sections.has-thumb{position:relative;isolation:isolate}
+.mw-studio-sections.has-thumb>button{position:relative;z-index:1;transition:color 180ms cubic-bezier(.22,1,.36,1)}
+.mw-studio-sections.has-thumb>button.active{background:transparent!important}
+.mw-studio-sections.has-thumb>button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mw-tab-thumb{position:absolute;left:0;top:0;z-index:0;border-radius:13px;background:var(--ink);pointer-events:none;will-change:transform}
+.mw-tab-thumb.is-ready{transition:transform 280ms cubic-bezier(.22,1,.36,1),width 280ms cubic-bezier(.22,1,.36,1),height 280ms cubic-bezier(.22,1,.36,1),opacity 180ms ease}
+/* Riga strumenti (solo Piatti): resta montata e si chiude/apre morbida, così il riquadro sotto scivola invece di saltare. */
+.mw-toolbar-wrap{display:grid;grid-template-rows:1fr;opacity:1;transition:grid-template-rows 280ms cubic-bezier(.22,1,.36,1),opacity 180ms cubic-bezier(.22,1,.36,1)}
+.mw-toolbar-wrap[data-open="0"]{grid-template-rows:0fr;opacity:0;pointer-events:none;margin-top:0!important;transition:grid-template-rows 280ms cubic-bezier(.22,1,.36,1),opacity 220ms cubic-bezier(.4,0,1,1)}
+.mw-toolbar-clip{min-height:0}
+.mw-toolbar-wrap[data-open="0"]>.mw-toolbar-clip{overflow:hidden}
+.mw-editor{position:relative}
+.mw-tab-panel>*+*{margin-top:12px}
+.mw-panel-ghost>*+*{margin-top:12px}
+/* «Avanzate» ↔ «Torna al menu»: slot fisso (scritta più lunga), pulsante allineato a destra che cambia solo larghezza e testo. */
+.mw-swap-slot{position:relative;display:inline-flex;justify-content:flex-end;align-items:center;flex:none}
+.mw-swap-sizer{position:absolute;left:0;top:0;visibility:hidden;pointer-events:none;display:flex;flex-direction:column;align-items:flex-start;height:0;overflow:visible}
+.mw-swap-measure,.mw-studio-toolbuttons button.mw-swap-btn{font:inherit;font-size:14px;font-weight:560;letter-spacing:0;white-space:nowrap;padding:0 14px;border:1px solid transparent}
+.mw-swap-measure{display:inline-block;box-sizing:border-box}
+.mw-studio-toolbuttons button.mw-swap-btn{position:relative;display:grid!important;place-items:center;box-sizing:border-box;width:auto;height:40px;min-height:0;border-color:var(--hairline);border-radius:var(--r-pill,999px);background:var(--raised,#fff);color:var(--ink);line-height:1;overflow:hidden;cursor:pointer;
+ transition:width 280ms cubic-bezier(.22,1,.36,1),background-color 180ms ease,color 180ms ease,border-color 180ms ease}
+.mw-studio-toolbuttons button.mw-swap-btn.is-dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+.mw-studio-toolbuttons button.mw-swap-btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mw-swap-text{grid-area:1/1;white-space:nowrap}
+.mw-swap-text.is-in{animation:mw-swap-in 180ms cubic-bezier(.22,1,.36,1) 40ms both}
+.mw-swap-text.is-out{animation:mw-swap-out 220ms cubic-bezier(.4,0,1,1) forwards}
+@keyframes mw-swap-in{from{opacity:0}to{opacity:1}}
+@keyframes mw-swap-out{from{opacity:1}to{opacity:0}}
+@media(prefers-reduced-motion:reduce){
+ .mw-tab-thumb.is-ready,.mw-studio-sections.has-thumb>button,.mw-toolbar-wrap,.mw-toolbar-wrap[data-open="0"],.mw-studio-toolbuttons button.mw-swap-btn{transition:none!important}
+ .mw-swap-text.is-in,.mw-swap-text.is-out{animation:none!important}.mw-swap-text.is-out{display:none}
+}
+/* Telefono: voci, riga unica compatta (Menu ▾ · Preset ▾ · lente · + · Avanzate) anche a 390 px, spazi verticali stretti. */
+@media(max-width:899px){
+ .mw-studio .mw-studio-sections{margin:0 auto 8px!important;min-height:0!important;padding:4px!important}
+ .mw-studio .mw-studio-sections>button{padding:7px 15px!important}
+ .mw-studio .mw-toolbar-wrap[data-open="1"]{margin-bottom:0}
+ .mw-studio .mw-studio-toolbar{flex-wrap:nowrap!important;gap:6px!important;row-gap:0!important;align-items:center!important;min-width:0;max-width:100%}
+ .mw-studio .mw-studio-toolbar>*{min-width:0}
+ .mw-studio .mw-studio-toolbar .mw-universal-search,.mw-studio .mw-studio-toolbar .mw-universal-search:not(.is-searching),.mw-studio .mw-studio-toolbar .mw-universal-search.is-searching{flex:1 1 0!important;width:auto!important;min-width:48px!important}
+ .mw-studio .mw-studio-toolbar .mw-menu-picker{width:100%;height:36px!important;min-height:36px!important;padding:0 6px 0 10px!important;border-radius:12px;font-size:14px;gap:2px}
+ .mw-studio .mw-studio-toolbar .mw-universal-search input{height:36px!important;min-height:36px!important}
+ .mw-studio .mw-studio-toolbar .mw-dp-btn{flex:0 1 82px!important;width:82px!important;min-width:56px!important;height:36px!important;padding:0 6px 0 10px!important;gap:2px;border-radius:12px;font-size:14px}
+ .mw-studio .mw-studio-toolbar .mw-dp-spacer{display:none!important}
+ .mw-studio .mw-studio-toolbuttons{flex:none!important;flex-wrap:nowrap!important;gap:6px!important;max-width:none!important;min-width:0}
+ .mw-studio .mw-studio-toolbuttons>button{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;padding:0!important}
+ .mw-studio .mw-studio-toolbuttons>button svg{width:17px;height:17px}
+ .mw-swap-measure,.mw-studio-toolbuttons button.mw-swap-btn{font-size:13.5px;padding:0 12px}
+ .mw-studio .mw-studio-toolbuttons button.mw-swap-btn{height:36px!important;min-height:36px!important}
+ .mw-tab-panel>.mw-ed-stage.is-mobile{margin-top:8px}
+}
+/* La riga sta in una griglia: senza min-width:0 si allargava oltre lo schermo invece di stringere «Menu ▾». */
+.mw-toolbar-wrap{grid-template-columns:minmax(0,1fr)}
+.mw-toolbar-clip{min-width:0}
+.screen-scroll{scrollbar-gutter:stable}
+.mw-adv-more{display:flex;justify-content:flex-end}
+@media(max-width:899px){
+ .mw-studio .mw-studio-toolbar{margin:0!important}
+ .mw-studio .mw-toolbar-wrap+.mw-tab-panel,.mw-studio .mw-toolbar-wrap[data-open="1"]{margin-top:0!important}
+ .mw-studio .mw-tab-panel{margin-top:8px!important}
+ .mw-tab-panel>.mw-ed-stage.is-mobile{margin-top:0!important}
+}
+/* Desktop: la testata di Avanzate ha la stessa altezza di quella dell'editor (pulsanti 36 px): la riga sotto non si sposta. */
+.mw-ed-head.mw-legacy-head>button{flex:none!important;width:auto!important;min-width:0!important;min-height:36px!important;height:36px;padding:0 16px!important;border-radius:var(--r-pill,999px)!important;font-size:14px!important;white-space:nowrap}
