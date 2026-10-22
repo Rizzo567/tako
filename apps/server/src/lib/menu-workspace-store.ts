@@ -36,7 +36,7 @@ export class WorkspaceOwnership extends Error{}
 export const TRIAL_PUBLISH_BLOCKED_MESSAGE='Questo è un menu di prova privato: non si può pubblicare sul menu pubblico finché il locale non diventa cliente. Le modifiche restano salvate in bozza.'
 export class WorkspaceTrialLocked extends Error{constructor(){super(TRIAL_PUBLISH_BLOCKED_MESSAGE)}}
 export async function isTrialRestaurant(tenant:string,connection:Pick<DB,'execute'>=db){return (await connection.execute(sql`SELECT 1 FROM restaurants WHERE id=${tenant} AND settings->>'takomenuTrial'='true'`)).length>0}
-async function verifyOwnership(tx:Pick<DB,'execute'>,tenant:string,w:Workspace){
+export async function verifyOwnership(tx:Pick<DB,'execute'>,tenant:string,w:Workspace){
  for(const url of [w.pdf.backgroundImageUrl,...w.pdfPresets.map(p=>p.config.backgroundImageUrl)].filter((u):u is string=>!!u))if(!url.startsWith(`/uploads/${tenant}/`)||/[?#]/.test(url)||url.slice(`/uploads/${tenant}/`.length).includes('/'))throw new WorkspaceOwnership('Foreign or invalid PDF image URL')
  const imageUrls=[w.design.logoUrl,w.design.coverUrl,w.design.backgroundImageUrl,w.pdf.backgroundImageUrl,...w.pdfPresets.map(p=>p.config.backgroundImageUrl),...w.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>i.imageUrl)))].filter((u):u is string=>!!u)
  for(const url of imageUrls){if(!url.startsWith(`/uploads/${tenant}/`) && !url.startsWith('https://'))throw new WorkspaceOwnership('Foreign or invalid image URL');if(url.startsWith('https://')&&new URL(url).pathname.startsWith('/uploads/')&&!new URL(url).pathname.startsWith(`/uploads/${tenant}/`))throw new WorkspaceOwnership('Foreign image URL')}
@@ -47,7 +47,7 @@ async function verifyOwnership(tx:Pick<DB,'execute'>,tenant:string,w:Workspace){
  if(rows.length)throw new WorkspaceOwnership('Foreign resource')
 }
 /** Riga del workspace bloccata FOR UPDATE + flag PROVA nella stessa istruzione (prima erano due). */
-async function lockWorkspace(tx:Pick<DB,'execute'>,tenant:string){
+export async function lockWorkspace(tx:Pick<DB,'execute'>,tenant:string){
  const rows=await tx.execute(sql`SELECT revision,draft,published,EXISTS(SELECT 1 FROM restaurants WHERE id=${tenant} AND settings->>'takomenuTrial'='true') AS trial FROM menu_workspaces WHERE restaurant_id=${tenant} FOR UPDATE`)
  return rows[0] as {revision:unknown,draft:unknown,published:unknown,trial:boolean}|undefined
 }
@@ -74,7 +74,7 @@ function publicationRows(tenant:string,w:Workspace){
  * piatti correnti allineate), ma tocca solo le righe che cambiano. Le righe identiche non vengono riscritte
  * (updated_at e id delle traduzioni restano quelli di prima). Una sola istruzione = un solo giro col DB.
  */
-async function writePublication(tx:Pick<DB,'execute'>,tenant:string,w:Workspace,now:Date){
+export async function writePublication(tx:Pick<DB,'execute'>,tenant:string,w:Workspace,now:Date){
  const rows=publicationRows(tenant,w)
  const data=JSON.stringify({...rows,now:now.toISOString()})
  await tx.execute(sql`WITH d AS (SELECT ${data}::jsonb AS j),
@@ -107,7 +107,7 @@ async function writePublication(tx:Pick<DB,'execute'>,tenant:string,w:Workspace,
  SELECT (SELECT count(*) FROM menus_off)+(SELECT count(*) FROM items_off)+(SELECT count(*) FROM menus_up)+(SELECT count(*) FROM sections_up)+(SELECT count(*) FROM items_up)+(SELECT count(*) FROM variants_off)+(SELECT count(*) FROM variants_up)+(SELECT count(*) FROM translations_off)+(SELECT count(*) FROM translations_up) AS changed`)
 }
 /** Bozza (e pubblicato) + riga di storico in una sola istruzione. */
-async function writeWorkspace(tx:Pick<DB,'execute'>,tenant:string,actor:string,revision:number,w:Workspace,publish:boolean,label:string){
+export async function writeWorkspace(tx:Pick<DB,'execute'>,tenant:string,actor:string,revision:number,w:Workspace,publish:boolean,label:string){
  const doc=JSON.stringify(w)
  await tx.execute(sql`WITH v AS (INSERT INTO menu_workspace_versions(id,restaurant_id,revision,label,snapshot,created_by) VALUES(${randomUUID()},${tenant},${revision},${label},${doc}::jsonb,${actor}) RETURNING 1)
  UPDATE menu_workspaces SET draft=${doc}::jsonb,revision=${revision},published=CASE WHEN ${publish} THEN ${doc}::jsonb ELSE published END,published_revision=CASE WHEN ${publish} THEN ${revision} ELSE published_revision END,updated_at=now() WHERE restaurant_id=${tenant}`)
