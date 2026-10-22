@@ -151,7 +151,9 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  if(pend?.kind==='batch'&&pend.why==='delete'&&!changeActs.length&&(ONLY_CANCEL.test(plain(message))||CANCEL_WORDS.test(plain(message))))return{kind:'cancel'}
  // notte 22/10 (n-annulla-domanda, n-annulla-poi-comando): «annulla», «lascia stare», «no» mentre il bot aspetta una risposta alla SUA domanda
  // chiudono la domanda (salvo un «annulla» dell'ultima pubblicazione ancora annullabile): prima «non c’è nulla da annullare» + la stessa domanda.
- if(!changeActs.length&&(pend?.kind==='ask'||pend?.kind==='hold'||pend?.kind==='other')&&ONLY_CANCEL.test(plain(message))&&!(control.includes('undo_last')&&o.undoOK))return{kind:'cancel'}
+ // notte 22/10 (QA v147 GRAVE: «aggiungi il vitello tonnato» → domanda → «annulla» → annullata una modifica della conversazione PRIMA): con una
+ // domanda aperta «annulla» chiude SOLO la domanda, sempre.
+ if(!changeActs.length&&(pend?.kind==='ask'||pend?.kind==='hold'||pend?.kind==='other')&&ONLY_CANCEL.test(plain(message)))return{kind:'cancel'}
  if(control.includes('undo_last')){if(!o.undoOK)return reject('annulla_scaduto');if(!undoRequested(message))return reject('annulla_senza_richiesta');if(rawActs.length||control.length>1)return reject('annulla_con_altro');return{kind:'undo'}}
  if(control.includes('confirm_pending')){
   // R9: con una TUA domanda aperta (brain_ask) non c'è nulla da confermare: la risposta va scritta come piano con le azioni della richiesta originale.

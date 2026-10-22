@@ -76,6 +76,8 @@ export const REFERS=/\b(fai|solo|anche|pure|puru|uguale|ugual\w*|idem|stess[oa]|
 // accetta un'azione senza nome solo se tocca ESATTAMENTE quei piatti; altrimenti chiede.
 const DEIX_N:Record<string,number>={due:2,tre:3,quattro:4,'2':2,'3':3,'4':4}
 const DEIX_PLURAL=/\b(?:quei|quegli|quelli|quelle|questi|queste|entramb\w*|tutti|tutte|ambedue)\b|\b(?:metti|nascondi|togli|rimetti|segna|porta|fa|cambia|alza|abbassa|aumenta|mostra|leva|lascia|toglie)(?:me)?li\b|\b(?:li|le) (?:metti|nascondi|togli|rimetti|segni|porti|cambi)\b/
+// notte 22/10 (QA v145 «c'è il tiramisù?» → «è finito»): frase ellittica senza piatto (verbo/stato da solo) = il piatto appena chiesto.
+const ELLIPTIC=/^(?:e |ok |allora |ah )?(?:(?:e|è|sono|so|e gia) )?(?:finit\w*|esaurit\w*|tornat\w*|di nuovo disponibil\w*|disponibil\w*|non c e piu|nascondi|toglilo|toglila|a \d+(?:[.,]\d+)?(?: euro)?|mett\w* a \d+(?:[.,]\d+)?)$/
 export const ONE_PRONOUN=/\b(?:mett|port|fa|alz|abbass|aument|cambi|togli|nascond|segn|rimett|lev|mostr|evidenzi|diminu|scont|spost|elimin|cancell|rinomin|aggiorn|ritocc)\w*?l[oa]\b|\b(?:lo|la|l) (?:metti|porti|alzi|abbassi|segni|togli|nascondi|rimetti|cambi|fai)\b/
 const DEIX_ORD=/\b(?:il|la|l|lo|quest) ?(prim[oa]|second[oa]|terz[oa]|ultim[oa])\b(?! (?:piatt[oi] (?:del|della|di)|del pranzo|della cena))/
 export function deixisReferents(msg:string,owners:string[],refs:MenuRef[],botList:string[]=[]):{kind:'set'|'one',ids:string[]}|null{
@@ -435,7 +437,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
    // notte 22/10 (cc-giornata-01/04/06): «quanto costa la gricia?» → «mettila a 12»: il pronome singolare va al piatto UNICO del messaggio
    // precedente del titolare (ripetuto dal bot nella risposta), anche se quel messaggio era una domanda e il modello ha scelto l'ultima modifica.
    const bdFull=refs.filter(r=>plain(r.name).length>=3&&(' '+plain(lastBotText)+' ').includes(' '+plain(r.name)+' ')).map(r=>r.id),one=pd.length===1?pd:pd.filter(id=>bdFull.includes(id))
-   if(bare.length===1&&one.length===1&&bare[0]!==one[0]&&bd.includes(one[0]!)&&!ids.includes(one[0]!)&&ONE_PRONOUN.test(msg)&&!DEIX_PLURAL.test(' '+msg+' ')&&looksLikeQuestion(prevOwner)&&!/\b(?:prima|precedente|altr[oaie])\b/.test(msg)){const from=bare[0]!,to=one[0]!;for(const a of plan.actions)if('id' in a&&(a as any).id===from)(a as any).id=to;ids[ids.indexOf(from)]=to;bare[0]=to}
+   if(bare.length===1&&one.length===1&&bare[0]!==one[0]&&bd.includes(one[0]!)&&!ids.includes(one[0]!)&&(ONE_PRONOUN.test(msg)||ELLIPTIC.test(msg)&&msg.split(' ').length<=5)&&!DEIX_PLURAL.test(' '+msg+' ')&&looksLikeQuestion(prevOwner)&&!/\b(?:prima|precedente|altr[oaie])\b/.test(msg)){const from=bare[0]!,to=one[0]!;for(const a of plan.actions)if('id' in a&&(a as any).id===from)(a as any).id=to;ids[ids.indexOf(from)]=to;bare[0]=to}
    // Un prezzo senza piatto («no scusa 14») corregge solo un prezzo detto nel messaggio precedente, mai un «finito».
    // Fase R: «anche la lasagna» → «no scusa 14»: il prezzo cambiato l'ha scritto il server nell'ultima risposta (riga «X: prezzo da»).
    const botChanged=(id:string)=>{const r=byId.get(id);return !!r&&plain(lastBotText).includes(plain(r.name)+' prezzo da')}

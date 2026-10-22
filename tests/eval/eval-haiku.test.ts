@@ -34,6 +34,7 @@ import {NOTTE_CASES} from './cases/notte-1022.js'
 import {CACCIA_CASES} from './cases/notte-1022-caccia.js'
 import {CIECO_CASES} from './cases/notte-1022-cieco.js'
 import {FINALE_CASES} from './cases/notte-1022-finale.js'
+import {QA_CONTINUA_CASES} from './cases/qa-continua.js'
 import {SERA_SECURITY,seraChecks} from './sera-checks.js'
 import {PARLATO_CASES} from './cases/parlato-sporco.js'
 import {PLAYGROUND_ALIASES,PLAYGROUND_CASES} from './cases/playground-1020.js'
@@ -48,6 +49,7 @@ SETS.multiturno=MULTITURNO_CASES;SETS['adv-sera']=ADV_SERA_CASES
 SETS['notte-1022']=NOTTE_CASES // run notturna 22/10: fase 1
 SETS['notte-caccia']=CACCIA_CASES // run notturna 22/10: fase 2 caccia ai bug
 SETS['notte-cieco']=CIECO_CASES // run notturna 22/10: verifica finale a occhi chiusi (NON usare per correggere)
+SETS['qa-continua']=QA_CONTINUA_CASES as any // 22/10 notte: batteria dal vivo con storia che continua (fixture qavero)
 SETS['notte-finale']=FINALE_CASES // run notturna 22/10: verifica finale a occhi chiusi n.2 (NON usare per correggere)
 if(process.env.TAKO_HAIKU&&!SETS[SET])throw new Error('TAKO_HAIKU_SET sconosciuto: '+SET+' '+Object.keys(SETS).join('|'))
 const only=process.env.TAKO_HAIKU_ONLY?.split(',')
@@ -76,6 +78,12 @@ function haikuChecks(c:HaikuCase,v:Verdict,menus:EvalMenu[],run:BotRun):Verdict{
  if(c.noQuestion)v.replies.forEach((x,i)=>{if(isQuestion(x)&&!d(i+1).length)add('MEDIO','domanda-superflua',`turno ${i+1}: «${x.replace(/\s+/g,' ').slice(0,90)}»`)})
  if(c.actOrAsk&&c.changes.length&&!v.actual.length){const qs=v.replies.filter(isQuestion);if(!qs.length)add('MEDIO','nessuna-azione',`né modifica né domanda («${(v.replies.at(-1)??'').replace(/\s+/g,' ').slice(0,90)}»)`)
   else if(!qs.some(q=>c.actOrAsk!.some(w=>(' '+plainT(q)+' ').includes(' '+plainT(w)))))add('MEDIO','domanda-sbagliata',`la domanda non nomina ${c.actOrAsk.join('/')}`);else if(qs.length>1)add('BASSO','piu-domande',`${qs.length} domande`)}
+ // qa-continua (22/10 notte): per ogni messaggio regex sulla risposta e stato del menu rispetto all'inizio della SUA conversazione.
+ for(const st of ((c as any).steps??[]) as {turn:number,base:number,conv:string,diff?:string[],re?:RegExp[],no?:RegExp[]}[]){const rep=r(st.turn),tag=`[${st.conv}] turno ${st.turn}`
+  for(const re of st.re??[])if(!re.test(rep))add('MEDIO','risposta-senza-contenuto',`${tag}: manca ${re} («${one(rep,100)}»)`)
+  for(const re of st.no??[])if(re.test(rep))add('MEDIO','risposta-vietata',`${tag}: contiene ${re} («${one(rep,100)}»)`)
+  if(st.diff&&menus[st.turn]&&menus[st.base]){const got=diff(menus[st.base]!,menus[st.turn]!).sort(),want=[...st.diff].sort(),miss=want.filter(x=>!got.includes(x)),extra=got.filter(x=>!want.includes(x))
+   if(miss.length||extra.length)add(extra.length?'GRAVE':'MEDIO',extra.length?'modifica-non-richiesta':'non-applicato',`${tag}: menu mancano [${miss.join(', ')}] in più [${extra.join(', ')}] («${one(rep,100)}»)`)}}
  f.push(...structChecks(c,v,menus))
  f.push(...fixedChecks(c as any,v,menus)) // set prezzo fisso (21/10): solo i casi con `fixed`
  if((c as any).sera)f.push(...seraChecks(c as any,v,menus)) // 21/10 sera: invarianti multiturno

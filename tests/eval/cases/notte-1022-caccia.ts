@@ -218,6 +218,15 @@ export const CACCIA_CASES:CacciaCase[]=[
  cc('qv','qavero',[Q('quanto costa la pasta carbonara?'),T('portala a dieci e mezzo')],[P('pasta carbonara',10.5)]),
  cc('qv','qavero',[T('alza i primi di 50 centesimi')],[P('la parmigiana',13),P('pasta al pesto',9.5),P('pasta carbonara',9.5),P('riso giallo',8.5)],{note:'Primi: cena vuota, giorno a prezzo fisso → solo i Primi del Menu di verifica, subito (stesso aumento)'}),
  cc('qv','qavero',[Q('quante paste ho nei primi?')],[],{says:[nots(1,/pasta al rag|pasta al sugo|gnocchi|lasagna e|menu cena/i)]}),
+ // ---- QA-LIVE v145: storia della conversazione PRIMA (argomenti diversi di fila, come in produzione) ----
+ cc('storia','qavero',[T('alza la pasta al ragù di un euro'),Q('grazie'),Q("c'è il tiramisù?"),T('è finito')],[P('pasta al ragù',11),AV('tiramisù')],{note:'«è finito» = il piatto appena chiesto (tiramisù), non quello della conversazione prima'}),
+ cc('storia','qavero',[T('aggiungi nei piatti di prova la frittata a 6'),Q('grazie'),T('aggiungi patatine fritte a 4')],[C('frittata',6,'piatti di prova')],{ask:[3],note:'GRAVE dal vivo: il sottomenu del piatto nuovo NON si eredita dalla conversazione prima'}),
+ cc('storia','qavero',[Q('quanto costano il riso giallo e la pasta carbonara?'),T('alzali tutti e due di 50 centesimi')],[P('riso giallo',8.5),P('pasta carbonara',9.5)],{note:'GRAVE dal vivo: 50 centesimi letto come 50 €'}),
+ cc('storia','qavero',[T('alza il pesto di un euro'),T('la pasta al pesto dei primi')],[P('pasta al pesto',10)],{note:'risposta univoca alla domanda tra due pesti: agire'}),
+ cc('storia','qavero',[T('aggiungi il vitello tonnato nei Primi del Menu di verifica'),T('14')],[C('vitello tonnato',14,'primi')],{says:[nots(1,/cosa vuoi cambiare/i),nots(2,/a che prezzo|quale prezzo/i)]}),
+ cc('storia','qavero',[T('alza di 50 centesimi i primi del Menu di verifica')],[P('la parmigiana',13),P('pasta al pesto',9.5),P('pasta carbonara',9.5),P('riso giallo',8.5)],{noQuestion:true}),
+ cc('storia','qavero',[Q('quanto costa la pasta al ragù?'),T('toglila'),T('rimettila')],[],{says:[nots(2,/quale piatto/i),nots(3,/quale piatto/i)],note:'pronomi dopo una lettura: nascondi e poi rimetti (alla fine com\'era)'}),
+ cc('storia',R,[T('la carbonara a 13'),Q('ok grazie'),Q('quanto costa la gricia?'),T('mettila a 12')],[P('Carbonara',13),P('Gricia',12)],{note:'il pronome va alla gricia letta, non alla carbonara di prima'}),
  cc('vietato',QS,[T('cancella il menu del giorno')],[],{fam:'bv-fuori' as Family,note:'Menu nascosto con 7 piatti: mai cancellarlo senza un sì'}),
 
  // ================= 9. MENU / SOTTOMENU / PIATTI NASCOSTI citati =================
