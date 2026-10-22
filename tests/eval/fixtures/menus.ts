@@ -219,3 +219,19 @@ export const notte=build('notte',21,{restaurant:'Osteria Notturna (prova)',menus
  ['Cena','dinner',[['Pizze',[['Marinara',6],['Napoli',7.5]]],['Primi',[['Risotto ai funghi',14]]]]],
  ['Bevande','drinks',[['Bibite',[['Acqua',2],['Coca Cola',3.5],['Birra media',5]]]]]]})
 Object.assign(FIXTURES,{notte})
+
+// qavero (22/10 notte, dal JSON pubblicato del QA dopo v146, riletto in sola lettura): identico al QA vero — Primi del Menu di verifica con
+// 4 piatti (niente paste nascoste in più), Menu pranzo con «Completo» vuoto, Menu cena con «Primi» vuoto e nascosto, Menu del giorno
+// nascosto a prezzo fisso (Completo 18, Solo primo 11). Serve a riprodurre le divergenze banco ↔ QA vero.
+export const qavero:MenuFixture=(()=>{const f=build('qavero',23,{restaurant:'Tako · Verifica web',menus:[
+ ['Menu di verifica · web QA','lunch',[['Piatti di prova',[['Piatto di verifica',13.5],['Che ne sacc',20],['boh',20],['pasta al ragù',10],['Inserisce il piatto la parmigiana',12],['Pasta al sugo',9],['Pasta al pesto e lasagna',10.01],['tiramisù',15]]],
+  ['Primi',[['la parmigiana',12.5],['pasta al pesto',9],['pasta carbonara',9],['riso giallo',8]]]]],
+ ['Menu pranzo','lunch',[['Completo',[]]]],
+ ['Menu cena','dinner',[['Primi',[]]]],
+ ['Menu del giorno','lunch',[['Primi',[['Lasagna',0],['Carbonara',0],['Gnocchi al ragù',0]]],['Secondi',[['Cotoletta',0],['Polpette',0],['Frittata di zucchine',0],['Frittata di patate',0]]]]]]})
+ const W=f.menu as any,hide=['Piatto di verifica','Che ne sacc','boh','Inserisce il piatto la parmigiana','Carbonara','Polpette','Frittata di zucchine','Frittata di patate']
+ for(const m of W.menus)for(const s of m.sections)for(const i of s.items){if(hide.includes(i.name))i.hidden=true;if(i.name==='boh')i.available=false}
+ W.menus[2].sections[0].active=false
+ W.menus[3].pricing='fisso';W.menus[3].active=false;W.menus[3].formulas=[{id:'5000dd00-5555-4555-8555-000000000001',name:'Completo',price:18,note:null,sectionIds:W.menus[3].sections.map((s:any)=>s.id),translations:{}},{id:'5000dd00-5555-4555-8555-000000000002',name:'Solo primo',price:11,note:null,sectionIds:[W.menus[3].sections[0].id],translations:{}}]
+ return f})()
+Object.assign(FIXTURES,{qavero})

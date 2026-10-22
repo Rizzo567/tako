@@ -11,7 +11,7 @@ import {g9DishMentioned,plain,withNewSections,describeAction,priceChoice,effecti
 import {copy,helpWords,fill} from '../lib/twilio-menu-copy.js'
 import {createStep,createQuestion,followUp,undoFor,categoryWordItems,revertTarget,groupCommand,type CreateDraft,type LastApplied} from '../lib/twilio-menu-create.js'
 import {words,exactPick,politeCommand,spokenDecimals,spokenCents,parseIntent,findDishes,diminutiveRivals,preselect,candidatesFor,resolveChoice,capabilityFromText,isThanks,compoundIntents,looksLikeQuestion,wantsCreateText,wantsSpecialText,isCompoundMessage,type Intent} from '../lib/twilio-menu-nlu.js'
-import {validTwilioSignature,shouldHandleInTako,replyIntent,forwardTwilioWebhook,parseMenuCommand,normalizeMenuText,twiml,nextMessage,whatsappAudioType,type MenuCommand} from '../lib/twilio-menu-command.js'
+import {validTwilioSignature,shouldHandleInTako,replyIntent,forwardTwilioWebhook,parseMenuCommand,normalizeMenuText,twiml,nextMessage,lateReply,whatsappAudioType,type MenuCommand} from '../lib/twilio-menu-command.js'
 import {reportFailure,inBackground,quietPhones,type FailureKind} from '../lib/twilio-menu-alerts.js'
 import {normalizeOwnerPhone,whatsappAddress} from '../lib/whatsapp-phone.js'
 import {fullMenuTurn,type FullMenuJob} from '../lib/twilio-menu-fullmenu.js'
@@ -670,14 +670,17 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
      const okSec=(x:SectionRef)=>!fixedSecIds.has(x.id)&&base.menus.some(m=>m.name===x.menu&&m.active!==false)
      // il sottomenu (e il Menu) detti nel messaggio di adesso o nella richiesta originale («aggiungi il cacio e pepe nei primi del pranzo»).
      const both=text+' \n '+askOrigin(askP),ns0=namedSections(text,sections).ids.length?namedSections(text,sections).ids:namedSections(both,sections).ids,ms=namedMenus(both,base.menus).map(m=>m.name)
-     const ns1=ns0.filter(id=>!fixedSecIds.has(id)),ns=ns1.length>1&&ms.length===1?ns1.filter(id=>sections.find(x=>x.id===id)?.menu===ms[0]):ns1,secId=pick??(ns.length===1?ns[0]:undefined)
+     const ns1a=ns0.filter(id=>!fixedSecIds.has(id)),ns1L=ns1a.filter(id=>{const x=sections.find(z=>z.id===id);return !!x&&base.menus.some(m=>m.name===x.menu&&m.active!==false&&(m.secs as any[]).find(z=>z.id===id)?.active!==false)}),ns1=ns1a.length>1&&ns1L.length>=1?ns1L:ns1a,ns=ns1.length>1&&ms.length===1?ns1.filter(id=>sections.find(x=>x.id===id)?.menu===ms[0]):ns1,secId=pick??(ns.length===1?ns[0]:undefined)
      const p0=d.price??(num&&opts.length&&d.price==null?Number(num[1]):onlyPrice(draftless(text,d.name)))
      const saidNow=(num&&opts.length)||namedSections(text,sections).ids.length>0||onlyPrice(draftless(text,d.name))!==null||yes
      if(!saidNow)return null
      const nm=d.name,low=nm.toLowerCase(),eur=(n:number)=>n.toFixed(2).replace('.',',')+' €',rounds=(askP.rounds??1)+1
      if(p0!=null&&p0>0&&secId)return{create:{kind:'create',sectionId:secId,name:nm,price:p0,description:null} as MenuAction}
      if(p0==null&&secId){const sc=sections.find(x=>x.id===secId)!;return{q:'A che prezzo metto *'+safe(nm)+'* in *'+safe(sc.name)+'*? Scrivimi per esempio «'+low+' 12».',patch:{rounds,draft:{...d,price:null,sectionId:secId}}}}
-     const course=dishCourse(nm),fit=course?sections.filter(x=>okSec(x)&&sameSection(x.name,course)):[],cands=[...sections.filter(okSec),...sections.filter(x=>!okSec(x)&&!fixedSecIds.has(x.id))].slice(0,6)
+     // elenco: prima i sottomenu attivi con piatti dei Menu visibili alla carta, poi quelli vuoti; mai sottomenu nascosti né Menu a prezzo fisso.
+     const secInfo=(x:SectionRef)=>base.menus.find(m=>m.name===x.menu)?.secs.find((z:any)=>z.id===x.id) as {active:boolean,items:number}|undefined
+     const live=(x:SectionRef)=>okSec(x)&&secInfo(x)?.active!==false
+     const course=dishCourse(nm),fit=course?sections.filter(x=>live(x)&&sameSection(x.name,course)):[],cands=[...sections.filter(x=>live(x)&&(secInfo(x)?.items??0)>0),...sections.filter(x=>live(x)&&!(secInfo(x)?.items))].slice(0,6)
      const head=p0!=null&&p0>0?'Ok, *'+eur(p0)+'*. ':''
      if(fit.length===1&&p0!=null&&p0>0){const sc=fit[0]!;return{q:head+'Metto *'+safe(nm)+'* in *'+safe(sc.name)+'*'+(base.menus.length>1?' (Menu *'+safe(sc.menu.replace(/^men[uù]\s+/i,''))+'*)':'')+'? Rispondi *sì* oppure dimmi il sottomenu giusto.',patch:{rounds,actions:[{kind:'create',sectionId:sc.id,name:nm,price:p0,description:null}],draft:{...d,price:p0}}}}
      const list=cands.map((x,i)=>(i+1)+'. *'+safe(x.name)+'* ('+safe(x.menu)+')').join('\n'),again=!!(askP as any).secOptions
@@ -820,16 +823,24 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  // notte 22/10 (QA v145 «quanto costa il riso giallo?» → «alzalo di un euro» → «Intendi il riso giallo a 8 €? Dimmi se è lui.»): il MODELLO
  // chiede conferma sul piatto unico appena citato dal bot. Pronome singolare + un solo piatto nell'ultima risposta del bot + un valore
  // leggibile (differenza, prezzo, finito, nascondi, rimetti) = l'azione su quel piatto, senza domanda. Vale per qualsiasi verbo col pronome.
- if(engine==='haiku'&&!pre&&!sessNow&&out.kind==='ask'&&!out.hold&&!out.twins?.length&&!out.actions.length&&(!pend||pend.kind==='ask')&&ONE_PRONOUN.test(plain(text))){const lb=' '+plain(run.lastBot??'')+' ',named=refs.filter(r=>plain(r.name).length>=3&&lb.includes(' '+plain(r.name)+' '))
-  const one=named.length===1?named[0]!:null
-  if(one&&out.ids.every(id=>id===one.id)&&!refs.some(r=>r.id!==one.id&&g9DishMentioned(r.name,text,refs))){const p2=plain(text),rd=relativeDelta(text),sp=singlePrice(text)
-   const act:MenuAction|null=rd?{kind:'price',id:one.id,price:Math.round((one.price+rd.delta)*100)/100} as MenuAction:sp!==null&&sp>0&&!/\b(?:alz|abbass|aument|diminu|scont)\w*/.test(p2)?{kind:'price',id:one.id,price:sp} as MenuAction:/\b(?:finit\w*|esaurit\w*)\b/.test(p2)?{kind:'available',id:one.id,value:false} as MenuAction:/\b(?:nascond\w*|togli\w*|lev[ai]\w*)\b/.test(p2)?{kind:'hidden',id:one.id,value:true} as MenuAction:null
-   if(act&&(act.kind!=='price'||(act as any).price>0)){out={kind:'change',actions:[act]};noDraft=true;(run.decision as any).draft=''}}}
+ // notte 22/10 (cieco «abbassa la cacio e pepe di trenta centesimi» → «Intendi il Supplì cacio e pepe o la Cacio e pepe?»): anche un piatto
+ // nominato ESATTAMENTE (nome intero, unico) mentre l'altro candidato ha solo una parte del nome: vale quello detto.
+ const exactOne=(()=>{const t=' '+plain(text).replace(/\b(?:il|lo|la|i|gli|le|l)\s+/g,' ')+' ',ex=refs.filter(r=>{const n=plain(r.name).replace(/^(?:il|lo|la|i|gli|le|l)\s+/,'');return n.length>=4&&t.includes(' '+n+' ')});const top=ex.filter(r=>!ex.some(o=>o.id!==r.id&&plain(o.name).includes(plain(r.name))));return top.length===1?top[0]!:null})()
+ const exIn=(id:string)=>out.kind==='ask'&&(out.ids.includes(id)||(!out.ids.length&&(' '+plain(String(run.decision.draft??''))+' ').includes(' '+plain(refs.find(r=>r.id===id)?.name??'\u0000')+' ')))
+ if(engine==='haiku'&&!pre&&!sessNow&&out.kind==='ask'&&!out.hold&&!out.twins?.length&&!out.actions.length&&(!pend||pend.kind==='ask')){const lb=' '+plain(run.lastBot??'')+' ',named=refs.filter(r=>plain(r.name).length>=3&&lb.includes(' '+plain(r.name)+' '))
+  const dq=' '+plain(String(run.decision.draft??''))+' ',draftDishes=refs.filter(r=>plain(r.name).length>=3&&dq.includes(' '+plain(r.name)+' '))
+  // A: pronome + piatto unico dell'ultima risposta del bot (nessun altro piatto detto). B: nome esatto unico + domanda del modello «quale piatto?» (≥2 piatti).
+  const A=ONE_PRONOUN.test(plain(text))&&named.length===1&&out.ids.every(id=>id===named[0]!.id)&&!refs.some(r=>r.id!==named[0]!.id&&g9DishMentioned(r.name,text,refs))?named[0]!:null
+  const B=!A&&exactOne&&exIn(exactOne.id)&&draftDishes.length>=2&&draftDishes.some(r=>r.id===exactOne.id)?exactOne:null,one=A??B
+  const p2=plain(text),verbs=(p2.match(/\b(?:alz|abbass|aument|diminu|scont|mett|port|togli|nascond|lev|segn|rimett|evidenz|aggiung|elimin|cancell|sposta|rinomin)\w*/g)??[]).length
+  if(one&&verbs<=1&&!/\b(?:e poi|poi|anche|evidenz\w*|promo|per ?cento|aggiung\w*|nuov[oa]|locale|ristorante)\b|%/.test(p2+' '+text)){const rd=relativeDelta(text),gp=[...new Set(g9Prices(text).map(x=>Math.round(x*100)/100))],sp=/\d/.test(text)&&gp.length===1?gp[0]!:null
+   const act:MenuAction|null=rd?{kind:'price',id:one.id,price:Math.round((one.price+rd.delta)*100)/100} as MenuAction:sp!==null&&sp>0&&!/\b(?:alz|abbass|aument|diminu|scont)\w*/.test(p2)?{kind:'price',id:one.id,price:sp} as MenuAction:/\b(?:finit\w*|esaurit\w*)\b/.test(p2)&&!/\b(?:non|nun)\b/.test(p2)?{kind:'available',id:one.id,value:false} as MenuAction:/\b(?:nascond\w*|togli\w*|lev[ai]\w*)\b/.test(p2)&&!/\b(?:non|nun)\b/.test(p2)?{kind:'hidden',id:one.id,value:true} as MenuAction:null
+   if(act&&(act.kind!=='price'||((act as any).price>0&&!oddPrice(act,refs)))){out={kind:'change',actions:[act]};noDraft=true;(run.decision as any).draft=''}}}
  // notte 22/10 (cieco b1 «le frittatine so finite tutte e due», «spritz 6,5 tutti e due»): «tutti e due / entrambi» con ESATTAMENTE due
  // candidati = l'azione su entrambi (prima una domanda inutile). L'azione la legge il server (finito / nascondi / un prezzo detto).
  if(engine==='haiku'&&!pre&&!sessNow&&out.kind==='ask'&&!out.hold&&!out.twins?.length&&/\b(?:tutt[ie] e (?:due|2)|entramb[ie]|ambedue)\b/.test(plain(text))){const ids2=[...new Set(out.ids)].filter(id=>refs.some(r=>r.id===id))
   if(ids2.length===2){const p2=plain(text),sp=singlePrice(text),fin=/\b(?:finit\w*|esaurit\w*|terminat\w*|fernut\w*)\b/.test(p2)&&!/\b(?:non|nun)\s+(?:e|sono|so)?\s*finit/.test(p2),hide=/\b(?:nascond\w*|togli\w*|lev[ai]\w*)\b/.test(p2)
-   const acts=fin?ids2.map(id=>({kind:'available',id,value:false}) as MenuAction):hide?ids2.map(id=>({kind:'hidden',id,value:true}) as MenuAction):sp!==null&&sp>0?ids2.map(id=>({kind:'price',id,price:sp}) as MenuAction):[]
+   const rd2=relativeDelta(text),acts=fin?ids2.map(id=>({kind:'available',id,value:false}) as MenuAction):hide?ids2.map(id=>({kind:'hidden',id,value:true}) as MenuAction):rd2?ids2.flatMap(id=>{const r=refs.find(x=>x.id===id)!;const v=Math.round((r.price+rd2.delta)*100)/100;return r.price>0&&v>0?[{kind:'price',id,price:v} as MenuAction]:[]}):sp!==null&&sp>0&&/\d/.test(text)&&!/\b(?:alz|abbass|aument|diminu|scont)\w*/.test(p2)?ids2.map(id=>({kind:'price',id,price:sp}) as MenuAction):[]
    if(acts.length){out={kind:'change',actions:acts};noDraft=true;(run.decision as any).draft=''}}}
  if(engine==='haiku'&&!pre&&!sessNow){
   const p0=plain(text),wantAdd=/\b(?:aggiung\w*|inserisc\w*|nuov[oa]|metti(?:mi|ci)?)\b/.test(p0)
@@ -872,6 +883,14 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(g&&'actions' in g){out={kind:'change',actions:g.actions};noDraft=true}
    else if(g&&'ask' in g){out={kind:'ask',ids:[],actions:[]};serverQ=(/e$/i.test(g.label.trim())?'Le':'I')+' *'+safe(g.label)+'* ci sono in più Menu: in quale? '+g.menus.map(x=>'*'+safe(x)+'*').join(' o ')+'?'}}
   if(out.kind==='change'&&visibleOnly(text)){const keep=out.actions.filter(a=>!('id' in a)||a.kind==='hidden'||!refs.find(r=>r.id===(a as any).id)?.hidden);if(keep.length)out={...out,actions:keep}}}
+ // notte 22/10 (qavero «aggiungi la frittatina» → «3,50» → creata nei Primi del Menu del giorno NASCOSTO): un piatto nuovo in un Menu o
+ // sottomenu nascosto che il titolare non ha nominato non si crea: domanda col prezzo tenuto e l'elenco dei sottomenu visibili.
+ if(engine==='haiku'&&out.kind==='change'&&out.actions.length===1&&out.actions[0]!.kind==='create'&&!(out.actions[0] as any).fromReplace){const a=out.actions[0] as Extract<MenuAction,{kind:'create'}>,sc=sections.find(x=>x.id===a.sectionId),m=sc?base.menus.find(mm=>mm.name===sc.menu):undefined
+  const hid=!!m&&(m.active===false||(m.secs as any[]).find(z=>z.id===sc!.id)?.active===false)
+  if(sc&&hid&&!namedMenus(askText,base.menus).some(mm=>mm.name===sc.menu)){const info=(x:SectionRef)=>(base.menus.find(mm=>mm.name===x.menu)?.secs as any[]|undefined)?.find(z=>z.id===x.id),live=(x:SectionRef)=>!fixedSecIds.has(x.id)&&base.menus.some(mm=>mm.name===x.menu&&mm.active!==false)&&info(x)?.active!==false
+   const cands=[...sections.filter(x=>live(x)&&(info(x)?.items??0)>0),...sections.filter(x=>live(x)&&!info(x)?.items)].slice(0,6)
+   out={kind:'ask',ids:[],actions:[],createDraft:{name:a.name,price:a.price>0?a.price:null,sectionId:null,sectionName:null}};(out as any).secOptions=cands.map(x=>x.id)
+   serverQ=(a.price>0?'Ok, *'+a.price.toFixed(2).replace('.',',')+' €*. ':'')+'In quale sottomenu metto *'+safe(a.name)+'*? Rispondi col numero o col nome.\n\n'+cands.map((x,i)=>(i+1)+'. *'+safe(x.name)+'* ('+safe(x.menu)+')').join('\n')}}
  if(serverQ)noDraft=true
  const finalRun=run
  // T6 (PIANO bot-haiku): menu o proposta cambiati mentre il modello pensava (dashboard, altro telefono) → con haiku si rilegge e si
@@ -1004,7 +1023,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // 21/10 sera: niente pending vuoto («Ok, lascio stare.» senza nulla in sospeso) — confonde il turno dopo.
     const emptyAsk=engine==='haiku'&&!noDraft&&!!question&&!out.hold&&!/\?|\brispondi\b/i.test(question)&&!out.ids.length&&!out.actions.length&&!out.createDraft&&!sessOut&&!out.twins?.length
     if(!keepRecap&&emptyAsk)await drop()
-    else if(!keepRecap){await drop();if(out.hold)await propose(tx,ctx,row.revision,{...out.hold,source:text});else await propose(tx,ctx,row.revision,{kind:'brain_ask',question,ids:out.ids.filter(id=>refs.some(r=>r.id===id)).slice(0,8),actions:out.actions.length?out.actions:pend?.kind==='ask'&&!out.ids.length?pend.ask.actions??[]:[],source:src.source,origin:src.origin,rounds:src.rounds,...(sessOut?{session:sessOut,rounds:1}:{}),draft:out.createDraft??(pend?.kind==='ask'?pend.ask.draft??null:null),...(out.twins?.length?{twins:out.twins}:{})} satisfies BrainAsk)}
+    else if(!keepRecap){await drop();if(out.hold)await propose(tx,ctx,row.revision,{...out.hold,source:text});else await propose(tx,ctx,row.revision,{kind:'brain_ask',question,ids:out.ids.filter(id=>refs.some(r=>r.id===id)).slice(0,8),actions:out.actions.length?out.actions:pend?.kind==='ask'&&!out.ids.length?pend.ask.actions??[]:[],source:src.source,origin:src.origin,rounds:src.rounds,...(sessOut?{session:sessOut,rounds:1}:{}),draft:out.createDraft??(pend?.kind==='ask'?pend.ask.draft??null:null),...((out as any).secOptions?{secOptions:(out as any).secOptions}:{}),...(out.twins?.length?{twins:out.twins}:{})} satisfies BrainAsk)}
     // R9: domanda sui piatti con lo stesso nome: i fatti mostrano le parti in attesa (numerate) e i piatti già nel menu.
     const facts=out.hold?holdFacts(out.hold,refs,sections):out.twins?.length?[out.actions.length?'Non ancora pubblicato:\n'+out.actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,withNewSections(sections,out.actions))).join('\n'):'','Già nel menu:\n'+candidateFacts(out.ids.slice(0,8),refs)].filter(Boolean).join('\n\n'):out.ids.length>=2||(!question&&out.ids.length)?candidateFacts(out.ids.slice(0,8),refs):''
     // R8: senza una domanda del modello utilizzabile, mai il solo «Non ho cambiato nulla.» su una richiesta capita: i fatti dicono
@@ -1042,7 +1061,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // notte 22/10 (Fix A: z-asr-005, z-r2-spezzati-003 «la birra a sei e cinque»): «Non ho cambiato nulla.» + un solo piatto in elenco,
     // senza domanda, su un messaggio con un prezzo (anche a parole) → sempre una domanda. Con UN piatto e UN prezzo detto senza dubbi, la
     // domanda porta l'azione pronta («Intendi *Birra* a 6 €? Rispondi sì»): il «sì» la applica (mai un sì che gira a vuoto).
-    const saidP=[...new Set(g9Prices(text).map(x=>Math.round(x*100)/100))],onePriced=cands.length===1&&saidP.length===1&&saidP[0]!>0&&!/\b(?:nascond\w*|togli\w*|finit\w*|esaurit\w*|elimin\w*|cancell\w*|aggiung\w*|rinomin\w*|evidenz\w*)\b/.test(plain(text))
+    const saidP=[...new Set(g9Prices(text).map(x=>Math.round(x*100)/100))],onePriced=cands.length===1&&saidP.length===1&&saidP[0]!>0&&!relativeDelta(text)&&!/\b(?:nascond\w*|togli\w*|finit\w*|esaurit\w*|elimin\w*|cancell\w*|aggiung\w*|rinomin\w*|evidenz\w*)\b/.test(plain(text))
     const nothing=/^Non ho cambiato nulla\.?$/.test(first)&&(clearCommand(text)||cands.length>=2||cands.length===1&&(saidP.length>0||plain(text).split(' ').length>=3)||(/\d/.test(text)&&plain(text).split(' ').length>=3)),again=!!lastQ&&/\?/.test(first)&&(plain(first)===plain(lastQ)||(!serverQ&&sameQuestion(first,lastQ)))
     // notte 22/10 (ps-06 «la ghisa a dodici» → «Quale piatto vuoi mettere a 12 €?»): domanda generica che non nomina nessun piatto, un
     // solo piatto che SUONA come quello detto e un prezzo chiaro → la domanda propone quel piatto con l'azione pronta (sì = applica).
@@ -1055,7 +1074,9 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     else if(nothing&&onePriced&&!pend&&!oddPrice({kind:'price',id:cands[0]!.id,price:saidP[0]!} as MenuAction,refs)){const r0=cands[0]!,act={kind:'price',id:r0.id,price:saidP[0]!} as MenuAction,eur=(n:number)=>n.toFixed(2).replace('.',',')+' €'
      const q='Intendi *'+safe(r0.name)+'* a *'+eur(saidP[0]!)+'* (adesso '+eur(r0.price)+')? Rispondi *sì* oppure dimmi il piatto e il prezzo giusti.'
      await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[r0.id],actions:[act],source:text.slice(0,600),origin:text.slice(0,600),rounds:1} satisfies BrainAsk);res=q}
-    else if(nothing&&cands.length===1&&saidP.length>1&&!/\d/.test(text)&&plain(text).split(' ').length<=7&&!pend){const r0=cands[0]!,q='Per *'+safe(r0.name)+'* (adesso '+r0.price.toFixed(2).replace('.',',')+' €) che prezzo metto? Scrivimelo in cifre, per esempio «'+plain(r0.name).split(' ').slice(0,2).join(' ')+' 6,50».'
+    else if(nothing&&cands.length===1&&!pend&&relativeDelta(text)&&cands[0]!.price>0){const r0=cands[0]!,np=Math.round((r0.price+relativeDelta(text)!.delta)*100)/100,eur=(n:number)=>n.toFixed(2).replace('.',',')+' €'
+     if(np>0){const q='Porto *'+safe(r0.name)+'* da '+eur(r0.price)+' a *'+eur(np)+'*? Rispondi *sì* oppure dimmi il prezzo giusto.';await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[r0.id],actions:[{kind:'price',id:r0.id,price:np} as MenuAction],source:text.slice(0,600),origin:text.slice(0,600),rounds:1} satisfies BrainAsk);res=q}}
+    else if(nothing&&cands.length===1&&saidP.length>1&&!/\d/.test(text)&&!relativeDelta(text)&&plain(text).split(' ').length<=7&&!pend){const r0=cands[0]!,q='Per *'+safe(r0.name)+'* (adesso '+r0.price.toFixed(2).replace('.',',')+' €) che prezzo metto? Scrivimelo in cifre, per esempio «'+plain(r0.name).split(' ').slice(0,2).join(' ')+' 6,50».'
      await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[r0.id],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1} satisfies BrainAsk);res=q}
     else if(nothing||again){let q=specificQuestion(text,cands);if(lastQ&&plain(q)===plain(lastQ))q=cands.length>=2?'Rispondi solo col numero del piatto (1, 2…) oppure scrivimi il suo nome.':'Riscrivimi la richiesta per intero, con il piatto e il valore: per esempio «la carbonara a 12».';res=[q,...blocks.slice(1).filter(b=>b.trim()!==NOTHING)].join('\n\n')
      const cur=(await tx.execute(sql`SELECT command,revision FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now()`))[0]
@@ -1260,6 +1281,10 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  // «Ci sto lavorando…» a 5 s dall'ARRIVO del messaggio (non da dopo lock/DB/lettura impostazioni).
  const arrivedAt=Date.now();
  const form=req.body as Record<string,string>,signature=String(req.headers['x-twilio-signature']||''),endpoint=process.env.TWILIO_WEBHOOK_URL||'';
+ // notte 22/10: richiesta arrivata in ritardo (oltre 12 s dal gateway) → le risposte immediate partono via REST, il TwiML resta vuoto.
+ const out=(text:string)=>{const r=lateReply(text,{gatewayAt:req.headers['x-tako-gateway-received-at'],arrivedAt,syncTest:form?.TakoSyncTest==='1'});if(!r.send.length)return r.xml
+  const job=(async()=>{for(const m of r.send){try{await sendWhatsApp(process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'',process.env.TWILIO_WHATSAPP_NUMBER||'',form.From||'',m)}catch{await new Promise(z=>setTimeout(z,1500));await sendWhatsApp(process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'',process.env.TWILIO_WHATSAPP_NUMBER||'',form.From||'',m).catch(()=>{})}}})(),runtime=(globalThis as any).EdgeRuntime
+  if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else void job;return r.xml}
  if(req.url!=='/api/whatsapp/twilio'||!form||!validTwilioSignature(process.env.TWILIO_AUTH_TOKEN||'',endpoint,form,signature)||form.AccountSid!==process.env.TWILIO_ACCOUNT_SID||form.To!==process.env.TWILIO_WHATSAPP_NUMBER)return reply.code(403).send('Forbidden');
  // Owner invitation is a separate trust boundary: validate the signed envelope before consuming it,
  // and never forward activation tokens to another service. Helper owns its DB transaction.
@@ -1268,10 +1293,10 @@ export async function twilioMenuRoutes(app:FastifyInstance){
   const cached=await db.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${form.MessageSid}`);if(cached.length)return reply.type('text/xml; charset=utf-8').send(twiml(String(cached[0]!.response)));
   const {activateOwnerInvite}=await import('../lib/onboarding-owner-invite.js');const messages=await activateOwnerInvite(form.From!,form.Body||'');const text=(messages??['L’invito *non è valido*. Chiedi un nuovo link alla tua agenzia.']).join(nextMessage);
   const response=await db.transaction(async tx=>{await lock(tx,form.From!);const duplicate=await tx.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${form.MessageSid}`);if(duplicate.length)return String(duplicate[0]!.response);await tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${form.MessageSid},${text}) ON CONFLICT DO NOTHING`);return text});
-  return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(response));
+  return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(out(response));
  }
  const lifecycleCommand=/^(?:avvia|riprendi) onboarding\b/i.test(form.Body||'');
- if(lifecycleCommand&&process.env.TAKO_WHATSAPP_ONBOARDING_ENABLED!=='1')return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml('Il collegamento *non è disponibile*. Generane uno nuovo dalla dashboard agenzia.'));
+ if(lifecycleCommand&&process.env.TAKO_WHATSAPP_ONBOARDING_ENABLED!=='1')return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(out('Il collegamento *non è disponibile*. Generane uno nuovo dalla dashboard agenzia.'));
  if(process.env.TAKO_WHATSAPP_ONBOARDING_ENABLED==='1'&&/^whatsapp:\+\d{8,15}$/.test(form.From||'')&&/^(?:SM|MM)[a-f0-9]{32}$/i.test(form.MessageSid||'')&&(form.Body||'').length<=2000){
   const {onboardingTransport,queueOnboardingChat,expiredOnboardingNotice,startsOnboarding}=await import('../lib/onboarding-chat.js');const pair=/^collega agenzia\b/i.test(form.Body||'');
   if(pair){const prior=await db.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${form.MessageSid}`);if(prior.length)return reply.type('text/xml; charset=utf-8').send(twiml(String(prior[0]!.response)))}
@@ -1279,11 +1304,11 @@ export async function twilioMenuRoutes(app:FastifyInstance){
   const agency=await onboardingTransport(form.From!,form.Body||'',agencyOnlyVoice);
   // The answer always arrives by REST from the queue. The immediate TwiML ack is only for a brand-new draft;
   // acking every step made each reply look doubled («Sto preparando il nuovo locale» after a name or a vocal).
-  if(agency){const fresh=!agency.active&&(startsOnboarding(form.Body||'')||/^avvia onboarding\b/i.test(form.Body||'')),queued=await queueOnboardingChat(agency.actor,form.From!,form.MessageSid!,form.Body||'',form);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(queued&&fresh?'Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione.':''))}
+  if(agency){const fresh=!agency.active&&(startsOnboarding(form.Body||'')||/^avvia onboarding\b/i.test(form.Body||'')),queued=await queueOnboardingChat(agency.actor,form.From!,form.MessageSid!,form.Body||'',form);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(out(queued&&fresh?'Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione.':''))}
   // A draft that just expired must not turn its follow-ups (LOGO:, a menu vocal) into edits of a real restaurant.
-  if(!lifecycleCommand&&!pair){const notice=await expiredOnboardingNotice(form.From!,form.Body||'',form);if(notice!==null&&typeof notice==='object'){await queueOnboardingChat(notice.voiceActor,form.From!,form.MessageSid!,form.Body||'',form);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(''))}if(notice!==null)return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(notice))}
-  if(lifecycleCommand)return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml('Il collegamento è *scaduto o non valido* per questo numero. Genera un nuovo QR dalla dashboard agenzia.'));
-  if(pair)return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml('Il collegamento agenzia è *scaduto o non valido*. Generane uno nuovo dalla dashboard agenzia.'))
+  if(!lifecycleCommand&&!pair){const notice=await expiredOnboardingNotice(form.From!,form.Body||'',form);if(notice!==null&&typeof notice==='object'){await queueOnboardingChat(notice.voiceActor,form.From!,form.MessageSid!,form.Body||'',form);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(''))}if(notice!==null)return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(out(notice))}
+  if(lifecycleCommand)return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(out('Il collegamento è *scaduto o non valido* per questo numero. Genera un nuovo QR dalla dashboard agenzia.'));
+  if(pair)return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(out('Il collegamento agenzia è *scaduto o non valido*. Generane uno nuovo dalla dashboard agenzia.'))
  }
  if(lifecycleCommand)return reply.code(400).send('Invalid onboarding message');
  const linked=await db.execute(sql`SELECT 1 FROM tako_whatsapp_links WHERE phone=${form.From||''}`);if(!shouldHandleInTako(linked.length>0,form.Body||''))try{const forwarded=await forwardTwilioWebhook(process.env.MENUSMART_WHATSAPP_WEBHOOK_URL||menusmartWebhook,process.env.TWILIO_AUTH_TOKEN||'',form);if(forwarded.contentType)reply.header('Content-Type',forwarded.contentType);return reply.code(forwarded.status).send(forwarded.body)}catch(error){req.log.error({error:error instanceof Error?error.name:'Error'},'MenuSmart WhatsApp forward failed');await inBackground(reportFailure({kind:'menusmart_forward',detail:error instanceof Error?error.name:'Error'}));return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(''))}
@@ -1314,7 +1339,7 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  if(media===0){const link=await linkTurn(tx,ctx,body);if(link){if(link.secret)return{kind:'secret' as const,say:await say(link.say),secret:[(link.say||!disclose?'':copy.aiDisclosure+'\n\n')+link.secret],ctx,...(link.deliver?{deliver:link.deliver}:{})};return say(link.say)}}
  if(media>0){const type=form.MediaContentType0||'',job=whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null;if(!job)return say(copy.mediaOnly);await reserve(tx,sid);return{job,ctx,ack:'',prefix}}
  if(!body&&!(await readBotBrain(tx,ctx.tenant)))return say(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return say(turn);if('llm' in turn&&!aiKeyFor(turn,await readBotSettings(tx,ctx.tenant)))return say((turn as any).brain?copy.brainDown:copy.noAi);await reserve(tx,sid);return{job:'text' as const,ctx,ack:'upload' in turn?prefix+copy.photoWorking:'',prefix:'upload' in turn?'':prefix}}).catch(async error=>{if(error instanceof WorkspaceTrialLocked)return error.message;req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
- if(typeof result==='string'){if(scope.tenant&&!scope.cached&&result&&body)await rememberTurn(db,scope.tenant,phone,body,result);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result))}
+ if(typeof result==='string'){if(scope.tenant&&!scope.cached&&result&&body)await rememberTurn(db,scope.tenant,phone,body,result);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(scope.cached?twiml(result):out(result))}
  // 19/10: messaggi riservati (credenziali) e messaggi dopo l'attivazione: via REST, in ordine, con una breve pausa dopo la risposta.
  // Verifica dal vivo sincrona sul QA (TakoSyncTest): tutto nello stesso TwiML, niente REST.
  if('kind' in result){const r=result as Secret,sync=r.ctx.tenant===qaTenant&&form.TakoSyncTest==='1'
@@ -1322,12 +1347,12 @@ export async function twilioMenuRoutes(app:FastifyInstance){
   const extra=():Promise<FollowUps>=>r.kind==='activated'?activationFollowUps(r.ctx):Promise.resolve({messages:r.secret,...(r.deliver?{deliver:r.deliver}:{})}),mediaJob=r.kind==='activated'?r.media:undefined
   if(sync){const out=await extra();if(out.deliver)await markPasswordDelivered(db,r.ctx,out.deliver);const m=mediaJob?await jobMessage(mediaJob.job,r.ctx,body,form,{expired:false}).catch(()=>copy.failed):'';if(mediaJob)await db.execute(sql`UPDATE tako_whatsapp_messages SET response=${sent+m} WHERE sid=${mediaJob.key}`);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml([r.say,...out.messages,m].filter(Boolean).join(nextMessage)))}
   const job=extra().then(m=>sendSecrets(r.ctx,m,!!r.say)).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp follow-up failed')).then(()=>mediaJob&&runJob(mediaJob.job,r.ctx,mediaJob.key,body,form,'')).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp AI job failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
-  return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(r.say))}
+  return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(out(r.say))}
  // Verifica dal vivo sincrona: solo sul QA e solo con il campo firmato TakoSyncTest=1 (la firma Twilio copre tutti i campi: serve il
  // token). Anche le risposte dell'IA tornano SOLO nel TwiML di questa richiesta, mai via REST, e senza avvisi. Altrimenti nulla cambia.
  if(result.ctx.tenant===qaTenant&&form.TakoSyncTest==='1'){const m=await jobMessage(result.job,result.ctx,body,form,{expired:false}).catch(()=>copy.failed);await db.execute(sql`UPDATE tako_whatsapp_messages SET response=${sent+m} WHERE sid=${sid}`);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml((result.ack?result.ack+'\n\n':'')+(m?result.prefix+m:'')))}
  const job=runJob(result.job,result.ctx,sid,body,form,result.prefix,arrivedAt).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp AI job failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
- return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(result.ack))
+ return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(out(result.ack))
  })
 }
 

@@ -26,3 +26,12 @@ export function whatsappAudioType(type:unknown,body:unknown):string|null{
  if(/^(?:application\/octet-stream|video\/mp4|application\/mp4)$/.test(t)){const ext=name.match(/\.(m4a|aac|mp3|mpeg|ogg|oga|opus|wav|webm|amr)$/)?.[1];if(ext)return ext==='m4a'||ext==='aac'?'audio/mp4':ext==='mp3'||ext==='mpeg'?'audio/mpeg':ext==='wav'?'audio/wav':ext==='webm'?'audio/webm':ext==='amr'?'audio/amr':'audio/ogg'}
  return null
 }
+
+/** notte 22/10 (worker gateway con header x-tako-gateway-received-at): se la richiesta arriva al server oltre 12 s dopo il gateway, Twilio
+ * ha già chiuso la connessione e il TwiML non arriva più al titolare. Le risposte immediate vanno allora mandate via REST (una per parte,
+ * divise con nextMessage) e il TwiML resta vuoto. Mai con la verifica sincrona TakoSyncTest=1. Funzione pura (testata). */
+export const LATE_GATEWAY_MS=12_000
+export function lateReply(text:string,o:{gatewayAt:unknown,arrivedAt:number,syncTest?:boolean}):{xml:string,send:string[]}{
+ const g=Number(o.gatewayAt),late=Number.isSafeInteger(g)&&g>0&&o.arrivedAt-g>LATE_GATEWAY_MS&&!o.syncTest
+ if(!late||!text)return{xml:twiml(text),send:[]}
+ return{xml:twiml(''),send:text.split(nextMessage).map(x=>x.trim()).filter(Boolean)}}

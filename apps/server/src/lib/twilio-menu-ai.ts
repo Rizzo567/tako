@@ -60,12 +60,13 @@ const QTY_LEAD=new RegExp(`\\b(quei|quegli|quelle|questi|queste|quelli|i|gli|le|
 const QTY_NOUN=new RegExp(`\\b${QTY}\\s+(?=(?:piatt|prodott|pizz|dolc|cos[ae]\\b|vari|voci|categori|portat|prim[ie]\\b|second[ie]\\b|antipast|contorn|bibit|panin|porzion)\\w*)`,'giu')
 const QTY_ONE=/(?<!\b(?:a|di|costa|costano|costi|prezzo|da|per|sui|sugli|tipo|circa)\s+)\b(?:un|una|uno)\b(?!\s*(?:euro|eur|€|e\s+\p{L}+|e\s+\d|virgola|in\s+meno|in\s+piu|in\s+più|di\s+meno|di\s+piu|di\s+più))/giu
 // A8 (X nomi-016): «la tagliata 300 grammi a 22»: un numero con un'unità di misura è una quantità, mai un prezzo.
-const RW0:Record<string,number>={un:1,uno:1,una:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9,dieci:10,venti:20,trenta:30,cinquanta:50}
+const RW0:Record<string,number>={un:1,uno:1,una:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9,dieci:10,quindici:15,venti:20,venticinque:25,trenta:30,quaranta:40,cinquanta:50,sessanta:60,settanta:70,ottanta:80,novanta:90,mezzo:0.5}
 const QTY_UNIT=/\b\d+(?:[.,]\d+)?\s*(?:grammi|gr|g|kg|chili|etti|etto|cl|ml|litri|litro|lt|cm|pezzi|pz|porzioni|persone|fette)\b/giu
 export const withoutQuantities=(s:string)=>s.replace(QTY_UNIT,' ').replace(QTY_LEAD,'$1').replace(QTY_NOUN,'').replace(QTY_ONE,' ')
 // A7.7 (avversaria X, G8): prezzi relativi. «aumenta/alza di 1», «abbassa/sconta di 2», «togli/leva 2 euro alla X», «+1», «-2»,
 // «50 centesimi in più», «un euro in meno». Il numero è una DIFFERENZA: mai un prezzo detto; il prezzo nuovo = attuale ± differenza.
-const RNUM='(\\d+(?:[.,]\\d{1,2})?|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci|cinquanta|venti|trenta)'
+// notte 22/10 (cieco: «alzala de cinquanta centesimi», «trenta centesimi» letto 3 €): parole lunghe prima e confine di parola; «mezzo» = 0,50.
+const RNUM='(\\d+(?:[.,]\\d{1,2})?|venticinque|quindici|cinquanta|quaranta|sessanta|settanta|ottanta|novanta|trenta|venti|dieci|mezzo|uno|una|un|due|tre|quattro|cinque|sei|sette|otto|nove)(?![a-z])'
 const REL=[[new RegExp(`\\b(?:aument\\w*|alz\\w*|rincar\\w*)\\b[^0-9+]*?\\bdi\\s+${RNUM}(?:\\s+(euro|centesimi|cent))?`,'iu'),1],[new RegExp(`\\b(?:abbass\\w*|scont\\w*|diminu\\w*|ribass\\w*)\\b[^0-9+]*?\\bdi\\s+${RNUM}(?:\\s+(euro|centesimi|cent))?`,'iu'),-1],
  [new RegExp(`\\b(?:togli\\w*|lev[ai]\\w*)\\s+${RNUM}\\s+(euro|centesimi|cent)\\b`,'iu'),-1],
  // A8.3 (Y7/Y8): «togli 1,50 alla tagliata» (decimale anche senza «euro»), «scala 2 euro dalla tagliata», «riduci/cala la carbonara
@@ -80,7 +81,7 @@ const RW=RW0
 const RWD:Record<string,number>={mezzo:50,dieci:10,venti:20,trenta:30,quaranta:40,cinquanta:50,sessanta:60,settanta:70,ottanta:80,novanta:90}
 export const relNormText=(t:string)=>relNorm(t)
 // notte 22/10 (cieco b1 «alzalo de un euro»): «de» dialettale = «di» davanti a una quantità.
-const relNorm=(t:string)=>t.replace(/\bde (?=(?:un|uno|una|due|tre|quattro|cinque|mezzo|\d))/g,'di ').replace(/\b(un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci)\b(?=\s+(?:euro\s+e\s+(?:mezzo|\d{1,2}|dieci|venti|trenta|quaranta|cinquanta|sessanta|settanta|ottanta|novanta)\b|e\s+mezzo\b))/g,w=>String(RW[w]))
+const relNorm=(t:string)=>t.replace(/\bde (?=[a-z0-9.,]+(?: e mezzo)?(?: euro| centesimi| cent)\b|mezzo\b|un\b|uno\b|una\b|\d)/g,'di ').replace(/\b(un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci)\b(?=\s+(?:euro\s+e\s+(?:mezzo|\d{1,2}|dieci|venti|trenta|quaranta|cinquanta|sessanta|settanta|ottanta|novanta)\b|e\s+mezzo\b))/g,w=>String(RW[w]))
  .replace(/\b(\d+)\s+(?:euro\s+)?e\s+(mezzo|\d{2}|dieci|venti|trenta|quaranta|cinquanta|sessanta|settanta|ottanta|novanta)\b(?!\s*(?:euro\s+)?(?:alla|al|ai|a\s)?\s*(?:il|la|lo|l|i|gli|le)?\s*\w+\s+a\s+\d)/g,(_m,a:string,b:string)=>`${a}.${String(/^\d/.test(b)?Number(b):RWD[b]).padStart(2,'0')} euro`)
  .replace(/(\d),(\d)/g,'$1.$2')
 export function relativeDelta(message:string):{delta:number,text:string}|null{const m0=relNorm(message.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''))

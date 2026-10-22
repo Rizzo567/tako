@@ -204,6 +204,20 @@ export const CACCIA_CASES:CacciaCase[]=[
  cc('v145',PZ,[T('alza di un euro le pizze')],[P('Margherita',7),P('Marinara',6),P('Diavola',8.5),P('Capricciosa',9.5),P('Quattro formaggi',9),P('Bufalina',10),P('Salsiccia e friarielli',10),P('Ortolana',9),P('Ripieno al forno',10)],{noQuestion:true,note:'sottomenu intero, stesso aumento: subito'}),
  cc('v145','victoria4',[T('nascondi tutti i dolci della cena'),T('sì')],[],{struct:[{after:2,hidden:['Menu cena>Dolci']}]}),
  cc('v145',PZ,[T('nascondi tutti i fritti'),T('sì')],[],{struct:[{after:2,hidden:['Cena>Fritti']}]}),
+ // ---- relativi a parole (cieco 69/72, 22/10 notte) ----
+ cc('rel',R,[D('Carbonara','price',13),V('la carbonara alzala de cinquanta centesimi')],[P('Carbonara',13.5)],{note:'dopo la dashboard, vocale con «de cinquanta centesimi»'}),
+ cc('rel',R,[T('la gricia alzala di un euro e mezzo')],[P('Gricia',12.5)]),
+ cc('rel',R,[T("l'amatriciana abbassala di due euro")],[P('Amatriciana',9)]),
+ cc('rel',R,[T('al tiramisù mezzo euro in più')],[P('Tiramisù',6.5)]),
+ cc('rel',R,[T('abbassa la cacio e pepe di trenta centesimi')],[P('Cacio e pepe',10.7)],{note:'«trenta» non è «tre»'}),
+ // ---- fixture qavero (identica al QA vero dopo v146) ----
+ cc('qv','qavero',[T('aggiungi le patatine fritte'),T('4'),T('nei piatti di prova')],[C('patatine fritte',4,'piatti di prova')],{says:[nots(2,/a che prezzo|che prezzo|dimmi anche il prezzo/i)],note:'QA v146: «4» = prezzo tenuto, si chiede solo il sottomenu'}),
+ cc('qv','qavero',[T('aggiungi le patatine fritte'),T('4 euro'),T('2')],[],{alt:[[C('patatine fritte',4,'piatti di prova')],[C('patatine fritte',4,'primi')]],says:[nots(2,/a che prezzo|dimmi anche il prezzo/i)],note:'risposta col numero dell\'elenco'}),
+ cc('qv','qavero',[T('aggiungi la frittatina'),T('3,50'),T('nei primi')],[C('frittatina',3.5,'primi')],{says:[nots(2,/a che prezzo|dimmi anche il prezzo/i)],note:'Primi in due Menu: vale quello alla carta visibile (Menu di verifica), il fisso no'}),
+ cc('qv','qavero',[Q('quanto costa il riso giallo?'),T('alzalo di un euro')],[P('riso giallo',9)]),
+ cc('qv','qavero',[Q('quanto costa la pasta carbonara?'),T('portala a dieci e mezzo')],[P('pasta carbonara',10.5)]),
+ cc('qv','qavero',[T('alza i primi di 50 centesimi')],[P('la parmigiana',13),P('pasta al pesto',9.5),P('pasta carbonara',9.5),P('riso giallo',8.5)],{note:'Primi: cena vuota, giorno a prezzo fisso → solo i Primi del Menu di verifica, subito (stesso aumento)'}),
+ cc('qv','qavero',[Q('quante paste ho nei primi?')],[],{says:[nots(1,/pasta al rag|pasta al sugo|gnocchi|lasagna e|menu cena/i)]}),
  cc('vietato',QS,[T('cancella il menu del giorno')],[],{fam:'bv-fuori' as Family,note:'Menu nascosto con 7 piatti: mai cancellarlo senza un sì'}),
 
  // ================= 9. MENU / SOTTOMENU / PIATTI NASCOSTI citati =================

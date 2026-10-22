@@ -114,7 +114,7 @@ k('osteria',S,[T('crea il menu Aperitivo'),T('dentro mettici il sottomenu Cockta
 k('osteria',S,[T('nel menu cena aggiungi il sottomenu Dolci'),T('mettici tiramisù a 6 e panna cotta a 5')],[C('Tiramisù',6,'Dolci'),C('Panna cotta',5,'Dolci')],
  {struct:[{after:2,menus:[{name:'Cena',sections:['Dolci']}],noNewMenus:true}],sera:{cmd:[1,2]}})
 k('osteria',S,[T('nella cena dentro le pizze crea la sezione Pizze rosse')],[],{struct:[{after:1,menus:[{name:'Cena',sub:[{parent:'Pizze',name:'Pizze rosse'}]}],noNewMenus:true,orAsk:true}],sera:{}})
-k('osteria',S,[T('aggiungi il vitello tonnato'),T('14')],[C('Vitello tonnato',14)],{ask:[1],says:[{turn:1,re:/prezz|quanto/i}],sera:{cmd:[1]},note:'senza prezzo: lo chiede, mai inventato; sottomenu libero'})
+k('osteria',S,[T('aggiungi il vitello tonnato'),T('14')],[C('Vitello tonnato',14)],{alt:[[]],actOrAsk:['sottomenu'],ask:[1],says:[{turn:1,re:/prezz|quanto/i}],sera:{cmd:[1]},note:'senza prezzo: lo chiede, mai inventato; sottomenu libero'})
 k('osteria',S,[T('rinomina il menu Pranzo in Pranzo di lavoro')],[],{sera:{cmd:[1],menuNamed:[{after:1,name:'Pranzo di lavoro'}]}})
 k('osteria',S,[T('elimina il menu Bevande'),T('no lascia stare')],[],{ask:[1],structAsk:[1],struct:[{after:2,visible:['Bevande']}],sera:{},note:'togliere un Menu intero: conferma; poi «no» = niente'})
 
@@ -136,7 +136,7 @@ k('bimbum',BB,[T('hamburger 14'),T('ok grazie 👍')],[P('Hamburger di manzo',14
 k('bimbum',BB,[T('salsiccia finita'),T('anche il pollo')],[AV('Salsiccia ai ferri'),AV('Pollo alla piastra')],{noQuestion:true,sera:{cmd:[1,2]}})
 k('bimbum',BB,[T('cotoletta 15 hamburger 14 salsiccia 11 pollo 12'),T('vai')],[P('Cotoletta alla milanese',15),P('Hamburger di manzo',14),P('Salsiccia ai ferri',11),P('Pollo alla piastra',12)],{recap:[1],sera:{yes:[2]}})
 k('bimbum',BB,[T('tagliere a 13'),T('no scusa 12,50')],[P('Tagliere bimbum',12.5)],{interim:[P('Tagliere bimbum',13)],sera:{cmd:[1]}})
-k('bimbum',BB,[T('aggiungi patatine fritte a 4'),T('sì')],[C('Patatine fritte',4)],{sera:{cmd:[1]},note:'nessun sottomenu adatto: può proporre Contorni (sì) o metterle dove ha senso'})
+k('bimbum',BB,[T('aggiungi patatine fritte a 4'),T('sì')],[C('Patatine fritte',4)],{alt:[[]],actOrAsk:['sottomenu'],sera:{cmd:[1]},note:'(coordinatore 02:00: senza un sottomenu ovvio chiedere dove metterlo tenendo il prezzo è corretto) nessun sottomenu adatto: può proporre Contorni (sì) o metterle dove ha senso'})
 k('bimbum',BB,[Q('mandi tu un messaggio a tutti i miei clienti con lo sconto del 20%?')],[],{fuori:true,says:[noCat(1),short(1,400)],note:'fuori perimetro: nessuna scrittura, nessuna promessa'})
 
 // ============ 9. CONVERSAZIONI LUNGHE (una mattina intera) ============
