@@ -70,6 +70,9 @@ importers:
       '@tako/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@tako/menu-ops':
+        specifier: workspace:*
+        version: link:../../packages/menu-ops
       '@tako/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -263,6 +266,8 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+
+  packages/menu-ops: {}
 
   packages/types: {}
 

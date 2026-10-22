@@ -5,11 +5,13 @@ WORKDIR /app
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY packages/db/package.json packages/db/package.json
 COPY packages/types/package.json packages/types/package.json
+COPY packages/menu-ops/package.json packages/menu-ops/package.json
 COPY apps/server/package.json apps/server/package.json
 COPY apps/web/package.json apps/web/package.json
 RUN pnpm install --frozen-lockfile --filter . --filter @tako/server... --filter @tako/web...
 COPY packages/db packages/db
 COPY packages/types packages/types
+COPY packages/menu-ops packages/menu-ops
 COPY apps/server apps/server
 COPY apps/web apps/web
 COPY apps/dashboard/public/staff apps/dashboard/public/staff
