@@ -252,7 +252,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
   if(sp?.kind==='rename_section')structPick=[{kind:'rename_section',sectionId:sp.sectionId,name:sp.name}]
   if(sp?.kind==='move'){if(sp.sectionId)structPick=sp.ids.map(id=>({kind:'move',id,sectionId:sp.sectionId!}) as MenuAction)
    else{const sid=randomUUID(),acts=[{kind:'create_section',newSectionId:sid,name:sp.sectionName,menuId:''} as MenuAction,...sp.ids.map(id=>({kind:'move',id,sectionId:sid}) as MenuAction)];{const un=unreadStruct(acts);if(un.length)return notRead(un)};await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true})
-    return fill(copy.sectionAsk,{categoria:safe(sp.sectionName),piatti:bold(sp.ids.map(id=>refs.find(r=>r.id===id)!.name)),categorie:sections.slice(0,15).map(x=>x.name).join(', ')})}}
+    return fill(copy.sectionAsk,{categoria:safe(sp.sectionName),piatti:bold(sp.ids.map(id=>refs.find(r=>r.id===id)!.name)),categorie:sections.slice(0,15).map(x=>'• '+x.name).join('\n')})}}
   if(sp?.kind==='create_section'){const ex=sections.find(x=>sameSection(x.name,sp.name)),sid=ex?.id??randomUUID(),acts:MenuAction[]=ex?[]:[{kind:'create_section',newSectionId:sid,name:sp.name,menuId:''}]
    if(sp.rest){const c=parseCreate('aggiungi '+sp.rest.replace(/^(?:anche|dentro|ci)\s+/,''),[{id:sid,name:sp.name,menu:''}],true)
     if(c?.name&&c.price!==null&&!refs.some(r=>r.sectionId===sid&&plainName(r.name)===plainName(c.name!)))acts.push({kind:'create',sectionId:sid,name:c.name,price:c.price,description:null})
@@ -478,8 +478,8 @@ function oddPrice(a:MenuAction,refs:MenuRef[]):boolean{if(a.kind!=='price'&&a.ki
 function priceAskText(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):string{const eur=(n:number)=>n.toFixed(2).replace('.',',')+' €'
  const odd=actions.filter(a=>oddPrice(a,refs)),line=(a:MenuAction)=>{const p=(a as any).price as number,r='id' in a?refs.find(x=>x.id===(a as any).id):undefined,nm=r?r.name:String((a as any).name??'')
   return '*'+safe(nm)+'* a *'+eur(p)+'*'+(r&&r.price>0?' (adesso '+eur(r.price)+')':'')+(p<=0?': con 0 € il prezzo non si vede nel menu':'')}
- const q=odd.length===1?line(odd[0]!)+'? Mi sembra un prezzo strano.':'Questi prezzi mi sembrano strani: '+odd.map(line).join('; ')+'.'
- return [q+' Rispondi *sì* per pubblicare oppure scrivimi il prezzo giusto.',actions.length>1?'Non ancora pubblicato:\n'+actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,withNewSections(sections,actions))).join('\n'):''].filter(Boolean).join('\n\n')}
+ const q=odd.length===1?line(odd[0]!)+'? Mi sembra un prezzo strano.':'Questi prezzi mi sembrano strani:\n'+odd.map(x=>'• '+line(x)).join('\n')
+ return [q+(odd.length>1?'\n\n':' ')+'Rispondi *sì* per pubblicare oppure scrivimi il prezzo giusto.',actions.length>1?'Non ancora pubblicato:\n'+actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,withNewSections(sections,actions))).join('\n'):''].filter(Boolean).join('\n\n')}
 /** Il messaggio è un comando su un GRUPPO non elencato piatto per piatto («tutti», «i dolci», «del 10%»): lì vale groupPriceRisk.
  * «mettili entrambi a 15» dopo due piatti nominati è un prezzo detto per quei piatti (vale solo il controllo del prezzo singolo). */
 function groupWording(message:string,sections:SectionRef[],refs:MenuRef[]):boolean{const p=plain(message);return /\btutt[ieoa]\b/.test(p)||!!groupPercent(message)||!!sectionGroupWord(p,sections,refs)}
@@ -1019,7 +1019,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    {const dels=effective.filter(a=>a.kind==='delete'&&waItems.has((a as any).id)).map(a=>({id:(a as any).id as string,before:waItems.get((a as any).id),sectionId:refs.find(r=>r.id===(a as any).id)?.sectionId??undefined}));if(dels.length)await trackChange(tx,ctx.phone,{at:Date.now(),items:dels} as any)}
    const reread=await readBotWorkspace(ctx.tenant,tx),after=reread?.published?catalogOf(workspaceSchema.parse(reread.published)):catalogOf(next),{ok,failed}=verifyApplied(effective,after.refs)
    inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run:finalRun,applied:ok.length>0,key,meter:ai.meter,engine}))
-   const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?'Non salvato: '+failed.map(a=>describeAction(a,refs,sections)).join('; '):'',out.kind==='change'&&out.after&&out.after.type==='read'&&!(effective.some(a=>a.kind==='create')&&((out.after as any).ids??[]).some((id:string)=>!effective.some(e=>'id' in e&&(e as any).id===id)))?planText(out.after,after.refs,after.sections):''].filter(Boolean).join('\n\n')
+   const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?unsavedText(failed.map(a=>describeAction(a,refs,sections))):'',out.kind==='change'&&out.after&&out.after.type==='read'&&!(effective.some(a=>a.kind==='create')&&((out.after as any).ids??[]).some((id:string)=>!effective.some(e=>'id' in e&&(e as any).id===id)))?planText(out.after,after.refs,after.sections):''].filter(Boolean).join('\n\n')
    lastRev=reread?.revision??saved.revision+1
    return{facts,allOk:!failed.length,revision:reread?.revision??saved.revision+1}}
   const publish=async(actions:MenuAction[]):Promise<string>=>{let effective=effectiveMenuActions(actions,workspace)
@@ -1132,7 +1132,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // Menu a prezzo fisso (banco prezzofisso 21/10, pf-piatto-nuovo-08): «la lasagna a 8» su un piatto di un Menu fisso, senza una domanda
     // del modello utilizzabile → il fatto del menu (i piatti non hanno prezzo, le opzioni sì), mai il solo «Non ho cambiato nulla».
     if(!question&&!out.hold&&/\d|\b(?:euro|prezz\w*|costa\w*)\b/i.test(text)){const fx=fixedDishFact([...out.ids,...out.actions.flatMap(a=>'id' in a?[(a as any).id as string]:[])],refs,base.menus);if(fx)return fx}
-    const unsaved=!question&&!out.hold&&!out.twins?.length&&out.actions.length?'Non salvato: '+out.actions.slice(0,8).map(a=>describeAction(a,refs,withNewSections(sections,out.actions))).join('; '):''
+    const unsaved=!question&&!out.hold&&!out.twins?.length&&out.actions.length?unsavedText(out.actions.slice(0,8).map(a=>describeAction(a,refs,withNewSections(sections,out.actions)))):''
     return [question,question||missingSection?'':NOTHING,unsaved,facts,missingSection].filter(Boolean).join('\n\n')}
    // Opzioni di un Menu a prezzo fisso: i fatti del server bastano (la bozza ripeteva gli stessi prezzi).
    case 'read':if(out.plan?.read==='formulas')return planText(out.plan,refs,sections)
@@ -1489,17 +1489,26 @@ function structureReply(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[
  for(const a of actions){if(a.kind==='set_menu_active'||a.kind==='set_section_active'){const what=(a.kind==='set_menu_active'?'il Menu *':'il sottomenu *')+safe(a.name)+'*'
    out.push(a.value?'Fatto: '+what+' ora è visibile ai clienti.'+(a.items?'':' I clienti vedono «Menu in arrivo» finché non aggiungi i piatti.'):'Fatto: '+what+' ora è nascosto ai clienti.')}
   if(a.kind==='delete_menu'||a.kind==='delete_section'||a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing')out.push(describeAction(a,refs,sections)+'.')}
- return out.join('\n')
+ return out.join(out.length>2?'\n\n':'\n')
 }
+// 22/10: più voci non salvate → una per riga (prima «a; b; c» su una riga).
+const unsavedText=(xs:string[])=>xs.length>1?'Non salvato:\n'+xs.map(x=>'• '+x).join('\n'):'Non salvato: '+xs[0]
 
 /** Riepilogo della sostituzione giornaliera (menu a prezzo fisso): per sottomenu, i piatti di oggi e quelli nascosti. */
 function replaceReply(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):string{
  const bySec=new Map<string,{shown:string[],hidden:string[]}>(),get=(id:string)=>{let v=bySec.get(id);if(!v){v={shown:[],hidden:[]};bySec.set(id,v)}return v}
  for(const a of actions as any[]){if(a.kind==='create')get(a.sectionId).shown.push(a.name);else if(a.kind==='hidden'){const r=refs.find(x=>x.id===a.id);if(!r)continue;(a.value?get(r.sectionId??'').hidden:get(r.sectionId??'').shown).push(r.name)}}
  for(const r of refs){const v=bySec.get(r.sectionId??'');if(v&&!r.hidden&&!(actions as any[]).some(a=>a.id===r.id)&&!v.shown.includes(r.name))v.shown.push(r.name)}
- const out:string[]=[],list=(xs:string[])=>xs.map(x=>'*'+safe(x)+'*').join(', ')
- for(const [id,v] of bySec){const s=sections.find(x=>x.id===id);out.push('Oggi nei *'+safe(s?.name??'')+'*'+(s?.menu?(/^men[uù]\b/i.test(s.menu.trim())?' del *':' del Menu *')+safe(s.menu)+'*':'')+': '+(v.shown.length?list(v.shown):'nessun piatto')+'.'+(v.hidden.length?' Nascosti: '+list(v.hidden)+' (tornano quando li rimetti).':''))}
- return out.join('\n')+'\nPer tornare come prima scrivi *annulla* entro 10 minuti.'
+ // 22/10 (richiesta Manuel, screenshot Victoria): messaggio strutturato, non un blocco unico. Per Menu un titolo in grassetto, per
+ // sottomenu il nome in grassetto e un piatto per riga; i nascosti in fondo su una riga sola; righe vuote tra i blocchi.
+ const byMenu=new Map<string,string[]>(),hidden:string[]=[]
+ for(const [id,v] of bySec){const s=sections.find(x=>x.id===id),menu=(s?.menu??'').trim(),blocks=byMenu.get(menu)??[]
+  blocks.push('*'+safe(s?.name??'')+'*\n'+(v.shown.length?v.shown.map(x=>'• '+safe(x)).join('\n'):'• nessun piatto'));byMenu.set(menu,blocks)
+  for(const h of v.hidden)if(!hidden.includes(h))hidden.push(h)}
+ const out:string[]=[]
+ for(const [menu,blocks] of byMenu)out.push('*'+(menu?(/^men[uù]\b/i.test(menu)?safe(menu):'Menu '+safe(menu)):'Menu')+' aggiornato*',...blocks)
+ if(hidden.length)out.push('Nascosti (tornano quando li rimetti):\n'+hidden.map(safe).join(', '))
+ return out.join('\n\n')+'\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.'
 }
 
 /** notte 22/10: il nome di un piatto NUOVO detto con «aggiungi / inserisci / metti nel menu» («aggiungi le patatine fritte a 4 nei primi» →

@@ -636,10 +636,10 @@ export function composeReply(decision:Pick<BrainDecision,'intent'|'plan'|'replyD
  if(plan.type==='change'){if(!after)throw new Error('composeReply: change senza rilettura del DB')
   const {ok,failed}=verifyApplied(plan.actions,after)
   if(!ok.length)return 'Non sono riuscito a salvare la modifica. Il menu non è cambiato. Riprova tra poco.'
-  return '*Confermato.* Ho aggiornato il menu.\n\n'+ok.map(a=>describeAction(a,before,sections)).join('\n')+(failed.length?'\n\nQuesta parte non è stata salvata: '+failed.map(a=>describeAction(a,before,sections)).join('; '):'')}
+  return '*Confermato.* Ho aggiornato il menu.\n\n'+ok.map(a=>describeAction(a,before,sections)).join('\n')+(failed.length?'\n\nQuesta parte non è stata salvata:\n'+failed.map(a=>'• '+describeAction(a,before,sections)).join('\n'):'')}
  if(plan.type==='read')return readText(plan,after??before)
  if(decision.intent==='chat')return draftIsSafe(decision.replyDraft)?decision.replyDraft.trim():'Dimmi pure cosa vuoi cambiare nel menu.'
- if(plan.type==='clarify'&&decision.replyDraft&&draftIsSafe(decision.replyDraft)&&plan.ids.length){const names=plan.ids.map(id=>before.find(r=>r.id===id)?.name).filter(Boolean);return decision.replyDraft.trim()+(names.length?'\n'+names.map(n=>'- *'+n+'*').join('\n'):'')}
+ if(plan.type==='clarify'&&decision.replyDraft&&draftIsSafe(decision.replyDraft)&&plan.ids.length){const names=plan.ids.map(id=>before.find(r=>r.id===id)?.name).filter(Boolean);return decision.replyDraft.trim()+(names.length?'\n'+names.map(n=>'• *'+n+'*').join('\n'):'')}
  return planText(plan,before,sections)
 }
 

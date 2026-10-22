@@ -279,7 +279,7 @@ export function priceChoice(message:string,refs:MenuRef[]):{text:string,store?:{
  return{text:fill(asked?copy.choosePriceNow:copy.choosePrice,{piatto,attuale:euro(dish.price),primo:alt.first,secondo:alt.second}),store:{id:dish.id,prices:[alt.a,alt.b],labels}}
 }
 export const priceChoiceText=(message:string,refs:MenuRef[])=>priceChoice(message,refs)?.text??null
-export function clarifyText(ids:string[],refs:MenuRef[]){const names=ids.map(id=>refs.find(r=>r.id===id)).filter(Boolean).map(r=>'*'+itemLabel(r!,refs)+'*');if(names.length===1)return `Cosa vuoi cambiare per ${names[0]}: il prezzo, se è finito o altro? Non ho cambiato nulla.`;return names.length?fill(copy.whichDish,{opzioni:names.join(', ')}):copy.notUnderstood}
+export function clarifyText(ids:string[],refs:MenuRef[]){const names=ids.map(id=>refs.find(r=>r.id===id)).filter(Boolean).map(r=>'*'+itemLabel(r!,refs)+'*');if(names.length===1)return `Cosa vuoi cambiare per ${names[0]}: il prezzo, se è finito o altro? Non ho cambiato nulla.`;return names.length?fill(copy.whichDish,{opzioni:names.map(n=>'• '+n).join('\n')}):copy.notUnderstood}
 /** 19/10: le voci «dashboard» e «menulink» del catalogo diventano il link vero; il server lo compila col locale (linkMarkers). */
 export const linkMarkers={dashboard:'\u0003dashboard\u0003',menulink:'\u0003menulink\u0003'} as const
 export function capabilityText(ids:string[]){if(!ids.length||ids.includes('all')||ids.length>2)return copy.help;return ids.map(id=>capabilities.find(c=>c.id===id)??capabilities.find(c=>c.id==='other')!).map(c=>c.id==='dashboard'||c.id==='menulink'?linkMarkers[c.id]:c.can?fill(copy.capabilityYes,{testo:c.text,esempio:c.example!}):fill(copy.capabilityNo,{testo:c.text,alternativa:c.alternative!})).join('\n\n')}
@@ -287,7 +287,7 @@ export function planText(plan:Exclude<MenuPlan,{type:'change'}>,refs:MenuRef[],s
  if(plan.type==='read')return readText(plan,refs);if(plan.type==='clarify')return clarifyText(plan.ids,refs);if(plan.type==='capability')return capabilityText(plan.ids);if(plan.type==='verbatim')return copy.notVerbatim
  if(plan.type==='exists'){const r=refs.find(x=>x.id===plan.id)!;return fill(copy.alreadyExists,{piatto:safe(r.name),categoria:safe(r.section??r.menu)})}
  const wanted=plan.missing.map(m=>m==='section'?'il sottomenu':m==='price'?'il prezzo':'il nome'),listed=sections.slice(0,15)
- return fill(copy.createMissing,{piatto:plan.name?'*'+safe(plan.name)+'*':'il piatto',mancante:wanted.length>1?wanted.slice(0,-1).join(', ')+' e '+wanted.at(-1):wanted[0]!,categorie:plan.missing.includes('section')&&listed.length?fill(copy.createCategories,{categorie:listed.map(s=>s.name).join(', ')}):'',})
+ return fill(copy.createMissing,{piatto:plan.name?'*'+safe(plan.name)+'*':'il piatto',mancante:wanted.length>1?wanted.slice(0,-1).join(', ')+' e '+wanted.at(-1):wanted[0]!,categorie:plan.missing.includes('section')&&listed.length?fill(copy.createCategories,{categorie:listed.map(s=>'• '+s.name).join('\n')}):'',}).replace('\n\n ','\n\n')
 }
 // Benvenuto del titolare: esempi con piatti veri del locale («carbonara 12 euro», «tiramisù finito»).
 const finished=(name:string)=>{const w=plain(name).split(' ')[0]??'';return /a$/.test(w)?'finita':/i$/.test(w)?'finiti':'finito'}
