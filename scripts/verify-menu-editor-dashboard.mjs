@@ -73,9 +73,9 @@ export async function startHarness({flag=true}={}){
   if(p==='/api/menu-workspace'&&m==='PUT'){if(b.expectedRevision!==srv.revision)return json(res,{error:{message:'Il menu è cambiato'}},409);srv.doc=b.workspace;srv.revision++;return json(res,{data:srv.doc,revision:srv.revision})}
   if(p==='/api/menu-workspace/status')return json(res,{revision:srv.revision,publishedRevision:srv.publishedRevision,pending:pending(),lastLabel:srv.label,lastAt:srv.labelAt})
   if(p==='/api/menu-workspace/ops'){const results=srv.applyOps(b.ops);return json(res,{revision:srv.revision,publishedRevision:srv.publishedRevision,pending:pending(),results,seq:b.seq})}
-  if(p==='/api/menu-workspace/publish/diff')return json(res,{data:diff()})
-  if(p==='/api/menu-workspace/publish'){if(b.expectedRevision!==srv.revision)return json(res,{error:{message:'Il menu è cambiato'},currentRevision:srv.revision},409);srv.published=clone(srv.doc);srv.revision++;srv.publishedRevision=srv.revision;srv.label='Pubblicazione';return json(res,{data:{revision:srv.revision}})}
-  if(p==='/api/menu-workspace/discard'){if(b.expectedRevision!==srv.revision)return json(res,{error:{message:'Il menu è cambiato'},currentRevision:srv.revision},409);srv.doc=clone(srv.published);srv.revision++;srv.label='Bozza scartata';return json(res,body())}
+  if(p==='/api/menu-workspace/publish/diff')return json(res,{data:{...diff(),botConflicts:srv.botConflicts||[]}})
+  if(p==='/api/menu-workspace/publish'){srv.lastPublish=b;if(b.expectedRevision!==srv.revision)return json(res,{error:{message:'Il menu è cambiato'},currentRevision:srv.revision},409);if(srv.botConflicts?.length&&b.confirmBotConflicts!==true)return json(res,{error:{code:'BOT_CONFLICTS',message:'Da WhatsApp sono state fatte modifiche che non sono in questa bozza'},currentRevision:srv.revision,conflicts:srv.botConflicts},409);srv.botConflicts=[];srv.published=clone(srv.doc);srv.revision++;srv.publishedRevision=srv.revision;srv.label='Pubblicazione';return json(res,{data:{revision:srv.revision}})}
+  if(p==='/api/menu-workspace/discard'){if(b.expectedRevision!==srv.revision)return json(res,{error:{message:'Il menu è cambiato'},currentRevision:srv.revision},409);srv.botConflicts=[];srv.doc=clone(srv.published);srv.revision++;srv.label='Bozza scartata';return json(res,body())}
   if(p==='/api/menu-workspace/versions')return json(res,{data:[{id:'v'+srv.revision,revision:srv.revision,label:srv.label,createdAt:srv.labelAt}]})
   if(p==='/api/menu-workspace/pdf'){srv.pdf.push({preview:b?.preview,menuIds:b?.menuIds,publishedRevision:srv.publishedRevision});res.setHeader('Content-Type','application/pdf');res.end(pdfBytes());return}
   if(p==='/api/menu-workspace/presentation')return json(res,{data:{restaurantName:'Trattoria Prova'}})
@@ -131,7 +131,7 @@ async function main(){
  const settled=async(page)=>{await waitFor(async()=>{const d=await frameDoc(page);return d&&JSON.stringify(strip(d))===JSON.stringify(srv.doc)},15000,'vista = server')}
  try{
   for(const vp of ['desktop','mobile']){
-   Object.assign(srv,{doc:fixture(),published:fixture(),revision:3,publishedRevision:3,fail:[],offline:false,flag:true});srv.pdf=[]
+   Object.assign(srv,{doc:fixture(),published:fixture(),revision:3,publishedRevision:3,fail:[],offline:false,flag:true,botConflicts:[]});srv.pdf=[]
    const page=await H.open(vp);let recorder=null
    if(vp==='desktop')recorder=await page.screencast({path:resolve(videoDir,'flusso-dashboard-desktop.webm'),ffmpegPath:'/opt/homebrew/bin/ffmpeg'})
    await page.waitForSelector('.mw-ed-stage');await tapFrame(page);await fromFrame(page,{type:'tako-menu-edit-ready'});await waitFor(()=>frameDoc(page),15000,'documento nell\'iframe')
@@ -189,6 +189,17 @@ async function main(){
    await fromFrame(page,{type:'tako-menu-edit-ops',seq:4,ops:[{op:'set',kind:'item',id:U(102),fields:{price:99}}]});await waitFor(()=>srv.doc.menus[0].sections[0].items.some(i=>i.price===99),5000,'bozza')
    await click(page,'Pubblica');await page.waitForSelector('dialog.mw-ed-publish[open] .mw-diff');await click(page,'Scarta le modifiche')
    await waitFor(()=>JSON.stringify(srv.doc)===JSON.stringify(srv.published),5000,'scartato');await settled(page);ok(vp+': Scarta le modifiche')
+   // Conflitti bot al Pubblica: riquadro aperto senza conflitti, il bot ne crea uno → «Pubblica ora» = 409 BOT_CONFLICTS → avviso + «Pubblica comunque»
+   await fromFrame(page,{type:'tako-menu-edit-ops',seq:41,ops:[{op:'set',kind:'item',id:U(102),fields:{price:98}}]});await waitFor(()=>srv.doc.menus[0].sections[0].items.some(i=>i.price===98),5000,'bozza conflitti')
+   await click(page,'Pubblica');await page.waitForSelector('dialog.mw-ed-publish[open] .mw-diff');assert.equal(await page.$('.mw-ed-bot-conflicts'),null,'nessun avviso senza conflitti')
+   srv.botConflicts=[{kind:'item',id:U(130),name:'Frittura',reason:'missing'}]
+   await click(page,'Pubblica ora');await page.waitForSelector('dialog.mw-ed-publish[open] .mw-ed-bot-conflicts',{timeout:8000})
+   const warn=await page.$eval('.mw-ed-bot-conflicts',e=>e.textContent);assert.match(warn,/Da WhatsApp sono state fatte modifiche che non sono in questa bozza: Frittura\. Se pubblichi, ai clienti tornerà la versione della bozza\./);assert.doesNotMatch(warn,/categori/i)
+   assert.notEqual(JSON.stringify(srv.doc),JSON.stringify(srv.published),'409: niente pubblicato');assert.equal(await page.$eval('dialog.mw-ed-publish .mw-publish-error',e=>e.textContent).catch(()=>''),'','nessun «il menu è cambiato»')
+   const btns=await page.$$eval('dialog.mw-ed-publish .mw-publish-actions button',b=>b.map(x=>x.textContent.trim()));assert.ok(btns.includes('Pubblica comunque')&&btns.includes('Annulla')&&!btns.includes('Pubblica ora'),'scelte: '+btns)
+   await shot(page,vp,'06b-conflitti-bot','Pubblica con modifiche da WhatsApp non in bozza: avviso Sobrio, «Pubblica comunque» / «Annulla»')
+   await click(page,'Pubblica comunque');await waitFor(()=>JSON.stringify(srv.doc)===JSON.stringify(srv.published),5000,'pubblicato comunque');assert.equal(srv.lastPublish.confirmBotConflicts,true);assert.deepEqual(srv.botConflicts,[])
+   await waitFor(async()=>/^Pubblicato/.test(await status(page)),5000,'stato Pubblicato dopo conferma');await settled(page);ok(vp+': conflitti bot → 409, avviso, «Pubblica comunque» con conferma')
    // Notifica WhatsApp
    srv.bot(U(111),{price:17},'WhatsApp: prezzo Cotoletta')
    await page.waitForFunction(()=>/Aggiornato da WhatsApp/.test(document.querySelector('.mw-live-toast-text')?.textContent||''),{timeout:15000})

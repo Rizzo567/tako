@@ -93,3 +93,35 @@ Misura locale su M-series; l'edge Supabase va rimisurato sul QA (K4).
    `set`/`move`/`reorder`/`manualOrder` sono idempotenti e anche `create` ripetuto con stesso id e stessi campi risponde `ok` (menu-ops), quindi un
    retry non duplica e non scrive (revisione invariata). Unico caso non trasparente: `remove` ripetuto → `NOT_FOUND` (documento invariato). Il client
    vede un errore su un'op già passata → ricarica, nessuna perdita né duplicato. `clientId`/`seq` restano solo eco. Test che lo fissa.
+
+## Conflitti bot al Pubblica (22/10)
+
+Rischio chiuso: il bot pubblica solo la sua modifica; se in bozza il bersaglio non c'è (piatto/Sezione/Menu cancellati o spostati, Sezione non vuota,
+Menu sostituito, bozza risultante invalida) la modifica va solo nel pubblicato e un «Pubblica» successivo della bozza la toglierebbe ai clienti.
+
+- **Memorizzazione (senza migrazioni):** campo facoltativo additivo nel documento BOZZA `botConflicts?: {kind:'menu'|'section'|'item', id, name, at, reason}[]`
+  (max 50, le più recenti; stesso elemento = voce aggiornata), schema zod in `menu-workspace-contract.ts` (`botConflictSchema`, `MAX_BOT_CONFLICTS`), senza default
+  (documento senza = identico). Scelto il documento bozza (opzione consigliata) perché vive sotto lo stesso lock di riga di bozza/pubblicazione, si azzera
+  naturalmente con Pubblica/Scarta (bozza = pubblicato) e non richiede tabelle: `menu_owner_notices` resta solo l'avviso.
+- **Scrittura:** `menu-workspace-bot.ts` → `partial()`, dopo il ramo PROVA (lì nulla va online): `botConflictsFor(skipped, …)` con le stesse voci di
+  `significantSkipped` (quelle dell'avviso); per `draft:invalid` la bozza resta quella di prima + il campo, voce = primo elemento cambiato dal bot
+  (piatto → Sezione → Menu), poi si rivalida. `reason` = codice del salto (`missing`, `move-target-missing`, `section-missing`, `not-empty-in-draft`,
+  `replaced`, `draft:invalid`…). Il pubblicato (`next`) non porta mai il campo.
+- **Mai nel pubblicato:** `mutateWorkspace(publish)` toglie il campo dal documento pubblicato (che diventa anche bozza → azzerato); `discardDraft` lo toglie.
+  Nei salvataggi di bozza (`mutateWorkspace` senza publish: PUT, ripristino versione, import, traduzioni) il campo resta **quello del server**: il client
+  non lo può né togliere né inventare. `applyDraftOps` lo conserva (applyOps clona il documento).
+- **Blocco:** `mutateWorkspace(..., guard)` — 8° argomento facoltativo, solo da `POST /publish`: conflitti presenti e `confirmBotConflicts` assente →
+  `WorkspaceBotConflicts` sotto lock (nessuna scrittura) → 409 `{error:{code:'BOT_CONFLICTS',message}, currentRevision, conflicts}`. Deviazione dal
+  testo del compito (`error:'BOT_CONFLICTS'` stringa): tenuta la forma `{error:{code,message}}` di tutte le altre risposte del pannello; la SPA accetta
+  entrambe. Senza guard (bot via `legacy()`, preset, onboarding, traduzioni) nessun blocco.
+- **pending:** con conflitti c'è sempre anche una differenza reale (bersaglio assente in bozza o bozza vecchia ancora pendente), quindi il campo non crea
+  falsi «pendente». Unico caso teorico «solo campo»: il titolare ricrea a mano lo stesso contenuto → pending vero finché non pubblica/scarta (conservativo).
+- **Riepilogo:** `publishDiffBody` (rotta + edge di lettura, stessa funzione) aggiunge `data.botConflicts` (sempre array).
+- **SPA:** `13-menu-editor-core.js` (`isBotConflictsError`, `botConflictsOf`, `botConflictsText`); `MenuEditorPublishDialog` mostra l'avviso Sobrio sopra i
+  pulsanti e cambia «Pubblica ora» in «Pubblica comunque» (+ «Annulla»); 409 BOT_CONFLICTS al clic → ricarica, riquadro con avviso. Ramo vecchio
+  (`13-menu-workspace.js`, flag spento): 409 BOT_CONFLICTS → `window.confirm` col testo e «Pubblicare comunque?», altrimenti messaggio d'errore.
+- **Limite noto:** la conferma copre i conflitti presenti al clic; un conflitto creato dal bot fra l'apertura del riquadro e il clic su «Pubblica comunque»
+  passa con la stessa conferma (finestra di secondi; il riquadro rilegge il riepilogo a ogni apertura).
+- **Test:** `tests/bot-partial-publish.test.ts` (describe «conflitti bot al Pubblica»), `tests/menu-workspace-ops.test.ts` (rotte vere: diff, 409, conferma,
+  discard), `tests/staff/menu-editor-bot-conflicts.test.mjs`, scenario e2e in `scripts/verify-menu-editor-dashboard.mjs` (shot `06b-conflitti-bot`).
+

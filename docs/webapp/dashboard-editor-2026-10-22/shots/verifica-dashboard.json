@@ -42,6 +42,11 @@
    "detail": ""
   },
   {
+   "scenario": "desktop: conflitti bot → 409, avviso, «Pubblica comunque» con conferma",
+   "ok": true,
+   "detail": ""
+  },
+  {
    "scenario": "desktop: notifica WhatsApp",
    "ok": true,
    "detail": ""
@@ -93,6 +98,11 @@
   },
   {
    "scenario": "mobile: Scarta le modifiche",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "scenario": "mobile: conflitti bot → 409, avviso, «Pubblica comunque» con conferma",
    "ok": true,
    "detail": ""
   },
@@ -154,6 +164,11 @@
    "label": "Pubblica: elenco differenze, «Pubblica ora», «Scarta le modifiche»"
   },
   {
+   "file": "desktop-06b-conflitti-bot.png",
+   "vp": "desktop",
+   "label": "Pubblica con modifiche da WhatsApp non in bozza: avviso Sobrio, «Pubblica comunque» / «Annulla»"
+  },
+  {
    "file": "desktop-07-whatsapp.png",
    "vp": "desktop",
    "label": "Notifica «Aggiornato da WhatsApp: Cotoletta» + lampeggio"
@@ -197,6 +212,11 @@
    "file": "mobile-06-pubblica.png",
    "vp": "mobile",
    "label": "Pubblica: elenco differenze, «Pubblica ora», «Scarta le modifiche»"
+  },
+  {
+   "file": "mobile-06b-conflitti-bot.png",
+   "vp": "mobile",
+   "label": "Pubblica con modifiche da WhatsApp non in bozza: avviso Sobrio, «Pubblica comunque» / «Annulla»"
   },
   {
    "file": "mobile-07-whatsapp.png",

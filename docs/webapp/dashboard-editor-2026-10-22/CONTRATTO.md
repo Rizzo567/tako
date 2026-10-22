@@ -41,7 +41,7 @@ Mappa gesto → op (`dropToOps`): `dish` → item `move` (toParentId = sectionId
 |---|---|---|
 | POST | `/api/menu-workspace/ops` | `{ops: Op[] (1..50), clientId: string, seq: number}` → `{revision, publishedRevision, pending, results}`. Scrive solo la bozza, sotto lock di riga, senza `expectedRevision`. Ammesso su PROVA. Versione «Bozza dashboard» al massimo ogni 30 min. Documento finale invalido → 422 e nessuna scrittura. Op rifiutate → 200 con `results[i].ok=false` (le altre applicate). |
 | GET | `/api/menu-workspace/status` (edge di LETTURA) | `{revision, publishedRevision, pending, lastLabel, lastAt}` |
-| POST | `/api/menu-workspace/publish` | invariato `{expectedRevision}`; 409 → corpo `{error, currentRevision}` |
+| POST | `/api/menu-workspace/publish` | invariato `{expectedRevision}`; 409 → corpo `{error, currentRevision}`. **Additivo (conflitti bot, 22/10):** corpo facoltativo `confirmBotConflicts: true`. Se la bozza ha `botConflicts` (modifiche da WhatsApp già online ma non entrate in bozza) e manca la conferma → 409 `{error:{code:'BOT_CONFLICTS', message}, currentRevision, conflicts:[{kind,id,name,reason}]}`, nessuna scrittura. Con la conferma pubblica e azzera il campo. Il riepilogo `GET /api/menu-workspace/publish/diff` (anche edge di lettura) ha in più `data.botConflicts` (sempre un array). Bot e preset non passano da questo blocco. |
 | POST | `/api/menu-workspace/discard` | `{expectedRevision}` → bozza = pubblicato, versione «Bozza scartata»; risposta come GET workspace |
 | PUT | `/api/menu-workspace` | invariato |
 

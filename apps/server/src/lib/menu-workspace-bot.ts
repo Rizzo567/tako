@@ -30,7 +30,7 @@ import { createHash, randomUUID } from 'node:crypto'
 import { sql, eq } from 'drizzle-orm'
 import { db, menuItems, type DB } from '@tako/db'
 import { readWorkspace, mutateWorkspace, writePublication, verifyOwnership, WorkspaceConflict, WorkspaceMissing, WorkspaceTrialLocked, type WorkspaceRow } from './menu-workspace-store.js'
-import { workspaceSchema, type Workspace } from './menu-workspace-contract.js'
+import { workspaceSchema, MAX_BOT_CONFLICTS, type Workspace, type BotConflict } from './menu-workspace-contract.js'
 import { pendingOf, jsonEqual } from './menu-workspace-pending.js'
 import { applyActions, type MenuAction } from './twilio-menu-ai.js'
 
@@ -248,6 +248,46 @@ function menuOfSkipped(entry: string, ...docs: Workspace[]): string | null {
  return docs[0]?.menus[0]?.id ?? null
 }
 
+/** Nome leggibile dell'entità (cercata in next, base, bozza). */
+function entityName(kind: string, id: string, ...docs: Workspace[]): string {
+ for (const w of docs) for (const m of w.menus) {
+  if (kind === 'menu' && m.id === id) return m.name
+  for (const s of m.sections) { if (kind === 'section' && s.id === id) return s.name; if (kind === 'item') { const it = s.items.find(i => i.id === id); if (it) return it.name } }
+ }
+ return kind === 'item' ? 'un piatto' : kind === 'section' ? 'una Sezione' : 'un Menu'
+}
+/** Primo elemento cambiato dal bot (piatto, poi Sezione, poi Menu): bersaglio del conflitto quando la bozza risultante è invalida. */
+function changedEntity(base: Workspace, next: Workspace): { kind: 'menu' | 'section' | 'item'; id: string } | null {
+ const bI = itemsOf(base), bS = sectionsOf(base)
+ for (const [id, n] of itemsOf(next)) { const b = bI.get(id); if (!b || b.sectionId !== n.sectionId || !jsonEqual(b.it, n.it)) return { kind: 'item', id } }
+ for (const [id] of bI) if (!itemsOf(next).has(id)) return { kind: 'item', id }
+ for (const [id, n] of sectionsOf(next)) { const b = bS.get(id); if (!b || b.menuId !== n.menuId || changedKeys(b.s, n.s, 'items').length) return { kind: 'section', id } }
+ for (const nm of next.menus) { const bm = base.menus.find(m => m.id === nm.id); if (!bm || changedKeys(bm, nm, 'sections').length) return { kind: 'menu', id: nm.id } }
+ const m = next.menus[0] ?? base.menus[0]
+ return m ? { kind: 'menu', id: m.id } : null
+}
+/** Voci di conflitto da `skipped` (stesse voci dell'avviso; 'draft:invalid' → l'elemento cambiato dal bot). */
+export function botConflictsFor(skipped: string[], base: Workspace, next: Workspace, draft: Workspace, at: string): BotConflict[] {
+ const out: BotConflict[] = []
+ if (skipped.includes('draft:invalid')) {
+  const e = changedEntity(base, next)
+  if (e) out.push({ kind: e.kind, id: e.id, name: entityName(e.kind, e.id, next, base, draft).slice(0, 300), at, reason: 'draft:invalid' })
+  return out
+ }
+ for (const entry of significantSkipped(skipped)) {
+  const [kind, id, ...rest] = entry.split(':')
+  if ((kind !== 'menu' && kind !== 'section' && kind !== 'item') || !id) continue
+  out.push({ kind, id, name: entityName(kind, id, next, base, draft).slice(0, 300), at, reason: (rest.join(':') || 'missing').slice(0, 100) })
+ }
+ return out
+}
+/** Accoda (stesso elemento = voce aggiornata, in fondo), massimo MAX_BOT_CONFLICTS (si tengono le più recenti). */
+export function mergeBotConflicts(existing: BotConflict[] | undefined, added: BotConflict[]): BotConflict[] {
+ const list = [...(existing ?? [])]
+ for (const c of added) { const k = list.findIndex(x => x.kind === c.kind && x.id === c.id); if (k >= 0) list.splice(k, 1); list.push(c) }
+ return list.slice(-MAX_BOT_CONFLICTS)
+}
+
 async function legacy(tenant: string, actor: string, labels: [string, string], change: BotChange, raw: WorkspaceRow, next: Workspace, connection: DB): Promise<BotChangeResult> {
  let revision = raw.revision
  for (const b of change.before ?? []) revision = (await mutateWorkspace(tenant, actor, revision, b.doc, false, b.label, connection)).revision
@@ -278,6 +318,14 @@ async function partial(tenant: string, actor: string, labels: [string, string], 
    await tx.execute(sql`UPDATE menu_workspaces SET draft=${JSON.stringify(newDraft)}::jsonb,revision=${D + 1},updated_at=now() WHERE restaurant_id=${tenant}`)
    return { trial: true as const }
   }
+  // Conflitti bot al Pubblica (notes/A1-server.md): le stesse voci che generano l'avviso (+ bozza invalida) restano memorizzate nella bozza,
+  // così «Pubblica» dalla dashboard si blocca finché il titolare non conferma. Mai nel pubblicato.
+  const conflicts = botConflictsFor(skipped, base, next, draft, new Date().toISOString())
+  if (conflicts.length) {
+   const withField = workspaceSchema.safeParse({ ...newDraft, botConflicts: mergeBotConflicts(newDraft.botConflicts, conflicts) })
+   if (withField.success) newDraft = withField.data
+  }
+  if (next.botConflicts !== undefined) { next = clone(next); delete next.botConflicts }
   // Disponibilità «dal vivo» (cucina/cassa) come in mutateWorkspace(publish): un piatto non toccato tiene il valore delle tabelle.
   const previousItems = new Map(base.menus.filter(m => m.active).flatMap(m => m.sections.filter(s => s.active).flatMap(s => s.items.filter(i => !i.hidden).map(i => [i.id, i.available] as const))))
   const liveItems = await tx.select({ id: menuItems.id, available: menuItems.available }).from(menuItems).where(eq(menuItems.restaurantId, tenant)).for('update')

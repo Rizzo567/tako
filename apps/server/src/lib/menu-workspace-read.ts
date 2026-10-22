@@ -5,9 +5,11 @@ import { workspaceSchema } from './menu-workspace-contract.js'
 import { workspaceDiff } from './menu-workspace-schedule.js'
 import type { WorkspaceRow } from './menu-workspace-store.js'
 
-/** Corpo di GET /api/menu-workspace/publish/diff: differenze bozza ↔ pubblicato + revisioni. */
+/** Corpo di GET /api/menu-workspace/publish/diff: differenze bozza ↔ pubblicato + revisioni + conflitti bot (sempre un array). */
 export function publishDiffBody(row: WorkspaceRow) {
- return {data:{...workspaceDiff(row.published?workspaceSchema.parse(row.published):workspaceSchema.parse({menus:[]}),workspaceSchema.parse(row.draft)),revision:row.revision,publishedRevision:row.published_revision}}
+ const draft=workspaceSchema.parse(row.draft)
+ // botConflicts (22/10): modifiche da WhatsApp online ma non in bozza; la dashboard le mostra prima del clic su Pubblica.
+ return {data:{...workspaceDiff(row.published?workspaceSchema.parse(row.published):workspaceSchema.parse({menus:[]}),draft),botConflicts:(draft.botConflicts??[]).map(({kind,id,name,reason,at})=>({kind,id,name,reason,at})),revision:row.revision,publishedRevision:row.published_revision}}
 }
 
 // ── Dashboard editor 22/10 ──

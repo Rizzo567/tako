@@ -162,7 +162,10 @@ function ScreenMenuWorkspace({ mobile, adapter: baseAdapter = window.TakoMenuWor
     catch(e){setError(e.message || 'Modifiche non salvate');setConflict(e.status===409);return false;}finally{setPending(false);}
   };
   const reviewPublish=async()=>{if(trialMenu){setError('Menu di prova privato: non si pubblica sul link pubblico finché il locale non accetta la prova.');return;}if(busy||setup||setupBusy||mediaBusy||mediaDirty||translationBusy||publishLock.current)return;publishLock.current=true;setPending(true);setError('');const seq=editSeq.current,edited=()=>{if(editSeq.current===seq)return false;toast('Hai fatto altre modifiche: premi di nuovo Pubblica.',{type:'info'});return true;};try{let next=saved;if(dirty){next=await adapter.save(document,saved.revision,saved.publishedRevision);setSaved(JSON.parse(JSON.stringify(next)));setConflict(false);if(edited())return;setDocument(next);}const result=await adapter.publishDiff();if(result.revision!==next.revision){const conflict=new Error('La bozza è cambiata: ricarica prima di pubblicare');conflict.status=409;throw conflict;}if(edited())return;setPublishReview({revision:next.revision,diff:result});}catch(e){setError(e.message||'Impossibile preparare la pubblicazione');setConflict(e.status===409);}finally{publishLock.current=false;setPending(false);}};
-  const confirmPublish=async()=>{if(trialMenu||publishLock.current||busy||dirty||mediaBusy||mediaDirty||translationBusy||publishReview?.revision!==saved.revision)return;publishLock.current=true;setBusy(true);try{await adapter.publish(publishReview.revision);setPublishReview(null);toast('Menu pubblicato',{type:'success'});await refresh();}catch(e){setError(e.message);setConflict(e.status===409);}finally{publishLock.current=false;setBusy(false);}};
+  const confirmPublish=async()=>{if(trialMenu||publishLock.current||busy||dirty||mediaBusy||mediaDirty||translationBusy||publishReview?.revision!==saved.revision)return;publishLock.current=true;setBusy(true);const done=async()=>{setPublishReview(null);toast('Menu pubblicato',{type:'success'});await refresh();};try{await adapter.publish(publishReview.revision);await done();}catch(e){
+   // Conflitti bot (22/10): modifiche da WhatsApp online ma non in bozza → messaggio semplice e conferma esplicita.
+   if(e.body?.error?.code==='BOT_CONFLICTS'){const text=window.TakoMenuEditorCore?.botConflictsText?window.TakoMenuEditorCore.botConflictsText(e.body.conflicts):e.message;if(window.confirm(text+'\n\nPubblicare comunque?')){try{await adapter.publish(publishReview.revision,{confirmBotConflicts:true});await done();}catch(x){setError(x.message);setConflict(x.status===409);}}else setError(text);}
+   else{setError(e.message);setConflict(e.status===409);}}finally{publishLock.current=false;setBusy(false);}};
   const dp=(window.useMenuDayPresets||MW_DP_NOOP)({adapter,viewRef:presetViewRef,menu,document,dirty,busy,refresh,save,discard:()=>{editSeq.current++;setDocument(JSON.parse(JSON.stringify(saved)));}});dp.onPublish=reviewPublish;
   useEffect(()=>{if(tab!=='contents'&&presetViewRef.current&&!dirty)dp.leave();},[tab]);
   const changeMenu=(key,value)=>mutate(doc=>{doc.menus.find(m=>m.id===menuId)[key]=value;});
@@ -418,7 +421,7 @@ const MW_REQUEST=async(path,method='GET',body)=>{
  if(path===''&&method==='GET'&&warm&&Date.now()-warm.at<5000){const result=await warm.promise;if(result?.data)return result;}
  const response=await fetch('/api/menu-workspace'+path,{method,credentials:'include',headers:body instanceof FormData?{}:{'Content-Type':'application/json'},body:body===undefined?undefined:body instanceof FormData?body:JSON.stringify(body)});
  const result=await response.json().catch(()=>null);
- if(!response.ok){const error=new Error(result?.error?.message||'Operazione menu non riuscita');error.status=response.status;throw error;}
+ if(!response.ok){const error=new Error(result?.error?.message||'Operazione menu non riuscita');error.status=response.status;error.body=result;throw error;}
  return result;
 };
 // Stesso ordine delle chiavi di Postgres jsonb (prima le più corte in byte UTF-8, poi confronto binario): il documento del PUT diventa identico a quello che la GET rileggerebbe.
@@ -433,7 +436,7 @@ window.TakoMenuWorkspaceContract={
  // Il PUT risponde col documento normalizzato appena scritto in bozza (commonMenuLanguages, come la GET): niente rilettura. publishedRevision non cambia con un salvataggio riuscito (una pubblicazione altrui avrebbe dato 409). Senza publishedRevision noto: rilettura come prima.
  save:async(document,expectedRevision,publishedRevision)=>{const put=await MW_REQUEST('','PUT',{expectedRevision,workspace:MW_DOCUMENT(document)});if(put?.data&&Number.isInteger(put.revision)&&publishedRevision!==undefined)return MW_NORMALIZE({data:MW_JSONB_ORDER(put.data),revision:put.revision,publishedRevision});return MW_NORMALIZE(await MW_REQUEST(''));},
  publishDiff:async()=>(await MW_REQUEST('/publish/diff')).data,
- publish:expectedRevision=>MW_REQUEST('/publish','POST',{expectedRevision}),
+ publish:(expectedRevision,opts)=>MW_REQUEST('/publish','POST',opts?.confirmBotConflicts?{expectedRevision,confirmBotConflicts:true}:{expectedRevision}),
  newMenu:(id,name)=>({id,name,description:null,type:'main',active:true,translations:{},sections:[]}),
  newSection:(id,name)=>({id,name,description:null,parentSectionId:null,active:true,translations:{},items:[]}),
  newItem:(id,name)=>({id,name,description:null,price:0,available:true,displayMode:'normal',variants:[],translations:{},allergens:[],tags:[],additives:[]}),

@@ -22,6 +22,9 @@
 .mw-ed-publish{max-width:min(640px,calc(100vw - 32px))}
 .mw-ed-publish .mw-publish-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .mw-ed-publish .mw-dp-spacer{flex:1}
+/* Conflitti bot al Pubblica (22/10): avviso Sobrio, testo nero/grigio, niente arancione. */
+.mw-ed-publish .mw-ed-bot-conflicts{margin:16px 0 4px;padding:12px 14px;border:1px solid #d9d6d0;border-radius:10px;background:#f6f5f2;color:#242628}
+.mw-ed-publish .mw-ed-bot-conflicts p{margin:0;font-size:14px;line-height:1.45}
 .mw-ed-diff{max-height:46vh;overflow:auto;margin:8px 0}
 .mw-ed-pdf{display:flex;flex-direction:column;gap:10px;min-height:520px;position:sticky;top:12px}
 .mw-ed-pdf-head{justify-content:space-between;align-items:baseline}

@@ -3,7 +3,8 @@ import { db, menus, menuSections, menuItems, itemVariants, menuItemTranslations,
 import { eq, asc, sql } from 'drizzle-orm'
 import { baselineLanguageConfiguration, normalizeBaselineTranslations } from './menu-workspace-languages.js'
 import { menuLayoutDefaults } from './menu-layout-defaults.js'
-import { workspaceSchema, type Workspace } from './menu-workspace-contract.js'
+import { workspaceSchema, botConflictSchema, type Workspace, type BotConflict } from './menu-workspace-contract.js'
+import { z } from 'zod'
 import { applyOps, type Op, type OpResult } from '@tako/menu-ops'
 import { jsonEqual } from './menu-workspace-pending.js'
 export type WorkspaceRow={draft:Workspace;published:Workspace|null;revision:number;published_revision:number|null}
@@ -114,13 +115,24 @@ export async function writeWorkspace(tx:Pick<DB,'execute'>,tenant:string,actor:s
  await tx.execute(sql`WITH v AS (INSERT INTO menu_workspace_versions(id,restaurant_id,revision,label,snapshot,created_by) VALUES(${randomUUID()},${tenant},${revision},${label},${doc}::jsonb,${actor}) RETURNING 1)
  UPDATE menu_workspaces SET draft=${doc}::jsonb,revision=${revision},published=CASE WHEN ${publish} THEN ${doc}::jsonb ELSE published END,published_revision=CASE WHEN ${publish} THEN ${revision} ELSE published_revision END,updated_at=now() WHERE restaurant_id=${tenant}`)
 }
-export async function mutateWorkspace(tenant:string,actor:string,expected:number,w:Workspace,publish=false,label='Salvataggio',connection:DB=db){
+/** Conflitti bot al Pubblica (22/10): la bozza ha modifiche da WhatsApp già online che pubblicandola verrebbero tolte.
+ * Lanciata solo dalla pubblicazione della dashboard (guard) senza conferma esplicita; bot e preset non passano da qui. */
+export class WorkspaceBotConflicts extends Error{constructor(public conflicts:BotConflict[],public currentRevision:number){super('Da WhatsApp sono state fatte modifiche che non sono in questa bozza')}}
+/** Elenco dei conflitti bot di un documento grezzo (bozza): [] se assente o illeggibile. */
+export function botConflictsOf(doc:unknown):BotConflict[]{const raw=(doc as {botConflicts?:unknown}|null)?.botConflicts;if(!Array.isArray(raw))return [];const p=z.array(botConflictSchema).safeParse(raw);return p.success?p.data:[]}
+/** guard (solo dashboard: POST /publish): con conflitti bot in bozza e senza confirmBotConflicts → WorkspaceBotConflicts, nessuna scrittura.
+ * Senza guard (bot, preset, onboarding, traduzioni) nessun blocco. In ogni pubblicazione il campo botConflicts si toglie (mai nel pubblicato,
+ * e la bozza pubblicata lo azzera). Nei salvataggi di bozza il campo resta quello del server (il client non lo decide). */
+export async function mutateWorkspace(tenant:string,actor:string,expected:number,w:Workspace,publish=false,label='Salvataggio',connection:DB=db,guard?:{confirmBotConflicts?:boolean}){
  return connection.transaction(async tx=>{
  const row=await lockWorkspace(tx,tenant)
  if(publish&&(row?row.trial===true:await isTrialRestaurant(tenant,tx)))throw new WorkspaceTrialLocked()
  if(!row)throw new WorkspaceMissing('Revision conflict')
  if(Number(row?.revision)!==expected)throw new WorkspaceConflict('Revision conflict')
- if(publish){w=workspaceSchema.parse(row!.draft);const previous=row!.published?workspaceSchema.parse(row!.published):null;const previousItems=new Map(previous?.menus.filter(m=>m.active).flatMap(m=>m.sections.filter(s=>s.active).flatMap(s=>s.items.filter(i=>!i.hidden).map(i=>[i.id,i.available] as const)))??[]);const liveItems=await tx.select({id:menuItems.id,available:menuItems.available}).from(menuItems).where(eq(menuItems.restaurantId,tenant)).for('update');const live=new Map(liveItems.map(i=>[i.id,i.available]));for(const m of w.menus)for(const s of m.sections)for(const i of s.items)if(previousItems.get(i.id)===i.available&&live.has(i.id))i.available=live.get(i.id)!}
+ const serverConflicts=botConflictsOf(row.draft)
+ if(publish&&guard&&!guard.confirmBotConflicts&&serverConflicts.length)throw new WorkspaceBotConflicts(serverConflicts,Number(row.revision))
+ if(!publish){w={...w};if(serverConflicts.length)w.botConflicts=serverConflicts;else delete w.botConflicts}
+ if(publish){w=workspaceSchema.parse(row!.draft);delete w.botConflicts;const previous=row!.published?workspaceSchema.parse(row!.published):null;const previousItems=new Map(previous?.menus.filter(m=>m.active).flatMap(m=>m.sections.filter(s=>s.active).flatMap(s=>s.items.filter(i=>!i.hidden).map(i=>[i.id,i.available] as const)))??[]);const liveItems=await tx.select({id:menuItems.id,available:menuItems.available}).from(menuItems).where(eq(menuItems.restaurantId,tenant)).for('update');const live=new Map(liveItems.map(i=>[i.id,i.available]));for(const m of w.menus)for(const s of m.sections)for(const i of s.items)if(previousItems.get(i.id)===i.available&&live.has(i.id))i.available=live.get(i.id)!}
  await verifyOwnership(tx,tenant,w)
  const revision=expected+1
  // Soft retirement keeps all IDs referenced by historical orders.
@@ -193,7 +205,9 @@ export async function discardDraft(tenant:string,actor:string,expectedRevision:n
   if(Number(row.revision)!==expectedRevision)throw new WorkspaceConflict('Revision conflict')
   if(row.published==null)throw new WorkspaceNotPublished('Menu mai pubblicato')
   // Confronto fra documenti normalizzati; si scrivono sempre documenti già passati da zod in entrambe le colonne.
-  const draftDoc=workspaceSchema.parse(row.draft),publishedDoc=workspaceSchema.parse(row.published),published=JSON.stringify(publishedDoc)
+  const draftDoc=workspaceSchema.parse(row.draft),publishedDoc=workspaceSchema.parse(row.published)
+  delete publishedDoc.botConflicts // conflitti bot: solo in bozza; Scarta li azzera (bozza = pubblicato)
+  const published=JSON.stringify(publishedDoc)
   if(jsonEqual(draftDoc,publishedDoc)){
    // Stesso contenuto ma colonne grezze diverse (default aggiunti dopo): si normalizzano, così /status non resta «pendente».
    if(!jsonEqual(row.draft,row.published))await tx.execute(sql`UPDATE menu_workspaces SET draft=${published}::jsonb,published=${published}::jsonb WHERE restaurant_id=${tenant}`)

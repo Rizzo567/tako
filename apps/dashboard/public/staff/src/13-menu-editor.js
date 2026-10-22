@@ -16,7 +16,7 @@ if(window.TakoMenuWorkspaceContract)Object.assign(window.TakoMenuWorkspaceContra
  applyOps:(ops,meta={})=>MW_ED_REQUEST('/ops','POST',{ops,clientId:meta.clientId,seq:meta.seq}),
  status:()=>MW_ED_REQUEST('/status'),
  discard:async expectedRevision=>{const r=await MW_ED_REQUEST('/discard','POST',{expectedRevision});return r?.data?MW_ED_NORMALIZE(r):window.TakoMenuWorkspaceContract.load();},
- publishStrict:expectedRevision=>MW_ED_REQUEST('/publish','POST',{expectedRevision}),
+ publishStrict:(expectedRevision,opts)=>MW_ED_REQUEST('/publish','POST',opts?.confirmBotConflicts?{expectedRevision,confirmBotConflicts:true}:{expectedRevision}),
  renderPublishedPdf:async(menuIds,signal)=>{
   const response=await fetch('/api/menu-workspace/pdf',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({menuIds,preview:false}),signal});
   if(response.ok){const blob=await response.blob();if(blob.size<5)throw new Error('Il server non ha restituito un PDF valido. Riprova.');return blob;}
@@ -72,12 +72,16 @@ function useMenuEditor({adapter,enabled,menuId,setMenuId,trial,onLeft}){
  const idle=async q=>{if(!(await q.whenIdle(MW_ED_IDLE_MS)))throw MW_ED_OFFLINE();};
  const loadDiff=async()=>{const q=qRef.current;await idle(q);const diff=await adapter.publishDiff();return {diff,revision:q.snapshot.revision};};
  const openPublish=async()=>{if(trial||!qRef.current||busyRef.current)return;busyRef.current=true;setReview({loading:true});try{const r=await loadDiff();setReview(r);}catch(e){setReview({error:e.message||'Impossibile preparare la pubblicazione'});}finally{busyRef.current=false;}};
- const confirmPublish=async()=>{const q=qRef.current;if(!q||busyRef.current)return;busyRef.current=true;setReview(r=>({...r,busy:true,error:''}));
+ // opts.confirmBotConflicts: il titolare ha visto l'avviso «modifiche da WhatsApp non in bozza» e ha scelto «Pubblica comunque».
+ const confirmPublish=async(opts={})=>{const q=qRef.current;if(!q||busyRef.current)return;busyRef.current=true;setReview(r=>({...r,busy:true,error:''}));
   try{await idle(q);
    // Il riquadro mostrava un'altra revisione (bot, altra scheda): si aggiorna da solo e si riconferma.
    if(review?.revision!==q.snapshot.revision){const r=await loadDiff();setReview({...r,error:'Il menu è cambiato nel frattempo: controlla e conferma di nuovo.'});return;}
-   await (adapter.publishStrict||adapter.publish)(q.snapshot.revision);const doc=await adapter.load();q.replace({...doc,pending:false});setReview(null);MW_ED_PILL('Menu pubblicato');}
-  catch(e){if(e.offline)setReview(v=>({...v,busy:false,error:e.message}));else if(e.status===409){try{await q.reload();const r=await loadDiff();setReview({...r,error:'Il menu è cambiato nel frattempo: controlla e conferma di nuovo.'});}catch(x){setReview(v=>({...v,busy:false,error:x.message}));}}else setReview(v=>({...v,busy:false,error:e.status===423||/prova/i.test(e.message||'')?'Menu di prova privato: la bozza è salvata, la pubblicazione è bloccata.':e.message||'Pubblicazione non riuscita'}));}
+   await (adapter.publishStrict||adapter.publish)(q.snapshot.revision,opts.confirmBotConflicts?{confirmBotConflicts:true}:undefined);const doc=await adapter.load();q.replace({...doc,pending:false});setReview(null);MW_ED_PILL('Menu pubblicato');}
+  catch(e){if(e.offline)setReview(v=>({...v,busy:false,error:e.message}));else if(window.TakoMenuEditorCore?.isBotConflictsError(e)){
+    // Conflitti bot: il riquadro resta aperto con l'avviso e le due scelte (nessun messaggio «il menu è cambiato»).
+    try{await q.reload();const r=await loadDiff();setReview({...r,conflicts:e.body.conflicts||[]});}catch(x){setReview(v=>({...v,busy:false,conflicts:e.body?.conflicts||[],error:''}));}}
+   else if(e.status===409){try{await q.reload();const r=await loadDiff();setReview({...r,error:'Il menu è cambiato nel frattempo: controlla e conferma di nuovo.'});}catch(x){setReview(v=>({...v,busy:false,error:x.message}));}}else setReview(v=>({...v,busy:false,error:e.status===423||/prova/i.test(e.message||'')?'Menu di prova privato: la bozza è salvata, la pubblicazione è bloccata.':e.message||'Pubblicazione non riuscita'}));}
   finally{busyRef.current=false;}};
  const discard=async()=>{const q=qRef.current;if(!q||busyRef.current)return;if(!window.confirm('Scartare tutte le modifiche non pubblicate? Il menu torna com’è online.'))return;busyRef.current=true;setReview(r=>({...r,busy:true,error:''}));
   try{await idle(q);const doc=await adapter.discard(q.snapshot.revision);q.replace({...doc,pending:false});setReview(null);setSelection(null);setPanel(null);MW_ED_PILL('Modifiche scartate');}
@@ -208,13 +212,18 @@ function MenuEditorPublishDialog({ed}){
  const close=()=>{if(!r.busy)ed.setReview(null);};
  const tokens=window.TakoMenuMotion,style={'--mw-motion-duration':`${tokens?.durationMs?.surface||340}ms`,'--mw-motion-ease':`cubic-bezier(${(tokens?.easing?.out||[.22,1,.36,1]).join(',')})`};
  const empty=r.diff&&!r.diff.details?.length&&!r.diff.added?.length&&!r.diff.removed?.length&&!r.diff.changed?.length;
+ // Conflitti bot (22/10): modifiche da WhatsApp online ma non in bozza → avviso sopra i pulsanti, «Pubblica comunque» o «Annulla».
+ const core=window.TakoMenuEditorCore,conflicts=core?core.botConflictsOf(r):[];
  return ReactDOM.createPortal(<dialog ref={ref} className="mw-publish-dialog mw-ed-publish" style={style} aria-labelledby="mw-ed-publish-title" aria-busy={!!r.busy||!!r.loading} onCancel={e=>{e.preventDefault();close();}}>
   <h3 id="mw-ed-publish-title">Pubblicare le modifiche?</h3>
   <p>Il menu digitale dei clienti e il PDF verranno aggiornati.</p>
   {r.loading&&<TakoLoading label="Preparo l’elenco delle modifiche…" variant="page"/>}
   {r.diff&&(empty?<p>Nessuna modifica da pubblicare.</p>:<div className="mw-ed-diff"><MenuWorkspaceDiff diff={r.diff} publication/></div>)}
   {r.error&&<p className="mw-publish-error" role="alert">{r.error}</p>}
-  <div className="mw-publish-actions"><button type="button" className="mw-ed-link" disabled={r.busy||r.loading||empty} onClick={ed.discard}>Scarta le modifiche</button><span className="mw-dp-spacer"/><Btn kind="soft" disabled={r.busy} onClick={close}>Annulla</Btn><Btn disabled={r.busy||r.loading||!r.diff||empty} onClick={ed.confirmPublish}>{r.busy?'Pubblicazione…':'Pubblica ora'}</Btn></div>
+  {conflicts.length>0&&<div className="mw-ed-bot-conflicts" role="alert"><p>{core.botConflictsText(conflicts)}</p></div>}
+  <div className="mw-publish-actions"><button type="button" className="mw-ed-link" disabled={r.busy||r.loading||empty} onClick={ed.discard}>Scarta le modifiche</button><span className="mw-dp-spacer"/><Btn kind="soft" disabled={r.busy} onClick={close}>Annulla</Btn>{conflicts.length>0
+   ?<Btn disabled={r.busy||r.loading||!r.diff} onClick={()=>ed.confirmPublish({confirmBotConflicts:true})}>{r.busy?'Pubblicazione…':'Pubblica comunque'}</Btn>
+   :<Btn disabled={r.busy||r.loading||!r.diff||empty} onClick={()=>ed.confirmPublish()}>{r.busy?'Pubblicazione…':'Pubblica ora'}</Btn>}</div>
  </dialog>,window.document.body);
 }
 

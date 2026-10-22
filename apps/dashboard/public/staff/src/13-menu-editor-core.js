@@ -231,7 +231,13 @@
   b.forEach((v,k)=>{if(k.startsWith('m:')){const p=a.get(k);const {sections,...x}=v;const y=p?(({sections,...r})=>r)(p):null;if(!same(x,y))out.push(k.slice(2));return;}if(!same(a.get(k),v))out.push(k.slice(2));});
   return out;
  }
- const api={createQueue,createStatusPoller,createPdfFeed,locate,changedFields,mutateToOps,changedIds,strip,same};
+ /* Conflitti bot al Pubblica (22/10, CONTRATTO §3): modifiche da WhatsApp già online che la bozza non ha.
+    Fonti: 409 BOT_CONFLICTS (error.body.conflicts) o riepilogo GET /publish/diff (data.botConflicts). */
+ const isBotConflictsError=e=>!!e&&e.status===409&&(e.body?.error?.code==='BOT_CONFLICTS'||e.body?.error==='BOT_CONFLICTS');
+ const botConflictsOf=review=>{const list=review&&(Array.isArray(review.conflicts)&&review.conflicts.length?review.conflicts:review.diff&&Array.isArray(review.diff.botConflicts)?review.diff.botConflicts:[]);return Array.isArray(list)?list.filter(c=>c&&typeof c.name==='string'):[];};
+ const botConflictNames=list=>[...new Set((list||[]).map(c=>String(c.name||'').trim()).filter(Boolean))];
+ const botConflictsText=list=>{const names=botConflictNames(list);return 'Da WhatsApp sono state fatte modifiche che non sono in questa bozza'+(names.length?': '+names.join(', '):'')+'. Se pubblichi, ai clienti tornerà la versione della bozza.';};
+ const api={createQueue,createStatusPoller,createPdfFeed,locate,changedFields,mutateToOps,changedIds,strip,same,isBotConflictsError,botConflictsOf,botConflictNames,botConflictsText};
  if(typeof window!=='undefined')window.TakoMenuEditorCore=api;
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
 })();

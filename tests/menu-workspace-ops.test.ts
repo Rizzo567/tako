@@ -271,6 +271,53 @@ describe('dashboard editor: bozza a operazioni', () => {
     expect((await req(A, 'POST', '/discard', { expectedRevision: r2.revision })).json().revision).toBe(r2.revision)
   })
 
+  it('conflitti bot: diff li mostra, publish senza conferma 409 BOT_CONFLICTS, con conferma pubblica e azzera, discard azzera', async () => {
+    const botLib = await import('../apps/server/src/lib/menu-workspace-bot.js')
+    const contract = await import('../apps/server/src/lib/menu-workspace-contract.js')
+    const [r] = await sql`insert into restaurants(name,slug,plan) values ('Conflitti',${'ops-conf-' + randomUUID().slice(0, 8)},'pro') returning id`
+    const [u] = await sql`insert into users(restaurant_id,name,email,role,password_hash,email_verified) values (${r!.id},'Owner C',${'owner-c-' + randomUUID().slice(0, 8) + '@isolated.test'},'owner','x',true) returning id`
+    const [m] = await sql`insert into menus(restaurant_id,name,type,active,position) values (${r!.id},'Menu C','main',true,0) returning id`
+    const [s] = await sql`insert into menu_sections(menu_id,name,position,active) values (${m!.id},'Primi',0,true) returning id`
+    const [x] = await sql`insert into menu_items(restaurant_id,section_id,name,price,available,position) values (${r!.id},${s!.id},'Carbonara',12,true,0) returning id`
+    const [y] = await sql`insert into menu_items(restaurant_id,section_id,name,price,available,position) values (${r!.id},${s!.id},'Gricia',10,true,1) returning id`
+    const C: Seed = { id: r!.id, ownerId: u!.id, menuId: m!.id, sectionId: s!.id, itemId: x!.id }
+    expect((await req(C, 'GET', '/')).statusCode).toBe(200)
+    expect((await req(C, 'GET', '/publish/diff')).json().data.botConflicts).toEqual([]) // nessun conflitto: array vuoto
+    const botTurn = async (id: string, price: number) => {
+      const view = (await botLib.readBotWorkspace(C.id))!, next = contract.workspaceSchema.parse(view.draft)
+      next.menus[0]!.sections[0]!.items.find(i => i.id === id)!.price = price
+      await botLib.applyBotChange(C.id, C.ownerId, ['WhatsApp: aggiornamento automatico', 'WhatsApp: pubblicazione automatica'], { expectedPublishedRevision: view.revision, next })
+    }
+    // bozza cancella Y → il bot modifica Y
+    expect((await ops(C, [{ op: 'remove', kind: 'item', id: y!.id }])).statusCode).toBe(200)
+    await botTurn(y!.id, 11)
+    const r1 = await row(C)
+    expect(r1.draft.botConflicts).toEqual([expect.objectContaining({ kind: 'item', id: y!.id, name: 'Gricia', reason: 'missing' })])
+    expect('botConflicts' in r1.published).toBe(false)
+    const diff = (await req(C, 'GET', '/publish/diff')).json().data
+    expect(diff.botConflicts).toEqual([expect.objectContaining({ kind: 'item', id: y!.id, name: 'Gricia', reason: 'missing' })])
+    expect(read.publishDiffBody((await store.readWorkspace(C.id))!).data.botConflicts).toEqual(diff.botConflicts) // stessa funzione dell'edge di lettura
+    const blocked = await req(C, 'POST', '/publish', { expectedRevision: r1.revision })
+    expect(blocked.statusCode).toBe(409)
+    expect(blocked.json()).toMatchObject({ error: { code: 'BOT_CONFLICTS' }, currentRevision: r1.revision, conflicts: [{ kind: 'item', id: y!.id, name: 'Gricia', reason: 'missing' }] })
+    expect(blocked.json().error.message).toContain('Gricia'); expect(blocked.json().error.message).not.toMatch(/categori/i)
+    expect((await row(C)).revision).toBe(r1.revision)
+    const ok = await req(C, 'POST', '/publish', { expectedRevision: r1.revision, confirmBotConflicts: true })
+    expect(ok.statusCode).toBe(200)
+    const r2 = await row(C)
+    expect(r2.pending).toBe(false); expect('botConflicts' in r2.draft).toBe(false); expect(r2.draft).toEqual(r2.published)
+    expect(r2.published.menus[0].sections[0].items.map((i: any) => i.id)).toEqual([x!.id])
+    // di nuovo un conflitto, poi Scarta: azzerato
+    expect((await ops(C, [{ op: 'remove', kind: 'item', id: x!.id }])).statusCode).toBe(200)
+    await botTurn(x!.id, 15)
+    const r3 = await row(C)
+    expect(r3.draft.botConflicts).toHaveLength(1)
+    expect((await req(C, 'POST', '/discard', { expectedRevision: r3.revision })).statusCode).toBe(200)
+    const r4 = await row(C)
+    expect(r4.pending).toBe(false); expect('botConflicts' in r4.draft).toBe(false)
+    expect((await req(C, 'GET', '/publish/diff')).json().data.botConflicts).toEqual([])
+  })
+
   it('PROVA: ops ammesse, pubblicazione bloccata (403)', async () => {
     await sql`UPDATE restaurants SET settings=coalesce(settings,'{}'::jsonb)||'{"takomenuTrial":true}'::jsonb WHERE id=${B.id}`
     try {
