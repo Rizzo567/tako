@@ -78,6 +78,7 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     if (!root || state.disabled) return
     const editable = (target: EventTarget | null) => { const el = (target as Element | null)?.closest?.(EDITABLE) as HTMLElement | null; return el && root.contains(el) ? el : null }
     const fromEl = (el: HTMLElement) => selectionFromAttributes({ id: el.getAttribute('data-edit-id'), kind: el.getAttribute('data-edit-kind'), select: el.getAttribute('data-edit-select') })
+    // Clic fuori (anche fuori dalla colonna del menu sugli schermi larghi) = deseleziona; la matita non conta come «fuori».
     const onClick = (e: MouseEvent) => { if (modeRef.current) return; const el = editable(e.target); if (el) select(fromEl(el)); else if (!(e.target as Element)?.closest?.('.tako-edit-pencil')) select(null) }
     const onFocus = (e: FocusEvent) => { if (modeRef.current) return; const el = editable(e.target); if (el && el === e.target) select(fromEl(el)) }
     const onKey = (e: KeyboardEvent) => {
@@ -86,8 +87,8 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       else if (action === 'deselect') { e.preventDefault(); select(null) }
     }
     const onDocKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !e.defaultPrevented && !root.contains(e.target as Node) && selRef.current) select(null) }
-    root.addEventListener('click', onClick); root.addEventListener('focusin', onFocus); root.addEventListener('keydown', onKey); document.addEventListener('keydown', onDocKey)
-    return () => { root.removeEventListener('click', onClick); root.removeEventListener('focusin', onFocus); root.removeEventListener('keydown', onKey); document.removeEventListener('keydown', onDocKey) }
+    document.addEventListener('click', onClick); root.addEventListener('focusin', onFocus); root.addEventListener('keydown', onKey); document.addEventListener('keydown', onDocKey)
+    return () => { document.removeEventListener('click', onClick); root.removeEventListener('focusin', onFocus); root.removeEventListener('keydown', onKey); document.removeEventListener('keydown', onDocKey) }
   }, [root, state.disabled])
 
   // Dopo ogni ri-render (documento nuovo, cambio pagina fra pillole, cambio Menu): riaggancio del gesto e lampeggio.

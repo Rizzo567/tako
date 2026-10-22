@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { WorkspaceMenuRenderer } from './WorkspaceMenuRenderer'
 import { projectMenuForEdit, projectMenuPreview } from '@/lib/menu-preview-calendar'
 import { acceptParentMessage, outgoing } from './menu-edit/protocol'
+import { applyDocumentTheme, DEFAULT_MENU_BACKGROUND } from '@/lib/menu-document-theme'
 import type { EditLayerState } from './menu-edit/MenuEditLayer'
 const MenuEditLayer=lazy(()=>import('./menu-edit/MenuEditLayer'))
 const noop=()=>{}
@@ -54,5 +55,14 @@ function MenuEditPreview({menuId}:{menuId:string}) {
  const props=useMemo(()=>{if(!doc)return null;try{return {value:editRendererProps(doc,selected,presentation,chooseMenu)}}catch(e){return {error:e instanceof Error?e.message:'Menu non valido'}}},[doc,selected,presentation])
  if(error||props?.error)return <p role="alert" className="p-6">{error||props?.error}</p>
  if(!props?.value)return <TakoLoading label="Caricamento menu…" variant="screen"/>
- return <><div ref={setRoot} data-menu-edit-root><WorkspaceMenuRenderer {...props.value}/></div><Suspense fallback={null}><MenuEditLayer root={root} doc={doc} setDoc={setDoc} menuId={selected} state={state} exitTick={exitTick}/></Suspense></>
+ return <><MenuEditSurface props={props.value} rootRef={setRoot}/><Suspense fallback={null}><MenuEditLayer root={root} doc={doc} setDoc={setDoc} menuId={selected} state={state} exitTick={exitTick}/></Suspense></>
+}
+
+/** Superficie della vista di modifica SENZA layer: sfondo del documento come la pagina pubblica + renderer in modo `editing`.
+ *  scripts/verify-menu-editor-identical.mjs la confronta pixel per pixel con la pagina pubblica. */
+export function MenuEditSurface({props,rootRef}:{props:ReturnType<typeof editRendererProps>;rootRef?:(el:HTMLDivElement|null)=>void}){
+ // Stesso sfondo di documento della pagina pubblica (fuori dalla colonna del menu sugli schermi larghi).
+ const themeBackground=props.design?.background||DEFAULT_MENU_BACKGROUND
+ useEffect(()=>{if(!themeBackground)return;return applyDocumentTheme(themeBackground)},[themeBackground])
+ return <div ref={rootRef} data-menu-edit-root><WorkspaceMenuRenderer {...props}/></div>
 }
