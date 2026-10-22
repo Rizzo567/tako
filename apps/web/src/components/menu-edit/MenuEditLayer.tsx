@@ -4,12 +4,12 @@
 // alla SPA, aggancio del motore del gesto (`gesture.ts`), lampeggio. Il renderer resta quello dei clienti in modo `editing`.
 import './edit.css'
 import { useEffect, useRef, useState } from 'react'
-import { applyOps, dropToOps, manualOrderSnapshot } from '../../../../../packages/menu-ops/src/index'
+import { applyOps } from '../../../../../packages/menu-ops/src/index'
 import type { Op } from '../../../../../packages/menu-ops/src/types'
 import { MENU_MOTION } from '@/lib/menu-motion'
 import { createMenuGesture, type MenuGesture, type ReorderDrop } from './gesture'
 import { outgoing, sameSelection, type EditSelection } from './protocol'
-import { canDropInto, currentOrderView, frameSelectors, keyAction, pencilLabel, selectionFromAttributes } from './selection'
+import { canDropInto, currentOrderView, dropOps, frameSelectors, keyAction, pencilLabel, selectionFromAttributes } from './selection'
 
 export type EditLayerState = { selection: EditSelection; flash: string[]; disabled: boolean; editing: boolean; tick: number }
 type Props = { root: HTMLElement | null; doc: any; setDoc: (doc: any) => void; menuId: string; state: EditLayerState; exitTick: number }
@@ -31,13 +31,14 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     selRef.current = next; setSelection(next)
     if (notify) post(outgoing.select(next))
   }
-  const sendOps = (ops: Op[], provisional = false) => {
+  const sendOps = (ops: Op[]) => {
     if (!ops.length) return
     try { setDoc(applyOps(docRef.current, ops).workspace) } catch { post(outgoing.error('APPLY_FAILED')); return }
-    post(outgoing.ops(ops, ++seqRef.current, provisional))
+    post(outgoing.ops(ops, ++seqRef.current))
   }
 
-  // Ordine visto ora, per la fotografia dell'ordine manuale fatta dalla SPA alla creazione di un Menu o Sottomenu dal «+».
+  // Ordine visto ora, per la fotografia dell'ordine manuale fatta dalla SPA alla creazione di un Sottomenu dal «+».
+  // Con documento già manuale nessun calcolo (la fotografia non serve più).
   useEffect(() => {
     if (!doc || doc?.design?.manualOrder === true) return
     try { post(outgoing.view(currentOrderView(doc, new Date().getHours()))) } catch {}
@@ -51,17 +52,11 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       root, itemSelector: '[data-edit-id]', reducedMotion: reduced(),
       canDrop: (item, toGroup) => canDropInto(item.kind, toGroup, menuRef.current),
       onTap: id => { const el = root.querySelector<HTMLElement>(`[data-edit-id="${CSS.escape(id)}"]`); if (el) select(selectionFromAttributes({ id, kind: el.getAttribute('data-edit-kind') })) },
-      onDrop: (drop: ReorderDrop) => { let ops: Op[] = []; try { ops = dropToOps(docRef.current, drop) } catch {} if (ops.length) sendOps(ops); else post(outgoing.error('DROP_IGNORED')) },
+      onDrop: (drop: ReorderDrop) => { let ops: Op[] = []; try { ops = dropOps(docRef.current, drop) } catch {} if (ops.length) sendOps(ops); else post(outgoing.error('DROP_IGNORED')) },
       onModeChange: editing => {
         setMode(editing); modeRef.current = editing
         if (editing) root.setAttribute('data-edit-jiggle', ''); else root.removeAttribute('data-edit-jiggle')
         post(outgoing.mode(editing))
-        // Migrazione pigra all'ordine manuale: fotografia dell'ordine visto ora, provvisoria finché non c'è un rilascio vero.
-        if (editing && docRef.current?.design?.manualOrder !== true) {
-          let ops: Op[] = []
-          try { ops = manualOrderSnapshot(docRef.current, currentOrderView(docRef.current, new Date().getHours())) } catch {}
-          sendOps(ops, true)
-        }
       },
     })
     gestureRef.current = gesture
@@ -122,21 +117,25 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
   // Documento o stato nuovi senza cambi di DOM (stesso contenuto): riaggancio e lampeggio comunque al frame successivo.
   useEffect(() => { if (!root) return; const id = requestAnimationFrame(() => { gestureRef.current?.refresh(); flashRef.current() }); return () => cancelAnimationFrame(id) }, [doc, state.tick])
 
-  // Riquadro e matita: seguono l'elemento (scroll, transizioni di pagina, ri-render) leggendo un solo rettangolo per frame.
+  // Riquadro e matita: seguono l'elemento. Niente ciclo a ogni frame: si ricalcola (un solo rAF alla volta) solo su scroll,
+  // resize, cambi di dimensione (ResizeObserver), mutazioni del DOM e fine delle transizioni di pagina.
   useEffect(() => {
     const frameEl = frameRef.current, pencil = pencilRef.current
     if (!root || !frameEl || !pencil) return
     if (!selection || mode) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); return }
-    let raf = 0, last = ''
+    let raf = 0, last = '', observed: HTMLElement | null = null
     const target = () => { for (const sel of frameSelectors(selection)) for (const el of Array.from(root.querySelectorAll<HTMLElement>(sel))) { const r = el.getBoundingClientRect(); if (r.width > 0 && r.height > 0) return { el, r } } return null }
-    const tick = () => {
-      raf = requestAnimationFrame(tick)
+    const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(() => schedule()) : null
+    const update = () => {
+      raf = 0
       if (document.hidden) return
       const t = target()
+      if (t?.el !== observed) { if (observed) resize?.unobserve(observed); observed = t?.el || null; if (observed) resize?.observe(observed) }
       if (!t) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); last = ''; return }
       const pad = 4, { r } = t, key = `${r.left}|${r.top}|${r.width}|${r.height}`
       if (key === last) return
-      last = key
+      // Si è mosso: si segue anche al frame dopo (animazioni WAAPI senza eventi) finché resta fermo.
+      const moved = last !== ''; last = key; if (moved) schedule()
       const radius = parseFloat(getComputedStyle(t.el).borderTopLeftRadius) || 10
       frameEl.style.transform = `translate3d(${r.left - pad}px,${r.top - pad}px,0)`; frameEl.style.width = r.width + pad * 2 + 'px'; frameEl.style.height = r.height + pad * 2 + 'px'; frameEl.style.borderRadius = Math.min(radius + pad, 999) + 'px'
       frameEl.classList.remove('tako-edit-hidden'); pencil.classList.remove('tako-edit-hidden')
@@ -146,8 +145,22 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       const name = (t.el.querySelector('h3')?.textContent || t.el.textContent || '').trim().slice(0, 60)
       pencil.setAttribute('aria-label', pencilLabel(selection.kind, name, t.el.getAttribute('data-edit-kind') === 'section' || !!t.el.closest('[data-edit-kind="section"]')))
     }
-    tick()
-    return () => cancelAnimationFrame(raf)
+    function schedule() { if (!raf) raf = requestAnimationFrame(update) }
+    const mutations = new MutationObserver(schedule)
+    mutations.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class', 'hidden'] })
+    resize?.observe(root)
+    const events = ['transitionend', 'transitioncancel', 'animationend'] as const
+    addEventListener('scroll', schedule, { capture: true, passive: true }); addEventListener('resize', schedule)
+    for (const e of events) root.addEventListener(e, schedule)
+    document.addEventListener('visibilitychange', schedule)
+    update()
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      mutations.disconnect(); resize?.disconnect()
+      removeEventListener('scroll', schedule, { capture: true }); removeEventListener('resize', schedule)
+      for (const e of events) root.removeEventListener(e, schedule)
+      document.removeEventListener('visibilitychange', schedule)
+    }
   }, [root, selection, mode])
 
   return <>

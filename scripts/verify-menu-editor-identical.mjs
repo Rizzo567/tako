@@ -219,25 +219,32 @@ async function main(){
     // canDrop: un piatto non si posa fra le Sezioni
     await clear();await frame.evaluate(o=>window.__takoMenuGestureStub.drop({id:o.dish,kind:'dish',fromGroup:'items:'+o.root,toGroup:'children:'+o.root,toIndex:0}),ids);await wait(150)
     check('1280: piatto rilasciato fuori dal suo tipo di contenitore → nessuna op',!(await msgs()).some(m=>m.type==='tako-menu-edit-ops'))
-    // tastiera minima dello stub: Spazio prende (tremolio + fotografia provvisoria ordine manuale), freccia giù, Spazio posa
+    // tastiera minima dello stub: Spazio prende (tremolio, nessuna fotografia: CONTRATTO §2 rivisto), freccia giù, Spazio posa
     await clear();await frame.focus(`[data-edit-id="${u(330)}"]`).catch(()=>{})
     const pillRoot=await frame.evaluate(()=>document.querySelector('[data-edit-kind="dish"]')?.getAttribute('data-edit-id'))
     await frame.focus(`[data-edit-id="${pillRoot}"]`);await pg.keyboard.press('Space');await wait(200)
     const mode=await last('tako-menu-edit-mode'),prov=(await msgs()).find(m=>m.type==='tako-menu-edit-ops'&&m.provisional)
     check('1280: Spazio → tako-menu-edit-mode {editing:true}',mode?.editing===true,mode)
-    check('1280: entrata nel tremolio con documento non manuale → op provvisorie reorder + manualOrder:true',!!prov&&prov.ops.some(o=>o.op==='manualOrder'&&o.value===true)&&prov.ops.some(o=>o.op==='reorder'),prov&&prov.ops.map(o=>o.op))
+    check('1280: entrata nel tremolio con documento non manuale → nessuna op (niente fotografia provvisoria)',!prov&&!(await msgs()).some(m=>m.type==='tako-menu-edit-ops'),prov&&prov.ops.map(o=>o.op))
     const jiggle=await frame.evaluate(()=>!!document.querySelector('[data-edit-jiggle]')),emptyH=await frame.evaluate(o=>document.querySelector(`[data-edit-group-id="items:${o.empty}"]`)?.getBoundingClientRect().height,ids)
     check('1280: in modalità tremolio le aree di rilascio vuote sono visibili',jiggle&&emptyH>=50,{jiggle,emptyH})
     await pg.screenshot({path:join(OUT,'layer-1280-tremolio-aree-vuote.png')})
     await pg.keyboard.press('ArrowDown');await pg.keyboard.press('Space');await wait(300)
     const kOps=(await msgs()).filter(m=>m.type==='tako-menu-edit-ops'&&!m.provisional).at(-1)
-    check('1280: tastiera stub (Spazio, ↓, Spazio) → op move del piatto',kOps?.ops?.[0]?.op==='move'&&kOps.ops[0].id===pillRoot,kOps?.ops)
+    check('1280: tastiera stub (Spazio, ↓, Spazio) → op move del piatto, senza fotografia ordine manuale',kOps?.ops?.[0]?.op==='move'&&kOps.ops[0].id===pillRoot&&!kOps.ops.some(o=>o.op==='manualOrder'),kOps?.ops)
     await clear();await pg.evaluate(()=>window.__exit());await wait(150);const out=await last('tako-menu-edit-mode')
     check('1280: «Fine» della SPA (tako-menu-edit-exit) → mode {editing:false}',out?.editing===false,out)
     // la SPA rimanda un documento (es. scarta il provvisorio): la vista si riallinea
     await pg.evaluate(()=>window.__send({}));await wait(300)
     const back=await frame.evaluate(o=>Array.from(document.querySelectorAll(`[data-edit-group-id="items:${o.child2}"] > [data-edit-id]`)).map(e=>e.getAttribute('data-edit-id')),ids)
     check('1280: documento della SPA → la vista torna a quello (nessuna modifica locale residua)',back[0]===u(320),back)
+    // rilascio di un Sottomenu su documento non manuale → fotografia + reorder nello stesso messaggio, op reali
+    await clear()
+    const pill=await frame.evaluate(()=>{const p=Array.from(document.querySelectorAll('[data-edit-kind="submenu"]'));const el=p[1]||p[0];return el?{id:el.getAttribute('data-edit-id'),group:el.getAttribute('data-edit-group'),count:p.length}:null})
+    if(pill){await frame.evaluate(p=>window.__takoMenuGestureStub.drop({id:p.id,kind:'submenu',fromGroup:p.group,toGroup:p.group,toIndex:0}),pill);await wait(300)}
+    const pOps=(await msgs()).filter(m=>m.type==='tako-menu-edit-ops')
+    check('1280: rilascio Sottomenu su documento non manuale → un solo messaggio con manualOrder + reorder, non provvisorio',!!pill&&pOps.length===1&&!pOps[0].provisional&&pOps[0].ops.some(o=>o.op==='manualOrder'&&o.value===true)&&pOps[0].ops.some(o=>o.op==='reorder'),{pill,ops:pOps.map(m=>m.ops.map(o=>o.op))})
+    await pg.evaluate(()=>window.__send({}));await wait(300)
     // messaggi da origine sbagliata ignorati
     const before=await frame.evaluate(()=>document.querySelectorAll('[data-edit-id]').length)
     await frame.evaluate(()=>window.postMessage({type:'tako-menu-edit-state',v:1,document:{schemaVersion:1,menus:[],design:{}},menuId:'x',selection:null,flash:[],disabled:false,editing:false},'*'));await wait(150)

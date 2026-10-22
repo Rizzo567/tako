@@ -16,7 +16,7 @@ function server({latency=0}={}){const s={doc:doc(),revision:1,published:1,calls:
  async send(ops,meta){s.calls.push({ops:plain(ops),meta:plain(meta)});if(latency)await new Promise(r=>setImmediate(r));if(s.fail){const f=s.fail;if(!f.sticky)s.fail=null;const e=new Error(f.message||'errore');e.status=f.status;throw e;}
   const r=Ops.applyOps(s.doc,ops);const changed=JSON.stringify(r.workspace)!==JSON.stringify(s.doc);s.doc=r.workspace;if(changed)s.revision++;return {revision:s.revision,publishedRevision:s.published,pending:true,results:plain(r.results)};},
  async load(){return {...plain(s.doc),revision:s.revision,publishedRevision:s.published};}};return s;}
-function setup(opts={}){const c=clock(),srv=server(opts),events=[];const q=Core.createQueue({ops:Ops,env:c.env,send:srv.send,load:srv.load,onEvent:e=>events.push(e)});q.init({...doc(),revision:1,publishedRevision:1});return {c,srv,q,events};}
+function setup(opts={}){const c=clock(),srv=server(opts),events=[];const q=Core.createQueue({ops:Ops,env:c.env,send:(ops,meta)=>srv.send(ops,meta),load:()=>srv.load(),onEvent:e=>events.push(e)});q.init({...doc(),revision:1,publishedRevision:1});return {c,srv,q,events};}
 const set=(id,fields)=>({op:'set',kind:'item',id,fields});
 const names=d=>d.menus[0].sections.flatMap(s=>s.items.map(i=>i.name));
 
@@ -126,4 +126,35 @@ test('poller dello stato: una richiesta alla volta, pausa durante Pubblica, back
  const p=Core.createStatusPoller({env:{...c.env,document:null},paused:()=>paused,status:async()=>{calls++;if(fail-->0)throw new Error('x');return {revision:calls};},onStatus:s=>seen.push(s.revision)});
  p.start();await c.advance(5000);assert.equal(calls,1);assert.equal(p.failures,1);await c.advance(10000);assert.equal(calls,2);assert.deepEqual(seen,[2]);
  paused=true;await c.advance(5000);assert.equal(calls,2);p.stop();
+});
+
+test('revisione 22/10: 422 di un gruppo intero → le op si rimandano una alla volta, si perde solo quella invalida',async()=>{
+ const {c,srv,q,events}=setup();const orig=srv.send;let groups=0;
+ srv.send=async(ops,meta)=>{if(ops.length>1){groups++;const e=new Error('INVALID_DOCUMENT');e.status=422;srv.calls.push({ops:plain(ops),meta:plain(meta)});throw e;}if(ops[0].fields&&ops[0].fields.name===''){srv.calls.push({ops:plain(ops),meta:plain(meta)});const e=new Error('INVALID_DOCUMENT');e.status=422;throw e;}return orig(ops,meta);};
+ const a=q.push(set('i1',{price:13})),b=q.push(set('i2',{name:''})),d=q.push(set('i2',{price:9}));
+ await c.advance(300);for(let n=0;n<10;n++){await c.advance(10);}await q.whenIdle();
+ assert.equal(groups,1);assert.equal(await a,true);assert.equal(await b,false);assert.equal(await d,true);
+ assert.equal(srv.doc.menus[0].sections[0].items[0].price,13);assert.equal(srv.doc.menus[0].sections[0].items[1].price,9);assert.equal(srv.doc.menus[0].sections[0].items[1].name,'Gricia');
+ assert.equal(events.filter(e=>e.type==='rejected').length,1);assert.deepEqual(plain(q.view),plain(Core.strip(await srv.load())));
+});
+
+test('revisione 22/10: risposta 200 con results[i].ok=false → le altre op restano applicate, ricarica e una sola pillola',async()=>{
+ const {c,srv,q,events}=setup();
+ const a=q.push(set('i1',{price:14})),b=q.push(set('nessuno',{name:'X'}));await c.advance(300);await q.whenIdle();
+ assert.equal(await a,true);assert.equal(await b,false);assert.equal(srv.doc.menus[0].sections[0].items[0].price,14);assert.equal(q.view.menus[0].sections[0].items[0].price,14);
+ assert.equal(events.filter(e=>e.type==='rejected').length,1);assert.ok(events.some(e=>e.type==='reloaded'));
+});
+
+test('revisione 22/10: stato remoto più vecchio (cache) → nessuna ricarica, mai indietro di revisione',async()=>{
+ const {c,srv,q}=setup();q.push(set('i1',{price:15}));await c.advance(300);await q.whenIdle();assert.equal(q.snapshot.revision,2);
+ let loads=0;const load=srv.load;srv.load=async()=>{loads++;return load();};
+ assert.equal(q.remote({revision:1,publishedRevision:1}),false);assert.equal(q.remote({revision:2,publishedRevision:1}),false);await flush();
+ assert.equal(loads,0);assert.equal(q.snapshot.revision,2);assert.equal(q.remote({revision:3,publishedRevision:1}),true);await flush();await q.whenIdle();assert.equal(loads,1);
+});
+
+test('revisione 22/10: whenIdle(timeout) senza rete → false allo scadere, le op restano in coda',async()=>{
+ const {c,srv,q}=setup();srv.fail={status:0,sticky:true};
+ q.push(set('i1',{price:16}));await c.advance(300);
+ let res=null;q.whenIdle(8000).then(v=>{res=v;});await c.advance(7999);assert.equal(res,null);await c.advance(1);assert.equal(res,false);
+ assert.ok(q.snapshot.queued>=1);srv.fail=null;q.online();await flush();await c.advance(300);assert.equal(await q.whenIdle(8000),true);assert.equal(srv.doc.menus[0].sections[0].items[0].price,16);
 });

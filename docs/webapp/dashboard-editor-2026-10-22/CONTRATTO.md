@@ -30,7 +30,10 @@ Mappa gesto → op (`dropToOps`): `dish` → item `move` (toParentId = sectionId
 
 - Campo `design.manualOrder?: boolean` (facoltativo, nessun default: documenti senza restano identici).
 - `manualOrder === true` → pagina pubblica, anteprima e editor: Menu nell'ordine del documento (niente `orderDayMenus`), pillole = Sottomenu veri (`categoryGroups`, nomi veri, niente accorpamento né ordinamento a lista fissa). Assente/false = comportamento di oggi, byte per byte.
-- Migrazione **pigra, senza SQL**: un locale passa all'ordine manuale solo quando il ristoratore riordina qualcosa. All'entrata nella modalità tremolio con documento non manuale, l'iframe calcola l'ordine che vede in quel momento (ordine pillole calcolato + ordine Menu all'ora attuale) e manda `manualOrderSnapshot(...)` come op **provvisorie**: la SPA le applica solo in locale; le invia al server insieme al primo rilascio reale; se si esce con «Fine» senza alcun rilascio, la SPA torna al documento di prima (nessuna modifica pendente).
+- Migrazione **pigra, senza SQL** (rivista 22/10 dopo la revisione avversariale, decisione dell'orchestratore): la fotografia `manualOrderSnapshot(...)` dell'ordine visto ora (pillole calcolate + Menu all'ora attuale) scatta SOLO
+  (a) al primo rilascio di tipo `menu` o `submenu` su documento non manuale: l'iframe manda fotografia + op del rilascio **nello stesso** `tako-menu-edit-ops` (op reali, niente `provisional`); rilasci di Piatti e Sezioni non fotografano (non cambiano le pillole);
+  (b) alla creazione di un **Sottomenu** dal «+» (la SPA usa l'ultima `tako-menu-edit-view` dell'iframe); creare un **Menu** non fotografa.
+  Entrare nel tremolio non manda più nulla. `tako-menu-edit-view` l'iframe la calcola a ogni cambio di documento solo se il documento non è manuale. Le op `provisional:true` restano accettate dalla SPA (compatibilità) ma l'iframe non le usa più.
 
 ## 3. API server
 
@@ -57,7 +60,8 @@ iframe → SPA:
 - `tako-menu-edit-ready` `{v:1}`
 - `tako-menu-edit-select` `{v:1, kind, id} | {v:1, kind:null}` (tocco breve / tastiera / Esc / clic fuori)
 - `tako-menu-edit-open` `{v:1, kind, id}` (matita)
-- `tako-menu-edit-ops` `{v:1, ops: Op[], provisional?: boolean, seq: number}` (rilascio del gesto, o snapshot ordine manuale provvisorio)
+- `tako-menu-edit-ops` `{v:1, ops: Op[], provisional?: boolean, seq: number}` (rilascio del gesto; con documento non manuale e rilascio Menu/Sottomenu: fotografia + rilascio insieme; `provisional` non più usato, §2)
+- `tako-menu-edit-view` `{v:1, view:{menuOrder, sectionOrder}}` (ordine visto ora, solo con documento non manuale; serve alla SPA per la creazione di un Sottomenu)
 - `tako-menu-edit-mode` `{v:1, editing: boolean}` (entrata/uscita tremolio; la SPA mostra/nasconde «Fine»)
 - `tako-menu-edit-menu` `{v:1, menuId}` (il ristoratore cambia Menu dal selettore nell'iframe)
 - `tako-menu-edit-error` `{v:1, code}`

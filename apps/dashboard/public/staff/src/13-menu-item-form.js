@@ -4,13 +4,38 @@
    Niente «Salva»: ogni campo si conferma (Invio o uscita dal campo) e diventa una op set; caselle, scelte e pulsanti confermano subito.
    I campi di testo restano locali mentre si scrive, così un aggiornamento del server non cancella ciò che si sta digitando. */
 const MW_ED_TEXTLIKE=el=>!!el&&(el.tagName==='TEXTAREA'||(el.tagName==='INPUT'&&!['checkbox','radio','button','submit','file','range','color'].includes((el.type||'text').toLowerCase())));
+/* Campi strutturati: restano LOCALI finché non sono validi per il server (stesse regole di menu-workspace-contract.ts),
+   così «Aggiungi variante» o un intervallo senza giorni non partono come op destinate al rifiuto. */
+const MW_ED_NUM=(v,min,max,int)=>typeof v==='number'&&Number.isFinite(v)&&v>=min&&v<=max&&(!int||Number.isInteger(v));
+const MW_ED_DATE=v=>v==null||/^\d{4}-\d{2}-\d{2}$/.test(v);
+const MW_ED_TIME=v=>/^([01]\d|2[0-3]):[0-5]\d$/.test(String(v||''));
+const MW_ED_ZONE=v=>{try{new Intl.DateTimeFormat('en',{timeZone:v});return true;}catch{return false;}};
+const MW_ED_VALID={
+ name:v=>typeof v==='string'&&!!v.trim(),
+ price:v=>MW_ED_NUM(v,0,100000),
+ costPrice:v=>v==null||MW_ED_NUM(v,0,Infinity),
+ calories:v=>v==null||MW_ED_NUM(v,0,Infinity,true),
+ prepTimeMinutes:v=>MW_ED_NUM(v,0,1440,true),
+ externalLink:v=>v==null||(typeof v==='string'&&/^https:\/\/[^\s/]+\.[^\s]+/.test(v.trim())),
+ variants:v=>Array.isArray(v)&&v.length<=100&&v.every(x=>x&&typeof x.name==='string'&&!!x.name.trim()&&x.name.length<=200&&MW_ED_NUM(x.priceModifier,-100000,100000)),
+ schedule:v=>v==null||(!!v&&MW_ED_ZONE(v.timezone||'Europe/Rome')&&MW_ED_DATE(v.from)&&MW_ED_DATE(v.until)&&(!v.from||!v.until||v.from<=v.until)&&Array.isArray(v.windows)&&v.windows.length<=30&&v.windows.every(w=>Array.isArray(w.weekdays)&&w.weekdays.length>0&&MW_ED_TIME(w.start)&&MW_ED_TIME(w.end))),
+ promo:v=>v==null||(MW_ED_NUM(v.price,0,100000)&&v.price>0&&MW_ED_DATE(v.until))
+};
+/* Normalizzazione prima dell'invio: link vuoto = nessun link. */
+const MW_ED_CLEAN={externalLink:v=>typeof v==='string'&&!v.trim()?null:typeof v==='string'?v.trim():v};
 function MW_USE_BUFFER(entity,keys,onCommit){
  const [edits,setEdits]=useState({}),editsRef=useRef({}),idRef=useRef(entity?.id);
  if(idRef.current!==entity?.id){idRef.current=entity?.id;editsRef.current={};}
  const value={...(entity||{}),...editsRef.current};
- const commit=useCallback(()=>{const pending=editsRef.current;if(!Object.keys(pending).length)return;editsRef.current={};setEdits({});
+ // final=true (chiusura del pannello): ciò che non è valido non può partire e si lascia; altrimenti resta locale finché non lo è.
+ const commit=useCallback((final)=>{const pending={...editsRef.current};if(!Object.keys(pending).length)return;
+  Object.keys(MW_ED_CLEAN).forEach(k=>{if(k in pending)pending[k]=MW_ED_CLEAN[k](pending[k]);});
   const fields=window.TakoMenuEditorCore.changedFields(entity,{...entity,...pending},Object.keys(pending).filter(k=>keys.includes(k)));
+  const held={};
   if(fields.name!==undefined&&!String(fields.name||'').trim()){delete fields.name;toast('Il nome non può essere vuoto',{type:'warn'});}
+  Object.keys(fields).forEach(k=>{if(k!=='name'&&MW_ED_VALID[k]&&!MW_ED_VALID[k](fields[k])){held[k]=editsRef.current[k];delete fields[k];}});
+  editsRef.current=final===true?{}:held;setEdits(editsRef.current);
+  if(final===true&&Object.keys(held).length)toast('Campi incompleti non salvati',{type:'warn'});
   if(Object.keys(fields).length)onCommit(fields);},[entity,keys,onCommit]);
  const later=useRef(false),source=useRef(null);
  const change=useCallback(next=>{const diff={};Object.keys(next).forEach(k=>{if(keys.includes(k)&&next[k]!==value[k])diff[k]=next[k];});if(!Object.keys(diff).length)return;
@@ -19,9 +44,9 @@ function MW_USE_BUFFER(entity,keys,onCommit){
   // Si guarda l'elemento dell'evento (Safari non dà il fuoco a caselle e pulsanti al clic).
   const from=source.current||window.document.activeElement;if(!MW_ED_TEXTLIKE(from)){later.current=true;}},[value,keys]);
  useEffect(()=>{if(later.current){later.current=false;commit();}});
- const bind={onChangeCapture:e=>{source.current=e.target;},onClickCapture:e=>{source.current=e.target;},onBlur:e=>{if(MW_ED_TEXTLIKE(e.target))commit();},onKeyDown:e=>{if(e.key==='Enter'&&e.target.tagName==='INPUT'&&MW_ED_TEXTLIKE(e.target)){e.preventDefault();commit();}}};
+ const bind={onChangeCapture:e=>{source.current=e.target;},onClickCapture:e=>{source.current=e.target;},onBlur:e=>{if(window.__mwEdMoving)return;if(MW_ED_TEXTLIKE(e.target))commit();},onKeyDown:e=>{if(e.key==='Enter'&&e.target.tagName==='INPUT'&&MW_ED_TEXTLIKE(e.target)){e.preventDefault();commit();}}};
  // Chiusura del pannello: ciò che è scritto non si perde.
- const commitRef=useRef(commit);commitRef.current=commit;useEffect(()=>()=>commitRef.current(),[]);
+ const commitRef=useRef(commit);commitRef.current=commit;useEffect(()=>()=>commitRef.current(true),[]);
  return {value,change,commit,bind,dirty:Object.keys(edits).length>0};
 }
 function MW_ED_PRICE({value,onChange,label='Prezzo (€)'}){

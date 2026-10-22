@@ -2,6 +2,8 @@
 import type { EditSelection, ModelKind } from './protocol'
 import { orderDayMenus } from '@/lib/menu-day-order'
 import { visibleSectionOrder } from '@/lib/menu-category-pages'
+import { applyOps, dropToOps, manualOrderSnapshot } from '../../../../../packages/menu-ops/src/index'
+import type { Op, ReorderDrop } from '../../../../../packages/menu-ops/src/types'
 
 export type GestureKind = 'menu' | 'submenu' | 'section' | 'dish'
 /** Il gesto parla menu|submenu|section|dish; il modello menu|section|item (CONTRATTO §4). */
@@ -67,3 +69,17 @@ export function currentOrderView(doc: DocLike, hour: number): { menuOrder: strin
   for (const m of doc.menus) sectionOrder[m.id] = visibleSectionOrder(m.sections.map(s => ({ ...s, sourceName: s.name, items: s.items as { available?: boolean }[] })), manual)
   return { menuOrder, sectionOrder }
 }
+
+/** Op di un rilascio. Migrazione pigra all'ordine manuale (CONTRATTO §2, revisione 22/10): SOLO un rilascio di Menu o
+ *  Sottomenu su documento non manuale fotografa l'ordine visto ora; fotografia + op del rilascio partono nello stesso
+ *  messaggio (op reali, mai provvisorie). Piatti e Sezioni non cambiano le pillole: niente fotografia. */
+export function dropOps(doc: any, drop: ReorderDrop, hour = new Date().getHours()): Op[] {
+  if ((drop.kind === 'menu' || drop.kind === 'submenu') && doc?.design?.manualOrder !== true) {
+    const snapshot = manualOrderSnapshot(doc, currentOrderView(doc, hour))
+    const after = snapshot.length ? applyOps(doc, snapshot).workspace : doc
+    const ops = dropToOps(after, drop)
+    return ops.length ? [...snapshot, ...ops] : []
+  }
+  return dropToOps(doc, drop)
+}
+

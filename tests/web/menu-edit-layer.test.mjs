@@ -66,3 +66,17 @@ test('the public page never loads the edit layer; the gesture has a single impor
  assert.equal((gesture.match(/^export \{ createMenuGesture \}/gm)||[]).length,1);assert.ok(layer.includes("from './gesture'"));assert.ok(!layer.includes('gesture-stub'))
  for(const f of ['MenuEditLayer.tsx','selection.ts','protocol.ts','edit.css'])assert.ok(!/categori/i.test(readFileSync('apps/web/src/components/menu-edit/'+f,'utf8').replace(/\/\/.*$/gm,'')),f)
 })
+test('revisione 22/10: la fotografia dell’ordine manuale parte solo col rilascio di Menu/Sottomenu, nello stesso gruppo di op',()=>{
+ const doc={design:{},menus:[{id:'cena',name:'Cena',type:'dinner',sections:[{id:'d',name:'Dolci',items:[{id:'i1',name:'Tiramisù',price:5},{id:'i2',name:'Panna cotta',price:5}]},{id:'p1',name:'Primi di terra',items:[]},{id:'a',name:'Antipasti',items:[]}]},{id:'pranzo',name:'Pranzo',type:'lunch',sections:[]}]}
+ const pill=sel.dropOps(doc,{id:'d',kind:'submenu',fromGroup:'pills:cena',toGroup:'pills:cena',toIndex:0},13)
+ assert.ok(pill.some(o=>o.op==='manualOrder'&&o.value===true),'fotografia presente');assert.ok(pill.at(-1).op==='reorder','rilascio dopo la fotografia')
+ const menus=sel.dropOps(doc,{id:'cena',kind:'menu',fromGroup:'menus',toGroup:'menus',toIndex:0},13)
+ assert.ok(menus.some(o=>o.op==='manualOrder'));assert.ok(menus.some(o=>o.op==='reorder'&&o.kind==='menu'))
+ const dish=sel.dropOps(doc,{id:'i2',kind:'dish',fromGroup:'items:d',toGroup:'items:d',toIndex:0},13)
+ assert.ok(dish.length>0&&!dish.some(o=>o.op==='manualOrder'),'piatti: niente fotografia')
+ const manual=sel.dropOps({...doc,design:{manualOrder:true}},{id:'d',kind:'submenu',fromGroup:'pills:cena',toGroup:'pills:cena',toIndex:1},13)
+ assert.ok(manual.length>0&&!manual.some(o=>o.op==='manualOrder'),'già manuale: solo il rilascio')
+ const layer=readFileSync('apps/web/src/components/menu-edit/MenuEditLayer.tsx','utf8')
+ assert.ok(!/provisional|true\)\s*\n?\s*}/.test(layer.replace(/\/\/.*$/gm,'').match(/onModeChange[\s\S]*?\n\s{6}},/)[0]),'entrata nel tremolio senza op')
+ assert.ok(!/requestAnimationFrame\(tick\)/.test(layer),'niente ciclo a ogni frame per seguire la selezione')
+})

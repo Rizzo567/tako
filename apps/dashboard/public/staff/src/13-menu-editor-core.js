@@ -5,7 +5,9 @@
      invio a gruppi ogni ≤ 300 ms, una richiesta alla volta (ordine garantito), ≤ 50 op per richiesta;
      op provvisorie (snapshot ordine manuale) solo in locale finché non arriva il primo rilascio reale;
      revisione remota diversa → ricarica (coda vuota) o ricarica dopo l'ack con riapplicazione delle op non confermate;
-     op rifiutata (404/409/422 o results[i].ok=false) → ricarica dal server + evento «rejected»;
+     op rifiutata (results[i].ok=false: il server applica le altre) → ricarica dal server + evento «rejected» solo per quelle;
+     422 dell'intero gruppo (server vecchio) → le op si rimandano una alla volta, si perde solo quella invalida;
+     404/409/400 → ricarica dal server + evento «rejected»;
      rete assente / 5xx → le op restano in coda, evento «offline», nuovi tentativi con attesa crescente.
    - createStatusPoller: GET /api/menu-workspace/status ogni 5 s (solo scheda visibile, mai due richieste insieme).
    - createPdfFeed: PDF del pubblicato per revisione (attesa 800 ms, richiesta precedente annullata, cache per revisione). */
@@ -26,6 +28,7 @@
   let outbox=[],inflight=null,provisional=[],seq=0,nextId=1;
   let timer=null,retryTimer=null,failures=0,offline=false,reloading=null,reloadWanted=false,remoteSeen=null,lastLabel='',destroyed=false;
   let waiters=[];
+  const ahead=(a,b)=>Number.isFinite(a)&&(!Number.isFinite(b)||a>b);
   const apply=(doc,list)=>list.length?ops.applyOps(doc,list.map(e=>e.op)).workspace:doc;
   const snapshot=()=>({view,revision,publishedRevision,clientId,pending:serverPending||outbox.length>0||!!inflight||provisional.length>0,
    queued:outbox.length+(inflight?inflight.entries.length:0),offline,provisional:provisional.length>0,saving:!!inflight||outbox.length>0});
@@ -42,7 +45,9 @@
    if(reloadWanted){reload();return;}
    if(!outbox.length){settle();return;}
    if(retryTimer!==null){env.clearTimeout(retryTimer);retryTimer=null;}
-   const entries=outbox.splice(0,maxBatch);inflight={entries,seq:++seq};
+   // Dopo un 422 di gruppo le op si rimandano una alla volta (solo), così si perde solo quella invalida.
+   let n=maxBatch;if(outbox[0].solo)n=1;else{const k=outbox.findIndex(e=>e.solo);if(k>0)n=Math.min(n,k);}
+   const entries=outbox.splice(0,n);inflight={entries,seq:++seq};
    const sent=inflight;
    emit();
    Promise.resolve().then(()=>o.send(entries.map(e=>e.op),{clientId,seq:sent.seq})).then(r=>ack(sent,r),e=>fail(sent,e));
@@ -60,7 +65,7 @@
    // Il server non alza la revisione se le op non cambiano nulla (ripetute/rifiutate): +0 o +1 sono nostri.
    if(nextRev!==null&&revision!==null&&nextRev!==revision&&nextRev!==revision+1)reloadWanted=true;
    if(nextPub!==publishedRevision)reloadWanted=true;
-   if(remoteSeen&&nextRev!==null&&(remoteSeen.revision>nextRev||remoteSeen.publishedRevision!==nextPub))reloadWanted=true;
+   if(remoteSeen&&nextRev!==null&&(ahead(remoteSeen.revision,nextRev)||ahead(remoteSeen.publishedRevision,nextPub)))reloadWanted=true;
    if(nextRev!==null)revision=nextRev;
    if(r&&typeof r.pending==='boolean')serverPending=r.pending;
    // Pubblicazione altrui scoperta dall'ack: la revisione pubblicata la aggiorna la ricarica, così l'evento «reloaded» la segnala.
@@ -75,6 +80,8 @@
    if(destroyed||inflight!==sent)return;
    inflight=null;
    const status=e&&e.status;
+   // 422 di un gruppo intero (server che non risponde per op): si rimanda una op alla volta, nell'ordine.
+   if(status===422&&sent.entries.length>1){sent.entries.forEach(x=>{x.solo=true;});outbox=sent.entries.concat(outbox);emit();schedule(0);return;}
    if(REJECT.has(status)){
     sent.entries.forEach(x=>x.done&&x.done(false));
     event({type:'rejected',status,codes:[status],ops:sent.entries.map(x=>x.op),message:e&&e.message});
@@ -129,14 +136,18 @@
    promote(){if(!provisional.length)return false;outbox=provisional.concat(outbox);provisional=[];recompute();if(!inflight&&!reloading)schedule(batchMs);return true;},
    dropProvisional(){if(!provisional.length)return false;provisional=[];recompute();return true;},
    /* Stato remoto (poller): revisione o pubblicazione diversa → ricarica (subito se la coda è vuota, altrimenti dopo l'ack). */
+   /* Solo in avanti: uno stato più vecchio (lettura in cache, risposta in ritardo) non fa mai tornare indietro di revisione. */
    remote(st){if(!st||!confirmed)return false;if(typeof st.lastLabel==='string')lastLabel=st.lastLabel;
-    const changed=(Number.isFinite(st.revision)&&st.revision!==revision)||(st.publishedRevision!==undefined&&st.publishedRevision!==publishedRevision);
-    if(!changed){if(typeof st.pending==='boolean'&&!outbox.length&&!inflight&&!provisional.length&&serverPending!==st.pending){serverPending=st.pending;emit();}return false;}
+    const changed=(revision!==null&&ahead(st.revision,revision))||ahead(st.publishedRevision,publishedRevision);
+    if(!changed){if(typeof st.pending==='boolean'&&st.revision===revision&&!outbox.length&&!inflight&&!provisional.length&&serverPending!==st.pending){serverPending=st.pending;emit();}return false;}
     if(inflight){remoteSeen={revision:st.revision,publishedRevision:st.publishedRevision};return true;}
     reloadWanted=true;if(!timer)flush();return true;},
    flush,
-   /* Promessa risolta a coda vuota e nessuna richiesta in corso (Pubblica aspetta qui). */
-   whenIdle(){if(timer!==null){env.clearTimeout(timer);timer=null;flush();}if(idle())return Promise.resolve();return new Promise(r=>waiters.push(r));},
+   /* Promessa risolta a coda vuota e nessuna richiesta in corso (Pubblica aspetta qui): true; con timeoutMs, false se
+      allo scadere la coda non si è svuotata (rete assente) — chi aspetta si libera, le op restano in coda. */
+   whenIdle(timeoutMs){if(timer!==null){env.clearTimeout(timer);timer=null;flush();}if(idle())return Promise.resolve(true);
+    return new Promise(r=>{let t=null;const w=()=>{if(t!==null)env.clearTimeout(t);r(true);};waiters.push(w);
+     if(timeoutMs>0)t=env.setTimeout(()=>{t=null;waiters=waiters.filter(x=>x!==w);r(false);},timeoutMs);});},
    reload,
    online(){if(offline||outbox.length){if(retryTimer!==null){env.clearTimeout(retryTimer);retryTimer=null;}flush();}},
    destroy(){destroyed=true;if(timer!==null)env.clearTimeout(timer);if(retryTimer!==null)env.clearTimeout(retryTimer);timer=retryTimer=null;waiters=[];},

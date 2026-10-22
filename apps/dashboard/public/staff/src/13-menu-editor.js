@@ -31,6 +31,9 @@ const MW_ED_CAN_EDIT=()=>['owner','manager','menu_editor'].includes(window.__tak
 const MW_ED_UUID=()=>(crypto.randomUUID?crypto.randomUUID():'10000000-1000-4000-8000-100000000000'.replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16)));
 const MW_ED_PILL=(message,opts={})=>window.TakoMenuLive?.toast?.show({message,...opts});
 const MW_ED_LABEL={menu:'menu',root:'sottomenu',child:'sezione',item:'piatto'};
+/* Pubblica/Scarta aspettano la coda al massimo 8 s: senza rete il riquadro si libera con un messaggio (le op restano in coda). */
+const MW_ED_IDLE_MS=8000,MW_ED_OFFLINE_TEXT='Non salvato, riprovo: controlla la connessione';
+const MW_ED_OFFLINE=()=>{const e=new Error(MW_ED_OFFLINE_TEXT);e.offline=true;return e;};
 
 function useMenuEditor({adapter,enabled,menuId,setMenuId,trial,onLeft}){
  const [snap,setSnap]=useState(null),[loadError,setLoadError]=useState(''),[selection,setSelection]=useState(null),[editing,setEditing]=useState(false),[flash,setFlash]=useState([]),[panel,setPanel]=useState(null),[review,setReview]=useState(null);
@@ -40,7 +43,7 @@ function useMenuEditor({adapter,enabled,menuId,setMenuId,trial,onLeft}){
   if(!enabled||!adapter?.applyOps||!window.TakoMenuEditorCore||!window.TakoMenuOps)return;
   const C=window.TakoMenuEditorCore;let alive=true;setLoadError('');setSnap(null);
   const q=C.createQueue({send:(ops,meta)=>adapter.applyOps(ops,meta),load:()=>adapter.load(),onChange:s=>{if(alive)setSnap(s);},onEvent:e=>{
-   if(e.type==='rejected')MW_ED_PILL('Modifica non applicata: l’elemento è cambiato');
+   if(e.type==='rejected')MW_ED_PILL((e.codes||[]).every(c=>c==='FIELD'||c===422)?'Modifica non valida: non salvata':'Modifica non applicata: l’elemento è cambiato');
    else if(e.type==='offline')MW_ED_PILL(e.auth?'Sessione scaduta: accedi di nuovo':'Non salvato, riprovo',{duration:600000});
    else if(e.type==='online')MW_ED_PILL('Modifiche salvate');
    else if(e.type==='reloaded'&&e.publishedChanged&&!busyRef.current){const live=window.TakoMenuLive,changed=live?live.changedItems(e.before,e.after):[];const ids=C.changedIds(e.before,e.after);if(ids.length)doFlash(ids);
@@ -66,18 +69,19 @@ function useMenuEditor({adapter,enabled,menuId,setMenuId,trial,onLeft}){
  const can=MW_ED_CAN_EDIT();
  const statusText=!snap?'Caricamento…':snap.pending?'Modifiche non pubblicate':'Pubblicato';
 
- const loadDiff=async()=>{const q=qRef.current;await q.whenIdle();const diff=await adapter.publishDiff();return {diff,revision:q.snapshot.revision};};
+ const idle=async q=>{if(!(await q.whenIdle(MW_ED_IDLE_MS)))throw MW_ED_OFFLINE();};
+ const loadDiff=async()=>{const q=qRef.current;await idle(q);const diff=await adapter.publishDiff();return {diff,revision:q.snapshot.revision};};
  const openPublish=async()=>{if(trial||!qRef.current||busyRef.current)return;busyRef.current=true;setReview({loading:true});try{const r=await loadDiff();setReview(r);}catch(e){setReview({error:e.message||'Impossibile preparare la pubblicazione'});}finally{busyRef.current=false;}};
  const confirmPublish=async()=>{const q=qRef.current;if(!q||busyRef.current)return;busyRef.current=true;setReview(r=>({...r,busy:true,error:''}));
-  try{await q.whenIdle();
+  try{await idle(q);
    // Il riquadro mostrava un'altra revisione (bot, altra scheda): si aggiorna da solo e si riconferma.
    if(review?.revision!==q.snapshot.revision){const r=await loadDiff();setReview({...r,error:'Il menu è cambiato nel frattempo: controlla e conferma di nuovo.'});return;}
    await (adapter.publishStrict||adapter.publish)(q.snapshot.revision);const doc=await adapter.load();q.replace({...doc,pending:false});setReview(null);MW_ED_PILL('Menu pubblicato');}
-  catch(e){if(e.status===409){try{await q.reload();const r=await loadDiff();setReview({...r,error:'Il menu è cambiato nel frattempo: controlla e conferma di nuovo.'});}catch(x){setReview(v=>({...v,busy:false,error:x.message}));}}else setReview(v=>({...v,busy:false,error:e.status===423||/prova/i.test(e.message||'')?'Menu di prova privato: la bozza è salvata, la pubblicazione è bloccata.':e.message||'Pubblicazione non riuscita'}));}
+  catch(e){if(e.offline)setReview(v=>({...v,busy:false,error:e.message}));else if(e.status===409){try{await q.reload();const r=await loadDiff();setReview({...r,error:'Il menu è cambiato nel frattempo: controlla e conferma di nuovo.'});}catch(x){setReview(v=>({...v,busy:false,error:x.message}));}}else setReview(v=>({...v,busy:false,error:e.status===423||/prova/i.test(e.message||'')?'Menu di prova privato: la bozza è salvata, la pubblicazione è bloccata.':e.message||'Pubblicazione non riuscita'}));}
   finally{busyRef.current=false;}};
  const discard=async()=>{const q=qRef.current;if(!q||busyRef.current)return;if(!window.confirm('Scartare tutte le modifiche non pubblicate? Il menu torna com’è online.'))return;busyRef.current=true;setReview(r=>({...r,busy:true,error:''}));
-  try{await q.whenIdle();const doc=await adapter.discard(q.snapshot.revision);q.replace({...doc,pending:false});setReview(null);setSelection(null);setPanel(null);MW_ED_PILL('Modifiche scartate');}
-  catch(e){if(e.status===409){await q.reload().catch(()=>{});try{const r=await loadDiff();setReview({...r,error:'Il menu è cambiato nel frattempo: riprova.'});}catch{setReview(v=>({...v,busy:false}));}}else setReview(v=>({...v,busy:false,error:e.message||'Non riuscito'}));}
+  try{await idle(q);const doc=await adapter.discard(q.snapshot.revision);q.replace({...doc,pending:false});setReview(null);setSelection(null);setPanel(null);MW_ED_PILL('Modifiche scartate');}
+  catch(e){if(e.offline)setReview(v=>({...v,busy:false,error:e.message}));else if(e.status===409){await q.reload().catch(()=>{});try{const r=await loadDiff();setReview({...r,error:'Il menu è cambiato nel frattempo: riprova.'});}catch{setReview(v=>({...v,busy:false}));}}else setReview(v=>({...v,busy:false,error:e.message||'Non riuscito'}));}
   finally{busyRef.current=false;}};
 
  /* «+» a 4 scelte (D9): genitore preselezionato dalla selezione; id dal client; compare subito, lampeggia, resta selezionato. */
@@ -93,10 +97,13 @@ function useMenuEditor({adapter,enabled,menuId,setMenuId,trial,onLeft}){
   else if(kind==='category'){const root=selection&&window.TakoMenuEditorCore.locate(view,selection.kind,selection.id)?.root;const last=root&&menu.sections.filter(s=>s.id===root.id||s.parentSectionId===root.id).at(-1);op={op:'create',kind:'section',id,parentId:menuId,fields:{name,active:false},...(last&&root.id&&menu.sections.some(s=>s.id===root.id)?{at:{afterId:last.id}}:{})};sel={kind:'section',id};}
   else if(kind==='section'){const kids=menu.sections.filter(s=>s.parentSectionId===parentId);const after=(kids.at(-1)||menu.sections.find(s=>s.id===parentId))?.id;op={op:'create',kind:'section',id,parentId:menuId,fields:{name,parentSectionId:parentId},...(after?{at:{afterId:after}}:{})};sel={kind:'section',id};}
   else{const anchor=selection?.kind==='item'&&window.TakoMenuEditorCore.locate(view,'item',selection.id)?.section.id===sectionId?selection.id:null;op={op:'create',kind:'item',id,parentId:sectionId,fields:{name,description:description||null,price:price||0},...(anchor?{at:{afterId:anchor}}:{})};sel={kind:'item',id};}
-  // Creare un Menu o un Sottomenu = il ristoratore decide l'ordine: il locale passa all'ordine manuale (fotografia dell'ordine visto),
-  // così il nuovo elemento compare col suo nome e non dentro una pillola accorpata (default 22/10, annotato).
-  const ov=orderViewRef.current;if((kind==='menu'||kind==='category')&&view.design?.manualOrder!==true&&ov&&window.TakoMenuOps?.manualOrderSnapshot){try{const snap=window.TakoMenuOps.manualOrderSnapshot(view,ov);if(snap.length)push(snap);}catch{}}
-  const done=push(op);if(kind==='menu')setMenuId(id);setSelection(sel);doFlash([id]);reveal(sel.kind,sel.id);return done;};
+  // Creare un Sottomenu = il ristoratore decide le pillole: il locale passa all'ordine manuale (fotografia dell'ordine visto),
+  // così il nuovo Sottomenu compare col suo nome e non dentro una pillola accorpata. Creare un Menu NON fotografa
+  // (decisione dell'orchestratore 22/10, revisione: i Menu nuovi non cambiano le pillole).
+  const ov=orderViewRef.current;if(kind==='category'&&view.design?.manualOrder!==true&&ov&&window.TakoMenuOps?.manualOrderSnapshot){try{const snap=window.TakoMenuOps.manualOrderSnapshot(view,ov);if(snap.length)push(snap);}catch{}}
+  // Conferma locale immediata: l'elemento è già nella vista, il foglio si chiude senza aspettare il server (offline compreso);
+  // un rifiuto successivo lo toglie con la ricarica e la pillola.
+  push(op);if(kind==='menu')setMenuId(id);setSelection(sel);doFlash([id]);reveal(sel.kind,sel.id);return true;};
  const frameRef=useRef(null),orderViewRef=useRef(null);
  const reveal=(kind,id)=>{setSelection({kind,id});window.setTimeout(()=>{try{const el=frameRef.current?.contentDocument?.querySelector(`[data-edit-id="${id}"],[data-item-id="${id}"],#workspace-section-${id}`);el?.scrollIntoView({block:'center',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}catch{}},120);};
  return {orderViewRef,enabled,ready:!!snap,loadError,snap,view,menus,menu,menuId,selection,setSelection,editing,setEditing,flash,panel,setPanel,review,setReview,push,can,trial,statusText,
@@ -109,7 +116,9 @@ const MW_ED_NOOP=()=>({enabled:false});
 
 /* ── Centro: iframe a tutta larghezza utile + pannello della matita + riquadro Pubblica ── */
 function MenuEditorStage({ed,adapter,mobile}){
- const frame=ed.frameRef,[src]=useState(()=>`/menu-preview/${ed.menuId}?edit=1`),proto=useRef('legacy');
+ // src fisso (il Menu passa nei messaggi); si aggiorna solo se l'iframe era nato senza Menu e ora ce n'è uno (primo Menu creato).
+ const frame=ed.frameRef,[src,setSrc]=useState(()=>`/menu-preview/${ed.menuId}?edit=1`),proto=useRef('legacy'),bornEmpty=useRef(!ed.menuId);
+ useEffect(()=>{if(ed.menuId&&bornEmpty.current){bornEmpty.current=false;proto.current='legacy';setSrc(`/menu-preview/${ed.menuId}?edit=1`);}},[ed.menuId]);
  const edRef=useRef(ed);edRef.current=ed;
  const post=useCallback(()=>{const cur=edRef.current,win=frame.current?.contentWindow;if(!win||!cur.view)return;
   if(proto.current==='edit')win.postMessage({type:'tako-menu-edit-state',v:1,document:cur.view,menuId:cur.menuId,selection:cur.selection,flash:cur.flash,disabled:!cur.can,editing:cur.editing},location.origin);
@@ -142,12 +151,13 @@ function MenuEditorPanel({ed,adapter,mobile}){
  const narrow=MW_USE_MEDIA('(max-width:899px)'),sheet=mobile||narrow;
  const close=()=>ed.setPanel(null);
  const [job,setJob]=useState(null),ctl=useRef(null),fileInput=useRef(null);
+ const [host]=useState(()=>{const d=window.document.createElement('div');d.style.display='contents';return d;});
  useEffect(()=>()=>ctl.current?.abort(),[]);
  if(!found)return null;
  const level=found.kind==='menu'?'menu':found.kind==='item'?'item':found.section.parentSectionId?'child':'root';
  const title='Modifica '+MW_ED_LABEL[level];
  const commit=fields=>ed.push({op:'set',kind:found.kind,id:ed.panel.id,fields});
- const remove=()=>{const name=(found.item||found.section||found.menu).name;if(!window.confirm(`Eliminare ${level==='item'?'il piatto':level==='menu'?'il menu':level==='root'?'il sottomenu e i suoi piatti':'la sezione e i suoi piatti'} «${name}»?`))return;ed.push({op:'remove',kind:found.kind,id:ed.panel.id});ed.setSelection(null);close();};
+ const remove=()=>{const name=(found.item||found.section||found.menu).name;if(!window.confirm(`Eliminare ${level==='item'?'il piatto':level==='menu'?'il menu':level==='root'?'il sottomenu con le sue sezioni e i suoi piatti':'la sezione e i suoi piatti'} «${name}»?`))return;ed.push({op:'remove',kind:found.kind,id:ed.panel.id});ed.setSelection(null);close();};
  const upload=async file=>{if(!file)return;const tools=window.TakoMenuImageTools;if(!tools){toast('Caricamento foto non disponibile',{type:'error'});return;}
   if(!MW_PHOTO_TYPES.includes(file.type)){toast('Formato non supportato: usa una foto JPG, PNG o WebP.',{type:'error'});return;}
   ctl.current?.abort();const c=ctl.current=new AbortController(),preview=URL.createObjectURL(file),id=ed.panel.id;setJob({percent:0,preview});
@@ -158,8 +168,20 @@ function MenuEditorPanel({ed,adapter,mobile}){
    photo={{job,onPick:()=>fileInput.current?.click(),onDropFile:upload,onCancel:()=>{ctl.current?.abort();setJob(null);}}}/>
   :<MenuEditorLevelForm key={ed.panel.id} kind={level} label={MW_ED_LABEL[level]} entity={found.kind==='menu'?found.menu:found.section} menu={found.menu} disabled={!ed.can} onCommit={commit} onDelete={remove} onFixedMutate={ed.mutateOps}/>;
  const content=<>{body}<input ref={fileInput} type="file" accept={MW_PHOTO_TYPES.join(',')} hidden tabIndex={-1} aria-hidden="true" onChange={e=>{const f=e.target.files?.[0];e.target.value='';upload(f);}}/></>;
- if(sheet)return <MenuWorkspaceDrawer title={title} onClose={close}>{content}</MenuWorkspaceDrawer>;
- return <MenuEditorPopover title={title} anchorId={ed.panel.id} frame={ed.frameRef} onClose={close}>{content}</MenuEditorPopover>;
+ // Il form vive in un nodo stabile (portale) che passa fra pop-over e foglio: rotazione/resize non lo smontano,
+ // il testo a metà resta nel campo e non viene confermato a sorpresa.
+ const portal=ReactDOM.createPortal(content,host);
+ if(sheet)return <>{portal}<MenuWorkspaceDrawer title={title} onClose={close}><MW_ED_SLOT host={host}/></MenuWorkspaceDrawer></>;
+ return <>{portal}<MenuEditorPopover title={title} anchorId={ed.panel.id} frame={ed.frameRef} onClose={close}><MW_ED_SLOT host={host}/></MenuEditorPopover></>;
+}
+/* Aggancia il nodo stabile del pannello dentro il contenitore corrente; durante il passaggio il fuoco torna al campo
+   e il «blur» del passaggio non conferma il testo (window.__mwEdMoving, letto da MW_USE_BUFFER). */
+function MW_ED_SLOT({host}){
+ const ref=useRef(null);
+ React.useLayoutEffect(()=>{const el=ref.current;if(!el)return;if(host.parentNode!==el)el.appendChild(host);const f=host.__focus;if(f&&f.isConnected&&host.contains(f))f.focus({preventScroll:true});
+  return()=>{const a=window.document.activeElement;if(a&&host.contains(a)&&a!==host){host.__focus=a;window.__mwEdMoving=true;window.setTimeout(()=>{window.__mwEdMoving=false;if(!host.isConnected)host.__focus=null;},150);}if(host.parentNode===el)el.removeChild(host);};},[host]);
+ useEffect(()=>{const f=host.__focus;if(!f)return;const id=requestAnimationFrame(()=>{host.__focus=null;if(f.isConnected&&host.contains(f))f.focus({preventScroll:true});window.__mwEdMoving=false;});return()=>cancelAnimationFrame(id);},[host]);
+ return <div ref={ref} style={{display:'contents'}}/>;
 }
 function MenuEditorPopover({title,anchorId,frame,onClose,children}){
  const ref=useRef(null),[pos,setPos]=useState(null),closeRef=useRef(onClose);closeRef.current=onClose;

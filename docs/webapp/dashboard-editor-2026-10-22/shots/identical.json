@@ -653,13 +653,8 @@
    }
   },
   {
-   "name": "1280: entrata nel tremolio con documento non manuale → op provvisorie reorder + manualOrder:true",
-   "ok": true,
-   "detail": [
-    "reorder",
-    "reorder",
-    "manualOrder"
-   ]
+   "name": "1280: entrata nel tremolio con documento non manuale → nessuna op (niente fotografia provvisoria)",
+   "ok": true
   },
   {
    "name": "1280: in modalità tremolio le aree di rilascio vuote sono visibili",
@@ -670,7 +665,7 @@
    }
   },
   {
-   "name": "1280: tastiera stub (Spazio, ↓, Spazio) → op move del piatto",
+   "name": "1280: tastiera stub (Spazio, ↓, Spazio) → op move del piatto, senza fotografia ordine manuale",
    "ok": true,
    "detail": [
     {
@@ -700,6 +695,25 @@
     "00000000-0000-4000-8000-000000000320",
     "00000000-0000-4000-8000-000000000321"
    ]
+  },
+  {
+   "name": "1280: rilascio Sottomenu su documento non manuale → un solo messaggio con manualOrder + reorder, non provvisorio",
+   "ok": true,
+   "detail": {
+    "pill": {
+     "id": "00000000-0000-4000-8000-000000000033",
+     "group": "pills:00000000-0000-4000-8000-000000000003",
+     "count": 3
+    },
+    "ops": [
+     [
+      "reorder",
+      "reorder",
+      "manualOrder",
+      "reorder"
+     ]
+    ]
+   }
   },
   {
    "name": "1280: messaggio non della finestra genitore ignorato",
@@ -883,11 +897,11 @@
    "ok": true
   }
  ],
- "startedAt": "2026-10-22T09:15:27.652Z",
+ "startedAt": "2026-10-22T09:45:19.476Z",
  "summary": {
   "identicalRuns": 24,
   "identicalAllZero": true,
-  "layerChecks": 47,
+  "layerChecks": 48,
   "layerFailed": []
  }
 }
