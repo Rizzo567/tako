@@ -11,6 +11,8 @@
  // Piatti cambiati (per id) o aggiunti tra il documento salvato locale e quello remoto.
  function changedItems(before,after){const old=itemsOf(before),out=[];itemsOf(after).forEach((item,id)=>{const prev=old.get(id);if(!prev||FIELDS.some(k=>!same(prev[k],item[k])))out.push({id,name:item.name||''});});return out;}
  function message(label,changed){if(/^\s*whatsapp/i.test(label||''))return changed.length===1&&changed[0].name?'Aggiornato da WhatsApp: '+changed[0].name:'Aggiornato da WhatsApp';return 'Menu aggiornato';}
+ /* GET /api/menu-workspace/status (edge di lettura, 22/10) → stessa forma di latest(): {revision,label}. */
+ function fromStatus(st){const n=Number(st&&st.revision);return Number.isFinite(n)?{revision:n,label:String((st&&st.lastLabel)||'')}:null;}
  function latest(rows){let top=null;(Array.isArray(rows)?rows:[]).forEach(r=>{const n=Number(r&&r.revision);if(Number.isFinite(n)&&(!top||n>top.revision))top={revision:n,label:String(r.label||'')};});return top;}
 
  /* o: {listVersions, load, getState:()=>({revision,saved,dirty,paused}), onApply(next,ids), onNotify({message,reload,revision}),
@@ -30,7 +32,7 @@
    if(!state||state.paused){schedule(interval);return;}
    inFlight=true;const startedAt=Date.now();
    try{
-    const top=latest(await o.listVersions());
+    const top=o.status?fromStatus(await o.status()):latest(await o.listVersions());
     let st=o.getState();
     if(!stopped&&top&&st&&!st.paused&&Number.isFinite(st.revision)&&top.revision>st.revision){
      if(st.dirty){
@@ -101,5 +103,5 @@
   if(!action)hideTimer=window.setTimeout(hide,duration);
  }
  const toast={show,hide,get element(){return pill;}};
- window.TakoMenuLive={create,changedItems,message,latest,toast};
+ window.TakoMenuLive={create,changedItems,message,latest,fromStatus,toast};
 })();

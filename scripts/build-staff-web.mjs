@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /** Precompile the original shared-global staff SPA; never mutate its source directory. */
-import { transform } from 'esbuild';
+import { transform, build } from 'esbuild';
 import {createHash} from 'node:crypto';
 import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
 import { resolve, dirname, relative, isAbsolute } from 'node:path';
@@ -29,6 +29,11 @@ const boot = `(function () {
   window.addEventListener('error', function (e) { panel((e && e.message) || 'Errore di caricamento'); });
   setTimeout(function () { if (document.getElementById('boot')) panel('Il server non risponde o la pagina non si è caricata.'); }, 12000);
 })();\n`;
+/* Dashboard editor 22/10: packages/menu-ops (applyOps…) compilato in un globale window.TakoMenuOps, stessa implementazione del server. */
+export async function buildMenuOpsLib() {
+  const result = await build({entryPoints:[resolve(repo,'packages/menu-ops/src/index.ts')],bundle:true,write:false,format:'iife',globalName:'TakoMenuOps',target:['es2020'],minify:true,legalComments:'none',logLevel:'silent'});
+  return result.outputFiles[0].text;
+}
 export async function buildStaffWeb(out = resolve(repo,'release/staff-web')) {
   out = resolve(out);
   if (out === source || out.startsWith(source + '/') || source.startsWith(out + '/')) throw new Error('Output must be separate from the staff source tree');
@@ -60,6 +65,7 @@ export async function buildStaffWeb(out = resolve(repo,'release/staff-web')) {
   for(const name of ['pdf.mjs','pdf.worker.mjs']) await cp(resolve(pdfjs,'legacy/build',name),resolve(out,'lib/pdfjs',name));
   for(const name of ['cmaps','standard_fonts','wasm']) await cp(resolve(pdfjs,name),resolve(out,'lib/pdfjs',name),{recursive:true});
   await cp(resolve(pdfjs,'LICENSE'),resolve(out,'lib/pdfjs/LICENSE'));
+  await writeFile(resolve(out,'lib/menu-ops.js'),await buildMenuOpsLib());
   await writeFile(resolve(out,'index.html'),html);
   const motion=JSON.parse(await readFile(new URL('../apps/web/src/lib/menu-motion.tokens.json',import.meta.url),'utf8'));
   await writeFile(resolve(out,'boot.js'),'window.TakoMenuMotion='+JSON.stringify(motion)+';\n'+boot);
