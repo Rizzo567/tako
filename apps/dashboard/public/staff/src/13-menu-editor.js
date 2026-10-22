@@ -157,13 +157,17 @@ function MenuEditorStage({ed,adapter,mobile}){
    const sr=scroller?scroller.getBoundingClientRect():{top:0},top=el.getBoundingClientRect().top-sr.top+(scroller?scroller.scrollTop:0);
    const pad=scroller?parseFloat(getComputedStyle(scroller).paddingBottom)||0:0,avail=(scroller?scroller.clientHeight:window.innerHeight)-top-pad;
    const h=Math.max(260,Math.floor(avail)),scale=Math.min(1,Math.round(w/MW_ED_LOGICAL*1000)/1000);
-   setFit(f=>f&&f.w===w&&f.h===h&&f.scale===scale?f:{w,h,scale});};
+   /* 22/10 sera: la barra in basso (capsula di vetro) galleggia sopra il riquadro: spazio in fondo al menu perché l'ultimo piatto resti raggiungibile. */
+   const nav=window.document.querySelector('.mobile-bottom-nav'),er=el.getBoundingClientRect();let pb=0;
+   /* geometria a riposo (non il rettangolo animato dell'entrata dal basso) */
+   if(nav&&nav.offsetHeight&&nav.offsetParent){const cb=nav.offsetParent.getBoundingClientRect().bottom,navTop=cb-(parseFloat(getComputedStyle(nav).bottom)||0)-nav.offsetHeight;pb=Math.max(0,Math.ceil(er.top+h-navTop+12));}
+   setFit(f=>f&&f.w===w&&f.h===h&&f.scale===scale&&f.pb===pb?f:{w,h,scale,pb});};
   const schedule=()=>{if(!raf)raf=requestAnimationFrame(run);};
-  run();scroller?.classList.add('mw-ed-noscroll');if(scroller)scroller.scrollTop=0;
+  scroller?.classList.add('mw-ed-noscroll');run();if(scroller)scroller.scrollTop=0;
   const ro=typeof ResizeObserver==='function'?new ResizeObserver(schedule):null;ro?.observe(el);if(scroller)ro?.observe(scroller);const head=el.parentElement;if(head)ro?.observe(head);
   window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);
   return()=>{if(raf)cancelAnimationFrame(raf);ro?.disconnect();window.removeEventListener('resize',schedule);window.visualViewport?.removeEventListener('resize',schedule);scroller?.classList.remove('mw-ed-noscroll');};},[mobile,!!ed.loadError]);
- const applyInv=useCallback(()=>{try{const de=frame.current?.contentDocument?.documentElement;if(de){if(fitRef.current&&fitRef.current.scale<1)de.style.setProperty('--tako-edit-inv',String(Math.round(1/fitRef.current.scale*1000)/1000));else de.style.removeProperty('--tako-edit-inv');}}catch{}},[]);
+ const applyInv=useCallback(()=>{try{const de=frame.current?.contentDocument?.documentElement;if(de){if(fitRef.current&&fitRef.current.scale<1)de.style.setProperty('--tako-edit-inv',String(Math.round(1/fitRef.current.scale*1000)/1000));else de.style.removeProperty('--tako-edit-inv');if(fitRef.current?.pb)de.style.setProperty('padding-bottom',Math.ceil(fitRef.current.pb/fitRef.current.scale)+'px');else de.style.removeProperty('padding-bottom');}}catch{}},[]);
  const fitRef=useRef(fit);fitRef.current=fit;
  useEffect(()=>{applyInv();},[fit]);
  if(ed.loadError)return <Card><p role="alert">{ed.loadError}</p><Btn onClick={()=>ed.queue()?.reload()}>Riprova</Btn></Card>;

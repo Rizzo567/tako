@@ -52,3 +52,25 @@
   .sb-swap > .in, .sb-swap > .out, .sb-enter, .sb-leave, .sb-chip-in, .sb-badge-in { animation-duration: .12s !important; animation-delay: 0s !important; transform: none !important; filter: none !important; }
   .sb-spin { animation-duration: 1.6s; }
 }
+
+/* ── 22/10 sera: barra in basso come la tab bar Liquid Glass di iOS 26 ──
+   Capsula flottante staccata dai bordi, vetro traslucido (il contenuto si vede sfocato dietro), bassa e compatta subito sopra
+   la safe-area; voce attiva su una pillola interna più chiara. Il contenuto scorre DIETRO la capsula. */
+.app-live.mobile .mobile-bottom-nav.tab-glass{
+ position:absolute!important;left:18px!important;right:18px!important;bottom:calc(env(safe-area-inset-bottom,0px) + 6px)!important;
+ margin:0!important;height:58px!important;min-height:58px!important;padding:4px!important;gap:4px;border-radius:999px!important;
+ background:rgba(255,255,255,.6)!important;
+ -webkit-backdrop-filter:blur(22px) saturate(180%)!important;backdrop-filter:blur(22px) saturate(180%)!important;
+ border:.5px solid rgba(255,255,255,.75)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -.5px 0 rgba(0,0,0,.04),0 0 0 .5px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.05)!important;
+ animation:tab-glass-in 420ms cubic-bezier(.22,1,.36,1) both;z-index:40!important}
+@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){.app-live.mobile .mobile-bottom-nav.tab-glass{background:rgba(255,255,255,.92)!important}}
+.app-live.mobile .mobile-bottom-nav.tab-glass .bb-tab{min-height:0!important;height:100%;padding:0!important;gap:2px!important;justify-content:center;border-radius:999px;transition:background-color 180ms ease}
+.app-live.mobile .mobile-bottom-nav.tab-glass .bb-tab.is-on{background:rgba(255,255,255,.85);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.06)}
+.app-live.mobile .mobile-bottom-nav.tab-glass .nav-ico svg{width:22px;height:22px}
+.app-live.mobile .mobile-bottom-nav.tab-glass .bb-tab>span:last-child{font-size:10px!important;line-height:12px}
+@keyframes tab-glass-in{from{transform:translateY(calc(100% + 24px));opacity:0}to{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.app-live.mobile .mobile-bottom-nav.tab-glass{animation:none}}
+/* Le pagine lasciano spazio alla capsula in fondo; l'editor del menu no: il riquadro arriva fino in fondo e scorre dietro. */
+.app-live.mobile .screen-scroll{padding-bottom:calc(20px + 58px + 12px + env(safe-area-inset-bottom,0px))!important}
+.app-live.mobile .screen-scroll.mw-ed-noscroll{padding-bottom:0!important}

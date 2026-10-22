@@ -41,3 +41,14 @@ Rollback: operativo `cp $RB/rollback-v157.ts release/serverless/candidate/index.
 - Verifica `scripts/verify-editor-mobile-fix.mjs` (emulazione iPhone 390×844 e 430×932 DPR 3 touch + desktop 1280): TUTTO VERDE, screenshot in `mobile-fix/`.
 - Deploy web → **b588452d-71c9-4f56-b36e-50f807cdb0c7** (prima 362c80a8). Smoke: /staff 200, /api/auth/me 401, /menu-preview QA 200 col bundle nuovo. Edge, bot, pubblico non toccati.
 - Rollback: `CI=true npx wrangler rollback 362c80a8-81e5-4068-a29d-f2f3439e949e --config deploy/cloudflare/wrangler.jsonc`.
+
+# LOG DEPLOY 22/10 sera (2) — testata telefono, OG, barra vetro, editor senza hero, gesto iPhone
+
+- Telefono: «Pubblica» nella riga della testata a destra di logo + Takomenu (slot `#tako-mobile-header-slot` in MobileHeader, portal dalla schermata Menu; altrove testata solo logo); niente più riga separata, contenuti saliti. Barra in basso: «Assistente» tolto (owner: Menu + Account; la rotta cowork resta), capsula Liquid Glass iOS 26 (vetro, staccata dai bordi, 58 px, entrata dal basso, reduced motion senza animazione); il riquadro del menu scorre dietro la capsula con spazio in fondo nell'iframe.
+- Editor (iframe `?edit=1`): niente hero (copertina/logo/lingua). Pagina pubblica e PDF non toccati (worker pubblico non ridistribuito).
+- Gesto (packages/menu-gesture): tolleranza del dito 10 px reali (prima 8 px del documento ≈ 5 px reali con scala 0,65), micro-scroll del documento entro tolleranza e resize solo-altezza non annullano più la pressione lunga.
+- OG dashboard: meta og/twitter in `/staff/`, immagine `/staff/assets/branding/takomenu-og-v2.jpg` (200 image/jpeg senza login).
+- Verifiche: `scripts/verify-header-og.mjs` (Chrome headless, iPhone 390/430 DPR 3 touch + 1280) TUTTO VERDE; `verify-editor-mobile-fix.mjs` 40 ✓, 3 ✗ attesi (il menu di prova senza hero non è più alto del riquadro); WebKit iOS (Simulatore, safaridriver, tocchi nativi): pressione/sposta/posa di piatto e Sottomenu OK a dito fermo; con tremolio ±6 px il sollevamento parte (modo «Fine» + segnaposto) ma il driver si blocca prima della posa → posa con tremolio non verificata in WebKit.
+- Deploy web → **b5facdde-4159-431a-83a1-da6dc4b02e72** (prima b588452d). Smoke: /staff 200, /api/auth/me 401, /menu-preview QA 200, meta OG presenti, immagine 200.
+- Rollback: `CI=true npx wrangler rollback b588452d-71c9-4f56-b36e-50f807cdb0c7 --config deploy/cloudflare/wrangler.jsonc`.
+- Sito root (worker `takomenu-marketing`, sorgente `~/Documents/brain/sites/takoitalia-coorda`): og/twitter:image → `takomenu-social-v2.jpg`, diff HTML solo le 2 righe immagine; versione **1faa6e11-a471-4cf6-a767-b61995b43606** (rollback `d326937b-bbb7-471b-8b8f-159d516949cb`).

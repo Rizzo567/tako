@@ -39,7 +39,7 @@ const ROLE_ACCESS = {
 const ROLE_HOME = { menu_editor:"menu", owner: "dashboard", cameriere: "sala", chef: "kds", cassiere: "ordini" };
 const MOBILE_PRIMARY = {
   menu_editor: ["menu"],
-  owner: ["menu", "cowork", "account"],
+  owner: ["menu", "account"], /* 22/10 sera: «Assistente» tolto dalla barra in basso (resta raggiungibile dal drawer/desktop) */
   cameriere: ["sala", "ordini", "chiamate", "comanda"],
   chef: ["kds", "ordini", "menu"],
   cassiere: ["ordini", "sala", "dashboard"],
@@ -348,6 +348,8 @@ function MobileHeader({ syncDelayed=false, route, openDrawer, live, role, badges
           </span>
 
         </div>
+        {/* 22/10 sera: slot a destra del logo; lo riempie la schermata Menu (Pubblica) via portal, altrove resta vuoto. */}
+        <div id="tako-mobile-header-slot" className="mobile-header-slot" style={{ flex: "none", display: "flex", alignItems: "center", minWidth: 0 }} />
         {route === "cassa" && (
           <button className="press" onClick={() => { if (window.__openNewBill) window.__openNewBill(); else window.takoGo && window.takoGo('cassa'); }} style={{ flex: "none", display: "inline-flex", alignItems: "center", gap: 6, height: 40, padding: "0 14px", borderRadius: 12, background: "var(--brand)", color: "var(--on-brand)", fontWeight: 700, fontSize: 13.5, fontFamily: "var(--f-ui)", boxShadow: "0 6px 16px -6px var(--brand)" }}>
             <Icon name="plus" size={17} />Nuovo conto
@@ -416,7 +418,7 @@ function BottomBar({ route, go, role, badges, openDrawer, dark }) {
     const selectedRoute = route==="menu"&&window.__takomenuAgency?"agency":route==="impostazioni"?"account":navParent(route);
     const on = !isMore && selectedRoute === navParent(it.id);
     return (
-      <button className="press bb-tab" onClick={isMore ? openDrawer : () => go(it.id)} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: compact ? 0 : 4, padding: compact ? "8px 0" : "9px 0 8px", color: on ? "var(--side-sel)" : idle, position: "relative" }}>
+      <button className={"press bb-tab"+(on?" is-on":"")} aria-current={on?"page":undefined} onClick={isMore ? openDrawer : () => go(it.id)} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: compact ? 0 : 4, padding: compact ? "8px 0" : "9px 0 8px", color: on ? "var(--side-sel)" : idle, position: "relative" }}>
         <span className="nav-ico" style={{ position: "relative" }}>
           <Icon name={isMore ? "apps" : it.icon} size={compact ? 25 : 22} stroke={on ? 2.5 : 2} />
           {!isMore && it.badge && navBadge(it, badges) > 0 && <span style={{ position: "absolute", top: -5, right: -8, minWidth: 15, height: 15, padding: "0 4px", borderRadius: 99, background: "var(--brand)", color: "var(--on-brand)", fontSize: 9.5, fontWeight: 800, display: "grid", placeItems: "center", border: dark ? "1.5px solid #1A1310" : "1.5px solid rgba(255,255,255,.95)" }}>{navBadge(it, badges)}</span>}
@@ -426,7 +428,7 @@ function BottomBar({ route, go, role, badges, openDrawer, dark }) {
     );
   };
   return (
-    <nav aria-label="Navigazione principale" className="mobile-bottom-nav" style={{ position: "relative", flex:"none", margin:"0 10px", marginBottom:"max(8px, env(safe-area-inset-bottom, 0px))", display: "flex", alignItems: "stretch", borderRadius: 12, padding: "2px 6px", zIndex: 40, backdropFilter: "blur(30px) saturate(200%)", WebkitBackdropFilter: "blur(30px) saturate(200%)", transition: "padding .25s var(--out)", ...glass }}>
+    <nav aria-label="Navigazione principale" className="mobile-bottom-nav tab-glass" style={{ position: "relative", flex:"none", margin:"0 10px", marginBottom:"max(8px, env(safe-area-inset-bottom, 0px))", display: "flex", alignItems: "stretch", borderRadius: 12, padding: "2px 6px", zIndex: 40, backdropFilter: "blur(30px) saturate(200%)", WebkitBackdropFilter: "blur(30px) saturate(200%)", transition: "padding .25s var(--out)", ...glass }}>
       {prim.map(it => <Tab key={it.id} it={it} />)}
       {!["owner","menu_editor"].includes(role)&&<Tab isMore it={{}} />}
     </nav>

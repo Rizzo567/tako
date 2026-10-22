@@ -1,0 +1,78 @@
+{
+ "at": "2026-10-22T13:39:56.844Z",
+ "fails": 6,
+ "results": [
+  {
+   "name": "scroll normale senza pressione lunga (nessun sollevamento)",
+   "ok": false,
+   "detail": {
+    "scrollY": 0,
+    "log": [
+     "pointerdown@119",
+     "touchstart@119",
+     "pointercancel@146",
+     "lostpointercapture@146",
+     "touchcancel@21424"
+    ]
+   }
+  },
+  {
+   "name": "piatto: sollevato con la pressione lunga",
+   "ok": false,
+   "detail": [
+    "scroll@22424"
+   ]
+  },
+  {
+   "name": "piatto: spostato e posato",
+   "ok": false,
+   "detail": {
+    "dishes": [
+     "Pasta al pomodoro9",
+     "Risotto ai funghi1",
+     "Lasagna11,00 €"
+    ],
+    "ghosts": 0,
+    "hidden": 0,
+    "log": [
+     "scroll@22424"
+    ]
+   }
+  },
+  {
+   "name": "sottomenu: sollevato con la pressione lunga",
+   "ok": false,
+   "detail": []
+  },
+  {
+   "name": "sottomenu: spostato e posato",
+   "ok": false,
+   "detail": {
+    "prima": [
+     "Primi",
+     "Secondi e panini",
+     "Contorni e insalat"
+    ],
+    "dopo": [
+     "Primi",
+     "Secondi e panini",
+     "Contorni e insalat"
+    ],
+    "ghosts": 0,
+    "hidden": 0,
+    "log": []
+   }
+  },
+  {
+   "name": "ops inviate al banco",
+   "ok": false,
+   "detail": [
+    "/api/menu-workspace/presentation",
+    "/api/menu-workspace/status",
+    "/api/menu-workspace/status",
+    "/api/menu-workspace/status",
+    "/api/menu-workspace/status"
+   ]
+  }
+ ]
+}

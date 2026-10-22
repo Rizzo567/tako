@@ -78,3 +78,7 @@
 .mw-bottom-sheet .mw-photo-zone{flex-wrap:wrap}
 .mw-bottom-sheet .mw-photo-pick{flex:1 1 180px}
 .mw-ed-stage.is-mobile{margin-left:-14px;margin-right:-14px}
+/* 22/10 sera: su telefono «Pubblica» sta nella riga della testata (slot di MobileHeader), a destra di logo + Takomenu. */
+.mobile-header-slot:empty{display:none!important}
+.mobile-header-slot .mw-ed-head{margin:0!important;padding:0;gap:8px}
+.mobile-header-slot .mw-ed-head .mw-ed-status{font-size:13px;white-space:nowrap}

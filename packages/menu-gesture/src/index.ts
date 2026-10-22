@@ -21,7 +21,7 @@ type Saved = { styles:Map<string,[string,string]>; attrs:Map<string,string|null>
 type Item = { el:HTMLElement; id:string; kind:Kind; group:string; box:Box; spring:Spring; phase:number; angle:number; saved:Saved; base:string; parent:HTMLElement|null }
 type Group = { el:HTMLElement; id:string; axis:'x'|'y'|'grid'; kind:Kind|null; box:Box }
 type Scroller = { el:HTMLElement; box:Box; x:number; y:number; maxX:number; maxY:number; allowX:boolean; allowY:boolean }
-type Pending = { item:Item; id:number; x:number; y:number; timer:number; pointerType:string }
+type Pending = { item:Item; id:number; x:number; y:number; timer:number; pointerType:string; sx:number; sy:number }
 type Drag = { item:Item; id:number|null; keyboard:boolean; pointerType:string; fromGroup:string; fromIndex:number; parent:Node; next:Node|null; originalGroup:string; group:string; index:number; anchorX:number; anchorY:number; x:number; y:number; lastX:number; lastY:number; ghost:HTMLElement; scale:number; scaleV:number; w:number; h:number; lift:number }
 type Landing = { started:number; id:string; ghost:HTMLElement; x:number; y:number; vx:number; vy:number; scale:number; scaleV:number; w:number; h:number }
 
@@ -286,12 +286,12 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     if(isControl(event.target,i))return
     clearPending()
     if(editing){event.preventDefault();begin(i,event.pointerId,event.clientX,event.clientY,event.pointerType);return}
-    const p:Pending={item:i,id:event.pointerId,x:event.clientX,y:event.clientY,timer:0,pointerType:event.pointerType}
+    const p:Pending={item:i,id:event.pointerId,x:event.clientX,y:event.clientY,timer:0,pointerType:event.pointerType,sx:view.scrollX,sy:view.scrollY}
     pending=p
     p.timer=view.setTimeout(()=>{if(pending===p&&root.contains(i.el))begin(i,p.id,p.x,p.y,p.pointerType)},Math.max(0,opts.longPressMs??1000))
   }
   function onMove(event:PointerEvent) {
-    if(pending&&event.pointerId===pending.id&&Math.hypot(event.clientX-pending.x,event.clientY-pending.y)>8)clearPending()
+    if(pending&&event.pointerId===pending.id&&Math.hypot(event.clientX-pending.x,event.clientY-pending.y)>slop())clearPending()
     if(!drag||event.pointerId!==drag.id)return
     if(event.cancelable)event.preventDefault()
     drag.x=event.clientX;drag.y=event.clientY;renderGhost();target();requestFrame()
@@ -314,7 +314,17 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
       else if(event.key.startsWith('Arrow')){event.preventDefault();keyboardMove(event.key)}
     } else if(!drag&&event.key==='Enter'){event.preventDefault();opts.onTap?.(i.id)}
   }
-  function onScroll() { clearPending();if(dead)return;measure();if(drag)target(true) }
+  /** Takomenu 22/10 sera (iPhone): la pagina rimpicciolita scorre DENTRO l'iframe; un dito fermo trema di qualche px e iOS
+   * sposta lo scroll di 1–2 px: la pressione lunga si annulla solo se lo scroll del documento va oltre la tolleranza. */
+  function onScroll(event:Event) {
+    const p=pending
+    if(p){const own=event.target===doc||event.target===doc.scrollingElement
+      if(!own||Math.hypot(view.scrollX-p.sx,view.scrollY-p.sy)>slop())clearPending()}
+    if(dead)return;measure();if(drag)target(true)
+  }
+  /** Tolleranza di movimento in px del documento: 10 px reali sullo schermo anche quando la SPA rimpicciolisce l'iframe
+   * (--tako-edit-inv = 1/scala). Prima: 8 px del documento = ~5 px reali con scala 0,65 → il tremolio del dito annullava la pressione. */
+  function slop():number { const inv=parseFloat(view.getComputedStyle(doc.documentElement).getPropertyValue('--tako-edit-inv'))||1;return 10*Math.max(1,inv) }
   function speed(p:number,min:number,max:number) { const edge=52;return p<min+edge?-Math.min(1,Math.max(0,(min+edge-p)/edge))*750:p>max-edge?Math.min(1,Math.max(0,(p-(max-edge))/edge))*750:0 }
   function autoScroll(dt:number) {
     if(!drag||drag.keyboard)return
@@ -420,7 +430,9 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
   listen(doc,'scroll',onScroll as EventListener,true)
   listen(view,'blur',(()=>{clearPending();if(drag)finish(true)}) as EventListener)
   listen(doc,'visibilitychange',(()=>{if(doc.hidden){clearPending();if(drag)finish(true)}}) as EventListener)
-  listen(view,'resize',(()=>{clearPending();measure()}) as EventListener)
+  let lastWidth=view.innerWidth
+  // Solo un cambio di larghezza (rotazione) annulla la pressione: su iPhone l'iframe cambia altezza da solo (barre di Safari, riquadro ricalcolato).
+  listen(view,'resize',(()=>{if(view.innerWidth!==lastWidth){lastWidth=view.innerWidth;clearPending()}measure()}) as EventListener)
   // Native touch scrolling is allowed until the hold has completed. Register before
   // touchstart (not after lift), so iOS can honour preventDefault on the first move.
   listen(doc,'touchmove',((e:TouchEvent)=>{if(drag&&!drag.keyboard&&e.cancelable)e.preventDefault()}) as EventListener,{passive:false})

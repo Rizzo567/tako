@@ -1,0 +1,373 @@
+{
+ "at": "2026-10-22T13:55:31.700Z",
+ "fails": 0,
+ "results": [
+  {
+   "name": "meta OG in apps/dashboard/public/staff/index.html",
+   "ok": true,
+   "detail": {
+    "miss": []
+   }
+  },
+  {
+   "name": "meta OG in release/serverless/static/staff/index.html",
+   "ok": true,
+   "detail": {
+    "miss": []
+   }
+  },
+  {
+   "name": "390 niente scroll orizzontale",
+   "ok": true,
+   "detail": {
+    "sw": 390,
+    "iw": 390
+   }
+  },
+  {
+   "name": "390 Pubblica grigio disattivato senza modifiche",
+   "ok": true,
+   "detail": {
+    "disabled": true,
+    "label": "Nessuna modifica da pubblicare",
+    "bg": "rgb(229, 229, 229)",
+    "inSlot": true
+   }
+  },
+  {
+   "name": "390 Pubblica nello slot della testata",
+   "ok": true,
+   "detail": {
+    "inSlot": true,
+    "sticky": false
+   }
+  },
+  {
+   "name": "390 Pubblica sulla riga del logo, a destra",
+   "ok": true,
+   "detail": {
+    "pub": {
+     "t": 10,
+     "b": 50,
+     "l": 286,
+     "r": 376,
+     "cy": 30,
+     "h": 40
+    },
+    "brand": {
+     "t": 9,
+     "b": 51,
+     "l": 14,
+     "r": 56,
+     "cy": 30,
+     "h": 42
+    }
+   }
+  },
+  {
+   "name": "390 contenuti subito sotto la testata",
+   "ok": true,
+   "detail": {
+    "header": {
+     "t": 0,
+     "b": 64,
+     "l": 0,
+     "r": 390,
+     "cy": 32,
+     "h": 64
+    },
+    "tabs": {
+     "t": 84,
+     "b": 118
+    },
+    "stage": {
+     "t": 248,
+     "b": 844,
+     "l": 0,
+     "r": 390,
+     "cy": 546,
+     "h": 596
+    }
+   }
+  },
+  {
+   "name": "390 riquadro scorre dietro la capsula",
+   "ok": true,
+   "detail": {
+    "stage": {
+     "t": 248,
+     "b": 844,
+     "l": 0,
+     "r": 390,
+     "cy": 546,
+     "h": 596
+    },
+    "nav": {
+     "t": 780,
+     "b": 838,
+     "l": 18,
+     "r": 372,
+     "cy": 809,
+     "h": 58
+    }
+   }
+  },
+  {
+   "name": "390 capsula vetro (staccata, arrotondata, sfocata, bassa)",
+   "ok": true,
+   "detail": {
+    "l": 18,
+    "r": 18,
+    "h": 58,
+    "radius": "999px",
+    "bf": "blur(22px) saturate(1.8)",
+    "bg": "rgba(255, 255, 255, 0.6)",
+    "pos": "absolute",
+    "on": [
+     true,
+     false
+    ]
+   }
+  },
+  {
+   "name": "390 ultimo piatto raggiungibile sopra la capsula",
+   "ok": true,
+   "detail": {
+    "lastBottom": 576,
+    "navTop": 780,
+    "pad": "117px"
+   }
+  },
+  {
+   "name": "390 barra in basso: Menu + Account, niente Assistente",
+   "ok": true,
+   "detail": [
+    {
+     "t": "Menu",
+     "w": 170
+    },
+    {
+     "t": "Account",
+     "w": 170
+    }
+   ]
+  },
+  {
+   "name": "390 tap → riquadro + matita",
+   "ok": true,
+   "detail": {
+    "frame": true,
+    "pencil": true
+   }
+  },
+  {
+   "name": "390 Pubblica nero in testata dopo una modifica",
+   "ok": true,
+   "detail": {
+    "disabled": false,
+    "label": "Pubblica le modifiche",
+    "bg": "rgb(10, 10, 10)",
+    "inSlot": true
+   }
+  },
+  {
+   "name": "390 niente scroll orizzontale (dopo modifica)",
+   "ok": true,
+   "detail": {
+    "sw": 390,
+    "iw": 390
+   }
+  },
+  {
+   "name": "430 niente scroll orizzontale",
+   "ok": true,
+   "detail": {
+    "sw": 430,
+    "iw": 430
+   }
+  },
+  {
+   "name": "430 Pubblica grigio disattivato senza modifiche",
+   "ok": true,
+   "detail": {
+    "disabled": true,
+    "label": "Nessuna modifica da pubblicare",
+    "bg": "rgb(229, 229, 229)",
+    "inSlot": true
+   }
+  },
+  {
+   "name": "430 Pubblica nello slot della testata",
+   "ok": true,
+   "detail": {
+    "inSlot": true,
+    "sticky": false
+   }
+  },
+  {
+   "name": "430 Pubblica sulla riga del logo, a destra",
+   "ok": true,
+   "detail": {
+    "pub": {
+     "t": 10,
+     "b": 50,
+     "l": 326,
+     "r": 416,
+     "cy": 30,
+     "h": 40
+    },
+    "brand": {
+     "t": 9,
+     "b": 51,
+     "l": 14,
+     "r": 56,
+     "cy": 30,
+     "h": 42
+    }
+   }
+  },
+  {
+   "name": "430 contenuti subito sotto la testata",
+   "ok": true,
+   "detail": {
+    "header": {
+     "t": 0,
+     "b": 64,
+     "l": 0,
+     "r": 430,
+     "cy": 32,
+     "h": 64
+    },
+    "tabs": {
+     "t": 84,
+     "b": 118
+    },
+    "stage": {
+     "t": 202,
+     "b": 932,
+     "l": 0,
+     "r": 430,
+     "cy": 567,
+     "h": 730
+    }
+   }
+  },
+  {
+   "name": "430 riquadro scorre dietro la capsula",
+   "ok": true,
+   "detail": {
+    "stage": {
+     "t": 202,
+     "b": 932,
+     "l": 0,
+     "r": 430,
+     "cy": 567,
+     "h": 730
+    },
+    "nav": {
+     "t": 868,
+     "b": 926,
+     "l": 18,
+     "r": 412,
+     "cy": 897,
+     "h": 58
+    }
+   }
+  },
+  {
+   "name": "430 capsula vetro (staccata, arrotondata, sfocata, bassa)",
+   "ok": true,
+   "detail": {
+    "l": 18,
+    "r": 18,
+    "h": 58,
+    "radius": "999px",
+    "bf": "blur(22px) saturate(1.8)",
+    "bg": "rgba(255, 255, 255, 0.6)",
+    "pos": "absolute",
+    "on": [
+     true,
+     false
+    ]
+   }
+  },
+  {
+   "name": "430 ultimo piatto raggiungibile sopra la capsula",
+   "ok": true,
+   "detail": {
+    "lastBottom": 572,
+    "navTop": 868,
+    "pad": "106px"
+   }
+  },
+  {
+   "name": "430 barra in basso: Menu + Account, niente Assistente",
+   "ok": true,
+   "detail": [
+    {
+     "t": "Menu",
+     "w": 190
+    },
+    {
+     "t": "Account",
+     "w": 190
+    }
+   ]
+  },
+  {
+   "name": "430 tap → riquadro + matita",
+   "ok": true,
+   "detail": {
+    "frame": true,
+    "pencil": true
+   }
+  },
+  {
+   "name": "430 Pubblica nero in testata dopo una modifica",
+   "ok": true,
+   "detail": {
+    "disabled": false,
+    "label": "Pubblica le modifiche",
+    "bg": "rgb(10, 10, 10)",
+    "inSlot": true
+   }
+  },
+  {
+   "name": "430 niente scroll orizzontale (dopo modifica)",
+   "ok": true,
+   "detail": {
+    "sw": 430,
+    "iw": 430
+   }
+  },
+  {
+   "name": "1280 niente scroll orizzontale",
+   "ok": true,
+   "detail": {
+    "sw": 1280,
+    "iw": 1280
+   }
+  },
+  {
+   "name": "1280 Pubblica grigio disattivato senza modifiche",
+   "ok": true,
+   "detail": {
+    "disabled": true,
+    "label": "Nessuna modifica da pubblicare",
+    "bg": "rgb(229, 229, 229)",
+    "inSlot": false
+   }
+  },
+  {
+   "name": "1280 desktop: Pubblica non spostato in testata",
+   "ok": true,
+   "detail": {
+    "disabled": true,
+    "label": "Nessuna modifica da pubblicare",
+    "bg": "rgb(229, 229, 229)",
+    "inSlot": false
+   }
+  }
+ ],
+ "errors": []
+}
