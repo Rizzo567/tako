@@ -1,0 +1,184 @@
+{
+ "tag": "v165-flusso",
+ "at": "2026-10-22T18:33:33.239Z",
+ "stopped": null,
+ "finalDiff": [],
+ "ok": 8,
+ "total": 8,
+ "results": [
+  {
+   "id": "svuota-annulla",
+   "desc": "«svuota il menu del giorno» → i 7 piatti nascosti subito, nessuna domanda → «annulla» → com’era",
+   "turns": [
+    {
+     "m": "svuota il menu del giorno",
+     "reply": "*Menu del giorno svuotato* Ho nascosto tutti i 7 piatti visibili. I sottomenu (Primi e Secondi) e i prezzi fissi restano come sono. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne». Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 3239,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Carbonara*: com’era prima *Gnocchi al ragù*: com’era prima *Cotoletta*: com’era prima *Polpette*: com’era prima *Frittata di zucchine*: com’era prima *Frittata di patate*: com’era prima",
+     "ms": 4097,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "svuota-inserisci-un-messaggio",
+   "desc": "«svuota il menu del giorno e nei primi inserisci carbonara e gnocchi al ragù» → solo loro visibili → annulla",
+   "turns": [
+    {
+     "m": "svuota il menu del giorno e nei primi inserisci carbonara e gnocchi al ragù",
+     "reply": "*Menu del giorno aggiornato* Ho nascosto gli altri 5 piatti del menu. *Primi* • Carbonara • Gnocchi al ragù Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2498,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Cotoletta*: com’era prima *Polpette*: com’era prima *Frittata di zucchine*: com’era prima *Frittata di patate*: com’era prima",
+     "ms": 3939,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "svuota-poi-inserisci-contesto",
+   "desc": "svuota → «nei secondi metti polpette e frittata di patate» (Menu dalla conversazione) → visibili → la regola stessa rimette gli altri",
+   "turns": [
+    {
+     "m": "svuota il menu del giorno",
+     "reply": "*Menu del giorno svuotato* Ho nascosto tutti i 7 piatti visibili. I sottomenu (Primi e Secondi) e i prezzi fissi restano come sono. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne». Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2561,
+     "fails": []
+    },
+    {
+     "m": "nei secondi metti polpette e frittata di patate",
+     "reply": "*Menu del giorno aggiornato* *Secondi* • Polpette • Frittata di patate Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2529,
+     "fails": []
+    },
+    {
+     "m": "nel menu del giorno nei primi inserisci lasagna, carbonara e gnocchi al ragù e nei secondi cotoletta e frittata di zucchine",
+     "reply": "*Menu del giorno aggiornato* *Primi* • Lasagna • Carbonara • Gnocchi al ragù *Secondi* • Cotoletta • Polpette • Frittata di zucchine • Frittata di patate Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2965,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "inserisci-nuovo-annulla",
+   "desc": "«nel menu del giorno nei primi inserisci la pasta e fagioli» → nuova senza prezzo, gli altri restano visibili → annulla la toglie",
+   "turns": [
+    {
+     "m": "nel menu del giorno nei primi inserisci la pasta e fagioli",
+     "reply": "*Menu del giorno aggiornato* *Primi* • Lasagna • Carbonara • Gnocchi al ragù • Pasta e fagioli (nuovo) Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2852,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Pasta e fagioli*: tolto (era stato aggiunto)",
+     "ms": 4889,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "elimina-menu-no",
+   "desc": "(correzione Manuel) «elimina il menu del giorno» = eliminare il Menu: chiede il sì senza scrivere → «no» → niente",
+   "turns": [
+    {
+     "m": "elimina il menu del giorno",
+     "reply": "Elimino il *Menu del giorno* intero? Spariscono i sottomenu *Primi* e *Secondi*, 7 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*. Se vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu del giorno».",
+     "ms": 2139,
+     "fails": []
+    },
+    {
+     "m": "no",
+     "reply": "Ok, non elimino niente: il *Menu del giorno* resta com’è.",
+     "ms": 1361,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "piatti-del-menu-svuota",
+   "desc": "«togli tutti i piatti del menu del giorno» = svuotamento (sottomenu restano), nessuna domanda → annulla",
+   "turns": [
+    {
+     "m": "togli tutti i piatti del menu del giorno",
+     "reply": "*Menu del giorno svuotato* Ho nascosto tutti i 7 piatti visibili. I sottomenu (Primi e Secondi) e i prezzi fissi restano come sono. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne». Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2741,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Carbonara*: com’era prima *Gnocchi al ragù*: com’era prima *Cotoletta*: com’era prima *Polpette*: com’era prima *Frittata di zucchine*: com’era prima *Frittata di patate*: com’era prima",
+     "ms": 4205,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "grave-b7-nascondi-tutti",
+   "desc": "(Victoria B7, GRAVE) «il menù del giorno si deve vedere ma devi nascondere tutti i piatti» → tutti nascosti subito (prima: elenco di 5 e «tutti» parziale)",
+   "turns": [
+    {
+     "m": "il menù del giorno si deve vedere ma devi nascondere tutti i piatti",
+     "reply": "*Menu del giorno svuotato* Ho nascosto tutti i 7 piatti visibili. I sottomenu (Primi e Secondi) e i prezzi fissi restano come sono. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne». Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2462,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Carbonara*: com’era prima *Gnocchi al ragù*: com’era prima *Cotoletta*: com’era prima *Polpette*: com’era prima *Frittata di zucchine*: com’era prima *Frittata di patate*: com’era prima",
+     "ms": 4120,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "grave-k2-pasta-e-fagioli",
+   "desc": "(K2, GRAVE) «nel menu del giorno primi carbonara e pasta e fagioli» → Carbonara + Pasta e fagioli (nuova), Lasagna e Gnocchi nascosti → annulla",
+   "turns": [
+    {
+     "m": "nel menu del giorno primi carbonara e pasta e fagioli",
+     "reply": "*Menu del giorno aggiornato* *Primi* • Pasta e fagioli • Carbonara Nascosti (tornano quando li rimetti): Lasagna, Gnocchi al ragù Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 3031,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Gnocchi al ragù*: com’era prima *Pasta e fagioli*: tolto (era stato aggiunto)",
+     "ms": 5766,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  }
+ ]
+}

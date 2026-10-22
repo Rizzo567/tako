@@ -13,3 +13,4 @@
 - 05:53 batteria v150b: 27/27, QA identico.
 - 05:55 v151 = commit 72dcad41 (candidate-index-v151.ts), rollback-v150.ts; primo contatto dal vivo ok.
 - 06:11 batteria v151 ×2: 27/27 e 27/27, QA identico. VERSIONE FINALE.
+- 20:30 (22/10) v165 = commit 3a379b66 (candidate-index-svuota-1022.ts), rollback = candidate-index-foto-nome.ts (v164). Regola svuota/inserisci + elimina Menu col sì + bug Victoria (BUG-CHAT-VICTORIA-1022.md). Build PASS, lazy boot PASS, diff sezioni: owner-brain-svuota (nuovo), twilio-menu, owner-brain-plan/-r, twilio-menu-ai + rinumerazioni esbuild (onboarding-planner, ai-actions, edge-image-initializer). Pronto in 17 s; 401/403/bot ok. Numero +3900000221023 (agenzia → QA) aggiunto e tolto. Flusso nuovo dal vivo 8/8, batteria v165 37/37 e v165b 37/37, QA identico. Batteria avversaria offline 98 casi/161 frasi 0 violazioni.
