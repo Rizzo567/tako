@@ -24,7 +24,7 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
   const [selection, setSelection] = useState<EditSelection>(null)
   const [mode, setMode] = useState(false)
   const docRef = useRef(doc), menuRef = useRef(menuId), selRef = useRef<EditSelection>(null), modeRef = useRef(false), seqRef = useRef(0)
-  const gestureRef = useRef<MenuGesture | null>(null), frameRef = useRef<HTMLDivElement>(null), pencilRef = useRef<HTMLButtonElement>(null)
+  const gestureRef = useRef<MenuGesture | null>(null), frameRef = useRef<HTMLDivElement>(null), pencilRef = useRef<HTMLButtonElement>(null), moveRef = useRef<HTMLButtonElement>(null)
   const lastSpa = useRef<{ selection: EditSelection; editing: boolean } | null>(null), pendingFlash = useRef<string[]>([]), flashRef = useRef<() => void>(() => {})
   docRef.current = doc; menuRef.current = menuId; selRef.current = selection; modeRef.current = mode
 
@@ -127,9 +127,9 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
   // Riquadro e matita: seguono l'elemento. Niente ciclo a ogni frame: si ricalcola (un solo rAF alla volta) solo su scroll,
   // resize, cambi di dimensione (ResizeObserver), mutazioni del DOM e fine delle transizioni di pagina.
   useEffect(() => {
-    const frameEl = frameRef.current, pencil = pencilRef.current
-    if (!root || !frameEl || !pencil) return
-    if (!selection || mode) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); return }
+    const frameEl = frameRef.current, pencil = pencilRef.current, move = moveRef.current
+    if (!root || !frameEl || !pencil || !move) return
+    if (!selection || mode) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); move.classList.add('tako-edit-hidden'); return }
     let raf = 0, last = '', observed: HTMLElement | null = null
     const target = () => { for (const sel of frameSelectors(selection)) for (const el of Array.from(root.querySelectorAll<HTMLElement>(sel))) { const r = el.getBoundingClientRect(); if (r.width > 0 && r.height > 0) return { el, r } } return null }
     const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(() => schedule()) : null
@@ -138,7 +138,7 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       if (document.hidden) return
       const t = target()
       if (t?.el !== observed) { if (observed) resize?.unobserve(observed); observed = t?.el || null; if (observed) resize?.observe(observed) }
-      if (!t) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); last = ''; return }
+      if (!t) { frameEl.classList.add('tako-edit-hidden'); pencil.classList.add('tako-edit-hidden'); move.classList.add('tako-edit-hidden'); last = ''; return }
       const pad = 4, { r } = t, key = `${r.left}|${r.top}|${r.width}|${r.height}`
       if (key === last) return
       // Si è mosso: si segue anche al frame dopo (animazioni WAAPI senza eventi) finché resta fermo.
@@ -149,6 +149,10 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       const pw = pencil.offsetWidth || 44, ph = pencil.offsetHeight || 32
       const x = Math.max(4, Math.min(innerWidth - pw - 4, r.right + pad - pw + 6)), y = Math.max(4, r.top - pad - ph / 2)
       pencil.style.transform = `translate3d(${x}px,${y}px,0)`
+      // «Sposta» (22/10 notte): in alto a SINISTRA del riquadro, stessa pillola della matita; mai sovrapposto alla matita.
+      move.classList.remove('tako-edit-hidden')
+      const mw = move.offsetWidth || 44, mx = Math.max(4, Math.min(x - mw - 8, r.left - pad - 6))
+      move.style.transform = `translate3d(${mx}px,${y}px,0)`
       const name = (t.el.querySelector('h3')?.textContent || t.el.textContent || '').trim().slice(0, 60)
       pencil.setAttribute('aria-label', pencilLabel(selection.kind, name, t.el.getAttribute('data-edit-kind') === 'section' || !!t.el.closest('[data-edit-kind="section"]')))
     }
@@ -175,6 +179,10 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
     <button ref={pencilRef} type="button" className="tako-edit-pencil tako-edit-hidden" data-edit-pencil aria-label="Modifica" onClick={() => { if (selRef.current) post(outgoing.open(selRef.current)) }}>
       <svg aria-hidden width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/><path d="m13.5 6.5 4 4" stroke="currentColor" strokeWidth="2"/></svg>
       <span>Modifica</span>
+    </button>
+    <button ref={moveRef} type="button" className="tako-edit-pencil tako-edit-move tako-edit-hidden" data-edit-move data-gesture-keep aria-label="Sposta: fai tremare gli elementi per riordinarli" onClick={() => { gestureRef.current?.enterEditMode?.() }}>
+      <svg aria-hidden width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      <span>Sposta</span>
     </button>
   </>
 }

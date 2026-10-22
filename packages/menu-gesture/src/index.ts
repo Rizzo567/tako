@@ -23,7 +23,7 @@ type Saved = { styles:Map<string,[string,string]>; attrs:Map<string,string|null>
 type Item = { el:HTMLElement; id:string; kind:Kind; group:string; box:Box; spring:Spring; phase:number; angle:number; saved:Saved; base:string; parent:HTMLElement|null }
 type Group = { el:HTMLElement; id:string; axis:'x'|'y'|'grid'; kind:Kind|null; box:Box }
 type Scroller = { el:HTMLElement; box:Box; x:number; y:number; maxX:number; maxY:number; allowX:boolean; allowY:boolean }
-type Pending = { item:Item; id:number; touchId:number|null; x:number; y:number; timer:number; pointerType:string; sx:number; sy:number; t0:number }
+type Pending = { item:Item; id:number; touchId:number|null; x:number; y:number; timer:number; pointerType:string; sx:number; sy:number; t0:number; edit?:boolean }
 type Drag = { item:Item; id:number|null; touchId:number|null; keyboard:boolean; pointerType:string; fromGroup:string; fromIndex:number; parent:Node; next:Node|null; originalGroup:string; group:string; index:number; anchorX:number; anchorY:number; x:number; y:number; lastX:number; lastY:number; ghost:HTMLElement; scale:number; scaleV:number; w:number; h:number; lift:number }
 type Landing = { started:number; id:string; ghost:HTMLElement; x:number; y:number; vx:number; vy:number; scale:number; scaleV:number; w:number; h:number }
 
@@ -44,7 +44,7 @@ function spring(x:number,v:number,target:number,dt:number,omega:number):[number,
   return [target+(d+a*dt)*e,(v-omega*a*dt)*e]
 }
 
-export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; refresh():void; destroy():void } {
+export function createMenuGesture(opts:GestureOptions): { enterEditMode():void; exitEditMode():void; refresh():void; destroy():void } {
   const root=opts.root, doc=root.ownerDocument, win=doc.defaultView
   if(!win)throw new Error('The gesture root must belong to a document with a window.')
   const view=win
@@ -98,7 +98,11 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
   function isControl(target:EventTarget|null,item:Item):boolean {
     if(!(target instanceof view.Element)||target===item.el)return false
     const control=target.closest('input:not(:disabled),textarea:not(:disabled),select:not(:disabled),[contenteditable="true"],a[href],button:not(:disabled),[data-gesture-ignore]') // Takomenu 22/10: i controlli disattivati (riga del piatto in anteprima) non bloccano il gesto
-    return !!control&&control!==item.el
+    // Takomenu 22/10 notte (BUG piatti mai sollevati): in modifica la riga del piatto è un <button aria-disabled> (9d198ca6), che
+    // `button:not(:disabled)` considerava un controllo → ogni tocco sul piatto veniva ignorato. aria-disabled e data-gesture-pass
+    // (corpo della riga, non un comando a sé) non sono controlli.
+    if(!control||control===item.el||!item.el.contains(control))return !!control&&control!==item.el
+    return !(control.getAttribute('aria-disabled')==='true'||control.hasAttribute('data-gesture-pass'))
   }
   function direct(g:Group):Item[] { return items.filter(i=>i.group===g.id&&g.el.contains(i.el)).sort((a,b)=>a.el===b.el?0:a.el.compareDocumentPosition(b.el)&4?-1:1) }
   function groupBy(id:string):Group|undefined { return groups.find(g=>g.id===id) }
@@ -331,16 +335,26 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     if(drag)return
     const t=event.changedTouches[0];if(!t)return
     const i=itemFor(event.target)
-    if(!i){clearPending('tocco fuori');if(editing)exitEditMode();return}
+    if(!i){clearPending('tocco fuori');return} // in tremolio l'uscita «tocco fuori» la decide onOutside* (uno scroll sulle zone vuote non esce)
     if(isControl(event.target,i))return
     clearPending('nuovo tocco')
-    if(editing){if(event.cancelable)event.preventDefault();begin(i,null,t.clientX,t.clientY,'touch',false,t.identifier);return}
+    // Tremolio (Takomenu 22/10 notte): il dito appoggiato non solleva ancora; oltre EDIT_SLOP px reali di movimento si solleva SUBITO
+    // dal punto di partenza. touch-action:none sugli elementi in tremolio: niente scroll nativo partito da un elemento.
+    if(editing){if(event.cancelable)event.preventDefault();pending={item:i,id:-1,touchId:t.identifier,x:t.clientX,y:t.clientY,timer:0,pointerType:'touch',sx:view.scrollX,sy:view.scrollY,t0:view.performance.now(),edit:true};dbg('pending','tremolio: muovi per sollevare '+i.kind+' '+i.id);return}
     arm(i,-1,t.identifier,t.clientX,t.clientY,'touch')
   }
   function onTouchMove(event:TouchEvent) {
     const p=pending
     if(p&&p.touchId!==null){
       const t=touchOf(event.changedTouches,p.touchId)
+      if(t&&p.edit){
+        if(event.cancelable)event.preventDefault()
+        if(Math.hypot(t.clientX-p.x,t.clientY-p.y)>editSlop()&&root.contains(p.item.el)){
+          begin(p.item,null,p.x,p.y,'touch',false,p.touchId)
+          if(drag){drag.x=t.clientX;drag.y=t.clientY;renderGhost();target();requestFrame()}
+        }
+        return
+      }
       if(t){
         const moved=Math.hypot(t.clientX-p.x,t.clientY-p.y)
         if(moved>slop())clearPending(`dito mosso ${Math.round(moved)}px > ${Math.round(slop())}`)
@@ -359,7 +373,7 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     const p=pending
     if(p&&p.touchId!==null&&touchOf(event.changedTouches,p.touchId)){
       clearPending(cancel?'touchcancel (iOS ha preso il tocco)':'tap')
-      if(!cancel&&root.contains(p.item.el))opts.onTap?.(p.item.id)
+      if(!cancel&&!p.edit&&root.contains(p.item.el))opts.onTap?.(p.item.id)
     }
     const d=drag
     if(d&&d.touchId!==null&&touchOf(event.changedTouches,d.touchId)){if(event.cancelable)event.preventDefault();finish(cancel)}
@@ -389,6 +403,32 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
   /** Tolleranza di movimento in px del documento: 10 px reali sullo schermo anche quando la SPA rimpicciolisce l'iframe
    * (--tako-edit-inv = 1/scala). Prima: 8 px del documento = ~5 px reali con scala 0,65 → il tremolio del dito annullava la pressione. */
   function slop():number { const inv=parseFloat(view.getComputedStyle(doc.documentElement).getPropertyValue('--tako-edit-inv'))||1;return 10*Math.max(1,inv) }
+  /** In tremolio: 7 px reali di movimento sollevano l'elemento (nessuna attesa). */
+  function editSlop():number { const inv=parseFloat(view.getComputedStyle(doc.documentElement).getPropertyValue('--tako-edit-inv'))||1;return 7*Math.max(1,inv) }
+  /** Tremolio sul telefono (Takomenu 22/10 notte): un tocco su zona vuota esce (come iPhone) solo se il dito NON scorre; con un dito
+   *  sulle zone vuote/titoli lo scroll resta nativo; con due dita ovunque (anche sopra gli elementi) la pagina scorre a mano. */
+  let outside:{id:number;x:number;y:number}|null=null, pan:{y:number;x:number}|null=null
+  const mid=(l:TouchList)=>{let x=0,y=0;for(let n=0;n<l.length;n++){x+=l[n].clientX;y+=l[n].clientY}return{x:x/l.length,y:y/l.length}}
+  function onOutsideStart(event:TouchEvent) {
+    if(dead||!editing)return
+    if(event.touches.length>=2&&!drag){outside=null;pan=mid(event.touches);if(pending?.edit)clearPending('due dita: scorrimento');return}
+    const t=event.changedTouches[0]
+    outside=t&&event.touches.length===1&&!itemFor(event.target)&&!(event.target instanceof view.Element&&event.target.closest('[data-gesture-keep]'))?{id:t.identifier,x:t.clientX,y:t.clientY}:null
+  }
+  function onOutsideMove(event:TouchEvent) {
+    if(outside){const t=touchOf(event.changedTouches,outside.id);if(t&&Math.hypot(t.clientX-outside.x,t.clientY-outside.y)>slop())outside=null}
+    if(pan&&editing&&!drag&&event.touches.length>=2){
+      const m=mid(event.touches),page=doc.scrollingElement as HTMLElement|null
+      if(event.cancelable)event.preventDefault()
+      if(page){page.scrollTop-=m.y-pan.y}
+      pan=m
+    }
+  }
+  function onOutsideEnd(event:TouchEvent,cancel:boolean) {
+    if(event.touches.length<2)pan=null
+    const o=outside;if(!o||!touchOf(event.changedTouches,o.id))return
+    outside=null;if(!cancel&&editing&&!drag)exitEditMode()
+  }
   function speed(p:number,min:number,max:number) { const edge=52;return p<min+edge?-Math.min(1,Math.max(0,(min+edge-p)/edge))*750:p>max-edge?Math.min(1,Math.max(0,(p-(max-edge))/edge))*750:0 }
   function autoScroll(dt:number) {
     if(!drag||drag.keyboard)return
@@ -474,6 +514,8 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
     if(landing){const i=items.find(i=>i.id===landing!.id);if(i)hide(i)}
     sweep();measure();requestFrame()
   }
+  /** Takomenu 22/10 notte: pulsante «Sposta» → tremolio senza pressione lunga (additivo al contratto). */
+  function enterEditMode(){if(dead||editing)return;clearPending('ingresso tremolio');mode(true);dbg('edit','tremolio da «Sposta»')}
   function exitEditMode(){if(dead)return;clearPending('uscita modifica');if(drag)finish(true);endLanding();mode(false);sweep()}
   function destroy() {
     if(dead)return
@@ -488,7 +530,7 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
   listen(doc,'pointerup',onUp as EventListener)
   listen(doc,'pointercancel',onCancel as EventListener)
   listen(root,'lostpointercapture',((e:PointerEvent)=>{if(drag&&drag.id!==null&&drag.id===e.pointerId)finish(true)}) as EventListener)
-  listen(doc,'pointerdown',((e:PointerEvent)=>{if(editing&&!root.contains(e.target as Node))exitEditMode()}) as EventListener)
+  listen(doc,'pointerdown',((e:PointerEvent)=>{if(editing&&!viaTouch(e)&&!root.contains(e.target as Node)&&!(e.target instanceof view.Element&&e.target.closest('[data-gesture-keep]')))exitEditMode()}) as EventListener)
   listen(root,'click',((e:MouseEvent)=>{if(view.performance.now()<clickUntil){e.preventDefault();e.stopImmediatePropagation()}}) as EventListener,true)
   listen(doc,'keydown',onKeys as EventListener)
   listen(doc,'scroll',onScroll as EventListener,true)
@@ -502,11 +544,15 @@ export function createMenuGesture(opts:GestureOptions): { exitEditMode():void; r
   listen(doc,'touchmove',onTouchMove as EventListener,{passive:false})
   listen(doc,'touchend',((e:TouchEvent)=>onTouchEnd(e,false)) as EventListener,{passive:false})
   listen(doc,'touchcancel',((e:TouchEvent)=>onTouchEnd(e,true)) as EventListener,{passive:false})
+  listen(doc,'touchstart',onOutsideStart as EventListener,{passive:true})
+  listen(doc,'touchmove',onOutsideMove as EventListener,{passive:false})
+  listen(doc,'touchend',((e:TouchEvent)=>onOutsideEnd(e,false)) as EventListener,{passive:true})
+  listen(doc,'touchcancel',((e:TouchEvent)=>onOutsideEnd(e,true)) as EventListener,{passive:true})
   // Niente selezione di testo né trascinamento nativo (immagini, link) mentre si tiene premuto o si trascina.
   listen(doc,'selectstart',((e:Event)=>{if(pending||drag)e.preventDefault()}) as EventListener)
   listen(root,'dragstart',((e:Event)=>{if(pending||drag||editing)e.preventDefault()}) as EventListener)
   listen(root,'contextmenu',((e:Event)=>{if(pending||drag||editing||itemFor(e.target))e.preventDefault()}) as EventListener)
   if(opts.reducedMotion===undefined)listen(media,'change',((e:MediaQueryListEvent)=>{reduced=e.matches;refresh();if(reduced)endLanding()}) as EventListener)
   refresh()
-  return{exitEditMode,refresh,destroy}
+  return{enterEditMode,exitEditMode,refresh,destroy}
 }

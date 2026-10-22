@@ -20,7 +20,7 @@ async function fresh(q = '') {
   // centro di un elemento nell'iframe → coordinate della pagina esterna (scala 0,65)
   const at = async sel => frame.evaluate(s => { const r = document.querySelector(s).getBoundingClientRect(); return { x: (r.left + r.width / 2) * .65, y: (r.top + r.height / 2) * .65 } }, sel)
   const log = () => frame.evaluate(() => window.__log)
-  return { page, frame, touch, at, log }
+  return { page, frame, touch, at, log, cdp }
 }
 async function hold(t, p, ms, tremor = 6) { await t.touch('touchStart', p.x, p.y); const t0 = Date.now(); let k = 0; while (Date.now() - t0 < ms) { await sleep(40); k++; await t.touch('touchMove', p.x + (k % 2 ? tremor : -tremor), p.y + (k % 3 ? tremor / 2 : -tremor)) } }
 async function run(name, fn) { try { await fn(); results.push(['OK', name]) } catch (e) { results.push(['FAIL', name, e.message]) } }
@@ -60,11 +60,53 @@ await run('durante l\'attesa: pointercancel, scroll, mousedown/click, resize di 
   await sleep(950); const l = await t.log(); await t.touch('touchEnd')
   assert.ok(l.some(e => e[0] === 'mode' && e[1] === true), JSON.stringify(l.filter(e => e[0] === 'dbg'))); await t.page.close()
 })
-await run('in modalità tremolio: tocco su un piatto lo prende subito; tocco fuori/Fine esce e ripulisce', async () => {
+const touch2 = (t, type, pts) => t.cdp.send('Input.dispatchTouchEvent', { type, touchPoints: pts.map(q => ({ radiusX: 8, radiusY: 8, force: 1, ...q })) })
+await run('enterEditMode («Sposta») → tremolio senza pressione; dito fermo non solleva; 8 px reali → sollevato SUBITO; piatto in stessa Sezione e in altra Sezione → onDrop', async () => {
+  const t = await fresh()
+  await t.frame.evaluate(() => window.__gesture.enterEditMode()); await sleep(100)
+  let l = await t.log(); assert.deepEqual(l.filter(e => e[0] === 'mode').map(e => e[1]), [true])
+  const p = await t.at('[data-edit-id="s1-d1"] h3'); await t.touch('touchStart', p.x, p.y); await sleep(250)
+  assert.equal(await t.frame.evaluate(() => !!document.querySelector('[data-menu-gesture-ghost]')), false, 'sollevato senza movimento')
+  const t0 = Date.now(); await t.touch('touchMove', p.x, p.y + 8)
+  assert.ok(await t.frame.evaluate(() => !!document.querySelector('[data-menu-gesture-ghost]')), 'non sollevato dopo 8 px'); assert.ok(Date.now() - t0 < 300)
+  const q = await t.at('[data-edit-id="s1-d4"]')
+  for (let k = 1; k <= 12; k++) { await t.touch('touchMove', p.x, p.y + 8 + (q.y - p.y) * k / 12); await sleep(25) }
+  await t.touch('touchEnd'); await sleep(150)
+  l = await t.log(); let drop = l.filter(e => e[0] === 'drop').pop(); assert.ok(drop, 'nessun onDrop stessa Sezione'); assert.equal(drop[1].toGroup, 'items:s1'); assert.equal(drop[1].kind, 'dish')
+  await sleep(1000)
+  const a = await t.at('[data-edit-id="s2-d0"] h3'), b = await t.at('[data-edit-id="s3-d1"]')
+  await t.touch('touchStart', a.x, a.y); await sleep(40)
+  for (let k = 1; k <= 24; k++) { await t.touch('touchMove', a.x, a.y + (b.y - a.y) * k / 24); await sleep(25) }
+  await t.touch('touchEnd'); await sleep(150)
+  l = await t.log(); drop = l.filter(e => e[0] === 'drop').pop(); assert.equal(drop[1].id, 's2-d0'); assert.equal(drop[1].toGroup, 'items:s3')
+  await sleep(1000); assert.deepEqual((await t.log()).filter(e => e[0] === 'mode').map(e => e[1]), [true], 'uscito dal tremolio')
+  await t.page.close()
+})
+await run('tremolio: Sottomenu (pillola) si sposta col solo movimento', async () => {
+  const t = await fresh(); await t.frame.evaluate(() => window.__gesture.enterEditMode()); await sleep(80)
+  const p = await t.at('[data-edit-id="p0"]'), q = await t.at('[data-edit-id="p2"]')
+  await t.touch('touchStart', p.x, p.y); for (let k = 1; k <= 12; k++) { await t.touch('touchMove', p.x + (q.x - p.x + 10) * k / 12, p.y); await sleep(25) } await t.touch('touchEnd'); await sleep(150)
+  const drop = (await t.log()).find(e => e[0] === 'drop'); assert.ok(drop, 'nessun drop pillola'); assert.equal(drop[1].kind, 'submenu'); await t.page.close()
+})
+await run('tremolio: due dita sopra i piatti scorrono la pagina senza sollevare; un dito che scorre su zona vuota non esce; tocco su zona vuota esce', async () => {
+  const t = await fresh(); await t.frame.evaluate(() => window.__gesture.enterEditMode()); await sleep(80)
+  await t.frame.evaluate(() => { window.__ev = []; for (const k of ['touchstart','touchmove']) document.addEventListener(k, e => window.__ev.push(k + e.touches.length + (e.defaultPrevented ? 'P' : '')), true) })
+  const p = await t.at('[data-edit-id="s1-d3"]'), y0 = await t.frame.evaluate(() => scrollY)
+  await touch2(t, 'touchStart', [{ x: p.x - 40, y: p.y, id: 1 }]); await sleep(30); await touch2(t, 'touchStart', [{ x: p.x - 40, y: p.y, id: 1 }, { x: p.x + 40, y: p.y, id: 2 }])
+  for (let k = 1; k <= 8; k++) { await touch2(t, 'touchMove', [{ x: p.x - 40, y: p.y - k * 15, id: 1 }, { x: p.x + 40, y: p.y - k * 15, id: 2 }]); await sleep(20) }
+  await touch2(t, 'touchEnd', []); await sleep(150)
+  const y1 = await t.frame.evaluate(() => scrollY); assert.ok(y1 > y0 + 50, `due dita non scorrono: ${y0}→${y1} ` + JSON.stringify(await t.frame.evaluate(() => window.__ev.slice(0, 12))))
+  let l = await t.log(); assert.ok(!l.some(e => e[0] === 'drop')); assert.equal(await t.frame.evaluate(() => document.querySelectorAll('[data-menu-gesture-ghost]').length), 0)
+  const h = await t.at('[data-edit-select="section:s2"]')
+  await t.touch('touchStart', h.x, h.y); for (let k = 1; k <= 6; k++) { await t.touch('touchMove', h.x, h.y - k * 20); await sleep(16) } await t.touch('touchEnd'); await sleep(200)
+  l = await t.log(); assert.deepEqual(l.filter(e => e[0] === 'mode').map(e => e[1]), [true], 'scroll su zona vuota è uscito')
+  const h2 = await t.at('[data-edit-select="section:s2"]'); await t.touch('touchStart', h2.x, h2.y); await sleep(60); await t.touch('touchEnd'); await sleep(200)
+  l = await t.log(); assert.deepEqual(l.filter(e => e[0] === 'mode').map(e => e[1]), [true, false])
+  assert.equal(await t.frame.evaluate(() => document.querySelectorAll('[data-menu-gesture-ghost],[style*="opacity: 0"]').length), 0); await t.page.close()
+})
+await run('pressione lunga resta come scorciatoia; poi exitEditMode (Fine) ripulisce', async () => {
   const t = await fresh(), p = await t.at('[data-edit-id="s1-d1"]')
-  await hold(t, p, 1150, 2); await t.touch('touchEnd'); await sleep(200)
-  const q = await t.at('[data-edit-id="s2-d0"]'); await t.touch('touchStart', q.x, q.y); await sleep(60)
-  assert.ok(await t.frame.evaluate(() => !!document.querySelector('[data-menu-gesture-ghost]')), 'non preso subito'); await t.touch('touchEnd'); await sleep(1300)
+  await hold(t, p, 1150, 2); await t.touch('touchEnd'); await sleep(1300)
   await t.frame.evaluate(() => window.__gesture.exitEditMode()); await sleep(200)
   const l = await t.log(); assert.deepEqual(l.filter(e => e[0] === 'mode').map(e => e[1]), [true, false])
   assert.equal(await t.frame.evaluate(() => document.querySelectorAll('[data-menu-gesture-ghost],[style*="opacity: 0"]').length), 0); await t.page.close()

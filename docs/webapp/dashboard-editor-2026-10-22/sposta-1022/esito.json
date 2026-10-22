@@ -1,0 +1,152 @@
+{
+ "fails": 0,
+ "results": [
+  {
+   "name": "piatto con foto nel DOM",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "tap piatto → «Modifica» (dx) e «Sposta» (sx) visibili",
+   "ok": true,
+   "detail": {
+    "pen": {
+     "l": 422,
+     "r": 589.984375,
+     "t": 242.59375,
+     "h": 67.671875,
+     "w": 167.984375
+    },
+    "move": {
+     "l": 10,
+     "r": 161.90625,
+     "t": 242.59375,
+     "h": 67.671875,
+     "w": 151.90625
+    },
+    "frame": {
+     "l": 16,
+     "r": 584,
+     "t": 276.59375,
+     "h": 104,
+     "w": 568
+    },
+    "txt": "Sposta"
+   }
+  },
+  {
+   "name": "«Sposta» ≥ 44 px reali",
+   "ok": true,
+   "detail": {
+    "h": 43.98671875
+   }
+  },
+  {
+   "name": "«Sposta» → tremolio senza pressione lunga",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "«Fine» nella SPA",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "PIATTO trascinato nella stessa Sezione → bozza aggiornata",
+   "ok": true,
+   "detail": [
+    "Risotto ai funghi",
+    "Lasagna",
+    "Pasta al pomodoro"
+   ]
+  },
+  {
+   "name": "ancora in tremolio dopo il rilascio",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "«Sposta» di nuovo → tremolio",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "PIATTO trascinato in un'altra Sezione → bozza aggiornata",
+   "ok": true,
+   "detail": {
+    "secondi": [
+     "Pollo arrosto"
+    ],
+    "diMare": [
+     "Frittura",
+     "Cotoletta"
+    ]
+   }
+  },
+  {
+   "name": "Sottomenu trascinato col solo movimento → ordine cambiato",
+   "ok": true,
+   "detail": {
+    "pills": 3,
+    "order0": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ],
+    "order1": [
+     "Secondi",
+     "Contorni",
+     "Primi"
+    ]
+   }
+  },
+  {
+   "name": "Menu trascinato col solo movimento → ordine cambiato",
+   "ok": true,
+   "detail": {
+    "menus": 2,
+    "m0": [
+     "Menu cena",
+     "Menu pranzo"
+    ],
+    "m1": [
+     "Menu pranzo",
+     "Menu cena"
+    ]
+   }
+  },
+  {
+   "name": "«Fine» trovato",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "«Fine» esce dal tremolio",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "nessun residuo (ghost/opacità 0)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "scroll normale fuori dal tremolio: scorre, nessun tremolio",
+   "ok": true,
+   "detail": {
+    "y0": 0,
+    "y1": 110
+   }
+  },
+  {
+   "name": "pressione lunga 1 s con tremolio ±5 px → solleva (piatto)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "Fine dopo pressione lunga",
+   "ok": true,
+   "detail": ""
+  }
+ ]
+}

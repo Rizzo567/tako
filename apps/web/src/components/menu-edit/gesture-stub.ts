@@ -14,7 +14,7 @@ export type GestureOptions = {
   longPressMs?: number
   reducedMotion?: boolean
 }
-export type MenuGesture = { exitEditMode(): void; refresh(): void; destroy(): void }
+export type MenuGesture = { enterEditMode?(): void; exitEditMode(): void; refresh(): void; destroy(): void }
 
 type Picked = { el: HTMLElement; id: string; kind: ReorderDrop['kind']; group: string; from: number; to: number }
 
