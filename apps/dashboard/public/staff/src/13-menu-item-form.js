@@ -99,12 +99,22 @@ async function MW_PAPER_AREA(file){
   return area.bottom-area.top>.35&&area.right-area.left>.5?area:null;
  }finally{URL.revokeObjectURL(url);}
 }
+/* Il modello va su come JPEG di qualità (≤2 MP): nel PDF entra così com'è, senza riconversione sul server. */
+async function MW_PAPER_JPEG(file){
+ const url=URL.createObjectURL(file);try{
+  const img=new Image();await new Promise((ok,ko)=>{img.onload=ok;img.onerror=()=>ko(new Error('Immagine non leggibile.'));img.src=url;});
+  const k=Math.min(1,Math.sqrt(1990000/(img.naturalWidth*img.naturalHeight))),c=document.createElement('canvas');c.width=Math.floor(img.naturalWidth*k);c.height=Math.floor(img.naturalHeight*k);
+  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.imageSmoothingQuality='high';x.drawImage(img,0,0,c.width,c.height);
+  const blob=await new Promise(ok=>c.toBlob(ok,'image/jpeg',.95));c.width=c.height=1;if(!blob)throw new Error('Preparazione del modello non riuscita.');
+  return new File([blob],(file.name||'modello').replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'});
+ }finally{URL.revokeObjectURL(url);}
+}
 function MenuPaperTemplate({menu,adapter,disabled,onCommit}){
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),input=useRef(null),url=menu?.paper?.templateUrl||'';
  const pick=async file=>{if(!file)return;setError('');
   if(!['image/png','image/jpeg','image/webp'].includes(file.type)){setError('Usa un’immagine JPG, PNG o WebP.');return;}
   const tools=window.TakoMenuImageTools;if(!tools?.quickUpload){setError('Caricamento non disponibile.');return;}
-  setBusy(true);try{const area=await MW_PAPER_AREA(file).catch(()=>null);const asset=await tools.quickUpload(file,{adapter});if(!asset?.url)throw new Error('Caricamento non riuscito. Riprova.');onCommit({paper:{templateUrl:asset.url,...(area?{area}:{})}});}
+  setBusy(true);try{const area=await MW_PAPER_AREA(file).catch(()=>null);const jpeg=await MW_PAPER_JPEG(file);const asset=await tools.quickUpload(jpeg,{adapter});if(!asset?.url)throw new Error('Caricamento non riuscito. Riprova.');onCommit({paper:{templateUrl:asset.url,...(area?{area}:{})}});}
   catch(e){setError(e.message||'Caricamento non riuscito. Riprova.');}finally{setBusy(false);}};
  return <section className="mw-paper" aria-label="Modello PDF"><h4>Modello PDF</h4>
   <p className="mw-paper-hint">{url?'Il PDF di questo menu usa il modello: il testo si scrive da solo e si aggiorna a ogni pubblicazione.':'Carica la grafica del menu (cornice, logo e titolo, spazio vuoto sotto): il PDF scriverà sopra piatti e prezzi.'}</p>

@@ -99,7 +99,7 @@ export type PaperLayout = { ops: PaperOp[]; scale: number; gapScale: number; fit
 export type PaperMeasure = (text: string, font: PaperFont, size: number) => number
 
 type Line = { text: string; font: PaperFont; size: number; color: 'heading' | 'text'; caps: boolean }
-type Block = { gap: number; min?: number; line?: Line; sep?: true; last?: boolean }
+type Block = { gap: number; min?: number; anchor?: true; line?: Line; sep?: true; last?: boolean }
 /** Distanza minima dal giglio (mezza altezza 21 + aria): stringendo gli spazi il giglio non tocca mai il testo. */
 const SEP_CLEAR_BEFORE = 29, SEP_CLEAR_AFTER = 30
 
@@ -117,7 +117,7 @@ export function layoutPaper(content: PaperContent, measure: PaperMeasure, page: 
   }
   // Sequenza di blocchi con lo spazio PRIMA di ciascuno (dalla linea di base o dal centro del separatore precedente).
   const build = (f: number): Block[] => {
-    const blocks: Block[] = [{ gap: S.firstSep, min: 26, sep: true }]
+    const blocks: Block[] = [{ gap: S.firstSep, anchor: true, sep: true }]
     let after: 'sep' | 'main' | 'row' | 'heading' | 'dish' = 'sep'
     const push = (gap: number, line: Line) => blocks.push({ gap, line, ...(blocks.at(-1)?.sep ? { min: SEP_CLEAR_AFTER } : {}) })
     const sepGap = (next: 'normal' | 'footer') => next === 'footer' ? S.sepToFooter : S.sepToNext
@@ -141,7 +141,8 @@ export function layoutPaper(content: PaperContent, measure: PaperMeasure, page: 
     const end = blocks.at(-1); if (end) end.last = true
     return blocks
   }
-  const gapOf = (b: Block, f: number, g: number) => Math.max((b.min ?? 0) * f, b.gap * f * g)
+  // Il primo separatore resta attaccato al titolo del modello (come nel riferimento): il suo spazio non si allarga.
+  const gapOf = (b: Block, f: number, g: number) => b.anchor ? b.gap * f : Math.max((b.min ?? 0) * f, b.gap * f * g)
   const ascent = (line: Line) => (line.caps ? CAP : ASC) * line.size
   // Misure del blocco a scala f (testi e spazi) e g (solo spazi): altezza dal bordo alto della zona all'ultima discendente.
   const measureHeight = (blocks: Block[], f: number, g: number) => {
@@ -154,7 +155,7 @@ export function layoutPaper(content: PaperContent, measure: PaperMeasure, page: 
     return y
   }
   const available = bottom - S.bottomMargin - top
-  const gapsOf = (list: Block[]) => list.reduce((sum, b) => sum + b.gap, 0)
+  const gapsOf = (list: Block[]) => list.reduce((sum, b) => sum + (b.anchor ? 0 : b.gap), 0)
   // Troppi piatti: prima si stringono gli spazi (fino a PAPER_MIN_GAP), poi testi e spazi insieme fino a PAPER_MIN_SCALE.
   let f = 1, g = 1, blocks = build(1), natural = measureHeight(blocks, 1, 1)
   if (natural > available) {
@@ -167,10 +168,12 @@ export function layoutPaper(content: PaperContent, measure: PaperMeasure, page: 
     g = Math.min(1.6, 1 + (available - natural) / Math.max(1, gapsOf(blocks))); natural = measureHeight(blocks, 1, g)
   }
   const fits = natural <= available + 0.5
-  let y = top + (fits ? Math.max(0, (available - natural) / 2) : 0)
+  // Spazio che avanza (anche dopo l'allargamento): metà sopra e metà sotto il contenuto, dopo il primo separatore.
+  const spare = fits ? Math.max(0, (available - natural) / 2) : 0
+  let y = top
   const ops: PaperOp[] = []
   for (const b of blocks) {
-    if (b.sep) { y += gapOf(b, f, g); ops.push({ kind: 'sep', cx: cx * unit, cy: y * unit, scale: f * unit }); continue }
+    if (b.sep) { y += gapOf(b, f, g); ops.push({ kind: 'sep', cx: cx * unit, cy: y * unit, scale: f * unit }); if (b.anchor) y += spare; continue }
     const line = b.line!
     let size = line.size * f
     const w = width(line, size); if (w > maxWidth) size *= maxWidth / w // titoli e prezzi su una riga: si stringono per stare nella larghezza
