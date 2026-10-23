@@ -11,7 +11,7 @@ const fixed={id:'m',name:'Menu Cena',pricing:'fisso',included:'¼ di vino oppure
 const render=async(menu,extra={})=>renderToStaticMarkup(React.createElement(await component(),{menu,design:{showPrices:true},...extra}))
 const text=html=>html.replace(/<[^>]+>/g,' ').replace(/&#x27;|&#39;/g,"'").replace(/\s+/g,' ')
 
-test('con sectionIds: un blocco per opzione come il vecchio sottomenu COMPLETO (titolo maiuscolo, riga NOME … prezzo, nota + Compreso), poi le sezioni comprese senza prezzi',async()=>{
+test('con sectionIds (23/10, una pagina): riquadro opzioni in cima, poi tutte le Sezioni in fila col loro titolo, niente pillole, piatti senza prezzo',async()=>{
  const {fixedMenuView}=await lib('apps/web/src/lib/menu-fixed-price.ts')
  const view=JSON.parse(JSON.stringify(fixedMenuView(fixed,'it')))
  assert.deepEqual(view.sections.map(s=>[s.name,s.parentSectionId?'child':'root']),[['COMPLETO','root'],['Primi','child'],['Secondi','child'],['Contorni','child'],['PRIMO','root'],['Primi','child']])
@@ -19,11 +19,13 @@ test('con sectionIds: un blocco per opzione come il vecchio sottomenu COMPLETO (
  assert.deepEqual(view.sections[0].items.map(i=>[i.name,i.price,i.description,i.displayMode]),[['Completo',16.9,'Un primo + un secondo con contorno. ¼ di vino oppure ½ litro d’acqua + caffè.','centered']])
  assert.equal(fixed.sections.length,3,'il documento non cambia')
  const html=await render(fixed),t=text(html)
- assert.equal(html.includes('data-fixed-price-box'),false,'niente riquadro in cima quando ci sono i blocchi')
- assert.match(t,/Completo 16.9 €/);assert.match(t,/Un primo \+ un secondo con contorno\. ¼ di vino oppure ½ litro d’acqua \+ caffè\./)
- for(const name of ['Linguine','Gnocchi','Nodino','Patate'])assert.ok(t.includes(name),name)
+ assert.ok(html.includes('data-fixed-price-box'),'riquadro opzioni in cima');assert.equal((html.match(/data-formula-row/g)||[]).length,2)
+ assert.equal(html.includes('data-category='),false,'niente pillole dei Sottomenu')
+ assert.match(t,/Completo 16.9 €/);assert.match(t,/Un primo \+ un secondo con contorno/);assert.match(t,/Compreso: ¼ di vino oppure ½ litro d’acqua \+ caffè/)
+ assert.ok(t.indexOf('Primi')<t.indexOf('Linguine')&&t.indexOf('Linguine')<t.indexOf('Secondi')&&t.indexOf('Secondi')<t.indexOf('Nodino')&&t.indexOf('Nodino')<t.indexOf('Contorni')&&t.indexOf('Contorni')<t.indexOf('Patate'),'sezioni una sotto l’altra')
+ assert.equal((html.match(/<section[^>]*id="workspace-section-/g)||[]).length,3,'ogni Sezione una volta sola')
  assert.equal(/8 €|11 €/.test(t),false,'piatti senza prezzo')
- assert.equal((html.match(/data-price-divider/g)||[]).length,1,'solo la riga opzione ha i puntini')
+ assert.equal((html.match(/data-price-divider/g)||[]).length,0,'nessun piatto con i puntini')
 })
 test('la riga opzione non si apre né si ordina, i piatti sì',async()=>{
  const html=await render(fixed,{onOpen:()=>{}})
@@ -47,7 +49,7 @@ test('tradotto: titolo e nota dell’opzione arrivano già tradotti, «Compreso�
  const en={...fixed,included:'¼ wine or ½ l water + coffee',formulas:[{...fixed.formulas[0],name:'Full',note:'A first + a main'}]}
  const {fixedMenuView}=await lib('apps/web/src/lib/menu-fixed-price.ts')
  assert.equal(fixedMenuView(en,'en').sections[0].name,'FULL')
- assert.match(text(await render(en,{language:'en'})),/A first \+ a main\. ¼ wine or ½ l water \+ coffee\./)
+ assert.match(text(await render(en,{language:'en'})),/Full 16.9 € A first \+ a main Included: ¼ wine or ½ l water \+ coffee/)
  const box=await render({...en,formulas:[{id:'x',name:'Full',price:9}]},{language:'de'})
  assert.match(text(box),/Inklusive: ¼ wine/)
 })

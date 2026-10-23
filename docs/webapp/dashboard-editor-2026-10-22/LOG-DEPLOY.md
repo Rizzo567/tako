@@ -75,3 +75,12 @@ Rollback: operativo `cp $RB/rollback-v157.ts release/serverless/candidate/index.
 - Verifica `scripts/verify-prezzo-fisso-1022.mjs` (iPhone 390×844/430×932 DPR 3 touch CDP con tremolio + 1280): 47/47 ✓, video `fisso-1022/390-trascina-prezzo-fisso.webm`.
 - Deploy web → **4449e124-dd66-4295-a13c-70321fbf1122** (prima 09b429da). Smoke: /staff 200, /api/auth/me 401, /menu-preview QA 200.
 - Rollback: `CI=true npx wrangler rollback 09b429da-6b8c-4335-a344-258c865bcaa5 --config deploy/cloudflare/wrangler.jsonc`.
+
+# LOG DEPLOY 23/10 mattina — matita a cerchio, prezzo fisso su una pagina, riquadro prezzi più leggibile
+
+- Matita: solo cerchietto con l'icona (32 px desktop; telefono 34 px visivi, area di tocco 46 px reali via --tako-edit-inv), in alto a destra del riquadro, senza testo; aria-label «Modifica piatto «nome»» (pencilLabel invariato); pausa anti-click 350 ms invariata.
+- Menu `pricing:'fisso'` (Victoria Menu Giorno / Menu Cena, QA Menu del giorno): niente pillole né vista ripetuta per opzione (fixedMenuView non più usato dal renderer), riquadro opzioni in cima e tutte le Sezioni in fila col loro titolo — pagina pubblica ed editor (stesso WorkspaceMenuRenderer). Editor: Sottomenu trascinabili su/giù (wrapper `data-edit-kind="submenu"` nel gruppo `pills:<menu>` asse y, stessa op delle pillole), piatti tra Sezioni come prima. Alla carta invariato. PDF non toccato.
+- Riquadro prezzi: nome 18/700, prezzo 19/700, note e «Compreso» 15 px interlinea 1,5; colori del locale.
+- Verifica `scripts/verify-fisso-pagina-1023.mjs` (iPhone 390/430 DPR 3 touch CDP + 1280): 32/32 ✓ (`fisso-pagina-1023/editor/`). Pagine pubbliche `scripts/shoot-public-fisso-1023.mjs` prima/dopo (`fisso-pagina-1023/prima|dopo`): Victoria Alla carta/Bevande, Bim Bum Bar, L'Agorà identici al byte; unica differenza Bim Bum Bar 390 dentro la foto di un piatto (decodifica JPEG, testo e layout identici). Test web: stessi 24 rossi preesistenti, nessuno nuovo.
+- Deploy web → **e1e8e3a5-68b8-4a17-a0b3-d87aecc44dec** (prima 9dd26c88). Rollback `CI=true npx wrangler rollback 9dd26c88-092a-4aa1-84c6-8fb416d59ae0 --config deploy/cloudflare/wrangler.jsonc`.
+- Deploy pubblico → **71e67cca-974e-4dbd-a25e-aaa551a16ebf** (prima f5d6756f). Rollback `CI=true npx wrangler rollback f5d6756f-5575-4a40-9706-864ebef040b8 --config deploy/cloudflare/wrangler-public.jsonc`.

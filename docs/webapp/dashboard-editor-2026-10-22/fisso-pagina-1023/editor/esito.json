@@ -1,0 +1,441 @@
+{
+ "fails": 0,
+ "results": [
+  {
+   "name": "390 nessuno scroll orizzontale",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 prezzo fisso: riquadro + Primi/Secondi/Contorni in sequenza, niente pillole",
+   "ok": true,
+   "detail": {
+    "box": true,
+    "pills": 0,
+    "h2": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ],
+    "subs": [
+     "pills:00000000-0000-4000-8000-000000000001",
+     "pills:00000000-0000-4000-8000-000000000001",
+     "pills:00000000-0000-4000-8000-000000000001"
+    ],
+    "dishGroups": 3,
+    "formula": 0,
+    "sizes": {
+     "name": "18px",
+     "price": "19px",
+     "note": "15px",
+     "inc": "15px"
+    },
+    "boxAbove": true
+   }
+  },
+  {
+   "name": "390 Sottomenu trascinabili su/giù (gruppo pills:menu) e 3 gruppi di piatti",
+   "ok": true,
+   "detail": {
+    "box": true,
+    "pills": 0,
+    "h2": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ],
+    "subs": [
+     "pills:00000000-0000-4000-8000-000000000001",
+     "pills:00000000-0000-4000-8000-000000000001",
+     "pills:00000000-0000-4000-8000-000000000001"
+    ],
+    "dishGroups": 3,
+    "formula": 0,
+    "sizes": {
+     "name": "18px",
+     "price": "19px",
+     "note": "15px",
+     "inc": "15px"
+    },
+    "boxAbove": true
+   }
+  },
+  {
+   "name": "390 riquadro prezzi: nome 18 / prezzo 19 / note 15 px",
+   "ok": true,
+   "detail": {
+    "name": "18px",
+    "price": "19px",
+    "note": "15px",
+    "inc": "15px"
+   }
+  },
+  {
+   "name": "390 matita: solo cerchio (~32–36 px visivi), tocco ≥44 px reali, senza testo, aria-label «Modifica …nome»",
+   "ok": true,
+   "detail": {
+    "w": 70.734375,
+    "h": 70.734375,
+    "dw": 52.28125,
+    "dh": 52.28125,
+    "radius": "999px",
+    "text": "",
+    "label": "Modifica piatto «Risotto ai funghi»",
+    "cx": 564.359375,
+    "cy": 488.375,
+    "fr": {
+     "r": 584,
+     "t": 488.515625,
+     "l": 16
+    },
+    "sc": 0.65,
+    "visual": 33.9828125,
+    "touch": 45.97734375
+   }
+  },
+  {
+   "name": "390 matita in alto a destra del riquadro",
+   "ok": true,
+   "detail": {
+    "w": 70.734375,
+    "h": 70.734375,
+    "dw": 52.28125,
+    "dh": 52.28125,
+    "radius": "999px",
+    "text": "",
+    "label": "Modifica piatto «Risotto ai funghi»",
+    "cx": 564.359375,
+    "cy": 488.375,
+    "fr": {
+     "r": 584,
+     "t": 488.515625,
+     "l": 16
+    }
+   }
+  },
+  {
+   "name": "390 tocco sulla matita → si apre «Modifica piatto»",
+   "ok": true,
+   "detail": "Modifica piattoNomeDescrizioneFotoTrascina qui una fotoJPG, PNG o WebP · massimo 10 MBCaricaScegli dalla galleriaUltime porzioniSolo oggiDisponibilitàEsauritoAllergeniCataloghi alimentariAllergeniAltr"
+  },
+  {
+   "name": "390 piatto Lasagna: Primi → Secondi",
+   "ok": true,
+   "detail": {
+    "primi": [
+     "Pasta al pomodoro",
+     "Risotto ai funghi"
+    ],
+    "secondi": [
+     "Lasagna",
+     "Pollo arrosto",
+     "Cotoletta"
+    ]
+   }
+  },
+  {
+   "name": "390 Sottomenu Contorni spostato su (prima di Secondi)",
+   "ok": true,
+   "detail": {
+    "order0": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ],
+    "order1": [
+     "Primi",
+     "Contorni",
+     "Secondi"
+    ],
+    "smid": {
+     "inside": true,
+     "glass": false,
+     "r": [
+      "0px",
+      "0px",
+      "0px",
+      "0px"
+     ],
+     "bf": "none",
+     "bg": "none",
+     "sh": "rgba(0, 0, 0, 0.16) 0px 14px 30px 0px"
+    }
+   }
+  },
+  {
+   "name": "390 la pagina segue il nuovo ordine",
+   "ok": true,
+   "detail": [
+    "Primi",
+    "Contorni",
+    "Secondi"
+   ]
+  },
+  {
+   "name": "390 «Fine» esce dal tremolio, nessun residuo",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 nessuno scroll orizzontale (dopo)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 Alla carta: pillole come prima, una pagina per pillola",
+   "ok": true,
+   "detail": {
+    "pills": [
+     "Antipasti",
+     "Pizze"
+    ],
+    "box": false,
+    "h2": [
+     "Antipasti"
+    ]
+   }
+  },
+  {
+   "name": "390 nessun errore console",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "430 nessuno scroll orizzontale",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "430 prezzo fisso: riquadro + Primi/Secondi/Contorni in sequenza, niente pillole",
+   "ok": true,
+   "detail": {
+    "box": true,
+    "pills": 0,
+    "h2": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ],
+    "subs": [
+     "pills:00000000-0000-4000-8000-000000000001",
+     "pills:00000000-0000-4000-8000-000000000001",
+     "pills:00000000-0000-4000-8000-000000000001"
+    ],
+    "dishGroups": 3,
+    "formula": 0,
+    "sizes": {
+     "name": "18px",
+     "price": "19px",
+     "note": "15px",
+     "inc": "15px"
+    },
+    "boxAbove": true
+   }
+  },
+  {
+   "name": "430 Sottomenu trascinabili su/giù (gruppo pills:menu) e 3 gruppi di piatti",
+   "ok": true,
+   "detail": {
+    "box": true,
+    "pills": 0,
+    "h2": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ],
+    "subs": [
+     "pills:00000000-0000-4000-8000-000000000001",
+     "pills:00000000-0000-4000-8000-000000000001",
+     "pills:00000000-0000-4000-8000-000000000001"
+    ],
+    "dishGroups": 3,
+    "formula": 0,
+    "sizes": {
+     "name": "18px",
+     "price": "19px",
+     "note": "15px",
+     "inc": "15px"
+    },
+    "boxAbove": true
+   }
+  },
+  {
+   "name": "430 riquadro prezzi: nome 18 / prezzo 19 / note 15 px",
+   "ok": true,
+   "detail": {
+    "name": "18px",
+    "price": "19px",
+    "note": "15px",
+    "inc": "15px"
+   }
+  },
+  {
+   "name": "430 matita: solo cerchio (~32–36 px visivi), tocco ≥44 px reali, senza testo, aria-label «Modifica …nome»",
+   "ok": true,
+   "detail": {
+    "w": 64.15625,
+    "h": 64.15625,
+    "dw": 47.421875,
+    "dh": 47.421875,
+    "radius": "999px",
+    "text": "",
+    "label": "Modifica piatto «Risotto ai funghi»",
+    "cx": 568.0703125,
+    "cy": 499.5859375,
+    "fr": {
+     "r": 584,
+     "t": 499.515625,
+     "l": 16
+    },
+    "sc": 0.7166639200846354,
+    "visual": 33.98554683526357,
+    "touch": 45.97846962292989
+   }
+  },
+  {
+   "name": "430 matita in alto a destra del riquadro",
+   "ok": true,
+   "detail": {
+    "w": 64.15625,
+    "h": 64.15625,
+    "dw": 47.421875,
+    "dh": 47.421875,
+    "radius": "999px",
+    "text": "",
+    "label": "Modifica piatto «Risotto ai funghi»",
+    "cx": 568.0703125,
+    "cy": 499.5859375,
+    "fr": {
+     "r": 584,
+     "t": 499.515625,
+     "l": 16
+    }
+   }
+  },
+  {
+   "name": "430 tocco sulla matita → si apre «Modifica piatto»",
+   "ok": true,
+   "detail": "Modifica piattoNomeDescrizioneFotoTrascina qui una fotoJPG, PNG o WebP · massimo 10 MBCaricaScegli dalla galleriaUltime porzioniSolo oggiDisponibilitàEsauritoAllergeniCataloghi alimentariAllergeniAltr"
+  },
+  {
+   "name": "430 piatto Lasagna: Primi → Secondi",
+   "ok": true,
+   "detail": {
+    "primi": [
+     "Pasta al pomodoro",
+     "Risotto ai funghi"
+    ],
+    "secondi": [
+     "Lasagna",
+     "Pollo arrosto",
+     "Cotoletta"
+    ]
+   }
+  },
+  {
+   "name": "430 Sottomenu Contorni spostato su (prima di Secondi)",
+   "ok": true,
+   "detail": {
+    "order0": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ],
+    "order1": [
+     "Primi",
+     "Contorni",
+     "Secondi"
+    ],
+    "smid": {
+     "inside": true,
+     "glass": false,
+     "r": [
+      "0px",
+      "0px",
+      "0px",
+      "0px"
+     ],
+     "bf": "none",
+     "bg": "none",
+     "sh": "rgba(0, 0, 0, 0.16) 0px 14px 30px 0px"
+    }
+   }
+  },
+  {
+   "name": "430 la pagina segue il nuovo ordine",
+   "ok": true,
+   "detail": [
+    "Primi",
+    "Contorni",
+    "Secondi"
+   ]
+  },
+  {
+   "name": "430 «Fine» esce dal tremolio, nessun residuo",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "430 nessuno scroll orizzontale (dopo)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "430 Alla carta: pillole come prima, una pagina per pillola",
+   "ok": true,
+   "detail": {
+    "pills": [
+     "Antipasti",
+     "Pizze"
+    ],
+    "box": false,
+    "h2": [
+     "Antipasti"
+    ]
+   }
+  },
+  {
+   "name": "430 nessun errore console",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "1280 prezzo fisso su una pagina",
+   "ok": true,
+   "detail": {
+    "box": true,
+    "pills": 0,
+    "h2": [
+     "Primi",
+     "Secondi",
+     "Contorni"
+    ]
+   }
+  },
+  {
+   "name": "1280 nessuno scroll orizzontale",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1280 matita a cerchio 32 px senza testo",
+   "ok": true,
+   "detail": {
+    "hidden": false,
+    "w": 40,
+    "dw": 32,
+    "text": ""
+   }
+  },
+  {
+   "name": "1280 click sulla matita → apre il pannello",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1280 nessun errore console",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}

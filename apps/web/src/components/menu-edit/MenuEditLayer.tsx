@@ -158,7 +158,7 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
       frameEl.style.transform = `translate3d(${r.left - pad}px,${r.top - pad}px,0)`; frameEl.style.width = r.width + pad * 2 + 'px'; frameEl.style.height = r.height + pad * 2 + 'px'; frameEl.style.borderRadius = Math.min(radius + pad, 999) + 'px'
       frameEl.classList.remove('tako-edit-hidden'); pencil.classList.remove('tako-edit-hidden')
       const pw = pencil.offsetWidth || 44, ph = pencil.offsetHeight || 32
-      const x = Math.max(4, Math.min(innerWidth - pw - 4, r.right + pad - pw + 6)), y = Math.max(4, r.top - pad - ph / 2)
+      const x = Math.max(0, Math.min(innerWidth - pw, r.right + pad - pw / 2 - 4)), y = Math.max(0, r.top - pad - ph / 2)
       pencil.style.transform = `translate3d(${x}px,${y}px,0)`
       const name = (t.el.querySelector('h3')?.textContent || t.el.textContent || '').trim().slice(0, 60)
       pencil.setAttribute('aria-label', pencilLabel(selection.kind, name, t.el.getAttribute('data-edit-kind') === 'section' || !!t.el.closest('[data-edit-kind="section"]')))
@@ -184,8 +184,8 @@ export default function MenuEditLayer({ root, doc, setDoc, menuId, state, exitTi
   return <>
     <div ref={frameRef} aria-hidden className="tako-edit-frame tako-edit-hidden" data-edit-frame/>
     <button ref={pencilRef} type="button" className="tako-edit-pencil tako-edit-hidden" data-edit-pencil aria-label="Modifica" onClick={() => { if (fresh()) return; if (selRef.current) post(outgoing.open(selRef.current)) }}>
-      <svg aria-hidden width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/><path d="m13.5 6.5 4 4" stroke="currentColor" strokeWidth="2"/></svg>
-      <span>Modifica</span>
+      {/* 23/10: solo un cerchietto con la matita (niente testo); il pulsante intorno resta l'area di tocco ≥ 44 px reali. */}
+      <span aria-hidden className="tako-edit-pencil-dot"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/><path d="m13.5 6.5 4 4" stroke="currentColor" strokeWidth="2"/></svg></span>
     </button>
   </>
 }

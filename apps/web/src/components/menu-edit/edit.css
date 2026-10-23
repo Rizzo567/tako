@@ -12,14 +12,16 @@
 /* Contenitori vuoti: area di rilascio visibile solo in modalità tremolio. */
 [data-menu-edit-root][data-edit-jiggle] [data-edit-group-id^="items:"]:empty,[data-menu-edit-root][data-edit-jiggle] [data-edit-group-id^="children:"]:empty{min-height:56px;border:1.5px dashed var(--edit-line);border-radius:14px;background:color-mix(in srgb,var(--edit-soft) 60%,transparent);margin:4px 0 12px}
 [data-menu-edit-root] [data-gesture-picked]{outline:2px dashed var(--edit-ink);outline-offset:4px}
-/* Riquadro di selezione: 2 px nero + alone morbido; matita a pillola in alto a destra. */
+/* Riquadro di selezione: 2 px nero + alone morbido; matita a cerchietto in alto a destra. */
 .tako-edit-frame{position:fixed;left:0;top:0;pointer-events:none;z-index:2147483000;border:2px solid var(--edit-ink,#0a0a0a);box-shadow:0 0 0 5px rgba(10,10,10,.07),0 10px 28px rgba(10,10,10,.12);will-change:transform,width,height;box-sizing:border-box}
-.tako-edit-pencil{position:fixed;left:0;top:0;z-index:2147483001;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;min-width:32px;padding:0 12px;border:0;border-radius:999px;background:var(--edit-ink,#0a0a0a);color:#fff;font:600 13px/1 system-ui,-apple-system,sans-serif;box-shadow:0 2px 8px rgba(10,10,10,.18);cursor:pointer;will-change:transform}
-.tako-edit-pencil:hover{background:var(--edit-ink-hover,#262626)}
-.tako-edit-pencil:focus-visible{outline:2px solid #fff;box-shadow:0 0 0 4px var(--edit-ink,#0a0a0a)}
-@media (pointer:coarse){.tako-edit-pencil{height:44px;min-width:44px;padding:0 16px;font-size:14px}}
+.tako-edit-pencil{position:fixed;left:0;top:0;z-index:2147483001;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:0;border-radius:999px;background:transparent;color:#fff;cursor:pointer;will-change:transform;-webkit-tap-highlight-color:transparent}
+.tako-edit-pencil-dot{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:999px;background:var(--edit-ink,#0a0a0a);box-shadow:0 2px 8px rgba(10,10,10,.18);pointer-events:none}
+.tako-edit-pencil:hover .tako-edit-pencil-dot{background:var(--edit-ink-hover,#262626)}
+.tako-edit-pencil:focus-visible{outline:none}
+.tako-edit-pencil:focus-visible .tako-edit-pencil-dot{outline:2px solid #fff;box-shadow:0 0 0 4px var(--edit-ink,#0a0a0a)}
+/* Telefono: la dashboard rimpicciolisce l'iframe (--tako-edit-inv = 1/scala, scritto dalla SPA): cerchio ~34 px visivi, tocco 46 px reali. */
+@media (pointer:coarse){.tako-edit-pencil{width:calc(46px * var(--tako-edit-inv,1));height:calc(46px * var(--tako-edit-inv,1))}.tako-edit-pencil-dot{width:calc(34px * var(--tako-edit-inv,1));height:calc(34px * var(--tako-edit-inv,1))}.tako-edit-pencil svg{width:calc(17px * var(--tako-edit-inv,1));height:calc(17px * var(--tako-edit-inv,1))}}
 /* Telefono (22/10 sera): la dashboard rimpicciolisce l'iframe (--tako-edit-inv = 1/scala, scritto dalla SPA): matita e riquadro restano a misura di dito. */
-@media (pointer:coarse){.tako-edit-pencil{height:calc(44px * var(--tako-edit-inv,1));min-width:calc(44px * var(--tako-edit-inv,1));padding:0 calc(16px * var(--tako-edit-inv,1));gap:calc(6px * var(--tako-edit-inv,1));font-size:calc(14px * var(--tako-edit-inv,1))}.tako-edit-pencil svg{width:calc(16px * var(--tako-edit-inv,1));height:calc(16px * var(--tako-edit-inv,1))}}
 .tako-edit-frame{border-width:calc(2px * var(--tako-edit-inv,1))}
 .tako-edit-hidden{display:none!important}
 /* Lampeggio breve degli elementi indicati dalla SPA (nuovi, aggiornati da WhatsApp). */
