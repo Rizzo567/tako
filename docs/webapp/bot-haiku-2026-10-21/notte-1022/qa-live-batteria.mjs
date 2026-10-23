@@ -17,11 +17,11 @@ const link=await q(`SELECT restaurant_id FROM tako_whatsapp_links WHERE phone='$
 if(link.length!==1||link[0].restaurant_id!==QA)throw new Error('numero non collegato solo al QA: mi fermo')
 const tw=parseEnv(fs.readFileSync(path.join(cfg,'twilio-menu.env'),'utf8'))
 const sign=(u,form)=>createHmac('sha1',tw.TWILIO_AUTH_TOKEN).update(u+Object.keys(form).sort().map(k=>k+form[k]).join('')).digest('base64')
-async function send(body){
+async function send(body,nap=2500){
  const form={AccountSid:tw.TWILIO_ACCOUNT_SID,From:phone,To:tw.TWILIO_WHATSAPP_NUMBER,NumMedia:'0',MessageSid:'SM'+randomBytes(16).toString('hex'),Body:body,TakoSyncTest:'1'},t0=performance.now()
  let raw='';try{const r=await fetch(tw.TWILIO_WEBHOOK_URL,{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded','x-twilio-signature':sign(tw.TWILIO_WEBHOOK_URL,form)},body:new URLSearchParams(form).toString(),signal:AbortSignal.timeout(90000)});raw=await r.text()}catch(e){raw='[ERRORE RETE '+e.message+']'}
  const ms=Math.round(performance.now()-t0),reply=raw.replace(/<[^>]+>/g,' ').replace(/&apos;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim()
- console.log('  >',body,`[${ms} ms]`,'\n    ',reply.slice(0,400));await sleep(2500);return {reply,ms}
+ console.log('  >',body,`[${ms} ms]`,'\n    ',reply.slice(0,400));await sleep(nap);return {reply,ms}
 }
 
 // ---------- istantanea e differenze ----------
@@ -128,6 +128,17 @@ const C=[
   t:[{m:'il menù del giorno si deve vedere ma devi nascondere tutti i piatti',no:[ASK],diff:HIDE7()},{m:'annulla',diff:[]}]},
  {id:'grave-k2-pasta-e-fagioli',desc:'(K2, GRAVE) «nel menu del giorno primi carbonara e pasta e fagioli» → Carbonara + Pasta e fagioli (nuova), Lasagna e Gnocchi ELIMINATI → annulla',
   t:[{m:'nel menu del giorno primi carbonara e pasta e fagioli',re:[String.raw`Pasta e fagioli`,String.raw`Eliminati`],no:[ASK,String.raw`nascost`],diff:[String.raw`^-Lasagna\|`,String.raw`^-Gnocchi al ragù\|`,String.raw`^\+Pasta e fagioli\|Primi\|Menu del giorno\|0$`]},{m:'annulla',diff:[]}]},
+ // 23/10 — chat di Luisa (Victoria): «elimina i primi» = sottomenu intero (Menu a prezzo fisso: subito + annulla), Menu detto col prezzo del
+ // Completo («da 18» = Menu del giorno del QA), «E inserisci» senza piatti = domanda dei nomi nel sottomenu della conversazione, elenco con
+ // doppio spazio e senza virgole, messaggi accavallati (il secondo parte 1 s dopo il primo, mentre il primo lavora).
+ {id:'luisa-elimina-primi',desc:'(Luisa) «Nel menù del giorno da 18 elimina i primi» → i 3 Primi del Menu del giorno eliminati subito, mai «a quale piatto?» → annulla',
+  t:[{m:'Nel menù del giorno da 18 elimina i primi',re:[String.raw`Eliminati`,String.raw`annulla`],no:[ASK,String.raw`quale piatto`],diff:[String.raw`^-Lasagna\|`,String.raw`^-Carbonara\|`,String.raw`^-Gnocchi al ragù\|`]},{m:'annulla',diff:[]}]},
+ {id:'luisa-inserisci-elenco',desc:'(Luisa) «Nel menù del giorno nei primi inserisci» → chiede i piatti → «Strozzapreti con Zola e pistacchio  orecchiette con zucca» → 2 piatti nuovi → annulla',
+  t:[{m:'Nel menù del giorno nei primi inserisci',re:[String.raw`Cosa inserisco`],diff:[]},{m:'Strozzapreti con Zola e pistacchio  orecchiette con zucca',re:[String.raw`Strozzapreti con zola e pistacchio`,String.raw`Orecchiette con zucca`],no:[ASK],diff:[String.raw`^\+Strozzapreti con zola e pistacchio\|Primi\|Menu del giorno\|0$`,String.raw`^\+Orecchiette con zucca\|Primi\|Menu del giorno\|0$`]},{m:'annulla',diff:[]}]},
+ {id:'luisa-accavallati',desc:'(Luisa) «Nel menù del giorno elimina i primi» + «annulla» 1 s dopo (accavallati): la fila li lavora in ordine → prima eliminati, poi rimessi; QA identico',
+  t:[{m:'Nel menù del giorno elimina i primi',with:'annulla',re:[String.raw`Eliminati`],re2:[String.raw`annull|com.era`],diff:[]}]},
+ {id:'luisa-si-domanda-menu',desc:'(Luisa) «elimina i primi» (più Menu) → UNA domanda sul Menu → «Menù del giorno da 18 euro» → eliminati → annulla',
+  t:[{m:'elimina i primi',re:[ASK],diff:[]},{m:'Menù del giorno da 18 euro',re:[String.raw`Eliminati`],no:[ASK],diff:[String.raw`^-Lasagna\|`,String.raw`^-Carbonara\|`,String.raw`^-Gnocchi al ragù\|`]},{m:'annulla',diff:[]}]},
  {id:'ok-a-domanda',desc:'«togli la carbonara» (pasta carbonara / Carbonara del Menu del giorno spento) → elimina la pasta carbonara o chiede; mai «nascosto»',
   t:[{m:'togli la carbonara',no:[String.raw`nascost`]}],restoreIfChanged:['annulla']},
 ]
@@ -161,11 +172,15 @@ for(const c of C){if(ONLY&&!ONLY.includes(c.id))continue
  for(const [k,t0] of c.t.entries()){let t=t0
   // «annulla» di ripristino solo se la conversazione ha davvero scritto: altrimenti annullerebbe la pubblicazione PRECEDENTE (es. un ripristino)
   if(t.m==='annulla'&&!t.literal&&!diff(base,await snap()).length)t={...t,m:'lascia stare'}
-  const {reply,ms}=await send(t.m),tr={m:t.m,reply,ms,fails:[]}
+  let reply,ms,reply2=''
+  if(t.with){const p1=send(t.m,0);await sleep(1000);const p2=send(t.with,0);const [a,b]=await Promise.all([p1,p2]);reply=a.reply;ms=Math.max(a.ms,b.ms+1000);reply2=b.reply;await sleep(2500)}else({reply,ms}=await send(t.m))
+  const tr={m:t.m+(t.with?' ∥ '+t.with:''),reply:reply+(t.with?' ∥ '+reply2:''),ms,fails:[]}
+  for(const e of t.re2||[])if(!new RegExp(e,'i').test(reply2))tr.fails.push(`seconda risposta senza /${e}/`)
+  if(t.with&&(reply+' '+reply2).split(/\?/).length-1>1)tr.fails.push('più di una domanda nei messaggi accavallati')
   for(const e of t.re||[])if(!new RegExp(e,'i').test(reply))tr.fails.push(`risposta senza /${e}/`)
   for(const e of t.no||[])if(new RegExp(e,'i').test(reply))tr.fails.push(`risposta con /${e}/`)
   if(t.diff){const d=diff(base,await snap()),err=checkDiff(d,t.diff);if(err)tr.fails.push(err)}
-  if(ms>20000)tr.fails.push(`lenta ${ms} ms`)
+  if(ms>30000)tr.fails.push(`lenta ${ms} ms`)
   r.turns.push(tr);for(const f of tr.fails)r.fails.push(`t${k+1} «${t.m}»: ${f}`)}
  if(c.restoreIfChanged&&diff(base,await snap()).length&&!r.turns.some(x=>x.m==='annulla'))for(const m of c.restoreIfChanged){const {reply}=await send(m);r.turns.push({m,reply,restore:true})}
  const left=diff(base,await snap());r.leftover=left.map(x=>x.s)

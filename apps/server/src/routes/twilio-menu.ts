@@ -47,7 +47,8 @@ import {fixTruncatedNumbers,undoRequested,explicitUndoRequested,ignoredInQuestio
 import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,groupPercent,priceSheet,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,sectionGroupWord,pureDrop,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
-import {ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,type RuleWait,type RuleReport,type RuleAsk} from '../lib/owner-brain-svuota.js'
+import {enqueueTurn,waitTurn,releaseTurn} from '../lib/whatsapp-turn-queue.js'
+import {ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,insertForQuestion,type RuleWait,type RuleReport,type RuleAsk} from '../lib/owner-brain-svuota.js'
 import {loadLexicon,saveSplitRules} from '../lib/dish-lexicon.js'
 import type {Lexicon,SplitRule} from '../lib/dish-split.js'
 const mLabelOf=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+n.trim()+'*':'Menu *'+n.trim()+'*'
@@ -631,6 +632,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(/^(?:s[iì]|si si|sì sì|si confermo|confermo|si elimina|si eliminalo|elimina|eliminalo|si cancellalo|cancellalo|ok si|si ok|si certo|certo)(?:\s+(?:grazie|pure|dai|tutto))?$/.test(pt)){pre={actions:[delM],why:'regola-elimina'};ruleDone=true}
    else if(/^(?:ok|okay|oki|va bene|perfetto|vai|procedi|d accordo|esatto|giusto|fallo|confermo tutto)$/.test(pt)){preReply='Per eliminare il '+mLab(delM.name)+' intero mi serve un *sì* scritto: rispondi *sì* per eliminarlo, oppure *no*.';ruleDone=true}
    else if(/^(?:no|non|annulla|lascia stare|lascia perdere|niente|fermo|aspetta|no grazie|no no|non eliminare|non eliminarlo|no lascia stare)\b/.test(pt)){preReply='Ok, non elimino niente: il '+mLab(delM.name)+' resta com\u2019è.';closePend=true;ruleDone=true}}
+  // 23/10 (chat Luisa, invariante «ogni domanda sì/no ha una proposta salvata e consumabile»): un «sì» scritto a una proposta in attesa
+  // (eliminazione, riepilogo, prezzo strano) la applica deciso dal SERVER, senza passare dal modello. Per eliminare serve un sì vero
+  // («sì», «elimina», «conferma»), non un «ok» o un pollice.
+  if(!ruleDone&&!delM&&pend?.kind==='batch'&&isAffirmative(text)&&(pend.why!=='delete'||/\b(?:si|elimin\w*|cancell\w*|conferm\w*|procedi)\b/.test(plain(text)))){pre={actions:[],why:'conferma'};ruleDone=true}
   if(!ruleDone&&(!sess||sess.applied)){const ruleWait=((askP as any)?.rule??null) as RuleWait|null
    let hist:{role:string,text:string,at:number}[]=[];try{hist=await sqlBrainStore(db).readHistory(ctx.tenant,ctx.phone,Date.now())}catch{/* senza cronologia: solo il Menu detto */}
    const draftName=askP?.draft?.name&&!askP.draft.sectionId?String(askP.draft.name):null
@@ -644,6 +649,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     else if(rr.kind==='fix'){pre={actions:rr.actions,why:'regola'};ruleFix=rr.reply}
     else if(rr.kind==='info'){preReply=rr.text;if(ruleLearn.length)await saveSplitRules(db as any,ctx.tenant,ruleLearn,'correction')}
     // «elimina il menu pranzo» (correzione Manuel 22/10): il Menu intero, SOLO col «sì» scritto (proposta di eliminazione in attesa)
+    // 23/10: sottomenu di un Menu alla carta da svuotare: proposta di eliminazione (il «sì» la applica, letto dal server).
+    else if(rr.kind==='confirm'){const acts=rr.actions;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true,why:'delete'})});preReply=rr.question+'\n\n'+pendingFacts('delete',acts,refs,sections);closePend=false}
     else if(rr.kind==='delete_menu'){const q=deleteMenuQuestion(rr),act={kind:'delete_menu',menuId:rr.menu.id,name:rr.menu.name,withItems:true,items:rr.items} as MenuAction;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:[act],requiresTypedOk:true,why:'delete'})});preReply=q;closePend=false}
     else{const q=rr.question,w=rr.wait;if(ruleLearn.length)await saveSplitRules(db as any,ctx.tenant,ruleLearn,'clarify');await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,rule:w} as any)});preReply=q;closePend=false}}
    else if(ruleWait){closePend=true;pend=null;answered=false;(base as any).pendingCommand=null}
@@ -685,7 +692,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     const val=(r:MenuRef)=>pr.length&&abs.length===1?abs[0]!/100:pr.length&&dl.length===1&&pr.length>1?Math.round((r.price+dl[0]!/100)*100)/100:!pr.length&&rd?Math.round((r.price+rd.delta)*100)/100:!pr.length&&said.length===1?said[0]!:null
     const acts=want.flatMap(r=>{const v=val(r);return v!==null&&v>0&&r.price>0?[{kind:'price',id:r.id,price:v} as MenuAction]:[]});return acts.length?acts:null}
    let acts:MenuAction[]|null=null
-   if(ids.length>=2&&(all||vis||(yes&&/\btutt[ieoa]\b/.test(plain(askP.question??'')))))acts=expand()
+   // 23/10 (chat Luisa «Intendi i Primi del Menu Giorno da 12 € per eliminarli tutti? 1… 2… 3…» → «Si» → di nuovo «Elimino…? Rispondi sì»):
+   // il sì a una domanda che chiede di ELIMINARE i piatti elencati è la conferma: si eliminano (annulla 10 minuti), mai una seconda domanda.
+   if(yes&&!stored.length&&ids.length&&/\b(?:elimin\w*|cancell\w*|togli\w*|lev[ao]\w*|rimuov\w*)\b/.test(plain(askP.question??'')))acts=ids.map(id=>({kind:'delete',id,soft:true}) as MenuAction)
+   else if(ids.length>=2&&(all||vis||(yes&&/\btutt[ieoa]\b/.test(plain(askP.question??'')))))acts=expand()
    else if(stored.length===1&&stored[0]!.kind==='create_section'&&answerSectionName(text)){const nm=answerSectionName(text)!,cs=stored[0] as Extract<MenuAction,{kind:'create_section'}>,ex=sections.find(x=>x.menu===cs.menuName&&sameSection(x.name,nm))
     // Il titolare sceglie un altro nome: quel sottomenu (se c'è già nel Menu, si usa quello), poi il piatto.
     acts=ex?[]:[{...cs,name:nm} as MenuAction];if(ex&&askP.draft?.name&&askP.draft.price!=null)acts=[{kind:'create',sectionId:ex.id,name:askP.draft.name,price:askP.draft.price,description:null} as MenuAction]}
@@ -739,7 +749,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
      if(secId&&price!=null&&price>0)acts=[...acts,{kind:'create',sectionId:secId,name:d.name,price,description:null} as MenuAction]
      else if(cs)follow={name:d.name,sectionId:cs.newSectionId,sectionName:cs.name,origin}}
     if(cs&&acts.some(a=>a.kind==='create'))acts=acts.map(a=>a===cs?{...cs,hidden:false} as MenuAction:a)
-    pre={actions:acts,why:'risposta',follow}}
+    const yesDel=yes&&acts.length>0&&acts.every(a=>a.kind==='delete')&&/\b(?:elimin\w*|cancell\w*|togli\w*|lev[ao]\w*|rimuov\w*)\b/.test(plain(askP.question??''))
+    pre={actions:yesDel?acts.map(a=>({...a,soft:true}) as MenuAction):acts,why:yesDel?'risposta-elimina':'risposta',follow}}
    // notte 22/10 (n-annulla-lascia-stare): «lascia stare» su una domanda aperta la chiude con un testo fisso (prima il modello, senza più
    // nulla in sospeso, rispondeva con un’altra domanda).
    else if(newCommandOverAsk(text,askP,refs)){closePend=true;if(engine==='haiku'&&pureDrop(text))preReply=dropText}}
@@ -820,7 +831,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  if(preReply){if(closePend)await db.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`);return preReply}
  let run:NonNullable<Awaited<ReturnType<typeof brainPlan>>>|null=pre?({decision:{path:'brain',intent:'change',plan:{type:'change',actions:pre.actions},exclude:[],aliasesUsed:[],replyDraft:'',notes:['sera:'+pre.why],usage:{},tokens:{},control:[],raw:{intent:'change',actions:[]},content:'',draft:''},clarifyIds:null,ownerRecent:'',lastBot:''} as any):await brainPlan(db,base);if(budget.expired)return '';if(!run)return down()
  let calls=pre?0:1
- let out:Outcome=pre?(pre.why==='annulla'?{kind:'undo'}:{kind:'change',actions:pre.actions}):decide(run)
+ let out:Outcome=pre?(pre.why==='annulla'?{kind:'undo'}:pre.why==='conferma'?{kind:'confirm',extra:[]}:{kind:'change',actions:pre.actions}):decide(run)
  // notte 22/10 (cc-giornata-06): «annulla» quando non c'è più niente da annullare (già annullato o oltre 10 minuti): testo fisso,
  // mai l'auto-correzione che diventava «Per "annulla" intendi Gricia?».
  if(engine==='haiku'&&out.kind==='reject'&&out.reason===reasonText(['annulla_scaduto'])&&undoRequested(text)&&plain(text).split(' ').length<=5&&!pend)return 'Non c\u2019è niente da annullare: l\u2019ultima modifica è già stata annullata, oppure sono passati più di 10 minuti. Dimmi pure cosa vuoi cambiare.'
@@ -1076,7 +1087,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    // Sostituzione dei piatti di oggi («stasera primi …»): si applica subito, «annulla» entro 10 minuti è la rete (banco prezzofisso 21/10).
    const asksOk=engine==='haiku'&&!answered&&draftAsksOkOnDate(effective,String(finalRun.decision.draft??''),text)
    // regola svuota/inserisci (22/10): si applica subito, «annulla» entro 10 minuti è la rete (decisione Manuel: niente domande)
-   const why=pre?.why==='regola'||pre?.why==='regola-elimina'?null:approval(effective,refs,text,answered)??(asksOk?'recap':null)
+   const why=pre?.why==='regola'||pre?.why==='regola-elimina'||pre?.why==='risposta-elimina'?null:approval(effective,refs,text,answered)??(asksOk?'recap':null)
    // Eliminazioni insieme ad altre modifiche (Y1): le parti chiare si pubblicano subito, le eliminazioni aspettano il «sì».
    if(why==='delete'){const dels=effective.filter(a=>a.kind==='delete'&&!a.undoCreate&&!a.soft),rest=effective.filter(a=>!dels.includes(a))
     if(rest.length&&!approval(rest,refs,text,answered)){const r=await applyNow(rest);await propose(tx,ctx,r.revision,{kind:'batch',actions:dels,requiresTypedOk:true,why:'delete'});return say([r.facts,pendingFacts('delete',dels,refs,sections)].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}}
@@ -1167,7 +1178,13 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
      question=sc&&d.price==null?'A che prezzo metto *'+safe(d.name)+'* in *'+safe(sc.name)+'*? Scrivimi per esempio «'+d.name.toLowerCase()+' 12».':!sc&&d.price!=null?'Ok, *'+eur(d.price)+'*. In quale sottomenu metto *'+safe(d.name)+'*?':'In quale sottomenu metto *'+safe(d.name)+'* e a che prezzo?'}
     // 22/10 (v139): una domanda di conferma («…? Rispondi sì», «Vuoi che…», «Aggiungo…?») parte SOLO con azioni salvate da eseguire al «sì»;
     // senza, diventa una domanda specifica (mai un «sì» che poi gira a vuoto).
-    if(engine==='haiku'&&!serverQ&&!out.actions.length&&!out.hold&&!out.twins?.length&&!out.createDraft&&/\brispondi\s+\*?s[iì](?![a-z])|\brispondi\s+\*?ok\b|\bvuoi che\b|\bconfermi\b|\blo faccio\?|^(?:ok,?\s*)?(?:aggiungo|creo|metto|tolgo|nascondo|sposto|cambio|elimino|rinomino|porto|inserisco)\b[^?\n]*\?/i.test(question))question=specificQuestion(text,out.ids.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r))
+    // 23/10 (chat Luisa «Vuoi aggiungere questi piatti nei *Primi* del *Menu Giorno*?» → «Si» → «Non c’è niente da confermare»): una domanda di
+    // AGGIUNTA senza azioni prende i piatti del messaggio (letti dal server) e li mostra uno per riga: il «sì» li aggiunge.
+    if(engine==='haiku'&&!serverQ&&!out.actions.length&&!out.hold&&!out.twins?.length&&!out.ids.length&&/\?/.test(question)&&/\b(?:aggiung\w*|inser\w*|mett\w*)\b/.test(plain(question))){let hist2:{role:string,text:string,at:number}[]=[];try{hist2=await sqlBrainStore(db).readHistory(ctx.tenant,ctx.phone,Date.now())}catch{/* solo il Menu della domanda */}
+     const iq=insertForQuestion(question,text,{menus:base.menus,sections,refs,lexicon,history:hist2});if(iq){out.actions=iq.actions;question=iq.question}}
+    // Una domanda che chiede di ELIMINARE i piatti elencati (candidati salvati) è consumabile: il «sì» li elimina (ramo della risposta).
+    const delQ=out.ids.length>0&&/\b(?:elimin\w*|cancell\w*|togli\w*|lev[ao]\w*|rimuov\w*)\b/.test(plain(question))
+    if(engine==='haiku'&&!serverQ&&!delQ&&!out.actions.length&&!out.hold&&!out.twins?.length&&!out.createDraft&&/\brispondi\s+\*?s[iì](?![a-z])|\brispondi\s+\*?ok\b|\bvuoi che\b|\bvuoi (?:aggiungere|inserire|mettere|eliminare|togliere|cancellare|creare|spostare|cambiare|nascondere|rinominare)\b|\bconfermi\b|\blo faccio\?|^(?:ok,?\s*)?(?:aggiungo|creo|metto|tolgo|nascondo|sposto|cambio|elimino|rinomino|porto|inserisco)\b[^?\n]*\?/i.test(question))question=specificQuestion(text,out.ids.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r))
     if(engine==='haiku'&&question&&!serverQ){const q3=dropInventedGroups(question,groupNames,askText);question=q3&&/\?/.test(q3)?q3:q3&&q3===question?q3:''}
     // notte 22/10 (lng-mig-3/4): una domanda su parti incerte non chiede anche «Rispondi OK per pubblicare» (due richieste insieme: il
     // titolare non sa a cosa rispondere). Resta la domanda; le parti chiare in attesa le mostrano i fatti.
@@ -1338,9 +1355,11 @@ async function runJob(kind:'audio'|'text'|'image',ctx:Ctx,sid:string,body:string
  // Fase R: col cervello acceso anche il tempo scaduto è «non disponibile» (unico testo fisso ammesso oltre l'avviso AI Act).
  const brainOn=kind!=='image'&&await readBotBrain(db,ctx.tenant)
  // 21/10: col cervello acceso, un turno che supera i 5 s manda UN solo «Ci sto lavorando…», poi il risultato (i turni veloci niente).
- let finished=false;const ackTimer=brainOn&&!quietPhones.has(ctx.phone)?setTimeout(()=>{if(finished||budget.expired)return;inBackground(sendWhatsApp(process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'',process.env.TWILIO_WHATSAPP_NUMBER||'',ctx.phone,copy.working).catch(()=>{}))},Math.max(0,5000-(Date.now()-arrivedAt))):undefined
+ // 23/10 (chat Luisa): in fila dietro al messaggio precedente dello stesso numero; il «Ci sto lavorando…» conta da quando tocca a lui.
+ const turn=await waitTurn(db,ctx.phone,sid,{maxWaitMs:45_000}).catch(()=>({key:null,waitedMs:0})),startAt=turn.waitedMs>500?Date.now():arrivedAt
+ let finished=false;const ackTimer=brainOn&&!quietPhones.has(ctx.phone)?setTimeout(()=>{if(finished||budget.expired)return;inBackground(sendWhatsApp(process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'',process.env.TWILIO_WHATSAPP_NUMBER||'',ctx.phone,copy.working).catch(()=>{}))},Math.max(0,5000-(Date.now()-startAt))):undefined
  // notte 22/10: allo scadere, se una scrittura è già partita si aspetta il suo esito (mai «non disponibile» mentre il menu cambia).
- let message=await raceDeadline(jobMessage(kind,ctx,body,form,budget).catch(error=>{if(error instanceof WorkspaceTrialLocked)return error.message;budget.failed=true;return kind==='image'?copy.photoDownload:brainOn?copy.brainDown:copy.failed}),budget,jobTimeoutMs(),()=>kind==='image'?copy.photoTimeout:brainOn?copy.brainDown:copy.jobTimeout).finally(()=>{finished=true;if(ackTimer)clearTimeout(ackTimer)})
+ let message=await raceDeadline(jobMessage(kind,ctx,body,form,budget).finally(()=>releaseTurn(db,turn.key)).catch(error=>{if(error instanceof WorkspaceTrialLocked)return error.message;budget.failed=true;return kind==='image'?copy.photoDownload:brainOn?copy.brainDown:copy.failed}),budget,jobTimeoutMs(),()=>kind==='image'?copy.photoTimeout:brainOn?copy.brainDown:copy.jobTimeout).finally(()=>{finished=true;if(ackTimer)clearTimeout(ackTimer)})
  const problem:FailureKind|null=budget.expired?'job_timeout':budget.failed?'job_failed':null
  if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'JOB '+JSON.stringify({kind,body:body.slice(0,60),message:String(message).slice(0,120),problem})+'\n'))
  if(!message){if(problem)await reportFailure({kind:problem,tenant:ctx.tenant,phone:ctx.phone,detail:kind});return}if(lead)message=lead+message;const accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'',from=process.env.TWILIO_WHATSAPP_NUMBER||''
@@ -1350,7 +1369,13 @@ async function runJob(kind:'audio'|'text'|'image',ctx:Ctx,sid:string,body:string
 }
 // 17/10: nomi di piatti e categorie del locale nel `prompt` di Whisper (nessun token LLM in più). Errore → parole di servizio.
 async function whisperVocab(tenant:string):Promise<string>{try{const row=await readBotWorkspace(tenant);if(!row)return '';const c=catalogOf(workspaceSchema.parse(row.published??row.draft));return whisperPrompt(c.refs,c.sections)}catch{return ''}}
-async function jobMessage(kind:'audio'|'text'|'image',ctx:Ctx,body:string,form:Record<string,string>,budget:Budget):Promise<string>{
+/** 23/10 (chat Luisa): i messaggi di un numero si lavorano in fila (whatsapp-turn-queue.ts). `turnSid` = biglietto da aspettare (prove
+ *  sincrone sul QA); runJob aspetta da sé prima del «Ci sto lavorando…». */
+async function jobMessage(kind:'audio'|'text'|'image',ctx:Ctx,body:string,form:Record<string,string>,budget:Budget,turnSid?:string):Promise<string>{
+ if(!turnSid)return jobMessageCore(kind,ctx,body,form,budget)
+ const turn=await waitTurn(db,ctx.phone,turnSid,{maxWaitMs:45_000,isExpired:()=>budget.expired}).catch(()=>({key:null,waitedMs:0}))
+ try{return await jobMessageCore(kind,ctx,body,form,budget)}finally{await releaseTurn(db,turn.key)}}
+async function jobMessageCore(kind:'audio'|'text'|'image',ctx:Ctx,body:string,form:Record<string,string>,budget:Budget):Promise<string>{
  const key=process.env.GROQ_API_KEY||'',accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'';let text=body,prefix='',response:string
  // Fase R: col cervello acceso nessun testo fisso d'attesa né d'errore: solo «non disponibile» (copy.brainDown).
  // Una sola lettura di settings per turno: cervello acceso e motore (haiku|groq).
@@ -1505,7 +1530,7 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  // 19/10 sera: se il primo messaggio è un vocale o una foto, dopo benvenuto e messaggi di accesso si lavora anche quello (job con chiave propria).
  if(ctx.pending){await tx.execute(sql`UPDATE tako_whatsapp_links SET activated_at=now() WHERE phone=${phone} AND activated_at IS NULL`);await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await discloseOnce(tx,phone)
   const welcome=await answer(await welcomeFor(tx,ctx.tenant)),type=form.MediaContentType0||'',mediaJob=media>0?(whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null):null
-  if(mediaJob){const key=sid+':media';await reserve(tx,key);return{kind:'activated' as const,say:welcome,ctx,media:{job:mediaJob,key}}}
+  if(mediaJob){const key=sid+':media';await reserve(tx,key);await enqueueTurn(tx,phone,key);return{kind:'activated' as const,say:welcome,ctx,media:{job:mediaJob,key}}}
   return{kind:'activated' as const,say:welcome,ctx}}
  if(phone===testFaultPhone&&ctx.tenant===qaTenant&&normalizeMenuText(body)==='guasto di prova')throw new TestFault('Guasto simulato')
  // AI Act (17/10): al primo messaggio di un numero già collegato, una riga «assistente automatico», una volta sola.
@@ -1514,20 +1539,20 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  if(media===0&&botQuestion(body))return answer(copy.aiDisclosure)
  // 19/10: link della dashboard / del menu digitale. Le credenziali (account creato ora) partono a parte (REST), mai nel TwiML in cache.
  if(media===0){const link=await linkTurn(tx,ctx,body);if(link){if(link.secret)return{kind:'secret' as const,say:await say(link.say),secret:[(link.say||!disclose?'':copy.aiDisclosure+'\n\n')+link.secret],ctx,...(link.deliver?{deliver:link.deliver}:{})};return say(link.say)}}
- if(media>0){const type=form.MediaContentType0||'',job=whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null;if(!job)return say(copy.mediaOnly);await reserve(tx,sid);return{job,ctx,ack:'',prefix}}
- if(!body&&!(await readBotBrain(tx,ctx.tenant)))return say(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return say(turn);if('llm' in turn&&!aiKeyFor(turn,await readBotSettings(tx,ctx.tenant)))return say((turn as any).brain?copy.brainDown:copy.noAi);await reserve(tx,sid);return{job:'text' as const,ctx,ack:'upload' in turn?prefix+copy.photoWorking:'',prefix:'upload' in turn?'':prefix}}).catch(async error=>{if(error instanceof WorkspaceTrialLocked)return error.message;req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
+ if(media>0){const type=form.MediaContentType0||'',job=whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null;if(!job)return say(copy.mediaOnly);await reserve(tx,sid);await enqueueTurn(tx,phone,sid);return{job,ctx,ack:'',prefix}}
+ if(!body&&!(await readBotBrain(tx,ctx.tenant)))return say(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return say(turn);if('llm' in turn&&!aiKeyFor(turn,await readBotSettings(tx,ctx.tenant)))return say((turn as any).brain?copy.brainDown:copy.noAi);await reserve(tx,sid);await enqueueTurn(tx,phone,sid);return{job:'text' as const,ctx,ack:'upload' in turn?prefix+copy.photoWorking:'',prefix:'upload' in turn?'':prefix}}).catch(async error=>{if(error instanceof WorkspaceTrialLocked)return error.message;req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
  if(typeof result==='string'){if(scope.tenant&&!scope.cached&&result&&body)await rememberTurn(db,scope.tenant,phone,body,result);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(scope.cached?twiml(result):out(result))}
  // 19/10: messaggi riservati (credenziali) e messaggi dopo l'attivazione: via REST, in ordine, con una breve pausa dopo la risposta.
  // Verifica dal vivo sincrona sul QA (TakoSyncTest): tutto nello stesso TwiML, niente REST.
  if('kind' in result){const r=result as Secret,sync=r.ctx.tenant===qaTenant&&form.TakoSyncTest==='1'
   if(r.say&&body)await rememberTurn(db,r.ctx.tenant,phone,body,r.say)
   const extra=():Promise<FollowUps>=>r.kind==='activated'?activationFollowUps(r.ctx):Promise.resolve({messages:r.secret,...(r.deliver?{deliver:r.deliver}:{})}),mediaJob=r.kind==='activated'?r.media:undefined
-  if(sync){const out=await extra();if(out.deliver)await markPasswordDelivered(db,r.ctx,out.deliver);const m=mediaJob?await jobMessage(mediaJob.job,r.ctx,body,form,{expired:false}).catch(()=>copy.failed):'';if(mediaJob)await db.execute(sql`UPDATE tako_whatsapp_messages SET response=${sent+m} WHERE sid=${mediaJob.key}`);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml([r.say,...out.messages,m].filter(Boolean).join(nextMessage)))}
+  if(sync){const out=await extra();if(out.deliver)await markPasswordDelivered(db,r.ctx,out.deliver);const m=mediaJob?await jobMessage(mediaJob.job,r.ctx,body,form,{expired:false},mediaJob.key).catch(()=>copy.failed):'';if(mediaJob)await db.execute(sql`UPDATE tako_whatsapp_messages SET response=${sent+m} WHERE sid=${mediaJob.key}`);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml([r.say,...out.messages,m].filter(Boolean).join(nextMessage)))}
   const job=extra().then(m=>sendSecrets(r.ctx,m,!!r.say)).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp follow-up failed')).then(()=>mediaJob&&runJob(mediaJob.job,r.ctx,mediaJob.key,body,form,'')).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp AI job failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
   return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(out(r.say))}
  // Verifica dal vivo sincrona: solo sul QA e solo con il campo firmato TakoSyncTest=1 (la firma Twilio copre tutti i campi: serve il
  // token). Anche le risposte dell'IA tornano SOLO nel TwiML di questa richiesta, mai via REST, e senza avvisi. Altrimenti nulla cambia.
- if(result.ctx.tenant===qaTenant&&form.TakoSyncTest==='1'){const m=await jobMessage(result.job,result.ctx,body,form,{expired:false}).catch(()=>copy.failed);await db.execute(sql`UPDATE tako_whatsapp_messages SET response=${sent+m} WHERE sid=${sid}`);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml((result.ack?result.ack+'\n\n':'')+(m?result.prefix+m:'')))}
+ if(result.ctx.tenant===qaTenant&&form.TakoSyncTest==='1'){const m=await jobMessage(result.job,result.ctx,body,form,{expired:false},sid).catch(()=>copy.failed);await db.execute(sql`UPDATE tako_whatsapp_messages SET response=${sent+m} WHERE sid=${sid}`);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml((result.ack?result.ack+'\n\n':'')+(m?result.prefix+m:'')))}
  const job=runJob(result.job,result.ctx,sid,body,form,result.prefix,arrivedAt).catch(error=>req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp AI job failed')),runtime=(globalThis as any).EdgeRuntime;if(typeof runtime?.waitUntil==='function')runtime.waitUntil(job);else await job
  return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(out(result.ack))
  })

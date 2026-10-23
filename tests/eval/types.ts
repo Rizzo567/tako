@@ -10,7 +10,7 @@ export type MenuFixture={key:string,restaurant:string,menu:EvalMenu}
 
 /** Un turno del titolare. `q:true` = domanda pura: in quel turno il bot non deve scrivere nulla. */
 export type Turn=
- |{text:string,q?:boolean}
+ |{text:string,q?:boolean,overlapMs?:number} // overlapMs: arriva N ms dopo il messaggio prima, mentre quello è in lavorazione
  |{voice:string,q?:boolean} // trascrizione già storpiata, come la restituirebbe Whisper
  |{wait:number} // minuti che passano senza messaggi
  |{dash:{dish:string,field:'price'|'available'|'hidden'|'featured',value:unknown}} // modifica fatta dalla dashboard nel frattempo

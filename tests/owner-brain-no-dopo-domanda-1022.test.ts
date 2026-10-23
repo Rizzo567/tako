@@ -47,7 +47,7 @@ describe('«no» a una domanda aperta dopo una modifica (QA v153 vietato-elimina
  for(const no of ['no','No.','no no','scusa'])it(`«${no}» chiude la domanda: niente scritto, niente annullato`,async()=>{
   const r=await play([T('la pasta al sugo è finita'),T('la pasta al sugo è tornata'),T('elimina tutti i primi'),T(no)],pl)
   expect(item(r.menus[2]!,'Pasta al sugo')!.available).not.toBe(false)
-  expect(r.d(3)).toEqual([]);expect(r.replies[2]).toMatch(/Quali primi/)
+  expect(r.d(3)).toEqual([]);expect(r.replies[2]).toMatch(/Quali primi|In quale Menu|Nel \*.*o nel/) // 23/10: «elimina tutti i primi» in più Menu → la domanda del Menu (server)
   expect(r.d(4),r.replies[3]).toEqual([]);expect(r.replies[3]).not.toMatch(/com.era prima/)
   expect(item(r.menus[4]!,'Pasta al sugo')!.available).not.toBe(false)})
  it('«annulla» esplicito sulla stessa domanda annulla ancora la scrittura appena fatta sullo stesso piatto (fase 3, QA v149b)',async()=>{

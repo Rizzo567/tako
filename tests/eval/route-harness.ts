@@ -14,12 +14,17 @@ export const S={draft:null as any,published:null as any,revision:5,published_rev
 
 const parse=(q:any)=>{let text='';const params:unknown[]=[];for(const c of q.queryChunks)if(c&&typeof c==='object'&&Array.isArray(c.value))text+=c.value.join('');else{text+='$';params.push(c)}return{text,params}}
 const live=(ph:string)=>{const x=S.proposals.get(ph);return x&&x.exp>Date.now()?x:undefined}
+let turnSeq=0
 export async function execute(q:unknown):Promise<any[]>{const {text,params}=parse(q),p=params as any[]
  if(S.extraSql){const r=S.extraSql(text,p);if(r!==undefined)return r}
  if(text.startsWith('SELECT 1 FROM tako_whatsapp_links'))return p[0]===phone?[{}]:[]
  if(text.startsWith('SELECT restaurant_id,actor_id,activated_at FROM tako_whatsapp_links'))return p[0]===phone?[{restaurant_id:tenant,actor_id:actor,activated_at:new Date()}]:[]
  if(text.includes('FROM users u'))return[{id:p[1],restaurant_id:p[0],role:'owner',active:true}]
  if(text.includes('pg_advisory_xact_lock'))return[]
+ // 23/10: fila dei messaggi per numero (whatsapp-turn-queue.ts): ora del DB crescente, biglietti per prefisso, rilascio.
+ if(text.startsWith('SELECT lpad('))return[{t:String(Date.now()+(++turnSeq)).padStart(15,'0')}]
+ if(text.startsWith('SELECT sid FROM tako_whatsapp_messages WHERE sid>'))return [...S.messages.keys()].filter(k=>k>String(p[0])&&k<String(p[1])).map(sid=>({sid}))
+ if(text.startsWith('DELETE FROM tako_whatsapp_messages WHERE sid='))return(S.messages.delete(String(p[0])),[])
  if(text.startsWith('SELECT response FROM tako_whatsapp_messages'))return S.messages.has(p[0])?[{response:S.messages.get(p[0])}]:[]
  if(text.startsWith('INSERT INTO tako_whatsapp_messages')){if(!S.messages.has(p[0]))S.messages.set(p[0],p[1]);return[]}
  if(text.startsWith('UPDATE tako_whatsapp_messages')){S.messages.set(p[1],p[0]);return[]}
@@ -90,11 +95,19 @@ export function createRouteBot(o:{name:string,settings?:Record<string,unknown>,e
   vi.setSystemTime(new Date(BASE_TIME));S.draft=structuredClone(doc);S.published=structuredClone(doc);S.revision=5;S.published_revision=5;S.proposals.clear();S.messages.clear();S.versions=[]
   S.restaurant=ctx.restaurant;S.settings={timezone:'Europe/Rome',botEngine:'groq'/* run Haiku 21/10: il default del codice è haiku; i giri storici restano su Groq */,...(o.settings??{})};S.extraSql=o.extraSql??null;groq?.setConversation(conv);anth?.setConversation(conv)
   await groq?.pace()
-  const turns:TurnResult[]=[]
+  const turns:TurnResult[]=[];let skipNext=false
   for(const t of conv.turns as Turn[]){
    if('wait' in t){vi.setSystemTime(new Date(Date.now()+t.wait*60000));continue}
    if('dash' in t){const w=structuredClone(S.published);for(const m of w.menus)for(const s of m.sections)for(const i of s.items)if(i.name===t.dash.dish)(i as any)[t.dash.field]=t.dash.value;S.draft=w;S.published=structuredClone(w);S.revision++;S.published_revision=S.revision;continue}
+   if(skipNext){skipNext=false;continue}
    const before=net.sent.length,llm0={...net.llm},g0=net.groqChat,t0=performance.now();let reply=''
+   // 23/10 (chat Luisa): `overlapMs` sul turno DOPO = quel messaggio arriva N ms dopo questo, mentre questo è ancora in lavorazione.
+   // Le risposte dei due messaggi finiscono insieme sul secondo turno (il primo resta vuoto); il menu è quello dopo entrambi.
+   const nx=conv.turns[conv.turns.indexOf(t)+1] as any
+   if('text' in t&&nx&&'text' in nx&&typeof nx.overlapMs==='number'){const a1=post({MessageSid:sid(),Body:t.text});await new Promise(r=>setTimeout(r,nx.overlapMs));const a2=post({MessageSid:sid(),Body:nx.text});const [r1,r2]=await Promise.all([a1,a2])
+    turns.push({reply:unxml(r1.body).trim(),menuAfter:structuredClone(S.published),latencyMs:0,llm:{calls:0,tokens:0,misses:0,recordedMs:0}} as any)
+    turns.push({reply:(unxml(r2.body).trim()+'\n'+net.sent.slice(before).join('\n')).trim(),menuAfter:structuredClone(S.published),latencyMs:Math.round((performance.now()-t0)*10)/10,llm:{calls:net.llm.calls-llm0.calls,tokens:net.llm.tokens-llm0.tokens,misses:net.llm.misses-llm0.misses,recordedMs:net.llm.ms-llm0.ms}} as any)
+    skipNext=true;vi.setSystemTime(new Date(Date.now()+20000));continue}
    try{if('text' in t){const res=await post({MessageSid:sid(),Body:t.text});reply=unxml(res.body).trim()}
     else{net.transcript=t.voice;const s=sid('MM');const res=await post({MessageSid:s,Body:'',NumMedia:'1',MediaContentType0:'audio/ogg',MediaUrl0:`https://api.twilio.com/2010-04-01/Accounts/${account}/Messages/${s}/Media/ME1`});reply=unxml(res.body).trim()}}catch(e){reply='';if(process.env.TAKO_BRAIN_DEBUG)(await import('node:fs')).appendFileSync(process.env.TAKO_BRAIN_DEBUG,'HARNESS-ERR '+String((e as any)?.stack??e).slice(0,600)+'\n')}
    reply=(reply+'\n'+net.sent.slice(before).join('\n')).trim()
