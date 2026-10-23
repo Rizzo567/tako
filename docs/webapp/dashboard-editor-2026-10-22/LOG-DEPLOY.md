@@ -84,3 +84,12 @@ Rollback: operativo `cp $RB/rollback-v157.ts release/serverless/candidate/index.
 - Verifica `scripts/verify-fisso-pagina-1023.mjs` (iPhone 390/430 DPR 3 touch CDP + 1280): 32/32 ✓ (`fisso-pagina-1023/editor/`). Pagine pubbliche `scripts/shoot-public-fisso-1023.mjs` prima/dopo (`fisso-pagina-1023/prima|dopo`): Victoria Alla carta/Bevande, Bim Bum Bar, L'Agorà identici al byte; unica differenza Bim Bum Bar 390 dentro la foto di un piatto (decodifica JPEG, testo e layout identici). Test web: stessi 24 rossi preesistenti, nessuno nuovo.
 - Deploy web → **e1e8e3a5-68b8-4a17-a0b3-d87aecc44dec** (prima 9dd26c88). Rollback `CI=true npx wrangler rollback 9dd26c88-092a-4aa1-84c6-8fb416d59ae0 --config deploy/cloudflare/wrangler.jsonc`.
 - Deploy pubblico → **71e67cca-974e-4dbd-a25e-aaa551a16ebf** (prima f5d6756f). Rollback `CI=true npx wrangler rollback f5d6756f-5575-4a40-9706-864ebef040b8 --config deploy/cloudflare/wrangler-public.jsonc`.
+
+# LOG DEPLOY 23/10 — colonna destra «Anteprima mobile», Menu ▾ / Preset ▾ larghi quanto il testo
+
+- Colonna destra su computer (Piatti, Aspetto, Condividi): via «PDF pubblicato» e il selettore «Menu/PDF»; al loro posto l'iPhone (`MenuWorkspacePhonePreview`, iframe `/menu-preview/<menu>` in cornice) con titolo «Anteprima mobile». Mostra la BOZZA corrente aggiornata live (editor: `ed.view` della coda op; flag spento/Aspetto: il documento in modifica), con etichetta «Da pubblicare»/«Non salvata». Scelta: bozza, perché l'iPhone accompagna quello che si sta modificando; il pubblicato si vede dal link pubblico. Su telefono nessuna colonna destra (invariato).
+- Conseguenza: su computer la voce «PDF» entra tra Piatti/Aspetto/Condividi (come su telefono); nella scheda PDF l'anteprima PDF resta a destra. `MenuEditorPdfColumn` non è più usato (lasciato nel file).
+- Menu ▾ e Preset ▾: larghezza = nome + freccia; min 92 px (76 su telefono), max min(260 px, 52 %) e min(200 px, 42 %) con ellissi; spazio a destra della riga libero (per il futuro Telefono/Cartaceo + Stampa, non creato). Override in coda a `sobrio.css`.
+- Verifica `scripts/verify-destra-1023.mjs` (banco SPA vera + API finta; 1280, 1440, iPhone 390 DPR 3 + nome lungo): 41/41 ✓ (`destra-1023/`).
+- Deploy web → **e6e2aa27-60e6-4fb6-a0c3-db135423544d** (prima e1e8e3a5). Smoke: /staff 200, /api/auth/me 401, /menu-preview QA 200. Simulatore iPhone 17 Pro ricaricato.
+- Rollback: `CI=true npx wrangler rollback e1e8e3a5-68b8-4a17-a0b3-d87aecc44dec --config deploy/cloudflare/wrangler.jsonc`.

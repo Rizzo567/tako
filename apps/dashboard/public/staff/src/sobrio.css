@@ -163,3 +163,12 @@
 /* Riga sotto: solo Menu ▾ e Preset ▾; il nome del Menu si legge intero. */
 .mw-ed-grid .mw-studio-toolbuttons:empty{display:none}
 @media(min-width:900px){.mw-ed-grid .mw-universal-search:not(.is-searching){flex:0 1 280px;width:280px}}
+
+/* 23/10: Menu ▾ e Preset ▾ larghi quanto il nome (+ freccia), min/max con ellissi; lo spazio a destra della riga resta libero. */
+.mw .mw-studio .mw-studio-toolbar .mw-universal-search:not(.is-searching){flex:0 1 auto!important;width:auto!important;min-width:0!important;max-width:min(260px,52%)!important}
+.mw .mw-studio .mw-studio-toolbar .mw-menu-picker{width:auto!important;max-width:100%;min-width:92px;justify-content:flex-start;gap:6px}
+.mw .mw-studio .mw-studio-toolbar .mw-menu-picker>span{flex:0 1 auto}
+.mw .mw-studio .mw-studio-toolbar .mw-dp-btn{flex:0 1 auto!important;width:auto!important;min-width:92px!important;max-width:min(200px,42%)!important;justify-content:flex-start}
+.mw .mw-studio .mw-studio-toolbar .mw-dp-btn .mw-dp-label{flex:0 1 auto;min-width:0}
+.mw .mw-studio .mw-studio-toolbar .mw-universal-search:not(.is-searching)~.mw-dp-spacer{display:block!important;flex:1 1 0!important;min-width:0!important}
+@media(max-width:899px){.mw .mw-studio .mw-studio-toolbar .mw-menu-picker,.mw .mw-studio .mw-studio-toolbar .mw-dp-btn{min-width:76px!important}}

@@ -1,0 +1,624 @@
+{
+ "fails": 0,
+ "results": [
+  {
+   "name": "1280 colonna destra: iPhone con titolo «Anteprima mobile»",
+   "ok": true,
+   "detail": {
+    "exists": true,
+    "title": "Anteprima mobile",
+    "phone": true,
+    "pdf": false,
+    "pdfText": false,
+    "tabs": false,
+    "menuWord": [],
+    "phoneW": 334,
+    "phoneH": 650
+   }
+  },
+  {
+   "name": "1280 colonna destra: nessun PDF, niente selettore «Menu/PDF»",
+   "ok": true,
+   "detail": {
+    "exists": true,
+    "title": "Anteprima mobile",
+    "phone": true,
+    "pdf": false,
+    "pdfText": false,
+    "tabs": false,
+    "menuWord": [],
+    "phoneW": 334,
+    "phoneH": 650
+   }
+  },
+  {
+   "name": "1280 PDF pubblicato non richiesto",
+   "ok": true,
+   "detail": [
+    {
+     "preview": true,
+     "menuIds": [
+      "00000000-0000-4000-8000-000000000001"
+     ],
+     "publishedRevision": 3
+    },
+    {
+     "preview": true,
+     "menuIds": [
+      "00000000-0000-4000-8000-000000000001"
+     ],
+     "publishedRevision": 3
+    }
+   ]
+  },
+  {
+   "name": "1280 l’iPhone mostra la BOZZA aggiornata live (non il pubblicato)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1280 etichetta «Da pubblicare» accanto al titolo",
+   "ok": true,
+   "detail": "Anteprima mobile\nDa pubblicare"
+  },
+  {
+   "name": "1280 Menu ▾ largo quanto il nome (+ freccia)",
+   "ok": true,
+   "detail": {
+    "tb": {
+     "l": 45,
+     "r": 861,
+     "w": 816
+    },
+    "mp": {
+     "l": 45,
+     "r": 184,
+     "w": 139
+    },
+    "mpText": "Menu pranzo",
+    "mpTextW": 87,
+    "mpClipped": false,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 196,
+     "r": 292,
+     "w": 96
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 292,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "1280 Preset ▾ largo quanto il testo",
+   "ok": true,
+   "detail": {
+    "tb": {
+     "l": 45,
+     "r": 861,
+     "w": 816
+    },
+    "mp": {
+     "l": 45,
+     "r": 184,
+     "w": 139
+    },
+    "mpText": "Menu pranzo",
+    "mpTextW": 87,
+    "mpClipped": false,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 196,
+     "r": 292,
+     "w": 96
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 292,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "1280 spazio libero a destra della riga",
+   "ok": true,
+   "detail": {
+    "free": 569,
+    "tb": {
+     "l": 45,
+     "r": 861,
+     "w": 816
+    },
+    "mp": {
+     "l": 45,
+     "r": 184,
+     "w": 139
+    },
+    "mpText": "Menu pranzo",
+    "mpTextW": 87,
+    "mpClipped": false,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 196,
+     "r": 292,
+     "w": 96
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 292,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "1280 voci Piatti/Aspetto/Condividi/PDF",
+   "ok": true,
+   "detail": [
+    "Piatti",
+    "Aspetto",
+    "Condividi",
+    "PDF"
+   ]
+  },
+  {
+   "name": "1280 editor invariato (iframe con menu modificabile)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1280 nessuno scroll orizzontale",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1280 Aspetto: colonna destra «Anteprima mobile», senza «Menu/PDF»",
+   "ok": true,
+   "detail": {
+    "title": "Anteprima mobile",
+    "tabs": false
+   }
+  },
+  {
+   "name": "1280 scheda PDF: anteprima PDF a destra",
+   "ok": true,
+   "detail": {
+    "visible": true,
+    "phone": false
+   }
+  },
+  {
+   "name": "1280 nessun errore console",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "1440 colonna destra: iPhone con titolo «Anteprima mobile»",
+   "ok": true,
+   "detail": {
+    "exists": true,
+    "title": "Anteprima mobile",
+    "phone": true,
+    "pdf": false,
+    "pdfText": false,
+    "tabs": false,
+    "menuWord": [],
+    "phoneW": 334,
+    "phoneH": 650
+   }
+  },
+  {
+   "name": "1440 colonna destra: nessun PDF, niente selettore «Menu/PDF»",
+   "ok": true,
+   "detail": {
+    "exists": true,
+    "title": "Anteprima mobile",
+    "phone": true,
+    "pdf": false,
+    "pdfText": false,
+    "tabs": false,
+    "menuWord": [],
+    "phoneW": 334,
+    "phoneH": 650
+   }
+  },
+  {
+   "name": "1440 PDF pubblicato non richiesto",
+   "ok": true,
+   "detail": [
+    {
+     "preview": true,
+     "menuIds": [
+      "00000000-0000-4000-8000-000000000001"
+     ],
+     "publishedRevision": 3
+    },
+    {
+     "preview": true,
+     "menuIds": [
+      "00000000-0000-4000-8000-000000000001"
+     ],
+     "publishedRevision": 3
+    }
+   ]
+  },
+  {
+   "name": "1440 l’iPhone mostra la BOZZA aggiornata live (non il pubblicato)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1440 etichetta «Da pubblicare» accanto al titolo",
+   "ok": true,
+   "detail": "Anteprima mobile\nDa pubblicare"
+  },
+  {
+   "name": "1440 Menu ▾ largo quanto il nome (+ freccia)",
+   "ok": true,
+   "detail": {
+    "tb": {
+     "l": 125,
+     "r": 941,
+     "w": 816
+    },
+    "mp": {
+     "l": 125,
+     "r": 264,
+     "w": 139
+    },
+    "mpText": "Menu pranzo",
+    "mpTextW": 87,
+    "mpClipped": false,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 276,
+     "r": 372,
+     "w": 96
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 372,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "1440 Preset ▾ largo quanto il testo",
+   "ok": true,
+   "detail": {
+    "tb": {
+     "l": 125,
+     "r": 941,
+     "w": 816
+    },
+    "mp": {
+     "l": 125,
+     "r": 264,
+     "w": 139
+    },
+    "mpText": "Menu pranzo",
+    "mpTextW": 87,
+    "mpClipped": false,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 276,
+     "r": 372,
+     "w": 96
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 372,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "1440 spazio libero a destra della riga",
+   "ok": true,
+   "detail": {
+    "free": 569,
+    "tb": {
+     "l": 125,
+     "r": 941,
+     "w": 816
+    },
+    "mp": {
+     "l": 125,
+     "r": 264,
+     "w": 139
+    },
+    "mpText": "Menu pranzo",
+    "mpTextW": 87,
+    "mpClipped": false,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 276,
+     "r": 372,
+     "w": 96
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 372,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "1440 voci Piatti/Aspetto/Condividi/PDF",
+   "ok": true,
+   "detail": [
+    "Piatti",
+    "Aspetto",
+    "Condividi",
+    "PDF"
+   ]
+  },
+  {
+   "name": "1440 editor invariato (iframe con menu modificabile)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1440 nessuno scroll orizzontale",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1440 Aspetto: colonna destra «Anteprima mobile», senza «Menu/PDF»",
+   "ok": true,
+   "detail": {
+    "title": "Anteprima mobile",
+    "tabs": false
+   }
+  },
+  {
+   "name": "1440 scheda PDF: anteprima PDF a destra",
+   "ok": true,
+   "detail": {
+    "visible": true,
+    "phone": false
+   }
+  },
+  {
+   "name": "1440 nessun errore console",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "390 niente colonna destra né secondo iframe",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 Menu ▾ largo quanto il nome (+ freccia)",
+   "ok": true,
+   "detail": {
+    "tb": {
+     "l": 14,
+     "r": 376,
+     "w": 362
+    },
+    "mp": {
+     "l": 14,
+     "r": 141,
+     "w": 127
+    },
+    "mpText": "Menu pranzo",
+    "mpTextW": 87,
+    "mpClipped": false,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 147,
+     "r": 225,
+     "w": 78
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 225,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "390 Preset ▾ largo quanto il testo",
+   "ok": true,
+   "detail": {
+    "tb": {
+     "l": 14,
+     "r": 376,
+     "w": 362
+    },
+    "mp": {
+     "l": 14,
+     "r": 141,
+     "w": 127
+    },
+    "mpText": "Menu pranzo",
+    "mpTextW": 87,
+    "mpClipped": false,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 147,
+     "r": 225,
+     "w": 78
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 225,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "390 spazio libero a destra della riga",
+   "ok": true,
+   "detail": {
+    "free": 151,
+    "tb": {
+     "l": 14,
+     "r": 376,
+     "w": 362
+    },
+    "mp": {
+     "l": 14,
+     "r": 141,
+     "w": 127
+    },
+    "mpText": "Menu pranzo",
+    "mpTextW": 87,
+    "mpClipped": false,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 147,
+     "r": 225,
+     "w": 78
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 225,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "390 editor invariato",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 nessuno scroll orizzontale",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390 nessun errore console",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "390-nome-lungo niente colonna destra né secondo iframe",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390-nome-lungo Menu ▾ con nome lungo: tetto + ellissi, riga non sfora",
+   "ok": true,
+   "detail": {
+    "tb": {
+     "l": 14,
+     "r": 376,
+     "w": 362
+    },
+    "mp": {
+     "l": 14,
+     "r": 202,
+     "w": 188
+    },
+    "mpText": "Menu degustazione del fine settimana con abbinamento vini",
+    "mpTextW": 398,
+    "mpClipped": true,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 208,
+     "r": 287,
+     "w": 78
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 287,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "390-nome-lungo Preset ▾ largo quanto il testo",
+   "ok": true,
+   "detail": {
+    "tb": {
+     "l": 14,
+     "r": 376,
+     "w": 362
+    },
+    "mp": {
+     "l": 14,
+     "r": 202,
+     "w": 188
+    },
+    "mpText": "Menu degustazione del fine settimana con abbinamento vini",
+    "mpTextW": 398,
+    "mpClipped": true,
+    "mpOverflow": "ellipsis",
+    "dp": {
+     "l": 208,
+     "r": 287,
+     "w": 78
+    },
+    "dpText": "Preset",
+    "dpTextW": 42,
+    "lastRight": 287,
+    "sections": [
+     "Piatti",
+     "Aspetto",
+     "Condividi",
+     "PDF"
+    ]
+   }
+  },
+  {
+   "name": "390-nome-lungo editor invariato",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390-nome-lungo nessuno scroll orizzontale",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "390-nome-lungo nessun errore console",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}
