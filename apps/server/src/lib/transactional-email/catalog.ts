@@ -4,7 +4,7 @@ export const emailCatalog = {
     "id": "benvenuto",
     "subject": "Benvenuto in Takomenu, {nome_titolare}",
     "title": "Il tuo Takomenu è pronto.",
-    "body": "Ciao {nome_titolare}, il tuo accesso per <strong>{nome_locale}</strong> è attivo.<br><br>Il tuo utente è <strong>{utente}</strong>. La password ti arriva su WhatsApp.<br>Il menu pubblico è qui: <a href=\"{link_menu}\">Apri il menu</a>.<br><br>Scrivi al bot WhatsApp <strong>{numero_bot}</strong> per aggiornare piatti e prezzi: puoi inviare un messaggio, un audio o una foto del menu. Ti risponde in chat.",
+    "body": "Ciao {nome_titolare}, il tuo accesso per <strong>{nome_locale}</strong> è attivo.<br><br>Il tuo utente è <strong>{utente}</strong>. Se non ricordi la password, usa «Password dimenticata» nella pagina di accesso.<br>Il menu pubblico è qui: <a href=\"{link_menu}\">Apri il menu</a>.<br><br>Scrivi al bot WhatsApp <strong>{numero_bot}</strong> per aggiornare piatti e prezzi: puoi inviare un messaggio, un audio o una foto del menu. Ti risponde in chat.",
     "button": "Apri la dashboard",
     "url": "{link_dashboard}"
   },
