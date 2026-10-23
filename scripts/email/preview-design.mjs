@@ -1,0 +1,9 @@
+import {build} from 'esbuild';import fs from 'node:fs/promises';import os from 'node:os';import path from 'node:path';import {pathToFileURL} from 'node:url';
+const tmp=await fs.mkdtemp(path.join(os.tmpdir(),'tako-email-design-'));const out=path.join(tmp,'renderer.mjs');
+await build({entryPoints:['apps/server/src/lib/transactional-email/render.ts'],bundle:true,format:'esm',platform:'node',outfile:out});
+const {renderTransactionalEmail}=await import(pathToFileURL(out));
+const target='docs/email-design-20261023',values={nome_titolare:'Manuel',nome_locale:'Locale QA',utente:'qa@example.invalid',link_dashboard:'https://takoitalia.com/staff/',link_menu:'https://example.invalid/menu',numero_bot:'+390000000000',minuti_validita:'30',link_reset:'https://example.invalid/reset?token=synthetic',data_ora:'23 ottobre 2026 alle 16:00',nuova_email:'nuova@example.invalid',link_conferma:'https://example.invalid/confirm',titolo:'Un aggiornamento per il tuo locale',testo:'Questa è una comunicazione di servizio dimostrativa. Nessuna azione è richiesta.'};
+const ids=['benvenuto','reset-password','password-cambiata','conferma-email','avviso-cambio-email','servizio'];
+for(const id of ids){const mail=renderTransactionalEmail(id,values);await fs.writeFile(target+'/'+id+'.html',mail.html.replaceAll('https://tcfccmvpycivxuxkoqpw.supabase.co/storage/v1/object/public/takomenu-email-assets/design-20261023','assets'))}
+await fs.writeFile(target+'/index.html','<!doctype html><html lang="it"><meta charset="utf-8"><title>Takomenu — email pronte per revisione</title><body style="font:18px Arial;background:#fff1e7;padding:32px;color:#19434c"><h1>Email Takomenu</h1><p>Preparazione locale · nessun deploy o invio · dati sintetici.</p>'+ids.map(id=>'<p><a href="'+id+'.html">'+id+'</a></p>').join('')+'</body></html>');
+await fs.rm(tmp,{recursive:true});console.log('Sei anteprime locali generate; nessun invio');
