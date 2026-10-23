@@ -22,3 +22,11 @@ separatori oro col giglio vettoriale, «TUTTI I MENU COMPRENDONO» + «Compreso�
 - QA: modello su «Menu del giorno» (fisso), Pubblica rev 4714; PDF pubblicato e anteprima 200 in ~2 s, 1 pagina, Playfair incorporato; PDF classico di un altro Menu 200 (prima prova del PDF sull'edge).
 - Web `takomenu-web` **610fc643-034f-4122-bd80-175687376eca** (prima e6e2aa27). Rollback: `CI=true npx wrangler rollback e6e2aa27-60e6-4fb6-a0c3-db135423544d --config deploy/cloudflare/wrangler.jsonc`.
 - **Victoria NON toccata**: bozza con modifica pendente (rev 136 vs pubblicato 135, 09:38: in Menu Giorno › Primi «linguine allo scoglio» spostata prima di «Pasta al pesto»). Pubblicare metterebbe online anche quella → fermo. Quando la bozza è pulita: `node scripts/victoria/pdf-modello-1023.mjs go`.
+
+## Selettore Telefono / PDF + Stampa (23/10 pomeriggio)
+- Menu → Piatti, riga Menu ▾ · Preset ▾: a destra la pillola «Telefono / PDF» (thumb che scivola, token standard/fast/exit, reduced motion) e «Stampa» (solo in PDF, dissolvenza; icona sola su telefono; sotto 390 px icone al posto del testo).
+- PDF = PDF **pubblicato** del Menu scelto (`renderPublishedPdf`, preview:false; modello PDF se presente). Bozza pendente → riga «Ci sono modifiche non pubblicate…» e a Stampa il dialogo Pubblica e stampa / Stampa com’è / Annulla (Pubblica e stampa = Pubblica esistente, poi stampa il PDF nuovo; su iPhone «PDF aggiornato pronto» → Stampa, serve un nuovo tocco per il foglio iOS).
+- Stampa: computer = iframe nascosto + print() (fallback nuova scheda); iPhone/iPad = navigator.share({files}) (AirPrint), altrimenti nuova scheda. L'editor resta montato in vista PDF (ritorno senza ricaricare).
+- Codice: `apps/dashboard/public/staff/src/14-menu-pdf-view.js` (nuovo), `13-menu-workspace.js`, `sobrio.css`, `index.html`.
+- Verifica: `scripts/verify-pdf-toggle-1023.mjs` (banco, 1280 + 390/430 DPR 3 + 375) **62/62**; screenshot in `toggle/`. Nota: sotto `taskpolicy -b` il rendering headless è troppo lento per campionare la pillola a metà corsa: lanciare a priorità normale.
+- Web `takomenu-web` **af507eaf-7570-4484-9a5b-c43ca8927c5a** (prima 610fc643). Smoke: staff 200, /api/auth/me 401, menu-preview QA 200. Rollback: `CI=true npx wrangler rollback 610fc643-034f-4122-bd80-175687376eca --config deploy/cloudflare/wrangler.jsonc`.

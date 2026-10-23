@@ -172,3 +172,48 @@
 .mw .mw-studio .mw-studio-toolbar .mw-dp-btn .mw-dp-label{flex:0 1 auto;min-width:0}
 .mw .mw-studio .mw-studio-toolbar .mw-universal-search:not(.is-searching)~.mw-dp-spacer{display:block!important;flex:1 1 0!important;min-width:0!important}
 @media(max-width:899px){.mw .mw-studio .mw-studio-toolbar .mw-menu-picker,.mw .mw-studio .mw-studio-toolbar .mw-dp-btn{min-width:76px!important}}
+
+/* 23/10: selettore «Telefono / PDF» + «Stampa» a destra di Menu ▾ · Preset ▾. Tempi dai token (variabili --mw-vs-* da MW_MS/MW_EASE). */
+.mw-view-tools{display:flex;align-items:center;gap:8px;flex:none!important;margin-left:auto}
+.mw-view-switch{position:relative;isolation:isolate;display:flex;gap:2px;padding:3px;border:1px solid var(--hairline);border-radius:14px;background:var(--sunken)}
+.mw-view-switch>button{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 14px;border:0;border-radius:11px;background:transparent!important;color:var(--ink);font:inherit;font-size:14px;line-height:1;white-space:nowrap;cursor:pointer;transition:color var(--mw-vs-fast,180ms) var(--mw-vs-ease,ease)}
+.mw-view-switch>button.active{color:var(--surface,#fff)}
+.mw-view-switch>button:disabled{opacity:.5;cursor:default}
+.mw-view-switch>button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mw-view-switch>button svg{flex:none;display:none}
+.mw-view-switch .mw-tab-thumb{border-radius:11px}
+.mw-view-switch .mw-tab-thumb.is-ready{transition:transform var(--mw-vs-ms,280ms) var(--mw-vs-ease,ease),width var(--mw-vs-ms,280ms) var(--mw-vs-ease,ease),height var(--mw-vs-ms,280ms) var(--mw-vs-ease,ease),opacity var(--mw-vs-fast,180ms) ease}
+.mw-print-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 16px;border:1px solid var(--hairline);border-radius:var(--r-pill,999px);background:var(--raised,#fff);color:var(--ink);font:inherit;font-size:14px;font-weight:500;line-height:1;white-space:nowrap;cursor:pointer;
+ opacity:0;visibility:hidden;transform:translateX(-4px);transition:opacity var(--mw-vs-exit,220ms) var(--mw-vs-exit-ease,ease),transform var(--mw-vs-exit,220ms) var(--mw-vs-exit-ease,ease),visibility 0s linear var(--mw-vs-exit,220ms),background-color 140ms ease}
+.mw-print-btn.is-on{opacity:1;visibility:visible;transform:none;transition:opacity var(--mw-vs-fast,180ms) var(--mw-vs-ease,ease),transform var(--mw-vs-fast,180ms) var(--mw-vs-ease,ease),visibility 0s,background-color 140ms ease}
+.mw-print-btn.is-on:disabled{opacity:.45;cursor:progress}
+.mw-print-btn:active{transform:scale(.97)}
+.mw-print-btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mw-print-btn svg{flex:none;display:block}
+/* Vista PDF: l'editor resta montato (nessun ricaricamento al ritorno su Telefono) ma fuori dal flusso e invisibile. */
+.mw-tab-panel.is-pdf-view{position:relative}
+.mw-tab-panel.is-pdf-view>.mw-ed-stage{position:absolute!important;left:0;right:0;top:0;height:0!important;min-height:0!important;margin:0!important;border:0!important;overflow:hidden!important;visibility:hidden;pointer-events:none}
+.mw-pdf-view{max-width:680px;margin:0 auto}
+.mw .mw-pdf-view-note{margin:0 0 8px;padding:8px 12px;border:1px solid var(--hairline);border-radius:12px;background:var(--sunken);color:var(--ink-2);font-size:13px;line-height:1.4;text-align:center}
+.mw .mw-pdf-view-empty{margin:24px 0;color:var(--ink-2);text-align:center}
+.mw-pdf-view-loading{min-height:320px;display:grid;place-items:center}
+.mw-pdf-view .mw-pdf-viewer{margin-top:0;padding-top:0;border-top:0}
+.mw-pdf-view .mw-pdf-page-stage{max-height:none;overflow:visible}
+.mw-print-actions{flex-wrap:wrap}
+@media(max-width:899px){
+ .mw .mw-studio .mw-studio-toolbar .mw-view-tools{gap:6px;margin-left:auto}
+ .mw-view-switch{padding:2px;border-radius:12px}
+ .mw-view-switch>button{height:30px;padding:0 10px;font-size:13.5px}
+ .mw-view-switch .mw-tab-thumb{border-radius:10px}
+ .mw-print-btn{width:36px;height:36px;min-width:36px;padding:0}
+ .mw-print-label{display:none}
+ .mw-pdf-view{margin:0 -2px}
+}
+@media(max-width:389px){
+ .mw-view-switch>button{padding:0 9px}
+ .mw-view-switch>button svg{display:block}
+ .mw-view-switch .mw-view-label{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .mw-view-switch .mw-tab-thumb.is-ready,.mw-view-switch>button,.mw-print-btn,.mw-print-btn.is-on{transition:none!important}
+}
