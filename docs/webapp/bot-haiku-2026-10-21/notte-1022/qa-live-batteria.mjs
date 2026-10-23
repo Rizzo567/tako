@@ -19,8 +19,10 @@ const tw=parseEnv(fs.readFileSync(path.join(cfg,'twilio-menu.env'),'utf8'))
 const sign=(u,form)=>createHmac('sha1',tw.TWILIO_AUTH_TOKEN).update(u+Object.keys(form).sort().map(k=>k+form[k]).join('')).digest('base64')
 async function send(body,nap=2500){
  const form={AccountSid:tw.TWILIO_ACCOUNT_SID,From:phone,To:tw.TWILIO_WHATSAPP_NUMBER,NumMedia:'0',MessageSid:'SM'+randomBytes(16).toString('hex'),Body:body,TakoSyncTest:'1'},t0=performance.now()
- let raw='';try{const r=await fetch(tw.TWILIO_WEBHOOK_URL,{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded','x-twilio-signature':sign(tw.TWILIO_WEBHOOK_URL,form)},body:new URLSearchParams(form).toString(),signal:AbortSignal.timeout(90000)});raw=await r.text()}catch(e){raw='[ERRORE RETE '+e.message+']'}
- const ms=Math.round(performance.now()-t0),reply=raw.replace(/<[^>]+>/g,' ').replace(/&apos;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim()
+ // 23/10: rete di casa instabile → solo gli errori di rete LOCALI (DNS/connessione) si riprovano con lo STESSO MessageSid (il server non
+ // rifà il turno: risposta in cache); il tempo misurato è quello dell'ultimo tentativo (tempo vero del bot).
+ let raw='',t1=t0;for(let k=0;k<6;k++){t1=performance.now();try{const r=await fetch(tw.TWILIO_WEBHOOK_URL,{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded','x-twilio-signature':sign(tw.TWILIO_WEBHOOK_URL,form)},body:new URLSearchParams(form).toString(),signal:AbortSignal.timeout(90000)});raw=await r.text();break}catch(e){raw='[ERRORE RETE '+e.message+']';if(!/ENOTFOUND|EAI_AGAIN|ECONNRESET|ECONNREFUSED|getaddrinfo/.test(String(e?.cause?.code??e?.cause?.message??e.message))||k===5)break;await sleep(5000)}}
+ const ms=Math.round(performance.now()-t1),reply=raw.replace(/<[^>]+>/g,' ').replace(/&apos;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim()
  console.log('  >',body,`[${ms} ms]`,'\n    ',reply.slice(0,400));await sleep(nap);return {reply,ms}
 }
 
