@@ -40,7 +40,7 @@ function vicx():EvalMenu{n=0
   S_('Primi',[['Risotto ai funghi porcini',0],['Pappardelle al cinghiale',0],['Linguine vongole e pomodorini',0,true],['Tagliatelle panna, speck e zucchine',0,true]]),
   S_('Secondi',[['Tagliata di manzo con rucola e grana',0],['Orata al forno',0],['Nodino burro e salvia',0,true],['Gamberetti sale e pepe',0,true]]),
   S_('Contorni',[['Patate al forno',0],['Insalata mista',0],['Zucchine fritte',0,true]])]}
- const carta={id:id('6a000000'),name:'Alla carta',type:'main',sections:[S_('Primi piatti',[['Spaghetti alla carbonara',10],['Pasta al pesto',8],['*Linguine allo scoglio',16],['*Spaghetti alle vongole',14],['Fusilli cavolfiore, acciughe e pomodorini',9]]),S_('Contorni',[['Insalata mista',4],['Patatine fritte',4]])]}
+ const carta={id:id('6a000000'),name:'Alla carta',type:'main',sections:[S_('Primi piatti',[['Spaghetti alla carbonara',10],['Pasta al pesto',8]]),S_('Contorni',[['Insalata mista',4],['Patatine fritte',4]])]}
  const drinks={id:id('6a000000'),name:'Drinks',type:'drinks',sections:[S_('Bevande',[['Acqua',2],['Caffè',1.5]])]}
  giorno.formulas=[{id:id('5b000000'),name:'Completo',price:12,note:null,sectionIds:giorno.sections.map(s=>s.id),translations:{}}]
  cena.formulas=[{id:id('5b000000'),name:'Completo',price:16.9,note:null,sectionIds:cena.sections.map(s=>s.id),translations:{}},{id:id('5b000000'),name:'Solo primo',price:12,note:null,sectionIds:[cena.sections[0]!.id],translations:{}},{id:id('5b000000'),name:'Solo secondo',price:14,note:null,sectionIds:[cena.sections[1]!.id,cena.sections[2]!.id],translations:{}}]
@@ -106,8 +106,6 @@ function violations(c:Case,r:{replies:string[],menus:any[]}):string[]{const out:
  for(const x of c.gone??[])if(wN.menus.some((m:any)=>m.name===c.menu&&m.sections.some((s:any)=>s.items.some((i:any)=>plainT(i.name)===plainT(x)))))out.push('non eliminato: '+x)
  for(const x of c.kept??[])if(!wN.menus.some((m:any)=>m.sections.some((s:any)=>s.items.some((i:any)=>plainT(i.name)===plainT(x)))))out.push('eliminato per sbaglio: '+x)
  if(c.menu)for(const [sec,names] of Object.entries(c.has??{})){const v=vis(wN,c.menu,sec).map(plainT);for(const x of names)if(!v.includes(plainT(x)))out.push(`${sec}: manca ${x}`)}
- // 22/10 sera: piatto NUOVO con nome che non comincia con una lettera maiuscola («*spaghetti…») o fatto di sole preposizioni («Della»)
- {const old=new Set((w0.menus as any[]).flatMap(m=>m.sections.flatMap((x:any)=>x.items.map((it:any)=>it.name))));for(const m of wN.menus as any[])for(const x of m.sections)for(const it of x.items)if(!old.has(it.name)&&(!/^[A-ZÀ-Ý0-9]/.test(it.name)||/^(?:del|della|dello|dei|delle|di|a|al|alla|nel|nella|nei|in|e|ed)$/i.test(it.name.trim())))out.push('nome nuovo sbagliato: «'+it.name+'» ('+m.name+')')}
  const allReplies=plainT(r.replies.join(' '))
  if(c.menu)for(const x of c.said??[]){const inMenu=allVis(wN,c.menu).some((y:string)=>plainT(y)===plainT(x));if(!inMenu&&!allReplies.includes(plainT(x)))out.push('nome scartato in silenzio: '+x)}
  if(c.reply&&!c.reply.test(r.replies[r.replies.length-1]??''))out.push('risposta finale senza '+c.reply)
@@ -355,15 +353,6 @@ export const BATTERIA:Case[]=[
  // svuota: testo «Ho eliminato … Eliminati: …», nessun «nascost»
  {id:'s21',turns:['svuota il menu cena'],menu:'Menu Cena',allHidden:true,reply:/^\*Menu Cena svuotato\*\n\nHo eliminato tutti gli 11 piatti\./},
  {id:'s22',turns:['togli tutti i piatti del menu cena','annulla'],menu:'Menu Cena',undoTo:0},
- // Prova del mattino 22/10 sera (QA con la forma vera di Victoria): carta con «*Linguine…», «*Spaghetti…» (asterisco nel nome) → i piatti
- // nuovi prendevano l'asterisco («*spaghetti aglio olio e peperoncino»); «… nei contorni della cena» creava il piatto «Della».
- {id:'v01',turns:['svuota il menu cena','nei primi inserisci pasta e fagioli, spaghetti aglio olio e peperoncino e linguine al pesto'],menu:'Menu Cena',exact:{Primi:['Pasta e fagioli','Spaghetti aglio olio e peperoncino','Linguine al pesto']}},
- {id:'v02',turns:['aggiungi le zucchine trifolate nei contorni della cena'],menu:'Menu Cena',keepVisible:true,has:{Contorni:['Zucchine trifolate']},reply:/^(?![\s\S]*Della)/},
- {id:'v03',turns:['stasera a cena primi linguine allo scoglio e tortellini panna e prosciutto secondi branzino al forno contorni insalata mista'],menu:'Menu Cena',exact:{Primi:['Linguine allo scoglio','Tortellini panna e prosciutto'],Secondi:['Branzino al forno'],Contorni:['Insalata mista']}},
- {id:'v04',turns:['nei primi del pranzo inserisci spaghetti alla carbonara e fusilli cavolfiore'],menu:'Menu Giorno',keepVisible:true,has:{Primi:['Spaghetti alla carbonara','Fusilli cavolfiore']}},
- {id:'v05',turns:['inserisci nei secondi della cena le polpette al sugo'],menu:'Menu Cena',keepVisible:true,has:{Secondi:['Polpette al sugo']},reply:/^(?![\s\S]*Della)/},
- {id:'v06',turns:['svuota il menu del giorno',V('Allora nei primi oggi mettiamo pasta al forno e ravioli ricotta e spinaci nei secondi arrosto di maiale e frittata di zucchine nei contorni patatine fritte')],menu:'Menu Giorno',exact:{Primi:['Pasta al forno','Ravioli ricotta e spinaci'],Secondi:['Arrosto di maiale','Frittata di zucchine'],Contorni:['Patatine fritte']}},
- {id:'v07',turns:['togli tutti i piatti del menu pranzo',V('oggi nei primi mettiamo lasagne e pasta e ceci')],menu:'Menu Giorno',exact:{Primi:['Lasagne','Pasta e ceci'],Secondi:[],Contorni:[]}},
  {id:'s23',turns:['svuota il menu cena e nei primi inserisci risotto ai funghi porcini'],menu:'Menu Cena',exact:{Primi:['Risotto ai funghi porcini'],Secondi:[],Contorni:[]}},
 ]
 

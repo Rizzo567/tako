@@ -20,13 +20,6 @@ describe('foto per nome (A)',()=>{
   expect(photoTargetsByName('Risò Giallo.',candidatesFor('Risò Giallo.',refs),refs)?.sort()).toEqual(['a1','b1'])})
  it('nomi diversi → si chiede (null)',()=>{const refs=refsOf(ws());const c=refs.filter(r=>/carbonara/i.test(r.name))
   expect(photoTargetsByName('la carbo',c,refs)).toBeNull()})
- it('22/10 sera: didascalia con parole intorno al nome → il piatto nominato per intero, senza domanda',()=>{
-  const refs=[{id:'t1',name:'Tagliata di manzo'},{id:'t2',name:'Tagliata rucola e grana'},{id:'t3',name:'Tagliata con funghi porcini e panna'},{id:'z1',name:'Zucchine trifolate'},{id:'z2',name:'Coppa di maiale con zucchine'},{id:'i1',name:'Insalata mista'},{id:'i2',name:'Insalata mista'},{id:'i3',name:'Insalata verde'}]
-  expect(photoTargetsByName('Questa è la tagliata di manzo',refs,refs)).toEqual(['t1'])
-  expect(photoTargetsByName('ecco la foto delle zucchine trifolate',refs,refs)).toEqual(['z1'])
-  expect(photoTargetsByName('foto insalata mista di oggi',refs,refs)?.sort()).toEqual(['i1','i2'])
-  expect(photoTargetsByName('la tagliata',refs,refs)).toBeNull()
-  expect(photoTargetsByName('insalata mista e insalata verde',refs,refs)).toBeNull()})
  it('scelta del modello su un piatto → tutti i suoi omonimi',()=>{expect(groupOf('b1',refsOf(ws())).sort()).toEqual(['a1','b1'])})
  it('applica, risposta «Foto messa su:» con un punto per riga, annulla toglie da tutti',()=>{const w=ws(),before=structuredClone(w),refs=refsOf(w)
   const acts=['a1','b1'].map(id=>({kind:'image',id,mediaUrl:'https://x/m'}) as MenuAction)

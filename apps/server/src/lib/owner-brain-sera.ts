@@ -306,7 +306,7 @@ export function sessionName(said:string,inSec:MenuRef[],vocab:string[]):{name:st
  const m=said.match(/^(.*?)\s+(?:a\s+)?(\d+(?:[.,]\d{1,2})?)\s*(?:€|euro)?$/),base=(m?m[1]!:said).trim(),price=m?Number(m[2]!.replace(',','.')):null
  const hit=dishInSection(base,inSec);if(hit)return{name:hit.name,existing:hit,price}
  // Accenti come nei nomi del locale («ragu» → «ragù» se c'è un piatto con «ragù»).
- const acc=new Map(vocab.flatMap(v=>v.split(/\s+/)).map(w=>w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu,'')).filter(w=>!!w&&plain(w)!==w.toLowerCase()).map(w=>[plain(w),w.toLowerCase()] as const))
+ const acc=new Map(vocab.flatMap(v=>v.split(/\s+/)).filter(w=>plain(w)!==w.toLowerCase()).map(w=>[plain(w),w.toLowerCase()] as const))
  return{name:capW(fixSpelling(base,vocab).split(' ').map(w=>acc.get(plain(w))??w).join(' ')),existing:null,price}}
 /** Azioni della sostituzione di un sottomenu (riusa gli esistenti, crea i nuovi — a 0 € nei menu fissi —, ELIMINA gli altri: 22/10 notte).
  *  `noPrice` = piatti nuovi alla carta senza prezzo (la sessione li chiede prima di applicare). */

@@ -54,7 +54,7 @@ const DAILY=/\b(?:oggi|stasera|stassera|stamattina|domani|stamani)\b/
 const NEG=/\b(?:non|nun)\s+(?:(?:li|le|lo|la|ci|mi|piu)\s+)?(?:togli|lev|nascond|svuot|elimin|cancell|rimuov|mett|inser|aggiung)/
 /** Altri comandi nello stesso messaggio: prezzi, esaurito, foto, eliminazione di un piatto, rinomina → non è la regola (resta il resto). */
 const OTHER=/\b(?:euro|prezz\w*|cost\w*|finit\w*|esaurit\w*|foto|rinomin\w*|spost\w*|evidenz\w*|promo\w*|sconto|scont\w*|alz\w*|abbass\w*|aument\w*|diminu\w*)\b|€/
-const PREP=new Set(['nei','negli','nelle','nel','nella','nello','tra','fra','in','i','gli','le','per','come','di','dei','delle','degli','ai','agli','alle','al','alla','sui','sugli','sulle','il','lo','la','l','da','dai','dagli','dalle','dal','dalla','del','della','dello','dell','a','ad','su','sul','sulla','sullo'])
+const PREP=new Set(['nei','negli','nelle','nel','nella','nello','tra','fra','in','i','gli','le','per','come','di','dei','delle','degli','ai','agli','alle','al','alla','sui','sugli','sulle','il','lo','la','l','da','dai','dagli','dalle','dal','dalla'])
 const FILL=new Set(['inserici','agiungi','ehm','beh','mah','insomma','inserisci','inserire','inseriamo','inserite','aggiungi','aggiungere','aggiungiamo','aggiungete','aggiungo','metti','mettici','mettete','mettiamo','mettere','mettimi','rimetti','rimettici','rimettere','ci','vanno','va','anche','pure','poi','e','ed','solo','soltanto','invece','il','lo','la','l','i','gli','le','un','uno','una','di','oggi','stasera','per','favore','grazie','ok','allora','dai','adesso','ora','quindi','sono','abbiamo','c','ce','cioe','tipo','sotto','dentro','nei','negli','nelle','nel','nella','tra','fra','in','ai','agli','alle','al','alla','con','da','che','mentre','invece','piatti','piatto','questi','queste','seguenti','se','puoi','potresti','voglio','vorrei','bisogna','devi','dobbiamo','facciamo','fai','scrivi','scrivimi','metto','inserisco','no','aspetta','scusa','anzi','ecco','ciao','senti','guarda','ah','eh','dunque','perfetto','bene','benissimo','esatto','mi','raccomando','subito','tutti','tutte','questo','quello','cosa','cose','vorremmo','volevo','bisogna','serve','servono','mettere','ricorda'])
 const SKIP=new Set(['niente','nulla','basta','ok','si','no','grazie','altro','tutto','tutti'])
 // DEFAULT_PROTECT → LOCUTIONS in dish-split.ts (23/10, lista curata più ampia)
@@ -198,8 +198,7 @@ function findExisting(name:string,secId:string|null,items:MenuRef[]):MenuRef|nul
  const all=items.filter(r=>sameName(r.name,name));if(!all.length)return null
  const pick=(xs:MenuRef[])=>xs.find(r=>!r.hidden)??xs[0]??null
  return pick(all.filter(r=>r.sectionId===secId))??pick(all)}
-// Solo lettere: «*Spaghetti» (asterisco nel nome del locale) o «cavolfiore,» non sono «accenti» da copiare (Victoria 22/10: «*spaghetti aglio…»).
-const accentize=(n:string,vocab:string[])=>{const acc=new Map(vocab.flatMap(v=>v.split(/\s+/)).map(w=>w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu,'')).filter(w=>!!w&&plain(w)!==w.toLowerCase()).map(w=>[plain(w),w.toLowerCase()] as const));return n.split(' ').map(w=>acc.get(plain(w))??w).join(' ')}
+const accentize=(n:string,vocab:string[])=>{const acc=new Map(vocab.flatMap(v=>v.split(/\s+/)).filter(w=>plain(w)!==w.toLowerCase()).map(w=>[plain(w),w.toLowerCase()] as const));return n.split(' ').map(w=>acc.get(plain(w))??w).join(' ')}
 const newName=(said:string,vocab:string[])=>capW(accentize(fixSpelling(said.toLowerCase(),vocab),vocab))
 /** Sottomenu del Menu adatto a un piatto senza sottomenu detto (portata dal nome). */
 function courseSection(name:string,secs:SectionRef[]):SectionRef|null{const c=dishCourse(name);if(!c)return null;const f=secs.filter(s=>sameSection(s.name,c));return f.length===1?f[0]!:null}
@@ -289,13 +288,11 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
  const clr=clearIntent(text,allSecNames)||(()=>{const sp=splitClearInsert(text,allSecNames);return !!sp.insert&&clearIntent(sp.clear,allSecNames)})()
  // seguito senza verbo subito dopo una risposta della regola («e nei contorni patate al forno»): è ancora un inserimento
  const lastBot=[...o.history].filter(t=>t.role==='bot').sort((a,b)=>b.at-a.at)[0]?.text??''
- const follow=/(?:aggiornato|svuotato)\*/.test(lastBot)&&/^(?:e |ed |poi |anche |allora |ok |oggi |stasera |per oggi |quindi |adesso |ora )*(?:nei|negli|nelle|nel|tra i|tra le|per i|per le|come|i|gli|le)?\s*(?:primi|primo|secondi|secondo|contorni|contorno|dolci|dolce|antipasti|antipasto)\b/.test(p)
+ const follow=/(?:aggiornato|svuotato)\*/.test(lastBot)&&/^(?:e |ed |poi |anche |allora |ok )*(?:nei|negli|nelle|nel|tra i|tra le|per i|per le|come|i|gli|le)?\s*(?:primi|primo|secondi|secondo|contorni|contorno|dolci|dolce|antipasti|antipasto)\b/.test(p)
  const ins=(INSERT_V.test(p)||follow)&&!OTHER.test(p)&&!/\b(?:mettil[oaie]|mettel[oaie]|aggiungil[oaie]|inseriscil[oaie])\b/.test(p)
  if(!clr&&!ins)return null
  // la sostituzione giornaliera («stasera a cena metti primi …») resta la sua strada
- // …ma solo con un Menu detto: subito dopo una risposta della regola, «allora nei primi oggi mettiamo A e B nei secondi C» (vocale
- // senza Menu) è il seguito dell'inserimento (prova del mattino 22/10 sera: prima finiva al modello → «Cosa vuoi cambiare?», niente scritto).
- if(!clr&&!STRONG_INSERT.test(p)&&DAILY.test(p)&&!(follow&&!menusIn(text,o.menus).length))return null
+ if(!clr&&!STRONG_INSERT.test(p)&&DAILY.test(p))return null
  if(!clr&&hasDigits(p))return null
  // Menu del messaggio, poi quello della conversazione
  const said=menusIn(text,o.menus)
