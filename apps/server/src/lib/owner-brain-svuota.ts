@@ -13,12 +13,18 @@
 import {plain,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
 import {sameSection} from './twilio-menu-structure.js'
 import {namedMenus,dishCourse,fixSpelling} from './owner-brain-sera.js'
+import {splitPieces,doubtReadings,doubtQuestion,isContorniSection,isContornoWord,doubtAnswer,parseCorrection,correctionPlan,correctionReply,ruleFromAnswer,type Lexicon,type SplitRule} from './dish-split.js'
 
 export type RuleMenu={id:string,name:string,pricing?:'carta'|'fisso',active?:boolean}
-export type RuleWait={kind:'menu',text:string,options:string[],del?:boolean}|{kind:'names',menuId:string,secId:string}
+export type Doubt={text:string,one:string,parts:string[]}
+/** 23/10: `split` = domanda «"X e Y": 1 piatto o 2?» su un pezzo dubbio (gli altri piatti del messaggio sono già scritti). */
+export type RuleWait={kind:'menu',text:string,options:string[],del?:boolean}|{kind:'names',menuId:string,secId:string}|{kind:'split',menuId:string,items:(Doubt&{secId:string})[]}
 export type RuleSection={secId:string,name:string,created:string[],shown:string[],already:string[]}
 export type RuleReport={menu:string,fixed:boolean,cleared:string[],deleteWord:boolean,sections:RuleSection[],unknownSecs:{word:string,names:string[]}[],notPlaced:string[],notFound?:string[],kept?:string[]}
-export type RuleResult={kind:'delete_menu',menu:RuleMenu,items:number,sections:string[]}|{kind:'apply',menu:RuleMenu,actions:MenuAction[],report:RuleReport}|{kind:'ask',question:string,wait:RuleWait}|{kind:'info',text:string}
+export type RuleAsk={question:string,wait:RuleWait}
+/** `learn` = regole di divisione da salvare nel lessico del locale (23/10); `ask` = domanda sul pezzo dubbio DOPO aver scritto il resto;
+ * `fix` = correzione della divisione («coppa è un piatto a parte»), testo già pronto. */
+export type RuleResult={kind:'delete_menu',menu:RuleMenu,items:number,sections:string[]}|{kind:'apply',menu:RuleMenu,actions:MenuAction[],report:RuleReport,ask?:RuleAsk|null,learn?:SplitRule[]}|{kind:'ask',question:string,wait:RuleWait,learn?:SplitRule[]}|{kind:'info',text:string,learn?:SplitRule[]}|{kind:'fix',actions:MenuAction[],reply:string,learn:SplitRule[]}
 
 // ---------- Menu di cui si parla ----------
 const LUNCH=/ (?:pranzo|pranzi|mezzogiorno|mezzo giorno) /,DINNER=/ (?:cena|cene|stasera|stassera|sera|serale) /
@@ -51,7 +57,7 @@ const OTHER=/\b(?:euro|prezz\w*|cost\w*|finit\w*|esaurit\w*|foto|rinomin\w*|spos
 const PREP=new Set(['nei','negli','nelle','nel','nella','nello','tra','fra','in','i','gli','le','per','come','di','dei','delle','degli','ai','agli','alle','al','alla','sui','sugli','sulle','il','lo','la','l','da','dai','dagli','dalle','dal','dalla','del','della','dello','dell','a','ad','su','sul','sulla','sullo'])
 const FILL=new Set(['inserici','agiungi','ehm','beh','mah','insomma','inserisci','inserire','inseriamo','inserite','aggiungi','aggiungere','aggiungiamo','aggiungete','aggiungo','metti','mettici','mettete','mettiamo','mettere','mettimi','rimetti','rimettici','rimettere','ci','vanno','va','anche','pure','poi','e','ed','solo','soltanto','invece','il','lo','la','l','i','gli','le','un','uno','una','di','oggi','stasera','per','favore','grazie','ok','allora','dai','adesso','ora','quindi','sono','abbiamo','c','ce','cioe','tipo','sotto','dentro','nei','negli','nelle','nel','nella','tra','fra','in','ai','agli','alle','al','alla','con','da','che','mentre','invece','piatti','piatto','questi','queste','seguenti','se','puoi','potresti','voglio','vorrei','bisogna','devi','dobbiamo','facciamo','fai','scrivi','scrivimi','metto','inserisco','no','aspetta','scusa','anzi','ecco','ciao','senti','guarda','ah','eh','dunque','perfetto','bene','benissimo','esatto','mi','raccomando','subito','tutti','tutte','questo','quello','cosa','cose','vorremmo','volevo','bisogna','serve','servono','mettere','ricorda'])
 const SKIP=new Set(['niente','nulla','basta','ok','si','no','grazie','altro','tutto','tutti'])
-const DEFAULT_PROTECT=['pasta e fagioli','pasta e ceci','pasta e patate','pasta e lenticchie','pasta e piselli','riso e piselli','pane e coperto','salsiccia e friarielli','prosciutto e melone','cacio e pepe','burro e salvia','sale e pepe','aglio olio e peperoncino','aglio e olio','rucola e grana','pomodoro e basilico','panna e speck','speck e zucchine','zucchine e gamberi','cozze e vongole','vongole e pomodorini','pane e pomodoro','mozzarella e pomodoro','salmone e zucchine','funghi e salsiccia','zucchine e speck','pomodorini e basilico','pepe e limone','olio e limone','spinaci e ricotta','ricotta e spinaci','burro e parmigiano','patate e cozze','cime di rapa e salsiccia']
+// DEFAULT_PROTECT → LOCUTIONS in dish-split.ts (23/10, lista curata più ampia)
 // Parola che apre il nome di un piatto (per i vocali senza virgole: «pasta alla carbonara linguine» = due piatti).
 const HEAD=new Set(['pasta','spaghetti','linguine','tagliatelle','pappardelle','fettuccine','penne','fusilli','rigatoni','paccheri','tortellini','tortelloni','ravioli','gnocchi','risotto','riso','lasagna','lasagne','orecchiette','trofie','bucatini','tortiglioni','cannelloni','maccheroni','mezze','minestrone','minestra','zuppa','vellutata','tagliata','cotoletta','cotolette','scaloppine','scaloppina','orata','branzino','salsiccia','salsicce','pollo','polpette','frittata','insalata','insalatona','nodino','filetto','bistecca','arrosto','hamburger','spezzatino','involtini','frittura','fritto','patate','patatine','parmigiana','bruschetta','bruschette','tiramisu','polenta','caprese','vitello','stinco','grigliata','calzone'])
 const VEG=new Set(['zucchine','melanzane','peperoni','spinaci','carciofi','fagiolini','broccoli','cime','cicoria','funghi','verdure','cavolfiore','finocchi'])
@@ -127,27 +133,29 @@ function mentions(t:Tok[],secs:SectionRef[],skip:Set<number>):Mention[]{const ou
   if(i===0||[',',';',':'].includes(prev)||/^(?:nei|negli|nelle|tra|fra|come|per|i|gli|le|ai|agli|alle)$/.test(prev)||next===':')out.push({i,n:1,secId:null,word:w})}
  return out}
 const isHead=(t:string[],k:number)=>HEAD.has(t[k]!)||(VEG.has(t[k]!)&&VEG_NEXT.test(t[k+1]??''))
-/** Nomi dei piatti di un pezzo di testo: virgole, «e»/«ed» (tranne dentro un nome: «pasta e fagioli», «nodino burro e salvia»),
- * e nei vocali senza virgole un nuovo piatto quando compare una parola che apre un piatto («pasta alla carbonara linguine»). */
-export function splitNames(seg:Tok[],known:string[]):string[]{
- const protect=[...new Set([...DEFAULT_PROTECT,...known.map(n=>plain(n)).filter(n=>/ (?:e|ed) /.test(n))])].map(n=>n.split(' '))
- const W=seg.map(x=>x.w),R=seg.map(x=>x.raw),keep=new Set<number>()
- for(const pr of protect)for(let i=0;i+pr.length<=W.length;i++)if(pr.every((x,k)=>W[i+k]===x))for(let k=0;k<pr.length;k++)if(W[i+k]==='e'||W[i+k]==='ed')keep.add(i+k)
- // pezzi separati da punteggiatura, poi da «e»
- const out:string[]=[];let cur:number[]=[]
- const flushPart=(ix:number[])=>{if(!ix.length)return;const parts:number[][]=[[]];for(const k of ix){if((W[k]==='e'||W[k]==='ed')&&!keep.has(k)){parts.push([]);continue}parts[parts.length-1]!.push(k)}
-  const merged:number[][]=[];for(const p of parts.filter(x=>x.length)){const prev=merged[merged.length-1],ws=p.map(k=>W[k]!)
-   // «e» davanti a una sola parola che non è un piatto («… olio e peperoncino», «pasta e ceci»): fa parte del nome di prima
-   if(prev&&ws.length===1&&!dishCourse(ws[0]!)&&!HEAD.has(ws[0]!)&&!known.some(n=>norm(n)===ws[0])){prev.push(-1,...p);continue}
-   merged.push([...p])}
-  for(const p of merged){let cut:number[]=[];for(let j=0;j<p.length;j++){const k=p[j]!;
-    if(cut.length&&k>=0&&isHead(W,k)&&cut.some(x=>x>=0&&isHead(W,x))&&!PREP.has(W[p[j-1]!]??'')&&p[j-1]!==-1&&!known.some(n=>norm(n)===cut.filter(x=>x>=0).map(x=>W[x]).concat(W[k]!).join(' ')))
-     {out.push(cut.map(x=>x<0?'e':R[x]).join(' ').replace(/' /g,"'"));cut=[]}
-    cut.push(k)}
-   if(cut.length)out.push(cut.map(x=>x<0?'e':R[x]).join(' ').replace(/' /g,"'"))}}
+/** Nomi dei piatti di un pezzo di testo: virgole/a capo dividono sempre; la «e» divide secondo dish-split.ts (lessico del locale,
+ * locuzioni, indizi; 23/10), e nei vocali senza virgole un nuovo piatto comincia quando compare una parola che apre un piatto
+ * («pasta alla carbonara linguine»). `ask`: i pezzi dubbi NON diventano nomi, tornano in `doubts` (si chiede «1 piatto o 2?»). */
+export type SplitOpts={lexicon?:Lexicon|null,section?:string|null,ask?:boolean}
+export function splitNamesX(seg:Tok[],known:string[],o:SplitOpts={}):{names:string[],doubts:Doubt[]}{
+ const W=seg.map(x=>x.w),R=seg.map(x=>x.raw),lex:Lexicon={names:[...new Set([...known,...(o.lexicon?.names??[])])],rules:o.lexicon?.rules??[]}
+ const out:string[]=[],doubts:Doubt[]=[],txt=(ix:number[])=>ix.map(x=>R[x]).join(' ').replace(/' /g,"'")
+ // nei Contorni anche un ortaggio/contorno semplice apre un piatto nuovo («insalata funghi misti e peperoni» detto a voce)
+ const ctn=isContorniSection(o.section),hd=(k:number)=>isHead(W,k)||(ctn&&isContornoWord(W[k]!))
+ const headCut=(p:number[])=>{let cut:number[]=[];for(let j=0;j<p.length;j++){const k=p[j]!
+   if(cut.length&&hd(k)&&cut.some(x=>hd(x))&&!PREP.has(W[p[j-1]!]??'')&&W[p[j-1]!]!=='e'&&W[p[j-1]!]!=='ed'&&W[p[j-1]!]!=='con'&&!known.some(n=>norm(n)===cut.map(x=>W[x]).concat(W[k]!).join(' '))){out.push(txt(cut));cut=[]}
+   cut.push(k)}
+  if(cut.length)out.push(txt(cut))}
+ const flushPart=(ix:number[])=>{if(!ix.length)return;const Wp=ix.map(k=>W[k]!)
+  for(const pc of splitPieces(Wp,{lexicon:lex,section:o.section??null},!!o.ask)){const abs=pc.ix.map(j=>ix[j]!)
+   if(pc.doubt&&o.ask){const rd=doubtReadings(Wp,pc),one=clean(txt(rd.one.map(j=>ix[j]!))),parts=rd.parts.map(x=>clean(txt(x.map(j=>ix[j]!)))).filter(Boolean)
+    if(one&&parts.length>1&&!SKIP.has(plain(one))){doubts.push({text:one,one,parts});continue}}
+   headCut(abs)}}
+ let cur:number[]=[]
  for(let k=0;k<W.length;k++){if(W[k]===','||W[k]===';'||W[k]===':'){flushPart(cur);cur=[];continue}cur.push(k)}
  flushPart(cur)
- return out.map(clean).filter(n=>!!n&&!SKIP.has(plain(n)))}
+ return{names:out.map(clean).filter(n=>!!n&&!SKIP.has(plain(n))),doubts}}
+export function splitNames(seg:Tok[],known:string[],o:Omit<SplitOpts,'ask'>={}):string[]{return splitNamesX(seg,known,{...o,ask:false}).names}
 const clean=(n:string)=>{let ws=n.replace(/\s+/g,' ').trim().split(' ').filter(Boolean)
  // «secodi inserisci orata»: un verbo d'inserimento dentro il nome = quello che c'è prima non è il piatto
  {const k=ws.map(w=>plain(w)).reduce((a,w,i)=>INSERT_V.test(w)?i:a,-1);if(k>=0)ws=ws.slice(k+1)}
@@ -155,30 +163,32 @@ const clean=(n:string)=>{let ws=n.replace(/\s+/g,' ').trim().split(' ').filter(B
  while(ws.length&&(FILL.has(plain(ws[ws.length-1]!))||PREP.has(plain(ws[ws.length-1]!))))ws.pop()
  return ws.join(' ').replace(/' /g,"'").replace(/^l'\s*/i,'').trim()}
 
-export type InsertParse={lists:{secId:string|null,word:string,names:string[]}[],loose:string[]}
+export type InsertParse={lists:{secId:string|null,word:string,names:string[],doubts?:Doubt[]}[],loose:string[]}
 /** Liste per sottomenu del testo (già tolte le parole del Menu): «nei primi inserisci A, B e C e nei secondi D», «inserisci A e B nei
  * primi», «primi: A, B; secondi: C». `loose` = nomi senza sottomenu detto. */
-export function parseInsert(text:string,secs:SectionRef[],menus:{name:string}[],known:string[]):InsertParse{
+export function parseInsert(text:string,secs:SectionRef[],menus:{name:string}[],known:string[],so:{lexicon?:Lexicon|null,ask?:boolean}={}):InsertParse{
  const t=tokens(text),skip=menuSpans(t,menus),ms=mentions(t,secs,skip),W=t.map(x=>x.w)
  const keepTok=(k:number)=>!skip.has(k)&&!ms.some(m=>k>=m.i&&k<m.i+m.n)
  const seg=(a:number,b:number)=>{const ix:number[]=[];for(let k=a;k<b;k++)if(keepTok(k))ix.push(k);return ix.map(k=>t[k]!)}
- const namesOf=(x:Tok[])=>splitNames(x,known)
+ const namesOf=(x:Tok[],sec:string|null=null)=>splitNames(x,known,{lexicon:so.lexicon,section:sec})
+ // 23/10: dentro un sottomenu i pezzi dubbi («funghi misti e peperoni» fuori dai Contorni) si chiedono (so.ask) invece di indovinarli
+ const namesSec=(x:Tok[],m:Mention)=>splitNamesX(x,known,{lexicon:so.lexicon,section:m.word,ask:!!so.ask&&!!m.secId})
  if(!ms.length)return{lists:[],loose:namesOf(seg(0,t.length))}
  const verbBefore=t.slice(0,ms[0]!.i).some((x,k)=>!skip.has(k)&&INSERT_V.test(x.w)),before=verbBefore?namesOf(seg(0,ms[0]!.i)):[]
  // «inserisci A e B nei primi e C nei secondi»: i nomi stanno PRIMA del loro sottomenu (preposizione davanti alla parola).
  const prepBefore=(m:Mention)=>m.i>0&&/^(?:nei|negli|nelle|nel|nella|tra|fra|in|ai|agli|alle|al|alla|come|sotto|dentro)$/.test(W[m.i-1]!)||(m.i>1&&/^(?:i|gli|le)$/.test(W[m.i-1]!)&&/^(?:tra|fra|in)$/.test(W[m.i-2]!))
  const lists:InsertParse['lists']=[]
- const push=(m:Mention,names:string[])=>{const l=lists.find(x=>x.secId===m.secId&&x.word===m.word);if(l){for(const n of names)if(!l.names.includes(n))l.names.push(n)}else lists.push({secId:m.secId,word:m.word,names:[...names]})}
+ const push=(m:Mention,names:string[],doubts:Doubt[]=[])=>{const l=lists.find(x=>x.secId===m.secId&&x.word===m.word);if(l){for(const n of names)if(!l.names.includes(n))l.names.push(n);if(doubts.length)l.doubts=[...(l.doubts??[]),...doubts]}else lists.push({secId:m.secId,word:m.word,names:[...names],...(doubts.length?{doubts:[...doubts]}:{})})}
+ const pushSeg=(m:Mention,x:Tok[])=>{const r=namesSec(x,m);push(m,r.names,r.doubts)}
  if(before.length&&prepBefore(ms[0]!)){
   // stile «nomi → sottomenu»
   let start=0
-  ms.forEach((m,j)=>{const names=namesOf(seg(start,m.i));push(m,names);start=m.i+m.n})
-  const tail=namesOf(seg(start,t.length))
+  ms.forEach((m,j)=>{pushSeg(m,seg(start,m.i));start=m.i+m.n})
   // coda senza sottomenu dopo: «… nei secondi e anche C» → all'ultimo sottomenu detto
-  if(tail.length)push(ms[ms.length-1]!,tail)
-  return{lists:lists.filter(l=>l.names.length),loose:[]}}
+  pushSeg(ms[ms.length-1]!,seg(start,t.length))
+  return{lists:lists.filter(l=>l.names.length||l.doubts?.length),loose:[]}}
  // stile «sottomenu → nomi»
- ms.forEach((m,j)=>{const end=j+1<ms.length?ms[j+1]!.i:t.length;push(m,namesOf(seg(m.i+m.n,end)))})
+ ms.forEach((m,j)=>{const end=j+1<ms.length?ms[j+1]!.i:t.length;pushSeg(m,seg(m.i+m.n,end))})
  // nomi prima del primo sottomenu senza preposizione davanti («carbonara e amatriciana primi»): restano senza sottomenu
  return{lists,loose:before}}
 
@@ -223,7 +233,9 @@ export type RuleInput={text:string,menus:RuleMenu[],sections:SectionRef[],refs:M
  /** risposta a una domanda della regola (Menu o nomi) */
  wait?:RuleWait|null,
  /** bozza di piatto in sospeso («In quale sottomenu metto X?») */
- draftName?:string|null}
+ draftName?:string|null,
+ /** 23/10: lessico del locale (nomi attuali + storico + regole imparate) per la divisione con la «e» */
+ lexicon?:Lexicon|null}
 const infoOf=(m:RuleMenu,sections:SectionRef[],refs:MenuRef[]):MenuInfo=>({menu:m,secs:sections.filter(s=>s.menu===m.name),items:refs.filter(r=>r.menu===m.name)})
 const hasDigits=(p:string)=>/\d/.test(p)
 /** Indice (nelle parole) dove comincia la parte «inserisci» di un messaggio che svuota e inserisce insieme. */
@@ -248,9 +260,25 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
   if(hit)return (o.wait as any).del?delMenuResult(hit,o):runOn(hit,o.wait.text,o,true)
   return null}
  if(o.wait?.kind==='names'){const m=o.menus.find(x=>x.id===(o.wait as any).menuId),s=o.sections.find(x=>x.id===(o.wait as any).secId)
-  if(m&&s&&!OTHER.test(p)&&!hasDigits(p)&&!CLEAR_V.test(p)&&!/\?/.test(text)){const info=infoOf(m,o.sections,o.refs),names=splitNames(tokens(text).filter((x,i,a)=>!menuSpans(a,o.menus).has(i)),vocab)
+  if(m&&s&&!OTHER.test(p)&&!hasDigits(p)&&!CLEAR_V.test(p)&&!/\?/.test(text)){const info=infoOf(m,o.sections,o.refs),names=splitNames(tokens(text).filter((x,i,a)=>!menuSpans(a,o.menus).has(i)),vocab,{lexicon:o.lexicon,section:s.name})
    if(names.length)return applyResult(info,{lists:[{secId:s.id,word:s.name,names}],loose:[]},null,vocab,text)}
   return null}
+ // 23/10: risposta a «"funghi misti e peperoni": 1 piatto o 2?» (gli altri piatti del messaggio erano già scritti). Si impara la risposta.
+ if(o.wait?.kind==='split'){const w=o.wait,it=w.items[0],ans=doubtAnswer(text),m=o.menus.find(x=>x.id===w.menuId),s=it?o.sections.find(x=>x.id===it.secId):undefined
+  if(!ans||!it||!m||!s)return null
+  const info=infoOf(m,o.sections,o.refs),learn=[ruleFromAnswer(it.one,it.parts,ans)],rest=w.items.slice(1)
+  const next:RuleAsk|null=rest.length?{question:doubtQuestion(rest[0]!.text,rest[0]!.parts.length),wait:{...w,items:rest}}:null
+  const r=applyResult(info,{lists:[{secId:s.id,word:s.name,names:ans==='one'?[it.one]:it.parts}],loose:[]},null,vocab,text)
+  if(!r)return next?{kind:'ask',question:next.question,wait:next.wait,learn}:{kind:'info',text:'Ok, me lo ricordo.',learn}
+  if(r.kind==='apply')return{...r,ask:next,learn}
+  if(r.kind==='info')return next?{kind:'ask',question:r.text+'\n\n'+next.question,wait:next.wait,learn}:{...r,learn}
+  return r}
+ // 23/10: correzione della divisione («coppa è un piatto a parte», «funghi misti e peperoni sono due contorni», «pasta e fagioli è un
+ // piatto solo»): divide/unisce il piatto nel menu (stessa sezione, subito dopo) e salva la regola nel lessico del locale.
+ {const corr=parseCorrection(text),pc=corr?plain(corr.phrase):''
+  if(corr&&!/\?\s*$/.test(text)&&!COURSES.includes(pc)&&!allSecNames.some(x=>sameSection(x,pc))&&!o.menus.some(m=>plain(m.name)===pc)){const said=menusIn(text,o.menus),pref=said.length===1?said[0]!.name:contextMenu(o.history,o.menus)?.name??null
+   const plan=correctionPlan(corr,o.refs,o.sections,o.menus,pref,o.lexicon??null),learn=plan.rule?[plan.rule]:[],reply=correctionReply(corr,plan,o.menus.length)
+   return plan.actions.length?{kind:'fix',actions:plan.actions,reply,learn}:{kind:'info',text:reply,learn}}}
  if(NEG.test(p)||/\?\s*$/.test(text)||/\b(?:annull\w*|com e(?:ra)?|come prima|come era|indietro|ripristin\w*)\b/.test(p))return null
  // 2) bozza in sospeso («In quale sottomenu metto Nodino…?») + un Menu a prezzo fisso detto («nono devi guardare menu cena»)
  if(o.draftName&&!/\b(?:lascia\w*|stare|perdere|niente|no|annull\w*|basta)\b/.test(p)){const ms=menusIn(text,o.menus);if(ms.length===1&&ms[0]!.pricing==='fisso'&&!hasDigits(p)){const info=infoOf(ms[0]!,o.sections,o.refs),ip=parseInsert(text,info.secs,o.menus,vocab),secId=ip.lists.find(l=>l.secId)?.secId??null
@@ -277,7 +305,7 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
  if(ctx)return runOn(ctx,text,o,follow,true)
  // nessun Menu: per svuotare, i Menu con piatti visibili; per inserire, i Menu a prezzo fisso con i sottomenu detti
  if(clr){const c=o.menus.filter(m=>o.refs.some(r=>r.menu===m.name));if(c.length===1)return runOn(c[0]!,text,o,false);if(!c.length)return{kind:'info',text:'Non c’è nessun piatto da togliere: il menu è già vuoto.'};return askMenu(c,text)}
- const fixed=o.menus.filter(m=>m.pricing==='fisso'),cands=fixed.filter(m=>{const ip=parseInsert(text,o.sections.filter(s=>s.menu===m.name),o.menus,vocab);return ip.lists.length>0&&ip.lists.every(l=>!!l.secId)})
+ const fixed=o.menus.filter(m=>m.pricing==='fisso'),cands=fixed.filter(m=>{const ip=parseInsert(text,o.sections.filter(s=>s.menu===m.name),o.menus,vocab,{lexicon:o.lexicon});return ip.lists.length>0&&ip.lists.every(l=>!!l.secId)})
  if(cands.length===1)return runOn(cands[0]!,text,o,false)
  if(cands.length>1)return askMenu(cands,text)
  return null}
@@ -295,10 +323,10 @@ function runOn(menu:RuleMenu,text:string,o:RuleInput,answer:boolean,fromCtx=fals
  if(clr){const m=clearText.match(/\b(?:tranne|eccetto|a parte|salvo|meno che|tranne che)\b(.*)$/i);if(m){keepNames=splitNames(tokens(m[1]!),vocab);clearText=clearText.slice(0,m.index)}}
  const p=plain(insText)
  let parse:InsertParse={lists:[],loose:[]}
- if(insText.trim()&&(INSERT_V.test(p)||clr||answer)){parse=parseInsert(insText,info.secs,o.menus,vocab)
+ if(insText.trim()&&(INSERT_V.test(p)||clr||answer)){parse=parseInsert(insText,info.secs,o.menus,vocab,{lexicon:o.lexicon,ask:true})
   // «nei primi inserisci» senza nomi: si chiedono i nomi (una riga)
-  if(!clr&&!parse.loose.length&&parse.lists.length===1&&!parse.lists[0]!.names.length&&parse.lists[0]!.secId){const s=info.secs.find(x=>x.id===parse.lists[0]!.secId)!;return{kind:'ask',question:'Cosa inserisco nei *'+s.name+'* del '+mLabel(menu.name)+'? Scrivimi i piatti, per esempio «carbonara, lasagne».',wait:{kind:'names',menuId:menu.id,secId:s.id}}}
-  parse={lists:parse.lists.filter(l=>l.names.length||!l.secId),loose:parse.loose}}
+  if(!clr&&!parse.loose.length&&parse.lists.length===1&&!parse.lists[0]!.names.length&&!parse.lists[0]!.doubts?.length&&parse.lists[0]!.secId){const s=info.secs.find(x=>x.id===parse.lists[0]!.secId)!;return{kind:'ask',question:'Cosa inserisco nei *'+s.name+'* del '+mLabel(menu.name)+'? Scrivimi i piatti, per esempio «carbonara, lasagne».',wait:{kind:'names',menuId:menu.id,secId:s.id}}}
+  parse={lists:parse.lists.filter(l=>l.names.length||l.doubts?.length||!l.secId),loose:parse.loose}}
  // Menu preso dalla conversazione ma il sottomenu detto è di un ALTRO Menu («aggiungi il tiramisù nei dolci» dopo la cena): non è la regola
  if(fromCtx&&parse.lists.some(l=>!l.secId&&o.sections.some(x=>x.menu!==menu.name&&sameSection(x.name,l.word))))return null
  if(!clr){if(!parse.lists.length&&!parse.loose.length)return null
@@ -307,7 +335,10 @@ function runOn(menu:RuleMenu,text:string,o:RuleInput,answer:boolean,fromCtx=fals
  return applyResult(info,parse,clr?{deleteWord:/\b(?:elimin\w*|cancell\w*)\b/.test(plain(clearText)),keep:keepNames}:null,vocab,text)}
 function applyResult(info:MenuInfo,parse:InsertParse,clear:{deleteWord:boolean,keep?:string[]}|null,vocab:string[],text:string):RuleResult|null{
  // un «nome» con dentro un verbo o una frase («restano uguali», «toglila», «aspetta») non è un piatto: decide il resto del flusso
- if([...parse.lists.flatMap(l=>l.names),...parse.loose].some(n=>NOT_DISH.test(plain(n))))return null
+ if([...parse.lists.flatMap(l=>[...l.names,...(l.doubts??[]).map(d=>d.one)]),...parse.loose].some(n=>NOT_DISH.test(plain(n))))return null
+ // 23/10: pezzi dubbi («"funghi misti e peperoni": 1 piatto o 2?») → una domanda di una riga; tutto il resto si scrive subito
+ const doubts=parse.lists.flatMap(l=>l.secId?(l.doubts??[]).map(d=>({...d,secId:l.secId!})):[])
+ const ask:RuleAsk|null=doubts.length?{question:doubtQuestion(doubts[0]!.text,doubts[0]!.parts.length),wait:{kind:'split',menuId:info.menu.id,items:doubts}}:null
  const b=buildInsert(info,parse,vocab)
  // Menu alla carta: un piatto nuovo vuole il prezzo → resta il percorso di prima (domanda del prezzo), salvo lo svuotamento
  if(b.needsPrice.length&&!clear)return null
@@ -317,9 +348,10 @@ function applyResult(info:MenuInfo,parse:InsertParse,clear:{deleteWord:boolean,k
  const actions=[...cl.actions,...b.actions]
  const report:RuleReport={menu:info.menu.name,fixed:info.menu.pricing==='fisso',cleared:cl.names,deleteWord:!!clear?.deleteWord,sections:b.sections,unknownSecs:b.unknownSecs,notPlaced:[...b.notPlaced,...b.needsPrice],notFound,kept:[...keep].filter(id=>!b.touched.has(id)).map(id=>info.items.find(r=>r.id===id)?.name??'').filter(Boolean)}
  if(!actions.length){
+  if(ask)return{kind:'ask',question:(b.sections.length?ruleReply(report,info.items,[],false)+'\n\n':'')+ask.question,wait:ask.wait}
   if(clear&&!b.sections.length)return{kind:'info',text:'Il '+mLabel(info.menu.name)+' è già vuoto: nessun piatto, non ho cambiato nulla. Scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne».'}
   return{kind:'info',text:ruleReply(report,info.items,[],false)}}
- return{kind:'apply',menu:info.menu,actions,report}}
+ return{kind:'apply',menu:info.menu,actions,report,ask}}
 
 // ---------- risposta (formato strutturato v164) ----------
 /** Testo della risposta: titolo per Menu, blocchi per sottomenu con un piatto per riga, note su ciò che non è entrato, «annulla». */
@@ -355,9 +387,9 @@ export function ruleReply(r:RuleReport,itemsBefore:MenuRef[],actions:MenuAction[
 // ---------- sostituzione giornaliera letta dal server (bug 16:37 Victoria «trovo più sottomenu Primi») ----------
 /** «stasera a cena metti primi: A e B, secondi C, contorni D» / «nel menu del giorno primi carbonara e pasta e fagioli»: Menu a prezzo
  * fisso DETTO nel messaggio + liste per sottomenu che sono tutte sottomenu di quel Menu, nessun altro comando. null = resta al modello. */
-export function dailyReplaceParse(text:string,menus:RuleMenu[],sections:SectionRef[],refs:MenuRef[]):{menu:RuleMenu,lists:{secId:string,names:string[]}[]}|null{
+export function dailyReplaceParse(text:string,menus:RuleMenu[],sections:SectionRef[],refs:MenuRef[],lexicon:Lexicon|null=null):{menu:RuleMenu,lists:{secId:string,names:string[]}[]}|null{
  const p=plain(text);if(STRONG_INSERT.test(p)||OTHER.test(p)||hasDigits(p)||NEG.test(p)||CLEAR_V.test(p)||/\?/.test(text))return null
  const ms=menusIn(text,menus);if(ms.length!==1||ms[0]!.pricing!=='fisso')return null
- const m=ms[0]!,secs=sections.filter(s=>s.menu===m.name),ip=parseInsert(text,secs,menus,refs.map(r=>r.name))
+ const m=ms[0]!,secs=sections.filter(s=>s.menu===m.name),ip=parseInsert(text,secs,menus,refs.map(r=>r.name),{lexicon})
  if(!ip.lists.length||ip.loose.length||ip.lists.some(l=>!l.secId||!l.names.length))return null
  return{menu:m,lists:ip.lists.map(l=>({secId:l.secId!,names:l.names}))}}

@@ -47,7 +47,9 @@ import {fixTruncatedNumbers,undoRequested,explicitUndoRequested,ignoredInQuestio
 import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,groupPercent,priceSheet,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,sectionGroupWord,pureDrop,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
-import {ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,type RuleWait,type RuleReport} from '../lib/owner-brain-svuota.js'
+import {ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,type RuleWait,type RuleReport,type RuleAsk} from '../lib/owner-brain-svuota.js'
+import {loadLexicon,saveSplitRules} from '../lib/dish-lexicon.js'
+import type {Lexicon,SplitRule} from '../lib/dish-split.js'
 const mLabelOf=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+n.trim()+'*':'Menu *'+n.trim()+'*'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
 const digest=(s:string)=>createHash('sha256').update(s).digest('hex')
@@ -55,7 +57,7 @@ async function permitted(tx:Pick<DB,'execute'>,actor:string,tenant:string){const
 const sent='\u0001'
 type Ctx={phone:string,tenant:string,actor:string,pending?:boolean};type Tx=Pick<DB,'execute'>;type Photo={mediaUrl:string,mediaType:string,url?:string};type ChoiceAction={kind:'price',price:number}|{kind:'available'|'hidden'|'featured',value:boolean}|{kind:'description',text:string}|{kind:'tag',tag:string,value:boolean}|SalesTemplate;type Choice={kind:'choose',action:ChoiceAction,options:string[]};type ChoicePrice={kind:'choose_price',id:string,prices:[number,number],labels:[string,string]};type Turn=string|{llm:true,brain?:true,photo?:Photo,text?:string,fullmenu?:FullMenuJob,exclude?:Excluded[],note?:string}|{upload:Extract<MenuAction,{kind:'image'}>[]}
 /** 21/10 (richiesta Manuel): numeri WhatsApp del titolare per locale. */
-export const OWNER_PHONES_MAX=3 // 22/10 (Manuel): da 2 a 3 numeri per locale
+export const OWNER_PHONES_MAX=4 // 22/10 (Manuel): da 2 a 3 numeri per locale; 23/10 (Manuel): 4
 const lock=(tx:Tx,phone:string)=>tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${phone},0))`)
 const reserve=(tx:Tx,sid:string)=>tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${sid},${sent}) ON CONFLICT DO NOTHING`)
 const propose=(tx:Tx,ctx:Ctx,revision:number,command:unknown)=>tx.execute(sql`INSERT INTO tako_whatsapp_proposals(phone,restaurant_id,actor_id,revision,command,expires_at) VALUES(${ctx.phone},${ctx.tenant},${ctx.actor},${revision},${JSON.stringify(command)}::jsonb,now()+interval '10 minutes') ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,revision=EXCLUDED.revision,command=EXCLUDED.command,expires_at=EXCLUDED.expires_at`)
@@ -566,6 +568,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  // messaggio va da solo; (4) «solo quelle visibili» dopo una scrittura = i piatti nascosti tornano com'erano.
  type Follow={name:string,sectionId:string,sectionName:string,origin:string}
  let pre:{actions:MenuAction[],why:string,follow?:Follow|null}|null=null,preReply:string|null=null,closePend=false,sessNow:SessState|null=null,sessNote='',sessAfter:SessState|null=null,ruleRep:RuleReport|null=null
+ // 23/10 (divisione con la «e»): domanda sul pezzo dubbio da fare DOPO la scrittura, regole da imparare, testo della correzione
+ let ruleAsk:RuleAsk|null=null,ruleLearn:SplitRule[]=[],ruleFix:string|null=null,lexicon:Lexicon|null=null
  if(engine==='haiku'){
   const askP=pend?.kind==='ask'?pend.ask as BrainAsk&{origin?:string,rounds?:number,session?:SessState}:null
   const rn=parseStructRename(text,base.menus,sections)
@@ -630,15 +634,20 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   if(!ruleDone&&(!sess||sess.applied)){const ruleWait=((askP as any)?.rule??null) as RuleWait|null
    let hist:{role:string,text:string,at:number}[]=[];try{hist=await sqlBrainStore(db).readHistory(ctx.tenant,ctx.phone,Date.now())}catch{/* senza cronologia: solo il Menu detto */}
    const draftName=askP?.draft?.name&&!askP.draft.sectionId?String(askP.draft.name):null
-   const rr=ruleTurn({text,menus:base.menus,sections,refs,history:hist,wait:ruleWait,draftName})
+   // 23/10: lessico del locale (nomi attuali + storico + regole imparate) solo se il messaggio può contenere una «e» da decidere o una
+   // correzione; lettura con tetto di tempo (mai bloccante: in errore valgono i nomi attuali).
+   if(ruleWait?.kind==='split'||/\b(?:e|ed|sono|separat\w*|divid\w*|unisc\w*|insieme|parte|solo|unico)\b/.test(plain(text)))lexicon=await loadLexicon(db as any,ctx.tenant,refs.map(r=>r.name))
+   const rr=ruleTurn({text,menus:base.menus,sections,refs,history:hist,wait:ruleWait,draftName,lexicon})
    if(rr){ruleDone=true;if(askP){closePend=true;pend=null;answered=false;(base as any).pendingCommand=null}
-    if(rr.kind==='apply'){pre={actions:rr.actions,why:'regola'};ruleRep=rr.report}
-    else if(rr.kind==='info')preReply=rr.text
+    if('learn' in rr&&rr.learn?.length)ruleLearn=rr.learn
+    if(rr.kind==='apply'){pre={actions:rr.actions,why:'regola'};ruleRep=rr.report;ruleAsk=rr.ask??null}
+    else if(rr.kind==='fix'){pre={actions:rr.actions,why:'regola'};ruleFix=rr.reply}
+    else if(rr.kind==='info'){preReply=rr.text;if(ruleLearn.length)await saveSplitRules(db as any,ctx.tenant,ruleLearn,'correction')}
     // «elimina il menu pranzo» (correzione Manuel 22/10): il Menu intero, SOLO col «sì» scritto (proposta di eliminazione in attesa)
     else if(rr.kind==='delete_menu'){const q=deleteMenuQuestion(rr),act={kind:'delete_menu',menuId:rr.menu.id,name:rr.menu.name,withItems:true,items:rr.items} as MenuAction;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:[act],requiresTypedOk:true,why:'delete'})});preReply=q;closePend=false}
-    else{const q=rr.question,w=rr.wait;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,rule:w} as any)});preReply=q;closePend=false}}
+    else{const q=rr.question,w=rr.wait;if(ruleLearn.length)await saveSplitRules(db as any,ctx.tenant,ruleLearn,'clarify');await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,rule:w} as any)});preReply=q;closePend=false}}
    else if(ruleWait){closePend=true;pend=null;answered=false;(base as any).pendingCommand=null}
-   else if(!askP&&!rn){const dr=dailyReplaceParse(text,base.menus,sections,refs)
+   else if(!askP&&!rn){const dr=dailyReplaceParse(text,base.menus,sections,refs,lexicon)
     if(dr){const vocab=refs.map(r=>r.name),acts=dr.lists.flatMap(l=>{const inS=refs.filter(r=>r.sectionId===l.secId);return sectionReplace(l.secId,[...new Set(l.names.map(n=>sessionName(n,inS,vocab).name))],refs,true).actions});if(acts.length){pre={actions:acts,why:'sostituzione'};ruleDone=true}
      else{preReply='Il '+mLab(dr.menu.name)+' è già così: non ho cambiato nulla.';ruleDone=true}}}}
   if(ruleDone){/* regola svuota/inserisci o sostituzione letta dal server */}
@@ -1080,7 +1089,13 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(why){await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why});const whole=engine==='haiku'?wholeGroup(effective,refs,sections):null;return say([zeroN?'Metto a *0 €* '+(zeroN===1?'1 piatto':zeroN+' piatti')+': con 0 € nel menu il prezzo non si vede. Rispondi *OK* per confermare oppure *annulla*.':'',whole?wholeGroupText(whole):pendingFacts(why,effective,refs,sections),already].filter(Boolean).join('\n\n'),false,pricesOf(effective))}
    const r=await applyNow(effective)
    if(pre?.why==='regola-elimina'&&r.allOk){const a0=effective[0] as any;return 'Fatto: il '+mLabelOf(String(a0?.name??''))+' è eliminato, con i suoi sottomenu e piatti.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.'}
-   if(pre?.why==='regola'&&ruleRep)return ruleReply(ruleRep,refs.filter(x=>x.menu===ruleRep!.menu),effective,true,r.inherited+(r.allOk?'':'\n\n'+r.facts))
+   // 23/10: regole di divisione imparate (risposta «1/2» o correzione) solo dopo la scrittura riuscita; il pezzo dubbio si chiede DOPO
+   if(pre?.why==='regola'&&ruleLearn.length&&r.allOk)await saveSplitRules(db as any,ctx.tenant,ruleLearn,ruleFix?'correction':'clarify')
+   if(pre?.why==='regola'&&ruleFix)return [ruleFix,r.inherited,r.allOk?'':r.facts,UNDO_HINT].filter(Boolean).join('\n\n')
+   if(pre?.why==='regola'&&ruleRep){const txt=ruleReply(ruleRep,refs.filter(x=>x.menu===ruleRep!.menu),effective,true,r.inherited+(r.allOk?'':'\n\n'+r.facts))
+    if(!ruleAsk)return txt
+    const q=ruleAsk.question,w=ruleAsk.wait;await propose(tx,ctx,r.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,rule:w} as any)
+    return txt+'\n\n'+q}
    // Prova dal vivo 21/10: aumento/ribasso uniforme applicato subito → solo il testo del server (la bozza prometteva un riepilogo e
    // nominava come «lasciati fuori» piatti che invece erano stati cambiati).
    if(engine==='haiku'&&r.allOk){const dl=uniformDelta(effective,refs);if(dl!==null)return [uniformReply(dl,effective.length,r.facts),already,UNDO_HINT].filter(Boolean).join('\n\n')
@@ -1421,7 +1436,7 @@ export async function twilioMenuRoutes(app:FastifyInstance){
   if('emailInUse' in result)return reply.code(409).send({error:{code:'EMAIL_IN_USE',field:'email',message:'Questa email è già usata da un altro account. Scrivi un’altra email del titolare.'}})
   if('emailOtherNumber' in result)return reply.code(409).send({error:{code:'EMAIL_OTHER_NUMBER',field:'email',message:'Questa email è già dell’altro numero: ogni numero ha la sua email.'}})
   if('alreadyListed' in result)return reply.code(409).send({error:{code:'PHONE_ALREADY_LISTED',field:'phone',message:'Questo numero è già in elenco.'}})
-  if('limit' in result)return reply.code(409).send({error:{code:'OWNER_PHONES_LIMIT',field:'phone',message:'Al massimo tre numeri per locale. Scollegane uno per aggiungerne un altro.'}})
+  if('limit' in result)return reply.code(409).send({error:{code:'OWNER_PHONES_LIMIT',field:'phone',message:'Al massimo quattro numeri per locale. Scollegane uno per aggiungerne un altro.'}})
   if('conflict' in result&&result.conflict){const c=result.conflict;return reply.code(409).send({error:{code:c.canMove?'PHONE_IN_USE_MOVABLE':'PHONE_IN_USE',field:'phone',message:c.canMove?`Questo numero è già collegato a ${c.name}. Vuoi spostarlo su questo locale?`:'Questo numero è già collegato a un altro locale. Per spostarlo contatta Tako.',canMove:c.canMove}})}
   return{data:result.state}})
  // 21/10: scollega UN numero (?phone=…); l'altro resta collegato con proposte e cronologia sue. Senza ?phone vale solo se il locale ne ha uno.
