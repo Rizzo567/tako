@@ -61,8 +61,10 @@ export function stripMenuPrice(text:string,menus:{name:string}[]):string{
  return text.replace(MENU_PRICE,(all,n)=>{const v=Number(String(n).replace(',','.'));const hit=menus.some(x=>{const fs=((x as any).formulas??[]) as {name:string,price:number}[];if(!fs.length)return false;const comp=fs.find(f=>plain(f.name)==='completo')??[...fs].sort((a,b)=>b.price-a.price)[0]!;return Math.abs(Number(comp.price)-v)<0.005})
   return hit?all.replace(/\s*da\s+\d{1,3}(?:[.,]\d{1,2})?\s*(?:euro|eur|€)?\s*$/i,' '):all}).trim()}
 /** Ultimo Menu nominato nella conversazione (turni più recenti prima): un turno del titolare con più Menu = ambiguo (null). */
-export function contextMenu<T extends {name:string}>(turns:{role:string,text:string,at:number}[],menus:T[]):T|null{
- for(const t of [...turns].sort((a,b)=>b.at-a.at)){const m=menusIn(t.text,menus);if(m.length===1)return m[0]!;if(m.length>1&&t.role==='owner')return null}
+export function contextMenu<T extends {name:string}>(turns:{role:string,text:string,at:number}[],menus:T[],recent?:number):T|null{
+ const all=[...turns].sort((a,b)=>b.at-a.at),now=all[0]?.at??0
+ // `recent` (23/10, batteria v181): solo gli ultimi N turni degli ultimi 10 minuti (mai il Menu di una conversazione di prima)
+ for(const t of recent?all.slice(0,recent).filter(x=>now-x.at<=10*60*1000):all){const m=menusIn(t.text,menus);if(m.length===1)return m[0]!;if(m.length>1&&t.role==='owner')return null}
  return null}
 const mLabel=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+n.trim()+'*':'Menu *'+n.trim()+'*'
 const orList=(xs:string[])=>xs.length<=1?xs.join(''):xs.slice(0,-1).join(', ')+' o '+xs[xs.length-1]
@@ -73,7 +75,7 @@ const COURSES=['primi','primo','secondi','secondo','contorni','contorno','dolci'
 const CLEAR_V=/\b(?:svuot\w*|togli\w*|toglie\w*|lev[ai]\w*|levare|levamo|levate|nascond\w*|rimuov\w*|elimin\w*|cancell\w*|sgombr\w*)\b/
 const INSERT_V=/\b(?:inser(?:isc|ic|is|isci|iamo|ire|ite)\w*|ag+iung\w*|metti|mettici|mettete|mettiamo|mettere|mettimi|ci vanno|ci va)\b/
 const STRONG_INSERT=/\b(?:inser(?:isc|ic|is|isci|iamo|ire|ite)\w*|ag+iung\w*)\b/
-const NOT_DISH=/\b(?:restan\w*|resta|rimang\w*|uguali|uguale|togli\w*|nascond\w*|lascia\w*|cambi\w*|elimin\w*|cancell\w*|annull\w*|aspett\w*|scusa|sbagliat\w*|prezz\w*|cost[ao]|costano|euro|finit\w*|esaurit\w*|svuot\w*|leva\w*|rimuov\w*|cosa|quale|quali|perche|come prima|com era)\b/
+const NOT_DISH=/\b(?:zero|gratis|tutto|niente|nulla|prezz\w*|restan\w*|resta|rimang\w*|uguali|uguale|togli\w*|nascond\w*|lascia\w*|cambi\w*|elimin\w*|cancell\w*|annull\w*|aspett\w*|scusa|sbagliat\w*|prezz\w*|cost[ao]|costano|euro|finit\w*|esaurit\w*|svuot\w*|leva\w*|rimuov\w*|cosa|quale|quali|perche|come prima|com era)\b/
 const DAILY=/\b(?:oggi|stasera|stassera|stamattina|domani|stamani)\b/
 const NEG=/\b(?:non|nun)\s+(?:(?:li|le|lo|la|ci|mi|piu)\s+)?(?:togli|lev|nascond|svuot|elimin|cancell|rimuov|mett|inser|aggiung)/
 /** Altri comandi nello stesso messaggio: prezzi, esaurito, foto, eliminazione di un piatto, rinomina → non è la regola (resta il resto). */
@@ -352,7 +354,7 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
    if(said.length===1)return runSectionClear(said[0]!,scp,o)
    const saidH=said.filter(has);if(saidH.length===1)return runSectionClear(saidH[0]!,scp,o);if(saidH.length>1)return askMenu(saidH,text)
    // il Menu della conversazione vale anche se quel sottomenu è già vuoto (si dice «sono già vuoti», mai la domanda su altri Menu)
-   const cm=contextMenu(o.history,o.menus);if(cm&&hasS(cm).length)return runSectionClear(cm,scp,o)
+   const cm=contextMenu(o.history,o.menus,4);if(cm&&hasS(cm).length)return runSectionClear(cm,scp,o)
    const c=o.menus.filter(has);if(c.length===1)return runSectionClear(c[0]!,scp,o);if(c.length>1)return askMenu(c,text)
    return null}}
  const clr=clearIntent(text,allSecNames)||(()=>{const sp=splitClearInsert(text,allSecNames);return !!sp.insert&&clearIntent(sp.clear,allSecNames)})()
@@ -396,7 +398,7 @@ function runOn(menu:RuleMenu,text:string,o:RuleInput,answer:boolean,fromCtx=fals
   parse={lists:parse.lists.filter(l=>l.names.length||l.doubts?.length||!l.secId),loose:parse.loose}}
  // 23/10 (chat Luisa «E inserisci» dopo «elimina i primi»): inserire senza dire il sottomenu = il sottomenu di cui si parlava
  // (ultimo messaggio del titolare che lo nomina, nello stesso Menu). Senza nomi: UNA domanda che chiede i piatti (con lo stato salvato).
- const defSec=!clr&&!parse.lists.length?contextSection(o.history,info,o.menus):null
+ const defSec=!clr&&!parse.lists.length&&STRONG_INSERT.test(p)?contextSection(o.history,info,o.menus):null // solo «inserisci/aggiungi» (batteria v181: «metti tutto a zero» diventava un piatto)
  if(defSec&&!parse.loose.length&&INSERT_V.test(p)&&!/\?/.test(text))return{kind:'ask',question:'Cosa inserisco nei *'+defSec.name+'* del '+mLabel(menu.name)+'? Scrivimi i piatti, per esempio «lasagna, carbonara».',wait:{kind:'names',menuId:menu.id,secId:defSec.id}}
  if(defSec&&parse.loose.length){const toSec=parse.loose.filter(n=>!findExisting(n,null,info.items)&&!courseSection(n,info.secs));if(toSec.length){parse={lists:[{secId:defSec.id,word:defSec.name,names:toSec}],loose:parse.loose.filter(n=>!toSec.includes(n))}}}
  // Menu preso dalla conversazione ma il sottomenu detto è di un ALTRO Menu («aggiungi il tiramisù nei dolci» dopo la cena): non è la regola
@@ -446,10 +448,10 @@ export function sectionClearParse(text:string,o:{menus:RuleMenu[],sections:Secti
    if(!words.includes(w))words.push(w);continue}
   return null}
  return words.length?{words,clear,insert:hasIns?sp.insert:''}:null}
-/** Sottomenu di cui si parla nella conversazione (ultimo messaggio del titolare, entro 20 minuti, che nomina un sottomenu di QUESTO Menu). */
+/** Sottomenu di cui si parla adesso: gli ultimi 2 scambi (titolare e bot, entro 10 minuti) che nominano un sottomenu di QUESTO Menu. */
 function contextSection(history:{role:string,text:string,at:number}[],info:MenuInfo,menus:{name:string}[]):SectionRef|null{
  const now=Math.max(0,...history.map(h=>h.at))
- for(const h of [...history].filter(x=>x.role==='owner'&&now-x.at<=20*60*1000).sort((a,b)=>b.at-a.at)){const t=tokens(h.text),ms=mentions(t,info.secs,menuSpans(t,menus)).filter(m=>m.secId);if(ms.length)return info.secs.find(x=>x.id===ms[ms.length-1]!.secId)??null}
+ for(const h of [...history].sort((a,b)=>b.at-a.at).slice(0,4).filter(x=>now-x.at<=10*60*1000)){const t=tokens(h.text),ms=mentions(t,info.secs,menuSpans(t,menus)).filter(m=>m.secId);if(ms.length)return info.secs.find(x=>x.id===ms[ms.length-1]!.secId)??null}
  return null}
 function runSectionClear(menu:RuleMenu,scp:{words:string[],clear:string,insert:string},o:RuleInput):RuleResult|null{
  const info=infoOf(menu,o.sections,o.refs),vocab=o.refs.map(r=>r.name),secs=info.secs.filter(x=>scp.words.some(w=>secMatch(x.name,w)))

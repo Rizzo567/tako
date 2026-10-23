@@ -158,6 +158,19 @@ describe('opzioni del Menu a prezzo fisso: «Il primo del menu da 12 costa 9», 
   expect(M(r.menus[1],'Menu Giorno').formulas.find((f:any)=>f.name==='Solo secondo').price).toBe(11);expect(r.replies[0]).not.toMatch(/\?/)
   expect(M(r.menus[2],'Menu Giorno').formulas.find((f:any)=>f.name==='Solo secondo').price).toBe(10)})})
 
+// ======================= batteria dal vivo v181: contesto vecchio =======================
+describe('il contesto vale solo per gli ultimi 2 scambi (batteria v181)',()=>{
+ const H=(xs:[string,string][])=>xs.map(([role,text],i)=>({role,text,at:Date.now()-(xs.length-i)*30000}))
+ it('«elimina tutti i primi» con il Menu detto 3 scambi fa → domanda sul Menu, nessuna scrittura',()=>{
+  const r=ruleTurn({text:'elimina tutti i primi',menus:MENUS,sections:CAT.sections,refs:CAT.refs,history:H([['owner','nel menu cena metti la tagliata'],['bot','*Menu Cena aggiornato*'],['owner','annulla'],['bot','Ok, annullo.'],['owner','la pasta al pesto è finita'],['bot','*Pasta al pesto*: finito']])}) as any
+  expect(r.kind).toBe('ask')})
+ it('«metti tutto a zero» dopo i Primi del Menu Giorno: mai un piatto «Tutto a zero»',()=>{
+  const r=ruleTurn({text:'metti tutto a zero',menus:MENUS,sections:CAT.sections,refs:CAT.refs,history:H([['owner','nel menu pranzo elimina i primi'],['bot','*Menu Giorno aggiornato*\n\n*Primi*\n• nessun piatto']])}) as any
+  expect(JSON.stringify(r??null)).not.toMatch(/Tutto a zero/i)})
+ it('«aggiungi il vitello tonnato» con i Primi detti 3 scambi fa: non va nei Primi da solo',()=>{
+  const r=ruleTurn({text:'aggiungi il vitello tonnato',menus:MENUS,sections:CAT.sections,refs:CAT.refs,history:H([['owner','nel menu pranzo elimina i primi'],['bot','*Menu Giorno aggiornato*\n\n*Primi*'],['owner','annulla'],['bot','Ok, annullo.'],['owner','grazie'],['bot','Di niente']])}) as any
+  expect(r?.kind==='apply'&&JSON.stringify(r.actions).includes('Vitello')).toBe(false)})})
+
 // ======================= REPLAY ESATTO della chat di Luisa =======================
 describe('REPLAY chat di Luisa 23/10 09:21–09:24 (stessi testi, «E inserisci» mentre il «Si» lavora)',()=>{
  it('stato finale: Primi del Menu Giorno = Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca; tutto il resto identico',async()=>{
