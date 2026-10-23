@@ -250,19 +250,21 @@ describe('route vero — divisione, domanda, correzione, memoria',()=>{
   expect(vis(w,'Menu Giorno','Contorni')).toEqual(['Insalata','Funghi misti','Peperoni'])
   for(const x of r.replies)expect(x).not.toMatch(/1 piatto o/)
   expect(r.replies[1]).toMatch(/• Coppa \(nuovo\)/);expect(r.replies[2]).toMatch(/• Peperoni \(nuovo\)/)})
- it('pezzo dubbio: il resto subito, UNA domanda di una riga; «2» divide e si ricorda (la volta dopo niente domanda)',async()=>{
-  const r=await play(['nel menu giorno nei secondi metti salsiccia alla griglia, funghi misti e peperoni','2','nel menu cena nei secondi metti funghi misti e peperoni'])
-  expect(vis(r.menus[1],'Menu Giorno','Secondi')).toContain('Salsiccia alla griglia');expect(vis(r.menus[1],'Menu Giorno','Secondi')).not.toContain('Funghi misti')
-  expect(r.replies[0]).toMatch(/«funghi misti e peperoni»: 1 piatto o 2\?$/)
+ // 23/10 sera (Manuel): un pezzo dubbio non fa più «1 piatto o 2?»: UNA domanda che mostra la proposta intera; «sì» o una correzione la applicano.
+ it('pezzo dubbio: UNA domanda con la proposta intera, niente scritto; la correzione «… sono due piatti» la applica e si ricorda',async()=>{
+  const r=await play(['nel menu giorno nei secondi metti salsiccia alla griglia, funghi misti e peperoni','funghi misti e peperoni sono due piatti','nel menu cena nei secondi metti funghi misti e peperoni'])
+  expect(r.replies[0]).toMatch(/Ho capito così, nei \*Secondi\* del \*Menu Giorno\*/);expect(r.replies[0]).toMatch(/• Salsiccia alla griglia/);expect(r.replies[0]).toMatch(/Va bene\? Rispondi \*sì\*/);expect(r.replies[0]).not.toMatch(/1 piatto o/)
+  expect(vis(r.menus[1],'Menu Giorno','Secondi')).toEqual(vis(r.menus[0],'Menu Giorno','Secondi'))
   expect(vis(r.menus[2],'Menu Giorno','Secondi')).toEqual(['Cotoletta alla milanese','Polpette al sugo','Salsiccia alla griglia','Funghi misti','Peperoni'])
   expect(habits().some(h=>/Divisione dei piatti: «funghi misti e peperoni»/.test(h))).toBe(true)
-  expect(r.replies[2]).not.toMatch(/1 piatto o/);expect(vis(r.menus[3],'Menu Cena','Secondi')).toEqual(['Orata al forno','Funghi misti','Peperoni'])})
- it('«1» = un piatto solo, ricordato',async()=>{
-  const r=await play(['nel menu giorno nei secondi metti arrosto di vitello e patate','uno','nel menu cena nei secondi metti arrosto di vitello e patate'])
-  expect(r.replies[0]).toMatch(/«arrosto di vitello e patate»: 1 piatto o 2\?/)
+  expect(r.replies[2]).not.toMatch(/Ho capito così|1 piatto o/);expect(vis(r.menus[3],'Menu Cena','Secondi')).toEqual(['Orata al forno','Funghi misti','Peperoni'])})
+ it('«… è un piatto solo» sulla proposta = un piatto, ricordato; «sì» applica la proposta com\u2019è',async()=>{
+  const r=await play(['nel menu giorno nei secondi metti arrosto di vitello e patate','arrosto di vitello e patate è un piatto solo','nel menu cena nei secondi metti arrosto di vitello e patate'])
+  expect(r.replies[0]).toMatch(/Ho capito così/)
   expect(vis(r.menus[1],'Menu Giorno','Secondi')).toEqual(['Cotoletta alla milanese','Polpette al sugo'])
   expect(vis(r.menus[2],'Menu Giorno','Secondi')).toContain('Arrosto di vitello e patate')
-  expect(r.replies[2]).not.toMatch(/1 piatto o/);expect(vis(r.menus[3],'Menu Cena','Secondi')).toContain('Arrosto di vitello e patate')})
+  expect(r.replies[2]).not.toMatch(/Ho capito così|1 piatto o/);expect(vis(r.menus[3],'Menu Cena','Secondi')).toContain('Arrosto di vitello e patate')
+  const r2=await play(['nel menu giorno nei secondi metti salsiccia alla griglia, funghi misti e peperoni','Si']);expect(vis(r2.menus[2],'Menu Giorno','Secondi')).toContain('Salsiccia alla griglia');expect(r2.replies[1]).toMatch(/annulla/)})
  it('correzione «coppa è un piatto a parte»: diviso nella stessa sezione subito dopo, «annulla» torna com’era, regola salvata',async()=>{
   const menu=vicd({giornoSecondi:[['Coscia di pollo',0],['Nodino con burro e salvia e coppa',0],['Polpette al sugo',0]]})
   const r=await play(['coppa è un piatto a parte','annulla'],menu)

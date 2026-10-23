@@ -88,7 +88,7 @@ describe('3) messaggi accavallati: un numero alla volta, nell’ordine d’arriv
   const ex={execute:async(q:any)=>{let t='';const p:any[]=[];for(const c of q.queryChunks)if(c&&typeof c==='object'&&Array.isArray(c.value))t+=c.value.join('');else{t+='$';p.push(c)}
    if(t.startsWith('SELECT lpad('))return[{t:String(1_800_000_000_000+(++seq)).padStart(15,'0')}]
    if(t.startsWith('INSERT INTO tako_whatsapp_messages')){rows.set(p[0],p[1]);return[]}
-   if(t.startsWith('SELECT sid FROM'))return [...rows.keys()].filter(k=>k>p[0]&&k<p[1]).map(sid=>({sid}))
+   if(t.startsWith('SELECT sid FROM'))return [...rows.keys()].filter(k=>k.startsWith(p[0])).map(sid=>({sid}))
    if(t.startsWith('DELETE FROM'))return(rows.delete(p[0]),[])
    return[]}}
   const ph='whatsapp:+39111',log:string[]=[];let busy=0,overlap=false

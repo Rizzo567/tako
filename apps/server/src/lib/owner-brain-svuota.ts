@@ -13,12 +13,13 @@
 import {plain,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
 import {sameSection} from './twilio-menu-structure.js'
 import {namedMenus,dishCourse,fixSpelling} from './owner-brain-sera.js'
+import {isAffirmative} from './owner-brain-r.js'
 import {splitPieces,doubtReadings,doubtQuestion,isContorniSection,isContornoWord,doubtAnswer,parseCorrection,correctionPlan,correctionReply,ruleFromAnswer,type Lexicon,type SplitRule} from './dish-split.js'
 
 export type RuleMenu={id:string,name:string,pricing?:'carta'|'fisso',active?:boolean,formulas?:{name:string,price:number}[]}
 export type Doubt={text:string,one:string,parts:string[]}
 /** 23/10: `split` = domanda «"X e Y": 1 piatto o 2?» su un pezzo dubbio (gli altri piatti del messaggio sono già scritti). */
-export type RuleWait={kind:'menu',text:string,options:string[],del?:boolean}|{kind:'names',menuId:string,secId:string}|{kind:'split',menuId:string,items:(Doubt&{secId:string})[]}
+export type RuleWait={kind:'menu',text:string,options:string[],del?:boolean}|{kind:'names',menuId:string,secId:string}|{kind:'propose',menuId:string,clearIds:string[],lists:{secId:string,names:string[]}[]}|{kind:'split',menuId:string,items:(Doubt&{secId:string})[]}
 export type RuleSection={secId:string,name:string,created:string[],shown:string[],already:string[]}
 export type RuleReport={menu:string,fixed:boolean,cleared:string[],deleteWord:boolean,sections:RuleSection[],unknownSecs:{word:string,names:string[]}[],notPlaced:string[],notFound?:string[],kept?:string[],
  /** 23/10 (chat Luisa): sottomenu svuotati («elimina i primi»), non il Menu intero */
@@ -288,9 +289,27 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
   if(m&&s&&!OTHER.test(p)&&!hasDigits(p)&&!CLEAR_V.test(p)&&!/\?/.test(text)){const info=infoOf(m,o.sections,o.refs),toks=tokens(text),sk=menuSpans(toks,o.menus),ms=mentions(toks,info.secs,sk)
    // 23/10 (chat Luisa «Lasagna strozzapreti con Zola e pistacchio  orecchiette con zucca»): virgole, doppio spazio e parole che aprono un
    // piatto dividono; un pezzo con la «e» dubbia si chiede («1 piatto o 2?»), gli altri si scrivono subito. Un sottomenu detto vale.
-   if(ms.some(x=>x.secId)){const ip=parseInsert(text,info.secs,o.menus,vocab,{lexicon:o.lexicon,ask:true});if(ip.lists.length||ip.loose.length)return applyResult(info,{lists:[...ip.lists,...(ip.loose.length?[{secId:s.id,word:s.name,names:ip.loose}]:[])],loose:[]},null,vocab,text)}
+   if(ms.some(x=>x.secId)){const ip=parseInsert(text,info.secs,o.menus,vocab,{lexicon:o.lexicon,ask:true});if(ip.lists.length||ip.loose.length)return applyResult(info,{lists:[...ip.lists,...(ip.loose.length?[{secId:s.id,word:s.name,names:ip.loose}]:[])],loose:[]},null,vocab,text,o.lexicon??null)}
    const r=splitNamesX(toks.filter((x,i)=>!sk.has(i)),vocab,{lexicon:o.lexicon,section:s.name,ask:true})
-   if(r.names.length||r.doubts.length)return applyResult(info,{lists:[{secId:s.id,word:s.name,names:r.names,...(r.doubts.length?{doubts:r.doubts}:{})}],loose:[]},null,vocab,text)}
+   if(r.names.length||r.doubts.length)return applyResult(info,{lists:[{secId:s.id,word:s.name,names:r.names,...(r.doubts.length?{doubts:r.doubts}:{})}],loose:[]},null,vocab,text,o.lexicon??null)}
+  return null}
+ // 23/10 sera: risposta alla proposta «Ho capito così …: • A • B — Va bene?». «sì» = applica; una correzione («funghi misti e peperoni sono
+ // due piatti», «pasta e fagioli è un piatto solo») o un elenco nuovo = applicati sulla proposta; «no/annulla» = niente.
+ if(o.wait?.kind==='propose'){const w=o.wait,m=o.menus.find(x=>x.id===w.menuId);if(!m)return null
+  const info=infoOf(m,o.sections,o.refs),pp=plain(text)
+  if(/^(?:no|annulla|lascia (?:stare|perdere)|niente|no grazie|non (?:farlo|fare niente))\b/.test(pp)&&!INSERT_V.test(pp))return{kind:'info',text:'Ok, non ho cambiato nulla.'}
+  if(isAffirmative(text)||(/^(?:s[iì]|ok|va bene|esatto|giusto|perfetto|certo|confermo)\b/.test(pp)&&!/\b(?:no|non|ma|pero|tranne|invece)\b/.test(pp)&&pp.split(' ').length<=6))return applyProposal(info,w,w.lists,vocab)
+  const corr=parseCorrection(text)
+  if(corr){const ph=plain(corr.phrase);let hit=false
+   const lists=w.lists.map(l=>{let names=[...l.names]
+    if(corr.kind==='split'){names=names.flatMap(n=>{if(plain(n)!==ph&&!plain(n).includes(ph))return[n];hit=true;const parts=corr.phrase.split(/\s+(?:e|ed)\s+/i).map(x=>x.trim()).filter(Boolean);return parts.length>1?parts:[n]})}
+    else{if(names.some(n=>plain(n)===ph))hit=true;else for(let i=0;i+1<names.length;i++){if(plain(names[i]!+' e '+names[i+1]!)===ph){names.splice(i,2,corr.phrase);hit=true;break}}}
+    // la proposta era già così (già divisa / già unita): vale come conferma, si applica com'è
+    if(corr.kind==='split'&&!hit){const parts=corr.phrase.split(/\s+(?:e|ed)\s+/i).map(x=>plain(x));for(let i=0;i+parts.length<=names.length;i++)if(parts.every((x,k)=>plain(names[i+k]!)===x)){hit=true;break}}
+    return{...l,names}})
+   if(hit){const parts=corr.phrase.split(/\s+(?:e|ed)\s+/i).map(x=>x.trim()).filter(Boolean),r=applyProposal(info,w,lists,vocab),learn=parts.length>1?[ruleFromAnswer(corr.phrase,parts,corr.kind==='split'?'split':'one')]:[];return r.kind==='apply'?{...r,learn}:{...r,learn} as RuleResult}}
+  if(!OTHER.test(pp)&&!hasDigits(pp)&&!CLEAR_V.test(pp)&&!/\?/.test(text)&&w.lists.length===1){const s0=info.secs.find(x=>x.id===w.lists[0]!.secId);if(s0){const toks=tokens(text),sk=menuSpans(toks,o.menus),r=splitNamesX(toks.filter((x,i)=>!sk.has(i)),vocab,{lexicon:o.lexicon,section:s0.name,ask:false})
+   if(r.names.length&&!r.names.some(n=>NOT_DISH.test(plain(n))))return applyProposal(info,w,[{secId:s0.id,names:r.names}],vocab)}}
   return null}
  // 23/10: risposta a «"funghi misti e peperoni": 1 piatto o 2?» (gli altri piatti del messaggio erano già scritti). Si impara la risposta.
  if(o.wait?.kind==='split'){const w=o.wait,it=w.items[0],ans=doubtAnswer(text),m=o.menus.find(x=>x.id===w.menuId),s=it?o.sections.find(x=>x.id===it.secId):undefined
@@ -325,7 +344,8 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
    const said=menusIn(text0,o.menus)
    if(said.length===1)return runSectionClear(said[0]!,scp,o)
    const saidH=said.filter(has);if(saidH.length===1)return runSectionClear(saidH[0]!,scp,o);if(saidH.length>1)return askMenu(saidH,text)
-   const cm=contextMenu(o.history,o.menus);if(cm&&has(cm))return runSectionClear(cm,scp,o)
+   // il Menu della conversazione vale anche se quel sottomenu è già vuoto (si dice «sono già vuoti», mai la domanda su altri Menu)
+   const cm=contextMenu(o.history,o.menus);if(cm&&hasS(cm).length)return runSectionClear(cm,scp,o)
    const c=o.menus.filter(has);if(c.length===1)return runSectionClear(c[0]!,scp,o);if(c.length>1)return askMenu(c,text)
    return null}}
  const clr=clearIntent(text,allSecNames)||(()=>{const sp=splitClearInsert(text,allSecNames);return !!sp.insert&&clearIntent(sp.clear,allSecNames)})()
@@ -377,12 +397,15 @@ function runOn(menu:RuleMenu,text:string,o:RuleInput,answer:boolean,fromCtx=fals
  if(!clr){if(!parse.lists.length&&!parse.loose.length)return null
   // senza sottomenu detto si va avanti solo con un Menu a prezzo fisso detto, o con nomi che sono tutti piatti di questo Menu
   if(!parse.lists.length&&!(menusIn(text,o.menus).some(m=>m.id===menu.id)&&menu.pricing==='fisso')&&!parse.loose.every(n=>!!findExisting(n,null,info.items))&&!answer&&!defSec)return null}
- return applyResult(info,parse,clr?{deleteWord:/\b(?:elimin\w*|cancell\w*)\b/.test(plain(clearText)),keep:keepNames}:null,vocab,text)}
-function applyResult(info:MenuInfo,parse:InsertParse,clear:{deleteWord:boolean,keep?:string[]}|null,vocab:string[],text:string):RuleResult|null{
+ return applyResult(info,parse,clr?{deleteWord:/\b(?:elimin\w*|cancell\w*)\b/.test(plain(clearText)),keep:keepNames}:null,vocab,text,o.lexicon??null)}
+function applyResult(info:MenuInfo,parse:InsertParse,clear:{deleteWord:boolean,keep?:string[]}|null,vocab:string[],text:string,lexicon:Lexicon|null=null):RuleResult|null{
  // un «nome» con dentro un verbo o una frase («restano uguali», «toglila», «aspetta») non è un piatto: decide il resto del flusso
  if([...parse.lists.flatMap(l=>[...l.names,...(l.doubts??[]).map(d=>d.one)]),...parse.loose].some(n=>NOT_DISH.test(plain(n))))return null
  // 23/10: pezzi dubbi («"funghi misti e peperoni": 1 piatto o 2?») → una domanda di una riga; tutto il resto si scrive subito
  const doubts=parse.lists.flatMap(l=>l.secId?(l.doubts??[]).map(d=>({...d,secId:l.secId!})):[])
+ // 23/10 sera (Manuel): con un pezzo dubbio niente «1 piatto o 2?»: UNA domanda che mostra la proposta intera (lettura più probabile).
+ if(doubts.length&&info.menu.pricing==='fisso'){const keepIds=new Set<string>();for(const n of clear?.keep??[]){const ex=findExisting(n,null,info.items);if(ex)keepIds.add(ex.id)}
+  return proposeFrom(info,parse,clear?info.items.filter(r=>!keepIds.has(r.id)).map(r=>r.id):[],vocab,lexicon)}
  const ask:RuleAsk|null=doubts.length?{question:doubtQuestion(doubts[0]!.text,doubts[0]!.parts.length),wait:{kind:'split',menuId:info.menu.id,items:doubts}}:null
  const b=buildInsert(info,parse,vocab)
  // Menu alla carta: un piatto nuovo vuole il prezzo → resta il percorso di prima (domanda del prezzo), salvo lo svuotamento
@@ -435,6 +458,7 @@ function runSectionClear(menu:RuleMenu,scp:{words:string[],clear:string,insert:s
  const ids=new Set(secs.map(x=>x.id)),old=info.items.filter(r=>ids.has(r.sectionId??'')&&!b.touched.has(r.id))
  const dels=old.map(r=>({kind:'delete',id:r.id,soft:true}) as MenuAction),actions=[...dels,...b.actions]
  const doubts=parse.lists.flatMap(l=>l.secId?(l.doubts??[]).map(d=>({...d,secId:l.secId!})):[])
+ if(doubts.length&&menu.pricing==='fisso')return proposeFrom(info,parse,old.map(r=>r.id),vocab,o.lexicon??null)
  const ask:RuleAsk|null=doubts.length?{question:doubtQuestion(doubts[0]!.text,doubts[0]!.parts.length),wait:{kind:'split',menuId:menu.id,items:doubts}}:null
  if(!actions.length){
   if(ask)return{kind:'ask',question:ask.question,wait:ask.wait}
@@ -444,6 +468,26 @@ function runSectionClear(menu:RuleMenu,scp:{words:string[],clear:string,insert:s
   return{kind:'confirm',menu,actions:dels,question:'Elimino '+(old.length===1?'il piatto':'tutti i '+old.length+' piatti')+' dei '+andList(secs.map(x=>'*'+x.name+'*'))+' del '+mLabel(menu.name)+'? Il sottomenu resta. Rispondi *sì* per eliminarli, oppure *no*.'}}
  const report:RuleReport={menu:menu.name,fixed:true,cleared:old.map(r=>r.name),deleteWord:true,sections:b.sections,unknownSecs:b.unknownSecs,notPlaced:[...b.notPlaced],clearedSecs:secs.map(x=>({secId:x.id,name:x.name}))}
  return{kind:'apply',menu,actions,report,ask}}
+
+// ---------- proposta con la lettura più probabile (23/10 sera, Manuel: domande intelligenti) ----------
+/** Il pezzo dubbio letto nel modo più probabile (stessa regola della divisione senza domanda). */
+function guessNames(d:Doubt,section:string|null,lexicon:Lexicon|null):string[]{const W=plain(d.one).split(' ').filter(Boolean),pcs=splitPieces(W,{lexicon,section},false);return pcs.length>1?d.parts:[d.one]}
+function proposeFrom(info:MenuInfo,parse:InsertParse,clearIds:string[],vocab:string[],lexicon:Lexicon|null):RuleResult{
+ const lists=parse.lists.filter(l=>l.secId).map(l=>{const sec=info.secs.find(x=>x.id===l.secId);return{secId:l.secId!,names:[...l.names,...(l.doubts??[]).flatMap(d=>guessNames(d,sec?.name??null,lexicon))].map(n=>newName(n,vocab))}}).filter(l=>l.names.length)
+ const ids=new Set(clearIds),secs=info.secs.filter(x=>info.items.some(r=>ids.has(r.id)&&r.sectionId===x.id))
+ const head=lists.length===1&&!secs.some(x=>x.id!==lists[0]!.secId)?'Ho capito così, nei *'+info.secs.find(x=>x.id===lists[0]!.secId)!.name+'* del '+mLabel(info.menu.name)+':':'Ho capito così, nel '+mLabel(info.menu.name)+':'
+ const out=[head]
+ if(clearIds.length)out.push('Tolgo '+andList(info.items.filter(r=>ids.has(r.id)).map(r=>r.name))+'.')
+ for(const l of lists){const sec=info.secs.find(x=>x.id===l.secId)!;out.push((lists.length>1||!head.includes('nei *')?'*'+sec.name+'*\n':'')+l.names.map(n=>'• '+n).join('\n'))}
+ out.push('Va bene? Rispondi *sì* oppure scrivimi cosa correggere.')
+ return{kind:'ask',question:out.join('\n\n'),wait:{kind:'propose',menuId:info.menu.id,clearIds,lists}}}
+function applyProposal(info:MenuInfo,w:{clearIds:string[]},lists:{secId:string,names:string[]}[],vocab:string[]):RuleResult{
+ const b=buildInsert(info,{lists:lists.map(l=>({secId:l.secId,word:info.secs.find(x=>x.id===l.secId)?.name??'',names:l.names})),loose:[]},vocab)
+ const old=info.items.filter(r=>w.clearIds.includes(r.id)&&!b.touched.has(r.id)),actions=[...old.map(r=>({kind:'delete',id:r.id,soft:true}) as MenuAction),...b.actions]
+ if(!actions.length)return{kind:'info',text:'Il '+mLabel(info.menu.name)+' è già così: non ho cambiato nulla.'}
+ const csecs=info.secs.filter(x=>old.some(r=>r.sectionId===x.id)),wholeMenu=info.items.length>0&&info.items.every(r=>w.clearIds.includes(r.id))
+ const report:RuleReport={menu:info.menu.name,fixed:true,cleared:old.map(r=>r.name),deleteWord:true,sections:b.sections,unknownSecs:b.unknownSecs,notPlaced:[...b.notPlaced],...(csecs.length&&!wholeMenu?{clearedSecs:csecs.map(x=>({secId:x.id,name:x.name}))}:{})}
+ return{kind:'apply',menu:info.menu,actions,report,ask:null}}
 
 // ---------- domanda del modello «Vuoi aggiungere questi piatti nei Primi…?» senza azioni (23/10, chat Luisa) ----------
 /** I piatti del messaggio del titolare per una domanda di aggiunta che nomina UN sottomenu (e il suo Menu): azioni pronte e la domanda

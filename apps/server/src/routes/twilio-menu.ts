@@ -1180,7 +1180,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // senza, diventa una domanda specifica (mai un «sì» che poi gira a vuoto).
     // 23/10 (chat Luisa «Vuoi aggiungere questi piatti nei *Primi* del *Menu Giorno*?» → «Si» → «Non c’è niente da confermare»): una domanda di
     // AGGIUNTA senza azioni prende i piatti del messaggio (letti dal server) e li mostra uno per riga: il «sì» li aggiunge.
-    if(engine==='haiku'&&!serverQ&&!out.actions.length&&!out.hold&&!out.twins?.length&&!out.ids.length&&/\?/.test(question)&&/\b(?:aggiung\w*|inser\w*|mett\w*)\b/.test(plain(question))){let hist2:{role:string,text:string,at:number}[]=[];try{hist2=await sqlBrainStore(db).readHistory(ctx.tenant,ctx.phone,Date.now())}catch{/* solo il Menu della domanda */}
+    if(engine==='haiku'&&!serverQ&&!out.actions.length&&!out.hold&&!out.twins?.length&&!out.ids.length&&/\?/.test(question)&&/\b(?:aggiung\w*|inser\w*|mett\w*)\b/.test(plain(question))){let hist2:{role:string,text:string,at:number}[]=[];try{hist2=await sqlBrainStore(tx).readHistory(ctx.tenant,ctx.phone,Date.now())}catch{/* solo il Menu della domanda */} // DENTRO la transazione: sull'edge il pool ha UNA connessione (db qui = blocco)
      const iq=insertForQuestion(question,text,{menus:base.menus,sections,refs,lexicon,history:hist2});if(iq){out.actions=iq.actions;question=iq.question}}
     // Una domanda che chiede di ELIMINARE i piatti elencati (candidati salvati) è consumabile: il «sì» li elimina (ramo della risposta).
     const delQ=out.ids.length>0&&/\b(?:elimin\w*|cancell\w*|togli\w*|lev[ao]\w*|rimuov\w*)\b/.test(plain(question))
@@ -1356,7 +1356,7 @@ async function runJob(kind:'audio'|'text'|'image',ctx:Ctx,sid:string,body:string
  const brainOn=kind!=='image'&&await readBotBrain(db,ctx.tenant)
  // 21/10: col cervello acceso, un turno che supera i 5 s manda UN solo «Ci sto lavorando…», poi il risultato (i turni veloci niente).
  // 23/10 (chat Luisa): in fila dietro al messaggio precedente dello stesso numero; il «Ci sto lavorando…» conta da quando tocca a lui.
- const turn=await waitTurn(db,ctx.phone,sid,{maxWaitMs:45_000}).catch(()=>({key:null,waitedMs:0})),startAt=turn.waitedMs>500?Date.now():arrivedAt
+ const turn=await waitTurn(db,ctx.phone,sid,{maxWaitMs:20_000}).catch(()=>({key:null,waitedMs:0})),startAt=turn.waitedMs>500?Date.now():arrivedAt
  let finished=false;const ackTimer=brainOn&&!quietPhones.has(ctx.phone)?setTimeout(()=>{if(finished||budget.expired)return;inBackground(sendWhatsApp(process.env.TWILIO_ACCOUNT_SID||'',process.env.TWILIO_AUTH_TOKEN||'',process.env.TWILIO_WHATSAPP_NUMBER||'',ctx.phone,copy.working).catch(()=>{}))},Math.max(0,5000-(Date.now()-startAt))):undefined
  // notte 22/10: allo scadere, se una scrittura è già partita si aspetta il suo esito (mai «non disponibile» mentre il menu cambia).
  let message=await raceDeadline(jobMessage(kind,ctx,body,form,budget).finally(()=>releaseTurn(db,turn.key)).catch(error=>{if(error instanceof WorkspaceTrialLocked)return error.message;budget.failed=true;return kind==='image'?copy.photoDownload:brainOn?copy.brainDown:copy.failed}),budget,jobTimeoutMs(),()=>kind==='image'?copy.photoTimeout:brainOn?copy.brainDown:copy.jobTimeout).finally(()=>{finished=true;if(ackTimer)clearTimeout(ackTimer)})
@@ -1373,7 +1373,7 @@ async function whisperVocab(tenant:string):Promise<string>{try{const row=await r
  *  sincrone sul QA); runJob aspetta da sé prima del «Ci sto lavorando…». */
 async function jobMessage(kind:'audio'|'text'|'image',ctx:Ctx,body:string,form:Record<string,string>,budget:Budget,turnSid?:string):Promise<string>{
  if(!turnSid)return jobMessageCore(kind,ctx,body,form,budget)
- const turn=await waitTurn(db,ctx.phone,turnSid,{maxWaitMs:45_000,isExpired:()=>budget.expired}).catch(()=>({key:null,waitedMs:0}))
+ const turn=await waitTurn(db,ctx.phone,turnSid,{maxWaitMs:20_000,isExpired:()=>budget.expired}).catch(()=>({key:null,waitedMs:0}))
  try{return await jobMessageCore(kind,ctx,body,form,budget)}finally{await releaseTurn(db,turn.key)}}
 async function jobMessageCore(kind:'audio'|'text'|'image',ctx:Ctx,body:string,form:Record<string,string>,budget:Budget):Promise<string>{
  const key=process.env.GROQ_API_KEY||'',accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'';let text=body,prefix='',response:string

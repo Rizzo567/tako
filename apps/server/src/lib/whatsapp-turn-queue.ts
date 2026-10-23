@@ -3,11 +3,11 @@
  * fila: il webhook (sotto il lock del telefono) mette un biglietto con l'ora del DB; il lavoro di un messaggio parte solo quando non c'è
  * più un biglietto PRIMA del suo (finito o scaduto). I biglietti stanno in tako_whatsapp_messages (chiave `turn:<telefono>:<ms>:<sid>`),
  * come le altre chiavi di servizio del bot (undo:, last:, ai:): nessuna tabella nuova. Un lavoro bloccato non ferma la fila per sempre:
- * il biglietto scade dopo TURN_STALE_MS. Modulo senza stato: ogni funzione riceve `execute`. */
+ * il biglietto scade dopo TURN_STALE_MS e nessun lavoro aspetta più di 20 s (meglio due turni insieme che un bot fermo). Modulo senza stato: ogni funzione riceve `execute`. */
 import {sql} from 'drizzle-orm'
 
 type Exec={execute:(q:any)=>Promise<any>}
-export const TURN_STALE_MS=150_000
+export const TURN_STALE_MS=90_000
 const prefix=(phone:string)=>'turn:'+phone+':'
 const at=(key:string,phone:string)=>Number(key.slice(prefix(phone).length).split(':')[0])
 
@@ -21,7 +21,8 @@ export async function enqueueTurn(tx:Exec,phone:string,sid:string):Promise<strin
 
 /** Biglietti del telefono, in ordine. */
 async function tickets(db:Exec,phone:string):Promise<string[]>{
- const rows=await db.execute(sql`SELECT sid FROM tako_whatsapp_messages WHERE sid>${prefix(phone)} AND sid<${prefix(phone)+'~'}`) as any[]
+ // starts_with, non un intervallo: con la collation del DB «~» non ordina dopo cifre e lettere (bug v178: nessun biglietto trovato)
+ const rows=await db.execute(sql`SELECT sid FROM tako_whatsapp_messages WHERE starts_with(sid,${prefix(phone)})`) as any[]
  return (rows??[]).map(r=>String(r.sid)).filter(k=>k.startsWith(prefix(phone))).sort()}
 
 /** Biglietti che precedono quello del messaggio `sid` e non sono scaduti. `mine` = il biglietto del messaggio (null se manca). */

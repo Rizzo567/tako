@@ -23,7 +23,7 @@ export async function execute(q:unknown):Promise<any[]>{const {text,params}=pars
  if(text.includes('pg_advisory_xact_lock'))return[]
  // 23/10: fila dei messaggi per numero (whatsapp-turn-queue.ts): ora del DB crescente, biglietti per prefisso, rilascio.
  if(text.startsWith('SELECT lpad('))return[{t:String(Date.now()+(++turnSeq)).padStart(15,'0')}]
- if(text.startsWith('SELECT sid FROM tako_whatsapp_messages WHERE sid>'))return [...S.messages.keys()].filter(k=>k>String(p[0])&&k<String(p[1])).map(sid=>({sid}))
+ if(text.startsWith('SELECT sid FROM tako_whatsapp_messages WHERE starts_with'))return [...S.messages.keys()].filter(k=>k.startsWith(String(p[0]))).map(sid=>({sid}))
  if(text.startsWith('DELETE FROM tako_whatsapp_messages WHERE sid='))return(S.messages.delete(String(p[0])),[])
  if(text.startsWith('SELECT response FROM tako_whatsapp_messages'))return S.messages.has(p[0])?[{response:S.messages.get(p[0])}]:[]
  if(text.startsWith('INSERT INTO tako_whatsapp_messages')){if(!S.messages.has(p[0]))S.messages.set(p[0],p[1]);return[]}
