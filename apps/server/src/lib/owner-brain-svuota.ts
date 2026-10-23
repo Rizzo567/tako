@@ -75,7 +75,7 @@ const COURSES=['primi','primo','secondi','secondo','contorni','contorno','dolci'
 const CLEAR_V=/\b(?:svuot\w*|togli\w*|toglie\w*|lev[ai]\w*|levare|levamo|levate|nascond\w*|rimuov\w*|elimin\w*|cancell\w*|sgombr\w*)\b/
 const INSERT_V=/\b(?:inser(?:isc|ic|is|isci|iamo|ire|ite)\w*|ag+iung\w*|metti|mettici|mettete|mettiamo|mettere|mettimi|ci vanno|ci va)\b/
 const STRONG_INSERT=/\b(?:inser(?:isc|ic|is|isci|iamo|ire|ite)\w*|ag+iung\w*)\b/
-const NOT_DISH=/\b(?:zero|gratis|tutto|niente|nulla|prezz\w*|restan\w*|resta|rimang\w*|uguali|uguale|togli\w*|nascond\w*|lascia\w*|cambi\w*|elimin\w*|cancell\w*|annull\w*|aspett\w*|scusa|sbagliat\w*|prezz\w*|cost[ao]|costano|euro|finit\w*|esaurit\w*|svuot\w*|leva\w*|rimuov\w*|cosa|quale|quali|perche|come prima|com era)\b/
+const NOT_DISH=/\b(?:capisc\w*|capit[oa]|aiut\w*|grazie|ciao|zero|gratis|tutto|niente|nulla|prezz\w*|restan\w*|resta|rimang\w*|uguali|uguale|togli\w*|nascond\w*|lascia\w*|cambi\w*|elimin\w*|cancell\w*|annull\w*|aspett\w*|scusa|sbagliat\w*|prezz\w*|cost[ao]|costano|euro|finit\w*|esaurit\w*|svuot\w*|leva\w*|rimuov\w*|cosa|quale|quali|perche|come prima|com era)\b/
 const DAILY=/\b(?:oggi|stasera|stassera|stamattina|domani|stamani)\b/
 const NEG=/\b(?:non|nun)\s+(?:(?:li|le|lo|la|ci|mi|piu)\s+)?(?:togli|lev|nascond|svuot|elimin|cancell|rimuov|mett|inser|aggiung)/
 /** Altri comandi nello stesso messaggio: prezzi, esaurito, foto, eliminazione di un piatto, rinomina → non è la regola (resta il resto). */
@@ -333,6 +333,9 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
  // 23/10 (test «alla Luisa»: «Il primo del menu da 12 costa 9», «Il solo secondo a pranzo mettilo a 11» → domanda senza azioni): il prezzo di
  // un'OPZIONE di un Menu a prezzo fisso detto con il Menu (anche «da 12», «a pranzo») lo legge il server: subito, «annulla» come rete.
  {const f=formulaPrice(text,text0,o);if(f)return f}
+ // «no aspetta tredici» subito dopo «Il *Completo* del *Menu Giorno* è già 12 €» / «*Completo* del *Menu Giorno*: da … a …»: quel prezzo.
+ {const lb=[...o.history].filter(t=>t.role==='bot').sort((a,b)=>b.at-a.at)[0]?.text??'',fm=lb.match(/\*(Completo|Solo primo|Solo secondo)\* del \*([^*\n]+)\*/),rest=p.replace(/^(?:(?:no|anzi|aspetta|scusa|ok|allora|volevo dire|intendevo|mettilo|mettila|fallo|falla|a)\s+)*/,'').replace(/\s*euro$/,'').trim()
+  if(fm&&rest&&/^(?:\d+(?:\s\d{1,2})?|[a-z]+(?:\s(?:e|virgola)\s[a-z]+)?)$/.test(rest)){const f=formulaPrice('il '+fm[1]!.toLowerCase()+' del '+fm[2]+' a '+rest,'il '+fm[1]!.toLowerCase()+' del '+fm[2]+' a '+rest,o);if(f)return f}}
  // 23/10 (chat Luisa «Menù mezzogiorno da 12 euro» da solo): solo il nome di un Menu = di quel Menu si parla; mai «a quale piatto metto 12 €?».
  {const ms=menusIn(text0,o.menus),t=tokens(text),sk=menuSpans(t,o.menus),rest=t.filter((x,i)=>!sk.has(i)&&!PREP.has(x.w)&&!FILL.has(x.w)&&![',',';',':'].includes(x.w)&&!/^(?:menu|ok|allora|si|euro|eur)$/.test(x.w))
   if(ms.length===1&&!rest.length&&!CLEAR_V.test(p)&&!INSERT_V.test(p)){const info=infoOf(ms[0]!,o.sections,o.refs),empty=info.secs.filter(x=>!info.items.some(r=>r.sectionId===x.id&&!r.hidden))

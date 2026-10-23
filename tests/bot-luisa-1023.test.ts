@@ -189,6 +189,20 @@ describe('«a prova di chiunque»: abbreviazioni, numeri a parole, «metti» dop
  it('«il completo a pranzo dodici euro» → Completo 12 (già)',()=>{expect(rt('il completo a pranzo dodici euro').text).toMatch(/Completo\* del \*Menu Giorno\* è già/)})
  it('«metti tagliata e orata» subito dopo «stasera via tutti i secondi» → nei Secondi della cena',()=>{const r=rt('metti tagliata  orata al forno',[['owner','stasera via tutti i secondi'],['bot','*Menu Cena aggiornato*\n\n*Secondi*\n• nessun piatto\n\nOra scrivimi i piatti nuovi, per esempio «nei secondi inserisci lasagna, carbonara».']]);expect(r.kind).toBe('apply');expect(r.menu.name).toBe('Menu Cena');expect(JSON.stringify(r.actions)).toMatch(/Tagliata.*Orata al forno/)})})
 
+describe('persona «scrive malissimo» (route)',()=>{
+ it('«anzi no la lasagna nn la mettere» subito dopo: Lasagna tolta senza domande',async()=>{const r=await play(['nel menu pranzo elimina i primi','nei primi metti carbo amatri e lasagna','anzi no la lasagna nn la mettere'])
+  expect(secItems(last(r),'Menu Giorno','Primi')).toEqual(['Carbonara','Amatriciana']);expect(r.replies[2]).not.toMatch(/\?/)})
+ it('«togli la carbo» con una sola Carbonara: eliminata subito; «annulla» la rimette',async()=>{const r=await play(['nel menu pranzo elimina i primi','nei primi metti carbo amatri','togli la carbo','annulla'])
+  expect(secItems(r.menus[3],'Menu Giorno','Primi')).toEqual(['Amatriciana']);expect(secItems(r.menus[4],'Menu Giorno','Primi')).toEqual(['Carbonara','Amatriciana'])})
+ it('«no aspetta tredici» dopo «il completo a pranzo dodici euro» → Completo 13',async()=>{const r=await play(['il completo a pranzo dodici euro','no aspetta tredici'])
+  expect(M(last(r),'Menu Giorno').formulas.find((f:any)=>f.name==='Completo').price).toBe(13)})
+ it('«ok» a una domanda «aggiungere o togliere?» con candidati: MAI eliminati',async()=>{
+  const pl:Planner=c=>/cotoletta/.test(plainT(c.message))?Q('Vuoi *aggiungere* Cotoletta e Polpette o *togliere* altri piatti?',[code(c,'Cotoletta di pollo con contorno')!,code(c,'Cotoletta di nodino con contorno')!]):base(c)
+  const r=await play(['cotoletta e polpette boh','ok'],pl);expect(allItems(last(r))).toBe(allItems(r.menus[0]))})
+ it('«x pranzo secondo cotoletta e polpette» = sostituzione dei Secondi del pranzo',async()=>{const r=await play(['x pranzo secondo cotoletta e polpette'])
+  expect(secItems(last(r),'Menu Giorno','Secondi')).toEqual(['Cotoletta','Polpette']);expect(JSON.stringify(M(last(r),'Alla carta'))).toBe(JSON.stringify(M(r.menus[0],'Alla carta')))})
+ it('«nn capisco» → aiuto con esempi',async()=>{const r=await play(['nn capisco']);expect(r.replies[0]).toMatch(/Per esempio/);expect(allItems(last(r))).toBe(allItems(r.menus[0]))})})
+
 // ======================= REPLAY ESATTO della chat di Luisa =======================
 describe('REPLAY chat di Luisa 23/10 09:21–09:24 (stessi testi, «E inserisci» mentre il «Si» lavora)',()=>{
  it('stato finale: Primi del Menu Giorno = Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca; tutto il resto identico',async()=>{

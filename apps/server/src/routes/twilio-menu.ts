@@ -48,7 +48,7 @@ import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,groupPercent,priceSheet,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,sectionGroupWord,pureDrop,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
 import {enqueueTurn,waitTurn,releaseTurn} from '../lib/whatsapp-turn-queue.js'
-import {ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,insertForQuestion,type RuleWait,type RuleReport,type RuleAsk} from '../lib/owner-brain-svuota.js'
+import {ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,insertForQuestion,shorthand,type RuleWait,type RuleReport,type RuleAsk} from '../lib/owner-brain-svuota.js'
 import {loadLexicon,saveSplitRules} from '../lib/dish-lexicon.js'
 import type {Lexicon,SplitRule} from '../lib/dish-split.js'
 const mLabelOf=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+n.trim()+'*':'Menu *'+n.trim()+'*'
@@ -657,7 +657,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // batteria v183 (GRAVE, come QA v153): «no / scusa / lascia stare» alla domanda della regola chiude SOLO la domanda; senza
     // questo il modello, senza più nulla in sospeso, annullava la modifica di prima.
     if(/^(?:(?:no|ah|allora|aspetta|scusa|ok|ops)\s+)*(?:no|lascia (?:stare|perdere)|lasciamo (?:stare|perdere)|niente|no grazie|scusa|ho sbagliato|non importa|fa niente|nessuno)$/.test(plain(text)))preReply=dropText}
-   else if(!askP&&!rn){const dr=dailyReplaceParse(text,base.menus,sections,refs,lexicon)
+   else if(!askP&&!rn){const dr=dailyReplaceParse(shorthand(text),base.menus,sections,refs,lexicon)
     if(dr){const vocab=refs.map(r=>r.name),acts=dr.lists.flatMap(l=>{const inS=refs.filter(r=>r.sectionId===l.secId);return sectionReplace(l.secId,[...new Set(l.names.map(n=>sessionName(n,inS,vocab).name))],refs,true).actions});if(acts.length){pre={actions:acts,why:'sostituzione'};ruleDone=true}
      else{preReply='Il '+mLab(dr.menu.name)+' è già così: non ho cambiato nulla.';ruleDone=true}}}}
   if(ruleDone){/* regola svuota/inserisci o sostituzione letta dal server */}
@@ -697,7 +697,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    let acts:MenuAction[]|null=null
    // 23/10 (chat Luisa «Intendi i Primi del Menu Giorno da 12 € per eliminarli tutti? 1… 2… 3…» → «Si» → di nuovo «Elimino…? Rispondi sì»):
    // il sì a una domanda che chiede di ELIMINARE i piatti elencati è la conferma: si eliminano (annulla 10 minuti), mai una seconda domanda.
-   if(yes&&!stored.length&&ids.length&&/\b(?:elimin\w*|cancell\w*|togli\w*|lev[ao]\w*|rimuov\w*)\b/.test(plain(askP.question??'')))acts=ids.map(id=>({kind:'delete',id,soft:true}) as MenuAction)
+   if(yes&&!stored.length&&ids.length&&/\b(?:eliminarl[ie]|elimino|vuoi eliminare|cancellarl[ie]|cancello|vuoi cancellare)\b/.test(plain(askP.question??''))&&!/\b(?:aggiung\w*|oppure|o togliere|o eliminare|o aggiungere)\b/.test(plain(askP.question??''))&&/\b(?:si|elimin\w*|cancell\w*|conferm\w*)\b/.test(plain(text)))acts=ids.map(id=>({kind:'delete',id,soft:true}) as MenuAction) // batteria persona 2: «ok» a «…aggiungere o togliere?» eliminava 2 piatti alla carta
    else if(ids.length>=2&&(all||vis||(yes&&/\btutt[ieoa]\b/.test(plain(askP.question??'')))))acts=expand()
    else if(stored.length===1&&stored[0]!.kind==='create_section'&&answerSectionName(text)){const nm=answerSectionName(text)!,cs=stored[0] as Extract<MenuAction,{kind:'create_section'}>,ex=sections.find(x=>x.menu===cs.menuName&&sameSection(x.name,nm))
     // Il titolare sceglie un altro nome: quel sottomenu (se c'è già nel Menu, si usa quello), poi il piatto.
@@ -752,7 +752,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
      if(secId&&price!=null&&price>0)acts=[...acts,{kind:'create',sectionId:secId,name:d.name,price,description:null} as MenuAction]
      else if(cs)follow={name:d.name,sectionId:cs.newSectionId,sectionName:cs.name,origin}}
     if(cs&&acts.some(a=>a.kind==='create'))acts=acts.map(a=>a===cs?{...cs,hidden:false} as MenuAction:a)
-    const yesDel=yes&&acts.length>0&&acts.every(a=>a.kind==='delete')&&/\b(?:elimin\w*|cancell\w*|togli\w*|lev[ao]\w*|rimuov\w*)\b/.test(plain(askP.question??''))
+    const yesDel=yes&&acts.length>0&&acts.every(a=>a.kind==='delete')&&/\b(?:eliminarl[ie]|elimino|vuoi eliminare|cancellarl[ie]|cancello|vuoi cancellare)\b/.test(plain(askP.question??''))&&/\b(?:si|elimin\w*|cancell\w*|conferm\w*)\b/.test(plain(text))
     pre={actions:yesDel?acts.map(a=>({...a,soft:true}) as MenuAction):acts,why:yesDel?'risposta-elimina':'risposta',follow}}
    // notte 22/10 (n-annulla-lascia-stare): «lascia stare» su una domanda aperta la chiude con un testo fisso (prima il modello, senza più
    // nulla in sospeso, rispondeva con un’altra domanda).
@@ -817,7 +817,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     if(act&&(act.kind!=='price'||((act as any).price>0&&!oddPrice(act,refs))))pre={actions:[act],why:'pronome'}}}}
  // notte 22/10 (primo contatto, demo): «cosa sai fare?», «come funziona?», «aiuto» → cosa sa fare, dal server; «posso cambiare i prezzi
  // da qui?» (senza piatto né numero) → «Sì» + un esempio della cosa chiesta. Il modello non riceve queste domande.
- if(engine==='haiku'&&!preReply&&!pre&&!sessNow){const hp=plain(text).replace(/^(?:(?:ciao|buongiorno|buonasera|salve|ehi|senti|scusa|ok)\s+)+/,'').trim()
+ if(engine==='haiku'&&!preReply&&!pre&&!sessNow){const hp=plain(shorthand(text)).replace(/^(?:(?:ciao|buongiorno|buonasera|salve|ehi|senti|scusa|ok)\s+)+/,'').trim()
   if(/^(?:(?:ma |e )?(?:cosa|che cosa|che) (?:sai|puoi|posso|si puo) fare(?: (?:qui|da qui|con te|per me|col bot|in chat))?|come funziona(?: (?:qui|il bot|la chat|questa chat))?|come ti uso|come si usa|(?:aiuto|help|istruzioni|comandi)(?: per favore)?|a cosa servi|chi sei e cosa fai|(?:ma )?come si fa|(?:ma )?come faccio|non (?:ci )?capisco(?: niente| nulla)?|non ho capito(?: niente| nulla| come si fa)?|non so come (?:si fa|fare)|che (?:devo|posso) (?:fare|scrivere)|aiutami|mi aiuti|come funziona sta cosa|boh come si fa)$/.test(hp.replace(/[?!.]+$/,'').trim()))preReply=copy.brainHelp
   else if(/\?\s*$/.test(text)&&!/\d/.test(text)&&!refs.some(r=>g9DishMentioned(r.name,text,refs))){const m=/^(?:ma |e |allora )?(?:posso|si puo|si possono|puoi|potresti|riesci a|sei capace di|e possibile) (?:anche )?(cambi\w*|modific\w*|aggiorn\w*|aggiung\w*|cre\w*|inser\w*|togli\w*|nascond\w*|lev\w*|mostr\w*|spost\w*|rinomin\w*|segn\w*|mett\w*|legg\w*|vede\w*|annull\w*|elimin\w*)\b/.exec(hp)
    if(m){const v=m[1]!,ex=/^(?:aggiung|cre|inser)/.test(v)?'«aggiungi la panna cotta a 5 nei Dolci»':/^(?:togli|nascond|lev)/.test(v)?'«nascondi il tiramisù»':/^mostr/.test(v)?'«rimetti il tiramisù nel menu»':/^spost/.test(v)?'«sposta il tiramisù nei Dolci»':/^rinomin/.test(v)?'«rinomina il Menu pranzo in Pranzo veloce»':/^(?:legg|vede)/.test(v)?'«cosa c’è nei Primi?»':/^annull/.test(v)?'«annulla»':/^elimin/.test(v)?'«elimina il tiramisù» (ti chiedo il sì prima)':/^segn/.test(v)&&/finit|esaurit/.test(hp)?'«il tiramisù è finito»':/finit|esaurit|disponibil/.test(hp)?'«il tiramisù è finito»':'«la carbonara a 12»'
@@ -828,6 +828,14 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   if(neg){const fixed=text.replace(/(^|[\s(:=,])[-\u2212\u2013]\s?(\d)/,'$1$2').trim();preReply='Un prezzo non può essere negativo, quindi *non ho cambiato nulla*. Intendevi «'+safe(fixed)+'»?'}}
  // notte 22/10 (qa-continua live: «elimina il vitello tonnato» appena creato → il modello indica *la parmigiana*): «elimina/cancella X» con X
  // il nome intero di UN solo piatto = eliminazione di quel piatto, decisa dal server (serve comunque il sì del titolare).
+ // 23/10 (persona «scrive malissimo»): «anzi no la lasagna nn la mettere» subito dopo averla creata = tolta (era appena aggiunta), senza
+ // domande; «togli la carbo» con UN solo piatto di quel nome = eliminato subito (annulla 10 minuti). Mai su piatti di nome diverso.
+ if(engine==='haiku'&&!preReply&&!pre&&!sessNow&&!pend){const st=plain(shorthand(text))
+  if(freshIds.size&&/\b(?:non|nn)\s+(?:(?:la|lo|li|le|ce|ci)\s+)?(?:mett\w*|aggiung\w*|inser\w*|vogli\w*)|\b(?:anzi no|toglil[aoie]|leval[aoie]|non metterl[aoie])\b/.test(st)){const hit=refs.filter(r=>freshIds.has(r.id)&&fullyNamed(r.name,shorthand(text)))
+   if(hit.length===1)pre={actions:[{kind:'delete',id:hit[0]!.id,soft:true,undoCreate:true} as MenuAction],why:'risposta-elimina'}}
+  if(!pre){const m=/^(?:(?:ok|allora|anzi|no|ora|adesso|e|poi)\s+)*(?:togli|toglimi|leva|levami|elimina|cancella)\s+(.+)$/.exec(st)
+   if(m&&!/\d|,/.test(text)&&!/\b(?:e|anche|pure|tutt[ieoa]|sottomenu|menu|sezione|categoria|poi|non|prima|precedente|ultim[oa]|foto)\b/.test(m[1]!)){const said=m[1]!.replace(/^(?:il|lo|la|i|gli|le|l)\s+/,'').replace(/\s+(?:dal|dalla|dai|nel|nei|del|della|a|al|alla)\s.*$/,'').trim(),hit=refs.filter(r=>sameDishName(r.name,said))
+    if(said.length>=3&&hit.length===1&&/^(?:togli|toglimi|leva|levami)\b/.test(m[0]!.replace(/^(?:(?:ok|allora|anzi|no|ora|adesso|e|poi)\s+)*/,'')))pre={actions:[{kind:'delete',id:hit[0]!.id,soft:true} as MenuAction],why:'risposta-elimina'}}}}
  if(engine==='haiku'&&!preReply&&!pre&&!sessNow&&!pend){const m=/^(?:ok |allora |ora |adesso )?(?:elimina|cancella|eliminami|cancellami)\s+(.+)$/.exec(plain(text))
   if(m&&!/\d|,/.test(text)&&!/\b(?:e|anche|pure|tutt[ieoa]|sottomenu|menu|sezione|categoria|poi|non|prima|precedente|ultim[oa])\b/.test(m[1]!)){const said=m[1]!.replace(/^(?:il|lo|la|i|gli|le|l)\s+/,'').replace(/\s+(?:dal|dalla|nel|nei) .*$/,'').trim(),hit=refs.filter(r=>sameDishName(r.name,said))
    if(said.length>=3&&hit.length===1){const act={kind:'delete',id:hit[0]!.id} as MenuAction;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:[act],requiresTypedOk:true,why:'delete'})});preReply='Elimino *'+safe(hit[0]!.name)+'* dal menu? Rispondi *sì*.\n\n'+pendingFacts('delete',[act],refs,sections)}}}
