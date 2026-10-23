@@ -174,6 +174,20 @@ describe('il contesto vale solo per gli ultimi 2 scambi (batteria v181)',()=>{
   const r=ruleTurn({text:'aggiungi il vitello tonnato',menus:MENUS,sections:CAT.sections,refs:CAT.refs,history:H([['owner','nel menu pranzo elimina i primi'],['bot','*Menu Giorno aggiornato*\n\n*Primi*'],['owner','annulla'],['bot','Ok, annullo.'],['owner','grazie'],['bot','Di niente']])}) as any
   expect(r?.kind==='apply'&&JSON.stringify(r.actions).includes('Vitello')).toBe(false)})})
 
+describe('«no» alla domanda del Menu della regola: chiude la domanda, MAI l\u2019annullo della modifica di prima (batteria v183, GRAVE)',()=>{
+ it('il modello che annullerebbe su «no» non viene neanche chiamato',async()=>{
+  const pl:Planner=c=>/^no$/.test(plainT(c.message))?P('change',[A('undo_last')],'Ok, annullo.'):base(c)
+  const r=await play(['Il solo secondo a pranzo mettilo a 11','grazie','grazie','elimina i contorni','no'],pl)
+  expect(r.replies[3]).toMatch(/Menu Giorno.*Menu Cena|In quale Menu/s)
+  expect(M(last(r),'Menu Giorno').formulas.find((f:any)=>f.name==='Solo secondo').price).toBe(11);expect(r.replies[4]).toMatch(/lascio stare/i)})})
+
+describe('«a prova di chiunque»: abbreviazioni, numeri a parole, «metti» dopo lo svuotamento',()=>{
+ const rt=(t:string,h:[string,string][]=[])=>ruleTurn({text:t,menus:MENUS,sections:CAT.sections,refs:CAT.refs,history:h.map(([role,text],i)=>({role,text,at:Date.now()-(h.length-i)*20000}))}) as any
+ it('«x pranzo togli tutti i primi», «stasera via tutti i secondi»',()=>{expect(rt('x pranzo togli tutti i primi').menu.name).toBe('Menu Giorno');expect(rt('stasera via tutti i secondi').menu.name).toBe('Menu Cena')})
+ it('«nei primi del pranzo metti carbo e amatri» → Carbonara, Amatriciana',()=>{const r=rt('nei primi del pranzo metti carbo e amatri');const names=JSON.stringify(r);expect(names).toMatch(/Carbonara/);expect(names).toMatch(/Amatriciana/)})
+ it('«il completo a pranzo dodici euro» → Completo 12 (già)',()=>{expect(rt('il completo a pranzo dodici euro').text).toMatch(/Completo\* del \*Menu Giorno\* è già/)})
+ it('«metti tagliata e orata» subito dopo «stasera via tutti i secondi» → nei Secondi della cena',()=>{const r=rt('metti tagliata  orata al forno',[['owner','stasera via tutti i secondi'],['bot','*Menu Cena aggiornato*\n\n*Secondi*\n• nessun piatto\n\nOra scrivimi i piatti nuovi, per esempio «nei secondi inserisci lasagna, carbonara».']]);expect(r.kind).toBe('apply');expect(r.menu.name).toBe('Menu Cena');expect(JSON.stringify(r.actions)).toMatch(/Tagliata.*Orata al forno/)})})
+
 // ======================= REPLAY ESATTO della chat di Luisa =======================
 describe('REPLAY chat di Luisa 23/10 09:21–09:24 (stessi testi, «E inserisci» mentre il «Si» lavora)',()=>{
  it('stato finale: Primi del Menu Giorno = Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca; tutto il resto identico',async()=>{
