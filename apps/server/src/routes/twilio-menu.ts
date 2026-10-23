@@ -766,6 +766,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   // di prima sulla Pasta al sugo (undoRequested accetta un «no» secco). Qui solo una richiesta ESPLICITA di annullo: un rifiuto chiude la domanda.
   if(engine==='haiku'&&askP&&!pre&&!preReply&&!sessNow&&explicitUndoRequested(text)&&plain(text).split(' ').length<=4&&!(askP.actions??[]).length&&!(askP as any).session&&!!undoRec&&!undoRec.full&&Date.now()-Number(undoRec.at)<=3*60*1000){const about=' '+plain(String(askP.question??'')+' '+String(askP.source??''))+' '
    if(undoRec.items.some(i=>[String(i.after?.name??i.before?.name??''),!i.before?sections.find(x=>x.id===i.sectionId)?.name??'':''].map(plain).some(k=>k.length>=3&&about.includes(' '+k+' ')))){pre={actions:[],why:'annulla'};closePend=true}}
+  // 23/10 (batteria v186b): risposta che nomina ESATTAMENTE uno dei candidati della domanda «quale?» («la pasta al pesto dei primi») =
+  // l'azione della richiesta di prima su quel piatto, decisa dal server prima del modello (prima: a volte la stessa domanda di nuovo).
+  if(engine==='haiku'&&askP&&!pre&&!preReply&&!sessNow&&!closePend&&!askP.twins?.length&&(askP.ids??[]).length>=2&&!(askP.actions??[]).length){const cands=refs.filter(r=>(askP.ids??[]).includes(r.id)),t=' '+plain(text).replace(/\b(?:il|lo|la|i|gli|le|l)\s+/g,' ')+' ',ex=cands.filter(r=>{const n=plain(r.name).replace(/^(?:il|lo|la|i|gli|le|l)\s+/,'');return n.length>=4&&t.includes(' '+n+' ')}),top=ex.filter(r=>!ex.some(o=>o.id!==r.id&&plain(o.name).includes(plain(r.name))))
+   if(top.length===1&&!CMD_RE_NEW.test(plain(text))){const vt=askOrigin(askP)+' \n '+text,act=pronounAct(top[0]!,vt);if(act&&(act.kind!=='price'||((act as any).price>0&&!oddPrice(act,refs)))){pre={actions:[act],why:'risposta'};closePend=true}}}
   if(closePend){pend=null;answered=false;(base as any).pendingCommand=null}
   if(pre)answered=true}
  // notte 22/10 (n-sessione-lunga): «fatto?», «hai fatto?», «tutto a posto?» = conferma di ciò che è già stato scritto (prima la scheda di un piatto).

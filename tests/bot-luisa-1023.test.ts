@@ -203,6 +203,12 @@ describe('persona «scrive malissimo» (route)',()=>{
   expect(secItems(last(r),'Menu Giorno','Secondi')).toEqual(['Cotoletta','Polpette']);expect(JSON.stringify(M(last(r),'Alla carta'))).toBe(JSON.stringify(M(r.menus[0],'Alla carta')))})
  it('«nn capisco» → aiuto con esempi',async()=>{const r=await play(['nn capisco']);expect(r.replies[0]).toMatch(/Per esempio/);expect(allItems(last(r))).toBe(allItems(r.menus[0]))})})
 
+describe('risposta che nomina uno dei candidati (batteria v186b)',()=>{
+ it('«alza la carbonara di un euro» → «quale?» → «gli spaghetti alla carbonara» → 11 €, senza rimandare la domanda',async()=>{
+  const pl:Planner=c=>/alza la carbonara/.test(plainT(c.message))?Q('Quale carbonara alzo di un euro?',[code(c,'Spaghetti alla carbonara')!,code(c,'Linguine alla carbonara di mare')!]):P('clarify',[],'Quale carbonara alzo di un euro?')
+  const r=await play(['alza la carbonara di un euro','gli spaghetti alla carbonara'],pl)
+  const sp=M(last(r),'Alla carta').sections.flatMap((x:any)=>x.items).find((i:any)=>i.name==='Spaghetti alla carbonara');expect(sp.price).toBe(11);expect(r.replies[1]).not.toMatch(/\?/)})})
+
 // ======================= REPLAY ESATTO della chat di Luisa =======================
 describe('REPLAY chat di Luisa 23/10 09:21–09:24 (stessi testi, «E inserisci» mentre il «Si» lavora)',()=>{
  it('stato finale: Primi del Menu Giorno = Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca; tutto il resto identico',async()=>{
