@@ -6,6 +6,7 @@
  * G6 prezzi implausibili → conferma scritta). I fatti nella risposta li scrive il server DOPO la rilettura (composeReply).
  * Se Groq è giù, la quota è finita, il JSON non è valido o la chiamata è lenta → {path:'fallback'}: il route usa il
  * percorso deterministico attuale, invariato. */
+import {parseInsert,sameName} from './owner-brain-svuota.js'
 import {randomUUID} from 'node:crypto'
 import {allOfSections,namedSections} from './owner-brain-sections.js'
 import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,relativeDelta,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
@@ -636,10 +637,10 @@ export function composeReply(decision:Pick<BrainDecision,'intent'|'plan'|'replyD
  if(plan.type==='change'){if(!after)throw new Error('composeReply: change senza rilettura del DB')
   const {ok,failed}=verifyApplied(plan.actions,after)
   if(!ok.length)return 'Non sono riuscito a salvare la modifica. Il menu non è cambiato. Riprova tra poco.'
-  return '*Confermato.* Ho aggiornato il menu.\n\n'+ok.map(a=>describeAction(a,before,sections)).join('\n')+(failed.length?'\n\nQuesta parte non è stata salvata: '+failed.map(a=>describeAction(a,before,sections)).join('; '):'')}
+  return '*Confermato.* Ho aggiornato il menu.\n\n'+ok.map(a=>describeAction(a,before,sections)).join('\n')+(failed.length?'\n\nQuesta parte non è stata salvata:\n'+failed.map(a=>'• '+describeAction(a,before,sections)).join('\n'):'')}
  if(plan.type==='read')return readText(plan,after??before)
  if(decision.intent==='chat')return draftIsSafe(decision.replyDraft)?decision.replyDraft.trim():'Dimmi pure cosa vuoi cambiare nel menu.'
- if(plan.type==='clarify'&&decision.replyDraft&&draftIsSafe(decision.replyDraft)&&plan.ids.length){const names=plan.ids.map(id=>before.find(r=>r.id===id)?.name).filter(Boolean);return decision.replyDraft.trim()+(names.length?'\n'+names.map(n=>'- *'+n+'*').join('\n'):'')}
+ if(plan.type==='clarify'&&decision.replyDraft&&draftIsSafe(decision.replyDraft)&&plan.ids.length){const names=plan.ids.map(id=>before.find(r=>r.id===id)?.name).filter(Boolean);return decision.replyDraft.trim()+(names.length?'\n'+names.map(n=>'• *'+n+'*').join('\n'):'')}
  return planText(plan,before,sections)
 }
 
@@ -769,6 +770,10 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
   const menu=(input.menus??[]).find(m=>m.name===sec!.menu),fixed=menu?.pricing==='fisso'
   const names=String(a.text??'').split(/\s*[;\n]\s*/).map(x=>x.replace(/[*_~`]/g,'').trim()).filter(Boolean).slice(0,40)
   if(!names.length)return{actions:[],notes:[],ask:'piatti_mancanti'}
+  // 22/10 (QA «primi carbonara e pasta e fagioli» → solo Carbonara): un piatto detto dal titolare per QUESTO sottomenu che il modello ha
+  // lasciato fuori si aggiunge (mai scartato in silenzio). Lettura del server delle liste per sottomenu (owner-brain-svuota.ts).
+  try{const said0=parseInsert(input.message,input.sections.filter(x=>x.menu===sec!.menu),input.menus??[],(input.refs??[]).map(r=>r.name)).lists.find(l=>l.secId===sec!.id)?.names??[]
+   for(const n of said0)if(!names.some(x=>sameName(x,n)||plain(x).includes(plain(n))||plain(n).includes(plain(x))))names.push(n.charAt(0).toLocaleUpperCase('it')+n.slice(1))}catch{/* lettura facoltativa */}
   // 21/10 sera: dentro una sessione di modifica dei piatti di oggi vale anche per un Menu alla carta (i nuovi vogliono il prezzo).
   const inSession=(input.pending as any)?.session?.menu===sec!.menu
   if(!fixed&&!inSession)return{actions:[],notes:[],ask:'sostituzione_alla_carta'}
@@ -795,7 +800,8 @@ export function structureActions(raw:any[],input:{message:string,history?:BrainT
    if(!hit&&c.length>1)return{actions:[],notes:[],ask:'piatto_ambiguo_sostituzione'}
    if(hit){used.add(hit.id);if(hit.hidden)actions.push({kind:'hidden',id:hit.id,value:false,fromReplace:true} as any);if(!fixed&&cartaPrice&&cartaPrice>0&&Math.abs(cartaPrice-hit.price)>=0.005)actions.push({kind:'price',id:hit.id,price:cartaPrice,fromReplace:true} as any)}
    else{if(!replaceWordsSaid(nm,said))return{actions:[],notes:[],ask:'nome_non_detto'};if(!fixed&&!(cartaPrice&&cartaPrice>0))return{actions:[],notes:[],ask:'prezzo_nuovo_alla_carta'};actions.push({kind:'create',sectionId:sec!.id,name:nm,price:fixed?0:cartaPrice!,description:null,fromReplace:true} as any)}}
-  for(const r of inSec)if(!used.has(r.id)&&!r.hidden)actions.push({kind:'hidden',id:r.id,value:true,fromReplace:true} as any)
+  // 22/10 notte (decisione Manuel): i piatti NON nominati del sottomenu si ELIMINANO (anche quelli già nascosti), mai nascosti.
+  for(const r of inSec)if(!used.has(r.id))actions.push({kind:'delete',id:r.id,soft:true,fromReplace:true} as any)
   notes.push('sostituzione:'+sec!.id+':'+names.map(x=>x.replace(/[:;]/g,' ')).join(';'))}
  // Mostrare/nascondere un intero Menu o Sottomenu (decisione Manuel 21/10). Già così → niente azione, nota per la risposta.
  for(const a of raw){if(!a||a.action!=='set_menu_visible')continue;const k=menuKey(String(a.menu??a.name??''));const m=(input.menus??[]).find(x=>menuKey(x.name)===k)??(input.menus??[]).find(x=>k.length>=3&&(menuKey(x.name).includes(k)||k.includes(menuKey(x.name))))

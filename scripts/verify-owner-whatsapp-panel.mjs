@@ -1,5 +1,5 @@
-// 21/10: QA visivo del pannello «WhatsApp del titolare» (due numeri). Componenti VERI della dashboard (kit, ScreenScroll, pannello),
-// API finta in memoria che imita il server (limite 2, email per numero, errori con «field»). Chrome headless: nessuna finestra a schermo.
+// 21/10: QA visivo del pannello «WhatsApp del titolare» (fino a tre numeri dal 22/10). Componenti VERI della dashboard (kit, ScreenScroll, pannello),
+// API finta in memoria che imita il server (limite 3 dal 22/10, email per numero, errori con «field»). Chrome headless: nessuna finestra a schermo.
 // Nessun DB, nessun login, nessun messaggio. Uscita: docs/webapp/due-numeri-2026-10-21/screenshot/*.png + verifica.json
 import puppeteer from 'puppeteer-core'
 import {readFile,writeFile,mkdir} from 'node:fs/promises'
@@ -14,7 +14,7 @@ const source=(await Promise.all(files.map(f=>readFile(resolve(root,'src',f),'utf
 // API finta: stessa forma delle risposte del server (GET/POST/DELETE /menu-workspace/whatsapp/owner).
 const fake=`
 window.__wa={sender:'+18382622788',numbers:[],calls:[]};
-const __waState=()=>{const n=window.__wa.numbers,last=n.at(-1)||null;return{configured:true,sender:window.__wa.sender,max:2,numbers:n.map(x=>({...x})),phone:last?.phone??null,email:last?.email??null,status:last?.status??null,activatedAt:null}};
+const __waState=()=>{const n=window.__wa.numbers,last=n.at(-1)||null;return{configured:true,sender:window.__wa.sender,max:3,numbers:n.map(x=>({...x})),phone:last?.phone??null,email:last?.email??null,status:last?.status??null,activatedAt:null}};
 const __waNorm=v=>{let d=String(v||'').replace(/\\D/g,'');if(d.startsWith('0039'))d=d.slice(4);if(d.length===10&&d.startsWith('3'))d='39'+d;return /^39\\d{9,10}$/.test(d)?'+'+d:null};
 const __waFail=(status,code,message,field)=>new Response(JSON.stringify({error:{code,message,...(field?{field}:{})}}),{status,headers:{'Content-Type':'application/json'}});
 const __waOk=data=>new Response(JSON.stringify({data}),{status:200,headers:{'Content-Type':'application/json'}});
@@ -30,7 +30,7 @@ window.fetch=async(url,opt={})=>{const u=new URL(url,location.origin),m=opt.meth
  if(others.some(x=>x.email===email))return __waFail(409,'EMAIL_OTHER_NUMBER','Questa email è già dell’altro numero: ogni numero ha la sua email.','email');
  if(phone==='+393330000000'&&!b.move)return __waFail(409,'PHONE_IN_USE_MOVABLE','Questo numero è già collegato a Victoria Bar. Vuoi spostarlo su questo locale?','phone');
  const same=W.numbers.find(x=>x.phone===phone);if(same){same.email=email;return __waOk(__waState())}
- if(others.length>=2)return __waFail(409,'OWNER_PHONES_LIMIT','Al massimo due numeri per locale. Scollegane uno per aggiungerne un altro.','phone');
+ if(others.length>=3)return __waFail(409,'OWNER_PHONES_LIMIT','Al massimo tre numeri per locale. Scollegane uno per aggiungerne un altro.','phone');
  const row={phone,email,status:'pending',activatedAt:null};const i=replace?W.numbers.findIndex(x=>x.phone===replace):-1;if(i>=0)W.numbers.splice(i,1,row);else W.numbers.push(row);
  return __waOk({...__waState(),replacedPhones:i>=0?[replace]:[]})};
 `
@@ -66,7 +66,7 @@ async function shot(page,name){await new Promise(r=>setTimeout(r,250));const ove
 try{
  for(const vp of ['desktop','mobile']){
   let p=await open(vp,[]);assert.ok(await p.$('.mw-owa-form input[type=tel]'),'vuoto: form subito');assert.equal(await p.$('.mw-owa-qr'),null);await shot(p,vp+'-1-vuoto');await p.close()
-  p=await open(vp,[A]);assert.equal(await p.$eval('.mw-owa-phone',e=>e.textContent),'+39 334 722 3384');assert.ok((await p.$eval('.mw-owa-head p',e=>e.textContent)).includes('+1 838 262 2788'));assert.equal(await p.$eval('.mw-owa-count',e=>e.textContent),'1 di 2');await shot(p,vp+'-2-un-numero-collegato')
+  p=await open(vp,[A]);assert.equal(await p.$eval('.mw-owa-phone',e=>e.textContent),'+39 334 722 3384');assert.ok((await p.$eval('.mw-owa-head p',e=>e.textContent)).includes('+1 838 262 2788'));assert.equal(await p.$eval('.mw-owa-count',e=>e.textContent),'1 di 3');await shot(p,vp+'-2-un-numero-collegato')
   await clickText(p,'Aggiungi numero');await p.waitForSelector('.mw-owa-row.is-new .mw-owa-form');await shot(p,vp+'-4-aggiungi-aperto')
   await p.type('.mw-owa-row.is-new input[type=tel]','123');await p.type('.mw-owa-row.is-new input[type=email]','giulia.bianchi@gmail.com');await p.click('.mw-owa-row.is-new button[type=submit]')
   await p.waitForSelector('.mw-owa-row.is-new .mw-owa-error');assert.ok((await p.$eval('.mw-owa-row.is-new .mw-owa-error-phone',e=>e.textContent)).startsWith('Numero non valido'));await shot(p,vp+'-5-errore')
@@ -74,8 +74,8 @@ try{
   await fill(p,'.mw-owa-row.is-new input[type=tel]','340 123 4567');await fill(p,'.mw-owa-row.is-new input[type=email]','mario.rossi@gmail.com');await p.click('.mw-owa-row.is-new button[type=submit]')
   await p.waitForSelector('.mw-owa-error-email');results.push(vp+': email dell’altro numero → errore sotto l’email')
   await fill(p,'.mw-owa-row.is-new input[type=email]','giulia.bianchi@gmail.com');await p.click('.mw-owa-row.is-new button[type=submit]')
-  await p.waitForFunction(()=>document.querySelectorAll('.mw-owa-list li.mw-owa-row:not(.is-editing)').length===2);assert.equal(await p.$('.mw-owa-add'),null,'2 di 2: niente Aggiungi');results.push(vp+': aggiunta del secondo numero dal form');await p.close()
-  p=await open(vp,[A,B]);assert.equal(await p.$eval('.mw-owa-count',e=>e.textContent),'2 di 2');assert.equal(await p.$('.mw-owa-add'),null);await shot(p,vp+'-3-collegato-e-in-attesa')
+  await p.waitForFunction(()=>document.querySelectorAll('.mw-owa-list li.mw-owa-row:not(.is-editing)').length===2);assert.notEqual(await p.$('.mw-owa-add'),null,'2 di 3: Aggiungi ancora presente');results.push(vp+': aggiunta del secondo numero dal form');await p.close()
+  p=await open(vp,[A,B]);assert.equal(await p.$eval('.mw-owa-count',e=>e.textContent),'2 di 3');assert.notEqual(await p.$('.mw-owa-add'),null);await shot(p,vp+'-3-collegato-e-in-attesa')
   await p.evaluate(()=>{const rows=document.querySelectorAll('.mw-owa-list li');[...rows[1].querySelectorAll('button')].find(b=>b.textContent==='Scollega').click()});await p.waitForSelector('.mw-owa-confirm');assert.equal(await p.evaluate(()=>document.activeElement?.textContent),'Annulla');await shot(p,vp+'-7-conferma-scollega')
   await p.evaluate(()=>[...document.querySelectorAll('.mw-owa-confirm button')].find(b=>b.textContent==='Scollega').click());await p.waitForFunction(()=>document.querySelectorAll('.mw-owa-list li').length===1);assert.ok(await p.$('.mw-owa-add'));results.push(vp+': scollega uno, l’altro resta');await p.close()
   p=await open(vp,[A,{...B,status:'linked'}]);await shot(p,vp+'-6-due-di-due')

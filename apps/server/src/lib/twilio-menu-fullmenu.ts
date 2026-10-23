@@ -4,6 +4,7 @@
 import {sql} from 'drizzle-orm'
 import type {DB} from '@tako/db'
 import {applyBotChange} from './menu-workspace-bot.js'
+import {inheritPhotos,inheritedNote} from './menu-photo-inherit.js'
 import {workspaceSchema,type Workspace} from './menu-workspace-contract.js'
 import {safe,type MenuRef} from './twilio-menu-ai.js'
 import {copy,fullMenuCopy,fill} from './twilio-menu-copy.js'
@@ -104,14 +105,14 @@ async function apply(tx:Tx,ctx:Ctx,w:Workspace,revision:number,full:FullMenuProp
   await dropProposal(tx,ctx);void enqueueNewTextTranslations(ctx.tenant,built.summary.newTexts).catch(()=>{})
   return fill(fullMenuCopy.savedPreset,{preset:saved.label})+missing.replace('online','nel preset')
  }
- const {workspace:changed,summary}=replaceMenuContent(w,d.menuId,rows),next=workspaceSchema.parse(changed),connection=tx as unknown as DB
+ const {workspace:changed,summary}=replaceMenuContent(w,d.menuId,rows),next=workspaceSchema.parse(changed),connection=tx as unknown as DB,inh=inheritPhotos(w,next)
  // Safety copy first (a labelled version of the menu as it is now), then draft, then publication: one transaction.
  // dashboard editor 22/10: solo quel Menu, in pubblicato e bozza; se la bozza di quel Menu aveva modifiche, prima se ne salva una versione + avviso.
  expired(isExpired);await applyBotChange(ctx.tenant,ctx.actor,['WhatsApp: menu intero (bozza)','WhatsApp: menu intero pubblicato'],{expectedPublishedRevision:revision,next,replaceMenuIds:[d.menuId],before:[{label:snapshotLabel+d.menuId,doc:workspaceSchema.parse(w)}],draftBackupLabel:'Bozza prima di WhatsApp (menu intero '+menu.name+')',notice:'Da WhatsApp è arrivato il menu intero «'+menu.name+'»: le modifiche non pubblicate di quel Menu sono state sostituite. Le trovi in Storico versioni.'},connection)
  expired(isExpired);await dropProposal(tx,ctx)
  // Translations never block the publication: only NEW texts are queued; the public menu shows Italian meanwhile.
  void enqueueNewTextTranslations(ctx.tenant,summary.newTexts).catch(()=>{})
- return fill(fullMenuCopy.applied,{menu:menu.name,piatti:rows.length,nuovi:summary.created.length,aggiornati:summary.updated.length,nascosti:summary.hidden.length,senzaPrezzo:missing})
+ return fill(fullMenuCopy.applied,{menu:menu.name,piatti:rows.length,nuovi:summary.created.length,aggiornati:summary.updated.length,nascosti:summary.hidden.length,senzaPrezzo:missing})+(inh.length?'\n\n'+inheritedNote(inh):'')
 }
 
 async function restore(tx:Tx,ctx:Ctx,w:Workspace,revision:number,isExpired?:()=>boolean):Promise<string>{

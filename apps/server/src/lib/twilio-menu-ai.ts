@@ -10,7 +10,7 @@ import {removeVerbRe,spokenCents,spokenDecimals} from './twilio-menu-nlu.js'
 import {isStructAction,applyStructAction,orderActions,DELETE_VERB,RENAME_VERB,MOVE_VERB,SECTION_WORD,sameSection,menuForSection,type StructAction} from './twilio-menu-structure.js'
 export type MenuRef={id:string,name:string,price:number,available:boolean,hidden:boolean,menu:string,section?:string,sectionId?:string,hasImage?:boolean,featured?:boolean,tags?:string[]}
 export type SectionRef={id:string,name:string,menu:string,pub?:string}
-export type MenuAction={kind:'price',id:string,price:number}|{kind:'available'|'hidden'|'featured',id:string,value:boolean}|{kind:'image',id:string,mediaUrl:string,mediaType:string,url?:string}|{kind:'description',id:string,text:string}|{kind:'tag',id:string,tag:string,value:boolean}|{kind:'create',sectionId:string,name:string,price:number,description:string|null}|{kind:'special',name:string,price:number,description:string|null}|SalesAction|StructAction
+export type MenuAction={kind:'price',id:string,price:number}|{kind:'available'|'hidden'|'featured',id:string,value:boolean}|{kind:'image',id:string,mediaUrl:string,mediaType:string,url?:string}|{kind:'description',id:string,text:string}|{kind:'tag',id:string,tag:string,value:boolean}|{kind:'create',sectionId:string,name:string,price:number,description:string|null,/** 23/10: subito dopo questo piatto (divisione di un piatto) */afterId?:string}|{kind:'special',name:string,price:number,description:string|null}|SalesAction|StructAction
 // `after` (17/10, A4.4): risposta alla domanda dello stesso messaggio, scritta dal server DOPO aver salvato la modifica.
 export type MenuPlan={type:'change',actions:MenuAction[],remove?:number[],after?:{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'capability',ids:string[]}}|{type:'read',read:'items',ids:string[]}|{type:'read',read:'unavailable'|'hidden'}|{type:'read',read:'formulas',text:string}|{type:'clarify',ids:string[],actions?:MenuAction[]}|{type:'missing',missing:('section'|'price'|'name')[],name:string|null,sectionIds:string[]}|{type:'exists',id:string}|{type:'verbatim'}|{type:'capability',ids:string[]}
 export const groqBase=()=>process.env.GROQ_API_BASE||'https://api.groq.com/openai/v1'
@@ -175,7 +175,7 @@ export const withNewSections=(sections:SectionRef[],actions:MenuAction[]):Sectio
 export function describeAction(a:MenuAction,refs:MenuRef[],sections:SectionRef[]=[]){
  if(isStructAction(a)){const sec=(id:string)=>sections.find(s=>s.id===id)?.name??'?'
   if(a.kind==='create_menu')return 'Nuovo Menu *'+safe(a.name)+'*'
-  if(a.kind==='delete_menu')return 'Tolto il Menu vuoto *'+safe(a.name)+'*'
+  if(a.kind==='delete_menu')return a.withItems?'Menu *'+safe(a.name)+'*: *eliminato* (con sottomenu e piatti)':'Tolto il Menu vuoto *'+safe(a.name)+'*'
   // «del Menu *Menu cena*» → «del *Menu cena*» quando il nome comincia già con «Menu».
   const mn=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+safe(n.trim())+'*':'Menu *'+safe(n.trim())+'*'
   if(a.kind==='set_formula')return a.isNew?'Nuova opzione *'+safe(a.name)+'* nel '+mn(a.menuName)+': *'+euro(a.price)+'*':'*'+safe(a.name)+'* del '+mn(a.menuName)+': '+(typeof a.before==='number'?'da '+euro(a.before)+' a ':'')+'*'+euro(a.price)+'*'
@@ -212,7 +212,15 @@ export function mergeMenuActions(previous:MenuAction[],delta:MenuAction[],remove
  const replacementKeys=new Set(delta.map(actionKey)),retained=previous.filter((a,i)=>!remove.includes(i+1)||replacementKeys.has(actionKey(a))),byKey=new Map(retained.map(a=>[actionKey(a),a]));for(const a of delta)byKey.set(actionKey(a),a);return [...byKey.values()]
 }
 /** Count actual field changes, not repeated instructions or values already in the published menu. */
+/** 22/10 notte (decisione Manuel, vincolante): per i piatti «nascondere» non esiste più. Ogni «nascondi/togli/leva X» (set_hidden true,
+ * da qualunque percorso: modello, sostituzione, svuota, pronome) diventa l'ELIMINAZIONE del piatto, subito (soft: niente «sì», «annulla»
+ * 10 minuti la rimette identica: snapshot dei Menu). Le altre azioni sullo stesso piatto cadono (il piatto non c'è più). Idempotente. */
+export function noHide(actions:MenuAction[]):MenuAction[]{
+ const out=actions.map(a=>a.kind==='hidden'&&a.value?({kind:'delete',id:a.id,soft:true,...((a as any).fromReplace?{fromReplace:true}:{})} as MenuAction):a)
+ const gone=new Set(out.flatMap(a=>a.kind==='delete'?[a.id]:[]))
+ return out.filter(a=>a.kind==='delete'||!('id' in a)||!gone.has((a as any).id))}
 export function effectiveMenuActions(actions:MenuAction[],workspace:any):MenuAction[]{
+ actions=noHide(actions)
  const items=new Map<string,any>(workspace.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,i]))));
  const sections=new Map<string,any>(workspace.menus.flatMap((m:any)=>m.sections.map((s:any)=>[s.id,s])))
  const where=new Map<string,string>(workspace.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,s.id]))))
@@ -222,7 +230,9 @@ export function effectiveMenuActions(actions:MenuAction[],workspace:any):MenuAct
   const item=items.get(a.id);if(a.kind==='delete')return !!item;if(!item)throw new Error('Item missing')
   if(a.kind==='rename')return item.name!==a.name;if(a.kind==='move')return where.get(a.id)!==a.sectionId;if(isSalesAction(a))return salesActionChanged(a,item);if(a.kind==='price')return item.price!==a.price;if(a.kind==='description')return (item.description??'')!==a.text;if(a.kind==='tag')return (item.tags??[]).includes(a.tag)!==a.value;return (a.kind==='available'?item.available!==false:!!item[a.kind])!==a.value})
 }
-export const appliedMenuText=(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]=[])=>{const all=withNewSections(sections,actions);return '*Confermato.* Ho aggiornato il menu.\n\n'+actions.map(a=>describeAction(a,refs,all)).join('\n')+(actions.some(a=>a.kind==='delete'&&!a.undoCreate)?'\n\n'+copy.deleteUndoHint:'')}
+// 22/10 (decisione foto per nome): la stessa foto su più piatti omonimi → elenco dei punti aggiornati, uno per riga.
+export const photoPlacesText=(actions:MenuAction[],refs:MenuRef[])=>'*Confermato.* Foto messa su:\n'+actions.map(a=>{const r=refs.find(x=>x.id===(a as any).id);return r?'• '+[r.menu,r.section??'',r.name].filter(Boolean).map(safe).join(' › '):''}).filter(Boolean).join('\n')+(actions.some(a=>refs.find(x=>x.id===(a as any).id)?.hasImage)?'\n\nLe foto che c’erano sono state sostituite.':'')
+export const appliedMenuText=(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]=[])=>{if(actions.length>1&&actions.every(a=>a.kind==='image'))return photoPlacesText(actions,refs);const all=withNewSections(sections,actions);return '*Confermato.* Ho aggiornato il menu.\n\n'+actions.map(a=>describeAction(a,refs,all)).join('\n')+(actions.some(a=>a.kind==='delete'&&!a.undoCreate)?'\n\n'+copy.deleteUndoHint:'')}
 /** Explicit requests to keep the published price cancel only that pending price row. */
 export function pendingPriceRestores(message:string,pending:MenuAction[],refs:MenuRef[]){
  const indices:number[]=[];for(const clause of message.split(/[.!?;\n]+/)){const text=' '+plain(clause)+' ';if(!/\b(lascia|lasciamo|mantieni|tieni|non cambiare|non modificare)\b/.test(text)||!/\bprezzo\b/.test(text)||!/\b(com e|come e|invariato|uguale|originale|attuale)\b/.test(text))continue;
@@ -279,7 +289,7 @@ export function priceChoice(message:string,refs:MenuRef[]):{text:string,store?:{
  return{text:fill(asked?copy.choosePriceNow:copy.choosePrice,{piatto,attuale:euro(dish.price),primo:alt.first,secondo:alt.second}),store:{id:dish.id,prices:[alt.a,alt.b],labels}}
 }
 export const priceChoiceText=(message:string,refs:MenuRef[])=>priceChoice(message,refs)?.text??null
-export function clarifyText(ids:string[],refs:MenuRef[]){const names=ids.map(id=>refs.find(r=>r.id===id)).filter(Boolean).map(r=>'*'+itemLabel(r!,refs)+'*');if(names.length===1)return `Cosa vuoi cambiare per ${names[0]}: il prezzo, se è finito o altro? Non ho cambiato nulla.`;return names.length?fill(copy.whichDish,{opzioni:names.join(', ')}):copy.notUnderstood}
+export function clarifyText(ids:string[],refs:MenuRef[]){const names=ids.map(id=>refs.find(r=>r.id===id)).filter(Boolean).map(r=>'*'+itemLabel(r!,refs)+'*');if(names.length===1)return `Cosa vuoi cambiare per ${names[0]}: il prezzo, se è finito o altro? Non ho cambiato nulla.`;return names.length?fill(copy.whichDish,{opzioni:names.map(n=>'• '+n).join('\n')}):copy.notUnderstood}
 /** 19/10: le voci «dashboard» e «menulink» del catalogo diventano il link vero; il server lo compila col locale (linkMarkers). */
 export const linkMarkers={dashboard:'\u0003dashboard\u0003',menulink:'\u0003menulink\u0003'} as const
 export function capabilityText(ids:string[]){if(!ids.length||ids.includes('all')||ids.length>2)return copy.help;return ids.map(id=>capabilities.find(c=>c.id===id)??capabilities.find(c=>c.id==='other')!).map(c=>c.id==='dashboard'||c.id==='menulink'?linkMarkers[c.id]:c.can?fill(copy.capabilityYes,{testo:c.text,esempio:c.example!}):fill(copy.capabilityNo,{testo:c.text,alternativa:c.alternative!})).join('\n\n')}
@@ -287,7 +297,7 @@ export function planText(plan:Exclude<MenuPlan,{type:'change'}>,refs:MenuRef[],s
  if(plan.type==='read')return readText(plan,refs);if(plan.type==='clarify')return clarifyText(plan.ids,refs);if(plan.type==='capability')return capabilityText(plan.ids);if(plan.type==='verbatim')return copy.notVerbatim
  if(plan.type==='exists'){const r=refs.find(x=>x.id===plan.id)!;return fill(copy.alreadyExists,{piatto:safe(r.name),categoria:safe(r.section??r.menu)})}
  const wanted=plan.missing.map(m=>m==='section'?'il sottomenu':m==='price'?'il prezzo':'il nome'),listed=sections.slice(0,15)
- return fill(copy.createMissing,{piatto:plan.name?'*'+safe(plan.name)+'*':'il piatto',mancante:wanted.length>1?wanted.slice(0,-1).join(', ')+' e '+wanted.at(-1):wanted[0]!,categorie:plan.missing.includes('section')&&listed.length?fill(copy.createCategories,{categorie:listed.map(s=>s.name).join(', ')}):'',})
+ return fill(copy.createMissing,{piatto:plan.name?'*'+safe(plan.name)+'*':'il piatto',mancante:wanted.length>1?wanted.slice(0,-1).join(', ')+' e '+wanted.at(-1):wanted[0]!,categorie:plan.missing.includes('section')&&listed.length?fill(copy.createCategories,{categorie:listed.map(s=>'• '+s.name).join('\n')}):'',}).replace('\n\n ','\n\n')
 }
 // Benvenuto del titolare: esempi con piatti veri del locale («carbonara 12 euro», «tiramisù finito»).
 const finished=(name:string)=>{const w=plain(name).split(' ')[0]??'';return /a$/.test(w)?'finita':/i$/.test(w)?'finiti':'finito'}
@@ -311,7 +321,7 @@ export function applyActions(w:any,actions:MenuAction[],opts:{uploads?:Map<strin
  const items=new Map<string,any>(w.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,i])))),names:string[]=[]
  for(const a of orderActions(actions)){
   if(isStructAction(a)){const n=applyStructAction(w,a);if(!names.includes(n))names.push(n);continue}
-  if(a.kind==='create'){const section=w.menus.flatMap((m:any)=>m.sections).find((s:any)=>s.id===a.sectionId);if(!section)throw new Error('Section missing');section.items.push({id:newId(),name:a.name,price:a.price,description:a.description});names.push(a.name);continue}
+  if(a.kind==='create'){const section=w.menus.flatMap((m:any)=>m.sections).find((s:any)=>s.id===a.sectionId);if(!section)throw new Error('Section missing');const it={id:newId(),name:a.name,price:a.price,description:a.description},at=a.afterId?section.items.findIndex((i:any)=>i.id===a.afterId):-1;if(at>=0)section.items.splice(at+1,0,it);else section.items.push(it);names.push(a.name);continue}
   if(a.kind==='special'){const {zone,date}=localDate(opts.timezone??'Europe/Rome',opts.now),schedule={timezone:zone,enabled:true,windows:[{weekdays:[0,1,2,3,4,5,6],start:'00:00',end:'00:00'}],from:date,until:date}
    const menu=w.menus.find((m:any)=>m.active!==false&&(m.type??'main')==='main')??w.menus.find((m:any)=>m.active!==false);if(!menu)throw new Error('Menu missing')
    let section=menu.sections.find((s:any)=>!s.parentSectionId&&plain(s.name)===plain(dailySectionName));if(!section){section={id:newId(),name:dailySectionName,items:[]};menu.sections.unshift(section)}

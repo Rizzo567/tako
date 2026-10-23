@@ -593,8 +593,9 @@ function MenuWorkspaceItemActions({document,item,menuId,checked,setChecked,busy,
 /* WhatsApp del titolare. 21/10/2026 (richiesta Manuel): fino a DUE numeri per locale, ognuno con la sua email e il suo account;
    pannello rifatto: una riga di testata, elenco in griglia (numero · email · stato · azioni), modifica e aggiunta nella riga,
    QR compatto. Salvare crea un pre-collegamento senza codici né messaggi; il primo messaggio di quel numero lo attiva.
-   Permessi e limite di due numeri verificati dal server (agenzia o titolare). */
-const MW_OWA_MAX=2;
+   Permessi e limite di numeri verificati dal server (agenzia o titolare). 22/10: il limite è 3 e arriva dal server
+   (state.max): MW_OWA_MAX è solo il valore di riserva. */
+const MW_OWA_MAX=3;
 /* «+393347223384» → «+39 334 722 3384»; «+18382622788» → «+1 838 262 2788». Solo presentazione: al server va sempre il valore grezzo. */
 function MW_OWA_PHONE(raw){const d=String(raw||'').replace(/\D/g,'');if(!d)return String(raw||'');
  const cc=d.startsWith('39')?'39':d.startsWith('1')?'1':d.slice(0,2),rest=d.slice(cc.length);

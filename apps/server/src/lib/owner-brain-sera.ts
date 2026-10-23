@@ -11,6 +11,7 @@ import {plain,g9Prices,g9WordNumber,relativeDelta,type MenuRef,type SectionRef,t
 import {sameSection,courseRank} from './twilio-menu-structure.js'
 import {isAffirmative,type BrainAsk} from './owner-brain-r.js'
 import {replaceCandidates} from './owner-brain-plan.js'
+import {splitPieces,LOCUTIONS} from './dish-split.js'
 
 export type SeraMenu={id:string,name:string,pricing?:'carta'|'fisso',active?:boolean,secs?:{id:string,name:string,active:boolean,parent:string|null,items:number}[]}
 
@@ -253,7 +254,8 @@ export type SessParse={lists:{key:string,secId:string|null,names:string[]}[],rem
 /** Sottomenu del Menu nominato con una parola del messaggio (anche «primo»/«primi»), o una portata che nel Menu non c'è. */
 const secKey=(w:string,secs:SectionRef[])=>secs.find(x=>sameSection(x.name,w)||plain(x.name)===w)??null
 export function parseSession(text:string,secs:SectionRef[],names:string[]=[]):SessParse{
- const protect=[...new Set([...names.map(n=>plain(n)),'pasta e fagioli','pasta e ceci','pasta e patate','pane e coperto','salsiccia e friarielli','prosciutto e melone','cacio e pepe'].filter(n=>/ (?:e|ed) /.test(n)))]
+ // 23/10: la «e» si decide con dish-split.ts (locuzioni, nomi del locale, indizi; nella sessione niente domande: vale l'ipotesi)
+ const protect=[...new Set([...names.map(n=>plain(n)),...LOCUTIONS].filter(n=>/ (?:e|ed) /.test(n)))]
  const raw=text.replace(/[🎤*_]/gu,' ').replace(/\s+/g,' ').trim(),p=raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’']/g,' ').replace(/[^a-z0-9,;:.\s]/g,' ').replace(/\s*([,;:])\s*/g,'$1 ').replace(/\s+/g,' ').trim(),out:SessParse={lists:[],removes:[],adds:[],keep:[],done:sessionDone(raw)}
  // Parole dei sottomenu del Menu e delle portate comuni.
  const words=[...new Set([...secs.flatMap(x=>[plain(x.name),...plain(x.name).split(' ').filter(w=>w.length>=4)]),...COURSE_WORDS])].sort((a,b)=>b.length-a.length)
@@ -275,7 +277,7 @@ export function parseSession(text:string,secs:SectionRef[],names:string[]=[]):Se
   const key=h[1]!,sec=secKey(key,secs)
   if(KEEP.test(seg)||/^(?:come (?:ieri|prima)|uguali?|invariat\w*)/.test(seg)){out.keep.push(key);return}
   // Il testo tra due parole di sottomenu senza piatti («i secondi e i contorni restano uguali»): la parola successiva decide.
-  const items=seg.split(/\s*,\s*|\s*;\s*|\s+e\s+|\s+ed\s+/).map(x=>x.replace(/_/g,' ').replace(LIST_ART,'').replace(/\s+(?:e|poi)$/,'').trim()).filter(x=>x&&!SKIP_ITEM.test(x))
+  const items=seg.split(/\s*,\s*|\s*;\s*/).flatMap(ch=>{const W=ch.replace(/_/g,' ').split(' ').filter(Boolean);return splitPieces(W,{lexicon:{names,rules:[]},section:sec?.name??key},false).map(pc=>pc.ix.map(i=>W[i]!).join(' '))}).map(x=>x.replace(LIST_ART,'').replace(/\s+(?:e|poi)$/,'').trim()).filter(x=>x&&!SKIP_ITEM.test(x))
   if(!items.length){if(i+1<hits.length&&KEEP.test(p.slice(hits[i+1]!.index!)))out.keep.push(key);return}
   out.lists.push({key,secId:sec?.id??null,names:items})})
  // «i secondi e i contorni restano uguali»: le parole di sottomenu dentro una frase di «restano».
@@ -284,7 +286,8 @@ export function parseSession(text:string,secs:SectionRef[],names:string[]=[]):Se
 const FOOD=['risotto','funghi','polpette','tagliata','lasagne','lasagna','carbonara','cotoletta','gnocchi','spaghetti','vongole','patate','insalata','mista','verdure','grigliate','tagliatelle','amatriciana','frittata','zucchine','melanzane','parmigiana','arrosto','vitello','salmone','branzino','spinaci','fagioli','pomodoro','arrabbiata','ragu','pesto','minestrone','zuppa','orecchiette','ravioli','tortellini','fettuccine','penne','paccheri','salsiccia','pollo','manzo','maiale','polenta','peperoni','scaloppine','limone','milanese','tiramisu','cannoli','crostata','frittura','calamari','gamberi','cozze','burro','salvia','bolognese','ricotta','mozzarella','bufala','prosciutto','formaggi']
 /** Corregge le parole del nome di un piatto nuovo con una lettera sbagliata («risoto» → risotto), solo se il vocabolario dà UN candidato. */
 export function fixSpelling(name:string,vocab:string[]):string{const V=[...new Set([...FOOD,...vocab.flatMap(v=>plain(v).split(' '))].filter(w=>w.length>=4))]
- return name.split(' ').map(w=>{const k=plain(w);if(k.length<5||V.includes(k))return w;const c=V.filter(v=>v.length>=5&&near(v,k));return c.length===1?c[0]!:w}).join(' ')}
+ // 23/10: mai «correggere» la sola vocale finale (genere/numero: «funghi misti» non è «mista» di «Insalata mista»)
+ return name.split(' ').map(w=>{const k=plain(w);if(k.length<5||V.includes(k))return w;const c=V.filter(v=>v.length>=5&&near(v,k)&&!(v.length===k.length&&v.slice(0,-1)===k.slice(0,-1)));return c.length===1?c[0]!:w}).join(' ')}
 const levN=(a:string,b:string)=>{const d=Array.from({length:a.length+1},(_,i)=>[i,...Array(b.length).fill(0)]);for(let j=1;j<=b.length;j++)d[0]![j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++){d[i]![j]=Math.min(d[i-1]![j]+1,d[i]![j-1]+1,d[i-1]![j-1]+(a[i-1]===b[j-1]?0:1));if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i]![j]=Math.min(d[i]![j],d[i-2]![j-2]+1)}return d[a.length]![b.length]}
 /** Refuso plausibile: una lettera per parole da 5 lettere, due per parole da 8 («cotolleta» → cotoletta). */
 const near=(a:string,b:string)=>a===b||(Math.min(a.length,b.length)>=5&&levN(a,b)<=(Math.min(a.length,b.length)>=8?2:1))
@@ -305,7 +308,7 @@ export function sessionName(said:string,inSec:MenuRef[],vocab:string[]):{name:st
  // Accenti come nei nomi del locale («ragu» → «ragù» se c'è un piatto con «ragù»).
  const acc=new Map(vocab.flatMap(v=>v.split(/\s+/)).filter(w=>plain(w)!==w.toLowerCase()).map(w=>[plain(w),w.toLowerCase()] as const))
  return{name:capW(fixSpelling(base,vocab).split(' ').map(w=>acc.get(plain(w))??w).join(' ')),existing:null,price}}
-/** Azioni della sostituzione di un sottomenu (riusa gli esistenti, crea i nuovi — a 0 € nei menu fissi —, nasconde gli altri, mai elimina).
+/** Azioni della sostituzione di un sottomenu (riusa gli esistenti, crea i nuovi — a 0 € nei menu fissi —, ELIMINA gli altri: 22/10 notte).
  *  `noPrice` = piatti nuovi alla carta senza prezzo (la sessione li chiede prima di applicare). */
 export function sectionReplace(secId:string,names:string[],refs:MenuRef[],fixed:boolean,prices:Record<string,number>={}):{actions:MenuAction[],noPrice:string[]}{
  const inSec=refs.filter(r=>r.sectionId===secId),used=new Set<string>(),actions:MenuAction[]=[],noPrice:string[]=[]
@@ -313,7 +316,8 @@ export function sectionReplace(secId:string,names:string[],refs:MenuRef[],fixed:
   if(hit){used.add(hit.id);if(hit.hidden)actions.push({kind:'hidden',id:hit.id,value:false,fromReplace:true} as any);const pr=prices[n];if(!fixed&&pr&&Math.abs(pr-hit.price)>=0.005)actions.push({kind:'price',id:hit.id,price:pr,fromReplace:true} as any);continue}
   const pr=prices[n];if(!fixed&&!(pr&&pr>0)){noPrice.push(n);continue}
   actions.push({kind:'create',sectionId:secId,name:n,price:fixed?0:pr!,description:null,fromReplace:true} as any)}
- for(const r of inSec)if(!used.has(r.id)&&!r.hidden)actions.push({kind:'hidden',id:r.id,value:true,fromReplace:true} as any)
+ // 22/10 notte (decisione Manuel): i piatti NON nominati del sottomenu si ELIMINANO (anche quelli già nascosti), mai nascosti.
+ for(const r of inSec)if(!used.has(r.id))actions.push({kind:'delete',id:r.id,soft:true,fromReplace:true} as any)
  return{actions,noPrice}}
 
 // ---------- listino incollato ----------

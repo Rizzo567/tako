@@ -31,6 +31,9 @@ export async function execute(q:unknown):Promise<any[]>{const {text,params}=pars
  if(text.startsWith('SELECT command FROM tako_whatsapp_proposals')){const x=live(p[0]);return x?[{command:structuredClone(x.command)}]:[]}
  if(text.startsWith('UPDATE tako_whatsapp_proposals SET command')){const x=S.proposals.get(p[1]);if(x)x.command=JSON.parse(p[0]);return[]}
  if(text.startsWith('INSERT INTO tako_whatsapp_proposals')){const mins=Number(text.match(/interval '(\d+) minutes'/)?.[1]??10);S.proposals.set(p[0],{revision:p[3],command:JSON.parse(p[4]),exp:Date.now()+mins*60000});return[]}
+ // 23/10: lessico del locale (dish-lexicon.ts) = nomi dei piatti delle ultime 25 versioni
+ if(text.includes('FROM menu_workspace_versions')&&text.includes('jsonb_path_query'))return [...new Set(S.versions.slice(-25).flatMap((v:any)=>(v.snapshot?.menus??[]).flatMap((m:any)=>(m.sections??[]).flatMap((x:any)=>(x.items??[]).map((i:any)=>String(i.name))))))].map(n=>({n}))
+ if(text.startsWith('SET LOCAL statement_timeout'))return[]
  if(text.startsWith('SELECT revision,label,snapshot FROM menu_workspace_versions')){const pre=[String(p[1]).replace('%',''),String(p[2]).replace('%','')];return S.versions.filter(v=>pre.some(x=>v.label.startsWith(x))).sort((a,b)=>b.revision-a.revision).slice(0,1).map(v=>structuredClone(v))}
  if(text.startsWith('INSERT INTO tako_whatsapp_ai_usage'))return[{requests:1,prompt_tokens:0,completion_tokens:0,audio_seconds:0,warned_at:null}]
  if(text.startsWith('INSERT INTO tako_whatsapp_errors'))return[{id:1}]

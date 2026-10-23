@@ -173,7 +173,7 @@ describe('owner-brain-plan: risposta con i fatti dal DB',()=>{
   expect(draftIsSafe('Quale tagliata intendi?')).toBe(true)
   expect(composeReply({intent:'chat',plan:{type:'clarify',ids:[]},replyDraft:'Ho aggiornato tutto'},refs,sections)).toBe('Dimmi pure cosa vuoi cambiare nel menu.')
   expect(composeReply({intent:'chat',plan:{type:'clarify',ids:[]},replyDraft:'Di nulla, buon servizio.'},refs,sections)).toBe('Di nulla, buon servizio.')
-  expect(composeReply({intent:'clarify',plan:{type:'clarify',ids:[id('Tagliata di manzo'),id('Tagliata di tonno')]},replyDraft:'Quale tagliata intendi?'},refs,sections)).toBe('Quale tagliata intendi?\n- *Tagliata di manzo*\n- *Tagliata di tonno*')
+  expect(composeReply({intent:'clarify',plan:{type:'clarify',ids:[id('Tagliata di manzo'),id('Tagliata di tonno')]},replyDraft:'Quale tagliata intendi?'},refs,sections)).toBe('Quale tagliata intendi?\n• *Tagliata di manzo*\n• *Tagliata di tonno*')
  })
 })
 

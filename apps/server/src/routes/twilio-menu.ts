@@ -7,6 +7,7 @@ import {isAgencyUser} from '../lib/agency-access.js'
 import {WorkspaceTrialLocked} from '../lib/menu-workspace-store.js'
 // dashboard editor 22/10: il bot legge il PUBBLICATO (revisione = published_revision) e pubblica solo la sua modifica (menu-workspace-bot.ts).
 import {readBotWorkspace,applyBotChange} from '../lib/menu-workspace-bot.js'
+import {inheritPhotos,inheritedNote,photoTargetsByName,groupOf} from '../lib/menu-photo-inherit.js'
 import {workspaceSchema,type Workspace} from '../lib/menu-workspace-contract.js'
 import {Buffer} from 'node:buffer'
 import {g9DishMentioned,plain,withNewSections,describeAction,priceChoice,effectiveMenuActions,mergeMenuActions,appliedMenuText,groqPendingMenuPlan,validatePendingMenuPlan,validateMenuPlan,groqMenuPlan,groqDishPick,validateDishPick,dishMatches,itemLabel,photoProblem,downscaleSourcePixels,applyActions,planText,welcomeText,safe,localDate,capabilityText,readText,GroqBusy,type GroqOptions,type UsageEvent,downloadTwilioMedia,transcribeAudio,whisperPrompt,sendWhatsApp,proposalText,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from '../lib/twilio-menu-ai.js'
@@ -38,7 +39,7 @@ import {readBotBrain,readBotSettings,engineKey,botEngineOf,type BotEngine} from 
 import {phoneticHits,looseSoundAlike} from '../lib/twilio-menu-phonetic.js'
 import {HAIKU_MODEL} from '../lib/owner-brain-anthropic.js'
 import {linkIntent,botQuestion} from '../lib/twilio-menu-nlu.js'
-import {linkMarkers} from '../lib/twilio-menu-ai.js'
+import {linkMarkers,noHide} from '../lib/twilio-menu-ai.js'
 import {ownerAccount,ownerEmailSchema,dashboardUrl,publicMenuUrl,markPasswordDelivered} from '../lib/whatsapp-owner-account.js'
 import {webEmailEnabled} from '../lib/web-email-enabled.js'
 import {uniformDelta,uniformReply,pruneWroteDraft} from '../lib/owner-brain-r.js'
@@ -46,13 +47,17 @@ import {fixTruncatedNumbers,undoRequested,explicitUndoRequested,ignoredInQuestio
 import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,groupPercent,priceSheet,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,sectionGroupWord,pureDrop,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
+import {ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,type RuleWait,type RuleReport,type RuleAsk} from '../lib/owner-brain-svuota.js'
+import {loadLexicon,saveSplitRules} from '../lib/dish-lexicon.js'
+import type {Lexicon,SplitRule} from '../lib/dish-split.js'
+const mLabelOf=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+n.trim()+'*':'Menu *'+n.trim()+'*'
 const menusmartWebhook='https://mtdguvbpdmekgzaemqoy.supabase.co/functions/v1/whatsapp-webhook'
 const digest=(s:string)=>createHash('sha256').update(s).digest('hex')
 async function permitted(tx:Pick<DB,'execute'>,actor:string,tenant:string){const rows=await tx.execute(sql`SELECT u.id,u.restaurant_id,u.role,r.active FROM users u JOIN restaurants r ON r.id=${tenant} WHERE u.id=${actor} AND u.active=true`);const u=rows[0];if(!u||!u.active)return false;if(isAgencyUser(actor))return true;if(u.restaurant_id===tenant&&u.role==='owner')return true;const membership=await tx.execute(sql`SELECT role FROM web_location_memberships WHERE user_id=${actor} AND restaurant_id=${tenant}`);return membership[0]?.role==='owner'}
 const sent='\u0001'
 type Ctx={phone:string,tenant:string,actor:string,pending?:boolean};type Tx=Pick<DB,'execute'>;type Photo={mediaUrl:string,mediaType:string,url?:string};type ChoiceAction={kind:'price',price:number}|{kind:'available'|'hidden'|'featured',value:boolean}|{kind:'description',text:string}|{kind:'tag',tag:string,value:boolean}|SalesTemplate;type Choice={kind:'choose',action:ChoiceAction,options:string[]};type ChoicePrice={kind:'choose_price',id:string,prices:[number,number],labels:[string,string]};type Turn=string|{llm:true,brain?:true,photo?:Photo,text?:string,fullmenu?:FullMenuJob,exclude?:Excluded[],note?:string}|{upload:Extract<MenuAction,{kind:'image'}>[]}
 /** 21/10 (richiesta Manuel): numeri WhatsApp del titolare per locale. */
-export const OWNER_PHONES_MAX=2
+export const OWNER_PHONES_MAX=4 // 22/10 (Manuel): da 2 a 3 numeri per locale; 23/10 (Manuel): 4
 const lock=(tx:Tx,phone:string)=>tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${phone},0))`)
 const reserve=(tx:Tx,sid:string)=>tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${sid},${sent}) ON CONFLICT DO NOTHING`)
 const propose=(tx:Tx,ctx:Ctx,revision:number,command:unknown)=>tx.execute(sql`INSERT INTO tako_whatsapp_proposals(phone,restaurant_id,actor_id,revision,command,expires_at) VALUES(${ctx.phone},${ctx.tenant},${ctx.actor},${revision},${JSON.stringify(command)}::jsonb,now()+interval '10 minutes') ON CONFLICT(phone) DO UPDATE SET restaurant_id=EXCLUDED.restaurant_id,actor_id=EXCLUDED.actor_id,revision=EXCLUDED.revision,command=EXCLUDED.command,expires_at=EXCLUDED.expires_at`)
@@ -118,8 +123,8 @@ const bold=(names:string[])=>names.map(n=>'*'+safe(n)+'*').join(', ')
 function storedActions(command:any,refs:MenuRef[],sections:SectionRef[]):MenuAction[]|null{
  if(command?.kind==='fullmenu')return null
  if(command?.kind==='batch'&&Array.isArray(command.actions)){const fresh=new Set(command.actions.filter((a:any)=>a.kind==='create_section').map((a:any)=>a.newSectionId)),okSec=(id:string)=>sections.some(s=>s.id===id)||fresh.has(id)
-  return command.actions.every((a:any)=>a.kind==='special'||a.kind==='create_section'||a.kind==='create_menu'||a.kind==='delete_menu'||a.kind==='set_menu_active'||a.kind==='rename_menu'||((a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing')&&typeof a.menuId==='string')||((a.kind==='delete_section'||a.kind==='set_section_active')&&sections.some(s=>s.id===a.sectionId))||(a.kind==='rename_section'?sections.some(s=>s.id===a.sectionId):a.kind==='create'?okSec(a.sectionId):a.kind==='move'?okSec(a.sectionId)&&refs.some(r=>r.id===a.id):refs.some(r=>r.id===a.id)))?command.actions:null}
- const legacy=command as MenuCommand|null;if(!legacy||typeof (legacy as any).name!=='string')return null;const matches=legacy?refs.filter(r=>normalizeMenuText(r.name)===normalizeMenuText(legacy.name)):[];if(!legacy||matches.length!==1)return null;return[legacy.kind==='price'?{kind:'price',id:matches[0]!.id,price:legacy.price}:{kind:legacy.kind,id:matches[0]!.id,value:legacy.value}]
+  return command.actions.every((a:any)=>a.kind==='special'||a.kind==='create_section'||a.kind==='create_menu'||a.kind==='delete_menu'||a.kind==='set_menu_active'||a.kind==='rename_menu'||((a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing')&&typeof a.menuId==='string')||((a.kind==='delete_section'||a.kind==='set_section_active')&&sections.some(s=>s.id===a.sectionId))||(a.kind==='rename_section'?sections.some(s=>s.id===a.sectionId):a.kind==='create'?okSec(a.sectionId):a.kind==='move'?okSec(a.sectionId)&&refs.some(r=>r.id===a.id):refs.some(r=>r.id===a.id)))?noHide(command.actions):null}
+ const legacy=command as MenuCommand|null;if(!legacy||typeof (legacy as any).name!=='string')return null;const matches=legacy?refs.filter(r=>normalizeMenuText(r.name)===normalizeMenuText(legacy.name)):[];if(!legacy||matches.length!==1)return null;return noHide([legacy.kind==='price'?{kind:'price',id:matches[0]!.id,price:legacy.price}:{kind:legacy.kind,id:matches[0]!.id,value:legacy.value}] as MenuAction[])
 }
 type TurnOpts={brainOff?:boolean,planned?:{revision:number,plan:MenuPlan,proposalRevision?:string},plannedFull?:{revision:number,job:FullMenuJob,extraction:FullMenuExtraction},voice?:boolean,isExpired?:()=>boolean,beginWrite?:()=>boolean,uploads?:Map<string,string>,exclude?:Excluded[]}
 type TurnState={text?:string,exclude:Excluded[],note?:string,brain?:boolean,postDraft?:CreateDraft,postBatch?:any,alsoVerb?:'featured'|'hidden',seen?:string[],batchClosed?:boolean}
@@ -222,7 +227,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
   if((proposal.command as any)?.requiresTypedOk&&!/^(?:(?:ok|okay|si|conferma|confermo|va|bene|procedi|pubblica)\s*)+$/.test(normalized))return copy.typedOk;const actions=Number(proposal.revision)===row.revision?storedActions(proposal.command,refs,sections):null;if(!actions){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return copy.menuChanged}
   const photos=actions.filter((a):a is Extract<MenuAction,{kind:'image'}>=>a.kind==='image'),ready=new Map<string,string>([...photos.flatMap(a=>a.url&&storedUpload(tenant,a.url)?[[a.id,a.url] as [string,string]]:[]),...(uploads??[])]);if(photos.some(a=>!ready.has(a.id)))return{upload:photos.filter(a=>!ready.has(a.id))}
   const beforeW=structuredClone(workspace),restaurant=await restaurantSettings(),names=applyActions(workspace,actions,{uploads:ready,timezone:String((restaurant[0]?.settings as any)?.timezone??'Europe/Rome')}),next=workspaceSchema.parse(workspace)
-  if(opts.isExpired?.()||(opts.beginWrite&&!opts.beginWrite()))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(tenant,actor,['WhatsApp: bozza confermata','WhatsApp: pubblicazione confermata'],{expectedPublishedRevision:row.revision,next},tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));void names;return appliedMenuText(actions,refs,sections)}
+  const inh=inheritPhotos(beforeW,next);if(opts.isExpired?.()||(opts.beginWrite&&!opts.beginWrite()))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(tenant,actor,['WhatsApp: bozza confermata','WhatsApp: pubblicazione confermata'],{expectedPublishedRevision:row.revision,next},tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));void names;return appliedMenuText(actions,refs,sections)+(inh.length?'\n\n'+inheritedNote(inh):'')}
  // Cervello (17/10, perimetro N; settings.botBrain, spento di default): il modello capisce per primo con il contesto (cronologia,
  // memoria, scelta in sospeso). Restano deterministici: riepiloghi, foto, bozze, annulla, parte incerta («tojibo»), scelte già chiare.
  // Fase B (17/10): eliminare, rinominare, spostare, creare/rinominare categorie detti in modo esplicito: deterministici.
@@ -252,7 +257,7 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
   if(sp?.kind==='rename_section')structPick=[{kind:'rename_section',sectionId:sp.sectionId,name:sp.name}]
   if(sp?.kind==='move'){if(sp.sectionId)structPick=sp.ids.map(id=>({kind:'move',id,sectionId:sp.sectionId!}) as MenuAction)
    else{const sid=randomUUID(),acts=[{kind:'create_section',newSectionId:sid,name:sp.sectionName,menuId:''} as MenuAction,...sp.ids.map(id=>({kind:'move',id,sectionId:sid}) as MenuAction)];{const un=unreadStruct(acts);if(un.length)return notRead(un)};await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true})
-    return fill(copy.sectionAsk,{categoria:safe(sp.sectionName),piatti:bold(sp.ids.map(id=>refs.find(r=>r.id===id)!.name)),categorie:sections.slice(0,15).map(x=>x.name).join(', ')})}}
+    return fill(copy.sectionAsk,{categoria:safe(sp.sectionName),piatti:bold(sp.ids.map(id=>refs.find(r=>r.id===id)!.name)),categorie:sections.slice(0,15).map(x=>'• '+x.name).join('\n')})}}
   if(sp?.kind==='create_section'){const ex=sections.find(x=>sameSection(x.name,sp.name)),sid=ex?.id??randomUUID(),acts:MenuAction[]=ex?[]:[{kind:'create_section',newSectionId:sid,name:sp.name,menuId:''}]
    if(sp.rest){const c=parseCreate('aggiungi '+sp.rest.replace(/^(?:anche|dentro|ci)\s+/,''),[{id:sid,name:sp.name,menu:''}],true)
     if(c?.name&&c.price!==null&&!refs.some(r=>r.sectionId===sid&&plainName(r.name)===plainName(c.name!)))acts.push({kind:'create',sectionId:sid,name:c.name,price:c.price,description:null})
@@ -376,7 +381,8 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
    else if(!fresh){const answer=looksLikeAnswer(text,refs);if(answer){await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);return fill(copy.chooseInvalid,{nome:safe(answer)})}
     const t0=normalizeMenuText(text).replace(/[^a-z0-9]+/g,' ').trim();if(t0&&!/\d/.test(t0)&&t0.split(' ').length<=5&&!findDishes(text,refs).length&&!parseIntent(text)&&!wantsCreateText(text))return copy.chooseAgain}}}
   const command=parseMenuCommand(text)
-  if(!picked&&!command&&pending){const matches=dishMatches(text,refs);if(matches.length!==1)return matches.length>1?fill(copy.sameName,{opzioni:bold(matches.map(r=>itemLabel(r,refs))),esempio:itemLabel(matches[0]!,refs)}):{llm:true,photo:{mediaUrl:pending.mediaUrl,mediaType:pending.mediaType,...(pending.url?{url:pending.url}:{})}};picked=[{kind:'image',id:matches[0]!.id,mediaUrl:pending.mediaUrl,mediaType:pending.mediaType,...(pending.url?{url:pending.url}:{})}]}
+  // 22/10 (decisione foto per nome): la foto va su TUTTI i piatti con quel nome normalizzato, in tutti i Menu, senza chiedere.
+  if(!picked&&!command&&pending){const matches=dishMatches(text,refs);if(!matches.length)return{llm:true,photo:{mediaUrl:pending.mediaUrl,mediaType:pending.mediaType,...(pending.url?{url:pending.url}:{})}};picked=matches.map(m=>({kind:'image',id:m.id,mediaUrl:pending.mediaUrl,mediaType:pending.mediaType,...(pending.url?{url:pending.url}:{})}) as MenuAction)}
   if(!picked){if(isThanks(text))return copy.thanks
    // F3+F4: promo e scarsità prima di parseIntent («togli la promo…» non è «nascondi»).
    if(!command&&parseSalesText(text)){const settings=await restaurantSettings(),sale=salesTurn(text,workspace,refs,businessDate((settings[0]?.settings as any)?.timezone));if(sale&&'reply' in sale)return sale.reply;if(sale&&'choose' in sale){await propose(tx,ctx,row.revision,{kind:'choose',action:sale.choose.template,options:sale.choose.options.map(r=>r.id)});return fill(copy.choose,{opzioni:sale.choose.options.map((r,i)=>`${i+1}. *${itemLabel(r,refs)}*`).join('\n')})}if(sale)picked=sale.actions}
@@ -430,16 +436,15 @@ async function menuTurnCore(tx:Tx,ctx:Ctx,text:string,opts:TurnOpts,st:TurnState
  // G6: prezzo implausibile (oltre 500 € o almeno 8 volte quello attuale: lo zero in più; round 2: 3× bloccava prezzi veri) → conferma scritta, mai online diretto.
  const implausible=actions.some(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special')&&(a.price>500||(a.kind==='price'&&(()=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&a.price>=8*r.price})())))
  // Fase B: eliminare chiede SEMPRE conferma («Elimino X dal menu? Rispondi sì»), anche da sola.
- const needsApproval=(!!batch&&!st.postBatch&&!st.batchClosed)||actions.length>3||implausible||actions.some(a=>a.kind==='delete'&&!a.undoCreate);
- // «elimina/cancella/rimuovi X»: nascosto, mai eliminato (17/10); lo si dice una volta nella risposta.
- {const hid=actions.find(a=>a.kind==='hidden'&&a.value);if(hid&&/\brimuov\w*/i.test(normalizeMenuText(text))&&!DELETE_VERB.test(normalizeMenuText(text).replace(/[^a-z0-9]+/g,' '))&&'id' in hid){const r=refs.find(x=>x.id===hid.id);if(r)tail=[tail,fill(copy.hiddenNotDeletedPlain,{piatto:safe(r.name).toLowerCase()})].filter(Boolean).join('\n\n')}}
+ const needsApproval=(!!batch&&!st.postBatch&&!st.batchClosed)||actions.length>3||implausible||actions.some(a=>a.kind==='delete'&&!a.undoCreate&&!a.soft);
+ // 22/10 notte: «nascondere» un piatto non esiste più (noHide in effectiveMenuActions): niente nota «l'ho nascosto».
  const withTail=(s:string)=>tail?s+'\n\n'+tail:s
  if(needsApproval){await propose(tx,ctx,row.revision,{kind:'batch',actions,requiresTypedOk:true});const restaurant=await tx.execute(sql`SELECT name FROM restaurants WHERE id=${tenant}`);return withTail(proposalText(String(restaurant[0]?.name),actions,refs,sections)+afterText(workspace))}
  const photos=actions.filter((a):a is Extract<MenuAction,{kind:'image'}>=>a.kind==='image'),ready=new Map<string,string>([...photos.flatMap(a=>a.url&&storedUpload(tenant,a.url)?[[a.id,a.url] as [string,string]]:[]),...(uploads??[])]);
  if(photos.some(a=>!ready.has(a.id))){await propose(tx,ctx,row.revision,{kind:'batch',actions,autoApply:true});return{upload:photos.filter(a=>!ready.has(a.id))}}
  const waItems=new Map(workspace.menus.flatMap(m=>m.sections.flatMap(sec=>sec.items.map(i=>[i.id,structuredClone(i)] as const)))),memo=actions.slice(preUndoLen),undo=undoFor(memo,id=>waItems.get(id) as any);
  const beforeW=structuredClone(workspace),restaurant=await restaurantSettings();applyActions(workspace,actions,{uploads:ready,timezone:String((restaurant[0]?.settings as any)?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace);
- if(opts.isExpired?.()||(opts.beginWrite&&!opts.beginWrite()))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(tenant,actor,['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica'],{expectedPublishedRevision:row.revision,next},tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);if(st.postDraft)await propose(tx,ctx,saved.revision+1,st.postDraft);else if(st.postBatch)await propose(tx,ctx,saved.revision+1,st.postBatch);await rememberRenames(tx,tenant,actions,refs,(await restaurantSettings())[0]?.settings);await writeLast(tx,phone,!reverted&&memo.length&&memo.every(a=>a.kind==='move')?{kind:'last',actions:memo,undo:memo.map(a=>({kind:'move',id:(a as any).id,sectionId:refs.find(r=>r.id===(a as any).id)?.sectionId??(a as any).sectionId}) as MenuAction),revision:saved.revision+1,at:Date.now()}:!reverted&&undo&&(memo.length===1||memo.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag'))?{kind:'last',actions:memo,undo,revision:saved.revision+1,at:Date.now()}:null);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));return withTail(appliedMenuText(actions,refs,sections)+afterText(next)+(st.postDraft?'\n\n'+createQuestion(st.postDraft,catalogOf(next).sections):st.postBatch?'\n\n'+copy.batchStill:''))
+ const inh=inheritPhotos(beforeW,next);if(opts.isExpired?.()||(opts.beginWrite&&!opts.beginWrite()))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(tenant,actor,['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica'],{expectedPublishedRevision:row.revision,next},tx as unknown as DB);if(opts.isExpired?.())throw new Error('WhatsApp turn expired');await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${phone}`);if(st.postDraft)await propose(tx,ctx,saved.revision+1,st.postDraft);else if(st.postBatch)await propose(tx,ctx,saved.revision+1,st.postBatch);await rememberRenames(tx,tenant,actions,refs,(await restaurantSettings())[0]?.settings);await writeLast(tx,phone,!reverted&&memo.length&&memo.every(a=>a.kind==='move')?{kind:'last',actions:memo,undo:memo.map(a=>({kind:'move',id:(a as any).id,sectionId:refs.find(r=>r.id===(a as any).id)?.sectionId??(a as any).sectionId}) as MenuAction),revision:saved.revision+1,at:Date.now()}:!reverted&&undo&&(memo.length===1||memo.every(a=>a.kind==='promo'||a.kind==='scarcity'||a.kind==='tag'))?{kind:'last',actions:memo,undo,revision:saved.revision+1,at:Date.now()}:null);await writeUndo(tx,phone,undoRecordFor(beforeW,next));if(st.brain)await trackChange(tx,phone,undoRecordFor(beforeW,next));return withTail(appliedMenuText(actions,refs,sections)+(inh.length?'\n\n'+inheritedNote(inh):'')+afterText(next)+(st.postDraft?'\n\n'+createQuestion(st.postDraft,catalogOf(next).sections):st.postBatch?'\n\n'+copy.batchStill:''))
 }
 /** Fase B (B3.2): dopo «rinomina boh in Bollito» il vecchio nome resta un alias del piatto nella memoria del ristorante
  * (solo col cervello acceso), così «boh» continua a funzionare. Mai verso un nome che è di un altro piatto. */
@@ -478,15 +483,16 @@ function oddPrice(a:MenuAction,refs:MenuRef[]):boolean{if(a.kind!=='price'&&a.ki
 function priceAskText(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):string{const eur=(n:number)=>n.toFixed(2).replace('.',',')+' €'
  const odd=actions.filter(a=>oddPrice(a,refs)),line=(a:MenuAction)=>{const p=(a as any).price as number,r='id' in a?refs.find(x=>x.id===(a as any).id):undefined,nm=r?r.name:String((a as any).name??'')
   return '*'+safe(nm)+'* a *'+eur(p)+'*'+(r&&r.price>0?' (adesso '+eur(r.price)+')':'')+(p<=0?': con 0 € il prezzo non si vede nel menu':'')}
- const q=odd.length===1?line(odd[0]!)+'? Mi sembra un prezzo strano.':'Questi prezzi mi sembrano strani: '+odd.map(line).join('; ')+'.'
- return [q+' Rispondi *sì* per pubblicare oppure scrivimi il prezzo giusto.',actions.length>1?'Non ancora pubblicato:\n'+actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,withNewSections(sections,actions))).join('\n'):''].filter(Boolean).join('\n\n')}
+ const q=odd.length===1?line(odd[0]!)+'? Mi sembra un prezzo strano.':'Questi prezzi mi sembrano strani:\n'+odd.map(x=>'• '+line(x)).join('\n')
+ return [q+(odd.length>1?'\n\n':' ')+'Rispondi *sì* per pubblicare oppure scrivimi il prezzo giusto.',actions.length>1?'Non ancora pubblicato:\n'+actions.map((a,i)=>(i+1)+'. '+describeAction(a,refs,withNewSections(sections,actions))).join('\n'):''].filter(Boolean).join('\n\n')}
 /** Il messaggio è un comando su un GRUPPO non elencato piatto per piatto («tutti», «i dolci», «del 10%»): lì vale groupPriceRisk.
  * «mettili entrambi a 15» dopo due piatti nominati è un prezzo detto per quei piatti (vale solo il controllo del prezzo singolo). */
 function groupWording(message:string,sections:SectionRef[],refs:MenuRef[]):boolean{const p=plain(message);return /\btutt[ieoa]\b/.test(p)||!!groupPercent(message)||!!sectionGroupWord(p,sections,refs)}
 /** notte 22/10 (imperfezione «sezione Pizze e pinse» inventata dal modello): frasi della bozza che nominano un Menu/Sottomenu che nel locale
  * non c'è (e che il turno non crea) cadono. `names` = nomi validi (Menu, Sottomenu, quelli creati adesso). */
-function dropInventedGroups(draft:string|null,names:string[],said=''):string|null{if(!draft)return draft;const ok=names.map(n=>plain(n)).filter(Boolean),sp=' '+plain(said)+' '
- const fake=(x:string)=>[...x.matchAll(/\b(?:sottomenu|sezione|categoria|menu|menù)\s+(?:dei |delle |degli |del |della |di )?\*([^*\n]{2,40})\*/gi)].some(m=>{const k=plain(m[1]!).replace(/^menu\s+/,'');return !!k&&!sp.includes(' '+k+' ')&&!ok.some(o=>{const o2=o.replace(/^menu\s+/,'');return o===k||o2===k||sameSection(o,k)||(k.length>=4&&(o2.startsWith(k)||(' '+o+' ').includes(' '+k+' ')))})})
+// 22/10 Victoria: anche «*Menu Pranzo*» inventato (asterischi attorno a «Menu X»).
+export function dropInventedGroups(draft:string|null,names:string[],said=''):string|null{if(!draft)return draft;const ok=names.map(n=>plain(n)).filter(Boolean),sp=' '+plain(said)+' '
+ const fake=(x:string)=>[...x.matchAll(/\b(?:sottomenu|sezione|categoria|menu|menù)\s+(?:dei |delle |degli |del |della |di )?\*([^*\n]{2,40})\*/gi),...x.matchAll(/\*((?:menu|menù)\s+[^*\n]{2,40})\*/gi)].some(m=>{const k=plain(m[1]!).replace(/^menu\s+/,'');return !!k&&!sp.includes(' '+k+' ')&&!ok.some(o=>{const o2=o.replace(/^menu\s+/,'');return o===k||o2===k||sameSection(o,k)||(k.length>=4&&(o2.startsWith(k)||(' '+o+' ').includes(' '+k+' ')))})})
  const keep=draft.split(/(?<=[.!?])\s+/).filter(x=>!fake(x));return keep.join(' ').trim()||null}
 function groupPriceRisk(actions:MenuAction[],refs:MenuRef[]):boolean{const ps=actions.filter(a=>a.kind==='price') as Extract<MenuAction,{kind:'price'}>[];if(ps.length<2)return false
  return ps.some(a=>{const r=refs.find(x=>x.id===a.id);return !!r&&r.price>0&&(a.price<=0||Math.abs(a.price-r.price)/r.price>0.5+1e-9)})}
@@ -496,7 +502,7 @@ function groupPriceRisk(actions:MenuAction[],refs:MenuRef[]):boolean{const ps=ac
  * (opzione conservativa: il playground 17 «aumenta tutte le pizze di un euro» attende riepilogo + OK); un intero menu o sottomenu
  * nascosto piatto per piatto chiede sempre conferma. */
 function approvalFor(actions:MenuAction[],refs:MenuRef[],message:string,answered=false,strict=false,sections:SectionRef[]=[]):BatchWhy|null{
- if(actions.some(a=>a.kind==='delete'&&!a.undoCreate))return 'delete'
+ if(actions.some(a=>a.kind==='delete'&&!a.undoCreate&&!a.soft))return 'delete'
  const structOnly=strict&&actions.length>0&&actions.every(a=>a.kind==='create_menu'||a.kind==='create_section'||a.kind==='delete_menu'||a.kind==='delete_section'||a.kind==='set_menu_active'||a.kind==='set_section_active')
  // Sostituzione giornaliera dei piatti di un sottomenu (menu fisso) e opzioni di prezzo: subito; togliere un'opzione = conferma.
  if(strict&&actions.length>0&&actions.every(a=>(a as any).fromReplace||isStructAction(a))&&actions.some(a=>(a as any).fromReplace||a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing'))return actions.some(a=>a.kind==='delete_formula')?'recap':null
@@ -561,7 +567,9 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  // domanda con azioni pronte = si applicano subito; (3) comando nuovo, o domanda già al 2° giro = la domanda si chiude e il
  // messaggio va da solo; (4) «solo quelle visibili» dopo una scrittura = i piatti nascosti tornano com'erano.
  type Follow={name:string,sectionId:string,sectionName:string,origin:string}
- let pre:{actions:MenuAction[],why:string,follow?:Follow|null}|null=null,preReply:string|null=null,closePend=false,sessNow:SessState|null=null,sessNote='',sessAfter:SessState|null=null
+ let pre:{actions:MenuAction[],why:string,follow?:Follow|null}|null=null,preReply:string|null=null,closePend=false,sessNow:SessState|null=null,sessNote='',sessAfter:SessState|null=null,ruleRep:RuleReport|null=null
+ // 23/10 (divisione con la «e»): domanda sul pezzo dubbio da fare DOPO la scrittura, regole da imparare, testo della correzione
+ let ruleAsk:RuleAsk|null=null,ruleLearn:SplitRule[]=[],ruleFix:string|null=null,lexicon:Lexicon|null=null
  if(engine==='haiku'){
   const askP=pend?.kind==='ask'?pend.ask as BrainAsk&{origin?:string,rounds?:number,session?:SessState}:null
   const rn=parseStructRename(text,base.menus,sections)
@@ -612,7 +620,38 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(r.kind==='ask'){let q=r.q;if(askP&&plain(q)===plain(askP.question??''))q='Mi mancano ancora: '+sessionMissing(st,sections).map(x=>'*'+safe(x.name)+'*').join(', ')+'. Scrivimi i piatti oppure «restano uguali».';preReply=q;await saveSess(st,q);closePend=false}
    else{sessAfter={...st,applied:true,rounds:0};if(r.actions.length)pre={actions:r.actions,why:'sessione'};else{preReply=[sessNote,'Ok, i piatti di oggi del '+mLab(st.menuName)+' sono già così.'].filter(Boolean).join(' ');await saveSess(sessAfter,'');closePend=false}}
    return true}
-  if(sess){const mSecs=sections.filter(x=>x.menu===sess.menuName),s2:SessState={...sess,done:{...sess.done},kept:[...sess.kept],acts:[...(sess.acts??[])],rounds:(sess.rounds??0)+1}
+  // Regola d'uso 22/10 (decisione Manuel, Victoria Bar): «svuota/togli tutto il menu X» = nasconde i piatti, tiene sottomenu e prezzi fissi;
+  // «nei primi inserisci A, B» = visibili/creati nel sottomenu del Menu di cui si parla, gli altri non si toccano. Letta dal SERVER prima del
+  // modello (owner-brain-svuota.ts); con un Menu ambiguo una domanda di una riga. Anche la sostituzione «stasera a cena primi: …» detta
+  // con il Menu (bug 16:37 «trovo più sottomenu Primi», 17:48 «pasta e fagioli» persa) è letta dal server.
+  let ruleDone=false
+  // Risposta alla proposta «Elimino il Menu X intero?»: «sì» scritto → eliminato (annulla 10 minuti); «no»/«annulla» → niente.
+  const delM=cmd?.kind==='batch'&&cmd.why==='delete'&&Array.isArray(cmd.actions)&&cmd.actions.length===1&&cmd.actions[0]?.kind==='delete_menu'&&cmd.actions[0]?.withItems?cmd.actions[0] as Extract<MenuAction,{kind:'delete_menu'}>:null
+  if(delM&&base.menus.some(m=>m.id===delM.menuId)){const pt=plain(text)
+   if(/^(?:s[iì]|si si|sì sì|si confermo|confermo|si elimina|si eliminalo|elimina|eliminalo|si cancellalo|cancellalo|ok si|si ok|si certo|certo)(?:\s+(?:grazie|pure|dai|tutto))?$/.test(pt)){pre={actions:[delM],why:'regola-elimina'};ruleDone=true}
+   else if(/^(?:ok|okay|oki|va bene|perfetto|vai|procedi|d accordo|esatto|giusto|fallo|confermo tutto)$/.test(pt)){preReply='Per eliminare il '+mLab(delM.name)+' intero mi serve un *sì* scritto: rispondi *sì* per eliminarlo, oppure *no*.';ruleDone=true}
+   else if(/^(?:no|non|annulla|lascia stare|lascia perdere|niente|fermo|aspetta|no grazie|no no|non eliminare|non eliminarlo|no lascia stare)\b/.test(pt)){preReply='Ok, non elimino niente: il '+mLab(delM.name)+' resta com\u2019è.';closePend=true;ruleDone=true}}
+  if(!ruleDone&&(!sess||sess.applied)){const ruleWait=((askP as any)?.rule??null) as RuleWait|null
+   let hist:{role:string,text:string,at:number}[]=[];try{hist=await sqlBrainStore(db).readHistory(ctx.tenant,ctx.phone,Date.now())}catch{/* senza cronologia: solo il Menu detto */}
+   const draftName=askP?.draft?.name&&!askP.draft.sectionId?String(askP.draft.name):null
+   // 23/10: lessico del locale (nomi attuali + storico + regole imparate) solo se il messaggio può contenere una «e» da decidere o una
+   // correzione; lettura con tetto di tempo (mai bloccante: in errore valgono i nomi attuali).
+   if(ruleWait?.kind==='split'||/\b(?:e|ed|sono|separat\w*|divid\w*|unisc\w*|insieme|parte|solo|unico)\b/.test(plain(text)))lexicon=await loadLexicon(db as any,ctx.tenant,refs.map(r=>r.name))
+   const rr=ruleTurn({text,menus:base.menus,sections,refs,history:hist,wait:ruleWait,draftName,lexicon})
+   if(rr){ruleDone=true;if(askP){closePend=true;pend=null;answered=false;(base as any).pendingCommand=null}
+    if('learn' in rr&&rr.learn?.length)ruleLearn=rr.learn
+    if(rr.kind==='apply'){pre={actions:rr.actions,why:'regola'};ruleRep=rr.report;ruleAsk=rr.ask??null}
+    else if(rr.kind==='fix'){pre={actions:rr.actions,why:'regola'};ruleFix=rr.reply}
+    else if(rr.kind==='info'){preReply=rr.text;if(ruleLearn.length)await saveSplitRules(db as any,ctx.tenant,ruleLearn,'correction')}
+    // «elimina il menu pranzo» (correzione Manuel 22/10): il Menu intero, SOLO col «sì» scritto (proposta di eliminazione in attesa)
+    else if(rr.kind==='delete_menu'){const q=deleteMenuQuestion(rr),act={kind:'delete_menu',menuId:rr.menu.id,name:rr.menu.name,withItems:true,items:rr.items} as MenuAction;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:[act],requiresTypedOk:true,why:'delete'})});preReply=q;closePend=false}
+    else{const q=rr.question,w=rr.wait;if(ruleLearn.length)await saveSplitRules(db as any,ctx.tenant,ruleLearn,'clarify');await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,rule:w} as any)});preReply=q;closePend=false}}
+   else if(ruleWait){closePend=true;pend=null;answered=false;(base as any).pendingCommand=null}
+   else if(!askP&&!rn){const dr=dailyReplaceParse(text,base.menus,sections,refs,lexicon)
+    if(dr){const vocab=refs.map(r=>r.name),acts=dr.lists.flatMap(l=>{const inS=refs.filter(r=>r.sectionId===l.secId);return sectionReplace(l.secId,[...new Set(l.names.map(n=>sessionName(n,inS,vocab).name))],refs,true).actions});if(acts.length){pre={actions:acts,why:'sostituzione'};ruleDone=true}
+     else{preReply='Il '+mLab(dr.menu.name)+' è già così: non ho cambiato nulla.';ruleDone=true}}}}
+  if(ruleDone){/* regola svuota/inserisci o sostituzione letta dal server */}
+  else if(sess){const mSecs=sections.filter(x=>x.menu===sess.menuName),s2:SessState={...sess,done:{...sess.done},kept:[...sess.kept],acts:[...(sess.acts??[])],rounds:(sess.rounds??0)+1}
    if(sess.applied&&(sessionExit(text)||isUndoRequest(text)||/\b(?:grazie|perfetto|ok|va bene|fatto|basta)\b/.test(plain(text))&&!parseSession(text,mSecs).lists.length))closePend=true
    else if(sessionExit(text)){preReply='Ok, lascio il '+mLab(sess.menuName)+' com\u2019era: non ho cambiato nulla.';closePend=true}
    else if(newCommandInSession(text,sess.menuName,base.menus)||rn)closePend=true
@@ -961,7 +1000,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   if(out.kind==='change'&&visibleOnly(text)){const keep=out.actions.filter(a=>!('id' in a)||a.kind==='hidden'||!refs.find(r=>r.id===(a as any).id)?.hidden);if(keep.length)out={...out,actions:keep}}}
  // notte 22/10 (qavero «aggiungi la frittatina» → «3,50» → creata nei Primi del Menu del giorno NASCOSTO): un piatto nuovo in un Menu o
  // sottomenu nascosto che il titolare non ha nominato non si crea: domanda col prezzo tenuto e l'elenco dei sottomenu visibili.
- if(engine==='haiku'&&out.kind==='change'&&out.actions.length===1&&out.actions[0]!.kind==='create'&&!(out.actions[0] as any).fromReplace){const a=out.actions[0] as Extract<MenuAction,{kind:'create'}>,sc=sections.find(x=>x.id===a.sectionId),m=sc?base.menus.find(mm=>mm.name===sc.menu):undefined
+ if(engine==='haiku'&&pre?.why!=='regola'&&out.kind==='change'&&out.actions.length===1&&out.actions[0]!.kind==='create'&&!(out.actions[0] as any).fromReplace){const a=out.actions[0] as Extract<MenuAction,{kind:'create'}>,sc=sections.find(x=>x.id===a.sectionId),m=sc?base.menus.find(mm=>mm.name===sc.menu):undefined
   const hid=!!m&&(m.active===false||(m.secs as any[]).find(z=>z.id===sc!.id)?.active===false)
   // notte 22/10 (QA v145 GRAVE «aggiungi patatine fritte a 4» → creato nel sottomenu della conversazione PRIMA): il sottomenu di un piatto
   // nuovo vale solo se detto (messaggio o richiesta in sospeso) o se nel locale c'è un solo sottomenu visibile; mai ereditato dalla memoria.
@@ -1006,27 +1045,27 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   let wroteActs:MenuAction[]=[],lastRev=row.revision
   // R10: senza scrittura, mai la stessa domanda dell'ultima risposta (riepilogo rimandato uguale): restano i fatti.
   const groupNames=[...base.menus.map(m=>m.name),...sections.map(x=>x.name),...((out as any).actions??[]).flatMap((a:any)=>a.kind==='create_section'||a.kind==='create_menu'||a.kind==='rename_section'||a.kind==='rename_menu'?[String(a.name??'')]:[])]
-  const say=(facts:string,wrote:boolean,extra:number[]=[])=>{let d=(noDraft||actedDraft(finalRun))&&!wrote?null:cleanDraft(finalRun.decision.draft,{wrote,numbers:numbersOK(finalRun,extra)});if(engine==='haiku')d=dropInventedGroups(d,groupNames,askText);if(d&&wrote&&engine==='haiku'){d=d.split(/(?<=[.!?])\s+/).filter(x=>!/\?\s*$/.test(x.trim())&&!/\b(?:rispondi|confermi|conferma)\b/i.test(x)).join(' ').trim()||null};if(d&&wrote&&engine==='haiku')d=finalRun.decision.notes?.includes('ripristino_come_spostamento')?null:pruneWroteDraft(d,wroteActs,refs);if(d&&!wrote&&facts&&lastQ&&sectionTurn&&sameQuestion(d,lastQ))d=null;return [d,facts].filter(Boolean).join('\n\n')||NOTHING}
+  const say=(facts:string,wrote:boolean,extra:number[]=[])=>{let d=(noDraft||actedDraft(finalRun))&&!wrote?null:cleanDraft(finalRun.decision.draft,{wrote,numbers:numbersOK(finalRun,extra)});if(engine==='haiku')d=dropInventedGroups(d,groupNames,askText);if(d&&wrote&&engine==='haiku'){d=d.split(/(?<=[.!?])\s+/).filter(x=>!/\?\s*$/.test(x.trim())&&!/\b(?:rispondi|confermi|conferma)\b/i.test(x)).join(' ').trim()||null};if(d&&wrote&&engine==='haiku')d=finalRun.decision.notes?.includes('ripristino_come_spostamento')?null:pruneWroteDraft(d,wroteActs,refs);if(d&&!wrote&&facts&&lastQ&&sectionTurn&&sameQuestion(d,lastQ))d=null;if(d)d=noHiddenTalk(d,[...wroteActs,...(((out as any).actions??[]) as MenuAction[])]);return [d,facts].filter(Boolean).join('\n\n')||NOTHING}
   const pricesOf=(acts:MenuAction[])=>acts.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price as number]:[]).concat(acts.flatMap(a=>'id' in a?[refs.find(r=>r.id===(a as any).id)?.price??-1]:[]))
   // Scrive e pubblica, poi rilegge dal DB: i fatti della risposta sono quelli riletti.
-  const applyNow=async(effective:MenuAction[],label:[string,string]=['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica']):Promise<{facts:string,allOk:boolean,revision:number}>=>{
+  const applyNow=async(effective:MenuAction[],label:[string,string]=['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica']):Promise<{facts:string,allOk:boolean,revision:number,inherited:string}>=>{
    wroteActs=[...wroteActs,...effective]
    const beforeW=structuredClone(workspace);applyActions(workspace,effective,{uploads:new Map(),timezone:String(settings?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace)
-   if(!beginWrite(budget))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(ctx.tenant,ctx.actor,[label[0],label[1]],{expectedPublishedRevision:live.revision,next},tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired')
+   const inh=inheritPhotos(beforeW,next);if(!beginWrite(budget))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(ctx.tenant,ctx.actor,[label[0],label[1]],{expectedPublishedRevision:live.revision,next},tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired')
    const waItems=new Map(beforeW.menus.flatMap((m:any)=>m.sections.flatMap((sec:any)=>sec.items.map((i:any)=>[i.id,structuredClone(i)] as const)))),back=undoFor(effective,id=>waItems.get(id) as any)
    await drop();await rememberRenames(tx,ctx.tenant,effective,refs,settings);await writeLast(tx,ctx.phone,back?{kind:'last',actions:effective,undo:back,revision:saved.revision+1,at:Date.now()}:null);const rec=undoRecordFor(beforeW,next);await writeUndo(tx,ctx.phone,rec);await trackChange(tx,ctx.phone,rec)
    // notte 22/10 (cc-giornata-05): i piatti eliminati restano 30 minuti tra i «ripristinabili» (nome, prezzo, sottomenu di prima).
    {const dels=effective.filter(a=>a.kind==='delete'&&waItems.has((a as any).id)).map(a=>({id:(a as any).id as string,before:waItems.get((a as any).id),sectionId:refs.find(r=>r.id===(a as any).id)?.sectionId??undefined}));if(dels.length)await trackChange(tx,ctx.phone,{at:Date.now(),items:dels} as any)}
    const reread=await readBotWorkspace(ctx.tenant,tx),after=reread?.published?catalogOf(workspaceSchema.parse(reread.published)):catalogOf(next),{ok,failed}=verifyApplied(effective,after.refs)
    inBackground(learnAfter(db,{tenant:ctx.tenant,refs,sections,run:finalRun,applied:ok.length>0,key,meter:ai.meter,engine}))
-   const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?'Non salvato: '+failed.map(a=>describeAction(a,refs,sections)).join('; '):'',out.kind==='change'&&out.after&&out.after.type==='read'&&!(effective.some(a=>a.kind==='create')&&((out.after as any).ids??[]).some((id:string)=>!effective.some(e=>'id' in e&&(e as any).id===id)))?planText(out.after,after.refs,after.sections):''].filter(Boolean).join('\n\n')
+   const facts=[ok.length?changeFacts(ok,refs,sections):'',failed.length?unsavedText(failed.map(a=>describeAction(a,refs,sections))):'',out.kind==='change'&&out.after&&out.after.type==='read'&&!(effective.some(a=>a.kind==='create')&&((out.after as any).ids??[]).some((id:string)=>!effective.some(e=>'id' in e&&(e as any).id===id)))?planText(out.after,after.refs,after.sections):'',inheritedNote(inh)].filter(Boolean).join('\n\n')
    lastRev=reread?.revision??saved.revision+1
-   return{facts,allOk:!failed.length,revision:reread?.revision??saved.revision+1}}
-  const publish=async(actions:MenuAction[]):Promise<string>=>{let effective=effectiveMenuActions(actions,workspace)
+   return{facts,allOk:!failed.length,revision:reread?.revision??saved.revision+1,inherited:inheritedNote(inh)}}
+  const publish=async(actions:MenuAction[]):Promise<string>=>{actions=noHide(actions);let effective=effectiveMenuActions(actions,workspace)
    // notte 22/10 (cieco b2 «nascondi tutti i dolci» → nascosti piatto per piatto, due frasi uguali): «tutti i <sottomenu>» nascosto per
    // intero = il sottomenu nascosto (un interruttore, si rimette con «rendi visibile»), con UNA domanda del server.
    let wholeSec:{name:string,menu:string,items:number}|null=null
-   if(engine==='haiku'&&/\btutt[ieoa]\b/.test(plain(text))&&effective.length>=2&&effective.every(a=>a.kind==='hidden'&&a.value)){const secs=[...new Set(effective.map(a=>refs.find(r=>r.id===(a as any).id)?.sectionId??''))]
+   if(engine==='haiku'&&pre?.why!=='regola'&&/\btutt[ieoa]\b/.test(plain(text))&&effective.length>=2&&effective.every(a=>a.kind==='hidden'&&a.value)){const secs=[...new Set(effective.map(a=>refs.find(r=>r.id===(a as any).id)?.sectionId??''))]
     if(secs.length===1&&secs[0]){const sid=secs[0]!,items=refs.filter(r=>r.sectionId===sid),sc=sections.find(x=>x.id===sid);if(sc&&items.every(r=>r.hidden||effective.some(a=>(a as any).id===r.id))){effective=[{kind:'set_section_active',sectionId:sid,name:sc.name,menuName:sc.menu,value:false,items:items.length} as MenuAction];wholeSec={name:sc.name,menu:sc.menu,items:items.length}}}}
    // T4b (1): niente da cambiare → nessuna scrittura, si dice com'è già (fatti del menu).
    const already=engine==='haiku'?noopFacts(actions,effective,refs):''
@@ -1036,9 +1075,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    // proposta in attesa dell'OK (mai un testo che chiede conferma sopra a una scrittura già fatta).
    // Sostituzione dei piatti di oggi («stasera primi …»): si applica subito, «annulla» entro 10 minuti è la rete (banco prezzofisso 21/10).
    const asksOk=engine==='haiku'&&!answered&&draftAsksOkOnDate(effective,String(finalRun.decision.draft??''),text)
-   const why=approval(effective,refs,text,answered)??(asksOk?'recap':null)
+   // regola svuota/inserisci (22/10): si applica subito, «annulla» entro 10 minuti è la rete (decisione Manuel: niente domande)
+   const why=pre?.why==='regola'||pre?.why==='regola-elimina'?null:approval(effective,refs,text,answered)??(asksOk?'recap':null)
    // Eliminazioni insieme ad altre modifiche (Y1): le parti chiare si pubblicano subito, le eliminazioni aspettano il «sì».
-   if(why==='delete'){const dels=effective.filter(a=>a.kind==='delete'&&!a.undoCreate),rest=effective.filter(a=>!dels.includes(a))
+   if(why==='delete'){const dels=effective.filter(a=>a.kind==='delete'&&!a.undoCreate&&!a.soft),rest=effective.filter(a=>!dels.includes(a))
     if(rest.length&&!approval(rest,refs,text,answered)){const r=await applyNow(rest);await propose(tx,ctx,r.revision,{kind:'batch',actions:dels,requiresTypedOk:true,why:'delete'});return say([r.facts,pendingFacts('delete',dels,refs,sections)].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}}
    // notte 22/10 (cc-prezzo-01 «la carbonara a 1300»): prezzo fuori scala = una DOMANDA del server (sì / prezzo giusto), mai la bozza
    // del modello che diceva «Rispondi OK per pubblicare» come se fosse un riepilogo qualunque.
@@ -1048,6 +1088,14 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(why&&engine==='haiku'&&wholeGroup(effective,refs,sections)){await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why});return wholeGroupText(wholeGroup(effective,refs,sections)!)}
    if(why){await drop();await propose(tx,ctx,row.revision,{kind:'batch',actions:effective,requiresTypedOk:true,why});const whole=engine==='haiku'?wholeGroup(effective,refs,sections):null;return say([zeroN?'Metto a *0 €* '+(zeroN===1?'1 piatto':zeroN+' piatti')+': con 0 € nel menu il prezzo non si vede. Rispondi *OK* per confermare oppure *annulla*.':'',whole?wholeGroupText(whole):pendingFacts(why,effective,refs,sections),already].filter(Boolean).join('\n\n'),false,pricesOf(effective))}
    const r=await applyNow(effective)
+   if(pre?.why==='regola-elimina'&&r.allOk){const a0=effective[0] as any;return 'Fatto: il '+mLabelOf(String(a0?.name??''))+' è eliminato, con i suoi sottomenu e piatti.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.'}
+   // 23/10: regole di divisione imparate (risposta «1/2» o correzione) solo dopo la scrittura riuscita; il pezzo dubbio si chiede DOPO
+   if(pre?.why==='regola'&&ruleLearn.length&&r.allOk)await saveSplitRules(db as any,ctx.tenant,ruleLearn,ruleFix?'correction':'clarify')
+   if(pre?.why==='regola'&&ruleFix)return [ruleFix,r.inherited,r.allOk?'':r.facts,UNDO_HINT].filter(Boolean).join('\n\n')
+   if(pre?.why==='regola'&&ruleRep){const txt=ruleReply(ruleRep,refs.filter(x=>x.menu===ruleRep!.menu),effective,true,r.inherited+(r.allOk?'':'\n\n'+r.facts))
+    if(!ruleAsk)return txt
+    const q=ruleAsk.question,w=ruleAsk.wait;await propose(tx,ctx,r.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,rule:w} as any)
+    return txt+'\n\n'+q}
    // Prova dal vivo 21/10: aumento/ribasso uniforme applicato subito → solo il testo del server (la bozza prometteva un riepilogo e
    // nominava come «lasciati fuori» piatti che invece erano stati cambiati).
    if(engine==='haiku'&&r.allOk){const dl=uniformDelta(effective,refs);if(dl!==null)return [uniformReply(dl,effective.length,r.facts),already,UNDO_HINT].filter(Boolean).join('\n\n')
@@ -1055,16 +1103,22 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     const tg=uniformTarget(effective);if(tg!==null&&/\btutt[ieoa]\b/.test(plain(text)))return [uniformTargetReply(tg,effective.length,r.facts),already,UNDO_HINT].filter(Boolean).join('\n\n')
     if(effective.every(a=>a.kind==='rename_menu'||a.kind==='rename_section'||a.kind==='rename'))return [r.facts,UNDO_HINT].join('\n\n')}
    // run Haiku 21/10 (decisione Manuel): solo struttura → testo del server, chiaro su cosa vedono i clienti (niente bozza del modello).
-   if(engine==='haiku'&&r.allOk&&effective.some(a=>(a as any).fromReplace))return replaceReply(effective,refs,sections)
+   if(engine==='haiku'&&r.allOk&&effective.some(a=>(a as any).fromReplace))return replaceReply(effective,refs,sections,r.inherited) // 22/10: nota foto PRIMA di «annulla»
    if(engine==='haiku'&&r.allOk&&effective.every(isStructAction)&&effective.some(a=>a.kind==='create_menu'||a.kind==='create_section'||a.kind==='set_menu_active'||a.kind==='set_section_active'||a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing'))return structureReply(effective,refs,sections,new Set(base.menus.filter(m=>!m.active).map(m=>m.name)))
-   return say([r.facts,already].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
+   // 22/10 notte: piatti eliminati con «togli/leva/nascondi» (subito, senza «sì»): la rete è «annulla» entro 10 minuti.
+   return say([r.facts,already,effective.some(a=>a.kind==='delete'&&(a as any).soft)&&r.allOk?UNDO_HINT:''].filter(Boolean).join('\n\n'),r.allOk,pricesOf(effective))}
   const core=async():Promise<string>=>{switch(out.kind){
    case 'undo':{const before=structuredClone(workspace) as any,res=applyUndo(workspace,undoRec!);if(!res.ok)return fill(copy.undoConflict,{piatti:res.changed.slice(0,4).map(n=>'*'+safe(n)+'*').join(', ')})
     const next=workspaceSchema.parse(workspace),saved=await applyBotChange(ctx.tenant,ctx.actor,['WhatsApp: annullamento','WhatsApp: annullamento pubblicato'],{expectedPublishedRevision:live.revision,next},tx as unknown as DB);await writeUndo(tx,ctx.phone,null);await writeLast(tx,ctx.phone,null);await drop()
     // notte 22/10 (n-pf annulla): annullare il prezzo di un'opzione (Completo, Solo primo…) mostra il prezzo tornato, non solo la bozza.
     const prevF=new Map<string,number>(((before.menus??[]) as any[]).flatMap(m=>((m.formulas??[]) as any[]).map(f=>[String(f.id),Number(f.price)] as [string,number])))
     const fx=((next as any).menus??[] as any[]).flatMap((m:any)=>((m.formulas??[]) as any[]).filter(f=>prevF.has(String(f.id))&&Math.abs(prevF.get(String(f.id))!-Number(f.price))>=0.005).map(f=>'*'+safe(f.name)+'* del *'+safe(m.name)+'*: di nuovo *'+Number(f.price).toFixed(2).replace('.',',')+' €*'))
-    return say([...res.restored.map(n=>fill(copy.undoRestored,{piatto:safe(n)})),...res.removed.map(n=>fill(copy.undoRemoved,{piatto:safe(n)})),...fx].join('\n'),true)}
+    // 22/10 (QA foto su due omonimi): stesso nome in più Menu → il Menu accanto al nome; testo del server (mai un solo Menu citato dal modello).
+    const allN=[...res.restored,...res.removed],dupN=(n:string)=>allN.filter(x=>plain(x)===plain(n)).length>1,used=new Set<string>()
+    const lab=(n:string)=>{if(!dupN(n))return safe(n);const it=(undoRec!.items??[]).find(i=>!used.has(i.id)&&String(i.before?.name??i.after?.name??'')===n);if(!it)return safe(n);used.add(it.id);const m=refs.find(r=>r.id===it.id)?.menu;return safe(n)+(m?' ('+safe(m)+')':'')}
+    const fm=undoRec!.full?.names.restoredMenus,lines=[...res.restored.map((n,i)=>fill(copy.undoRestored,{piatto:fm&&fm[i]&&dupN(n)?safe(n)+' ('+safe(fm[i]!)+')':lab(n)})),...res.removed.map(n=>fill(copy.undoRemoved,{piatto:lab(n)})),...fx].join('\n')
+    if(engine==='haiku')return ['Ok, annullo l’ultima modifica.',lines].filter(Boolean).join('\n\n')
+    return say(lines,true)}
    // notte 22/10 (n-annulla-domanda): chiudere una domanda o una bozza non è «annullare l’ultima pubblicazione»: testo fisso, mai la bozza.
    case 'cancel':await drop();if(engine==='haiku'&&pend&&pend.kind!=='batch')return dropText;return say('',false)
    case 'confirm':{const stored=pend&&(pend.kind==='batch'||pend.kind==='hold')?storedActions({kind:'batch',actions:pend.actions},refs,sections):null;if(!stored){await drop();return copy.menuChanged}
@@ -1132,7 +1186,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     // Menu a prezzo fisso (banco prezzofisso 21/10, pf-piatto-nuovo-08): «la lasagna a 8» su un piatto di un Menu fisso, senza una domanda
     // del modello utilizzabile → il fatto del menu (i piatti non hanno prezzo, le opzioni sì), mai il solo «Non ho cambiato nulla».
     if(!question&&!out.hold&&/\d|\b(?:euro|prezz\w*|costa\w*)\b/i.test(text)){const fx=fixedDishFact([...out.ids,...out.actions.flatMap(a=>'id' in a?[(a as any).id as string]:[])],refs,base.menus);if(fx)return fx}
-    const unsaved=!question&&!out.hold&&!out.twins?.length&&out.actions.length?'Non salvato: '+out.actions.slice(0,8).map(a=>describeAction(a,refs,withNewSections(sections,out.actions))).join('; '):''
+    const unsaved=!question&&!out.hold&&!out.twins?.length&&out.actions.length?unsavedText(out.actions.slice(0,8).map(a=>describeAction(a,refs,withNewSections(sections,out.actions)))):''
     return [question,question||missingSection?'':NOTHING,unsaved,facts,missingSection].filter(Boolean).join('\n\n')}
    // Opzioni di un Menu a prezzo fisso: i fatti del server bastano (la bozza ripeteva gli stessi prezzi).
    case 'read':if(out.plan?.read==='formulas')return planText(out.plan,refs,sections)
@@ -1239,8 +1293,9 @@ export async function resolveTurn(ctx:Ctx,text:string,turn:Exclude<Turn,string>,
  const note='llm' in turn?turn.note:undefined,r=await resolveTurnCore(ctx,text,turn,key,ai,budget);return note&&r?r+'\n\n'+note:r}
 async function resolveTurnCore(ctx:Ctx,text:string,turn:Exclude<Turn,string>,key:string,ai:GroqOptions={},budget:Budget={expired:false}):Promise<string>{
  if('upload' in turn){const uploads=new Map<string,string>()
-  for(const a of turn.upload){const saved=await prepareUpload(ctx.tenant,{mediaUrl:a.mediaUrl},ctx.phone)
-   if('error' in saved)return fill(copy.photoUploadFailed,{motivo:saved.error.replace(/\.$/,'').toLowerCase()});uploads.set(a.id,saved.url)}
+  const byMedia=new Map<string,string>()
+  for(const a of turn.upload){const known=byMedia.get(a.mediaUrl);if(known){uploads.set(a.id,known);continue}const saved=await prepareUpload(ctx.tenant,{mediaUrl:a.mediaUrl},ctx.phone)
+   if('error' in saved)return fill(copy.photoUploadFailed,{motivo:saved.error.replace(/\.$/,'').toLowerCase()});uploads.set(a.id,saved.url);byMedia.set(a.mediaUrl,saved.url)}
   if(budget.expired)return ''
   try{const done=await turnFor(ctx,'conferma',{uploads,isExpired:()=>budget.expired,beginWrite:()=>beginWrite(budget)});return typeof done==='string'?done:copy.failed}catch{return copy.photoPublishFailed}}
  // PIANO bot-haiku: cervello acceso su haiku → ogni turno di testo all'IA va al cervello Haiku (mai groqMenuPlan, mai Groq).
@@ -1250,8 +1305,11 @@ async function resolveTurnCore(ctx:Ctx,text:string,turn:Exclude<Turn,string>,key
  if(!(turn.brain||(haiku&&turn.fullmenu)?brainKey:key))return 'brain' in turn&&turn.brain?copy.brainDown:copy.noAi;const row=await readBotWorkspace(ctx.tenant);if(!row)throw new Error('Workspace missing');const {refs,sections}=catalogOf(workspaceSchema.parse(row.draft))
  if(turn.photo){const candidates=candidatesFor(text,refs);if(!candidates.length)return fill(copy.photoNotFound,{nome:text.slice(0,80)});// PIANO bot-haiku: cervello su Haiku → nessuna chiamata Groq neanche per la foto di un piatto: un solo candidato (o un solo nome
   // identico) = quel piatto, altrimenti si chiede quale (mai una scelta a caso).
-  const exact=candidates.filter(r=>plain(r.name)===plain(text)),pick:{type:'dish',id:string}|{type:'clarify',ids:string[]}=haiku?(candidates.length===1||exact.length===1?{type:'dish',id:(exact.length===1?exact[0]!:candidates[0]!).id}:{type:'clarify',ids:candidates.slice(0,5).map(r=>r.id)}):validateDishPick((await groqDishPick(text,candidates,key,[],ai)).content,refs);if(pick.type==='clarify')return pick.ids.length?fill(copy.photoWhich,{opzioni:bold(pick.ids.map(id=>itemLabel(refs.find(r=>r.id===id)!,refs)))}):fill(copy.photoNotFound,{nome:text.slice(0,80)})
-  if(budget.expired)return '';const done=await turnFor(ctx,text,{isExpired:()=>budget.expired,beginWrite:()=>beginWrite(budget),planned:{revision:row.revision,plan:{type:'change',actions:[{kind:'image',id:pick.id,...turn.photo}]}}});return typeof done==='string'?done:'upload' in done?await resolveTurn(ctx,text,done,key,ai,budget):copy.failed}
+  // 22/10 (decisione foto per nome): nomi identici (normalizzati) = lo stesso piatto → foto su tutti, senza domanda; si chiede solo
+  // se i candidati hanno nomi DIVERSI.
+  const byName=photoTargetsByName(text,candidates,refs),pick:{type:'dish',id:string}|{type:'clarify',ids:string[]}=byName?{type:'dish',id:byName[0]!}:haiku?{type:'clarify',ids:candidates.slice(0,5).map(r=>r.id)}:validateDishPick((await groqDishPick(text,candidates,key,[],ai)).content,refs);if(pick.type==='clarify')return pick.ids.length?fill(copy.photoWhich,{opzioni:bold(pick.ids.map(id=>itemLabel(refs.find(r=>r.id===id)!,refs)))}):fill(copy.photoNotFound,{nome:text.slice(0,80)})
+  const targets=byName??groupOf(pick.id,refs)
+  if(budget.expired)return '';const done=await turnFor(ctx,text,{isExpired:()=>budget.expired,beginWrite:()=>beginWrite(budget),planned:{revision:row.revision,plan:{type:'change',actions:targets.map(id=>({kind:'image',id,...turn.photo}) as MenuAction)}}});return typeof done==='string'?done:'upload' in done?await resolveTurn(ctx,text,done,key,ai,budget):copy.failed}
  if(turn.fullmenu){let extraction:FullMenuExtraction;try{extraction=haiku?await extractFullMenu(turn.fullmenu.text,brainKey,haikuFullMenuFetcher()):await extractFullMenu(turn.fullmenu.text,key,fullMenuFetcher())}catch(error){if(error instanceof OnboardingBusy)return copy.busy;return fullMenuCopy.failed}
   if(budget.expired)return '';const done=await turnFor(ctx,turn.fullmenu.text,{voice:turn.fullmenu.voice,isExpired:()=>budget.expired,beginWrite:()=>beginWrite(budget),plannedFull:{revision:row.revision,job:turn.fullmenu,extraction}});return typeof done==='string'?done:copy.failed}
  if(turn.text)text=turn.text;const exclude=turn.exclude??[]
@@ -1358,7 +1416,7 @@ export async function twilioMenuRoutes(app:FastifyInstance){
     const current=existing.owner_email?String(existing.owner_email):null
     if(existing.activated_at!=null&&current&&current!==email)return{emailLocked:current}
     await tx.execute(sql`UPDATE tako_whatsapp_links SET owner_email=${email} WHERE phone=${phone}`);return{state:await ownerState(tx,tenant)}}
-   // 21/10: massimo due numeri per locale (anche se il pannello nasconde «Aggiungi numero» a 2 su 2).
+   // 21/10: massimo due numeri per locale; 22/10 (Manuel): tre (il pannello nasconde «Aggiungi numero» a 3 su 3).
    if(others.length>=OWNER_PHONES_MAX)return{limit:true as const}
    if(existing){const other=String(existing.restaurant_id),canMove=await permitted(tx,actor,other);if(input.move!==true||!canMove)return{conflict:{name:canMove?String(existing.name):null,canMove}}}
    // Ricollegamento con l'email di un titolare a cui il bot aveva già consegnato l'accesso: sessioni chiuse ora, password nuova al primo messaggio.
@@ -1378,7 +1436,7 @@ export async function twilioMenuRoutes(app:FastifyInstance){
   if('emailInUse' in result)return reply.code(409).send({error:{code:'EMAIL_IN_USE',field:'email',message:'Questa email è già usata da un altro account. Scrivi un’altra email del titolare.'}})
   if('emailOtherNumber' in result)return reply.code(409).send({error:{code:'EMAIL_OTHER_NUMBER',field:'email',message:'Questa email è già dell’altro numero: ogni numero ha la sua email.'}})
   if('alreadyListed' in result)return reply.code(409).send({error:{code:'PHONE_ALREADY_LISTED',field:'phone',message:'Questo numero è già in elenco.'}})
-  if('limit' in result)return reply.code(409).send({error:{code:'OWNER_PHONES_LIMIT',field:'phone',message:'Al massimo due numeri per locale. Scollegane uno per aggiungerne un altro.'}})
+  if('limit' in result)return reply.code(409).send({error:{code:'OWNER_PHONES_LIMIT',field:'phone',message:'Al massimo quattro numeri per locale. Scollegane uno per aggiungerne un altro.'}})
   if('conflict' in result&&result.conflict){const c=result.conflict;return reply.code(409).send({error:{code:c.canMove?'PHONE_IN_USE_MOVABLE':'PHONE_IN_USE',field:'phone',message:c.canMove?`Questo numero è già collegato a ${c.name}. Vuoi spostarlo su questo locale?`:'Questo numero è già collegato a un altro locale. Per spostarlo contatta Tako.',canMove:c.canMove}})}
   return{data:result.state}})
  // 21/10: scollega UN numero (?phone=…); l'altro resta collegato con proposte e cronologia sue. Senza ?phone vale solo se il locale ne ha uno.
@@ -1489,17 +1547,32 @@ function structureReply(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[
  for(const a of actions){if(a.kind==='set_menu_active'||a.kind==='set_section_active'){const what=(a.kind==='set_menu_active'?'il Menu *':'il sottomenu *')+safe(a.name)+'*'
    out.push(a.value?'Fatto: '+what+' ora è visibile ai clienti.'+(a.items?'':' I clienti vedono «Menu in arrivo» finché non aggiungi i piatti.'):'Fatto: '+what+' ora è nascosto ai clienti.')}
   if(a.kind==='delete_menu'||a.kind==='delete_section'||a.kind==='set_formula'||a.kind==='delete_formula'||a.kind==='set_menu_pricing')out.push(describeAction(a,refs,sections)+'.')}
- return out.join('\n')
+ return out.join(out.length>2?'\n\n':'\n')
 }
+// 22/10: più voci non salvate → una per riga (prima «a; b; c» su una riga).
+const unsavedText=(xs:string[])=>xs.length>1?'Non salvato:\n'+xs.map(x=>'• '+x).join('\n'):'Non salvato: '+xs[0]
 
-/** Riepilogo della sostituzione giornaliera (menu a prezzo fisso): per sottomenu, i piatti di oggi e quelli nascosti. */
-function replaceReply(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):string{
+/** 22/10 notte (decisione Manuel «eliminare, non nascondere»): la bozza del modello non dice mai che un PIATTO è «nascosto» (i piatti tolti
+ * sono eliminati; i fatti del server lo dicono). Restano le frasi sulla visibilità di Menu/Sottomenu quando il turno la cambia davvero. */
+export function noHiddenTalk(d:string,acts:MenuAction[]):string|null{
+ if(acts.some(a=>a.kind==='set_menu_active'||a.kind==='set_section_active'||(a.kind==='create_section'&&(a as any).hidden)||a.kind==='create_menu'))return d
+ const keep=d.split(/(?<=[.!?])\s+/).filter(x=>!/\b(?:nascost\w*|nascond\w*)\b/i.test(x));return keep.join(' ').trim()||null}
+/** Riepilogo della sostituzione giornaliera (menu a prezzo fisso): per sottomenu, i piatti di oggi; in fondo gli eliminati (22/10 notte). */
+export function replaceReply(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[],extra=''):string{
  const bySec=new Map<string,{shown:string[],hidden:string[]}>(),get=(id:string)=>{let v=bySec.get(id);if(!v){v={shown:[],hidden:[]};bySec.set(id,v)}return v}
- for(const a of actions as any[]){if(a.kind==='create')get(a.sectionId).shown.push(a.name);else if(a.kind==='hidden'){const r=refs.find(x=>x.id===a.id);if(!r)continue;(a.value?get(r.sectionId??'').hidden:get(r.sectionId??'').shown).push(r.name)}}
- for(const r of refs){const v=bySec.get(r.sectionId??'');if(v&&!r.hidden&&!(actions as any[]).some(a=>a.id===r.id)&&!v.shown.includes(r.name))v.shown.push(r.name)}
- const out:string[]=[],list=(xs:string[])=>xs.map(x=>'*'+safe(x)+'*').join(', ')
- for(const [id,v] of bySec){const s=sections.find(x=>x.id===id);out.push('Oggi nei *'+safe(s?.name??'')+'*'+(s?.menu?(/^men[uù]\b/i.test(s.menu.trim())?' del *':' del Menu *')+safe(s.menu)+'*':'')+': '+(v.shown.length?list(v.shown):'nessun piatto')+'.'+(v.hidden.length?' Nascosti: '+list(v.hidden)+' (tornano quando li rimetti).':''))}
- return out.join('\n')+'\nPer tornare come prima scrivi *annulla* entro 10 minuti.'
+ for(const a of actions as any[]){if(a.kind==='create')get(a.sectionId).shown.push(a.name);else if(a.kind==='delete'){const r=refs.find(x=>x.id===a.id);if(r)get(r.sectionId??'').hidden.push(r.name)}else if(a.kind==='hidden'){const r=refs.find(x=>x.id===a.id);if(!r)continue;(a.value?get(r.sectionId??'').hidden:get(r.sectionId??'').shown).push(r.name)}}
+ for(const r of refs){const v=bySec.get(r.sectionId??'');if(v&&!r.hidden&&!(actions as any[]).some(a=>a.id===r.id&&(a.kind==='delete'||a.kind==='hidden'))&&!v.shown.includes(r.name))v.shown.push(r.name)}
+ // 22/10 (richiesta Manuel, screenshot Victoria): messaggio strutturato, non un blocco unico. Per Menu un titolo in grassetto, per
+ // sottomenu il nome in grassetto e un piatto per riga; gli eliminati in fondo su una riga sola; righe vuote tra i blocchi.
+ const byMenu=new Map<string,string[]>(),hidden:string[]=[]
+ for(const [id,v] of bySec){const s=sections.find(x=>x.id===id),menu=(s?.menu??'').trim(),blocks=byMenu.get(menu)??[]
+  blocks.push('*'+safe(s?.name??'')+'*\n'+(v.shown.length?v.shown.map(x=>'• '+safe(x)).join('\n'):'• nessun piatto'));byMenu.set(menu,blocks)
+  for(const h of v.hidden)if(!hidden.includes(h))hidden.push(h)}
+ const out:string[]=[]
+ for(const [menu,blocks] of byMenu)out.push('*'+(menu?(/^men[uù]\b/i.test(menu)?safe(menu):'Menu '+safe(menu)):'Menu')+' aggiornato*',...blocks)
+ if(hidden.length)out.push('Eliminati: '+hidden.map(safe).join(', '))
+ if(extra)out.push(extra)
+ return out.join('\n\n')+'\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.'
 }
 
 /** notte 22/10: il nome di un piatto NUOVO detto con «aggiungi / inserisci / metti nel menu» («aggiungi le patatine fritte a 4 nei primi» →

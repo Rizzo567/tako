@@ -81,21 +81,23 @@ describe('WhatsApp del titolare: due numeri per locale su Postgres vero', () => 
     expect((await state()).numbers.map((n: any) => n.phone)).toEqual(['+393330000091'])
   })
 
-  it('migrazione idempotente; poi due numeri sì, il terzo no; scollega uno lascia l’altro', async () => {
+  it('migrazione idempotente; poi quattro numeri sì (23/10), il quinto no; scollega uno lascia l’altro', async () => {
     await applySql('whatsapp-owner-two-numbers.sql'); await applySql('whatsapp-owner-two-numbers.sql')
     const indexes = (await sql`select indexname from pg_indexes where tablename='tako_whatsapp_links'`).map(r => r.indexname)
     expect(indexes).not.toContain('tako_whatsapp_links_one_per_restaurant')
     expect(indexes).toContain('tako_whatsapp_links_restaurant')
     expect((await save('3330000092', 'b@example.com')).statusCode).toBe(200)
-    const third = await save('3330000093', 'c@example.com')
-    expect(third.statusCode).toBe(409); expect(third.json().error.code).toBe('OWNER_PHONES_LIMIT')
-    expect((await state()).numbers.map((n: any) => [n.phone, n.email, n.status])).toEqual([['+393330000091', 'a@example.com', 'pending'], ['+393330000092', 'b@example.com', 'pending']])
+    expect((await save('3330000093', 'c@example.com')).statusCode).toBe(200)
+    expect((await save('3330000094', 'd@example.com')).statusCode).toBe(200)
+    const fifth = await save('3330000096', 'f@example.com')
+    expect(fifth.statusCode).toBe(409); expect(fifth.json().error.code).toBe('OWNER_PHONES_LIMIT')
+    expect((await state()).numbers.map((n: any) => [n.phone, n.email, n.status])).toEqual([['+393330000091', 'a@example.com', 'pending'], ['+393330000092', 'b@example.com', 'pending'], ['+393330000093', 'c@example.com', 'pending'], ['+393330000094', 'd@example.com', 'pending']])
     // proposte per telefono: scollegare il primo cancella solo le sue
     await sql`insert into tako_whatsapp_proposals(phone,restaurant_id,actor_id,revision,command,expires_at) values ('whatsapp:+393330000091',${tenant},${owner},1,'{}'::jsonb,now()+interval '1 hour'),('whatsapp:+393330000092',${tenant},${owner},1,'{}'::jsonb,now()+interval '1 hour')`
     expect((await app.inject({ method: 'DELETE', url: '/api/menu-workspace/whatsapp/owner', headers: as(owner, tenant) })).statusCode).toBe(400)
     const r = await app.inject({ method: 'DELETE', url: '/api/menu-workspace/whatsapp/owner?phone=%2B393330000091', headers: as(owner, tenant) })
     expect(r.statusCode).toBe(200)
-    expect(r.json().data.numbers.map((n: any) => n.phone)).toEqual(['+393330000092'])
+    expect(r.json().data.numbers.map((n: any) => n.phone)).toEqual(['+393330000092', '+393330000093', '+393330000094'])
     expect((await sql`select phone from tako_whatsapp_proposals order by phone`).map(x => x.phone)).toEqual(['whatsapp:+393330000092'])
   })
 
@@ -103,7 +105,7 @@ describe('WhatsApp del titolare: due numeri per locale su Postgres vero', () => 
     expect((await save('3330000094', 'd@example.com')).statusCode).toBe(200)
     const edit = await save('3330000095', 'd@example.com', { replace: '+393330000094' })
     expect(edit.statusCode).toBe(200); expect(edit.json().data.replacedPhones).toEqual(['+393330000094'])
-    expect((await state()).numbers.map((n: any) => n.phone)).toEqual(['+393330000092', '+393330000095'])
+    expect((await state()).numbers.map((n: any) => n.phone)).toEqual(['+393330000092', '+393330000093', '+393330000095'])
     // il titolare di un altro locale non può prendersi un numero già collegato qui
     const steal = await app.inject({ method: 'POST', url: '/api/menu-workspace/whatsapp/owner', headers: as(ownerOther, other), payload: { phone: '3330000092', email: 'e@example.com', move: true } })
     expect(steal.statusCode).toBe(409); expect(steal.json().error.code).toBe('PHONE_IN_USE')

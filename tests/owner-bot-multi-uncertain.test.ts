@@ -29,7 +29,7 @@ describe('due o più parti incerte: domanda per ciascuna, parti chiare in sospes
    const hold=h.hold,asks=holdAsks(hold)
    expect(asks.map(a=>a.type).sort(),c.msg).toEqual(c.unc.map(u=>u.type).sort())
    expect(hold.actions.map(a=>a.kind+'|'+('id' in a?a.id:'')).sort(),c.msg).toEqual(c.clear.map(x=>x[1].kind+'|'+x[1].id).sort())
-   for(const u of c.unc){if(u.type==='unknown')expect(h.text,c.msg).toContain(`«${u.text}» non l’ho capito`);if(u.type==='remove')expect(h.text,c.msg).toMatch(/intendi \*togliere (boh|che ne sacc)\*/);if(u.type==='choose')expect(h.text,c.msg).toMatch(/quale intendi\? 1\. \*/)}
+   for(const u of c.unc){if(u.type==='unknown')expect(h.text,c.msg).toContain(`«${u.text}» non l’ho capito`);if(u.type==='remove')expect(h.text,c.msg).toMatch(/intendi \*togliere (boh|che ne sacc)\*/);if(u.type==='choose')expect(h.text,c.msg).toMatch(/quale intendi\?\n1\. \*/)}
    expect(h.text).toContain('Non ho ancora cambiato nulla')}})
  const hold=(c:Case)=>(holdFromMessage(c.msg,sections,refs) as {hold:Hold}).hold
  it('«no» pubblica solo le parti chiare; «annulla» niente',()=>{

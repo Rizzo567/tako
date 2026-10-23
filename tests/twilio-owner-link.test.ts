@@ -116,16 +116,18 @@ describe('collegamento del titolare dalla dashboard',()=>{
   await post(a,'whatsapp:+393330000042','buongiorno');expect(db.forwarded).toBe(0)
   const other=await post(a,'whatsapp:+393499999999','ciao');expect(other.body).toBe('<Response><Message>MenuSmart</Message></Response>');expect(db.forwarded).toBe(1)
   expect((await post(a,'whatsapp:+393330000042','ciao',false)).statusCode).toBe(403);expect(db.forwarded).toBe(1);await a.close()})
- it('21/10: un locale ha al massimo due telefoni: il secondo si aggiunge, il terzo è rifiutato dal server; i rifiutati restano a MenuSmart',async()=>{const a=await app()
+ it('23/10: un locale ha al massimo quattro telefoni: secondo, terzo e quarto si aggiungono, il quinto è rifiutato dal server; i rifiutati restano a MenuSmart',async()=>{const a=await app()
   await save(a,OWNER_QA,QA,'3330000043');await post(a,'whatsapp:+393330000043','ciao');db.proposals.set('whatsapp:+393330000043',{restaurant_id:QA,actor_id:OWNER_QA,revision:7,command:{kind:'batch',actions:[]}})
-  const two=await save(a,OWNER_QA,QA,'3330000044');expect(two.statusCode).toBe(200);expect(two.json().data.numbers.map((n:any)=>[n.phone,n.status])).toEqual([['+393330000043','linked'],['+393330000044','pending']]);expect(two.json().data.max).toBe(2)
+  const two=await save(a,OWNER_QA,QA,'3330000044');expect(two.statusCode).toBe(200);expect(two.json().data.numbers.map((n:any)=>[n.phone,n.status])).toEqual([['+393330000043','linked'],['+393330000044','pending']]);expect(two.json().data.max).toBe(4)
   expect(db.proposals.has('whatsapp:+393330000043')).toBe(true)
-  const third=await save(a,OWNER_QA,QA,'3330000045');expect(third.statusCode).toBe(409);expect(third.json().error).toMatchObject({code:'OWNER_PHONES_LIMIT',field:'phone'});expect(third.json().error.message).toContain('due numeri')
+  const third=await save(a,OWNER_QA,QA,'3330000045');expect(third.statusCode).toBe(200);expect(third.json().data.numbers).toHaveLength(3)
+  const fourth=await save(a,OWNER_QA,QA,'3330000046');expect(fourth.statusCode).toBe(200);expect(fourth.json().data.numbers).toHaveLength(4)
+  const fifth=await save(a,OWNER_QA,QA,'3330000047');expect(fifth.statusCode).toBe(409);expect(fifth.json().error).toMatchObject({code:'OWNER_PHONES_LIMIT',field:'phone'});expect(fifth.json().error.message).toContain('quattro numeri')
   // anche un numero collegato altrove con move=true: prima il limite, niente spostamento
   const moving=await save(a,AGENCY,QA,'+390000000098',true);expect(moving.statusCode).toBe(409);expect(moving.json().error.code).toBe('OWNER_PHONES_LIMIT');expect(db.links.get(MANUEL)!.restaurant_id).toBe(VIC)
-  expect(linksOf(QA).map(([k])=>k).sort()).toEqual(['whatsapp:+393330000043','whatsapp:+393330000044'])
-  await post(a,'whatsapp:+393330000045','ciao');expect(db.forwarded).toBe(1)
-  // risalvare lo stesso numero già collegato non lo rimette in attesa e non conta come terzo
+  expect(linksOf(QA).map(([k])=>k).sort()).toEqual(['whatsapp:+393330000043','whatsapp:+393330000044','whatsapp:+393330000045','whatsapp:+393330000046'])
+  await post(a,'whatsapp:+393330000047','ciao');expect(db.forwarded).toBe(1)
+  // risalvare lo stesso numero già collegato non lo rimette in attesa e non conta come quinto
   const again=await save(a,OWNER_QA,QA,'+39 333 000 0043',undefined,defaultEmail('3330000043'));expect(again.statusCode).toBe(200);expect(again.json().data.numbers[0].status).toBe('linked');await a.close()})
  it('un telefono ha un solo locale: se è collegato altrove chiede conferma e sposta solo con move=true e permesso su entrambi',async()=>{const a=await app()
   const conflict=await save(a,AGENCY,QA,'+390000000098');expect(conflict.statusCode).toBe(409);expect(conflict.json().error).toMatchObject({code:'PHONE_IN_USE_MOVABLE'});expect(conflict.json().error.message).toContain('Victoria Bar');expect(db.links.get(MANUEL)!.restaurant_id).toBe(VIC)
@@ -263,7 +265,7 @@ expect(messages(r.body)[0]).toContain('menu digitale di');await new Promise(r=>s
   const added=await save(a,AGENCY,QA,'3330000079',undefined,'eva2@example.com');expect(added.json().data.replacedPhones).toEqual([]);expect(added.json().data.numbers.map((n:any)=>n.phone)).toEqual(['+393330000078','+393330000079']);await a.close()})
 })
 
-// 21/10 (richiesta Manuel): fino a due numeri per locale, ognuno con la sua email e il suo account; sospesi, annulla e cronologia per numero.
+// 21/10 (richiesta Manuel): fino a due numeri per locale (22/10: tre), ognuno con la sua email e il suo account; sospesi, annulla e cronologia per numero.
 describe('due numeri del titolare per locale',()=>{
  const A='whatsapp:+393330000081',B='whatsapp:+393330000082'
  const account=(email:string)=>Object.entries(users).find(([,u])=>u.email===email)

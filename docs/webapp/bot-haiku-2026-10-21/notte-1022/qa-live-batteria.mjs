@@ -11,7 +11,8 @@ const TAG=args.find((a,i)=>!a.startsWith('--')&&(oi<0||i!==oi+1))||new Date().to
 const sleep=ms=>new Promise(r=>setTimeout(r,ms))
 
 // ---------- numero / firma ----------
-const phone=JSON.parse(fs.readFileSync(path.join(cfg,'owner-service-qa-backup.json'),'utf8'))?.link?.phone
+// 22/10: TAKO_QA_PHONE (es. whatsapp:+3900000221022, numero fittizio collegato solo al QA) al posto del numero di backup; il controllo «solo QA» resta.
+const phone=process.env.TAKO_QA_PHONE||JSON.parse(fs.readFileSync(path.join(cfg,'owner-service-qa-backup.json'),'utf8'))?.link?.phone
 const link=await q(`SELECT restaurant_id FROM tako_whatsapp_links WHERE phone='${phone.replace(/'/g,"''")}'`)
 if(link.length!==1||link[0].restaurant_id!==QA)throw new Error('numero non collegato solo al QA: mi fermo')
 const tw=parseEnv(fs.readFileSync(path.join(cfg,'twilio-menu.env'),'utf8'))
@@ -47,7 +48,9 @@ function checkDiff(d,expect){const ss=d.map(x=>x.s),res=expect.map(e=>new RegExp
 // ---------- conversazioni ----------
 // turno: {m, re:[regex che la risposta DEVE avere], no:[regex che NON deve avere], diff:[...] (stato atteso rispetto all'inizio della conv; omesso = non controllato)}
 // restore: comandi finali per rimettere il QA (fanno parte della conversazione; anche loro controllati con diff:[])
-const ASK=String.raw`\?|rispondi|dimmi`, NODONE=String.raw`\b(fatto|aggiornat|cambiat|pubblicat|messo|alzat|nascost)\w*`
+const ASK=String.raw`\?|rispondi|dimmi`
+// 22/10 notte (correzione Manuel «eliminare, non nascondere»): i 7 piatti del Menu del giorno del QA ELIMINATI, tranne quelli in `keep`
+const GIORNO=['Lasagna','Carbonara','Gnocchi al ragù','Cotoletta','Polpette','Frittata di zucchine','Frittata di patate'],HIDE7=(keep=[])=>GIORNO.filter(n=>!keep.includes(n)).map(n=>'^-'+n+String.raw`\|`), NODONE=String.raw`\b(fatto|aggiornat|cambiat|pubblicat|messo|alzat|nascost)\w*`
 const C=[
  {id:'annulla-domanda-aperta',desc:'«annulla» mentre il bot aspetta la risposta alla sua domanda (piatto nuovo senza dati): niente scritture, niente domanda ripetuta',
   t:[{m:'aggiungi il vitello tonnato',re:[ASK],diff:[]},{m:'annulla',literal:true,no:[String.raw`sottomenu.*\?|prezzo.*\?`],diff:[]}]},
@@ -56,8 +59,8 @@ const C=[
   t:[{m:'quanto costa il riso giallo?',re:[String.raw`\b8\b`],diff:[]},{m:'alzalo di un euro',re:[String.raw`\b9\b`],no:[String.raw`intendi|\?`],diff:[String.raw`^riso giallo\|price\|8→9$`]},{m:'annulla',diff:[]}]},
  {id:'pronome-mettila',desc:'lettura poi «mettila a 10» → pasta carbonara 10 €',
   t:[{m:'quanto costa la pasta carbonara?',re:[String.raw`\b9\b`],diff:[]},{m:'mettila a 10',re:[String.raw`\b10\b`],no:[String.raw`\?`],diff:[String.raw`^pasta carbonara\|price\|9→10$`]},{m:'annulla',diff:[]}]},
- {id:'pronome-toglila',desc:'lettura poi «toglila» → pasta al ragù nascosta; «rimettila» → visibile',
-  t:[{m:'quanto costa la pasta al ragù?',re:[String.raw`\b10\b`],diff:[]},{m:'toglila',no:[String.raw`\?`],diff:[String.raw`^pasta al ragù\|hidden\|false→true$`]},{m:'rimettila',no:[String.raw`\?`],diff:[]}]},
+ {id:'pronome-toglila',desc:'lettura poi «toglila» → pasta al ragù ELIMINATA subito (22/10 notte); «annulla» → rimessa identica',
+  t:[{m:'quanto costa la pasta al ragù?',re:[String.raw`\b10\b`],diff:[]},{m:'toglila',re:[String.raw`eliminat`],no:[String.raw`\?`,String.raw`nascost`],diff:[String.raw`^-pasta al ragù\|`]},{m:'annulla',diff:[]}]},
  {id:'pronome-finito',desc:'«c\'è il tiramisù?» → «è finito» → non disponibile; «è tornato» → disponibile',
   t:[{m:"c'è il tiramisù?",diff:[]},{m:'è finito',no:[String.raw`\?`],diff:[String.raw`^tiramisù\|available\|true→false$`]},{m:'è tornato',no:[String.raw`\?`],diff:[]}]},
  {id:'nuovo-solo-prezzo',desc:'«aggiungi le patatine fritte» → chiede sottomenu E prezzo insieme («le metto»); «4» tenuto, chiede solo il sottomenu; poi lo crea a 4 €',
@@ -78,7 +81,9 @@ const C=[
   t:[{m:'alza di 50 centesimi i primi',no:[String.raw`quale piatto|rispondi col numero`]}],restoreIfChanged:['annulla']},
  {id:'prezzo-lettere-1',desc:'«il riso giallo a otto e cinquanta» → 8,50',t:[{m:'il riso giallo a otto e cinquanta',no:[String.raw`\?`],diff:[String.raw`^riso giallo\|price\|8→8\.5$`]},{m:'annulla',diff:[]}]},
  {id:'prezzo-lettere-2',desc:'«la pasta al sugo a dieci euro e mezzo» → 10,50',t:[{m:'la pasta al sugo a dieci euro e mezzo',no:[String.raw`\?`],diff:[String.raw`^Pasta al sugo\|price\|9→10\.5$`]},{m:'annulla',diff:[]}]},
- {id:'nascondi-mostra',desc:'«nascondi il riso giallo» → nascosto; «mostralo di nuovo» → visibile',t:[{m:'nascondi il riso giallo',no:[String.raw`\?`],diff:[String.raw`^riso giallo\|hidden\|false→true$`]},{m:'mostralo di nuovo',no:[String.raw`\?`],diff:[]}]},
+ {id:'nascondi-elimina',desc:'(22/10 notte) «nascondi il riso giallo» = togli → ELIMINATO, mai nascosto; «annulla» → identico',t:[{m:'nascondi il riso giallo',re:[String.raw`eliminat`],no:[String.raw`\?`,String.raw`nascost`],diff:[String.raw`^-riso giallo\|`]},{m:'annulla',diff:[]}]},
+ {id:'togli-elimina',desc:'(22/10 notte) «togli la pasta al pesto e lasagna» → eliminata subito con «annulla»; «annulla» → identica',t:[{m:'togli la pasta al pesto e lasagna',re:[String.raw`eliminat`,String.raw`annulla`],no:[String.raw`\?`,String.raw`nascost`],diff:[String.raw`^-Pasta al pesto e lasagna\|`]},{m:'annulla',diff:[]}]},
+ {id:'sostituzione-eliminati',desc:'(22/10 notte) «nel menu del giorno secondi cotoletta e polpette» → le due frittate ELIMINATE, risposta «Eliminati: …»; annulla',t:[{m:'nel menu del giorno secondi cotoletta e polpette',re:[String.raw`Eliminati: .*Frittata`],no:[ASK,String.raw`nascost`],diff:[String.raw`^-Frittata di zucchine\|`,String.raw`^-Frittata di patate\|`]},{m:'annulla',diff:[]}]},
  {id:'finito-tornato',desc:'«la pasta al sugo è finita» → non disponibile; «la pasta al sugo è tornata» → disponibile',t:[{m:'la pasta al sugo è finita',no:[String.raw`\?`],diff:[String.raw`^Pasta al sugo\|available\|true→false$`]},{m:'la pasta al sugo è tornata',no:[String.raw`\?`],diff:[]}]},
  {id:'elimina-poi-annulla',desc:'«elimina la pasta al sugo» → chiede il sì, niente scritto → «annulla» → scarta, niente scritto',t:[{m:'elimina la pasta al sugo',re:[String.raw`sì|si\b`],diff:[]},{m:'annulla',literal:true,diff:[]}]},
  {id:'vietato-tutto-zero',desc:'«metti tutto a zero» → deve chiedere conferma (OK/sì) senza scrivere → «no» → niente',t:[{m:'metti tutto a zero',re:[ASK],no:[NODONE],diff:[]},{m:'no',diff:[]}]},
@@ -104,8 +109,27 @@ const C=[
  {id:'lettura-paste-primi',desc:'«quante paste ho nei primi?» → solo pasta al pesto e pasta carbonara (non pasta al ragù/sugo di Piatti di prova)',t:[{m:'quante paste ho nei primi?',re:[String.raw`pesto`,String.raw`carbonara`],no:[String.raw`ragù|sugo|gnocchi`],diff:[]}]},
  {id:'prezzo-insolito-no',desc:'«il riso giallo a 80» → aspetta l\'OK senza scrivere → «no» → niente',t:[{m:'il riso giallo a 80',re:[ASK],no:[NODONE],diff:[]},{m:'no',diff:[]}]},
  {id:'anzi-rimettilo',desc:'«il riso giallo a 9» → 9 € → «anzi rimettilo a 8» → 8 €',t:[{m:'il riso giallo a 9',no:[String.raw`\?`],diff:[String.raw`^riso giallo\|price\|8→9$`]},{m:'anzi rimettilo a 8',no:[String.raw`\?`],diff:[]}]},
- {id:'ok-a-domanda',desc:'«togli la carbonara» (pasta carbonara visibile / Carbonara del Menu del giorno già nascosta) → nasconde la pasta carbonara o chiede; «ok»/risposta non deve scrivere altro',
-  t:[{m:'togli la carbonara',no:[String.raw`elimin`]}],restoreIfChanged:['annulla']},
+ // 22/10 sera — REGOLA D'USO (decisione Manuel dopo Victoria): «svuota il menu X» = piatti nascosti, sottomenu e prezzi fissi intatti, subito;
+ // «nei primi inserisci A, B» = visibili/creati nel Menu di cui si parla, gli altri non si toccano. Menu del giorno del QA (prezzo fisso).
+ {id:'svuota-annulla',desc:'«svuota il menu del giorno» → i 7 piatti ELIMINATI subito, nessuna domanda → «annulla» → com’era (identico)',
+  t:[{m:'svuota il menu del giorno',re:[String.raw`svuotat`,String.raw`Ho eliminato`,String.raw`annulla`],no:[ASK,String.raw`nascost`],diff:HIDE7()},{m:'annulla',diff:[]}]},
+ {id:'svuota-inserisci-un-messaggio',desc:'«svuota il menu del giorno e nei primi inserisci carbonara e gnocchi al ragù» → solo loro visibili → annulla',
+  t:[{m:'svuota il menu del giorno e nei primi inserisci carbonara e gnocchi al ragù',re:[String.raw`Carbonara`,String.raw`Gnocchi`],no:[ASK],diff:HIDE7(['Carbonara','Gnocchi al ragù'])},{m:'annulla',diff:[]}]},
+ {id:'inserisci-contesto',desc:'(22/10 notte) Menu dalla conversazione: «nel menu del giorno nei primi inserisci la pasta e fagioli» → «nei secondi metti la tagliata» → nuova nei Secondi del Menu del giorno; annulla toglie la tagliata; «elimina la pasta e fagioli» + «sì» la toglie',
+  t:[{m:'nel menu del giorno nei primi inserisci la pasta e fagioli',re:[String.raw`Pasta e fagioli`],no:[ASK],diff:[String.raw`^\+Pasta e fagioli\|Primi\|Menu del giorno\|0$`]},{m:'nei secondi metti la tagliata',re:[String.raw`Tagliata`],no:[ASK],diff:[String.raw`^\+Pasta e fagioli\|Primi\|Menu del giorno\|0$`,String.raw`^\+Tagliata\|Secondi\|Menu del giorno\|0$`]},
+     {m:'annulla',diff:[String.raw`^\+Pasta e fagioli\|Primi\|Menu del giorno\|0$`]},{m:'elimina la pasta e fagioli dal menu del giorno',re:[ASK],diff:[String.raw`^\+Pasta e fagioli\|Primi\|Menu del giorno\|0$`]},{m:'sì',diff:[]}]},
+ {id:'inserisci-nuovo-annulla',desc:'«nel menu del giorno nei primi inserisci la pasta e fagioli» → nuova senza prezzo, gli altri restano visibili → annulla la toglie',
+  t:[{m:'nel menu del giorno nei primi inserisci la pasta e fagioli',re:[String.raw`Pasta e fagioli`],no:[ASK],diff:[String.raw`^\+Pasta e fagioli\|Primi\|Menu del giorno\|0$`]},{m:'annulla',diff:[]}]},
+ {id:'elimina-menu-no',desc:'(correzione Manuel) «elimina il menu del giorno» = eliminare il Menu: chiede il sì senza scrivere → «no» → niente',
+  t:[{m:'elimina il menu del giorno',re:[String.raw`Elimino il .*intero\?`,String.raw`sì`],diff:[]},{m:'no',no:[String.raw`eliminat`],diff:[]}]},
+ {id:'piatti-del-menu-svuota',desc:'«togli tutti i piatti del menu del giorno» = svuotamento (sottomenu restano), nessuna domanda → annulla',
+  t:[{m:'togli tutti i piatti del menu del giorno',no:[ASK],diff:HIDE7()},{m:'annulla',diff:[]}]},
+ {id:'grave-b7-nascondi-tutti',desc:'(Victoria B7, GRAVE) «il menù del giorno si deve vedere ma devi nascondere tutti i piatti» → tutti ELIMINATI subito (prima: elenco di 5 e «tutti» parziale)',
+  t:[{m:'il menù del giorno si deve vedere ma devi nascondere tutti i piatti',no:[ASK],diff:HIDE7()},{m:'annulla',diff:[]}]},
+ {id:'grave-k2-pasta-e-fagioli',desc:'(K2, GRAVE) «nel menu del giorno primi carbonara e pasta e fagioli» → Carbonara + Pasta e fagioli (nuova), Lasagna e Gnocchi ELIMINATI → annulla',
+  t:[{m:'nel menu del giorno primi carbonara e pasta e fagioli',re:[String.raw`Pasta e fagioli`,String.raw`Eliminati`],no:[ASK,String.raw`nascost`],diff:[String.raw`^-Lasagna\|`,String.raw`^-Gnocchi al ragù\|`,String.raw`^\+Pasta e fagioli\|Primi\|Menu del giorno\|0$`]},{m:'annulla',diff:[]}]},
+ {id:'ok-a-domanda',desc:'«togli la carbonara» (pasta carbonara / Carbonara del Menu del giorno spento) → elimina la pasta carbonara o chiede; mai «nascosto»',
+  t:[{m:'togli la carbonara',no:[String.raw`nascost`]}],restoreIfChanged:['annulla']},
 ]
 
 // ---------- ripristino automatico con comandi inversi al bot ----------
@@ -116,6 +140,7 @@ function inverse(d){const cmds=[]
   else if(x.kind==='field'&&x.f==='available')cmds.push([x.x.available?`${n}${where} è di nuovo disponibile`:`${n}${where} è finito`])
   else if(x.kind==='field'&&x.f==='hidden')cmds.push([x.x.hidden?`nascondi ${n}${where}`:`mostra ${n}${where}`])
   else if(x.kind==='added')cmds.push([`elimina ${n} (${x.y.section} del ${x.y.menu})`,'sì'])
+  // 22/10 notte: un piatto eliminato non si rimette coi comandi (solo «annulla» entro 10 minuti): non ripristinabile qui
   else cmds.push(null)}
  return cmds}
 async function restore(base){for(let round=1;round<=2;round++){const d=diff(base,await snap());if(!d.length)return true

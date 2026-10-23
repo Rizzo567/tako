@@ -151,11 +151,11 @@ function holdQuestionMulti(hold:Hold,refs:MenuRef[],sections:SectionRef[]):strin
  const lines=asks.map((a,i)=>{const n=asks.length>1?`${String.fromCharCode(65+i)}) `:''
   switch(a.type){case 'remove':return n+fill(copy.holdAskRemove,{parola:safe(a.word).slice(0,40),piatto:name(a.id)})
    case 'price':return n+fill(copy.holdAskPrice,{piatto:safe(a.name)})
-   case 'choose':return n+fill(copy.holdAskChoose,{parola:safe(a.word).slice(0,40),opzioni:a.options.map((id,j)=>`${j+1}. *${name(id)}*`).join(' · ')})
+   case 'choose':return n+fill(copy.holdAskChoose,{parola:safe(a.word).slice(0,40),opzioni:a.options.map((id,j)=>`${j+1}. *${name(id)}*`).join('\n')})
    case 'confirm':return n+fill(copy.holdAskConfirm,{parola:safe(a.word).slice(0,40),cosa:describeAction(a.action,refs,sections).replace(/\*/g,'')})
    case 'unknown':return n+fill(copy.holdAskUnknown,{parola:safe(a.word).slice(0,40)})}})
  const footer=asks.length>1?copy.holdAskFooter:hold.actions.length?copy.holdAskFooterOne:asks[0]?.type==='confirm'||asks[0]?.type==='remove'?copy.holdAskFooterOnly:asks[0]?.type==='choose'?copy.holdAskFooterChoose:copy.holdAskFooterOne
- return head+lines.join('\n')+'\n\n'+footer}
+ return head+lines.join(lines.some(l=>l.includes('\n'))?'\n\n':'\n')+'\n\n'+footer}
 
 /** Risposta a una richiesta con più parti incerte: ogni pezzo della risposta completa la domanda a cui si adatta.
  * Restano `remaining` le domande senza risposta (il bot le ripete). null = non è una risposta. */
@@ -231,7 +231,7 @@ export function clearChanges(text:string,refs:MenuRef[]):MenuAction[]|null{const
 export type UndoItem={id:string,sectionId:string,before:any|null,after:any|null}
 // Fase B (17/10): eliminazioni, spostamenti e categorie nuove/rinominate cambiano la struttura: si salva il menu INTERO di prima
 // (`full.before`) e l'impronta di quello di dopo; «annulla» lo rimette solo se nel frattempo il menu non è cambiato.
-export type UndoRecord={kind:'undo',at:number,items:UndoItem[],full?:{before:any[],after:string,names:{restored:string[],removed:string[]}}}
+export type UndoRecord={kind:'undo',at:number,items:UndoItem[],full?:{before:any[],after:string,names:{restored:string[],removed:string[],restoredMenus?:string[]}}}
 const holdHash=(s:string)=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16)+':'+s.length}
 export const undoWindowMs=10*60*1000
 const holdCanon=(v:any):string=>v===null||typeof v!=='object'?JSON.stringify(v??null):Array.isArray(v)?'['+v.map(holdCanon).join(',')+']':'{'+Object.keys(v).filter(k=>v[k]!==undefined).sort().map(k=>JSON.stringify(k)+':'+holdCanon(v[k])).join(',')+'}'
@@ -243,8 +243,10 @@ export function undoRecordFor(before:any,after:any,now=Date.now()):UndoRecord|nu
  if(holdCanon({...before,menus:undefined})!==holdCanon({...after,menus:undefined}))return null
  const a=holdItemsOf(before),b=holdItemsOf(after),items:UndoItem[]=[]
  const structural=holdSectionShape(before)!==holdSectionShape(after)||[...a].some(([id,y])=>!b.has(id)||b.get(id)!.sectionId!==y.sectionId)
- if(structural){const restored=[...a].filter(([id,y])=>!b.has(id)||b.get(id)!.sectionId!==y.sectionId||holdCanon(b.get(id)!.item)!==holdCanon(y.item)).map(([,y])=>String(y.item.name??'')),removed=[...b].filter(([id])=>!a.has(id)).map(([,x])=>String(x.item.name??''))
-  return{kind:'undo',at:now,items:[],full:{before:structuredClone(before.menus),after:holdHash(holdCanon(after.menus)),names:{restored:[...new Set(restored)],removed}}}}
+ if(structural){const menuOf=(id:string)=>String((before.menus as any[]).find((m:any)=>m.sections.some((s:any)=>s.items.some((i:any)=>i.id===id)))?.name??'')
+  // 22/10 notte: omonimi in Menu diversi (eliminati insieme) restano due righe, ognuna col suo Menu (prima: un nome solo, senza Menu).
+  const pairs=[...a].filter(([id,y])=>!b.has(id)||b.get(id)!.sectionId!==y.sectionId||holdCanon(b.get(id)!.item)!==holdCanon(y.item)).map(([id,y])=>({n:String(y.item.name??''),m:menuOf(id)})).filter((p,i,xs)=>xs.findIndex(q=>q.n===p.n&&q.m===p.m)===i),removed=[...b].filter(([id])=>!a.has(id)).map(([,x])=>String(x.item.name??''))
+  return{kind:'undo',at:now,items:[],full:{before:structuredClone(before.menus),after:holdHash(holdCanon(after.menus)),names:{restored:pairs.map(p=>p.n),removed,restoredMenus:pairs.map(p=>p.m)}}}}
  for(const [id,x] of b){const y=a.get(id);if(!y)items.push({id,sectionId:x.sectionId,before:null,after:structuredClone(x.item)});else if(holdCanon(y.item)!==holdCanon(x.item)||y.sectionId!==x.sectionId)items.push({id,sectionId:x.sectionId,before:structuredClone(y.item),after:structuredClone(x.item)})}
  for(const [id,y] of a)if(!b.has(id))return null
  return items.length&&items.length<=60?{kind:'undo',at:now,items}:null}
