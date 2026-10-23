@@ -28,6 +28,8 @@ function MenuWorkspacePrint({adapter,document,menu,mutate,dirty,initialLanguage=
  };
  // Render saved configuration automatically; never silently save an unsaved editor draft.
  useEffect(()=>{request.current++;setBusy(false);if(dirty||!menuIds.length)return;const timer=setTimeout(()=>render(false),300);return()=>{clearTimeout(timer);request.current++;};},[renderKey,dirty,adapter]);
+ // 23/10: Menu con «Modello PDF» → il PDF è il modello con il menu scritto sopra; impaginazione e temi non servono.
+ const paper=menuIds.length>0&&menuIds.every(id=>document.menus.find(m=>m.id===id)?.paper?.templateUrl);
  const selection=MW_PDF_GROUPS.find(g=>g[0]===group)||MW_PDF_GROUPS[0];
  const extraFields=[{key:'verticalCentered',label:'Centra verticalmente il contenuto',type:'boolean'},{key:'backgroundOpacity',label:'Opacità immagine sfondo (0–1)',type:'number'},{key:'backgroundSize',label:'Dimensione immagine sfondo',options:[{value:'cover',label:'Copri pagina'},{value:'contain',label:'Contieni nella pagina'}]},{key:'logoBackground',label:'Colore sfondo logo',type:'color',nullable:true}];
  const allFields=[...(adapter.pdfFields||[]),...extraFields.filter(e=>!(adapter.pdfFields||[]).some(f=>f.key===e.key))];
@@ -39,9 +41,10 @@ function MenuWorkspacePrint({adapter,document,menu,mutate,dirty,initialLanguage=
  return <section className="mw-pdf-editor" aria-label="Editor PDF">
   <div className="mw-pdf-shell"><div className="mw-pdf-controls">
   <div className="mw-pdf-header"><div><h3>Documento PDF</h3><p>Configura il menu da stampare.</p></div></div><Btn disabled={busy||dirty||!menuIds.length} onClick={()=>render(true)}>{busy?'Generazione…':'Scarica menu PDF'}</Btn>
-  <label className="mw-field">Allineamento testi<select aria-label="Allineamento testi PDF" value={document.pdf.alignment||'left'} onChange={e=>{const alignment=e.target.value;mutate(d=>{d.pdf.alignment=alignment;for(const key of Object.keys(d.pdf.typography||{})){if(key!=='price'&&key!=='footer')d.pdf.typography[key]={...d.pdf.typography[key],align:alignment};}});}}><option value="left">A sinistra</option><option value="center">Centrati</option></select></label>
+  {paper&&<p className="mw-pdf-note" role="status">Questo menu usa il <strong>Modello PDF</strong> (matita del menu): piatti e prezzi si scrivono da soli sul modello e il PDF si aggiorna a ogni pubblicazione.</p>}
+  {!paper&&<label className="mw-field">Allineamento testi<select aria-label="Allineamento testi PDF" value={document.pdf.alignment||'left'} onChange={e=>{const alignment=e.target.value;mutate(d=>{d.pdf.alignment=alignment;for(const key of Object.keys(d.pdf.typography||{})){if(key!=='price'&&key!=='footer')d.pdf.typography[key]={...d.pdf.typography[key],align:alignment};}});}}><option value="left">A sinistra</option><option value="center">Centrati</option></select></label>}
   <fieldset className="mw-pdf-selection"><legend>Menu da includere nel PDF</legend>{document.menus.map(m=><label key={m.id} className="mw-check"><input type="checkbox" checked={menuIds.includes(m.id)} onChange={e=>setMenuIds(ids=>e.target.checked?[...ids,m.id]:ids.filter(id=>id!==m.id))}/>{m.name}</label>)}</fieldset>
-  <Btn kind="soft" disabled={mediaBlocked} aria-expanded={controls} aria-controls="mw-pdf-panel" onClick={()=>setControls(v=>!v)}>{controls?'Chiudi impaginazione e temi':'Impaginazione e temi'}</Btn>
+  {!paper&&<Btn kind="soft" disabled={mediaBlocked} aria-expanded={controls} aria-controls="mw-pdf-panel" onClick={()=>setControls(v=>!v)}>{controls?'Chiudi impaginazione e temi':'Impaginazione e temi'}</Btn>}
   {controls&&<div className="mw-pdf-tabs" role="tablist" aria-label="Configurazione PDF">{[['document','Documento'],['themes','Temi']].map(([id,label])=><button key={id} id={'mw-pdf-tab-'+id} type="button" disabled={mediaBlocked} role="tab" aria-selected={tab===id} aria-controls="mw-pdf-panel" onClick={()=>setTab(id)}>{label}</button>)}</div>}
   {dirty&&<p className="mw-pdf-note" role="status">Salva le modifiche dell’editor per aggiornare l’anteprima e scaricare il PDF. L’anteprima visualizzata corrisponde all’ultima generazione.</p>}
   {error&&<p role="alert">{error}</p>}

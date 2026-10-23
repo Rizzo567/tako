@@ -26,7 +26,7 @@ export type OpResult = { ok: true } | { ok: false; code: OpErrorCode; message?: 
 
 /** Whitelist dei campi modificabili con set/create per livello. */
 export const FIELD_WHITELIST: Record<Kind, readonly string[]> = {
-  menu: ['name', 'description', 'type', 'active', 'pricing', 'formulas', 'included', 'schedule'],
+  menu: ['name', 'description', 'type', 'active', 'pricing', 'formulas', 'included', 'schedule', 'paper'],
   section: ['name', 'description', 'active', 'schedule'],
   item: ['name', 'description', 'price', 'imageUrl', 'allergens', 'tags', 'additives', 'available', 'hidden', 'featured', 'displayMode', 'externalLink', 'priceDisplay', 'promo', 'scarcity', 'schedule', 'variants', 'costPrice', 'calories', 'kitchenStation', 'prepTimeMinutes'],
 }

@@ -84,7 +84,37 @@ function MenuWorkspaceItemForm({adapter,item,fixed,disabled,onCommit,photo,onDel
  </div>;
 }
 /* Menu, Sottomenu, Sezione: nome, visibile/nascosto, Elimina (D8). Il Menu ha anche Alla carta / Prezzo fisso col pannello esistente. */
-function MenuEditorLevelForm({kind,entity,menu,disabled,onCommit,onDelete,onFixedMutate,label}){
+/* «Modello PDF» del Menu (23/10): immagine con cornice, logo e titolo; il sistema scrive sopra il menu (PDF sempre aggiornato).
+   La zona vuota si misura qui sul caricamento (dal centro verso titolo e cornice) e si salva con l'immagine. */
+async function MW_PAPER_AREA(file){
+ const url=URL.createObjectURL(file);try{
+  const img=new Image();await new Promise((ok,ko)=>{img.onload=ok;img.onerror=()=>ko(new Error('Immagine non leggibile.'));img.src=url;});
+  const w=Math.min(600,img.naturalWidth),h=Math.round(img.naturalHeight*w/img.naturalWidth),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.drawImage(img,0,0,w,h);const d=x.getImageData(0,0,w,h).data;c.width=c.height=1;
+  const at=(px,py)=>(py*w+px)*4,cx=w>>1,cy=h>>1,bg=[d[at(cx,cy)],d[at(cx,cy)+1],d[at(cx,cy)+2]],ink=(px,py)=>{const i=at(px,py);return Math.abs(d[i]-bg[0])+Math.abs(d[i+1]-bg[1])+Math.abs(d[i+2]-bg[2])>90;};
+  let l=cx;while(l>0&&!ink(l,cy))l--;let r=cx;while(r<w-1&&!ink(r,cy))r++;
+  const a=Math.round(l+.05*w),b=Math.round(r-.05*w),row=py=>{let n=0;for(let px=a;px<b;px++)if(ink(px,py))n++;return n>1;};
+  let t=cy;while(t>0&&!row(t))t--;let bo=cy;while(bo<h-1&&!row(bo))bo++;
+  const area={top:(t+1)/h,bottom:bo/h,left:(l+1)/w,right:r/w};
+  // Zona troppo piccola (modello pieno o sfondo non uniforme): valori del modello Victoria.
+  return area.bottom-area.top>.35&&area.right-area.left>.5?area:null;
+ }finally{URL.revokeObjectURL(url);}
+}
+function MenuPaperTemplate({menu,adapter,disabled,onCommit}){
+ const [busy,setBusy]=useState(false),[error,setError]=useState(''),input=useRef(null),url=menu?.paper?.templateUrl||'';
+ const pick=async file=>{if(!file)return;setError('');
+  if(!['image/png','image/jpeg','image/webp'].includes(file.type)){setError('Usa un’immagine JPG, PNG o WebP.');return;}
+  const tools=window.TakoMenuImageTools;if(!tools?.quickUpload){setError('Caricamento non disponibile.');return;}
+  setBusy(true);try{const area=await MW_PAPER_AREA(file).catch(()=>null);const asset=await tools.quickUpload(file,{adapter});if(!asset?.url)throw new Error('Caricamento non riuscito. Riprova.');onCommit({paper:{templateUrl:asset.url,...(area?{area}:{})}});}
+  catch(e){setError(e.message||'Caricamento non riuscito. Riprova.');}finally{setBusy(false);}};
+ return <section className="mw-paper" aria-label="Modello PDF"><h4>Modello PDF</h4>
+  <p className="mw-paper-hint">{url?'Il PDF di questo menu usa il modello: il testo si scrive da solo e si aggiorna a ogni pubblicazione.':'Carica la grafica del menu (cornice, logo e titolo, spazio vuoto sotto): il PDF scriverà sopra piatti e prezzi.'}</p>
+  {url&&<img className="mw-paper-thumb" src={url} alt="Modello PDF attuale"/>}
+  <div className="mw-actions"><button type="button" className="mw-pill" disabled={disabled||busy} onClick={()=>input.current?.click()}>{busy?'Caricamento…':url?'Sostituisci':'Carica modello'}</button>{url&&<button type="button" className="mw-pill" disabled={disabled||busy} onClick={()=>onCommit({paper:null})}>Rimuovi</button>}</div>
+  {error&&<p role="alert" className="mw-paper-error">{error}</p>}
+  <input ref={input} type="file" accept="image/png,image/jpeg,image/webp" hidden tabIndex={-1} aria-hidden="true" onChange={e=>{const f=e.target.files?.[0];e.target.value='';pick(f);}}/>
+ </section>;
+}
+function MenuEditorLevelForm({kind,entity,menu,disabled,onCommit,onDelete,onFixedMutate,label,adapter}){
  const keys=kind==='menu'?['name','description','type','active']:['name','description','active'];
  const buf=MW_USE_BUFFER(entity,keys,onCommit),v=buf.value;
  const fixed=kind==='menu'&&menu?.pricing==='fisso';
@@ -96,7 +126,8 @@ function MenuEditorLevelForm({kind,entity,menu,disabled,onCommit,onDelete,onFixe
   <label className="mw-check mw-ed-toggle"><input type="checkbox" role="switch" checked={v.active!==false} disabled={disabled} onChange={e=>buf.change({active:e.target.checked})}/>{v.active!==false?'Visibile ai clienti':'Nascosto ai clienti'}</label>
   {kind==='menu'&&!fixed&&window.MenuPricingChoice&&<window.MenuPricingChoice value={menu.pricing} disabled={disabled} showNote={false} onChange={mode=>onFixedMutate(d=>window.TakoMenuFixed.setPricing(d.menus.find(m=>m.id===menu.id),mode))}/>}
   {fixed&&window.MenuFixedPricePanel&&<window.MenuFixedPricePanel menu={menu} mutate={onFixedMutate} disabled={disabled} onPreview={()=>{}}/>}
+  {kind==='menu'&&adapter&&<MenuPaperTemplate menu={menu} adapter={adapter} disabled={disabled} onCommit={onCommit}/>}
   <div className="mw-item-delete"><Btn size="sm" kind="ghost" disabled={disabled} onClick={onDelete}>{'Elimina '+label}</Btn></div>
  </div>;
 }
-Object.assign(window,{MenuWorkspaceItemForm,MenuEditorLevelForm});
+Object.assign(window,{MenuWorkspaceItemForm,MenuEditorLevelForm,MenuPaperTemplate});

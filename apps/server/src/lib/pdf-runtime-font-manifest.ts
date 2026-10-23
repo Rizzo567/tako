@@ -76,6 +76,18 @@ export const pdfRuntimeFontManifest = {
     "bytes": 616196,
     "sha256": "c8f669ceb2c9c60ccf55198b305e08a997ffca79a38cc7eeb551e643cbe66505"
   },
+  "PlayfairDisplay-Black.ttf": {
+    "bytes": 123532,
+    "sha256": "c549b1064828d22e398c5d9bdce9267aa130569b177c67d550daaf1e8c636288"
+  },
+  "PlayfairDisplay-Bold.ttf": {
+    "bytes": 123536,
+    "sha256": "adefc53e7b3d483f1fa5e85edd82b7689ca79db25a1f6786bd7949cdcfeec601"
+  },
+  "PlayfairDisplay-Regular.ttf": {
+    "bytes": 123240,
+    "sha256": "1609a54fa3ad1abc8d0037132f73700333241ea0b65672079998e352f151dea7"
+  },
   "Poppins-Bold.ttf": {
     "bytes": 155996,
     "sha256": "983676516167748b74de6f4771fb384c664fd913acb8b471122ecacf5da5ea6c"

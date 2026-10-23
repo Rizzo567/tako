@@ -26,6 +26,8 @@ export function createEdgePdfRuntimeAssetLoader(source:EdgePdfFontSource,options
    for(const font of selectedFonts)for(const face of ['Regular','Bold','Italic','BoldItalic']){
     const name=`${families[font]}-${face}.ttf`;if(name in pdfRuntimeFontManifest)names.add(name)
    }
+   // PDF da modello grafico (23/10): Playfair Display per i Menu con `paper.templateUrl`.
+   if(workspace.menus.some(menu=>menuIds.includes(menu.id)&&(menu as {paper?:{templateUrl?:string|null}|null}).paper?.templateUrl))for(const name of ['PlayfairDisplay-Regular.ttf','PlayfairDisplay-Bold.ttf','PlayfairDisplay-Black.ttf','NotoSans-Bold.ttf'])if(name in pdfRuntimeFontManifest)names.add(name)
    const selected={...workspace,menus:workspace.menus.filter(menu=>menuIds.includes(menu.id))}
    const corpus=JSON.stringify(selected,(key,value)=>key==='translations'?{[lang]:value?.[lang]}:key==='foodTranslations'?{[lang]:value?.[lang]}:value)
    if(/[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/.test(corpus))names.add('NotoSansArabic-Regular.ttf')

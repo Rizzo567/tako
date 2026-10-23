@@ -201,7 +201,7 @@ function MenuEditorPanel({ed,adapter,mobile}){
   finally{setJob(null);setTimeout(()=>URL.revokeObjectURL(preview),400);}};
  const body=level==='item'?<MenuWorkspaceItemForm key={ed.panel.id} adapter={adapter} item={found.item} fixed={found.menu.pricing==='fisso'} disabled={!ed.can} onCommit={commit} onDelete={remove}
    photo={{job,onPick:()=>fileInput.current?.click(),onDropFile:upload,onCancel:()=>{ctl.current?.abort();setJob(null);}}}/>
-  :<MenuEditorLevelForm key={ed.panel.id} kind={level} label={MW_ED_LABEL[level]} entity={found.kind==='menu'?found.menu:found.section} menu={found.menu} disabled={!ed.can} onCommit={commit} onDelete={remove} onFixedMutate={ed.mutateOps}/>;
+  :<MenuEditorLevelForm key={ed.panel.id} kind={level} label={MW_ED_LABEL[level]} entity={found.kind==='menu'?found.menu:found.section} menu={found.menu} disabled={!ed.can} onCommit={commit} onDelete={remove} onFixedMutate={ed.mutateOps} adapter={adapter}/>;
  const content=<>{body}<input ref={fileInput} type="file" accept={MW_PHOTO_TYPES.join(',')} hidden tabIndex={-1} aria-hidden="true" onChange={e=>{const f=e.target.files?.[0];e.target.value='';upload(f);}}/></>;
  // Il form vive in un nodo stabile (portale) che passa fra pop-over e foglio: rotazione/resize non lo smontano,
  // il testo a metà resta nel campo e non viene confermato a sorpresa.
