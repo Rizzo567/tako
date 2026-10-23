@@ -1,7 +1,7 @@
 # Template email — preparazione 23 ottobre 2026
 
 ## Stato
-Nessun deploy, upload asset, modifica DNS/secret, invio o retry clienti. Manuel ha risposto «aspettiamo» al gate backend. Branch codex/manuel-email-design-1023 derivato dalla consegna email 5c136e1e. Non rilasciare il checkout intero: è precedente al backend attuale.
+Nessun deploy, modifica DNS/secret, invio o retry clienti. Dopo la richiesta «verifica che funzioni», caricati soltanto sei asset grafici nel bucket pubblico email esistente e inviate due prove tecniche alla casella di Manuel: entrambe presenti in INBOX Gmail. Manuel ha risposto «aspettiamo» al gate backend. Branch codex/manuel-email-design-1023 derivato dalla consegna email 5c136e1e. Non rilasciare il checkout intero: è precedente al backend attuale.
 
 ## Diagnosi dal vivo (sola lettura)
 Scaricata edge v178, bundle sha 6d27e84afb12ee14357768b541a8c1d7cda6fbc26285eb1607e98aaa70320aab: renderer precedente ancora presente. Le bozze del 20 ottobre non erano integrate. Coda aggregata osservata: benvenuto 7 sent, 6 failed, 1 pending, 2 cancelled. Gli errori sono DELIVERY_FAILED; i falliti hanno 6 tentativi. Le altre cinque varianti hanno invii storici segnati sent. Sent significa accettazione provider, non verifica inbox.
@@ -21,7 +21,7 @@ Newsletter/social non configurati: niente pulsanti finti, promozione 15% o iscri
 - Typecheck server PASS.
 - Browser desktop/mobile: immagini caricate e assenza overflow orizzontale PASS; screenshot allegati.
 - Delta preparato: byte prima/dopo sezione renderer identici. Nessun rebuild di altre route, cron o bot.
-- Nessun invio Resend fatto in questa sessione; Outlook, Apple Mail, inbox/spam non certificati.
+- Due invii Resend tecnici a Manuel: HTTP200 e presenza INBOX Gmail verificati tramite connettore. Uno diagnostico, uno con il nuovo template reset e destinazione demo priva di token. Nessun reset avviato. Outlook e Apple Mail non verificati.
 
 ## Ripresa dopo sblocco
 1. Verificare che il backend sia libero; riscaricare bundle e versione correnti. Non usare la vecchia base v178 se cambiata.
@@ -30,3 +30,9 @@ Newsletter/social non configurati: niente pulsanti finti, promozione 15% o iscri
 4. Verificare nuovamente versione/hash prima del deploy del solo delta. Nessun altro Worker/edge da rilasciare.
 5. Verificare con inbox QA controllata e identificativi sintetici; non resettare account clienti. Controllare accettazione provider, consegna e link prima di dichiarare operativo.
 6. Le email già accodate sono snapshot cifrati: il renderer nuovo vale per nuovi eventi. Non riscrivere né rinviare la coda storica automaticamente.
+
+## Aggiornamento verifica reale
+- La coda contiene ora 9 benvenuti failed, tutti con destinatario sul dominio dimostrativo riservato example.com; nessun pending osservato nell’ultimo controllo. Non interpretarli come 9 clienti non raggiunti. Nessun retry o cancellazione eseguito.
+- La chiave locale Resend funziona per inviare: prova diagnostica e nuovo template ricevuti in INBOX. La lettura API resta vietata dalla chiave solo invio.
+- Asset: 6 PNG caricati in design-20261023, HTTP200 anonimo e hash identico verificati per tutti. Il bucket consente solo PNG e massimo1MiB: due fotografie convertite in PNG a tavolozza256 colori sotto il limite, senza cambiare i permessi del bucket. Il font remoto non viene richiesto: tipografia con fallback Georgia, senza URL font non disponibile.
+- Il backend operativo resta invariato. I nuovi eventi automatici continuano a usare il vecchio renderer finché non viene autorizzato il delta.
