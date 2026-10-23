@@ -73,6 +73,7 @@ describe('1) «primi/secondi/…» sono sottomenu: «elimina i primi» li elimin
 describe('2) sinonimi del Menu (pranzo/mezzogiorno/da 12/del giorno, cena/sera/da 16,90) e contesto',()=>{
  it('menusIn',()=>{
   for(const t of ['menu pranzo','a pranzo','mezzogiorno','menu mezzogiorno','menu da 12','menu da 12 euro','Menù mezzogiorno da 12 euro','nel menu del giorno','menu giorno','pranzo da 12 €'])expect(menusIn(t,MENUS).map(m=>m.name),t).toEqual(['Menu Giorno'])
+  expect((ruleTurn({text:'Menù mezzogiorno da 12 euro',menus:MENUS,sections:CAT.sections,refs:CAT.refs,history:[]}) as any)?.text).toMatch(/^Ok, il \*Menu Giorno\*/)
   for(const t of ['cena','stasera','la sera','menu da 16,90','menu cena','menu da 16,90 euro'])expect(menusIn(t,MENUS).map(m=>m.name),t).toEqual(['Menu Cena'])
   expect(menusIn('la carbonara da 12',MENUS)).toEqual([])})
  it('Menu detto prima nella conversazione: non si richiede',()=>{

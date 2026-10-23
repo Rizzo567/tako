@@ -328,6 +328,10 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
    const plan=correctionPlan(corr,o.refs,o.sections,o.menus,pref,o.lexicon??null),learn=plan.rule?[plan.rule]:[],reply=correctionReply(corr,plan,o.menus.length)
    return plan.actions.length?{kind:'fix',actions:plan.actions,reply,learn}:{kind:'info',text:reply,learn}}}
  if(NEG.test(p)||/\?\s*$/.test(text)||/\b(?:annull\w*|com e(?:ra)?|come prima|come era|indietro|ripristin\w*)\b/.test(p))return null
+ // 23/10 (chat Luisa «Menù mezzogiorno da 12 euro» da solo): solo il nome di un Menu = di quel Menu si parla; mai «a quale piatto metto 12 €?».
+ {const ms=menusIn(text0,o.menus),t=tokens(text),sk=menuSpans(t,o.menus),rest=t.filter((x,i)=>!sk.has(i)&&!PREP.has(x.w)&&!FILL.has(x.w)&&![',',';',':'].includes(x.w)&&!/^(?:menu|ok|allora|si|euro|eur)$/.test(x.w))
+  if(ms.length===1&&!rest.length&&!CLEAR_V.test(p)&&!INSERT_V.test(p)){const info=infoOf(ms[0]!,o.sections,o.refs),empty=info.secs.filter(x=>!info.items.some(r=>r.sectionId===x.id&&!r.hidden))
+   return{kind:'info',text:'Ok, il '+mLabel(ms[0]!.name)+(empty.length?': '+(empty.length===1?'i *'+empty[0]!.name+'* sono vuoti':andList(empty.map(x=>'*'+x.name+'*'))+' sono vuoti'):'')+'. Cosa cambio? Per esempio «'+(empty.length?'nei '+plain(empty[0]!.name)+' inserisci lasagna, carbonara':'togli i primi')+'».'}}}
  // 2) bozza in sospeso («In quale sottomenu metto Nodino…?») + un Menu a prezzo fisso detto («nono devi guardare menu cena»)
  if(o.draftName&&!/\b(?:lascia\w*|stare|perdere|niente|no|annull\w*|basta)\b/.test(p)){const ms=menusIn(text,o.menus);if(ms.length===1&&ms[0]!.pricing==='fisso'&&!hasDigits(p)){const info=infoOf(ms[0]!,o.sections,o.refs),ip=parseInsert(text,info.secs,o.menus,vocab),secId=ip.lists.find(l=>l.secId)?.secId??null
    return applyResult(info,{lists:secId?[{secId,word:'',names:[o.draftName]}]:[],loose:secId?[]:[o.draftName]},null,vocab,text)}}
