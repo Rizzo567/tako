@@ -328,6 +328,9 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
    const plan=correctionPlan(corr,o.refs,o.sections,o.menus,pref,o.lexicon??null),learn=plan.rule?[plan.rule]:[],reply=correctionReply(corr,plan,o.menus.length)
    return plan.actions.length?{kind:'fix',actions:plan.actions,reply,learn}:{kind:'info',text:reply,learn}}}
  if(NEG.test(p)||/\?\s*$/.test(text)||/\b(?:annull\w*|com e(?:ra)?|come prima|come era|indietro|ripristin\w*)\b/.test(p))return null
+ // 23/10 (test «alla Luisa»: «Il primo del menu da 12 costa 9», «Il solo secondo a pranzo mettilo a 11» → domanda senza azioni): il prezzo di
+ // un'OPZIONE di un Menu a prezzo fisso detto con il Menu (anche «da 12», «a pranzo») lo legge il server: subito, «annulla» come rete.
+ {const f=formulaPrice(text,text0,o);if(f)return f}
  // 23/10 (chat Luisa «Menù mezzogiorno da 12 euro» da solo): solo il nome di un Menu = di quel Menu si parla; mai «a quale piatto metto 12 €?».
  {const ms=menusIn(text0,o.menus),t=tokens(text),sk=menuSpans(t,o.menus),rest=t.filter((x,i)=>!sk.has(i)&&!PREP.has(x.w)&&!FILL.has(x.w)&&![',',';',':'].includes(x.w)&&!/^(?:menu|ok|allora|si|euro|eur)$/.test(x.w))
   if(ms.length===1&&!rest.length&&!CLEAR_V.test(p)&&!INSERT_V.test(p)){const info=infoOf(ms[0]!,o.sections,o.refs),empty=info.secs.filter(x=>!info.items.some(r=>r.sectionId===x.id&&!r.hidden))
@@ -472,6 +475,19 @@ function runSectionClear(menu:RuleMenu,scp:{words:string[],clear:string,insert:s
   return{kind:'confirm',menu,actions:dels,question:'Elimino '+(old.length===1?'il piatto':'tutti i '+old.length+' piatti')+' dei '+andList(secs.map(x=>'*'+x.name+'*'))+' del '+mLabel(menu.name)+'? Il sottomenu resta. Rispondi *sì* per eliminarli, oppure *no*.'}}
  const report:RuleReport={menu:menu.name,fixed:true,cleared:old.map(r=>r.name),deleteWord:true,sections:b.sections,unknownSecs:b.unknownSecs,notPlaced:[...b.notPlaced],clearedSecs:secs.map(x=>({secId:x.id,name:x.name}))}
  return{kind:'apply',menu,actions,report,ask}}
+
+// ---------- prezzo di un'opzione del Menu a prezzo fisso ----------
+const euroF=(n:number)=>n.toFixed(2).replace('.',',')+' €'
+function formulaPrice(text:string,text0:string,o:RuleInput):RuleResult|null{
+ const p=plain(text);if(!/\b(?:cost\w*|mett\w*|port\w*|fai|fallo|falla|a|prezzo)\b/.test(p)||/\b(?:alz\w*|abbass\w*|aument\w*|diminu\w*|scont\w*|di un euro|in piu|in meno)\b|%/.test(p))return null
+ const fm=p.match(/\b(?:(solo) )?(primo|secondo|completo)\b/);if(!fm)return null
+ const ms=menusIn(text0,o.menus).filter(m=>m.pricing==='fisso');if(ms.length!==1)return null
+ const nums=[...text.replace(/(\d)\s*,\s*(\d{1,2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(x=>Number(x[0]));if(nums.length!==1||!(nums[0]!>0)||nums[0]!>200)return null
+ if(o.refs.some(r=>plain(r.name).length>=4&&(' '+p+' ').includes(' '+plain(r.name)+' ')))return null
+ const m=ms[0]!,fs=(m.formulas??[]) as {name:string,price:number,id?:string}[],want=fm[2]==='completo'?'completo':'solo '+fm[2],f=fs.find(x=>plain(x.name)===want)??(fm[2]!=='completo'?fs.find(x=>plain(x.name).includes(fm[2]!)):undefined);if(!f||!(f as any).id)return null
+ const price=Math.round(nums[0]!*100)/100
+ if(Math.abs(Number(f.price)-price)<0.005)return{kind:'info',text:'Il *'+f.name+'* del '+mLabel(m.name)+' è già *'+euroF(price)+'*: non ho cambiato nulla.'}
+ return{kind:'fix',actions:[{kind:'set_formula',menuId:m.id,menuName:m.name,formulaId:(f as any).id,isNew:false,name:f.name,price,before:Number(f.price)} as MenuAction],reply:'*'+f.name+'* del '+mLabel(m.name)+': da '+euroF(Number(f.price))+' a *'+euroF(price)+'*.',learn:[]}}
 
 // ---------- proposta con la lettura più probabile (23/10 sera, Manuel: domande intelligenti) ----------
 /** Il pezzo dubbio letto nel modo più probabile (stessa regola della divisione senza domanda). */

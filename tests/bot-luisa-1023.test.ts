@@ -29,7 +29,7 @@ export function victoria():EvalMenu{n=0
  return{menus:STRUCT.map(m=>{const sections=m.sections.map((s:any)=>({id:id('7c000000'),name:s.name,items:s.items.map(([nm,price,h]:[string,number,boolean?])=>({id:id('5c000000'),name:nm,price,...(h?{hidden:true}:{})}))}))
   return{id:id('6c000000'),name:m.name,type:m.type,...(m.pricing==='fisso'?{pricing:'fisso',formulas:m.formulas.map((f:any)=>({id:id('5d000000'),name:f.name,price:f.price,note:f.note,sectionIds:f.secs.map((i:number)=>sections[i].id),translations:{}}))}:{}),sections}}) as any,design:{}}}
 const W0=workspaceSchema.parse(victoria()),CAT=catalogOf(W0)
-const MENUS:RuleMenu[]=(W0.menus as any[]).map(m=>({id:m.id,name:m.name,pricing:m.pricing==='fisso'?'fisso':'carta',formulas:(m.formulas??[]).map((f:any)=>({name:f.name,price:Number(f.price)}))}))
+const MENUS:RuleMenu[]=(W0.menus as any[]).map(m=>({id:m.id,name:m.name,pricing:m.pricing==='fisso'?'fisso':'carta',formulas:(m.formulas??[]).map((f:any)=>({id:f.id,name:f.name,price:Number(f.price)}))}))
 const M=(w:any,name:string)=>w.menus.find((m:any)=>m.name===name)
 const secItems=(w:any,menu:string,sec:string)=>M(w,menu).sections.find((s:any)=>s.name===sec).items.filter((i:any)=>!i.hidden).map((i:any)=>i.name)
 const allItems=(w:any)=>JSON.stringify(w.menus.map((m:any)=>[m.name,m.sections.map((s:any)=>[s.name,s.items.map((i:any)=>i.name+':'+i.price+(i.hidden?':h':''))])]))
@@ -146,6 +146,17 @@ describe('7) sostituzione di un sottomenu: subito con «annulla»; il «sì» re
   expect(r.replies[0]).not.toMatch(/\?/);expect(secItems(r.menus[1],'Menu Giorno','Primi').length).toBeGreaterThanOrEqual(2);expect(r.replies[0]).toMatch(/annulla/)})
  it('«elimina il menu pranzo» chiede ancora il sì',async()=>{const r=await play(['elimina il menu pranzo'])
   expect(r.replies[0]).toMatch(/Rispondi \*sì\*/);expect(allItems(r.menus[1])).toBe(allItems(r.menus[0]))})})
+
+// ======================= prezzo delle opzioni detto «alla Luisa» =======================
+describe('opzioni del Menu a prezzo fisso: «Il primo del menu da 12 costa 9», «Il solo secondo a pranzo mettilo a 11»',()=>{
+ it('lettura pura',()=>{const rt=(t:string)=>ruleTurn({text:t,menus:MENUS,sections:CAT.sections,refs:CAT.refs,history:[]}) as any
+  expect(rt('Il primo del menu da 12 costa 9').text).toMatch(/Solo primo\* del \*Menu Giorno\* è già \*9,00 €\*/)
+  const r=rt('Il solo secondo a pranzo mettilo a 11');expect(r.kind).toBe('fix');expect(r.actions[0]).toMatchObject({kind:'set_formula',name:'Solo secondo',price:11,before:10})
+  expect(rt('Il completo della cena mettilo a 17').actions[0]).toMatchObject({kind:'set_formula',name:'Completo',price:17})
+  expect(rt('alza il completo della cena di un euro')).toBeNull()})
+ it('route: scritto subito, «annulla» lo rimette',async()=>{const r=await play(['Il solo secondo a pranzo mettilo a 11','annulla'])
+  expect(M(r.menus[1],'Menu Giorno').formulas.find((f:any)=>f.name==='Solo secondo').price).toBe(11);expect(r.replies[0]).not.toMatch(/\?/)
+  expect(M(r.menus[2],'Menu Giorno').formulas.find((f:any)=>f.name==='Solo secondo').price).toBe(10)})})
 
 // ======================= REPLAY ESATTO della chat di Luisa =======================
 describe('REPLAY chat di Luisa 23/10 09:21–09:24 (stessi testi, «E inserisci» mentre il «Si» lavora)',()=>{
