@@ -137,8 +137,8 @@ const C=[
   t:[{m:'Nel menù del giorno nei primi inserisci',re:[String.raw`Cosa inserisco`],diff:[]},{m:'Strozzapreti con Zola e pistacchio  orecchiette con zucca',re:[String.raw`Strozzapreti con zola e pistacchio`,String.raw`Orecchiette con zucca`],no:[ASK],diff:[String.raw`^\+Strozzapreti con zola e pistacchio\|Primi\|Menu del giorno\|0$`,String.raw`^\+Orecchiette con zucca\|Primi\|Menu del giorno\|0$`]},{m:'annulla',diff:[]}]},
  {id:'luisa-accavallati',desc:'(Luisa) «Nel menù del giorno elimina i primi» + «annulla» 1 s dopo (accavallati): la fila li lavora in ordine → prima eliminati, poi rimessi; QA identico',
   t:[{m:'Nel menù del giorno elimina i primi',with:'annulla',re:[String.raw`Eliminati`],re2:[String.raw`annull|com.era`],diff:[]}]},
- {id:'luisa-si-domanda-menu',desc:'(Luisa) «elimina i primi» (più Menu) → UNA domanda sul Menu → «Menù del giorno da 18 euro» → eliminati → annulla',
-  t:[{m:'elimina i primi',re:[ASK],diff:[]},{m:'Menù del giorno da 18 euro',re:[String.raw`Eliminati`],no:[ASK],diff:[String.raw`^-Lasagna\|`,String.raw`^-Carbonara\|`,String.raw`^-Gnocchi al ragù\|`]},{m:'annulla',diff:[]}]},
+ {id:'luisa-si-domanda-menu',desc:'(Luisa) due letture (il contesto del Menu vale solo 2 scambi) poi «elimina i primi» (più Menu) → UNA domanda sul Menu → «Menù del giorno da 18 euro» → eliminati → annulla',
+  t:[{m:'quanto costa il riso giallo?',diff:[]},{m:'quanto costa la pasta carbonara?',diff:[]},{m:'elimina i primi',re:[ASK],diff:[]},{m:'Menù del giorno da 18 euro',re:[String.raw`Eliminati`],no:[ASK],diff:[String.raw`^-Lasagna\|`,String.raw`^-Carbonara\|`,String.raw`^-Gnocchi al ragù\|`]},{m:'annulla',diff:[]}]},
  {id:'ok-a-domanda',desc:'«togli la carbonara» (pasta carbonara / Carbonara del Menu del giorno spento) → elimina la pasta carbonara o chiede; mai «nascosto»',
   t:[{m:'togli la carbonara',no:[String.raw`nascost`]}],restoreIfChanged:['annulla']},
 ]

@@ -398,7 +398,7 @@ function runOn(menu:RuleMenu,text:string,o:RuleInput,answer:boolean,fromCtx=fals
   parse={lists:parse.lists.filter(l=>l.names.length||l.doubts?.length||!l.secId),loose:parse.loose}}
  // 23/10 (chat Luisa «E inserisci» dopo «elimina i primi»): inserire senza dire il sottomenu = il sottomenu di cui si parlava
  // (ultimo messaggio del titolare che lo nomina, nello stesso Menu). Senza nomi: UNA domanda che chiede i piatti (con lo stato salvato).
- const defSec=!clr&&!parse.lists.length&&STRONG_INSERT.test(p)?contextSection(o.history,info,o.menus):null // solo «inserisci/aggiungi» (batteria v181: «metti tutto a zero» diventava un piatto)
+ const defSec=!clr&&!parse.lists.length&&STRONG_INSERT.test(p)&&(menusIn(text,o.menus).some(m=>m.id===menu.id)||contextMenu(o.history,o.menus,4)?.id===menu.id)?contextSection(o.history,info,o.menus):null // solo «inserisci/aggiungi» (batteria v181: «metti tutto a zero» diventava un piatto)
  if(defSec&&!parse.loose.length&&INSERT_V.test(p)&&!/\?/.test(text))return{kind:'ask',question:'Cosa inserisco nei *'+defSec.name+'* del '+mLabel(menu.name)+'? Scrivimi i piatti, per esempio «lasagna, carbonara».',wait:{kind:'names',menuId:menu.id,secId:defSec.id}}
  if(defSec&&parse.loose.length){const toSec=parse.loose.filter(n=>!findExisting(n,null,info.items)&&!courseSection(n,info.secs));if(toSec.length){parse={lists:[{secId:defSec.id,word:defSec.name,names:toSec}],loose:parse.loose.filter(n=>!toSec.includes(n))}}}
  // Menu preso dalla conversazione ma il sottomenu detto è di un ALTRO Menu («aggiungi il tiramisù nei dolci» dopo la cena): non è la regola

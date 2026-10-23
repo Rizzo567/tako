@@ -167,6 +167,9 @@ describe('il contesto vale solo per gli ultimi 2 scambi (batteria v181)',()=>{
  it('«metti tutto a zero» dopo i Primi del Menu Giorno: mai un piatto «Tutto a zero»',()=>{
   const r=ruleTurn({text:'metti tutto a zero',menus:MENUS,sections:CAT.sections,refs:CAT.refs,history:H([['owner','nel menu pranzo elimina i primi'],['bot','*Menu Giorno aggiornato*\n\n*Primi*\n• nessun piatto']])}) as any
   expect(JSON.stringify(r??null)).not.toMatch(/Tutto a zero/i)})
+ it('«aggiungi il vitello tonnato» con il Menu detto 3 scambi fa e «Primi» nell\u2019ultima risposta: non va nei Primi da solo (batteria v182)',()=>{
+  const r=ruleTurn({text:'aggiungi il vitello tonnato',menus:MENUS,sections:CAT.sections,refs:CAT.refs,history:H([['owner','nel menu pranzo elimina i primi'],['bot','*Menu Giorno aggiornato*'],['owner','grazie'],['bot','Di niente'],['owner','togli la carbonara'],['bot','*Carbonara* (Primi): eliminato']])}) as any
+  expect(r?.kind==='apply'&&JSON.stringify(r.actions).includes('Vitello')).toBe(false)})
  it('«aggiungi il vitello tonnato» con i Primi detti 3 scambi fa: non va nei Primi da solo',()=>{
   const r=ruleTurn({text:'aggiungi il vitello tonnato',menus:MENUS,sections:CAT.sections,refs:CAT.refs,history:H([['owner','nel menu pranzo elimina i primi'],['bot','*Menu Giorno aggiornato*\n\n*Primi*'],['owner','annulla'],['bot','Ok, annullo.'],['owner','grazie'],['bot','Di niente']])}) as any
   expect(r?.kind==='apply'&&JSON.stringify(r.actions).includes('Vitello')).toBe(false)})})
