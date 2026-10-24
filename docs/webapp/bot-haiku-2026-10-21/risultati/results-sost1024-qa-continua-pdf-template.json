@@ -1,0 +1,4165 @@
+{
+ "set": "qa-continua",
+ "metriche": {
+  "set": "qa-continua",
+  "modo": "replay",
+  "conversazioni": 2,
+  "misurate": 0,
+  "nonMisurate": [
+   "qa-continua",
+   "qa-continua-rapida"
+  ],
+  "messaggi": 0,
+  "corrette": 0,
+  "percentuale": 0,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 0,
+  "domandePer10Messaggi": 0,
+  "domandeNonAttesePer10": 0,
+  "latenzaAnthropicMs": {
+   "p50": 0,
+   "p95": 0,
+   "chiamate": 0
+  },
+  "latenzaTurnoMs": {
+   "p50": 0,
+   "p95": 0,
+   "nota": "harness + latenza Haiku registrata"
+  },
+  "chiamatePerMessaggio": 0,
+  "tokenMediPerMessaggio": null,
+  "cacheHit": {
+   "chiamateConCacheRead": 0,
+   "su": 0,
+   "percentuale": 0
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0,
+   "perMessaggioUsd": 0,
+   "tetto": 0.5
+  },
+  "anthropic": {
+   "hit": 0,
+   "vere": 0,
+   "mock": 0,
+   "assenti": 195,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 4.1
+ },
+ "codici": {},
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "qa-continua",
+   "family": "bv-multiple",
+   "menu": "qavero",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: available|Pasta al sugo|false"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: available|riso giallo|false"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: delete|Carbonara"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[annulla-domanda-aperta] turno 1: manca /\\?|rispondi|dimmi/i («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momen»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-prezzo] turno 3: manca /\\b8\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-alzalo] turno 4: manca /\\b8\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-alzalo] turno 5: manca /\\b9\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-alzalo] turno 5: menu mancano [price|riso giallo|9] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-mettila] turno 7: manca /\\b9\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-mettila] turno 8: manca /\\b10\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-mettila] turno 8: menu mancano [price|pasta carbonara|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-toglila] turno 10: manca /\\b10\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-toglila] turno 11: menu mancano [hidden|pasta al ragù|true] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-finito] turno 14: menu mancano [available|tiramisù|false] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-prezzo] turno 16: manca /prezz|quanto/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-prezzo] turno 16: manca /sottomenu/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-prezzo] turno 17: manca /\\b4\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-prezzo] turno 17: manca /sottomenu/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[nuovo-solo-prezzo] turno 18: menu mancano [create|patatine fritte|4|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-con-prezzo] turno 20: manca /sottomenu/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[nuovo-con-prezzo] turno 21: menu mancano [create|patatine fritte|4|primi] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-sottomenu] turno 23: manca /prezz|quanto/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[nuovo-solo-sottomenu] turno 24: menu mancano [create|vitello tonnato|14|primi] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[si-a-domanda-a-scelta] turno 26: manca /sottomenu/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[si-a-domanda-a-scelta] turno 27: manca /sottomenu|quale/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[tutti-e-due] turno 29: manca /\\b8\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[tutti-e-due] turno 29: manca /\\b9\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[tutti-e-due] turno 30: menu mancano [price|pasta carbonara|9.5, price|riso giallo|8.5] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[gruppo-menu-detto] turno 32: menu mancano [price|la parmigiana|13, price|pasta al pesto|9.5, price|pasta carbonara|9.5, price|riso giallo|8.5] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[prezzo-lettere-1] turno 36: menu mancano [price|riso giallo|8.5] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[prezzo-lettere-2] turno 38: menu mancano [price|Pasta al sugo|10.5] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[nascondi-mostra] turno 40: menu mancano [hidden|riso giallo|true] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "[finito-tornato] turno 43: menu mancano [] in più [available|Pasta al sugo|false] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[vietato-tutto-zero] turno 46: manca /\\?|rispondi|dimmi/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[riepilogo-pollice] turno 50: manca /\\bok\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[riepilogo-pollice] turno 51: menu mancano [price|Pasta al sugo|10, price|pasta carbonara|10, price|riso giallo|9, price|tiramisù|16] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[ambiguo-pesto-ok] turno 53: manca /\\?|rispondi|dimmi/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[ambiguo-pesto-ok] turno 54: menu mancano [price|pasta al pesto|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-primi] turno 56: manca /riso giallo/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-primi] turno 56: manca /carbonara/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-paste-primi] turno 57: manca /pesto/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-paste-primi] turno 57: manca /carbonara/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[prezzo-insolito-no] turno 58: manca /\\?|rispondi|dimmi/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[anzi-rimettilo] turno 60: menu mancano [price|riso giallo|9] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-vietata",
+     "why": "[ok-a-domanda] turno 62: contiene /elimin/i («*Carbonara*: *eliminato* dal menu Per tornare come prima scrivi *annulla* entro 10 minuti.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "[ok-a-domanda] turno 63: menu mancano [] in più [delete|Carbonara] («In quale sottomenu metto *Carbonara*? Rispondi col numero o col nome. 1. *Piatti di prova* (Menu di »)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149-patatine-crea-elimina] turno 64: menu mancano [create|patatine fritte|4|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[v149-patatine-crea-elimina] turno 65: manca /rispondi \\*?s/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149-patatine-crea-elimina] turno 65: menu mancano [create|patatine fritte|4|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[v149-nuovo-dopo-eliminato] turno 67: manca /sottomenu/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[v149-nuovo-dopo-eliminato] turno 67: manca /\\b4\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-vietata",
+     "why": "[v149-nuovo-dopo-eliminato] turno 68: contiene /\\?/i («A che prezzo metto *Carbonara* in *Primi*? Scrivimi per esempio «carbonara 12».»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149-nuovo-dopo-eliminato] turno 68: menu mancano [create|patatine fritte|4|primi] in più [] («A che prezzo metto *Carbonara* in *Primi*? Scrivimi per esempio «carbonara 12».»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[v149-pesto-poi-anzi] turno 70: manca /\\?|rispondi|dimmi/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149-pesto-poi-anzi] turno 71: menu mancano [price|pasta al pesto|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149-pesto-poi-anzi] turno 73: menu mancano [price|riso giallo|9] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149b-annulla-dopo-scrittura] turno 75: menu mancano [create|patatine fritte|4|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149b-annulla-dopo-scrittura] turno 76: menu mancano [create|patatine fritte|4|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[sposta-dopo-creazione] turno 78: menu mancano [create|vitello tonnato|14|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[sposta-dopo-creazione] turno 79: menu mancano [create|vitello tonnato|14|primi] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[sposta-dopo-creazione] turno 80: manca /rispondi \\*?s/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[sposta-dopo-creazione] turno 80: menu mancano [create|vitello tonnato|14|primi] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-poi-nuovo] turno 82: manca /riso giallo/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[lettura-poi-nuovo] turno 83: menu mancano [create|trofie al pesto|11|primi] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-dopo-scrittura] turno 85: manca /\\b9\\b/i («*Carbonara* l’hai eliminato poco fa: non è più nel menu. Per rimetterlo scrivimi «rimetti carbonara»»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-dopo-scrittura] turno 86: menu mancano [price|pasta carbonara|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-dopo-scrittura] turno 87: menu mancano [price|pasta carbonara|10.5] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[tutti-e-due-dopo-scrittura] turno 89: menu mancano [price|pasta carbonara|10, price|riso giallo|9] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[finito-poi-tornato] turno 91: manca /rag[uù]/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[finito-poi-tornato] turno 92: menu mancano [available|pasta al ragù|false] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[nascondi-poi-rimettilo] turno 94: menu mancano [hidden|tiramisù|true] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[scrittura-poi-lettura-altro] turno 96: menu mancano [price|Pasta al sugo|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[scrittura-poi-lettura-altro] turno 97: manca /\\b8\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[scrittura-poi-lettura-altro] turno 97: menu mancano [price|Pasta al sugo|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[scrittura-poi-lettura-altro] turno 98: menu mancano [price|Pasta al sugo|10, price|riso giallo|9] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[scrittura-poi-lettura-altro] turno 99: menu mancano [price|Pasta al sugo|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-nome-lascia] turno 101: manca /\\?|rispondi|dimmi/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[conta-primi] turno 103: manca /\\b4\\b|quattro/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[evidenza-poi-togli] turno 104: menu mancano [featured|tiramisù|true] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[finito-nome-poi-pronome] turno 107: manca /\\b9\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "[finito-nome-poi-pronome] turno 108: menu mancano [] in più [available|riso giallo|false] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    }
+   ],
+   "expected": [],
+   "actual": [
+    "available|Pasta al sugo|false",
+    "available|riso giallo|false",
+    "delete|Carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "*Pasta al sugo*: *finito*",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Elimino *Pasta al sugo* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Pasta al sugo*: da eliminare",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Nel *Menu di verifica · web QA* o nel *Menu del giorno*?",
+    "Ok, lascio stare: non ho cambiato nulla.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "*Carbonara*: *eliminato* dal menu\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "In quale sottomenu metto *Carbonara*? Rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Mi serve il sottomenu: scrivimi il nome, per esempio *Piatti di prova*, oppure il numero dell’elenco.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "A che prezzo metto *Carbonara* in *Primi*? Scrivimi per esempio «carbonara 12».",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "*Carbonara* l’hai eliminato poco fa: non è più nel menu. Per rimetterlo scrivimi «rimetti carbonara».",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "*riso giallo*: *finito*",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto."
+   ],
+   "turns": [
+    "aggiungi il vitello tonnato",
+    "annulla",
+    "[+2 min]",
+    "quanto costa il riso giallo?",
+    "[+2 min]",
+    "quanto costa il riso giallo?",
+    "alzalo di un euro",
+    "annulla",
+    "[+2 min]",
+    "quanto costa la pasta carbonara?",
+    "mettila a 10",
+    "annulla",
+    "[+2 min]",
+    "quanto costa la pasta al ragù?",
+    "toglila",
+    "rimettila",
+    "[+2 min]",
+    "c'è il tiramisù?",
+    "è finito",
+    "è tornato",
+    "[+2 min]",
+    "aggiungi le patatine fritte",
+    "4",
+    "nei Piatti di prova",
+    "annulla",
+    "[+2 min]",
+    "aggiungi patatine fritte a 4",
+    "nei Primi del Menu di verifica",
+    "annulla",
+    "[+2 min]",
+    "aggiungi il vitello tonnato nei Primi del Menu di verifica",
+    "14",
+    "annulla",
+    "[+2 min]",
+    "aggiungi patatine fritte a 4",
+    "sì",
+    "lascia stare",
+    "[+2 min]",
+    "quanto costano il riso giallo e la pasta carbonara?",
+    "alzali tutti e due di 50 centesimi",
+    "annulla",
+    "[+2 min]",
+    "alza di 50 centesimi i primi del Menu di verifica",
+    "annulla",
+    "[+2 min]",
+    "alza di 50 centesimi i primi",
+    "annulla",
+    "[+2 min]",
+    "il riso giallo a otto e cinquanta",
+    "annulla",
+    "[+2 min]",
+    "la pasta al sugo a dieci euro e mezzo",
+    "annulla",
+    "[+2 min]",
+    "nascondi il riso giallo",
+    "mostralo di nuovo",
+    "[+2 min]",
+    "la pasta al sugo è finita",
+    "la pasta al sugo è tornata",
+    "[+2 min]",
+    "elimina la pasta al sugo",
+    "annulla",
+    "[+2 min]",
+    "metti tutto a zero",
+    "no",
+    "[+2 min]",
+    "elimina tutti i primi",
+    "no",
+    "[+2 min]",
+    "riso giallo a 9, pasta carbonara a 10, pasta al sugo a 10, tiramisù a 16",
+    "👍",
+    "annulla",
+    "[+2 min]",
+    "alza il pesto di un euro",
+    "la pasta al pesto dei primi",
+    "annulla",
+    "[+2 min]",
+    "cosa c'è nei primi?",
+    "[+2 min]",
+    "quante paste ho nei primi?",
+    "[+2 min]",
+    "il riso giallo a 80",
+    "no",
+    "[+2 min]",
+    "il riso giallo a 9",
+    "anzi rimettilo a 8",
+    "[+2 min]",
+    "togli la carbonara",
+    "rimetti la pasta carbonara nel menu",
+    "[+2 min]",
+    "aggiungi le patatine fritte a 4 nei Piatti di prova",
+    "elimina le patatine fritte",
+    "sì",
+    "[+2 min]",
+    "aggiungi patatine fritte a 4",
+    "nei Primi del Menu di verifica",
+    "annulla",
+    "[+2 min]",
+    "alza il pesto di un euro",
+    "la pasta al pesto dei primi",
+    "annulla",
+    "il riso giallo a 9",
+    "anzi rimettilo a 8",
+    "[+2 min]",
+    "aggiungi le patatine fritte a 4 nei Piatti di prova",
+    "nei Piatti di prova",
+    "annulla",
+    "[+2 min]",
+    "aggiungi il vitello tonnato a 14 nei Piatti di prova",
+    "no, nei Primi del Menu di verifica",
+    "elimina il vitello tonnato",
+    "sì",
+    "[+2 min]",
+    "cosa c'è nei primi?",
+    "aggiungi le trofie al pesto a 11 nei primi",
+    "annulla",
+    "[+2 min]",
+    "quanto costa la pasta carbonara?",
+    "alzala di un euro",
+    "alzala ancora di 50 centesimi",
+    "rimettila a 9",
+    "[+2 min]",
+    "il riso giallo a 9 e la pasta carbonara a 10",
+    "abbassali tutti e due di un euro",
+    "[+2 min]",
+    "c'è la pasta al ragù?",
+    "è finita",
+    "no scusa, è tornata",
+    "[+2 min]",
+    "nascondi il tiramisù",
+    "rimettilo",
+    "[+2 min]",
+    "la pasta al sugo a 10",
+    "quanto costa il riso giallo?",
+    "mettilo a 9",
+    "annulla",
+    "la pasta al sugo a 9",
+    "[+2 min]",
+    "aggiungi la frittatina",
+    "lascia stare",
+    "[+2 min]",
+    "quanti piatti ho nei Primi del Menu di verifica?",
+    "[+2 min]",
+    "metti in evidenza il tiramisù",
+    "toglilo dall'evidenza",
+    "[+2 min]",
+    "il riso giallo è finito",
+    "quanto costa la pasta al pesto?",
+    "il riso giallo è tornato"
+   ],
+   "clarifications": 4,
+   "unexpectedClarifications": 4,
+   "llmCalls": 0,
+   "llmMisses": 98,
+   "llmTokens": 0,
+   "latencyMs": [
+    135.4,
+    35.4,
+    23.2,
+    16.2,
+    21.7,
+    14.5,
+    11.7,
+    14.6,
+    15.8,
+    23.2,
+    12.8,
+    13.7,
+    10.1,
+    13,
+    17.3,
+    10.7,
+    8.9,
+    11.6,
+    8.3,
+    8.2,
+    11.7,
+    8.4,
+    19.7,
+    8.3,
+    7.9,
+    10.8,
+    85.9,
+    8.6,
+    12.2,
+    14.7,
+    8.3,
+    15.5,
+    9.1,
+    9.1,
+    10.8,
+    10,
+    8.3,
+    13.3,
+    8.3,
+    8.4,
+    9.5,
+    45.3,
+    10.6,
+    11.7,
+    9.8,
+    10.3,
+    10.4,
+    8.4,
+    7.7,
+    15.7,
+    8.8,
+    10.7,
+    10.1,
+    8.6,
+    10.1,
+    10.6,
+    12.9,
+    8.8,
+    10.9,
+    10.4,
+    8.6,
+    16.6,
+    11.4,
+    17.8,
+    11,
+    8.8,
+    11.2,
+    8.1,
+    9.1,
+    11.8,
+    7,
+    6.9,
+    9.9,
+    8.6,
+    9,
+    9.9,
+    8.6,
+    9.8,
+    10.4,
+    8.3,
+    7.2,
+    11.4,
+    8.4,
+    8.5,
+    9.8,
+    9.4,
+    8.9,
+    10,
+    11,
+    10.6,
+    9.8,
+    8.5,
+    7.8,
+    9.4,
+    10.4,
+    8.3,
+    10.1,
+    8.8,
+    8.8,
+    9.8,
+    8.9,
+    8.7,
+    9.6,
+    7.7,
+    7.6,
+    18.3,
+    7.4,
+    9.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "batteria dal vivo QA v145–v149 (27 conversazioni di fila, storia che continua, 2 min tra le conversazioni)",
+   "nonMisurato": true
+  },
+  {
+   "id": "qa-continua-rapida",
+   "family": "bv-multiple",
+   "menu": "qavero",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: available|Pasta al sugo|false"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: available|riso giallo|false"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: create|carbonara|9|primi"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: delete|Carbonara"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[annulla-domanda-aperta] turno 1: manca /\\?|rispondi|dimmi/i («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momen»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-prezzo] turno 3: manca /\\b8\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-alzalo] turno 4: manca /\\b8\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-alzalo] turno 5: manca /\\b9\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-alzalo] turno 5: menu mancano [price|riso giallo|9] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-mettila] turno 7: manca /\\b9\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-mettila] turno 8: manca /\\b10\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-mettila] turno 8: menu mancano [price|pasta carbonara|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-toglila] turno 10: manca /\\b10\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-toglila] turno 11: menu mancano [hidden|pasta al ragù|true] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-finito] turno 14: menu mancano [available|tiramisù|false] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-prezzo] turno 16: manca /prezz|quanto/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-prezzo] turno 16: manca /sottomenu/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-prezzo] turno 17: manca /\\b4\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-prezzo] turno 17: manca /sottomenu/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[nuovo-solo-prezzo] turno 18: menu mancano [create|patatine fritte|4|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-con-prezzo] turno 20: manca /sottomenu/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[nuovo-con-prezzo] turno 21: menu mancano [create|patatine fritte|4|primi] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-sottomenu] turno 23: manca /prezz|quanto/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[nuovo-solo-sottomenu] turno 24: menu mancano [create|vitello tonnato|14|primi] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[si-a-domanda-a-scelta] turno 26: manca /sottomenu/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[si-a-domanda-a-scelta] turno 27: manca /sottomenu|quale/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[tutti-e-due] turno 29: manca /\\b8\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[tutti-e-due] turno 29: manca /\\b9\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[tutti-e-due] turno 30: menu mancano [price|pasta carbonara|9.5, price|riso giallo|8.5] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[gruppo-menu-detto] turno 32: menu mancano [price|la parmigiana|13, price|pasta al pesto|9.5, price|pasta carbonara|9.5, price|riso giallo|8.5] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[prezzo-lettere-1] turno 36: menu mancano [price|riso giallo|8.5] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[prezzo-lettere-2] turno 38: menu mancano [price|Pasta al sugo|10.5] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[nascondi-mostra] turno 40: menu mancano [hidden|riso giallo|true] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "[finito-tornato] turno 43: menu mancano [] in più [available|Pasta al sugo|false] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[vietato-tutto-zero] turno 46: manca /\\?|rispondi|dimmi/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[riepilogo-pollice] turno 50: manca /\\bok\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[riepilogo-pollice] turno 51: menu mancano [price|Pasta al sugo|10, price|pasta carbonara|10, price|riso giallo|9, price|tiramisù|16] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[ambiguo-pesto-ok] turno 53: manca /\\?|rispondi|dimmi/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[ambiguo-pesto-ok] turno 54: menu mancano [price|pasta al pesto|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-primi] turno 56: manca /riso giallo/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-primi] turno 56: manca /carbonara/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-paste-primi] turno 57: manca /pesto/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-paste-primi] turno 57: manca /carbonara/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[prezzo-insolito-no] turno 58: manca /\\?|rispondi|dimmi/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[anzi-rimettilo] turno 60: menu mancano [price|riso giallo|9] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-vietata",
+     "why": "[ok-a-domanda] turno 62: contiene /elimin/i («*Carbonara*: *eliminato* dal menu Per tornare come prima scrivi *annulla* entro 10 minuti.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "[ok-a-domanda] turno 63: menu mancano [] in più [delete|Carbonara] («In quale sottomenu metto *Carbonara*? Rispondi col numero o col nome. 1. *Piatti di prova* (Menu di »)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149-patatine-crea-elimina] turno 64: menu mancano [create|patatine fritte|4|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[v149-patatine-crea-elimina] turno 65: manca /rispondi \\*?s/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149-patatine-crea-elimina] turno 65: menu mancano [create|patatine fritte|4|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[v149-nuovo-dopo-eliminato] turno 67: manca /sottomenu/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[v149-nuovo-dopo-eliminato] turno 67: manca /\\b4\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-vietata",
+     "why": "[v149-nuovo-dopo-eliminato] turno 68: contiene /\\?/i («A che prezzo metto *Carbonara* in *Primi*? Scrivimi per esempio «carbonara 12».»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149-nuovo-dopo-eliminato] turno 68: menu mancano [create|patatine fritte|4|primi] in più [] («A che prezzo metto *Carbonara* in *Primi*? Scrivimi per esempio «carbonara 12».»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[v149-pesto-poi-anzi] turno 70: manca /\\?|rispondi|dimmi/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149-pesto-poi-anzi] turno 71: menu mancano [price|pasta al pesto|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149-pesto-poi-anzi] turno 73: menu mancano [price|riso giallo|9] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149b-annulla-dopo-scrittura] turno 75: menu mancano [create|patatine fritte|4|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[v149b-annulla-dopo-scrittura] turno 76: menu mancano [create|patatine fritte|4|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[sposta-dopo-creazione] turno 78: menu mancano [create|vitello tonnato|14|piatti di prova] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[sposta-dopo-creazione] turno 79: menu mancano [create|vitello tonnato|14|primi] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[sposta-dopo-creazione] turno 80: manca /rispondi \\*?s/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[sposta-dopo-creazione] turno 80: menu mancano [create|vitello tonnato|14|primi] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[lettura-poi-nuovo] turno 82: manca /riso giallo/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[lettura-poi-nuovo] turno 83: menu mancano [create|trofie al pesto|11|primi] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[pronome-dopo-scrittura] turno 85: manca /\\b9\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-dopo-scrittura] turno 86: menu mancano [price|pasta carbonara|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[pronome-dopo-scrittura] turno 87: menu mancano [price|pasta carbonara|10.5] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[tutti-e-due-dopo-scrittura] turno 89: menu mancano [price|pasta carbonara|10, price|riso giallo|9] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[finito-poi-tornato] turno 91: manca /rag[uù]/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[finito-poi-tornato] turno 92: menu mancano [available|pasta al ragù|false] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[nascondi-poi-rimettilo] turno 94: menu mancano [hidden|tiramisù|true] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[scrittura-poi-lettura-altro] turno 96: menu mancano [price|Pasta al sugo|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[scrittura-poi-lettura-altro] turno 97: manca /\\b8\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[scrittura-poi-lettura-altro] turno 97: menu mancano [price|Pasta al sugo|10] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "[scrittura-poi-lettura-altro] turno 98: menu mancano [price|Pasta al sugo|10, price|riso giallo|9] in più [create|carbonara|9|primi] («Nuovo piatto *Carbonara* in *Primi*: *9,00 €*»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "[scrittura-poi-lettura-altro] turno 99: menu mancano [price|Pasta al sugo|10] in più [create|carbonara|9|primi] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "[scrittura-poi-lettura-altro] turno 100: menu mancano [] in più [create|carbonara|9|primi] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[nuovo-solo-nome-lascia] turno 101: manca /\\?|rispondi|dimmi/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[conta-primi] turno 103: manca /\\b4\\b|quattro/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "non-applicato",
+     "why": "[evidenza-poi-togli] turno 104: menu mancano [featured|tiramisù|true] in più [] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "risposta-senza-contenuto",
+     "why": "[finito-nome-poi-pronome] turno 107: manca /\\b9\\b/i («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "[finito-nome-poi-pronome] turno 108: menu mancano [] in più [available|riso giallo|false] («Sono momentaneamente non disponibile, riprova tra un minuto.»)"
+    }
+   ],
+   "expected": [],
+   "actual": [
+    "available|Pasta al sugo|false",
+    "available|riso giallo|false",
+    "create|carbonara|9|primi",
+    "delete|Carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "*Pasta al sugo*: *finito*",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Elimino *Pasta al sugo* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Pasta al sugo*: da eliminare",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Nel *Menu di verifica · web QA* o nel *Menu del giorno*?",
+    "Ok, lascio stare.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "*Carbonara*: *eliminato* dal menu\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "In quale sottomenu metto *Carbonara*? Rispondi col numero o col nome.\n\n1. *Piatti di prova* (Menu di verifica · web QA)\n2. *Primi* (Menu di verifica · web QA)",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Mi serve il sottomenu: scrivimi il nome, per esempio *Piatti di prova*, oppure il numero dell’elenco.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "A che prezzo metto *Carbonara* in *Primi*? Scrivimi per esempio «carbonara 12».",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Va bene, per ora lascio *Carbonara* fuori dal menu. Quando vuoi aggiungerlo scrivimi il prezzo, per esempio «carbonara 12».",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Nuovo piatto *Carbonara* in *Primi*: *9,00 €*",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "*riso giallo*: *finito*",
+    "Sono momentaneamente non disponibile, riprova tra un minuto.",
+    "Sono momentaneamente non disponibile, riprova tra un minuto."
+   ],
+   "turns": [
+    "aggiungi il vitello tonnato",
+    "annulla",
+    "quanto costa il riso giallo?",
+    "quanto costa il riso giallo?",
+    "alzalo di un euro",
+    "annulla",
+    "quanto costa la pasta carbonara?",
+    "mettila a 10",
+    "annulla",
+    "quanto costa la pasta al ragù?",
+    "toglila",
+    "rimettila",
+    "c'è il tiramisù?",
+    "è finito",
+    "è tornato",
+    "aggiungi le patatine fritte",
+    "4",
+    "nei Piatti di prova",
+    "annulla",
+    "aggiungi patatine fritte a 4",
+    "nei Primi del Menu di verifica",
+    "annulla",
+    "aggiungi il vitello tonnato nei Primi del Menu di verifica",
+    "14",
+    "annulla",
+    "aggiungi patatine fritte a 4",
+    "sì",
+    "lascia stare",
+    "quanto costano il riso giallo e la pasta carbonara?",
+    "alzali tutti e due di 50 centesimi",
+    "annulla",
+    "alza di 50 centesimi i primi del Menu di verifica",
+    "annulla",
+    "alza di 50 centesimi i primi",
+    "annulla",
+    "il riso giallo a otto e cinquanta",
+    "annulla",
+    "la pasta al sugo a dieci euro e mezzo",
+    "annulla",
+    "nascondi il riso giallo",
+    "mostralo di nuovo",
+    "la pasta al sugo è finita",
+    "la pasta al sugo è tornata",
+    "elimina la pasta al sugo",
+    "annulla",
+    "metti tutto a zero",
+    "no",
+    "elimina tutti i primi",
+    "no",
+    "riso giallo a 9, pasta carbonara a 10, pasta al sugo a 10, tiramisù a 16",
+    "👍",
+    "annulla",
+    "alza il pesto di un euro",
+    "la pasta al pesto dei primi",
+    "annulla",
+    "cosa c'è nei primi?",
+    "quante paste ho nei primi?",
+    "il riso giallo a 80",
+    "no",
+    "il riso giallo a 9",
+    "anzi rimettilo a 8",
+    "togli la carbonara",
+    "rimetti la pasta carbonara nel menu",
+    "aggiungi le patatine fritte a 4 nei Piatti di prova",
+    "elimina le patatine fritte",
+    "sì",
+    "aggiungi patatine fritte a 4",
+    "nei Primi del Menu di verifica",
+    "annulla",
+    "alza il pesto di un euro",
+    "la pasta al pesto dei primi",
+    "annulla",
+    "il riso giallo a 9",
+    "anzi rimettilo a 8",
+    "aggiungi le patatine fritte a 4 nei Piatti di prova",
+    "nei Piatti di prova",
+    "annulla",
+    "aggiungi il vitello tonnato a 14 nei Piatti di prova",
+    "no, nei Primi del Menu di verifica",
+    "elimina il vitello tonnato",
+    "sì",
+    "cosa c'è nei primi?",
+    "aggiungi le trofie al pesto a 11 nei primi",
+    "annulla",
+    "quanto costa la pasta carbonara?",
+    "alzala di un euro",
+    "alzala ancora di 50 centesimi",
+    "rimettila a 9",
+    "il riso giallo a 9 e la pasta carbonara a 10",
+    "abbassali tutti e due di un euro",
+    "c'è la pasta al ragù?",
+    "è finita",
+    "no scusa, è tornata",
+    "nascondi il tiramisù",
+    "rimettilo",
+    "la pasta al sugo a 10",
+    "quanto costa il riso giallo?",
+    "mettilo a 9",
+    "annulla",
+    "la pasta al sugo a 9",
+    "aggiungi la frittatina",
+    "lascia stare",
+    "quanti piatti ho nei Primi del Menu di verifica?",
+    "metti in evidenza il tiramisù",
+    "toglilo dall'evidenza",
+    "il riso giallo è finito",
+    "quanto costa la pasta al pesto?",
+    "il riso giallo è tornato"
+   ],
+   "clarifications": 4,
+   "unexpectedClarifications": 4,
+   "llmCalls": 0,
+   "llmMisses": 97,
+   "llmTokens": 0,
+   "latencyMs": [
+    11.3,
+    10.8,
+    8.8,
+    8.6,
+    10.1,
+    8.6,
+    8.3,
+    10.2,
+    7.9,
+    8.4,
+    8.5,
+    8.7,
+    9.8,
+    11,
+    9.3,
+    9.1,
+    10.7,
+    7.9,
+    8.1,
+    9.9,
+    8.6,
+    8.3,
+    13.9,
+    8.3,
+    7.3,
+    10,
+    8.5,
+    7,
+    11.1,
+    9.4,
+    7.5,
+    8.7,
+    7.1,
+    7.8,
+    11.5,
+    8.9,
+    7.8,
+    9.8,
+    7.7,
+    7.7,
+    9.2,
+    15.3,
+    12.8,
+    7.2,
+    4.7,
+    7.3,
+    3.8,
+    3.4,
+    5.9,
+    9.4,
+    7.5,
+    8,
+    8,
+    7.8,
+    8.9,
+    8.1,
+    7.7,
+    8.8,
+    7.1,
+    7.4,
+    11.6,
+    15,
+    11.5,
+    10.1,
+    9.4,
+    9.1,
+    9,
+    7.4,
+    9.6,
+    8.2,
+    9.6,
+    10.4,
+    7.8,
+    8.1,
+    8.9,
+    7.9,
+    7.5,
+    10.9,
+    9.6,
+    7.6,
+    8.3,
+    8.5,
+    9.5,
+    8.9,
+    7.6,
+    8.6,
+    11.7,
+    8.2,
+    9.2,
+    13.7,
+    8.7,
+    8.3,
+    10.5,
+    8.5,
+    7.8,
+    11.5,
+    9.5,
+    17.2,
+    9.3,
+    8.7,
+    10.8,
+    8.1,
+    8.8,
+    9.1,
+    8.1,
+    14,
+    11.8,
+    9.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "batteria dal vivo QA v145–v149 (27 conversazioni di fila, storia che continua, senza attese come dal vivo)",
+   "nonMisurato": true
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "qa-continua",
+   "hash": "097c790a926e1821",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "4ccf4296133f334f",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "d9dd21e845752198",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "919c49cbdb18da4a",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "cc7697d9cdaf24bd",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "a5c9d73ddadf7462",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "426a6ca07aeb0db1",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e3adfbe8d170caf7",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "9a870b938be7a220",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "a24c2dbc179a7d79",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "fa9093f937b16540",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "945ec2f8856cc78a",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "a13cd227f1c29bd9",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "5069845c32869c91",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "bed56f85c40581ff",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "1ad7056f4405b7ee",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "a6e00d3e3c130392",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "bc7767c3d73383b4",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e1d6e3f5f0ebc87c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "64041cd5fecf58b3",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "7640e90042524256",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "644bbbdaddff7502",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "778effa346fc134d",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "b7c0621290302426",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "45178d234d31c5e4",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "1c7c0a411cf2f11b",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "eb459e31aa7c260f",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "d03d9de104c30a05",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "7c2a6e3e89b74212",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "98cb3275955b54bd",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "1c16258c109f28f7",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "c442e710de627d8d",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "605f35d54d99c150",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "400b91418017c61a",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "b86a346ba7abed97",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "0356430415a1a2ff",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "105b1f86a6f0bc35",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "f67615ebfe2a943d",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "f3ea3706507b5c22",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "fffa87b4639cc257",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e41d50a538f5b399",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "69cab6cb0eaeff92",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "51a8ec3da9d028c1",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "81ed4de56aee6d2a",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "fa1048be6ffcd3cc",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "409e673f85a1016a",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "9448d1a1b60427f7",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "2bfc7f5165923b7f",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "2f561874d2e6f721",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "96b6c66bb20a912d",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "2c6960e7299ff687",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "2cd4f104c4a7a006",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "206c881d84a485be",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "4d7e31879b2f7f6c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "adf1c8e7a3ac28bc",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "4de3488af00ac4ce",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "9c8f69b2a20378b8",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ae14c85871044948",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "875a87212ee2d1d1",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "f15c7a1a4af26a34",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "13e9e78ef71bf0fd",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "505a883f4e870c60",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "46694df01119b2c0",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "847034493fef7863",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "7fd94fec133d3a7b",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "91550b172381030e",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "0b43b81ae5ea885d",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "2c61ded8f9fc71b9",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ad2210fed83273fd",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "bbe659c17182ceca",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ba0b516efba73bd6",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "78ecce587e9cd5fd",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "5c27494d13057965",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "f3362216bd65c3d8",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "51144178fa343c0a",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "d398b3d12086726c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "388645eca7b587d5",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "e53aec40ba67b85f",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "0eff83b1dd4b8b21",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "6da69edeba602a31",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "5e0f0bb693d15149",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "6e7405b402096a69",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "aa579cd4b275b0d1",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "9c6c383e8fef0dd2",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "74ee2f5c008e7ddb",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "6f68f29b32e19121",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "127900213f272300",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "5535a914590635ab",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "6e94ae2346d7aa29",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "c8b20be18ec64f10",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "a23f92a63f3ed99c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "ed49584449434d16",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "00e6057cc8dab941",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "cfe4e58fb04934ab",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "154024fd4a31ed0f",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "cc801fbf173265f5",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "3447d557ff3ee68e",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua",
+   "hash": "51042ec45d888e2b",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "097c790a926e1821",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "4ccf4296133f334f",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "222130d2218be103",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "4955e20f3638f3af",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "77e533897074763b",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "1e8df49312bdcf18",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "f86216e83a7974ef",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "195206aaf5e993f6",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "dff71f6a70743b6b",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "21578f038cc965d9",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "efa5292c0aa40419",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "d0848c47f4a66216",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a42b79adda7e2a71",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "c4a3ecd398c57447",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "daa63be07f5540f9",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "2222a633b8ea6ddf",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a0dbe3e2c68df617",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0d7b82c904a0ff3c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "29238891819abe96",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "d74ef324d0e06398",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "ffcf17dd075f8881",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "7eda359151d0c0e7",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0ee5bec7e329c10a",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a21a22aa13f67258",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "d6ae72d95100d9ec",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "7711e2b51932f4a7",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "ac2cc0efd2ee3cb1",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "b4381e203249bb86",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a96115a3625aa8cf",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "e0c7f04c4e065f9c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "761603906eeffee5",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "ace9c60d00e44725",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "5f25516c1414be47",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "4955f3d70f8f0678",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "e0a069e1d1b00617",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "8be90c445382f148",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "3d711fe183198e1b",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "983cca0b6fd46f9c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "912edc009df8ed97",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "77a49b16c97239b0",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "27f92053fdde69be",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "5078fc0359415c1f",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "acd473e200a35ca5",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "57247cf6dd89c5c0",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "771894492aeb361e",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "9ac8b2b18f5e9327",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "652e3c04490d7ef3",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0ffd0bb36ca3be27",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "ea3366290c8a63ca",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "68185e389d84586c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a3996717aef5d2f2",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a15e934b42dc1fd6",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "d0c60d7b98eff236",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "3365d2910f21632f",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "b20d25813f44ef22",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "bab303c5d6956506",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "017fa8e27c7b4070",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "6018307ad03733dd",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "b76cd423b7b8172d",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a3766c75c511259b",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "56d5f374b2a7fd5c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "e16e0f9e3b533b0c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "dbd3eb2bf5912eb7",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0cfd43a6d8c9e49e",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "ffa6634bd675a6b3",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "e64473e5bfd398cc",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "84b1c0d163624403",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0c0d4a1c097c3bd4",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a92675d5e7068da7",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a8fe993377a14639",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "b8e130d40fd91da8",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "355b2156eff75f6c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "bd3caa8dcf3cd163",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "c1d6631f67469c66",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "02da1506f68fffe9",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "74d08314d55182c3",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "eec2e04cd8572cd6",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "d90d3aee5ce68056",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "291ec161fa2f6e95",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "090def99506031dc",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "802c6fd336038e37",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "6c0e05061aad69f1",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "ec461c8c51621076",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "f54f80ff2736d476",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "511b269dc107ebc3",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "55412ac7f0f9f14d",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "f6f3be08ad6d84f1",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "0c8c61a7976cf5df",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "6257e8b430100539",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "da380f328006f2a3",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "a23c7f990542efc5",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "d6eb68bdadef939c",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "6cf2a729def37f3a",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "5c6ce47827a7b19b",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "38e89d4359f4fbe6",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "57daa396620eb5a6",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "qa-continua-rapida",
+   "hash": "c86bc41e971e13a9",
+   "source": "miss",
+   "status": 400,
+   "ms": 0,
+   "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}

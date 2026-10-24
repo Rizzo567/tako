@@ -1557,7 +1557,7 @@
     "non toccare la carbonara, la lasagna invece mettila a 12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *il sottomenu*.\n\nSottomenu disponibili:\n• Antipasti\n• Primi\n• Secondi\n• Piatti di prova\n• Offerte\n• Pizze\n• Dolci\n• Proposte\n• Bibite\n• Caffetteria\n• Vini\n\nDimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
    ],
    "expected": [
     "price|Lasagna al forno|12"
@@ -6350,7 +6350,7 @@
     "togli la promo dalla carbonara e mettila a 11"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *il sottomenu*.\n\nSottomenu disponibili:\n• Antipasti\n• Primi\n• Secondi\n• Piatti di prova\n• Offerte\n• Pizze\n• Dolci\n• Proposte\n• Bibite\n• Caffetteria\n• Vini\n\nDimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
    ],
    "expected": [
     "promo|Spaghetti alla carbonara|null",
