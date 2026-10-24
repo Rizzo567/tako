@@ -6,6 +6,7 @@ import {readFileSync} from 'node:fs'
 import {ruleTurn,ruleReply,swapTurn,fixMealWords,menusIn,type RuleMenu} from '../apps/server/src/lib/owner-brain-svuota.js'
 import {wantsCreate} from '../apps/server/src/lib/twilio-menu-ai.js'
 import {spelledAlike} from '../apps/server/src/lib/twilio-menu-phonetic.js'
+import {photoTargetsByName} from '../apps/server/src/lib/menu-photo-inherit.js'
 import {workspaceSchema} from '../apps/server/src/lib/menu-workspace-contract.js'
 import {catalogOf} from '../apps/server/src/lib/owner-brain-eval.js'
 
@@ -54,4 +55,14 @@ describe('sostituzione in una frase (chat Manuel 18:09)',()=>{
   expect(wantsCreate('menu mezzogirno togli lasagna metti rigatoni')).toBe(true);expect(wantsCreate('la lasagna è finita')).toBe(false)})
  it('a suono solo nomi che somigliano anche nelle lettere (tiramisù → mai «Pirata»)',()=>{
   expect(spelledAlike('porta il tiramisu a 6 euro','Pirata')).toBe(false);expect(spelledAlike('la ghisa a dodici','Gricia')).toBe(true);expect(spelledAlike('la birra a sei e cinque','Birra 33 cl')).toBe(true)})
+ it('foto con didascalia «questa è la X» (ripreso da 6a1af510)',()=>{
+  const refs=[{id:'t1',name:'Tagliata di manzo'},{id:'t2',name:'Tagliata rucola e grana'},{id:'t3',name:'Tagliata con funghi porcini e panna'},{id:'z1',name:'Zucchine trifolate'},{id:'z2',name:'Coppa di maiale con zucchine'},{id:'i1',name:'Insalata mista'},{id:'i2',name:'Insalata mista'},{id:'i3',name:'Insalata verde'}]
+  expect(photoTargetsByName('Questa è la tagliata di manzo',refs,refs)).toEqual(['t1'])
+  expect(photoTargetsByName('ecco la foto delle zucchine trifolate',refs,refs)).toEqual(['z1'])
+  expect(photoTargetsByName('foto insalata mista di oggi',refs,refs)?.sort()).toEqual(['i1','i2'])
+  expect(photoTargetsByName('la tagliata',refs,refs)).toBeNull()
+  expect(photoTargetsByName('insalata mista e insalata verde',refs,refs)).toBeNull()})
+ it('vocale «allora nei primi oggi mettiamo…» subito dopo lo svuotamento = seguito dell inserimento (ripreso da 6a1af510)',()=>{
+  const h=[{role:'owner',text:'nel menu pranzo togli i primi',at:1},{role:'bot',text:'*Menu Giorno aggiornato*\n\n*Primi*\n• nessun piatto',at:2}]
+  const r=run('allora nei primi oggi mettiamo la pasta alla norma',NOW,h);expect(effect(r)?.add).toEqual(['Menu Giorno›Primi›Pasta alla norma'])})
 })

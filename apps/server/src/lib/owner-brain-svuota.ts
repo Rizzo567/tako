@@ -373,13 +373,15 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
  const clr=clearIntent(text,allSecNames)||(()=>{const sp=splitClearInsert(text,allSecNames);return !!sp.insert&&clearIntent(sp.clear,allSecNames)})()
  // seguito senza verbo subito dopo una risposta della regola («e nei contorni patate al forno»): è ancora un inserimento
  const lastBot=[...o.history].filter(t=>t.role==='bot').sort((a,b)=>b.at-a.at)[0]?.text??''
- const follow=/(?:aggiornato|svuotato)\*/.test(lastBot)&&/^(?:e |ed |poi |anche |allora |ok )*(?:nei|negli|nelle|nel|tra i|tra le|per i|per le|come|i|gli|le)?\s*(?:primi|primo|secondi|secondo|contorni|contorno|dolci|dolce|antipasti|antipasto)\b/.test(p)
+ const follow=/(?:aggiornato|svuotato)\*/.test(lastBot)&&/^(?:e |ed |poi |anche |allora |ok |oggi |stasera |per oggi |quindi |adesso |ora )*(?:nei|negli|nelle|nel|tra i|tra le|per i|per le|come|i|gli|le)?\s*(?:primi|primo|secondi|secondo|contorni|contorno|dolci|dolce|antipasti|antipasto)\b/.test(p)
  const ins=(INSERT_V.test(p)||follow)&&!OTHER.test(p)&&!/\b(?:mettil[oaie]|mettel[oaie]|aggiungil[oaie]|inseriscil[oaie])\b/.test(p)
  if(!clr&&!ins)return null
  // 24/10: «togli X e metti Y» non letto come sostituzione: mai inserire Y perdendo «togli X» (decide il resto del flusso)
  if(!clr&&CLEAR_V.test(p))return null
  // la sostituzione giornaliera («stasera a cena metti primi …») resta la sua strada
- if(!clr&&!STRONG_INSERT.test(p)&&DAILY.test(p))return null
+ // …ma solo con un Menu detto: subito dopo una risposta della regola «allora nei primi oggi mettiamo A e B» (vocale senza Menu) è il seguito
+ // dell'inserimento (24/10, ripreso da 6a1af510: prima finiva al modello → niente scritto)
+ if(!clr&&!STRONG_INSERT.test(p)&&DAILY.test(p)&&!(follow&&!menusIn(text,o.menus).length))return null
  if(!clr&&hasDigits(p))return null
  // Menu del messaggio, poi quello della conversazione
  const said=menusIn(text0,o.menus) // 24/10: anche «da 12 …» (tolto da `text`) indica il Menu

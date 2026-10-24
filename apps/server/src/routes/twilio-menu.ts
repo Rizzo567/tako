@@ -864,6 +864,12 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
  if(engine==='haiku'&&!preReply&&!pre&&!sessNow&&!pend){const st=plain(shorthand(text))
   if(freshIds.size&&/\b(?:non|nn)\s+(?:(?:la|lo|li|le|ce|ci)\s+)?(?:mett\w*|aggiung\w*|inser\w*|vogli\w*)|\b(?:anzi no|toglil[aoie]|leval[aoie]|non metterl[aoie])\b/.test(st)){const hit=refs.filter(r=>freshIds.has(r.id)&&fullyNamed(r.name,shorthand(text)))
    if(hit.length===1)pre={actions:[{kind:'delete',id:hit[0]!.id,soft:true,undoCreate:true} as MenuAction],why:'risposta-elimina'}}
+  // 24/10 (batteria: «togli la lasagna metti rigatoni» → «toglili» → «Intendi Rigatoni o Lasagna?»): solo il pronome subito dopo aver
+  // creato piatti = quei piatti (singolare: uno solo appena creato; plurale: tutti quelli appena creati, max 4). Mai quelli eliminati.
+  const snapTxt=undoOK&&(undoRec as any)?.full?JSON.stringify((undoRec as any).full.before??null):'',fresh2=snapTxt?new Set(refs.filter(r=>!snapTxt.includes(r.id)&&base.menus.some(m=>m.name===r.menu&&snapTxt.includes(m.id))).map(r=>r.id)):freshIds // con l'istantanea del Menu (regole): nuovi = non c'erano prima
+  if(!pre&&fresh2.size){const pr=/^(?:(?:no|anzi|scusa|ok|allora)\s+)*(?:toglil([aoie])|leval([aoie])|eliminal([aoie])|cancellal([aoie])|non (?:l[aoie]|li|le) (?:volevo|mettere))$/.exec(st)
+   const fr=refs.filter(r=>fresh2.has(r.id)&&!r.hidden),g=pr?(pr[1]??pr[2]??pr[3]??pr[4]??(/\b(?:li|le)\b/.test(st)?'i':'a')):''
+   if(pr&&fr.length&&(/[ao]/.test(g)?fr.length===1:fr.length<=4))pre={actions:fr.map(r=>({kind:'delete',id:r.id,soft:true,undoCreate:true}) as MenuAction),why:'risposta-elimina'}}
   if(!pre){const m=/^(?:(?:ok|allora|anzi|no|ora|adesso|e|poi)\s+)*(?:togli|toglimi|leva|levami|elimina|cancella)\s+(.+)$/.exec(st)
    if(m&&!/\d|,/.test(text)&&!/\b(?:e|anche|pure|tutt[ieoa]|sottomenu|menu|sezione|categoria|poi|non|prima|precedente|ultim[oa]|foto)\b/.test(m[1]!)){const said=m[1]!.replace(/^(?:il|lo|la|i|gli|le|l)\s+/,'').replace(/\s+(?:dal|dalla|dai|nel|nei|del|della|a|al|alla)\s.*$/,'').trim(),hit=refs.filter(r=>sameDishName(r.name,said))
     if(said.length>=3&&hit.length===1&&/^(?:togli|toglimi|leva|levami)\b/.test(m[0]!.replace(/^(?:(?:ok|allora|anzi|no|ora|adesso|e|poi)\s+)*/,'')))pre={actions:[{kind:'delete',id:hit[0]!.id,soft:true} as MenuAction],why:'risposta-elimina'}}}}

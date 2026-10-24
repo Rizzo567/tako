@@ -45,7 +45,13 @@ export function inheritedNote(list:InheritedPhoto[]):string{
  *  omonimi del locale, senza domanda. Nomi DIVERSI → null (si chiede quale, o decide il modello sul solo piatto). */
 export function photoTargetsByName(text:string,candidates:{id:string,name:string}[],refs:{id:string,name:string}[]):string[]|null{
  const key=dishKey(text),exact=candidates.filter(r=>dishKey(r.name)===key),same=candidates.length>0&&new Set(candidates.map(r=>dishKey(r.name))).size===1
- const anchor=exact[0]??(same?candidates[0]:undefined);if(!anchor)return null
+ let anchor=exact[0]??(same?candidates[0]:undefined)
+ // 24/10 (ripreso da 6a1af510, mai andato online): didascalia con parole intorno al nome («Questa è la tagliata di manzo», «ecco la foto
+ // delle zucchine trifolate») → il nome di piatto più lungo (≥2 parole) contenuto per intero nella didascalia, se è uno solo (omonimi = lo stesso).
+ if(!anchor&&key){const inside=candidates.filter(r=>{const k=dishKey(r.name);return k.split(' ').length>=2&&(' '+key+' ').includes(' '+k+' ')})
+  const top=Math.max(0,...inside.map(r=>dishKey(r.name).length)),best=inside.filter(r=>dishKey(r.name).length===top)
+  if(best.length&&new Set(best.map(r=>dishKey(r.name))).size===1)anchor=best[0]}
+ if(!anchor)return null
  return groupOf(anchor.id,refs)}
 /** Tutti gli omonimi (stesso nome normalizzato) del piatto `id`, lui compreso. */
 export function groupOf(id:string,refs:{id:string,name:string}[]):string[]{
