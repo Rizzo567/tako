@@ -1,0 +1,337 @@
+[
+ {
+  "id": "luisa-giornata",
+  "turns": [
+   {
+    "text": "Buongiorno"
+   },
+   {
+    "text": "Menù mezzogiorno da 12 euro togli tutti i primi"
+   },
+   {
+    "text": "Metti nei primi lasagna al forno  pasta e fagioli  risotto ai funghi"
+   },
+   {
+    "text": "Togli tutti i secondi"
+   },
+   {
+    "text": "Nei secondi metti"
+   },
+   {
+    "text": "Cotoletta alla milanese  scaloppine al limone polpette al sugo",
+    "overlapMs": 1500
+   },
+   {
+    "text": "Togli tutti i contorni"
+   },
+   {
+    "text": "Metti nei contorni patate al forno insalata"
+   },
+   {
+    "text": "Scusa la pasta e fagioli è finita"
+   },
+   {
+    "text": "Rinomina risotto ai funghi in risotto ai porcini"
+   },
+   {
+    "text": "Il primo del menu da 12 costa 9"
+   },
+   {
+    "text": "Il solo secondo a pranzo mettilo a 11"
+   },
+   {
+    "text": "Si"
+   },
+   {
+    "text": "Quanto costa il menu sera"
+   },
+   {
+    "text": "Stasera togli i primi"
+   },
+   {
+    "text": "E inserisci"
+   },
+   {
+    "text": "Tagliatelle al ragù  gnocchi alla sorrentina spaghetti alle vongole",
+    "overlapMs": 1200
+   },
+   {
+    "text": "Togli tutti i secondi della cena"
+   },
+   {
+    "text": "Metti nei secondi tagliata di manzo  branzino al forno"
+   },
+   {
+    "text": "Annulla"
+   },
+   {
+    "text": "Metti nei secondi tagliata di manzo  orata al forno"
+   },
+   {
+    "text": "Togli la melanzana al forno dalla cena"
+   },
+   {
+    "text": "allora nei contorni della cena aggiungi anche spinaci al burro"
+   },
+   {
+    "text": "Il completo della cena mettilo a 17"
+   },
+   {
+    "text": "Si"
+   },
+   {
+    "text": "Nei primi del pranzo inserici anche carbonara"
+   },
+   {
+    "text": "No la carbonara toglila"
+   },
+   {
+    "text": "Quanto costa il menu sera"
+   },
+   {
+    "text": "Grazie"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna al forno",
+     "Pasta e fagioli (finito)",
+     "Risotto ai porcini"
+    ],
+    "Menu Giorno›Secondi": [
+     "Cotoletta alla milanese",
+     "Scaloppine al limone",
+     "Polpette al sugo"
+    ],
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Insalata"
+    ],
+    "Menu Giorno›opzione Solo secondo": [
+     "11"
+    ],
+    "Menu Cena›Primi": [
+     "Tagliatelle al ragù",
+     "Gnocchi alla sorrentina",
+     "Spaghetti alle vongole"
+    ],
+    "Menu Cena›Secondi": [
+     "Tagliata di manzo",
+     "Orata al forno"
+    ],
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "insalata verde",
+     "patate al forno",
+     "Spinaci al burro"
+    ],
+    "Menu Cena›opzione Completo": [
+     "17"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "TEST-LUISA-1023"
+ },
+ {
+  "id": "scrive-malissimo",
+  "turns": [
+   {
+    "text": "ciao"
+   },
+   {
+    "text": "aiuto"
+   },
+   {
+    "text": "come si fa?"
+   },
+   {
+    "text": "x pranzo togli tutti i primi"
+   },
+   {
+    "text": "nei primi metti carbo amatri e lasagna"
+   },
+   {
+    "text": "si si"
+   },
+   {
+    "text": "anzi no la lasagna nn la mettere"
+   },
+   {
+    "text": "x pranzo secondo cotoletta e polpette"
+   },
+   {
+    "text": "ok"
+   },
+   {
+    "text": "👍"
+   },
+   {
+    "text": "x pranzo contorni patate al forno e insalata"
+   },
+   {
+    "text": "il completo a pranzo dodici euro"
+   },
+   {
+    "text": "no aspetta tredici"
+   },
+   {
+    "text": "si si"
+   },
+   {
+    "text": "nn capisco"
+   },
+   {
+    "text": "stasera via tutti i secondi"
+   },
+   {
+    "text": "metti tagliata  orata"
+   },
+   {
+    "text": "quanto costa il menu sera"
+   },
+   {
+    "text": "togli la carbo"
+   },
+   {
+    "text": "annulla"
+   },
+   {
+    "text": "va bene"
+   },
+   {
+    "text": "grazie ciao"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Carbonara",
+     "Amatriciana"
+    ],
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Polpette"
+    ],
+    "Menu Giorno›Contorni": [
+     "Insalata",
+     "Patate al forno"
+    ],
+    "Menu Giorno›opzione Completo": [
+     "13"
+    ],
+    "Menu Cena›Secondi": [
+     "Tagliata",
+     "Orata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "TEST-LUISA-1023"
+ },
+ {
+  "id": "sost-giornata",
+  "turns": [
+   {
+    "text": "nel menu pranzo togli i primi"
+   },
+   {
+    "text": "togli anche i secondi e i contorni"
+   },
+   {
+    "text": "ok primi metti lasagna , strozzapreti con zola e pistacchio orecchiette con zucca"
+   },
+   {
+    "text": "come secondi metti cotoletta arrosto e contorni patate al forno e spinaci"
+   },
+   {
+    "text": "menu mezzogirno togli lasagna metti rigatoni"
+   },
+   {
+    "text": "la cotoletta è finita"
+   },
+   {
+    "text": "rimettila"
+   },
+   {
+    "text": "al posto delle orechiette metti gnocchi al pomodoro"
+   },
+   {
+    "text": "togli patate al forno metti patate fritte"
+   },
+   {
+    "text": "1"
+   },
+   {
+    "text": "cambia gli spinaci con la cicoria"
+   },
+   {
+    "text": "x stasera togli il pollo al forno e metti la salsiccia alla griglia"
+   },
+   {
+    "text": "porta il tiramisu a 6 euro"
+   },
+   {
+    "text": "la cotoletta mettila a 5 euro"
+   },
+   {
+    "text": "togli gli strozapreti metti i ravioli"
+   },
+   {
+    "text": "nei secondi del pranzo metti salsiccia alla griglia  funghi misti e peperoni"
+   },
+   {
+    "text": "si"
+   },
+   {
+    "text": "elimina l arrosto"
+   },
+   {
+    "text": "si"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Rigatoni",
+     "Gnocchi al pomodoro",
+     "Ravioli"
+    ],
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Salsiccia alla griglia",
+     "Funghi misti",
+     "Peperoni"
+    ],
+    "Menu Giorno›Contorni": [
+     "Patate fritte",
+     "Cicoria"
+    ],
+    "Menu Cena›Secondi": [
+     "branzino al forno",
+     "scaloppine al vino bianco",
+     "Salsiccia alla griglia"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    4,
+    6,
+    7,
+    10,
+    11
+   ],
+   "forbid": [
+    "Pirata",
+    "A quale piatto metto"
+   ]
+  },
+  "note": "giornata con sostituzioni (live)"
+ }
+]
