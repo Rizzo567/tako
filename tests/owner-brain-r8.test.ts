@@ -26,7 +26,7 @@ const fake:any={mode:'fake',stats:{},maxTokens:0,pace:async()=>{},setConversatio
 const MSG='ora in primi aggiungi pasta al pesto , pasta al ragu, pasta carbonara, riso giallo.\nmetti le paste a 10 euro e il riso a 8 euro'
 async function turn(plans:any[],text=MSG){queue=structuredClone(plans);installNet(fake,realFetch)
  const conv:Conversation={id:'r8',family:'manuel',menu:'qa',turns:[{text}],changes:[]}
- const run=await createRouteBot({name:'nuovo',settings:{botBrain:true},extraSql:brainSql}).run(conv,structuredClone(after),{restaurant:'Tako · Verifica web'})
+ const run=await createRouteBot({name:'nuovo',settings:{botBrain:true,botEngine:'groq'/* storico Groq: dal 21/10 il default è haiku (PIANO bot-haiku §1.5) */},extraSql:brainSql}).run(conv,structuredClone(after),{restaurant:'Tako · Verifica web'})
  const t=run.turns[0]!;if(process.env.TAKO_R8_SHOW)process.stderr.write("REPLY "+JSON.stringify(t.reply)+"\n");return{reply:t.reply.replace(/^Sono l.*?persona\.\s*/s,''),wrote:diff(after,t.menuAfter).length+sectionDiff(after,t.menuAfter).length,pending:run.pending as any}}
 
 describe('R8: mai «fatto» senza scrittura, mai il solo «Non ho cambiato nulla.»',()=>{

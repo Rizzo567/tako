@@ -20,9 +20,11 @@ for(let i=0;i<2;i++){const response=await handler(new Request(url,{headers}));co
  const stdout=execFileSync('npx',['--yes','deno','run','--node-modules-dir=auto','--allow-env','--allow-read','--allow-sys=hostname','fixture.ts'],{cwd:temporary,encoding:'utf8',timeout:120000,maxBuffer:2*1024*1024,stdio:['ignore','pipe','pipe']});
  const milestones=stdout.split('\n').filter(line=>line.startsWith('{')).map(line=>JSON.parse(line));
  assert.equal(milestones.filter(m=>m.phase==='before_image_initializer').length,0,'image init never runs for read-only requests');
- assert.equal(milestones.filter(m=>m.phase==='before_app_import').length,1,'one shared boot for two trusted requests');
- assert(stdout.indexOf('DENIED_BEFORE_BOOT')<stdout.indexOf('before_app_import'));
+ // Boot-start marker: candidate-entry emits 'app_module_ready' first inside ensureBoot (older entries: 'before_app_import').
+ const bootMarker=stdout.includes('"before_app_import"')?'before_app_import':'app_module_ready';
+ assert.equal(milestones.filter(m=>m.phase===bootMarker).length,1,'one shared boot for two trusted requests');
+ assert(stdout.indexOf('DENIED_BEFORE_BOOT')<stdout.indexOf(bootMarker));
  assert(stdout.includes('AUTHORIZED_REQUEST_NO_IMAGE_BOOT'));
  const report={passed:true,mode:'LOCAL_DENO_FIXTURE_NO_DEPLOY',bundleBytes:bundle.length,bundleSha256:createHash('sha256').update(bundle).digest('hex'),privateConfigurationRead:false,externalNetworkForbidden:true,checks:['idle does not boot','gateway denied before boot','authorized request starts boot','two requests share settled boot','trusted request completes without image initializer; denied DB network may return generic failure'],memoryMilestones:milestones,limitation:'Denied-network health runs without WASM; hosted upload/PDF peaks require separate verification'};
- await writeFile(new URL('docs/webapp/activation/candidate-lazy-boot-local-verification.json',root),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
+ await writeFile(new URL('release/serverless/candidate-lazy-boot-local-verification.json',root),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
 }finally{await rm(temporary,{recursive:true,force:true})}

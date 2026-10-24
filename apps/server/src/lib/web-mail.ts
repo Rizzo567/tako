@@ -1,13 +1,13 @@
 import { db } from '@tako/db'
 import { sql } from 'drizzle-orm'
-export type WebMail = { to: string; subject: string; html: string }
+export type WebMail = { to: string; subject: string; html: string; text?: string; from?: string; reply_to?: string }
 export type MailDelivery = (mail: WebMail, idempotencyKey: string) => Promise<{ id: string }>
 export const escapeMail = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]!))
 export const deliverWebMail: MailDelivery = async (mail, idempotencyKey) => {
   if (process.env.WEB_EMAIL_ENABLED !== '1' || !process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) throw new Error('Email delivery unavailable')
   const response = await fetch('https://api.resend.com/emails', { method: 'POST', signal: AbortSignal.timeout(10000),
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json', 'Idempotency-Key': idempotencyKey },
-    body: JSON.stringify({ from: process.env.EMAIL_FROM, ...mail }) })
+    body: JSON.stringify({ from: process.env.EMAIL_FROM, reply_to: process.env.EMAIL_REPLY_TO || 'manuelrizzo474@gmail.com', ...mail }) })
   if (!response.ok) throw new Error('Email delivery failed')
   const body = await response.json() as { id?: string }
   if (!body.id) throw new Error('Email delivery response invalid')

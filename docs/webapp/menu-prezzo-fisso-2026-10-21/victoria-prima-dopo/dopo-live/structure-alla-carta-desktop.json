@@ -1,0 +1,675 @@
+{
+ "viewport": "desktop",
+ "menu": "Alla carta",
+ "menus": [
+  "Menu Pranzo",
+  "Menu Cena",
+  "Bevande",
+  "Alla carta"
+ ],
+ "pills": [
+  "Antipasti e sfiziosità",
+  "Primi",
+  "Secondi e panini",
+  "Contorni e insalate",
+  "Formaggi",
+  "Pizze e pinse",
+  "Dolci e frutta"
+ ],
+ "pages": [
+  {
+   "pill": "Antipasti e sfiziosità",
+   "file": "alla-carta-desktop-1-antipasti-e-sfiziosita.png",
+   "menuNote": "Coperto 1,50 €",
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "Antipasti di mare",
+     "note": null,
+     "rows": [
+      {
+       "name": "Bruschetta Victoria",
+       "price": "8,00 €",
+       "description": "pomodorini e gamberetti"
+      },
+      {
+       "name": "Antipasto della casa caldo",
+       "price": "15,00 €",
+       "description": "frutti di mare misti"
+      },
+      {
+       "name": "Impepate di cozze",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Zuppa di cozze",
+       "price": "12,00 €",
+       "description": null
+      },
+      {
+       "name": "*Cocktail di gamberi",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Polpo rucola e patate",
+       "price": "12,00 €",
+       "description": null
+      },
+      {
+       "name": "Capesante gratinate",
+       "price": "4,00 €",
+       "description": "cad."
+      }
+     ]
+    },
+    {
+     "title": "Antipasti di terra",
+     "note": null,
+     "rows": [
+      {
+       "name": "Bruschetta",
+       "price": "6,00 €",
+       "description": "pomodorini basilico aglio olio"
+      },
+      {
+       "name": "Affettato misto",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Caprese",
+       "price": "10,00 €",
+       "description": "mozzarella di bufala pomodorini"
+      },
+      {
+       "name": "Prosciutto crudo e melone di stagione",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Antipasto misto terra + Formaggi",
+       "price": "13,00 €",
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 2330
+  },
+  {
+   "pill": "Primi",
+   "file": "alla-carta-desktop-2-primi.png",
+   "menuNote": "Coperto 1,50 €",
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "Primi piatti",
+     "note": null,
+     "rows": [
+      {
+       "name": "*Linguine allo scoglio",
+       "price": "16,00 €",
+       "description": null
+      },
+      {
+       "name": "*Linguine alla carbonara di mare",
+       "price": "16,00 €",
+       "description": null
+      },
+      {
+       "name": "Spaghetti alla carbonara",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "*Spaghetti alle vongole",
+       "price": "14,00 €",
+       "description": null
+      },
+      {
+       "name": "Paccheri alla pescatora",
+       "price": "15,00 €",
+       "description": null
+      },
+      {
+       "name": "Paccheri alla Totò",
+       "price": "10,00 €",
+       "description": "pomodorini basilico scamorza"
+      },
+      {
+       "name": "Gnocchi alla sorrentina al forno",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Penne alla Victoria",
+       "price": "12,00 €",
+       "description": "panna pomodorini carciofi speck vodka"
+      },
+      {
+       "name": "Penne all'arrabbiata",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Penne alla corsara",
+       "price": "14,00 €",
+       "description": "arrabbiata con porcini"
+      },
+      {
+       "name": "Pasta al pesto",
+       "price": "8,00 €",
+       "description": "Trofie al pesto con pomodoro."
+      },
+      {
+       "name": "Tortellini Prosciutto e Panna",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Strozzapreti zucchine e speck",
+       "price": "12,00 €",
+       "description": null
+      },
+      {
+       "name": "Paccheri al pomodoro",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Penne cremose con rucola, carne e zafferano",
+       "price": "12,00 €",
+       "description": null
+      },
+      {
+       "name": "Spaghetti o linguine con cozze",
+       "price": "14,00 €",
+       "description": null
+      },
+      {
+       "name": "Tagliatelle con cozze e pomodorini",
+       "price": "14,00 €",
+       "description": null
+      },
+      {
+       "name": "Tagliatelle zucchine e gamberi",
+       "price": "14,00 €",
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 2854
+  },
+  {
+   "pill": "Secondi e panini",
+   "file": "alla-carta-desktop-3-secondi-e-panini.png",
+   "menuNote": "Coperto 1,50 €",
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "Secondi di carne",
+     "note": null,
+     "rows": [
+      {
+       "name": "Tagliata rucola e grana",
+       "price": "20,00 €",
+       "description": null
+      },
+      {
+       "name": "Tagliata con funghi porcini e panna",
+       "price": "24,00 €",
+       "description": null
+      },
+      {
+       "name": "Scaloppine al limone",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Scaloppine al marsala",
+       "price": "12,00 €",
+       "description": null
+      },
+      {
+       "name": "Scaloppine con funghi porcini e panna",
+       "price": "15,00 €",
+       "description": null
+      },
+      {
+       "name": "Gran misto di carne per due",
+       "price": "40,00 €",
+       "description": null
+      },
+      {
+       "name": "Stinco di maiale al forno con contorno",
+       "price": "16,00 €",
+       "description": "Contorno intercambiabile: piselli in umido, zucchine o purè."
+      },
+      {
+       "name": "Coppa di maiale con zucchine",
+       "price": "14,00 €",
+       "description": null
+      },
+      {
+       "name": "Cotoletta di pollo con contorno",
+       "price": "12,00 €",
+       "description": "Con patatine o contorno intercambiabile."
+      },
+      {
+       "name": "Cotoletta di nodino con contorno",
+       "price": "14,00 €",
+       "description": "Con cime di rapa, funghi o contorno intercambiabile."
+      }
+     ]
+    },
+    {
+     "title": "Secondi di pesce",
+     "note": null,
+     "rows": [
+      {
+       "name": "Orata o branzino al forno",
+       "price": "16,00 €",
+       "description": null
+      },
+      {
+       "name": "Orata al forno con patate olive pomodorini",
+       "price": "20,00 €",
+       "description": null
+      },
+      {
+       "name": "Tagliata di orata o branzino con rucola e grana",
+       "price": "20,00 €",
+       "description": null
+      },
+      {
+       "name": "Fritto misto con verdure",
+       "price": "18,00 €",
+       "description": null
+      },
+      {
+       "name": "Fritto solo calamari",
+       "price": "19,00 €",
+       "description": null
+      },
+      {
+       "name": "Gran misto di pesce gratinato per due",
+       "price": "40,00 €",
+       "description": null
+      },
+      {
+       "name": "Scampi e gamberoni gratinati con carciofi",
+       "price": "20,00 €",
+       "description": null
+      },
+      {
+       "name": "Scampi e gamberoni alla griglia",
+       "price": "18,00 €",
+       "description": null
+      },
+      {
+       "name": "Calamari alla griglia",
+       "price": "15,00 €",
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 3117
+  },
+  {
+   "pill": "Contorni e insalate",
+   "file": "alla-carta-desktop-4-contorni-e-insalate.png",
+   "menuNote": "Coperto 1,50 €",
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "Contorni",
+     "note": null,
+     "rows": [
+      {
+       "name": "Insalata verde",
+       "price": "3,00 €",
+       "description": null
+      },
+      {
+       "name": "Insalata mista",
+       "price": "4,00 €",
+       "description": null
+      },
+      {
+       "name": "Patatine fritte",
+       "price": "4,00 €",
+       "description": null
+      }
+     ]
+    },
+    {
+     "title": "Insalatone",
+     "note": null,
+     "rows": [
+      {
+       "name": "Insalatona della casa",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Insalatona della casa+gamberetti o tonno",
+       "price": "12,00 €",
+       "description": null
+      },
+      {
+       "name": "Insalatona della casa+bufala",
+       "price": "12,00 €",
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 1730
+  },
+  {
+   "pill": "Formaggi",
+   "file": "alla-carta-desktop-5-formaggi.png",
+   "menuNote": "Coperto 1,50 €",
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "Formaggi",
+     "note": null,
+     "rows": [
+      {
+       "name": "Formaggi misti",
+       "price": "10,00 €",
+       "description": null
+      },
+      {
+       "name": "Porzione di grana",
+       "price": "7,00 €",
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 1254
+  },
+  {
+   "pill": "Pizze e pinse",
+   "file": "alla-carta-desktop-6-pizze-e-pinse.png",
+   "menuNote": "Coperto 1,50 €",
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "Pizze e calzoni",
+     "note": "Ogni aggiunta 1 €",
+     "rows": [
+      {
+       "name": "Focaccia bianca",
+       "price": "5,00 €",
+       "description": null
+      },
+      {
+       "name": "Focaccia rossa",
+       "price": "5,00 €",
+       "description": "pomodoro olio origano"
+      },
+      {
+       "name": "Marinara",
+       "price": "6,00 €",
+       "description": "pomodoro aglio origano olio"
+      },
+      {
+       "name": "Focaccia farcita",
+       "price": "a partire da 6,00 €",
+       "description": "Prosciutto, pomodorini e mozzarella di bufala."
+      },
+      {
+       "name": "Margherita",
+       "price": "7,00 €",
+       "description": "pomodoro mozzarella"
+      },
+      {
+       "name": "Siciliana",
+       "price": "7,00 €",
+       "description": "pomodoro acciughe capperi aglio origano"
+      },
+      {
+       "name": "Wurstel",
+       "price": "8,00 €",
+       "description": "Pomodoro, mozzarella e wurstel"
+      },
+      {
+       "name": "Pulcinella",
+       "price": "8,00 €",
+       "description": "pomodoro mozzarella olive origano"
+      },
+      {
+       "name": "Pugliese",
+       "price": "8,00 €",
+       "description": "pomodoro mozzarella cipolle"
+      },
+      {
+       "name": "Tonno",
+       "price": "9,00 €",
+       "description": "Pomodoro, mozzarella e tonno"
+      },
+      {
+       "name": "Paoletta",
+       "price": "8,00 €",
+       "description": "pomodoro mozzarella funghi champignon"
+      },
+      {
+       "name": "Campagnola",
+       "price": "8,00 €",
+       "description": "pomodoro mozzarella prosciutto cotto"
+      },
+      {
+       "name": "Napoletana",
+       "price": "9,00 €",
+       "description": "pomodoro mozzarella acciughe origano"
+      },
+      {
+       "name": "Romana",
+       "price": "9,00 €",
+       "description": "pomodoro mozzarella capperi acciughe origano"
+      },
+      {
+       "name": "Crudo",
+       "price": "9,00 €",
+       "description": "Pomodoro, mozzarella e prosciutto crudo"
+      },
+      {
+       "name": "Zola",
+       "price": "9,00 €",
+       "description": "mozzarella gorgonzola"
+      },
+      {
+       "name": "Ortolana",
+       "price": "9,00 €",
+       "description": "pomodoro mozzarella verdure grigliate"
+      },
+      {
+       "name": "Calabrese",
+       "price": "9,00 €",
+       "description": "pomodoro mozzarella salame piccante"
+      },
+      {
+       "name": "Fantasia",
+       "price": "9,00 €",
+       "description": "pomodoro mozzarella cotto funghi"
+      },
+      {
+       "name": "Parmigiana",
+       "price": "9,00 €",
+       "description": "pomodoro mozzarella melanzane grana"
+      },
+      {
+       "name": "Capricciosa",
+       "price": "9,50 €",
+       "description": "pomodoro mozzarella carciofi olive capperi acciughe origano"
+      },
+      {
+       "name": "4 Stagioni",
+       "price": "9,50 €",
+       "description": "pomodoro mozzarella carciofi funghi cotto"
+      },
+      {
+       "name": "Tirolese",
+       "price": "9,50 €",
+       "description": "pomodoro mozzarella scamorza speck"
+      },
+      {
+       "name": "Bismarck",
+       "price": "9,00 €",
+       "description": "pomodoro mozzarella cotto uovo"
+      },
+      {
+       "name": "Primavera",
+       "price": "10,00 €",
+       "description": "pomodoro mozzarella rucola pomodorini"
+      },
+      {
+       "name": "4 Formaggi",
+       "price": "9,00 €",
+       "description": "mozzarella zola brie emmental"
+      },
+      {
+       "name": "Bufala",
+       "price": "10,00 €",
+       "description": "Pomodoro e mozzarella di bufala"
+      },
+      {
+       "name": "Porcini",
+       "price": "10,00 €",
+       "description": "Pomodoro, mozzarella e funghi porcini"
+      },
+      {
+       "name": "Valtellinese",
+       "price": "10,00 €",
+       "description": "pomodoro mozzarella bresaola rucola"
+      },
+      {
+       "name": "Salmone",
+       "price": "12,00 €",
+       "description": "Pomodoro, mozzarella e salmone"
+      },
+      {
+       "name": "Gamberetti",
+       "price": "12,00 €",
+       "description": "pomodoro mozzarella gamberetti rucola"
+      },
+      {
+       "name": "Garden",
+       "price": "12,00 €",
+       "description": "pomodoro mozzarella salsiccia peperoni cipolla"
+      },
+      {
+       "name": "Porcini e salsiccia",
+       "price": "14,00 €",
+       "description": "Pomodoro, mozzarella, porcini e salsiccia"
+      },
+      {
+       "name": "Scoglio",
+       "price": "14,00 €",
+       "description": "pomodoro mozzarella frutti di mare"
+      },
+      {
+       "name": "Turbolenti",
+       "price": "12,00 €",
+       "description": "pomodoro mozzarella zola cipolla olive crudo"
+      },
+      {
+       "name": "Pirata",
+       "price": "15,00 €",
+       "description": "bufala pomodorini rucola grana crudo tutto a freddo"
+      },
+      {
+       "name": "Calzone",
+       "price": "8,00 €",
+       "description": "mozzarella prosciutto cotto"
+      },
+      {
+       "name": "Calzone farcito",
+       "price": "10,00 €",
+       "description": "mozzarella cotto funghi carciofi"
+      },
+      {
+       "name": "Mezzo metro Margherita",
+       "price": "20,00 €",
+       "description": null
+      },
+      {
+       "name": "Mezzo metro farcita",
+       "price": "a partire da 26,00 €",
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 5121
+  },
+  {
+   "pill": "Dolci e frutta",
+   "file": "alla-carta-desktop-7-dolci-e-frutta.png",
+   "menuNote": "Coperto 1,50 €",
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "Dolci",
+     "note": null,
+     "rows": [
+      {
+       "name": "Dolce della casa",
+       "price": "a partire da 5,00 €",
+       "description": null
+      },
+      {
+       "name": "Tartufo bianco",
+       "price": "4,00 €",
+       "description": null
+      },
+      {
+       "name": "Tartufo al cioccolato",
+       "price": "4,00 €",
+       "description": null
+      },
+      {
+       "name": "Torroncino",
+       "price": "4,00 €",
+       "description": null
+      },
+      {
+       "name": "Meringa",
+       "price": "4,00 €",
+       "description": null
+      },
+      {
+       "name": "Meringa con cioccolata calda",
+       "price": "6,00 €",
+       "description": null
+      },
+      {
+       "name": "Sorbetto al limone/frutta",
+       "price": "4,00 €",
+       "description": null
+      },
+      {
+       "name": "Sorbetto alla vodka",
+       "price": "5,00 €",
+       "description": null
+      },
+      {
+       "name": "Torta della Nonna",
+       "price": "4,00 €",
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 1954
+  }
+ ],
+ "errors": []
+}

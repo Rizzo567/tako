@@ -37,7 +37,7 @@ describe('richiesta multipla con una parte incerta (vocale di Manuel, 17/10)',()
   const h=holdFromMessage('aggiungi nei piatti di prova la parmigiana a 10 euro, il tiramisù a 6 euro e la frittata',sections,refs as any)!
   if(!('hold' in h))throw new Error('hold atteso');expect(h.hold.ask).toEqual({type:'price',name:'Frittata',sectionId:'s4'})
   expect(holdAnswer('8 euro',h.hold,refs as any)).toEqual({actions:[...h.hold.actions,{kind:'create',sectionId:'s4',name:'Frittata',price:8,description:null}]})
-  expect(holdFromMessage('aggiungi nei piatti di prova la parmigiana a 10 euro e togli boh',sections,refs as any)).toEqual({actions:[{kind:'create',sectionId:'s4',name:'Parmigiana',price:10,description:null},{kind:'hidden',id:'e',value:true}]})
+  expect(holdFromMessage('aggiungi nei piatti di prova la parmigiana a 10 euro e togli boh',sections,refs as any)).toEqual({actions:[{kind:'create',sectionId:'s4',name:'Parmigiana',price:10,description:null},{kind:'hidden',id:'e',value:true}],seen:[]})
   expect(holdFromMessage('aggiungi tra i primi i tonnarelli a 11 e i tortelli a 12',sections,refs as any)).toBeNull()
   expect(holdFromMessage('la carbonara costa 13 e la lasagna 12',sections,refs as any)).toBeNull()
  })

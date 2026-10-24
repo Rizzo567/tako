@@ -33,15 +33,15 @@ function ScreenMenu({ mobile }) {
   };
   return (
     <ScreenScroll mobile={mobile}>
-      <PageHead mobile={mobile} tako="dish" title="Menu" sub={`${menu.length} sezioni · ${menu.reduce((a, s) => a + s.piatti.length, 0)} piatti`}
+      <PageHead mobile={mobile} tako="dish" title="Menu" sub={`${menu.length} sottomenu · ${menu.reduce((a, s) => a + s.piatti.length, 0)} piatti`}
         actions={<div style={{ display: "flex", gap: 8 }}>
           <Btn kind="soft" icon="sparkles" onClick={() => setImportOpen(true)}>Importa da testo</Btn>
-          <Btn kind="soft" icon="plus" onClick={() => { setSecName(""); setSecOpen(true); }}>Nuova sezione</Btn>
+          <Btn kind="soft" icon="plus" onClick={() => { setSecName(""); setSecOpen(true); }}>Nuovo sottomenu</Btn>
           <Btn kind="brand" icon="plus" onClick={async () => {
           // Scelta: creo un piatto minimale sulla prima sezione e ricarico.
           // L'utente lo rifinisce poi dal modal di modifica. Tiene la UI invariata.
           const primaSez = menu[0];
-          if (!primaSez || !primaSez._id) { toast("Crea prima una sezione di menu", { type: "error" }); return; }
+          if (!primaSez || !primaSez._id) { toast("Crea prima un sottomenu", { type: "error" }); return; }
           try {
             await window.TakoActions.menuCreateItem(primaSez._id, { name: "Nuovo piatto", price: 0 });
             toast("Piatto creato", { type: "success" });
@@ -50,9 +50,9 @@ function ScreenMenu({ mobile }) {
         }}>Nuovo piatto</Btn>
         </div>} />
       {menu.length === 0 && (
-        <Empty tako="dish" title="Menu vuoto — crea la prima sezione"
-          sub="Organizza i piatti in sezioni (Antipasti, Primi…), poi aggiungi i piatti o importa da testo."
-          action={<Btn kind="brand" icon="plus" onClick={() => { setSecName(""); setSecOpen(true); }}>Nuova sezione</Btn>} />
+        <Empty tako="dish" title="Menu vuoto — crea il primo sottomenu"
+          sub="Organizza i piatti in sottomenu (Antipasti, Primi…), poi aggiungi i piatti o importa da testo."
+          action={<Btn kind="brand" icon="plus" onClick={() => { setSecName(""); setSecOpen(true); }}>Nuovo sottomenu</Btn>} />
       )}
       {menu.map((s, si) => (
         <div key={s._id || si} style={{ marginBottom: 22 }}>
@@ -61,7 +61,7 @@ function ScreenMenu({ mobile }) {
             <h3 style={{ fontSize: 17 }}>{s.sezione}</h3>
             <Badge tone="muted">{s.piatti.length}</Badge>
             <div style={{ flex: 1 }} />
-            <IconBtn name="trash" tone="ghost" style={{ color: "var(--danger)" }} title="Elimina sezione"
+            <IconBtn name="trash" tone="ghost" style={{ color: "var(--danger)" }} title="Elimina sottomenu"
               onClick={() => setDelSez(s)} />
           </div>
           <Card pad={0} style={{ overflow: "hidden" }}>
@@ -90,15 +90,15 @@ function ScreenMenu({ mobile }) {
         </div>
       ))}
       <Confirm open={!!delSez} onClose={() => setDelSez(null)} danger
-        title={delSez ? `Eliminare la sezione "${delSez.sezione}"?` : "Eliminare la sezione?"}
-        body={delSez && delSez.piatti.length ? `La sezione e i suoi ${delSez.piatti.length} piatti verranno rimossi dal menu.` : "La sezione verrà rimossa dal menu."}
+        title={delSez ? `Eliminare il sottomenu "${delSez.sezione}"?` : "Eliminare il sottomenu?"}
+        body={delSez && delSez.piatti.length ? `Il sottomenu e i suoi ${delSez.piatti.length} piatti verranno rimossi dal menu.` : "Il sottomenu verrà rimosso dal menu."}
         confirmLabel="Elimina"
         onConfirm={async () => {
           const sez = delSez;
           if (!sez || !sez._id) { setDelSez(null); return; }
           try {
             await window.TakoActions.menuDeleteSection(sez._id);
-            toast("Sezione eliminata", { type: "success" });
+            toast("Sottomenu eliminato", { type: "success" });
             await window.takoReload();
           } catch (e) { toast(e.message, { type: "error" }); }
           finally { setDelSez(null); }
@@ -122,11 +122,11 @@ function ScreenMenu({ mobile }) {
       <Overlay open={secOpen} onClose={() => { if (!secLoading) setSecOpen(false); }} anchor="center">
         <div style={{ width: mobile ? 320 : 400, maxWidth: "100%", background: "var(--surface)", borderRadius: 12, overflow: "hidden", boxShadow: "var(--sh-pop)" }}>
           <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--hairline)", display: "flex", alignItems: "center", gap: 12 }}>
-            <h3 style={{ flex: 1, fontSize: 18 }}>Nuova sezione</h3>
+            <h3 style={{ flex: 1, fontSize: 18 }}>Nuovo sottomenu</h3>
             <IconBtn name="x" tone="soft" onClick={() => { if (!secLoading) setSecOpen(false); }} />
           </div>
           <div style={{ padding: 20 }}>
-            <Field label="Nome sezione">
+            <Field label="Nome sottomenu">
               <input style={inputStyle} value={secName} autoFocus placeholder="Es. Antipasti"
                 onChange={e => setSecName(e.target.value)} />
             </Field>
@@ -138,7 +138,7 @@ function ScreenMenu({ mobile }) {
               setSecLoading(true);
               try {
                 await window.TakoActions.menuCreateSection(secName.trim());
-                toast("Sezione creata", { type: "success" });
+                toast("Sottomenu creato", { type: "success" });
                 await window.takoReload();
                 setSecOpen(false); setSecName("");
               } catch (e) { toast(e.message, { type: "error" }); }
@@ -155,7 +155,7 @@ function ScreenMenu({ mobile }) {
           </div>
           <div className="scroll" style={{ flex: 1, overflowY: "auto", padding: 20 }}>
             {!preview ? (<>
-              <p style={{ fontSize: 13, color: "var(--ink-2)", marginBottom: 12 }}>Incolla un menu in formato libero: l'AI lo struttura in sezioni e piatti con prezzi.</p>
+              <p style={{ fontSize: 13, color: "var(--ink-2)", marginBottom: 12 }}>Incolla un menu in formato libero: l'AI lo struttura in sottomenu e piatti con prezzi.</p>
               <textarea
                 value={text}
                 onChange={e => setText(e.target.value)}
@@ -163,7 +163,7 @@ function ScreenMenu({ mobile }) {
                 style={{ width: "100%", minHeight: 220, padding: 12, borderRadius: 12, border: "1px solid var(--hairline)", fontSize: 14, fontFamily: "var(--f-ui)", color: "var(--ink)", background: "var(--raised)", outline: "none", resize: "vertical" }}
               />
             </>) : (<>
-              <p style={{ fontSize: 13, color: "var(--ink-2)", marginBottom: 16 }}>{previewCount} piatti in {preview.sections.length} sezioni</p>
+              <p style={{ fontSize: 13, color: "var(--ink-2)", marginBottom: 16 }}>{previewCount} piatti in {preview.sections.length} sottomenu</p>
               {preview.sections.map((sez, si) => (
                 <div key={si} style={{ marginBottom: 18 }}>
                   <h4 style={{ fontSize: 15, marginBottom: 8, color: "var(--brand)" }}>{sez.name}</h4>

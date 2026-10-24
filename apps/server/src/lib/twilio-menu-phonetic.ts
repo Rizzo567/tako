@@ -11,7 +11,7 @@ export function phoneKey(s:string){let t=fold(s).replace(/\s+/g,'')
  t=t.replace(/ph/g,'f').replace(/ch/g,'k').replace(/gh/g,'g').replace(/c(?=[aou]|$|[^aeiouy])/g,'k').replace(/q/g,'k').replace(/x/g,'s').replace(/z/g,'s').replace(/j|y/g,'i').replace(/w/g,'v').replace(/h/g,'')
  t=t.replace(/(.)\1+/g,'$1').replace(/ck/g,'k').replace(/sc(?=[ei])/g,'s').replace(/gn/g,'n').replace(/gl(?=i)/g,'l')
  return t}
-function lev(a:string,b:string){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let prev=Array.from({length:n+1},(_,j)=>j)
+export function lev(a:string,b:string){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let prev=Array.from({length:n+1},(_,j)=>j)
  for(let i=1;i<=m;i++){const cur=[i];for(let j=1;j<=n;j++)cur[j]=Math.min(prev[j]!+1,cur[j-1]!+1,prev[j-1]!+(a[i-1]===b[j-1]?0:1));prev=cur}return prev[n]!}
 export const phoneScore=(a:string,b:string)=>{const x=phoneKey(a),y=phoneKey(b);if(!x||!y)return 0;return 1-lev(x,y)/Math.max(x.length,y.length)}
 
@@ -29,6 +29,10 @@ export function phoneticHits(message:string,refs:MenuRef[]):{strong:string[],wea
    // Una parola di servizio in testa o in coda conta solo se è anche nel nome del piatto («che nesac» = «Che ne sacc»).
    if(lead&&!((!SERVICE.has(win[0]!)||rw[0]===win[0])&&(!SERVICE.has(win.at(-1)!)||rw.at(-1)===win.at(-1))))continue
    // Una parola che il nome del piatto contiene già («frittatina», «tramezzino») è un nome parziale, non un suono storpiato.
+   // notte 22/10 (z-asr-005 «la pizza en duja» = Pizza 'nduja): parole del nome dette uguali + il RESTO storpiato dalla trascrizione
+   // («en duja» = «nduja», vocale iniziale e spazio in più). Il resto unito, senza una vocale iniziale caduta, uguale a quello del nome = forte.
+   if(text.split(' ').some(w=>w.length>=4&&rw.includes(w))&&win.length>=2){const restT=win.filter(w=>!rw.includes(w)&&!SERVICE.has(w)).join(''),restN=rw.filter(w=>!win.includes(w)&&!SERVICE.has(w)).join('')
+    if(restT.length>=3&&restN.length>=4&&(phoneKey(restT)===phoneKey(restN)||phoneKey(restT).replace(/^[aeiou]/,'')===phoneKey(restN))&&win.length>=rw.length){if(1>(best.get(r.id)??0)){best.set(r.id,1);phrase.set(r.id,text)}continue}}
    if((' '+fold(r.name)+' ').includes(' '+text+' ')||text.split(' ').some(w=>w.length>=4&&(' '+fold(r.name)+' ').includes(' '+w+' ')))continue;if(Math.abs(rk.length-key.length)>Math.max(2,rk.length*0.4))continue
    const sc=phoneScore(text,r.name),short=rk.length<=3&&key.length<=3&&key[0]===rk[0]&&lev(key,rk)<=1?Math.max(sc,WEAK):sc
    if(short>(best.get(r.id)??0)){best.set(r.id,short);phrase.set(r.id,text)}
@@ -50,3 +54,8 @@ export function phoneticCandidates(target:string,refs:MenuRef[]):MenuRef[]{
  const scored=refs.map(r=>{const rk=phoneKey(r.name),k=phoneKey(t),sc=phoneScore(t,r.name);return{r,s:rk.length<=3&&k.length<=3&&k[0]===rk[0]&&lev(k,rk)<=1?Math.max(sc,WEAK):sc}}).filter(x=>x.s>=WEAK).sort((a,b)=>b.s-a.s)
  if(!scored.length)return [];if(scored[1]&&scored[1].s>=scored[0]!.s-0.1)return scored.slice(0,3).map(x=>x.r)
  return [scored[0]!.r]}
+
+/** notte 22/10 (ps-06 «la ghisa» ≈ Gricia): somiglianza LARGA, solo per PROPORRE un piatto in una domanda (mai per scrivere):
+ * parola di 4+ lettere, stessa prima e ultima lettera di un piatto dal nome di una parola, chiavi a distanza ≤ metà. */
+export function looseSoundAlike(message:string,refs:MenuRef[]):MenuRef[]{const ws=fold(message).split(' ').filter(w=>w.length>=5&&!SERVICE.has(w)&&!/^\d/.test(w)&&!/^(?:alz|abbass|mett|port|togl|nascond|aggiung|cambi|aument|diminu|segn|rimett|elimin|cancell|sposta|rinomin|quell|quest|tutt|prezz|eur)/.test(w))
+ return refs.filter(r=>{const n=fold(r.name);if(n.includes(' ')||n.length<4)return false;return ws.some(w=>w!==n&&w[0]===n[0]&&w.at(-1)===n.at(-1)&&lev(phoneKey(w),phoneKey(n))<=Math.floor(Math.max(phoneKey(w).length,phoneKey(n).length)/2))})}

@@ -5,7 +5,7 @@ import type {BotRun,Change,Conversation,EvalItem,EvalMenu,Fail,Turn,Verdict} fro
 
 export const plainT=(s:string)=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()
 type Flat=EvalItem&{section:string}
-export const flat=(w:EvalMenu):Map<string,Flat>=>new Map(w.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>[i.id,{...i,section:s.name}] as [string,Flat]))))
+export const flat=(w:EvalMenu):Map<string,Flat>=>new Map(w.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>[i.id,{...i,section:s.name,secId:s.id}] as unknown as [string,Flat]))))
 const num=(n:number)=>String(Math.round(n*100)/100)
 
 /** Ogni differenza tra due menu diventa una chiave confrontabile con le attese. */
@@ -15,7 +15,8 @@ export function diff(before:EvalMenu,after:EvalMenu):string[]{
   // R5.1 (nota 63): un piatto nuovo messo anche in evidenza nella stessa conversazione («aggiungi X… mettila in evidenza»)
   if(!y){out.push(`create|${plainT(x.name)}|${num(x.price)}|${plainT(x.section)}`);if(x.featured)out.push(`featured|${plainT(x.name)}|true`);continue}
   if(x.name!==y.name)out.push(`rename|${y.name}|${x.name}`)
-  if(x.section!==y.section)out.push(`move|${y.name}|${x.section}`)
+  // notte 22/10: un sottomenu RINOMINATO (stesso id) non sposta i suoi piatti (cieco b1: «rinomina Bibite in Analcolici» letto come move).
+  if(x.section!==y.section&&(x as any).secId!==(y as any).secId)out.push(`move|${y.name}|${x.section}`)
   if(x.price!==y.price)out.push(`price|${y.name}|${num(x.price)}`)
   if((x.available!==false)!==(y.available!==false))out.push(`available|${y.name}|${x.available!==false}`)
   if(!!x.hidden!==!!y.hidden)out.push(`hidden|${y.name}|${!!x.hidden}`)
@@ -30,6 +31,20 @@ export function diff(before:EvalMenu,after:EvalMenu):string[]{
 
 /** Categorie nuove o rinominate (solo per riconoscere una scrittura vera nel controllo «fatto»). */
 export function sectionDiff(before:EvalMenu,after:EvalMenu):string[]{const a=new Map(before.menus.flatMap(m=>m.sections.map(s=>[s.id,s.name]))),out:string[]=[];for(const m of after.menus)for(const s of m.sections){const old=a.get(s.id);if(old===undefined)out.push('section|'+s.name);else if(old!==s.name)out.push('section-rename|'+old+'|'+s.name)}return out}
+/** Menu nuovi (set struttura 21/10): un Menu creato, anche vuoto, è una scrittura vera per il controllo «fatto». */
+// 21/10: anche Menu/Sottomenu tolti e cambi di visibilità (active) contano come scritture vere (niente «fatto-falso»).
+export function menuDiff(before:EvalMenu,after:EvalMenu):string[]{const a=new Map(before.menus.map(m=>[m.id,m])),b=new Set(after.menus.map(m=>m.id)),out=after.menus.filter(m=>!a.has(m.id)).map(m=>'menu|'+m.name)
+ for(const m of before.menus)if(!b.has(m.id))out.push('menu-tolto|'+m.name)
+ for(const m of after.menus){const p=a.get(m.id) as any;if(!p)continue;if((p.active!==false)!==((m as any).active!==false))out.push('menu-active|'+m.name)
+  const ps=new Map((p.sections??[]).map((s:any)=>[s.id,s]));for(const s of m.sections){const q=ps.get(s.id) as any;if(!q)out.push('sezione|'+s.name);else if((q.active!==false)!==((s as any).active!==false))out.push('sezione-active|'+s.name)}
+  for(const s of p.sections??[])if(!m.sections.some(x=>x.id===s.id))out.push('sezione-tolta|'+s.name)
+  // prezzo fisso (21/10): formule, pricing e «Compreso» sono scritture vere (campi assenti = nessuna differenza: retrocompatibile)
+  if((p.pricing??'carta')!==((m as any).pricing??'carta'))out.push('pricing|'+m.name+'|'+((m as any).pricing??'carta'))
+  const fk=(f:any)=>JSON.stringify([f.name,f.price,f.note??null,f.sectionIds??null]),pf=new Map(((p.formulas??[]) as any[]).map(f=>[f.id,f])),mf=((m as any).formulas??[]) as any[]
+  for(const f of mf){const q=pf.get(f.id);if(!q)out.push('formula|'+m.name+'|'+f.name+'|'+f.price);else if(fk(q)!==fk(f))out.push('formula-cambiata|'+m.name+'|'+f.name+'|'+f.price)}
+  for(const f of pf.values())if(!mf.some(x=>x.id===f.id))out.push('formula-tolta|'+m.name+'|'+f.name)
+  if((p.included??null)!==((m as any).included??null))out.push('compreso|'+m.name)}
+ return out}
 export const key=(c:Change):string=>c.op==='create'?`create|${plainT(c.name)}|${num(c.price)}|${c.section?plainT(c.section):'*'}`:c.op==='price'?`price|${c.dish}|${num(c.price)}`:c.op==='promo'?`promo|${c.dish}|${c.price===null?'null':num(c.price)}`:c.op==='description'?`description|${c.dish}|${plainT(c.text)}`:c.op==='delete'?`delete|${c.dish}`:c.op==='rename'?`rename|${c.dish}|${c.name}`:c.op==='move'?`move|${c.dish}|${c.section}`:c.op==='section'?`section|${plainT(c.name)}`:`${c.op}|${c.dish}|${c.value}`
 const same=(exp:string,act:string)=>exp===act||(exp.endsWith('|*')&&act.startsWith(exp.slice(0,-1)))
 const dishOf=(k:string)=>k.split('|')[1]!
@@ -45,7 +60,10 @@ const QUESTION=/\?|\bquale\b|\bquali\b|\brispondi\b|scrivi il nome|scrivi il num
 const ERROR=/c[’']è stato un problema|riprova tra poco|non riesco ad ascoltare il vocale/i
 const LOST=/non trovo|non ho capito|non riesco a capire/i
 const RAW=/undefined|NaN|\[object|\{"|\bnull\b/
-export const isQuestion=(r:string)=>QUESTION.test(r)&&!RECAP.test(r)&&!LOST.test(r)
+// notte 22/10: «Non trovo la cassata nel menu. Vuoi aggiungerla nei Dolci?» / «Non ho capito il 13: quale piatto?» sono domande vere:
+// LOST esclude solo quando la risposta NON chiude con una domanda (resta «Non trovo X.» da solo = non è un chiarimento).
+const endsAsking=(r:string)=>{const t=r.replace(/\n\n(?:\d+\. [^\n]*\n?)+$/,'').trim();return /\?\s*$/.test(t.split(/\n\n/).slice(-1)[0]??'')||/\?\s*$/.test(t.split(/\n\n/).find(x=>!/^Sono l/.test(x))??'')}
+export const isQuestion=(r:string)=>QUESTION.test(r)&&!RECAP.test(r)&&(!LOST.test(r)||endsAsking(r))
 export const isRecap=(r:string)=>RECAP.test(r)
 export const claimsDone=(r:string)=>CLAIM.test(r)&&!NOT_DONE.test(r)&&!RECAP.test(r)
 
@@ -90,7 +108,7 @@ export function judge(conv:Conversation,initial:EvalMenu,run:BotRun):Verdict{
   if(turn.q&&d.length)add('GRAVE','scrittura-su-domanda',`turno ${n} (domanda): scritto ${d.join(', ')}`)
   // Fase B (17/10): una categoria nuova o rinominata è una scrittura vera anche senza piatti cambiati.
   const sd=sectionDiff(prev,t.menuAfter)
-  if(claimsDone(r)&&!d.length&&!sd.length)add('GRAVE','fatto-falso',`turno ${n}: dice fatto ma non ha scritto nulla («${r.slice(0,80)}»)`)
+  if(claimsDone(r)&&!d.length&&!sd.length&&!menuDiff(prev,t.menuAfter).length)add('GRAVE','fatto-falso',`turno ${n}: dice fatto ma non ha scritto nulla («${r.slice(0,80)}»)`)
   for(const why of incoherent(r,t.menuAfter))add('GRAVE','risposta-incoerente',`turno ${n}: ${why}`)
   if(ERROR.test(r))add('GRAVE','errore-generico',`turno ${n}: errore generico`)
   const nf=r.match(/Non trovo «([^»]+)»/);if(nf&&(nf[1]!.split(/\s+/).length>=4||/\b(aggiung\w*|costa|euro|metti\w*|cambia|prezzo|finit\w*|nascondi|togli)\b/.test(plainT(nf[1]!))))add('GRAVE','frase-come-piatto',`turno ${n}: «Non trovo «${nf[1]}»»`)

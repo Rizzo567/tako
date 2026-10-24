@@ -1,0 +1,1517 @@
+{
+ "set": "parlato",
+ "metriche": {
+  "set": "parlato",
+  "modo": "mock",
+  "conversazioni": 30,
+  "misurate": 30,
+  "nonMisurate": [],
+  "messaggi": 30,
+  "corrette": 0,
+  "percentuale": 0,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 30,
+  "domandePer10Messaggi": 10,
+  "domandeNonAttesePer10": 10,
+  "latenzaAnthropicMs": {
+   "p50": 0,
+   "p95": 0,
+   "chiamate": 30
+  },
+  "latenzaTurnoMs": {
+   "p50": 14,
+   "p95": 27,
+   "nota": "harness + latenza Haiku registrata"
+  },
+  "chiamatePerMessaggio": 1,
+  "tokenMediPerMessaggio": {
+   "input": 18,
+   "output": 120,
+   "cacheRead": 2208,
+   "cacheWrite": 0
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 30,
+   "su": 30,
+   "percentuale": 100
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.002516,
+   "perMessaggioUsd": 0.000084,
+   "tetto": 0.5
+  },
+  "anthropic": {
+   "hit": 0,
+   "vere": 0,
+   "mock": 30,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 1.8,
+  "parlato": {
+   "corrette": 0,
+   "domandeGiuste": 0,
+   "gravi": 0,
+   "corretteODomandeGiustePct": 0
+  }
+ },
+ "codici": {
+  "domanda-sbagliata": {
+   "GRAVE": 0,
+   "MEDIO": 30,
+   "BASSO": 0
+  }
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "ps-01",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina carbonara"
+    }
+   ],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 carbonar tredic"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2342,
+   "latencyMs": [
+    102.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-02",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina lasagna"
+    }
+   ],
+   "expected": [
+    "price|Lasagna|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 la lasagn… a dodic"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2343,
+   "latencyMs": [
+    27.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-03",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina saltimbocca"
+    }
+   ],
+   "expected": [
+    "price|Saltimbocca alla romana|16"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 saltimbocc… sedic"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2343,
+   "latencyMs": [
+    13.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-04",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina polpette"
+    }
+   ],
+   "expected": [
+    "available|Polpette al sugo|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 polpett… finite"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2342,
+   "latencyMs": [
+    11.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-05",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina margherita"
+    }
+   ],
+   "expected": [
+    "price|Margherita|8"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 margherita otto"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2342,
+   "latencyMs": [
+    18.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-06",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina gricia"
+    }
+   ],
+   "expected": [
+    "price|Gricia|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 la ghisa a dodici"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2343,
+   "latencyMs": [
+    14.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-07",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina amatriciana"
+    }
+   ],
+   "expected": [
+    "available|Amatriciana|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 amatricana finita"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2343,
+   "latencyMs": [
+    13.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-08",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina coca"
+    }
+   ],
+   "expected": [
+    "price|Coca Cola|3.5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 la cocacola mettila a tre e cinquanta"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2348,
+   "latencyMs": [
+    14.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-09",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina sorrentina"
+    }
+   ],
+   "expected": [
+    "price|Sorrentina|10"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 la sorrendina a dieci"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2344,
+   "latencyMs": [
+    23.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-10",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina cacio/pepe"
+    }
+   ],
+   "expected": [
+    "price|Cacio e pepe|12.5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 il cacio pepe… dodici e… cinquanta"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2347,
+   "latencyMs": [
+    24.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-11",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina sorrentina"
+    }
+   ],
+   "expected": [
+    "available|Sorrentina|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 la sorrentina… finita"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2344,
+   "latencyMs": [
+    15.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-12",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina saltimbocca"
+    }
+   ],
+   "expected": [
+    "available|Saltimbocca alla romana|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 saltimbocca… nun ce sta… finito"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2346,
+   "latencyMs": [
+    13.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-13",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina gricia/carbonara"
+    }
+   ],
+   "expected": [
+    "available|Carbonara|false",
+    "available|Gricia|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 gricia e carbonara… finite"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2345,
+   "latencyMs": [
+    13.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-14",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina carbonara"
+    }
+   ],
+   "expected": [
+    "price|Carbonara|14"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 eh allora senti eh la… la carbonara… mettila a… quattordici"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2353,
+   "latencyMs": [
+    15.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-15",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina coda/vaccinara"
+    }
+   ],
+   "expected": [
+    "price|Coda alla vaccinara|17"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 la coda… la coda alla vaccinara diciassette"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2349,
+   "latencyMs": [
+    13.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-16",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina abbacchio"
+    }
+   ],
+   "expected": [
+    "available|Abbacchio scottadito|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 l'abbacchio… è finito l'abbacchio"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2347,
+   "latencyMs": [
+    11.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-17",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina birra"
+    }
+   ],
+   "expected": [
+    "price|Birra|6"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 la birra… la birra a sei"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2345,
+   "latencyMs": [
+    13.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-18",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina crostata"
+    }
+   ],
+   "expected": [
+    "hidden|Crostata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 eh… la crostata… togli la crostata"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2347,
+   "latencyMs": [
+    13.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-19",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina diavola"
+    }
+   ],
+   "expected": [
+    "price|Diavola|9"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 mo… la diavola… la diavola a nove"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2347,
+   "latencyMs": [
+    15.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-20",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina amatriciana"
+    }
+   ],
+   "expected": [
+    "price|Amatriciana|11.5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 amatriciana… undici e cinquanta"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2346,
+   "latencyMs": [
+    13.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-21",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina acqua"
+    }
+   ],
+   "expected": [
+    "price|Acqua naturale|2.5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 l'acqua… due e cinquanta"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2345,
+   "latencyMs": [
+    12.2
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-22",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina vino"
+    }
+   ],
+   "expected": [
+    "price|Vino della casa 1/4|6"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 vino della casa… sei euri"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2345,
+   "latencyMs": [
+    10.9
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-23",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina cicoria"
+    }
+   ],
+   "expected": [
+    "price|Cicoria ripassata|6"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 la cicoria mettila a sei euro… sei"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2347,
+   "latencyMs": [
+    16.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-24",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina patate"
+    }
+   ],
+   "expected": [
+    "price|Patate al forno|5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 le patate quattro e mezzo… no cinque"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2348,
+   "latencyMs": [
+    15
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-25",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina caffe"
+    }
+   ],
+   "expected": [
+    "price|Caffè|1.6"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 er caffè… uno e cinquanta… no uno e sessanta"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2350,
+   "latencyMs": [
+    14.7
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-26",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina amatriciana"
+    }
+   ],
+   "expected": [
+    "price|Amatriciana|13"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 allora… la carbonara… no aspetta… l'amatriciana a tredici"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2353,
+   "latencyMs": [
+    14.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-27",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina gricia"
+    }
+   ],
+   "expected": [
+    "available|Gricia|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 a gricia nun ce sta cchiù"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2345,
+   "latencyMs": [
+    16.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-28",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina tiramisu"
+    }
+   ],
+   "expected": [
+    "hidden|Tiramisù|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 o tiramisù levalo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2343,
+   "latencyMs": [
+    10.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-29",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina panna/cotta"
+    }
+   ],
+   "expected": [
+    "available|Panna cotta|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 a panna cotta… nun c'è cchiù"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2346,
+   "latencyMs": [
+    14.4
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-30",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "domanda-sbagliata",
+     "why": "la domanda non nomina polpette"
+    }
+   ],
+   "expected": [
+    "available|Polpette al sugo|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?"
+   ],
+   "turns": [
+    "🎤 eh senti… le polpette… rimettile… ci stanno di nuovo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 2353,
+   "latencyMs": [
+    14.5
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "ps-01",
+   "hash": "fc1eda135df8a803",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 14,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-02",
+   "hash": "cb9ac9823f2fe645",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 15,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-03",
+   "hash": "db5f8ed4fa0d3e5a",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 15,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-04",
+   "hash": "cdeacfee7e97734e",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 14,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-05",
+   "hash": "a5bd58d73a91dc08",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 14,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-06",
+   "hash": "cebf6c5ae7973cba",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 15,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-07",
+   "hash": "51f80a0104f96086",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 15,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-08",
+   "hash": "c817edb3cee4a5a7",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 20,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-09",
+   "hash": "cfe9262085f4ce19",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 16,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-10",
+   "hash": "47009051456a131c",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 19,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-11",
+   "hash": "d7f9e849032d9b44",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 16,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-12",
+   "hash": "cba4b64e097e34fa",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 18,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-13",
+   "hash": "ee5f255e2ca8cf8f",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 17,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-14",
+   "hash": "9cec746786296484",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 25,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-15",
+   "hash": "087d5c9ac2f0c98a",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 21,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-16",
+   "hash": "83faa36ea13fa0a6",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 19,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-17",
+   "hash": "82d7b9907b91060f",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 17,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-18",
+   "hash": "924345e6670f4ebb",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 19,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-19",
+   "hash": "6d3e1a92e8cb8258",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 19,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-20",
+   "hash": "4a3b6b52803a6dba",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 18,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-21",
+   "hash": "7ab59182550d3404",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 17,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-22",
+   "hash": "02298d6d6315f300",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 17,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-23",
+   "hash": "8bfb00deba64e5e4",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 19,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-24",
+   "hash": "5fa0e1a46a42b21a",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 20,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-25",
+   "hash": "985b68277b1df5ad",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 22,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-26",
+   "hash": "675454812a7302fd",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 25,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-27",
+   "hash": "e34ab046e57b9b68",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 17,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-28",
+   "hash": "8329ede9fea387b4",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 15,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-29",
+   "hash": "f637a57f183a90c5",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 18,
+    "output": 120,
+    "cacheRead": 2208,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-30",
+   "hash": "cf27eae5b073d552",
+   "source": "mock",
+   "status": 200,
+   "ms": 0,
+   "usage": {
+    "input": 24,
+    "output": 120,
+    "cacheRead": 2209,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}

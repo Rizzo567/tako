@@ -35,7 +35,7 @@ const HIDE=P({actions:['p4','p6','p7','p8'].map(item=>A({action:'set_hidden',ite
 const strip=(r:string)=>r.replace(/^Sono l.*?persona\.\s*/s,'')
 async function conv(turns:{voice?:string,text?:string}[],plans:any[],menu=qa){queue=structuredClone(plans);seen.length=0;cards.length=0;installNet(fake,realFetch);resetBrainTables()
  const c:Conversation={id:'r10',family:'manuel',menu:'qa',turns:turns.map(t=>t.voice!==undefined?{voice:t.voice}:{text:t.text!}),changes:[]}
- const run=await createRouteBot({name:'nuovo',settings:{botBrain:true},extraSql:brainSql}).run(c,structuredClone(menu),{restaurant:'Tako · Verifica web'})
+ const run=await createRouteBot({name:'nuovo',settings:{botBrain:true,botEngine:'groq'/* storico Groq: dal 21/10 il default è haiku (PIANO bot-haiku §1.5) */},extraSql:brainSql}).run(c,structuredClone(menu),{restaurant:'Tako · Verifica web'})
  if(process.env.TAKO_R10_SHOW)for(const t of run.turns)process.stderr.write('REPLY '+JSON.stringify(t.reply)+'\n')
  return{turns:run.turns.map(t=>({reply:strip(t.reply),changes:diff(menu,t.menuAfter)})),left:queue.length,pending:run.pending as any}}
 const secs=(w:any)=>w.menus.flatMap((m:any)=>{const p=publicNames(m);return m.sections.map((s:any)=>({id:s.id,name:s.name,menu:m.name,pub:p.get(s.id)}))})

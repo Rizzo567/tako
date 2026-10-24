@@ -35,6 +35,9 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
   useEffect(() => { if (!isReset) return; let alive = true; setResetState("checking");
     TakoAPI.post('/web-accounts/reset-check', { token: resetToken }).then(r => { if (alive) setResetState(r && r.valid ? "valid" : "expired"); }).catch(() => { if (alive) setResetState("expired"); });
     return () => { alive = false; }; }, [isReset, resetToken]);
+  /* 19/10 sera: finché le email sono spente il recupero passa dall'agenzia: niente tasto «Password dimenticata». */
+  const [emailOn, setEmailOn] = useState(null);
+  useEffect(() => { if (!webMode) return; let alive = true; TakoAPI.get('/web-accounts/capabilities').then(c => { if (alive) setEmailOn(!!(c && c.email)); }).catch(() => { if (alive) setEmailOn(false); }); return () => { alive = false; }; }, [webMode]);
   const askNewLink = () => { history.replaceState(null, '', location.pathname); setMode('forgot'); setErr(''); setInfo(''); setPassword(''); setPassword2(''); };
   const submit = async (e) => {
     e.preventDefault(); setErr("");
@@ -43,7 +46,7 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
     try {
       if (isForgot) {
         const capability=await TakoAPI.get('/web-accounts/capabilities');
-        if(!capability.email){setErr('Il recupero tramite email sarà disponibile quando il servizio email sarà attivato.');return;}
+        if(!capability.email){setErr('Per recuperare la password scrivi alla tua agenzia.');return;}
         await TakoAPI.post('/web-accounts/forgot-password',{email:email.trim()});setInfo('Se l’indirizzo è registrato, riceverai le istruzioni.');return;
       }
       if(isReset){
@@ -51,6 +54,8 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
         if(password!==password2){setErr('Le due password non coincidono.');return;}
         try{const r=await TakoAPI.post('/web-accounts/reset-password',{token:resetToken,password});if(r&&r.email)setEmail(r.email);}
         catch(ex){if(ex.code==='INVALID_RESET'){setResetState('expired');return;}throw ex;}
+        // 19/10 sera: chi apre il link con una sessione aperta (anche di un altro account) ne esce: si rientra con la password nuova.
+        try{await TakoAPI.post('/auth/logout');}catch(_){}
         history.replaceState(null,'',location.pathname);setMode('login');setPassword('');setPassword2('');setInfo('Password cambiata, entra con quella nuova.');return;
       }
       const d = isReg
@@ -120,7 +125,7 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
           </>
         )}
         {!isReset && <><label style={lab}>Email</label>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoFocus={!isReg} required style={inp} /></>}
+        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete={isReg ? "email" : "username"} autoCapitalize="none" autoCorrect="off" spellCheck={false} autoFocus={!isReg} required style={inp} /></>}
         {isReset && resetState === "checking" && <TakoLoading variant="compact" label="Controllo del link…"/>}
         {isReset && resetState === "expired" && <div role="alert" style={{ fontSize: 14, color: "var(--ink2,#555)", lineHeight: 1.5 }}>
           <p style={{ margin: "0 0 12px", fontWeight: 700, color: "var(--ink)" }}>Link scaduto, richiedine uno nuovo.</p>
@@ -130,7 +135,7 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
         <label style={lab}>Ripeti nuova password</label>
         <input value={password2} onChange={(e) => setPassword2(e.target.value)} type="password" autoComplete="new-password" required minLength={8} style={{ ...inp, marginBottom: 6 }} /></>}
         {!isForgot && !isReset && <><label style={lab}>Password</label>
-        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required minLength={isReg ? 8 : undefined} placeholder={isReg ? "almeno 8 caratteri" : undefined} style={{ ...inp, marginBottom: 6 }} /></>}
+        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" autoComplete={isReg ? "new-password" : "current-password"} required minLength={isReg ? 8 : undefined} placeholder={isReg ? "almeno 8 caratteri" : undefined} style={{ ...inp, marginBottom: 6 }} /></>}
         {isReg && (
           <label style={{ display: "flex", alignItems: "flex-start", gap: 8, margin: "10px 0 2px", fontSize: 12.5, color: "var(--ink3,#888)", cursor: "pointer", userSelect: "none" }}>
             <input type="checkbox" checked={newsletter} onChange={(e) => setNewsletter(e.target.checked)} style={{ marginTop: 2, accentColor: "var(--brand)" }} />
@@ -143,7 +148,8 @@ function Login({ onDone, registrationAllowed = true, webMode = false }) {
           style={{ width: "100%", marginTop: 14, padding: "12px", borderRadius: 12, border: "none", background: "var(--brand)", color: "var(--on-brand)", fontWeight: 800, fontSize: 15, cursor: "pointer", opacity: busy ? .6 : 1 }}>
           {busy ? <TakoLoading variant="compact" label={isForgot?"Invio istruzioni…":isReset?"Aggiornamento password…":isReg?"Creazione ristorante…":"Accesso a Takomenu…"}/> : isForgot ? "Invia istruzioni" : isReset ? "Conferma" : isReg ? "Crea ristorante" : "Entra"}
         </button>}
-        {webMode && !isReg && <button type="button" disabled={busy} onClick={()=>{if(isReset)history.replaceState(null,'',location.pathname);setMode(isForgot||isReset?'login':'forgot');setErr('');setInfo('');}} style={{marginTop:12,background:'none',border:0,color:'var(--brand)',cursor:'pointer'}}>{isForgot||isReset?'Torna all’accesso':'Password dimenticata?'}</button>}
+        {webMode && !isReg && emailOn === false && !isReset && <p style={{ marginTop: 12, fontSize: 13, color: "var(--ink3,#888)", textAlign: "center" }}>Password dimenticata? Scrivi alla tua agenzia.</p>}
+        {webMode && !isReg && (emailOn === true || isReset || isForgot) && <button type="button" disabled={busy} onClick={()=>{if(isReset)history.replaceState(null,'',location.pathname);setMode(isForgot||isReset?'login':'forgot');setErr('');setInfo('');}} style={{marginTop:12,background:'none',border:0,color:'var(--brand)',cursor:'pointer'}}>{isForgot||isReset?'Torna all’accesso':'Password dimenticata?'}</button>}
         {registrationAllowed && <div style={{ textAlign: "center", marginTop: 16, fontSize: 13, color: "var(--ink3,#888)" }}>
           {isReg ? "Hai già un account? " : "Primo accesso? "}
           <a href="#" onClick={(e) => { e.preventDefault(); setErr(""); setMode(isReg ? "login" : "register"); }} style={{ color: "var(--brand)", fontWeight: 700, textDecoration: "none" }}>
@@ -159,7 +165,7 @@ function App({ session }) {
   window.__takomenuAgency = session.user.agency === true;window.__takoUser=session.user;
   const role0 = ROLE_DB2UI[session.user.role] || "nonAutorizzato";
   ROLES[role0] = { ...ROLES[role0], name: session.user.name, initials: (session.user.name || "?").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase() };
-  const [route, setRoute] = useState(() => safeRoute(role0, session.user.agency&&new URLSearchParams(location.search).get("view")==="leads"?"agency_leads":session.user.agency&&["dashboard",null].includes(load("route",null))?"agency":load("route",session.user.agency?"agency":window.innerWidth<900&&role0==="owner"?"menu":ROLE_HOME[role0]||"dashboard")));
+  const [route, setRoute] = useState(() => safeRoute(role0, session.user.agency&&new URLSearchParams(location.search).get("view")==="leads"?"agency_leads":session.user.agency&&["dashboard",null].includes(load("route",null))?"agency":load("route",session.user.agency?"agency":homeRoute(role0))));
   const [settings, setSettings] = useState(() => {
     let ls = {}; try { ls = JSON.parse(localStorage.getItem("tako-dash-settings") || "{}"); } catch (_) { ls = {}; }
     // Backend vince: SETTINGS_DEFAULTS è già stato popolato dal backend in loadAll().
@@ -345,7 +351,7 @@ function App({ session }) {
     case "comanda": Screen = <ScreenComanda key={"comanda" + dataVersion} mobile={mobile} />; break;
     case "sala": Screen = <ScreenSala mobile={mobile} rooms={rooms} calls={calls} onSetTableState={onSetTableState} />; break;
     case "chiamate": Screen = <ScreenChiamate mobile={mobile} calls={calls} onResolve={async (call) => { await TakoAPI.post(`/tables/${call._id}/waiter-resolve`); setCalls(c => c.filter(x => x._id !== call._id)); }} />; break;
-    case "prenotazioni": Screen = <ScreenPrenotazioni key={"pren" + dataVersion} mobile={mobile} />; break;
+    case "prenotazioni": Screen = <ScreenPrenotazioni key={"pren" + dataVersion} mobile={mobile} rooms={rooms} />; break;
     case "menu": Screen = ["owner", "menu_editor"].includes(role) && window.ScreenMenuWorkspace ? <window.ScreenMenuWorkspace key={"menu" + dataVersion} mobile={mobile} /> : <ScreenMenu key={"menu" + dataVersion} mobile={mobile} />; break;
     case "statistiche": Screen = role === "owner" && window.ScreenReportsWorkspace ? <window.ScreenReportsWorkspace mobile={mobile}/> : <ScreenStatistiche key={"stats" + dataVersion} mobile={mobile} />; break;
     case "staff": Screen = <ScreenStaff key={"staff" + dataVersion} mobile={mobile} />; break;
@@ -449,6 +455,8 @@ function Root() {
   const [sessionGeneration,setSessionGeneration]=useState(0);
   const [state, setState] = useState({ phase: "loading", session: null });
   useEffect(() => {
+    // 19/10 sera: con ?reset= nell'URL si mostra sempre «Scegli una nuova password», anche con una sessione valida.
+    if (new URLSearchParams(location.search).has("reset")) { setState({ phase: "login", session: null }); return; }
     (async () => {
       try {
         const {user:me,restaurant} = await TakoAPI.get("/auth/bootstrap");
@@ -517,7 +525,7 @@ function ChangePasswordCard(){const [open,setOpen]=useState(false),[current,setC
   setBusy(true);try{await TakoAPI.post('/web-accounts/change-password',{current,password:next});reset();setOpen(false);setDone('Password cambiata. Sugli altri dispositivi dovrai entrare di nuovo.')}catch(ex){setError(ex.status===429?'Troppi tentativi, riprova tra qualche minuto.':ex.message||'Password non cambiata. Riprova.')}finally{setBusy(false)}};
  return <Card><h3>Password</h3>{done&&<p role="status" style={{color:'var(--ok,#2b8a3e)',fontWeight:700}}>{done}</p>}
   {!open?<Btn full kind="soft" onClick={()=>{setOpen(true);setDone('')}}>Cambia password</Btn>:
-  <form onSubmit={submit} className="change-password-form" style={{display:'grid',gap:10}}>
+  <form onSubmit={submit} className="mw change-password-form" style={{display:'grid',gap:10}}>
    <label className="mw-field"><span>Password attuale</span><input type="password" autoComplete="current-password" required value={current} disabled={busy} onChange={e=>setCurrent(e.target.value)}/></label>
    <label className="mw-field"><span>Nuova password</span><input type="password" autoComplete="new-password" required minLength={8} placeholder="almeno 8 caratteri" value={next} disabled={busy} onChange={e=>setNext(e.target.value)}/></label>
    <label className="mw-field"><span>Ripeti nuova password</span><input type="password" autoComplete="new-password" required minLength={8} value={again} disabled={busy} onChange={e=>setAgain(e.target.value)}/></label>

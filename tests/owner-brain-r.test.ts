@@ -24,7 +24,7 @@ const fake:any={mode:'fake',stats:{},maxTokens:0,pace:async()=>{},setConversatio
   return{response:r,hit:false,miss:false,tokens:0,ms:0}}}
 
 describe('fase R: Groq non risponde → solo «non disponibile», nessuna modifica (R1.3)',()=>{
- const bot=createRouteBot({name:'r',settings:{botBrain:true},extraSql:brainSql})
+ const bot=createRouteBot({name:'r',settings:{botBrain:true,botEngine:'groq'/* storico Groq: dal 21/10 il default è haiku (PIANO bot-haiku §1.5) */},extraSql:brainSql})
  const conv=(text:string):Conversation=>({id:'r-'+text,family:'manuel',menu:'qa',turns:[{text},{text:'sì'}],changes:[]})
  for(const m of ['503','429','json','timeout'] as Mode[])for(const text of ['la carbonara a 13','elimina boh','annulla','nascondi boh e metti la parmigiana a 12','ciao'])it(`${m}: «${text}»`,async()=>{
   mode=m;calls=0;installNet(fake,realFetch);const menu=initialMenu('qa'),run=await bot.run(conv(text),structuredClone(menu),{restaurant:FIXTURES.qa!.restaurant})

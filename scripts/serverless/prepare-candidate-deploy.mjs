@@ -8,7 +8,7 @@ import {loadLocalEnvironment} from '../start-webapp.mjs'
 const root=path.resolve(new URL('../../',import.meta.url).pathname)
 const slug='tako-operational-candidate'
 const required=['DATABASE_URL','JWT_SECRET','SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY','TAKO_GATEWAY_SECRET','TAKO_RATE_LIMIT_SECRET','WEB_ORIGIN','PDF_FONT_BUCKET','TAKO_IMAGE_SEEDS_JSON']
-const optional=['DATABASE_CA_CERT','UPLOADS_MAX_BYTES','SUPABASE_STORAGE_BUCKET','PDF_FONT_PREFIX','PDF_FONT_TIMEOUT_MS','PDF_FONT_MAX_BYTES','TAKOMENU_AGENCY_USER_IDS']
+const optional=['DATABASE_CA_CERT','UPLOADS_MAX_BYTES','SUPABASE_STORAGE_BUCKET','PDF_FONT_PREFIX','PDF_FONT_TIMEOUT_MS','PDF_FONT_MAX_BYTES','TAKOMENU_AGENCY_USER_IDS','ANTHROPIC_API_KEY','TAKO_BOT_ENGINE_DEFAULT']
 export const candidateSecretNames=[...required,...optional].map(key=>'TAKO_CANDIDATE_'+key)
 function parsePrivate(text){return parseEnv(text)}
 export function validateCandidateSecrets(values){

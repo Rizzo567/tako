@@ -1,0 +1,357 @@
+# REPORT — motore Haiku 5.5 per il bot WhatsApp titolare (run notturna 21/10/2026, 01:00–04:00)
+
+Branch `codex/bot-anthropic-1019` (push fatto). Piano: `PIANO.md` (= PIANO-FINALE 20/10), deviazioni: `implementation-notes.md`, risultati per set: `risultati/summary-*-{r1..r4,finale}.md`.
+
+
+
+
+
+## 0nonies. RUN NOTTURNA 22/10 (23:11→07:30) — caccia ai bug: edge v151
+
+**Online:** edge `tako-operational-candidate` **v151** (commit 72dcad41, ezbr 871c9466…); worker dashboard `takomenu-web` **20ba6b07** (solo il webhook Twilio cambiato); lettura v28 e worker pubblico invariati.
+
+**Provato:** ~380 conversazioni nuove (~750 messaggi) in 5 set nuovi — `notte-1022` (73), `notte-caccia` (121), `qa-continua` (batteria dal vivo con storia continua, fixture `qavero`), e due set scritti «a occhi chiusi» da agenti che non vedevano le correzioni: `notte-cieco` (72 conv, 119 msg) e `notte-finale` (73 conv, 112 msg) — più ~11 giri della batteria dal vivo sul QA (27 conversazioni ciascuno, ~800 messaggi veri via webhook firmato).
+
+**Bug corretti (strutturali, ognuno con casi permanenti):** sicurezza prezzi di gruppo (0 €, ±50% → riepilogo+OK) e prezzi singoli assurdi/negativi (mai scritti senza sì); nessuna scrittura dopo lo scadere del tempo del turno e mai «non disponibile» a scrittura partita; pronomi dopo una lettura o una scrittura risolti dal server («quanto costa X?» → «mettila/alzalo/toglila», «anzi rimettilo»); «tutti e due» sui due piatti della risposta di prima; relativi in lettere («de cinquanta centesimi», «mezzo euro in più»); piatto nuovo: risposta parziale tenuta («4» = prezzo), mai sottomenu ereditato da conversazioni vecchie né Menu nascosto non detto, elenchi senza sottomenu vuoti e solo del Menu detto; «annulla» con domanda aperta chiude solo la domanda e non dice mai «non ho cambiato nulla» se un turno prima ha scritto; gruppi per sottomenu («alza le pizze di 50 centesimi», «nascondi tutti i dolci» = interruttore del sottomenu, OK multi-Menu); letture dei sottomenu composte dai dati, nomi inventati tolti; primo contatto («cosa sai fare?», «posso cambiare i prezzi?») dal server; «sì e anche il tiramisù», «solo il babà»; listino incollato; vecchi rossi chiusi (z-asr-005, z-interruzioni-008/011/017, z-rinomine-002/009, bv-asr-003/005, bv-correzioni-002/003, bv-deixis-003, str-v-08, lng-mig-3/4, ps-06, i 2 test twilio-menu). Dettaglio: `implementation-notes.md` 43–51.
+
+| Set | v140 (prima) | v151 (dopo) |
+|---|---|---|
+| multiturno | 38/38 | 38/38 |
+| adv-sera | 227/227 | 227/227 |
+| prezzofisso | 74/75 | 75/75 |
+| banco | 84/92 (5 GRAVI) | 90/92 (1 GRAVE vecchio) |
+| adv150 | 137/150 | 150/150 |
+| lunghi | 40/42 | 42/42 |
+| struttura | 93/94 | 94/94 |
+| visibilita | 19/20 | 20/20 |
+| parlato | 29/30 | 30/30 |
+| playground | 20/20 | 20/20 |
+| victoria | 10/10 | 10/10 |
+| notte-1022 (nuovo) | 53/57 al primo giro | 73/73 |
+| notte-caccia (nuovo) | 49/63, 5 GRAVI | 121/121 |
+| notte-cieco (cieco) | 60/72, 4 GRAVI (v144) | 72/72 |
+| notte-finale (cieco n.2) | 68/73 (v150) | 70/73 |
+| batteria dal vivo QA | 21/27 (v145) | v150: 27/27 ×2 · v151: 27/27 ×2 |
+| proprietà multi-turno | 0 violazioni | 0 violazioni |
+
+**Aperti (rischio per i clienti):**
+- bv-correzioni-004 (vecchio): frase vocale ambigua che corregge una promo («…mettila a 10») — la promo del tiramisù a 3 € può restare; raro.
+- bv-categorie-001: fa una domanda invece di agire (nessuna scrittura sbagliata).
+- notte-finale: «a pranzo aggiungi la panna cotta a 5» senza Dolci nel Pranzo → chiede il sottomenu invece di proporre di creare «Dolci»; «aggiungi lo Spritz Hugo» chiede il sottomenu anche se «Aperitivi» è ovvio; «👍» non basta per eliminare (scelta voluta: serve un sì scritto).
+- Varianza dal vivo: a volte dopo «la pasta al pesto dei primi» richiede tra *pasta al pesto* e *Pasta al pesto e lasagna* (nessuna scrittura sbagliata).
+- Dopo ogni deploy Supabase impiega ~15–70 s ad attivare la versione: è la piattaforma, non il codice. Il worker ora tiene viva la richiesta fino a ~45 s e le risposte immediate arrivano via REST se in ritardo; oltre resta un rischio → deploy solo di notte, poi `scripts/serverless/wait-edge-ready.mjs`.
+
+**Rollback:** `RB=~/.config/tako-webapp/rollback-edge-20261021; cp $RB/rollback-v150.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs && node scripts/serverless/wait-edge-ready.mjs` (anche rollback-v149/v146/v140). Worker: `CI=true npx wrangler rollback 49846043-0b54-4759-bb28-9013ca33ca3e --config deploy/cloudflare/wrangler.jsonc`.
+
+**Spesa Anthropic notte:** ~1,00 $ di banchi (registro 1,78 → 2,77 $) + pochi centesimi di prove dal vivo; tetto 8 $.
+
+## 0octies. AGGIORNAMENTO 22/10 notte — bot multi-turno a prova di bug: edge v140
+
+Bug dal vivo segnalati da Manuel sul QA (21/10 sera, v137):
+- un «sì» non eseguiva la proposta;
+- i messaggi nuovi venivano incollati alla domanda in sospeso (`source` che accumulava);
+- mancava la rinomina di Menu e Sottomenu;
+- «tutte le paste» chiedeva conferma;
+- i Primi venivano creati nel Menu sbagliato.
+
+Correzione strutturale (commit d0915bb0 … 2195764e):
+- domanda in sospeso con tetto di 2 giri;
+- un secondo «sì» esegue la proposta, oppure la domanda si chiude;
+- mai una conferma senza azioni salvate;
+- mai «Non ho cambiato nulla» a un comando chiaro;
+- un comando nuovo chiude la domanda e viene eseguito da solo;
+- `source` limitato all'ultimo messaggio;
+- rinomina di Menu e Sottomenu con annulla;
+- sessione dei piatti di oggi letta dal server: liste per sottomenu che restano tra un turno e l'altro, nuovi a 0 € nei menu fissi, correzioni e refusi; non è un copione fisso.
+
+Gate superato:
+
+| Prova | Risultato |
+|---|---|
+| multiturno | 38/38 |
+| adv-sera (batteria dura in italiano normale: omonimi, pronomi, numeri in lettere, refusi, richieste multiple, menu del giorno intero, sessioni) | 227/227 |
+| proprietà | 6 seed × 200 conversazioni, 0 violazioni |
+| prezzofisso | 74/75 (resta il falso positivo noto) |
+| suite vitest | 0 rossi nuovi |
+
+Prove dal vivo sul QA:
+- **v138:** la conversazione di Manuel 1–13 regge.
+- **v139:** la sessione del menu del giorno è corretta (Primi = Lasagna + Risotto ai funghi, Secondi = Tagliata + Polpette, Carbonara tolta alla correzione).
+- **v140:** lasagne senza prezzo con il tetto, poi «lasagna 12» crea il piatto; il «sì» a vuoto riceve una risposta utile.
+
+QA rimesso com'era prima delle prove.
+
+- Nota: il primo messaggio dopo un deploy ha impiegato 69 s (avvio a freddo dell'edge).
+- Rollback: `cp $RB/rollback-v139.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs`. Sono disponibili anche rollback-v138 e rollback-v137.
+
+## 0septies. AGGIORNAMENTO 21/10 notte — Victoria migrata al prezzo fisso, bot finale, punti minori: TUTTO ONLINE
+
+**Online:**
+- edge `tako-operational-candidate` **v137** (ezbr f499083b…);
+- lettura **v28**;
+- worker dashboard `takomenu-web` **49846043-0b54-4759-bb28-9013ca33ca3e**;
+- worker pagine pubbliche `takomenu-public` **037f6b68-8d34-4d2b-a2a1-0b2e39322033** (prima d9c80a18, del 17/10).
+
+**Victoria (528e263c), migrata:** revisione 59 → 61; backup in `~/.config/tako-webapp/victoria-prezzo-fisso-20261021-*c/`.
+- Pranzo: Completo 12 €. Cena: Completo 16,90 / Solo primo 9 / Solo secondo 10. Compreso: «¼ di vino oppure ½ litro d’acqua + caffè».
+- Alla carta (106 piatti) e Drinks (16) invariati. Nessun piatto perso; 10 doppioni tolti e 4 piatti-prezzo diventati opzioni.
+- Foto dal vivo, prima e dopo, da computer e da telefono (`menu-prezzo-fisso-2026-10-21/victoria-prima-dopo/{prima,dopo-live,diff-live}`): cambiano solo «COMPLETO»→«Completo», «PRIMO/SECONDO»→«SOLO PRIMO/SOLO SECONDO» e i nomi delle opzioni; gli altri pixel sono 0 o rumore minimo (<0,5%).
+- **Incidente:**
+  - la prima migrazione (rev 57) era andata online con il worker pubblico ancora del 17/10, che non conosce il prezzo fisso, quindi i blocchi COMPLETO e i prezzi non comparivano;
+  - visto con le foto, `--restore` eseguito subito (rev 59) e pagina verificata identica;
+  - poi il deploy del worker pubblico e la nuova migrazione;
+  - finestra di pagina errata: circa 30–40 minuti in serata.
+- Lo script di migrazione ora riconosce anche il trucco col piatto-prezzo, che è la forma dei dati veri di oggi.
+
+**Worker pubblico:** il nuovo deploy porta online anche le modifiche della pagina pubblica dal 17/10 in poi, cioè «Menu in arrivo», la scelta del tavolo e il delta live. Confronto prima/dopo su Bim Bum Bar, Panuzza's e San Galdino: struttura identica; le differenze di pixel sono la foto di testata e il «Menu in arrivo» nei sottomenu vuoti di Panuzza's, già deciso. Rollback: `CI=true npx wrangler rollback d9c80a18-b160-4b34-9af5-2b4333f57722 --config deploy/cloudflare/wrangler-public.jsonc` (attenzione: senza riportare Victoria alla carta la sua pagina perderebbe i prezzi, quindi prima `--restore`).
+
+**Bot v137:**
+- aumento uniforme con risposta solo del server;
+- «rimetti X nei <sottomenu>» = spostamento;
+- vocale con più richieste applicato subito.
+
+Prova dal vivo sul QA: tutto corretto, compresi «gnocchi al ragù», «passa a 18» e la lettura delle opzioni. QA rimesso com'era; il «Menu del giorno» resta nascosto.
+
+**Punti minori online:** scheda PDF su mobile, notifiche in basso su mobile, «sottomenu» nel vecchio schermo Menu, promo nascosta nei menu fissi, `PATCH /api/restaurants/me` con lock e chiavi di sistema preservate. Indice GIN `restaurants_pdf_documents_path_ops_idx` applicato.
+
+**PDF:** su decisione di Manuel, la grafica la fa lui. I PDF multipli restano spenti (`TAKO_MENU_PDF_DOCUMENTS` non impostato) e `supplied-menu-pdf.ts` resta. Il lavoro grafico a metà è salvato nello stash «wip grafica PDF curata 21/10» e in `~/.config/tako-webapp/wip-pdf-grafica-1021/`.
+
+**Verifiche finali:**
+- banco: prezzofisso 74/75, banco 84/92, adv150 136/150, lunghi 40/42, struttura 93/94, victoria 10/10, visibilita 19/20, parlato 29/30, playground 20/20, 0 GRAVI di sicurezza;
+- vitest: 0 rossi nuovi;
+- tests/web: gli stessi 23 rossi noti;
+- build edge e lazy boot PASS.
+- Spesa banchi totale: 1,62 $.
+
+## 0sexies. AGGIORNAMENTO 21/10 sera — BOT + menu a prezzo fisso ONLINE (PDF multipli spenti, Victoria non migrata)
+
+**Online:** edge `tako-operational-candidate` **v136** (ezbr d7d4d5aa…), lettura `tako-read-candidate` **v28** (ezbr d2af569b…), worker `takomenu-web` **8c5992d3-226b-456b-ad3e-4c0a87780e49**.
+- PDF multipli spenti con `TAKO_MENU_PDF_DOCUMENTS` (non impostato): le route rispondono 404 e la dashboard nasconde «I tuoi PDF»; il PDF classico e il PDF fisso di Victoria non cambiano.
+- Correzioni del bot prima del deploy:
+  - la sostituzione usa la frase detta quando il modello sceglie un piatto simile sbagliato («gnocchi al ragù» ≠ Gnocchi al pomodoro), restando prudente su «pasta e fagioli» e sui vocali senza punteggiatura;
+  - nelle letture, «senza prezzo» invece di «0,00 €».
+- Corrette dopo la prova dal vivo (v135, v136): un sottomenu creato in un Menu nascosto non si nasconde a sua volta (prima un menu reso visibile restava vuoto per i clienti), e il testo «per ora è nascosto» compare solo se è vero.
+- Banco mirato: prezzofisso 74/75 (resta il falso positivo pf-piatto-nuovo-08), banco 84/92, adv150 136/150, lunghi 40/42, struttura 93/94, visibilita 19/20, victoria 10/10. 0 GRAVI di sicurezza.
+- Prova dal vivo sul QA (webhook firmato `TakoSyncTest`, nessun WhatsApp inviato), con ogni passo verificato sul DB pubblicato. Tutto riuscito:
+  - crea il Menu, crea i sottomenu, prezzo fisso;
+  - opzioni Completo 15 / Solo primo 9;
+  - piatti del giorno su 2 sottomenu (creati a 0 €);
+  - «il completo passa a 17»;
+  - rendi visibile;
+  - aumento uniforme di 1 € sui Primi (applicato subito);
+  - sposta un piatto;
+  - vocale multi-richiesta: una domanda di conferma superflua, poi «sì» applica tutte e 3 le richieste.
+  La proiezione pubblica (`/api/customer/restaurant/QA/menu?menuId=…`) mostra pricing fisso, le opzioni e i piatti visibili. Turni 4–10 s.
+- Victoria dal vivo dopo il deploy, confrontata con le foto «prima»: struttura identica e 0 pixel cambiati (Pranzo e Cena, desktop e mobile).
+- Difetti visti dal vivo, non corretti:
+  - il testo dell'aumento uniforme dice «ti mostro il riepilogo prima di pubblicare» ma applica subito, e nomina in modo confuso due piatti «lasciati fuori»;
+  - «rimetti il tiramisù nei Piatti di prova» viene preso come annulla del prezzo, non come spostamento;
+  - «elimina il menu» con piatti dentro propone di nasconderlo (prudente, voluto);
+  - il QA non ha una pagina pubblica per slug, quindi lo scatto della pagina vera del QA non è stato fatto.
+- Rollback (copie in `~/.config/tako-webapp/rollback-edge-20261021/`):
+  - edge: `cp $RB/rollback-v133.ts release/serverless/candidate/index.ts && node scripts/translations/deploy-projection.mjs` (oppure `rollback-v135.ts`);
+  - lettura: `cp $RB/rollback-read-v27.ts release/serverless/read-candidate/index.ts && node scripts/translations/deploy-projection.mjs --read`;
+  - worker: `CI=true npx wrangler rollback 3e44eedc-c6ea-424a-9c0c-5cc2d07512b0 --config deploy/cloudflare/wrangler.jsonc`.
+- Sul QA resta un «Menu del giorno» nascosto (fisso, 5 piatti); il resto del QA è com'era.
+
+## 0quinquies. AGGIORNAMENTO 21/10 15:10–17:40 — Menu a prezzo fisso + PDF multipli: COSTRUITO E VERIFICATO, NON ONLINE
+
+**Niente deploy, niente migrazione dei dati veri di Victoria** (istruzione di Manuel). Online resta tutto come §0quater (edge v133, lettura v27, worker 3e44eedc). Procedura pronta: `docs/webapp/menu-prezzo-fisso-2026-10-21/GO-LIVE.md`.
+
+**Cosa c'è** (commit 242a2da → b174a644, branch pushato):
+- Dati: Menu `pricing carta|fisso`, opzioni (nome · prezzo · nota · sottomenu compresi), «Compreso»; i prezzi dei piatti restano salvati passando a fisso.
+- Pagina pubblica a blocchi per opzione. Copia locale di Victoria migrata: Pranzo identico al pixel; Cena identica salvo i titoli «PRIMO»→«SOLO PRIMO», «SECONDO»→«SOLO SECONDO».
+- Dashboard ristoratore: scelta carta/fisso, opzioni, «Tutto il menu», Compreso, «Sostituisci i piatti», anteprima, «I tuoi PDF» (più documenti, ordine dei menu, grafica, link fisso copia/rigenera/revoca). 54 scatti desktop+375 in `menu-prezzo-fisso-2026-10-21/screenshot-dashboard/`.
+- PDF: documenti salvati in `settings.pdfDocuments`, generati sempre dal menu pubblicato, link pubblico `/api/public/menu-pdf/:token`.
+- Bot: «il completo a cena passa a 17», «alza di un euro», opzioni nuove/tolte (con conferma), piatti nuovi a 0 € nei menu fissi, sostituzione dei piatti del giorno su più sottomenu (riusa i piatti esistenti, nasconde gli altri, mai elimina, «annulla» 10 min).
+- Migrazione Victoria: `scripts/victoria/fixed-price-migration.ts` (--plan/--execute/--restore con backup). Sulla copia del 19/10: 0 piatti persi, 10 doppioni tolti.
+
+**Giro di verifiche finale:**
+- Revisione avversariale della dashboard (agente separato): NON PASSA con 8 ALTO, tra cui la parola «categoria», la scelta carta/fisso doppia, due sistemi PDF, l'anteprima e il mobile 375. Tutti corretti nel giro unico; nella dashboard ora c'è «Sottomenu» (categoria) / «Sezione» (sottocategoria).
+- Banco col modello vero: il primo giro prezzofisso ha dato 48/75. Corretti 6 difetti del bot, tra cui il più grave: confermava «passa a 17 €» senza applicare. Correzione generale: le bozze di piani non applicati vengono scartate.
+
+| set | finale |
+|---|---|
+| prezzofisso | **73/75 (97,3%)**, 0 GRAVI sicurezza |
+| banco | 84/92 (91,3%) |
+| victoria | 10/10 |
+| struttura | 93/94 |
+| visibilita | 19/20 |
+| playground | 20/20 |
+| parlato | 29/30 |
+| adv150 | 136/150 (90,7%), 0 sicurezza |
+| lunghi | 40/42, 0 timeout, turno p50 4,2 s / p95 9,2 s |
+
+- Restano 2 casi prezzofisso. pf-piatto-nuovo-08 è un falso positivo del banco: il bot spiega che il prezzo è delle opzioni. pf-sostituzione-16 è vero: «gnocchi al ragù» rimostra «Gnocchi al pomodoro» invece di crearne uno nuovo.
+- tsc server/web verdi. vitest: nessun rosso nuovo (4 file con hook in timeout sotto carico, saltati se rieseguiti da soli: richiedono il server :3001). tests/web: gli stessi 23 rossi noti. Build edge PASS + lazy boot PASS; rispetto a v133 cambiano solo i moduli attesi (bot, prezzo fisso, PDF).
+- Spesa Anthropic cumulativa dei banchi: 1,62 $.
+
+**Problemi possibili (da leggere prima del go-live):** vedi il resoconto a Manuel e `STATO.md`.
+
+## 0quater. AGGIORNAMENTO 21/10 14:00–15:10 — messaggi lunghi senza timeout, «sposta» non più perso: edge v133
+
+**Esito.** Deploy `tako-operational-candidate` **v133** (ezbr cbf863d3…); lettura (v27) e worker (3e44eedc) invariati.
+- **Timeout (errore id 59 «haiku: timeout», vocale con 5 richieste):** budget del turno 30 s (era 25); ogni tentativo usa il budget rimasto (niente più tetto fisso di 10 s); la lentezza non si ritenta (solo rete/5xx/429). Se il budget finisce: «Il messaggio è lungo e non sono riuscito a finirlo in tempo: *non ho cambiato nulla*. Mandamelo diviso…» — mai «momentaneamente non disponibile» per un messaggio lungo (non si è mai scritto nulla a metà: la scrittura è una sola, alla fine). Turno oltre 5 s → UN «Ci sto lavorando…», poi il risultato (niente sui turni veloci).
+- Causa vera dei rifiuti sui messaggi lunghi (oltre alla lentezza): «gnocchi ai quattro formaggi» non riconosciuto come «Gnocchi 4 formaggi» (numeri in lettere nel controllo «piatto diverso») e la regola «aggiungi su piatto esistente» che in un messaggio lungo bloccava anche i prezzi degli altri piatti → corretti.
+- **«Sposta X» persa:** la risposta che completa la domanda («nei panini, crealo») ora crea il Sottomenu E sposta il piatto (verbo «sposta» preso dalla richiesta in sospeso; «crealo» non è più «parte persa»); un Sottomenu creato insieme ai piatti che ci finiscono dentro nasce visibile.
+- **Set nuovo «lunghi» (42):** 35 messaggi da 5–8 richieste (vocali, «anziché», «anzi», misti prezzo/finito/nuovo/nascondi/sposta), 5 con «13.000», il vocale vero di Manuel, il caso «sposta → crealo».
+
+| Set (giro l3; latenze dal vivo dal giro l2) | Valore |
+|---|---|
+| **Lunghi 42** | **41/42**, 0 GRAVI · **0 timeout** · turno dal vivo **p50 4,6 s / p95 9,5 s** (chiamata Haiku p50 4,5 s / p95 6,9 s; 1,05 chiamate/messaggio) |
+| Banco vero 92 | 80/92 = 87%, 0 GRAVI di sicurezza |
+| Avversario 150 | 139/150 = 92,7%, 0 di sicurezza |
+| Struttura 94 · visibilità 20 | 92/94 (1 GRAVE non di sicurezza: «sezione Pizze rosse» creata come sottomenu nascosto) · 19/20 |
+| Victoria · parlato · playground | 10/10 · 29/30 · 20/20 |
+| Suite | 0 rossi nuovi (4 test che vogliono il server :3001 cambiano solo messaggio d'errore) |
+
+Rollback: `candidate-index-vis.ts` (= v132) con `deploy-projection.mjs`. Il bundle v133 include anche il contratto dati facoltativo del prezzo fisso (242a2da), non usato.
+
+---
+## 0ter. AGGIORNAMENTO 21/10 11:00–13:10 — Menu nuovi nascosti, «rendi visibile», «Menu in arrivo»: edge v132 + lettura v27 + worker 3e44eedc
+
+**Esito.** Gate verde e deploy fatto: `tako-operational-candidate` **v132** (ezbr a4015bb8…), `tako-read-candidate` **v27** (ezbr 4ec90e1d…), worker `takomenu-web` **3e44eedc…** (prima d21ca4b8…). Secret invariati (Haiku per tutti).
+- **Bot:** Menu creati dal bot nascono **nascosti** (`active=false`); un Sottomenu aggiunto a un Menu esistente nasce nascosto, quelli creati dentro un Menu nuovo seguono il Menu. Azioni `set_menu_visible`/`set_section_visible` («rendi visibile», «mostra», «fai vedere», «pubblica il menu…», «attiva…»): mostrare = subito; nascondere un Menu/Sottomenu con piatti = conferma; vuoto = subito; omonimi senza Menu → una domanda. Riepilogo: «Ho creato il Menu *Cena* con i sottomenu … Per ora è nascosto: scrivi *rendi visibile Cena* quando vuoi che i clienti lo vedano.» · dopo «rendi visibile» su vuoto: «I clienti vedono «Menu in arrivo» finché non aggiungi i piatti.» «annulla» rimette anche la visibilità.
+- **Dashboard:** crea i Menu col suo codice (client, `13-menu-workspace.js` `newMenu … active:true`), NON passa dal bot: lì restano visibili alla creazione come prima.
+- **Pagina pubblica:** Menu e Sottomenu `active` si vedono anche vuoti, con la riga sobria «Menu in arrivo» (14 lingue). Un Menu con piatti tutti esauriti sparisce come prima. Senza `menuId` il QR apre il primo Menu con piatti (`defaultPublicMenu`).
+- **Locali online con Menu/Sottomenu attivi ma vuoti (dati NON toccati, decide Manuel):** **Panuzza's** — sottomenu «Fuori menù» e «Verdure» del Menu «Menu» (ora mostrano «Menu in arrivo»); **QA** — «Menu pranzo» (con «Completo») e «Menu cena» (della prova di Manuel).
+- Fix emersi nei giri: proposte di struttura confermabili, «Nascondo tutto il Menu X?» → proposta vera, sottomenu inventati col nome del Menu scartati, candidati incerti col nome del piatto, prezzi veri dei piatti nominati nella bozza, riepilogo con OK scritto dal server, piatti nei sottomenu creati nello stesso piano, con una correzione le parti in sospeso non si pubblicano, «aggiungi» su piatto esistente → domanda anche nei messaggi misti.
+
+| Set (giro v10, stato pushato) | Valore |
+|---|---|
+| Visibilità 20 (nuovo) | **20/20** |
+| Struttura 94 | **94/94** |
+| Banco vero 92 | **82/92 = 89,1%**, 0 GRAVI di sicurezza |
+| Avversario 150 | 140/150 = 93,3%, 0 di sicurezza |
+| Victoria · parlato · playground | 10/10 · 30/30 · 20/20 |
+| Suite vitest | 0 rossi nuovi · test web: stessi 23 rossi del commit prima (800016a) |
+
+Giri: v1 (enum delle azioni di visibilità mancante nello schema: il modello non poteva usarle) → v2 (rete giù) → v3–v10 con fix deterministici. Più dei 3 giri: il banco oscillava 81–90% per la varianza dopo il cambio di prompt; chiuso con regole del server, non col prompt (note 34).
+Rollback (`~/.config/tako-webapp/rollback-edge-20261021/`): operativo `candidate-index-v130-tutti.ts` (= v131); lettura `read-candidate-index-800016a.ts` con `deploy-projection.mjs --read`; worker `npx wrangler rollback d21ca4b8-44d0-4f3b-b451-be6fcdbc522e --config deploy/cloudflare/wrangler.jsonc`.
+
+---
+## 0bis. AGGIORNAMENTO 21/10 10:00–11:20 — Menu/Sottomenu da chat, niente conferme a vuoto, Haiku per TUTTI, due numeri: edge v131 + dashboard
+
+**Esito.** Gate verde (V1–V9, banco 88%, 0 GRAVI di sicurezza su banco, avversario 150 e struttura). Deploy in ordine: migrazione due-numeri → **edge v130** (codice) → secret `TAKO_CANDIDATE_TAKO_BOT_ENGINE_DEFAULT=haiku` → **edge v131** (stesso codice, ezbr `8f086c00…`) → **dashboard worker `takomenu-web` versione `d21ca4b8…`** (prima: `d0c898a4…`). **Haiku acceso per tutti i titolari** (Victoria compresa) senza scritture sui ristoranti.
+
+Cosa è cambiato (motore haiku):
+- **Struttura da chat**: `create_menu(name)`, `create_section(name, menu)` anche vuoti e anche in un Menu creato nello stesso messaggio; Sezione dentro un Sottomenu (`section=cN`); correzione di una struttura appena creata con `delete_menu`/`delete_section` **solo se vuoti** e solo con un segnale di correzione (mai con «anche»). Tutto subito, con riepilogo e annulla 10 minuti; nel riepilogo: «Menu e Sottomenu vuoti non si vedono ai clienti finché non ci metti dei piatti» (la pagina pubblica toglie già i Menu senza piatti). Nomi solo se detti dal titolare (anche nei suoi ultimi messaggi), mai frasi intere. Menu del locale (anche vuoti) nel contesto del modello.
+- **Nessuna conferma a vuoto**: bozze con «il sistema» o «1 per sì / 2 per no» non partono mai; «ti preparo/creo/faccio…» senza scrittura = dichiarazione falsa (bloccata); «sì/vai» senza niente in sospeso → il modello esegue l'ultima richiesta chiara o dice in una frase cosa non può fare; «Elimino X? Rispondi sì» scritto come domanda diventa una proposta vera (il «sì» la conferma); «sì solo il babà» elimina subito solo quello.
+- «aggiungi la carbonara a 13» con la carbonara già presente → domanda (mai un prezzo cambiato da «aggiungi»); «tutti i secondi» con Secondi in più Menu → una domanda.
+- **Interruttore**: con `TAKO_BOT_ENGINE_DEFAULT=haiku` il cervello è acceso di default per ogni locale; `settings.botBrain=false` o `settings.botEngine='groq'` = override per locale; `TAKO_BOT_BRAIN_OFF=1` kill switch. Senza env (test, strumenti) resta come prima.
+- **Merge `feat/due-numeri-whatsapp` 731b4ae** (due numeri per locale + pannello rifatto; note in `docs/webapp/due-numeri-2026-10-21/NOTE.md`). Migrazione `whatsapp-owner-two-numbers.sql` applicata (tolto `tako_whatsapp_links_one_per_restaurant`, creato `tako_whatsapp_links_restaurant`, nessun dato toccato).
+
+| Set (stato pushato) | Valore |
+|---|---|
+| **Struttura 74** (conversazione vera di Manuel + 2 varianti, 4 frasi Bim Bum Bar, avversaria 67) | **74/74**, 0 GRAVI |
+| Banco vero 92 | **81/92 = 88%**, GRAVI 6, **0 di sicurezza** |
+| Avversario 150 | 137/150 = 91,3%, GRAVI 3, **0 di sicurezza** |
+| Victoria 10 · parlato 30 · playground 20 | 9/10 (1 MEDIO: chiede sulla sorrentina) · 29/30 · 20/20, 0 GRAVI |
+| Suite | 0 rossi nuovi (3461 test) · tsc pulito · build PASS · lazy boot PASS |
+| Spesa Anthropic totale (dal 20/10) | **~0,58 $** su 3 $ |
+
+Giri (max 3): s1 (prompt nuovo) → s2 (+ banco struttura: 70/74, 2 GRAVI sicurezza) → s3 (Sezioni + correzioni: 71/74, 1 GRAVE sicurezza: «no, anche Cocktail» toglieva Spritz) → **fix deterministico verificato solo sul set struttura (74/74)**, prompt invariato quindi gli altri set restano quelli di s3. Deviazione dal tetto dei 3 giri dichiarata in implementation-notes 31.
+
+Verifiche dopo il deploy (sola lettura): `/staff` 200, `/api/auth/me` 401, webhook senza firma 403 (nessun invio), **0 errori** in `tako_whatsapp_errors` nelle ultime 2 ore; Victoria `botBrain=true`, nessun `botEngine` → motore risolto **haiku**; Panuzza's (nessuna impostazione) → cervello acceso, haiku. Prova sincrona non eseguita: lo script usa il numero di Manuel e scriverebbe nella sua cronologia e nel menu QA che sta usando → la prova la fa lui.
+
+**Rollback** (in quest'ordine, tutto pronto in `~/.config/tako-webapp/rollback-edge-20261021/`):
+1. motore: secret `TAKO_CANDIDATE_TAKO_BOT_ENGINE_DEFAULT=groq` (clienti come prima) oppure `TAKO_BOT_BRAIN_OFF=1`;
+2. dashboard: `npx wrangler rollback d0c898a4-b6e5-4df0-babf-2f75b8e38cce --config deploy/cloudflare/wrangler.jsonc`;
+3. edge: `candidate-index-haiku.ts` (v129) con `deploy-projection.mjs` (il pannello vecchio torna a un numero; non togliere l'indice semplice).
+
+---
+## 0. AGGIORNAMENTO 21/10 mattina (08:35–09:15, via di Manuel) — gate VERDE, deploy QA FATTO (v129)
+
+**Esito.** Corretti i punti 3–8. Gate §8 verde al giro di misura 2 (V1–V9). **Deploy fatto: edge `tako-operational-candidate` v129** (ezbr `3a2f5c16…`, bundle sha `85edf119…`), secret nuovi `TAKO_CANDIDATE_ANTHROPIC_API_KEY` e `TAKO_CANDIDATE_TAKO_BOT_ENGINE_DEFAULT=groq` (clienti invariati su Groq), `botEngine='haiku'` **solo** su QA 26050ecd.
+**Numero di Manuel NON ricollegato:** `link-status` lo trova collegato dal 19/10 16:34 a un **altro locale** (`739024ee…`, titolare rizzobusiness1@gmail.com), non a Victoria né al QA. DEPLOY-QA §e: in questo caso STOP (spostarlo toglierebbe il collegamento a quel locale, non autorizzato). Di conseguenza **la prova sincrona `TakoSyncTest` non è stata eseguita** (serve un mittente collegato al QA; un numero di prova finto non è autorizzato, e col numero di Manuel si scriverebbe sul menu dell'altro locale). Controllo in sola lettura dopo il deploy: v129 risponde (401 «Missing token» su `/api/auth/me`), nessun errore WhatsApp nuovo (`scripts/whatsapp/errors.mjs`).
+
+| Voce (giro m2, stato pushato) | Valore |
+|---|---|
+| **Banco vero 92** | **79/92 = 85,9%** · GRAVI 3, **0 di sicurezza** |
+| Victoria 10 | 10/10 |
+| Parlato sporco 30 | **30/30**, 0 GRAVI |
+| Playground 20 (17 = aumento uniforme applicato subito) | 20/20 |
+| Avversario 150 | **138/150 = 92%** · GRAVI 3, **0 di sicurezza** |
+| V1 tsc · V2 suite · V5 lessico · V9 build+lazy boot | pulito · 0 rossi nuovi · verde · PASS/PASS |
+| Costo per messaggio | ~0,0003 $ (invariato) |
+| Spesa totale (notte + mattina) | **~0,33 $** su 3 $ (ledger 0,3241 $ + 0,0013 $) |
+
+Giri di misura del mattino (max 3): m1 banco 82,6% (2 GRAVI sicurezza), avversario 92% (0) → m2 banco **85,9%** (0), avversario 92% (0). Gate verde al secondo giro.
+Fix del mattino (regole deterministiche, solo motore haiku salvo dove indicato; test in `tests/owner-brain-haiku-fixes.test.ts`, 9 test):
+- «annulla / lascia stare / no / niente» con un'eliminazione in attesa = scarta la proposta (`decideTurn`, entrambi i motori) — z-annulla-018.
+- numero col separatore delle migliaia («13.000») → domanda, nessun prezzo — z-assurdi-008.
+- righe che non cambiano niente tolte anche dalle parti in attesa — bv-deixis-001/002.
+- azioni opposte sullo stesso piatto (nascondi+evidenza, finito+disponibile, due prezzi) → domanda — z-contraddizioni-002.
+- «sconto/promo/offerta» → promo allo stesso prezzo, mai cambio del prezzo pieno — bv-multiple-007/008.
+- **decisione Manuel (punto 8):** aumento/ribasso uniforme su un gruppo («aumenta tutti di 1 €») applicato subito con riepilogo e undo 10 min; restano con conferma eliminazioni, menu/sottomenu interi, liste di modifiche diverse. Attese aggiornate: bv-multiple-006 (già così), playground 17.
+- in più: data futura («da domani costa 13,50») → domanda «lo cambio subito?» (prima scriveva e diceva «lo imposto per domani», falso) — bv-asr-001; le parti chiare di un sospeso si pubblicano con la modifica successiva — bv-deixis-001.
+- Prompt Haiku allineato a queste regole. Punto 9 (nomi corti storpiati) non fatto.
+
+GRAVI rimasti (nessuno di sicurezza): banco bv-correzioni-001/002 (richiesta «aggiungi la parmigiana» con un piatto dal nome più lungo già presente), bv-asr-003/005 («Bu» dopo «Bo»: chiede invece di correggere); avversario z-asr-005 («en duja»), z-interruzioni-008 («sì e anche il tiramisù»), z-rinomine-009 (rinomina + nascondi nello stesso messaggio): tutti «non applicato», cioè il bot non scrive e risponde «Non ho cambiato nulla».
+
+**Rollback pronto** (`DEPLOY-QA.md` §g, copia v127 in `~/.config/tako-webapp/rollback-edge-20261021/`): bundle → v127; `qa-deploy-sql.mjs engine-off` per riportare il QA su Groq.
+
+---
+
+## (Notte) 1. Esito in 3 righe
+- **Fatto:** il motore Haiku 5.5 è nel bot (fetch su `/v1/messages`, interruttore `settings.botEngine`, default codice `haiku`, Groq chat mai chiamato con haiku, Whisper invariato, lessico Menu/Sottomenu/Sezione/Piatti, validatore T4b, rigioco su conflitto, menu intero su Haiku). Base portata a **v127 online** (email + sale/tavoli, che il piano non conosceva). tsc pulito, suite senza rossi nuovi, build + lazy boot PASS.
+- **Non raggiunto:** banco vero **83,7%** (soglia deploy 85%, obiettivo 90%) con **2 GRAVI di sicurezza**; campione avversario 150 con **3 GRAVI di sicurezza**. Victoria 10/10, parlato sporco 29/30, playground 20/20.
+- **Deploy QA: NO** (gate §8 non verde: V7 < 85% e V8 ≠ 0 GRAVI). Edge online invariato (v127), nessun secret toccato, **numero di Manuel NON ricollegato**, `botEngine` non scritto su nessun locale.
+
+## 2. Pagella (stato finale del ramo, misura di controllo dopo il giro 4)
+
+| Voce | Valore |
+|---|---|
+| **Banco vero 92 (V7)** | **77/92 = 83,7%** · GRAVI 7 (sicurezza 2: bv-deixis-001, bv-deixis-002) · MEDI 8 |
+| Victoria 10 (V6) | **10/10**, 0 GRAVI |
+| **Parlato sporco 30 (V8b)** | **29/30 corrette**, 0 domande, **0 GRAVI** (96,7%) |
+| Playground 20 (V8c) | **20/20**, 0 GRAVI |
+| Campione avversario 150 (V8) | 135/150 (90%) · **GRAVI 6 (sicurezza 3)** · MEDI 9 |
+| V4 chiamate Groq chat con haiku | **0** su tutti i set (asserzione dell'harness) |
+| V1 tsc · V2 suite · V3 unit motore · V5 lessico · V9 bundle | pulito · 0 rossi nuovi (baseline in `BASELINE-SUITE-ROSSI.txt`) · 23/23 · verde · build PASS + lazy boot PASS |
+| Domande ogni 10 messaggi | banco 3,6 (non attese 2,2) · avversario 2,8 (1,5) · Victoria 2,7 (0,9) |
+| Latenza turno dal vivo p50 / p95 | **2,0 s / 6,4 s** (avversario 150, tutto dal vivo); banco giro 1 2,2 / 6,7 s. Chiamata Haiku p50 2,0–2,6 s, p95 4,3–5,5 s. V10 ok (≤4 / ≤8 s) |
+| Chiamate Haiku per messaggio | 1,2 (auto-correzioni comprese) |
+| Token medi per messaggio | input 180–235 + cache read 8,3–9,2k + output 340–385 |
+| Cache hit | 99,4–100% (il prefisso system ~8k token resta in cache) |
+| **Costo per messaggio** | **~0,0003 $** (0,00028–0,00031 sui set grandi) |
+| **€ per locale al mese (500 msg)** | **~0,14 €** con cache; caso peggiore senza cache (messaggi radi, >5 min) ~0,0011 $/msg → ~0,50 € |
+| **Spesa della notte** | **~0,22 $** su 3,00 $ di tetto (ledger 0,2214 $ + A0 e prove 0,0013 $) |
+
+### Giri del loop (fix → verifica, max 4)
+
+| Giro | Banco | GRAVI (sicurezza) | Victoria | Parlato | Playground | Cosa è cambiato |
+|---|---|---|---|---|---|---|
+| 1 (codice di T) | 77,2% (71/92) | 7 (3) | 10/10 | 26/30 | 17/20 | — |
+| 2 | **82,4%** (75/91, 1 non misurata) | 7 (4) | 10/10 | 29/30 | 20/20 | numeri troncati del parlato («dodic», «diciott e cinquant»), «nun è fernuta» non è «finita», bozza al presente («rimetto…») = «fatto», numeri detti a parole ammessi nella bozza; prompt: un solo candidato = agisci, parti chiare sempre, correzione di proposta = rifai tutte le azioni, valori alternativi = domanda |
+| 3 | 69,6% (64/92) | 3 (**0**) | 9/10 | 21/30 | 19/20 | proposta vecchia mai confermata dopo una correzione; prezzi della proposta in attesa validi; bozza con domanda = proposta (troppo larga: Haiku scrive spesso «Confermi?») |
+| 4 | 80,4% (74/92) | 10 (4) | 8/10 | 30/30 | 20/20 | conferma solo con data futura («da domani…»); tolta la domanda dalla bozza quando il server scrive; regola prompt «fino a 3 modifiche senza conferma» → regressione (4 modifiche diventano una domanda e l'«ok» non trova la proposta) |
+| finale (controllo, non giro di fix) | **83,7%** (77/92) | 7 (2) | 10/10 | 29/30 | 20/20 | tolta la regola prompt del giro 4 |
+
+Stop: 4 giri fatti e due giri consecutivi (3 e 4) senza miglioramento sul giro 2 → stop del §7. E3 non scattato (giro 1 al 77% > 70%).
+Nota: tra un giro e l'altro la varianza del modello è di ±5–7 punti sul banco anche a prompt quasi uguale; ora la cache record/replay rende i giri ripetibili a costo zero.
+
+### Parlato sporco — casi peggiori (stato finale: 1 solo non corretto, 0 GRAVI)
+1. ps-06 «la ghisa a dodici» → «Non ho cambiato nulla.» + elenco con *Gricia* (MEDIO: avrebbe dovuto chiedere «Intendi la *Gricia*?»).
+Nel giro 1 (prima dei fix) i peggiori erano: ps-01 «carbonar tredic», ps-02 «la lasagn… a dodic» (bozza «Ok, aggiorno la *Lasagna*» senza scrittura), ps-03, ps-06; playground pg-09 «gnocchi quattro formag dodic», pg-11 «la tagliat… diciott e cinquant», pg-14 «bruschett cinque e mezz» → tutti risolti dal normalizzatore dei numeri troncati.
+
+## 3. Problemi trovati (gravità · stato · fix in una riga)
+1. **ALTO · risolto (base)** — Online c'era **v127**, non v119: email (v121/v125, 5c136e1) e sale/tavoli (v126/v127, 24ad33f) mancavano nel ramo; un deploy le avrebbe tolte a tutti i clienti. Ricostruita la base (`codex/bot-haiku-base-v127` 0fa42a6) e mergiata (4377c76); il confronto per sezioni resta «diverso» per costruzione (online = patch a mano sul bundle), il confronto normalizzato non trova codice mancante.
+2. **ALTO · risolto** — Dopo una correzione di un riepilogo («la pasta fai 15, l'acqua lasciala») il secondo «OK» pubblicava la **proposta vecchia** (bv-multiple-003). Fix: correzione che nomina piatti della proposta → la proposta vecchia non resta in sospeso; prezzi della proposta in attesa valgono come detti.
+3. **ALTO · aperto** — «annulla» su un'eliminazione in attesa: il modello lo legge come «annulla l'ultima pubblicazione», il bot richiede «vuoi eliminare?» e al «sì» elimina (z-annulla-018). Fix: con una proposta di eliminazione in attesa, «annulla/lascia stare» = scarta la proposta (regola del validatore).
+4. **ALTO · aperto** — «la carbonara a 13.000» scritto come 13 € (z-assurdi-008). Fix: prezzo con separatore delle migliaia o > 500 → domanda.
+5. **ALTO · aperto** — Rimandi «quei due prodotti» risolti sui piatti sbagliati quando la proposta contiene una riga inutile («tiramisù da 6 € a 6 €») (bv-deixis-001/002: boh a 15 € non richiesto). Fix: togliere dalle proposte le azioni che non cambiano niente (oggi lo fa solo sulle scritture immediate).
+6. **MEDIO · aperto** — «nascondi il babà e mettilo in evidenza» scrive entrambe (z-contraddizioni-002). Fix: azioni contraddittorie sullo stesso piatto → domanda.
+7. **MEDIO · aperto** — «sconto/promo a 12» a volte diventa `set_price` invece della promo (bv-multiple-007/008 nei giri 2–4). Fix: regola del validatore (parola «sconto/promo/offerta» → solo promo).
+8. **MEDIO · scelta da confermare** — Più di 3 modifiche con haiku = sempre «Rispondi OK», anche «aumenta tutti di un euro» (scelta conservativa di T4b, allinea il playground 17). Contraddice la risposta #6 del §11 per quel caso del banco (bv-multiple-006 resta MEDIO). Decide Manuel.
+9. **MEDIO · aperto** — Nomi corti storpiati («Bo», «Bu») → il bot chiede «Intendi *boh*?» anche dopo aver già capito (bv-asr-003/005: «correzione non applicata»).
+10. **BASSO · risolto** — Incidente 00:57: un `pnpm install` nella worktree ha svuotato il node_modules condiviso del repo `Tako`; ripristinato alle 00:58 col lockfile del repo (nessun file tracciato cambiato).
+11. **BASSO · risolto** — Un mio commento a metà riga nell'harness ha spento per ~10 minuti l'emulazione delle tabelle del cervello nei test storici (fix-a/fix-b/r9 rossi); corretto prima del commit, le misure Haiku non ne sono toccate (fatte prima).
+
+## 4. Cosa resta (per Manuel)
+- **Nessuna prova dal telefono possibile stamattina:** il QA non è stato deployato e il tuo numero non è ricollegato. Edge online = v127 di ieri, clienti invariati su Groq.
+- Per arrivare al gate (≥85% banco, 0 GRAVI): un giro corto sui punti 3–7 (sono regole deterministiche del validatore, 1–2 h) e poi misura in replay + record; la procedura di deploy è pronta in `DEPLOY-QA.md` (secret nuovi, rollback, `bot-engine.sql` solo QA, `qa-manuel-link.sql` per il tuo numero solo sul QA, prova sincrona `qa-sync-test.mjs`).
+- Decisione: punto 8 (aumento uniforme: applica subito o chiede OK?).
+- Decisione dopo il collaudo: passare `TAKO_BOT_ENGINE_DEFAULT` a `haiku` (= Victoria e tutti su Haiku). Finché il secret vale `groq`, il codice nuovo si comporta come oggi per i clienti.
+- Tagli: nessuno (T3 menu intero su Haiku fatto; campione avversario a 150, non 60).
+- Exit scattati: nessun E0–E6; stop per regola «2 giri senza miglioramento» + max 4 giri. Deploy non tentato (gate).

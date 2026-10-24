@@ -136,7 +136,7 @@ function ScreenDashboard({ mobile, go, orders, settings = SETTINGS_DEFAULTS, rol
   const _hour = new Date().getHours();
   const _greet = _hour < 12 ? "Buongiorno" : _hour < 18 ? "Buon pomeriggio" : "Buonasera";
   const _r = (ROLES[role] || ROLES.owner);
-  const _first = (_r.name && _r.name !== "—") ? _r.name.split(" ")[0] : "";
+  const _first = greetName(_r.name);
   const setupDone = SETUP.filter(s => s.done).length;
   const allDone = setupDone === SETUP.length;
   const incomplete = settings.mostraOnboarding;

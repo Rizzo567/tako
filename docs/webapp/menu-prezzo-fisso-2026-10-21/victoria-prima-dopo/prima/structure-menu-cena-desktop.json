@@ -1,0 +1,214 @@
+{
+ "viewport": "desktop",
+ "menu": "Menu Cena",
+ "menus": [
+  "Menu Pranzo",
+  "Menu Cena",
+  "Bevande",
+  "Alla carta"
+ ],
+ "pills": [
+  "COMPLETO",
+  "Primi",
+  "Secondi e panini"
+ ],
+ "pages": [
+  {
+   "pill": "COMPLETO",
+   "file": "menu-cena-desktop-1-completo.png",
+   "menuNote": null,
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "COMPLETO",
+     "note": null,
+     "rows": [
+      {
+       "name": "COMPLETO",
+       "price": "16,90 €",
+       "description": "Un primo + un secondo con contorno. ¼ di vino oppure ½ litro d’acqua + caffè."
+      }
+     ]
+    },
+    {
+     "title": "Primi",
+     "note": null,
+     "rows": [
+      {
+       "name": "Linguine vongole e pomodorini",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Fusilli cavolfiore, acciughe e pomodorini",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Gnocchi alla sorrentina",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Tagliatelle panna, speck e zucchine",
+       "price": null,
+       "description": null
+      }
+     ]
+    },
+    {
+     "title": "Secondi",
+     "note": null,
+     "rows": [
+      {
+       "name": "Nodino burro e salvia",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Salsiccia alla griglia",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Gamberetti sale e pepe",
+       "price": null,
+       "description": null
+      }
+     ]
+    },
+    {
+     "title": "Contorni",
+     "note": null,
+     "rows": [
+      {
+       "name": "Zucchine fritte",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Patate al forno",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Melanzane al sugo",
+       "price": null,
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 2206
+  },
+  {
+   "pill": "Primi",
+   "file": "menu-cena-desktop-2-primi.png",
+   "menuNote": null,
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "PRIMO",
+     "note": null,
+     "rows": [
+      {
+       "name": "PRIMO",
+       "price": "9,00 €",
+       "description": "Un primo. ¼ di vino oppure ½ litro d’acqua + caffè."
+      }
+     ]
+    },
+    {
+     "title": "Primi",
+     "note": null,
+     "rows": [
+      {
+       "name": "Linguine vongole e pomodorini",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Fusilli cavolfiore, acciughe e pomodorini",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Gnocchi alla sorrentina",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Tagliatelle panna, speck e zucchine",
+       "price": null,
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 1434
+  },
+  {
+   "pill": "Secondi e panini",
+   "file": "menu-cena-desktop-3-secondi-e-panini.png",
+   "menuNote": null,
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "SECONDO",
+     "note": null,
+     "rows": [
+      {
+       "name": "SECONDO",
+       "price": "10,00 €",
+       "description": "Un secondo con contorno. ¼ di vino oppure ½ litro d’acqua + caffè."
+      }
+     ]
+    },
+    {
+     "title": "Secondi",
+     "note": null,
+     "rows": [
+      {
+       "name": "Nodino burro e salvia",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Salsiccia alla griglia",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Gamberetti sale e pepe",
+       "price": null,
+       "description": null
+      }
+     ]
+    },
+    {
+     "title": "Contorni",
+     "note": null,
+     "rows": [
+      {
+       "name": "Zucchine fritte",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Patate al forno",
+       "price": null,
+       "description": null
+      },
+      {
+       "name": "Melanzane al sugo",
+       "price": null,
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 1731
+  }
+ ],
+ "errors": []
+}

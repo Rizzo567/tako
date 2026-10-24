@@ -1,0 +1,1390 @@
+{
+ "set": "parlato",
+ "metriche": {
+  "set": "parlato",
+  "modo": "record",
+  "conversazioni": 30,
+  "misurate": 30,
+  "nonMisurate": [],
+  "messaggi": 30,
+  "corrette": 30,
+  "percentuale": 100,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 0,
+  "domandePer10Messaggi": 0.3,
+  "domandeNonAttesePer10": 0.3,
+  "latenzaAnthropicMs": {
+   "p50": 1998,
+   "p95": 3389,
+   "chiamate": 30
+  },
+  "latenzaTurnoMs": {
+   "p50": 22,
+   "p95": 91,
+   "nota": "misurata dal vivo"
+  },
+  "chiamatePerMessaggio": 1,
+  "tokenMediPerMessaggio": {
+   "input": 50,
+   "output": 221,
+   "cacheRead": 9730,
+   "cacheWrite": 33
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 30,
+   "su": 30,
+   "percentuale": 100
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.00651,
+   "perMessaggioUsd": 0.000217,
+   "tetto": 0.4
+  },
+  "anthropic": {
+   "hit": 30,
+   "vere": 0,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 2.2,
+  "parlato": {
+   "corrette": 29,
+   "domandeGiuste": 1,
+   "gravi": 0,
+   "corretteODomandeGiustePct": 100
+  }
+ },
+ "codici": {},
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "ps-01",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Carbonara* a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 carbonar tredic"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10005,
+   "latencyMs": [
+    173.4
+   ],
+   "recordedLlmMs": 2387,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-02",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Lasagna|12"
+   ],
+   "actual": [
+    "price|Lasagna|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Lasagna* la metto a 12 €.\n\n*Lasagna*: prezzo da 11,00 € a *12,00 €*"
+   ],
+   "turns": [
+    "🎤 la lasagn… a dodic"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10011,
+   "latencyMs": [
+    90.5
+   ],
+   "recordedLlmMs": 1998,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-03",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Saltimbocca alla romana|16"
+   ],
+   "actual": [
+    "price|Saltimbocca alla romana|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, il *Saltimbocca alla romana* passa a 16 €.\n\n*Saltimbocca alla romana*: prezzo da 15,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "🎤 saltimbocc… sedic"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10022,
+   "latencyMs": [
+    27.4
+   ],
+   "recordedLlmMs": 1475,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-04",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Polpette al sugo|false"
+   ],
+   "actual": [
+    "available|Polpette al sugo|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Polpette al sugo* come esaurite.\n\n*Polpette al sugo*: *finito*"
+   ],
+   "turns": [
+    "🎤 polpett… finite"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10006,
+   "latencyMs": [
+    25.2
+   ],
+   "recordedLlmMs": 2067,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-05",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Margherita|8"
+   ],
+   "actual": [
+    "price|Margherita|8"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Margherita* a 8 €.\n\n*Margherita*: prezzo da 7,00 € a *8,00 €*"
+   ],
+   "turns": [
+    "🎤 margherita otto"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10001,
+   "latencyMs": [
+    30.6
+   ],
+   "recordedLlmMs": 1539,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-06",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Gricia|12"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi *Gricia* a *12,00 €* (adesso 11,00 €)? Rispondi *sì* oppure dimmi il piatto e il prezzo giusti."
+   ],
+   "turns": [
+    "🎤 la ghisa a dodici"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10153,
+   "latencyMs": [
+    20.7
+   ],
+   "recordedLlmMs": 2584,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-07",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Amatriciana|false"
+   ],
+   "actual": [
+    "available|Amatriciana|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Amatriciana* segnata come finita.\n\n*Amatriciana*: *finito*"
+   ],
+   "turns": [
+    "🎤 amatricana finita"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10003,
+   "latencyMs": [
+    23.4
+   ],
+   "recordedLlmMs": 1554,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-08",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Coca Cola|3.5"
+   ],
+   "actual": [
+    "price|Coca Cola|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Coca Cola* a 3,50 €.\n\n*Coca Cola*: prezzo da 3,00 € a *3,50 €*"
+   ],
+   "turns": [
+    "🎤 la cocacola mettila a tre e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10017,
+   "latencyMs": [
+    29.1
+   ],
+   "recordedLlmMs": 2064,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-09",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Sorrentina|10"
+   ],
+   "actual": [
+    "price|Sorrentina|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno la *Sorrentina*.\n\n*Sorrentina*: prezzo da 9,00 € a *10,00 €*"
+   ],
+   "turns": [
+    "🎤 la sorrendina a dieci"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10158,
+   "latencyMs": [
+    31.2
+   ],
+   "recordedLlmMs": 2644,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-10",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cacio e pepe|12.5"
+   ],
+   "actual": [
+    "price|Cacio e pepe|12.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Cacio e pepe* lo porto a 12,50 €.\n\n*Cacio e pepe*: prezzo da 10,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "🎤 il cacio pepe… dodici e… cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10035,
+   "latencyMs": [
+    32.2
+   ],
+   "recordedLlmMs": 2522,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-11",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Sorrentina|false"
+   ],
+   "actual": [
+    "available|Sorrentina|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno la *Sorrentina* come esaurita.\n\n*Sorrentina*: *finito*"
+   ],
+   "turns": [
+    "🎤 la sorrentina… finita"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9989,
+   "latencyMs": [
+    20.6
+   ],
+   "recordedLlmMs": 1995,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-12",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Saltimbocca alla romana|false"
+   ],
+   "actual": [
+    "available|Saltimbocca alla romana|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Saltimbocca alla romana* come esaurito.\n\n*Saltimbocca alla romana*: *finito*"
+   ],
+   "turns": [
+    "🎤 saltimbocca… nun ce sta… finito"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10024,
+   "latencyMs": [
+    22.5
+   ],
+   "recordedLlmMs": 1540,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-13",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Carbonara|false",
+    "available|Gricia|false"
+   ],
+   "actual": [
+    "available|Carbonara|false",
+    "available|Gricia|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Gricia* e *Carbonara* come finite.\n\n*Gricia*: *finito*\n*Carbonara*: *finito*"
+   ],
+   "turns": [
+    "🎤 gricia e carbonara… finite"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10066,
+   "latencyMs": [
+    17.5
+   ],
+   "recordedLlmMs": 1712,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-14",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|14"
+   ],
+   "actual": [
+    "price|Carbonara|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Carbonara* a 14 €.\n\n*Carbonara*: prezzo da 12,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "🎤 eh allora senti eh la… la carbonara… mettila a… quattordici"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10007,
+   "latencyMs": [
+    25
+   ],
+   "recordedLlmMs": 3389,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-15",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Coda alla vaccinara|17"
+   ],
+   "actual": [
+    "price|Coda alla vaccinara|17"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Coda alla vaccinara* a 17 €.\n\n*Coda alla vaccinara*: prezzo da 16,00 € a *17,00 €*"
+   ],
+   "turns": [
+    "🎤 la coda… la coda alla vaccinara diciassette"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10023,
+   "latencyMs": [
+    21.9
+   ],
+   "recordedLlmMs": 1602,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-16",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Abbacchio scottadito|false"
+   ],
+   "actual": [
+    "available|Abbacchio scottadito|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Abbacchio scottadito* come esaurito.\n\n*Abbacchio scottadito*: *finito*"
+   ],
+   "turns": [
+    "🎤 l'abbacchio… è finito l'abbacchio"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10023,
+   "latencyMs": [
+    18.5
+   ],
+   "recordedLlmMs": 1989,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-17",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Birra|6"
+   ],
+   "actual": [
+    "price|Birra|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Birra* a 6 €.\n\n*Birra*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "turns": [
+    "🎤 la birra… la birra a sei"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9990,
+   "latencyMs": [
+    20.2
+   ],
+   "recordedLlmMs": 1674,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-18",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Crostata|true"
+   ],
+   "actual": [
+    "hidden|Crostata|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, nascondo la *Crostata* dal menu.\n\n*Crostata*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 eh… la crostata… togli la crostata"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9998,
+   "latencyMs": [
+    17.9
+   ],
+   "recordedLlmMs": 2077,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-19",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Diavola|9"
+   ],
+   "actual": [
+    "price|Diavola|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Diavola* la metto a 9 €.\n\n*Diavola*: prezzo da 8,00 € a *9,00 €*"
+   ],
+   "turns": [
+    "🎤 mo… la diavola… la diavola a nove"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9996,
+   "latencyMs": [
+    20.4
+   ],
+   "recordedLlmMs": 1555,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-20",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Amatriciana|11.5"
+   ],
+   "actual": [
+    "price|Amatriciana|11.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Amatriciana* aggiornata a 11,50 €.\n\n*Amatriciana*: prezzo da 11,00 € a *11,50 €*"
+   ],
+   "turns": [
+    "🎤 amatriciana… undici e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10009,
+   "latencyMs": [
+    20.1
+   ],
+   "recordedLlmMs": 2063,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-21",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Acqua naturale|2.5"
+   ],
+   "actual": [
+    "price|Acqua naturale|2.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiorno *Acqua naturale*.\n\n*Acqua naturale*: prezzo da 2,00 € a *2,50 €*"
+   ],
+   "turns": [
+    "🎤 l'acqua… due e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10275,
+   "latencyMs": [
+    20.3
+   ],
+   "recordedLlmMs": 4164,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-22",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Vino della casa 1/4|6"
+   ],
+   "actual": [
+    "price|Vino della casa 1/4|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Vino della casa 1/4* lo metto a 6 €.\n\n*Vino della casa 1/4*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "turns": [
+    "🎤 vino della casa… sei euri"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10018,
+   "latencyMs": [
+    21
+   ],
+   "recordedLlmMs": 2205,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-23",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cicoria ripassata|6"
+   ],
+   "actual": [
+    "price|Cicoria ripassata|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Cicoria ripassata* a 6 €.\n\n*Cicoria ripassata*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "turns": [
+    "🎤 la cicoria mettila a sei euro… sei"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9999,
+   "latencyMs": [
+    23.1
+   ],
+   "recordedLlmMs": 1935,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-24",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Patate al forno|5"
+   ],
+   "actual": [
+    "price|Patate al forno|5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Patate al forno* a 5 €.\n\n*Patate al forno*: prezzo da 4,50 € a *5,00 €*"
+   ],
+   "turns": [
+    "🎤 le patate quattro e mezzo… no cinque"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10019,
+   "latencyMs": [
+    23.4
+   ],
+   "recordedLlmMs": 1587,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-25",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Caffè|1.6"
+   ],
+   "actual": [
+    "price|Caffè|1.6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto il *Caffè* a 1,60 €.\n\n*Caffè*: prezzo da 1,50 € a *1,60 €*"
+   ],
+   "turns": [
+    "🎤 er caffè… uno e cinquanta… no uno e sessanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10026,
+   "latencyMs": [
+    25.5
+   ],
+   "recordedLlmMs": 1835,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-26",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Amatriciana|13"
+   ],
+   "actual": [
+    "price|Amatriciana|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto *Amatriciana* a 13 €.\n\n*Amatriciana*: prezzo da 11,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 allora… la carbonara… no aspetta… l'amatriciana a tredici"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10135,
+   "latencyMs": [
+    21.8
+   ],
+   "recordedLlmMs": 2055,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-27",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Gricia|false"
+   ],
+   "actual": [
+    "available|Gricia|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno la *Gricia* come esaurita.\n\n*Gricia*: *finito*"
+   ],
+   "turns": [
+    "🎤 a gricia nun ce sta cchiù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9992,
+   "latencyMs": [
+    19.2
+   ],
+   "recordedLlmMs": 1732,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-28",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Tiramisù|true"
+   ],
+   "actual": [
+    "hidden|Tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo il *Tiramisù* dal menu.\n\n*Tiramisù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 o tiramisù levalo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9992,
+   "latencyMs": [
+    17.9
+   ],
+   "recordedLlmMs": 1550,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-29",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Panna cotta|false"
+   ],
+   "actual": [
+    "available|Panna cotta|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno la *Panna cotta* come esaurita.\n\n*Panna cotta*: *finito*"
+   ],
+   "turns": [
+    "🎤 a panna cotta… nun c'è cchiù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9999,
+   "latencyMs": [
+    20
+   ],
+   "recordedLlmMs": 2074,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  },
+  {
+   "id": "ps-30",
+   "family": "bv-asr",
+   "menu": "anziano",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Polpette al sugo|true"
+   ],
+   "actual": [
+    "available|Polpette al sugo|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, rimetto disponibili le *Polpette al sugo*.\n\n*Polpette al sugo*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "🎤 eh senti… le polpette… rimettile… ci stanno di nuovo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10031,
+   "latencyMs": [
+    19.8
+   ],
+   "recordedLlmMs": 2603,
+   "usedLlm": true,
+   "source": "parlato sporco 21/10",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "ps-01",
+   "hash": "28b78dc3fcefa5d8",
+   "source": "hit",
+   "status": 200,
+   "ms": 2387,
+   "usage": {
+    "input": 43,
+    "output": 199,
+    "cacheRead": 9267,
+    "cacheWrite": 496
+   }
+  },
+  {
+   "conv": "ps-02",
+   "hash": "242ce072cc4b20b6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1998,
+   "usage": {
+    "input": 46,
+    "output": 202,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-03",
+   "hash": "c8654880bb7c32ac",
+   "source": "hit",
+   "status": 200,
+   "ms": 1475,
+   "usage": {
+    "input": 46,
+    "output": 213,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-04",
+   "hash": "fdd36615b59085af",
+   "source": "hit",
+   "status": 200,
+   "ms": 2067,
+   "usage": {
+    "input": 42,
+    "output": 201,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-05",
+   "hash": "220f4a32b6079a74",
+   "source": "hit",
+   "status": 200,
+   "ms": 1539,
+   "usage": {
+    "input": 41,
+    "output": 197,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-06",
+   "hash": "4a5d8a41a74f2aea",
+   "source": "hit",
+   "status": 200,
+   "ms": 2584,
+   "usage": {
+    "input": 45,
+    "output": 345,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-07",
+   "hash": "ff3bd1bc7b70c877",
+   "source": "hit",
+   "status": 200,
+   "ms": 1554,
+   "usage": {
+    "input": 42,
+    "output": 198,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-08",
+   "hash": "619e927635c4ce53",
+   "source": "hit",
+   "status": 200,
+   "ms": 2064,
+   "usage": {
+    "input": 53,
+    "output": 201,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-09",
+   "hash": "a9a6d6513208a4b3",
+   "source": "hit",
+   "status": 200,
+   "ms": 2644,
+   "usage": {
+    "input": 46,
+    "output": 349,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-10",
+   "hash": "0ba8d04913856f55",
+   "source": "hit",
+   "status": 200,
+   "ms": 2522,
+   "usage": {
+    "input": 54,
+    "output": 218,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-11",
+   "hash": "3fb8dcb1d16b409c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1995,
+   "usage": {
+    "input": 45,
+    "output": 181,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-12",
+   "hash": "9bbaff1a3d1c3bfc",
+   "source": "hit",
+   "status": 200,
+   "ms": 1540,
+   "usage": {
+    "input": 52,
+    "output": 209,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-13",
+   "hash": "c49b410c7a954170",
+   "source": "hit",
+   "status": 200,
+   "ms": 1712,
+   "usage": {
+    "input": 47,
+    "output": 256,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-14",
+   "hash": "131423e114055fac",
+   "source": "hit",
+   "status": 200,
+   "ms": 3389,
+   "usage": {
+    "input": 61,
+    "output": 183,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-15",
+   "hash": "447e6120f907896b",
+   "source": "hit",
+   "status": 200,
+   "ms": 1602,
+   "usage": {
+    "input": 54,
+    "output": 206,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-16",
+   "hash": "7a9469926d899bab",
+   "source": "hit",
+   "status": 200,
+   "ms": 1989,
+   "usage": {
+    "input": 54,
+    "output": 206,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-17",
+   "hash": "6da8ab6f36094bf5",
+   "source": "hit",
+   "status": 200,
+   "ms": 1674,
+   "usage": {
+    "input": 46,
+    "output": 181,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-18",
+   "hash": "2fd07e250d1af191",
+   "source": "hit",
+   "status": 200,
+   "ms": 2077,
+   "usage": {
+    "input": 50,
+    "output": 185,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-19",
+   "hash": "9cb225500fbcc58b",
+   "source": "hit",
+   "status": 200,
+   "ms": 1555,
+   "usage": {
+    "input": 51,
+    "output": 182,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-20",
+   "hash": "e1dd6044d44c0e76",
+   "source": "hit",
+   "status": 200,
+   "ms": 2063,
+   "usage": {
+    "input": 50,
+    "output": 196,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-21",
+   "hash": "f151ea767f973f2b",
+   "source": "hit",
+   "status": 200,
+   "ms": 4164,
+   "usage": {
+    "input": 49,
+    "output": 463,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-22",
+   "hash": "76f2873a0da924db",
+   "source": "hit",
+   "status": 200,
+   "ms": 2205,
+   "usage": {
+    "input": 46,
+    "output": 209,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-23",
+   "hash": "788f1a7d4a9bf5db",
+   "source": "hit",
+   "status": 200,
+   "ms": 1935,
+   "usage": {
+    "input": 52,
+    "output": 184,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-24",
+   "hash": "c52cad752b5ae421",
+   "source": "hit",
+   "status": 200,
+   "ms": 1587,
+   "usage": {
+    "input": 52,
+    "output": 204,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-25",
+   "hash": "e0a2d57f169549ea",
+   "source": "hit",
+   "status": 200,
+   "ms": 1835,
+   "usage": {
+    "input": 58,
+    "output": 205,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-26",
+   "hash": "1745f6168ac4ff32",
+   "source": "hit",
+   "status": 200,
+   "ms": 2055,
+   "usage": {
+    "input": 62,
+    "output": 310,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-27",
+   "hash": "998432eced402afa",
+   "source": "hit",
+   "status": 200,
+   "ms": 1732,
+   "usage": {
+    "input": 50,
+    "output": 179,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-28",
+   "hash": "28b7d41c4917ad3b",
+   "source": "hit",
+   "status": 200,
+   "ms": 1550,
+   "usage": {
+    "input": 45,
+    "output": 184,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-29",
+   "hash": "111072d261dd01e4",
+   "source": "hit",
+   "status": 200,
+   "ms": 2074,
+   "usage": {
+    "input": 52,
+    "output": 184,
+    "cacheRead": 9763,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "ps-30",
+   "hash": "eb677679b039a622",
+   "source": "hit",
+   "status": 200,
+   "ms": 2603,
+   "usage": {
+    "input": 61,
+    "output": 205,
+    "cacheRead": 9267,
+    "cacheWrite": 498
+   }
+  }
+ ]
+}

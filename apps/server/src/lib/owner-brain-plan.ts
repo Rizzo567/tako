@@ -6,7 +6,8 @@
  * G6 prezzi implausibili → conferma scritta). I fatti nella risposta li scrive il server DOPO la rilettura (composeReply).
  * Se Groq è giù, la quota è finita, il JSON non è valido o la chiamata è lenta → {path:'fallback'}: il route usa il
  * percorso deterministico attuale, invariato. */
-import {allOfSections} from './owner-brain-sections.js'
+import {randomUUID} from 'node:crypto'
+import {allOfSections,namedSections} from './owner-brain-sections.js'
 import {chatModels,groqBase,withRateLimit,GroqBusy,parseJson,validateMenuPlan,describeAction,readText,planText,plain,g9DishMentioned,g9Prices,relativeDelta,type GroqOptions,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from './twilio-menu-ai.js'
 import {negatedClauses,priceAlternatives,type Excluded} from './twilio-menu-clarify.js'
 import {looksLikeQuestion,politeCommand,parseIntent,findDishes,foreignQualifier,diminutiveRivals} from './twilio-menu-nlu.js'
@@ -16,23 +17,24 @@ import {capabilities} from './twilio-menu-copy.js'
 import type {Hold,HoldAsk} from './twilio-menu-hold.js'
 import {salesLlmActions} from './twilio-menu-sales.js'
 import {phoneticHits} from './twilio-menu-phonetic.js'
-import {CONTROL_ACTIONS,politeRequest,isAffirmative,sameDishName,type ControlAction} from './owner-brain-r.js'
+import {numbersIn,CONTROL_ACTIONS,politeRequest,isAffirmative,sameDishName,type ControlAction} from './owner-brain-r.js'
 import {sameSection} from './twilio-menu-structure.js'
+import {callHaiku} from './owner-brain-anthropic.js'
 import {buildBrainContext,recentHistory,draftText,type BrainContextInput,type BrainContext,type BrainMemoryEntry,type BrainTurn} from './owner-brain-context.js'
 
-export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section',...CONTROL_ACTIONS] as const
+export const BRAIN_ACTIONS=['restore','set_price','set_available','set_hidden','set_featured','set_description','add_tag','remove_tag','create_item','create_daily_special',...salesLlmActions,'delete_item','rename_item','move_item','create_section','rename_section','create_menu','delete_menu','delete_section','set_menu_visible','set_section_visible','set_formula_price','create_formula','delete_formula','replace_section_items','set_menu_pricing',...CONTROL_ACTIONS] as const
 const nullable=(type:string)=>({type:[type,'null']})
 export const BRAIN_SCHEMA={name:'owner_brain_plan',strict:true,schema:{type:'object',additionalProperties:false,
  required:['intent','actions','read','item_refs','capability_ids','clarify','uncertain','alias_used','reply_draft'],
  properties:{
   intent:{type:'string',enum:['change','read','clarify','capability','chat']},
-  actions:{type:'array',items:{type:'object',additionalProperties:false,required:['action','item','section','price','price_ref','price_delta','value','tag','text','name','until'],properties:{
-   action:{type:'string',enum:[...BRAIN_ACTIONS]},item:nullable('string'),section:nullable('string'),price:nullable('number'),price_ref:nullable('string'),price_delta:nullable('number'),value:nullable('boolean'),tag:nullable('string'),text:nullable('string'),name:nullable('string'),until:nullable('string')}}},
+  actions:{type:'array',items:{type:'object',additionalProperties:false,required:['action','item','section','menu','price','price_ref','price_delta','value','tag','text','name','until'],properties:{
+   action:{type:'string',enum:[...BRAIN_ACTIONS]},item:nullable('string'),section:nullable('string'),menu:nullable('string'),price:nullable('number'),price_ref:nullable('string'),price_delta:nullable('number'),value:nullable('boolean'),tag:nullable('string'),text:nullable('string'),name:nullable('string'),until:nullable('string')}}},
   read:{type:'string',enum:['items','unavailable','hidden','none']},
   item_refs:{type:'array',items:{type:'string'}},
   capability_ids:{type:'array',items:{type:'string'}},
   clarify:{type:'object',additionalProperties:false,required:['question','item_refs','missing'],properties:{question:nullable('string'),item_refs:{type:'array',items:{type:'string'}},missing:{type:'array',items:{type:'string',enum:['name','price','section']}}}},
-  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section',...CONTROL_ACTIONS].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
+  uncertain:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','candidates','action','value','price'],properties:{phrase:{type:'string'},candidates:{type:'array',items:{type:'string'}},action:{type:'string',enum:['none',...BRAIN_ACTIONS.filter(a=>!['restore','create_item','create_daily_special','delete_item','rename_item','move_item','create_section','rename_section','create_menu','delete_menu','delete_section','set_menu_visible','set_section_visible','set_formula_price','create_formula','delete_formula','replace_section_items','set_menu_pricing',...CONTROL_ACTIONS].includes(a))]},value:nullable('boolean'),price:nullable('number')}}},
   alias_used:{type:'array',items:{type:'object',additionalProperties:false,required:['phrase','item'],properties:{phrase:{type:'string'},item:{type:'string'}}}},
   reply_draft:{type:'string'}}}}
 
@@ -40,7 +42,8 @@ export type BrainUsage={model:string,prompt:number,completion:number,cached:numb
 export type BrainCall={model:string,content:string,usage:BrainUsage}
 export type BrainFetch=(url:string,init:RequestInit)=>Promise<Response>
 export type BrainCallOptions=GroqOptions&{fetch?:BrainFetch,models?:string[]}
-export class BrainUnavailable extends Error{constructor(readonly reason:'busy'|'invalid_json'|'http'|'timeout'|'no_key',detail=''){super('BRAIN_'+reason.toUpperCase()+(detail?': '+detail:''))}}
+export type BrainDownReason='busy'|'invalid_json'|'http'|'timeout'|'no_key'|'refusal'|'max_tokens'
+export class BrainUnavailable extends Error{constructor(readonly reason:BrainDownReason,readonly detail=''){super('BRAIN_'+reason.toUpperCase()+(detail?': '+detail:''))}}
 
 /** Client Groq del cervello: stesso `withRateLimit` del bot (twilio-menu-ai.ts) — 429 → modello di riserva o attesa entro il
  * budget, errore o JSON non valido → modello successivo. Budget stretto (default 8 s): oltre si va in riserva deterministica. */
@@ -73,6 +76,9 @@ export const REFERS=/\b(fai|solo|anche|pure|puru|uguale|ugual\w*|idem|stess[oa]|
 // accetta un'azione senza nome solo se tocca ESATTAMENTE quei piatti; altrimenti chiede.
 const DEIX_N:Record<string,number>={due:2,tre:3,quattro:4,'2':2,'3':3,'4':4}
 const DEIX_PLURAL=/\b(?:quei|quegli|quelli|quelle|questi|queste|entramb\w*|tutti|tutte|ambedue)\b|\b(?:metti|nascondi|togli|rimetti|segna|porta|fa|cambia|alza|abbassa|aumenta|mostra|leva|lascia|toglie)(?:me)?li\b|\b(?:li|le) (?:metti|nascondi|togli|rimetti|segni|porti|cambi)\b/
+// notte 22/10 (QA v145 «c'è il tiramisù?» → «è finito»): frase ellittica senza piatto (verbo/stato da solo) = il piatto appena chiesto.
+const ELLIPTIC=/^(?:e |ok |allora |ah )?(?:(?:e|è|sono|so|e gia) )?(?:finit\w*|esaurit\w*|tornat\w*|di nuovo disponibil\w*|disponibil\w*|non c e piu|nascondi|toglilo|toglila|a \d+(?:[.,]\d+)?(?: euro)?|mett\w* a \d+(?:[.,]\d+)?)$/
+export const ONE_PRONOUN=/\b(?:mett|port|fa|alz|abbass|aument|cambi|togli|nascond|segn|rimett|lev|mostr|evidenzi|diminu|scont|spost|elimin|cancell|rinomin|aggiorn|ritocc)\w*?l[oa]\b|\b(?:lo|la|l) (?:metti|porti|alzi|abbassi|segni|togli|nascondi|rimetti|cambi|fai)\b/
 const DEIX_ORD=/\b(?:il|la|l|lo|quest) ?(prim[oa]|second[oa]|terz[oa]|ultim[oa])\b(?! (?:piatt[oi] (?:del|della|di)|del pranzo|della cena))/
 export function deixisReferents(msg:string,owners:string[],refs:MenuRef[],botList:string[]=[]):{kind:'set'|'one',ids:string[]}|null{
  const p=' '+plain(msg)+' ',ord=p.match(DEIX_ORD),ords=[...p.matchAll(new RegExp(DEIX_ORD.source,'g'))],except=p.match(/\btutt[ie] (?:tranne|eccetto|esclus[oaie]|meno) (.+)$/),plural=DEIX_PLURAL.test(p)
@@ -88,6 +94,9 @@ export function deixisReferents(msg:string,owners:string[],refs:MenuRef[],botLis
  if(except){const named=refs.filter(r=>g9DishMentioned(r.name,except[1]!,refs)).map(r=>r.id);return{kind:'set',ids:(lastMulti&&lastMulti.length>=2?lastMulti:chrono).filter(id=>!named.includes(id))}}
  const nm=p.match(/\b(?:tutti|tutte|quei|quelle|questi|queste|i|le|gli|ambedue) (?:e )?(due|tre|quattro|2|3|4)\b/),n=nm?DEIX_N[nm[1]!]!:/\bentramb\w*|\bambedue\b/.test(p)?2:null
  if(lastMulti&&lastMulti.length>=(n??2))return{kind:'set',ids:n?lastMulti.slice(0,n):lastMulti}
+ // notte 22/10 (cc-giornata-02 «sono finiti i crocchè» → «rimettili»): plurale senza numero e UN solo piatto nel messaggio precedente
+ // (spesso dal nome plurale: crocchè, supplì, puntarelle) = quel piatto.
+ if(n===null&&!botList.length&&lists.length&&lists.at(-1)!.length===1)return{kind:'one',ids:[lists.at(-1)![0]!]}
  const back:string[]=[];for(const l of [...lists].reverse())for(const id of [...l].reverse())if(!back.includes(id))back.push(id)
  const want=n??2;if(back.length<want)return{kind:'set',ids:[]}
  const pick=back.slice(0,want);return{kind:'set',ids:chrono.filter(id=>pick.includes(id))}}
@@ -115,13 +124,18 @@ export function priceOfOtherClause(actions:MenuAction[],message:string,refs:Menu
   const others=parts.filter(x=>x!==mine[0]&&g9Prices(x).length);if(others.length&&others.every(x=>refs.some(o=>o.id!==r.id&&g9DishMentioned(o.name,x,refs))))out.push(a.id)}
  return out}
 /** Azioni con il verso opposto a quello detto nel messaggio (solo quando il messaggio ha un verso solo). */
-export function polarityProblem(actions:MenuAction[],msg:string,refs?:MenuRef[]):string[]{const m=' '+msg+' ',out:string[]=[]
+export function polarityProblem(actions:MenuAction[],msg:string,refs?:MenuRef[],raw?:string):string[]{const m=' '+msg+' ',out:string[]=[],handled=new Set<string>()
+ // notte 22/10 (cc-giornata-02 «ah no scusa, era la sfogliatella, il babà c'è»): con più parti separate da virgole il verso di ogni piatto
+ // è quello della SUA parte; una parte senza verbo («era la sfogliatella») prende il verso dal contesto, mai da «c'è» detto per un altro piatto.
+ if(refs&&raw){const parts=raw.split(/[,;.!]+|\s+(?:e|ed|ma)\s+/).map(x=>plain(x)).filter(Boolean);if(parts.length>1)for(const a of actions){if(!('id' in a)||a.kind!=='available')continue;const r=refs.find(x=>x.id===a.id);if(!r)continue;const part=parts.find(x=>g9DishMentioned(r.name,x,refs));if(!part)continue;handled.add(a.id)
+  const q=' '+part+' ',neg=/\b(?:non|nun|un|nu)\s+(?:e|sono|so|song|ee|era)?\s*(?:ancora\s+)?(?:finit|esaurit|fernut)\w*/.test(q),on=(neg||AV_ON.test(q))&&!(AV_OFF.test(q)&&!neg),off=!neg&&AV_OFF.test(q)&&!AV_ON.test(q);if((on&&!a.value)||(off&&a.value))out.push(a.id)}}
+ actions=actions.filter(a=>!('id' in a)||!handled.has((a as any).id))
  // Verso per parte: «è finita la gricia, la carbonara c'è» → la carbonara non può diventare finita.
- if(refs)for(const a of actions){if(!('id' in a)||a.kind!=='available')continue;const r=refs.find(x=>x.id===a.id);if(!r)continue;const part=msg.split(/ (?:e|ed|ma) | , /).find(x=>g9DishMentioned(r.name,x,refs));if(!part)continue;const on=AV_ON.test(' '+part+' ')&&!AV_OFF.test(' '+part+' '),off=AV_OFF.test(' '+part+' ')&&!AV_ON.test(' '+part+' ');if((on&&!a.value)||(off&&a.value))out.push(a.id)}
+ if(refs)for(const a of actions){if(!('id' in a)||a.kind!=='available')continue;const r=refs.find(x=>x.id===a.id);if(!r)continue;const part=msg.split(/ (?:e|ed|ma) | , /).find(x=>g9DishMentioned(r.name,x,refs));if(!part)continue;const neg=/\b(?:non|nun|un|nu)\s+(?:e|sono|so|song|ee|era)?\s*(?:ancora\s+)?(?:finit|esaurit|fernut)\w*/.test(' '+part+' '),on=(neg||AV_ON.test(' '+part+' '))&&!(AV_OFF.test(' '+part+' ')&&!neg),off=!neg&&AV_OFF.test(' '+part+' ')&&!AV_ON.test(' '+part+' ');if((on&&!a.value)||(off&&a.value))out.push(a.id)}
  // «non è finita», «nun è finita» (dialetto): una negazione del verbo vieta proprio quell'azione.
  const notFinished=/\b(?:non|nun|un|nu)\s+(?:e|sono|so|song|ee|era)?\s*(?:ancora\s+)?(?:finit|esaurit|fernut)\w*/.test(m)
  for(const a of actions)if(notFinished&&'id' in a&&a.kind==='available'&&!a.value)out.push(a.id)
- const fOff=FEAT_OFF.test(m),fOn=FEAT_ON.test(m)&&!fOff,hOn=HID_ON.test(m)&&!HID_OFF.test(m)&&!/evidenza|promo|offert|scont|etichett/.test(m),hOff=HID_OFF.test(m)&&!HID_ON.test(m),aOff=AV_OFF.test(m)&&!AV_ON.test(m),aOn=AV_ON.test(m)&&!AV_OFF.test(m)
+ const fOff=FEAT_OFF.test(m),fOn=FEAT_ON.test(m)&&!fOff,hOn=HID_ON.test(m)&&!HID_OFF.test(m)&&!/evidenza|promo|offert|scont|etichett/.test(m),hOff=HID_OFF.test(m)&&!HID_ON.test(m),aOff=!notFinished&&AV_OFF.test(m)&&!AV_ON.test(m),aOn=(AV_ON.test(m)||notFinished)&&!(AV_OFF.test(m)&&!notFinished)
  for(const a of actions){if(!('id' in a))continue
   if(a.kind==='featured'&&((fOff&&a.value)||(fOn&&!a.value)))out.push(a.id)
   if(a.kind==='hidden'&&((hOn&&!a.value)||(hOff&&a.value)))out.push(a.id)
@@ -154,8 +168,11 @@ const sameRoot=(a:string,b:string)=>a===b||(a.length>=6&&b.length>=6&&a.slice(0,
 export function rivalDishes(id:string,message:string,refs:MenuRef[]):string[]{
  const msg=plain(message).split(' '),target=refs.find(r=>r.id===id);if(!target)return []
  if((' '+plain(message)+' ').includes(' '+plain(target.name)+' '))return []
- const mine=nameWords(target.name).filter(w=>wordHit(w,msg));if(!mine.length)return []
- return refs.filter(o=>o.id!==id&&mine.every(w=>nameWords(o.name).some(x=>sameRoot(x,w)))).map(o=>o.id)
+ // notte 22/10 (z-asr-009 «il bacalà fritto» ≠ Calzone fritto): una parola del nome detta con le doppie sbagliate è comunque detta.
+ const dd=(w:string)=>w.replace(/(.)\1+/g,'$1');if((' '+dd(plain(message))+' ').includes(' '+dd(plain(target.name))+' '))return []
+ const hitW=(w:string)=>wordHit(w,msg)||(w.length>=5&&msg.some(m=>dd(m)===dd(w)))
+ const mine=nameWords(target.name).filter(hitW);if(!mine.length)return []
+ return refs.filter(o=>o.id!==id&&mine.every(w=>nameWords(o.name).some(x=>sameRoot(x,w)||dd(x)===dd(w)))).map(o=>o.id)
 }
 
 // Un piatto «coperto» da un altro: tutte le parole che il messaggio ha in comune con lui le ha anche un altro piatto, che in più
@@ -228,7 +245,7 @@ export function validateBrainPlan(raw:unknown,ctx:Pick<BrainContext,'codes'>,inp
    const bad=[...new Set(lost.map(w=>parts.find(p=>fold0(p).replace(/,/g,'.').includes(w))??w))].slice(0,3)
    return{...d,intent:'clarify',plan:{type:'clarify',ids:[]} as MenuPlan,hold:{kind:'hold',actions:d.plan.actions,asks:bad.map(w=>({type:'unknown' as const,word:w}))},notes:[...d.notes,'parte_persa:'+lost.slice(0,3).join(',')]}}}
  return d}
-function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{freshIds?:Set<string>,refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[],draftText?:string,twinIds?:string[]}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
+function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:{freshIds?:Set<string>,refs:MenuRef[],sections:SectionRef[],message:string,memory?:BrainMemoryEntry[],pendingActions?:MenuAction[]|null,clarifySource?:string|null,clarifyIds?:string[]|null,history?:BrainTurn[],restorable?:Map<string,MenuAction[]>,now?:number,exclude?:Excluded[],draftText?:string,twinIds?:string[],fixedSecIds?:Set<string>,menus?:BrainContextInput['menus']}):Omit<BrainDecision,'path'|'usage'|'tokens'>{
  const data=parseJson(raw),{refs,sections}=input,message=dialectNumbers(input.message),byId=new Map(refs.map(r=>[r.id,r])),notes:string[]=[]
  const map=(v:unknown)=>typeof v==='string'?ctx.codes.get(v.trim().toLowerCase())??null:null
  const empty={type:'clarify',ids:[]} as MenuPlan
@@ -252,6 +269,9 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  for(const id of input.twinIds??[])if(byId.has(id))trusted.add(id)
  // Fase R: «bò»/«bo» = «boh» (solo accento o h muta): è il nome, non un suono incerto.
  for(const id of sound.weak){const ph=sound.phrase.get(id);if(ph&&plain(ph).replace(/h/g,'')===plain(byId.get(id)!.name).replace(/h/g,''))trusted.add(id)}
+ // notte 22/10 (bv-asr-003/005 «Bo a 50» → «Bu costa 40»): un suono debole UNICO vale come nominato se è il piatto appena cambiato
+ // (l'ultima risposta del bot ne riporta il fatto «X: prezzo da…»). Da solo, a freddo, resta una domanda (bv-asr-002).
+ {const lb=[...(input.history??[])].reverse().find(t=>t.role==='bot')?.text??'',w=sound.weak.filter(id=>!trusted.has(id));if(w.length===1){const nm=plain(byId.get(w[0]!)!.name);if(nm.length>=2&&(' '+plain(lb)+' ').includes(' '+nm+' prezzo da '))trusted.add(w[0]!)}}
  const weakIds=new Set(sound.weak.filter(id=>!trusted.has(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)))
  // Fase R: «sono tornati tutti i dolci», «nascondi tutte le pizze»: la categoria nominata per intero nomina i suoi piatti.
  // R9: anche nella richiesta originale legata alla TUA domanda aperta («metti i primi tutti a 11» → «si»).
@@ -259,7 +279,11 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  // R10: «togli tutti i piatti dalla sezione altre proposte»: anche col nome pubblico del menu digitale (tutte le sezioni che vi cadono).
  const sectionWide=new Set<string>()
  for(const id of allOfSections(input.message+(input.clarifySource?' \n '+input.clarifySource:''),sections))for(const r of refs)if(r.sectionId===id){trusted.add(r.id);sectionWide.add(r.id)}
- const trustedHas=(id:string)=>trusted.has(id)
+ // run Haiku 21/10: i piatti della proposta in attesa (riepilogo da confermare) sono già stati scelti dal titolare: una correzione
+ // («la pasta fai 15, mantieni le altre») che li riprende non li rende ambigui, e i loro prezzi in attesa valgono come detti.
+ const pendIds=new Set((input.pendingActions??[]).flatMap(a=>'id' in a&&typeof (a as any).id==='string'?[(a as any).id as string]:[]))
+ const pendPrice=(id:string,v:number)=>(input.pendingActions??[]).some(p=>(p.kind==='price'||p.kind==='promo')&&(p as any).id===id&&typeof (p as any).price==='number'&&Math.abs((p as any).price-v)<0.005)
+ const trustedHas=(id:string)=>trusted.has(id)||pendIds.has(id)
  const reply=typeof data.reply_draft==='string'?data.reply_draft.slice(0,600):''
  // «no, la parmigiana no»: il «no,» in testa non è una clausola (stessa normalizzazione del percorso di prima).
  // «la gricia no, lasciala a 11»: un valore detto per il piatto «negato» è una correzione, non un'esclusione.
@@ -284,7 +308,10 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  if(intent==='read'&&!mixAsChange&&(data.read==='unavailable'||data.read==='hidden')&&!looksLikeQuestion(message)&&/\b(finit\w*|esaurit\w*|nascond\w*|togli\w*|fernut\w*)\b/.test(msg)){const i=parseIntent(message),opts2=[...new Set([...refIds(data.clarify?.item_refs),...refIds(data.item_refs),...(i&&'target' in i?findDishes((i as any).target,refs).map(r=>r.id):[])])].slice(0,8)
   const act=i&&(i.kind==='available'||i.kind==='hidden')&&opts2.length?{kind:i.kind,id:opts2[0]!,value:(i as any).value} as MenuAction:null
   return{intent:'clarify',plan:opts2.length>1&&act?{type:'clarify',ids:opts2,actions:[act]}:{type:'clarify',ids:opts2},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'lettura_non_domanda']}}
- if(intent==='read'&&!mixAsChange){const ids=refIds(data.item_refs);if(data.read==='unavailable'||data.read==='hidden')return{intent,plan:{type:'read',read:data.read},exclude,aliasesUsed,replyDraft:reply,notes};const rivals=ids.flatMap(id=>trustedHas(id)?[]:rivalDishes(id,message,refs).filter(r=>!ids.includes(r)))
+ if(intent==='read'&&!mixAsChange){const ids=refIds(data.item_refs);if(data.read==='unavailable'||data.read==='hidden')return{intent,plan:{type:'read',read:data.read},exclude,aliasesUsed,replyDraft:reply,notes}
+  // Menu a prezzo fisso (banco prezzofisso 21/10, pf-lettura-*): «quanto costa il completo a cena?», «il menu cena è a prezzo fisso?»
+  // non nominano piatti: la risposta (opzioni, prezzi, compreso) la scrive il server dal menu, prima era «Non ho cambiato nulla».
+  {const ft=ids.length&&!ids.every(id=>input.fixedSecIds?.has(byId.get(id)?.sectionId??''))?null:formulaRead(message,input.menus);if(ft)return{intent,plan:{type:'read',read:'formulas',text:ft},exclude,aliasesUsed,replyDraft:reply,notes:[...notes,'lettura_opzioni']}};const rivals=ids.flatMap(id=>trustedHas(id)?[]:rivalDishes(id,message,refs).filter(r=>!ids.includes(r)))
   if(rivals.length)return{intent:'clarify',plan:{type:'clarify',ids:[...new Set([...ids,...rivals])].slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}
   return{intent,plan:ids.length?{type:'read',read:'items',ids:ids.slice(0,10)}:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:reply,notes}}
  // «e pure la gricia», «anche la gricia» subito dopo una modifica di prezzo confermata: il modello a volte chiede il prezzo;
@@ -313,7 +340,20 @@ function validateBrainPlanCore(raw:unknown,ctx:Pick<BrainContext,'codes'>,input:
  const unc=(Array.isArray(data.uncertain)?data.uncertain:[]).filter((u:any)=>u&&typeof u.phrase==='string'&&u.phrase.trim()&&inText(plain(u.phrase),msg)).slice(0,6)
  const asks:HoldAsk[]=[],candCovered:string[]=[]
  const clearIds=new Set(actions.map((a:any)=>map(a?.item)).filter(Boolean) as string[]),negIds=new Set(exclude.map(e=>e.id))
- for(const u of unc){const all=refIds(u.candidates),cands=all.filter(id=>!clearIds.has(id)&&!negIds.has(id)).slice(0,8)
+ // run Haiku 21/10 (bv-deixis-001): candidati scritti col NOME del piatto invece del codice pN → stesso piatto se il nome è esatto e unico.
+ const candIds=(list:unknown)=>Array.isArray(list)?[...new Set(list.flatMap((v:unknown)=>{const id=map(v);if(id&&byId.has(id))return [id];const k=plain(String(v??''));const hits=k.length>=3?refs.filter(r=>plain(r.name)===k):[];return hits.length===1?[hits[0]!.id]:[]}))]:[]
+ for(const u of unc){const all=candIds(u.candidates),cands=all.filter(id=>!clearIds.has(id)&&!negIds.has(id)).slice(0,8)
+  // notte 22/10 (bv-deixis-003 «aggiungi la parmigiana a 10» con la parmigiana già a 10): parte incerta su UN piatto nominato per intero e
+  // col prezzo che ha già = niente da cambiare, non una domanda.
+  if(all.length===1&&typeof u.price==='number'&&byId.has(all[0]!)&&Math.abs(byId.get(all[0]!)!.price-u.price)<0.005&&(' '+plain(String(u.phrase))+' ').includes(' '+plain(byId.get(all[0]!)!.name)+' '))continue
+  // notte 22/10 (cc-vietato-16 «le puntarelle a 6,50 e poi raccontami una barzelletta»): una parte fuori tema (nessun piatto, numero o
+  // verbo del menu, azione none) non è una parte incerta del menu: non ferma le parti chiare (la bozza del modello risponde al resto).
+  if(String(u.action??'none')==='none'&&!all.length&&plain(String(u.phrase)).split(' ').length>=2&&!/\d/.test(String(u.phrase))&&!/\b(?:mett|togl|nascond|aggiung|elimin|cancell|alz|abbass|aument|diminu|spost|rinomin|finit|esaurit|prezz|evidenz|rimett|cambi|segn|port|sottomenu|menu|sezion|piatt)\w*/.test(plain(String(u.phrase)))&&!refs.some(r=>g9DishMentioned(r.name,String(u.phrase),refs)))continue
+  // notte 22/10 (bv-correzioni-002 «aggiungi nei piatti di prova la parmigiana a 10» con «Inserisce il piatto la parmigiana» nel menu): un nome
+  // CONTENUTO in quello più lungo di un piatto esistente, detto con «aggiungi» e un prezzo, è un piatto NUOVO (regola del titolare), non un doppione.
+  {const art=(x:string)=>plain(x).replace(/^(?:il|lo|la|l|i|gli|le)\s+/,'').trim(),ph=art(String(u.phrase));if(all.length===1&&typeof u.price==='number'&&u.price>0&&byId.has(all[0]!)&&ph.length>=4){const cn=art(byId.get(all[0]!)!.name)
+   const sib=actions.find((a:any)=>a?.action==='create_item'&&a.section)
+   if(cn!==ph&&(' '+cn+' ').includes(' '+ph+' ')&&/\b(?:aggiung|inserisc|nuov)\w*/.test(msg)&&sib&&g9Prices(message).some(v=>Math.abs(v-u.price)<0.005)&&!refs.some(r=>art(r.name)===ph)){const nm=String(u.phrase).trim().replace(/^(?:il|lo|la|l'|l’|i|gli|le)\s*/i,'');actions.push({action:'create_item',item:null,section:sib.section,menu:null,price:u.price,price_ref:null,price_delta:null,value:null,tag:null,text:null,name:nm.charAt(0).toLocaleUpperCase('it')+nm.slice(1),until:null});continue}}}
   // Candidati già toccati da una parte chiara o negati: quell'ambiguità non c'è più (resta solo se rimangono ≥2 piatti o nessuno era indicato).
   if(all.length&&cands.length<(all.length>=2?2:1))continue
   candCovered.push(...cands);const word=String(u.phrase).trim().slice(0,60)
@@ -342,6 +382,11 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  const no=(note:string,ids:(string|null)[]=[])=>({intent:'clarify' as const,plan:{type:'clarify' as const,ids:ids.filter((x):x is string=>!!x&&byId.has(x))},exclude,aliasesUsed,replyDraft:'',notes:[...notes,note]})
  for(const a of actions){if(!a||typeof a!=='object'||!BRAIN_ACTIONS.includes(a.action))return no('azione_sconosciuta',actions.map((x:any)=>map(x?.item)))
   const id=map(a.item)
+  // Prova dal vivo 21/10 («rimetti il tiramisù nei Piatti di prova del Menu di verifica» → ripristinava il prezzo): «rimetti/riporta X
+  // in/nei <sottomenu>» con un sottomenu nominato diverso da quello attuale è uno SPOSTAMENTO; «rimetti com'era» senza destinazione resta un ripristino.
+  if(a.action==='restore'&&id&&byId.has(id)&&mentioned(id)){const dest=restoreDestination(input.message,byId.get(id)!,sections)
+   if(dest==='ambiguous')return no('ripristino_con_destinazione',[id])
+   if(dest){if(!actions.some((x:any)=>x?.action==='move_item'&&map(x.item)===id))legacy.push({action:'move_item',item_id:id,section_id:dest,section_name:null});if(!notes.includes('ripristino_come_spostamento'))notes.push('ripristino_come_spostamento');continue}}
   if(a.action==='restore'){if(!id||!byId.has(id)||!mentioned(id))return no('ripristino_non_valido',[id]);const back=input.restorable?.get(id);if(!back?.length)return no('ripristino_impossibile',[id]);derived.push({id,actions:back.map(b=>({...b,fromRestore:true}) as unknown as MenuAction)});continue}
   if(a.action==='set_price'&&a.price==null&&typeof a.price_delta==='number'&&id&&byId.has(id)){const d=a.price_delta,dir=d>0?UP:DOWN;if((!dir.test(msg)&&!(d>0?/\+\s*\d/:/(?:^|[\s(])-\s*\d/).test(message))||/\b(?:a|costa|prezzo|fallo|mettil\w*)\s*[-–]\s*\d/i.test(message))return no('delta_senza_verbo',[id]) /* «a -1» è un prezzo negativo, non una differenza (R5.1) */;legacy.push({action:'set_price',item_id:id,price:Math.round((byId.get(id)!.price+d)*100)/100});deltaIds.add(id);continue}
   if(a.action==='set_price'&&a.price==null&&typeof a.price_ref==='string'){const refId=map(a.price_ref)
@@ -352,18 +397,27 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   legacy.push(legacyAction(a,map))}
  // R5.1 (nota 64): niente più ripristino automatico deciso dal server su «scusa/intendevo X»: col cervello unico il «rimetti com'era»
  // lo decide il modello (restore); il server non indovina («scusa, la lasagna è finita» NON è una correzione della carbonara).
- const opts={sections,message,exclude:[...exclude,...candCovered.map(id=>({id}))],trustedIds:trusted.size||weakIds.size?new Set([...trusted,...weakIds]):undefined}
+ const opts={sections,message,exclude:[...exclude,...candCovered.map(id=>({id}))],trustedIds:trusted.size||weakIds.size?new Set([...trusted,...weakIds]):undefined,fixedSectionIds:input.fixedSecIds}
  const withHold=(d:Omit<BrainDecision,'path'|'usage'|'tokens'>):Omit<BrainDecision,'path'|'usage'|'tokens'>=>{if(!asks.length)return d
   if(d.plan.type!=='change'&&!(d.plan.type==='clarify'&&!d.plan.ids.length))return d
   const clear=d.plan.type==='change'?d.plan.actions:[];if(asks.length<2&&!clear.length)return d
   return{...d,intent:'clarify',plan:{type:'clarify',ids:[]},hold:{kind:'hold',actions:clear,asks},notes:[...d.notes,'parti_incerte']}}
  const guard=(plan:MenuPlan):Omit<BrainDecision,'path'|'usage'|'tokens'>=>{if(plan.type!=='change')return{intent:'clarify',plan,exclude,aliasesUsed,replyDraft:'',notes}
+  // notte 22/10 (QA v143): un prezzo messo sul piatto di un Menu a prezzo fisso (0 €) quando c'è UN solo omonimo alla carta, visibile e col
+  // prezzo, che il messaggio nomina allo stesso modo → va su quello alla carta (prima: «la Carbonara è nel Menu del giorno a prezzo fisso»).
+  for(const a of plan.actions){if(a.kind!=='price'||!('id' in a))continue;const t=byId.get(a.id);if(!t||t.price>0||trustedHas(a.id))continue
+   const key=plain(t.name).split(' ').filter(w=>w.length>=4),alt=refs.filter(o=>o.id!==t.id&&o.price>0&&!o.hidden&&key.length>0&&key.every(w=>plain(o.name).split(' ').includes(w))&&g9DishMentioned(o.name,message,refs))
+   if(alt.length===1&&!plan.actions.some(b=>'id' in b&&(b as any).id===alt[0]!.id))(a as any).id=alt[0]!.id}
   const ids=[...new Set(plan.actions.flatMap(a=>'id' in a&&typeof (a as any).id==='string'?[(a as any).id as string]:[]))],rivals=ids.flatMap(id=>trustedHas(id)?[]:rivalDishes(id,message,refs).filter(r=>!ids.includes(r)))
   // Piatti indicati in modo ambiguo o coperti da un altro: le azioni chiare restano, per ognuna ambigua una domanda «quale?»
   // con l'azione già capita (proposta hold o scelta), mai una scelta del modello e mai la richiesta intera persa.
   const dim=(id:string)=>{const t=byId.get(id)!;return message.split(/[,;]|\s+e\s+/).filter(x=>g9DishMentioned(t.name,x,refs)).flatMap(x=>diminutiveRivals(x,t,refs).map(o=>o.id))}
    const openSet=new Set(input.clarifyIds??[]),inOpen=(x:string)=>!openSet.size||!openSet.has(id0)||openSet.has(x);let id0=''
-   const doubt=new Map<string,string[]>();for(const id of ids){if(trustedHas(id))continue;id0=id;const r=[...rivalDishes(id,message,refs),...dominatedBy(id,message,refs),...dim(id)].filter(x=>x!==id&&inOpen(x));if(r.length)doubt.set(id,[id,...new Set(r)])}
+   const doubt=new Map<string,string[]>();for(const id of ids){if(trustedHas(id))continue;id0=id
+    // notte 22/10 (QA v143 «la carbonara a dieci e mezzo»): per un PREZZO, un omonimo di un Menu a prezzo fisso (piatto a 0 €, il prezzo
+    // non si mette lì) non è un rivale di un piatto alla carta col prezzo: vale quello alla carta.
+    const t0=byId.get(id)!,priceAct=plan.actions.some(a=>'id' in a&&(a as any).id===id&&(a.kind==='price'||a.kind==='promo'))
+    const r=[...rivalDishes(id,message,refs),...dominatedBy(id,message,refs),...dim(id)].filter(x=>x!==id&&inOpen(x)&&!(priceAct&&t0.price>0&&(byId.get(x)?.price??1)<=0));if(r.length)doubt.set(id,[id,...new Set(r)])}
   if(doubt.size){const clear=plan.actions.filter(a=>!('id' in a)||!doubt.has((a as any).id)),amb=plan.actions.filter(a=>'id' in a&&doubt.has((a as any).id))
    const asks2:HoldAsk[]=amb.map(a=>{const {id,...template}=a as any;return{type:'choose' as const,word:refs.find(r=>r.id===id)?.name??'',options:doubt.get(id)!.slice(0,8),template}})
    if(!clear.length&&asks2.length===1)return{intent:'clarify',plan:{type:'clarify',ids:asks2[0]!.type==='choose'?asks2[0]!.options:[],actions:[amb[0]!]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_ambiguo']}
@@ -372,7 +426,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // che nomina quel piatto: un modello che scambia i prezzi tra i piatti non scrive.
   {const swapped=[...priceClauseProblem(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs),...priceOfOtherClause(plan.actions.filter(a=>!derived.some(d=>d.id===('id' in a?a.id:''))),message,refs)];if(swapped.length)return{intent:'clarify',plan:{type:'clarify',ids:swapped.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'prezzo_di_un_altro_piatto']}}
   // 17/10 (correzioni A): il valore deve avere il verso detto («togli l'evidenza» → mai in evidenza; «finito» → mai disponibile).
-  {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg,refs);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
+  {const restored=new Set(derived.filter(d=>!d.refId).map(d=>d.id)),bad=polarityProblem(plan.actions.filter(a=>!('id' in a)||!restored.has(a.id)),msg,refs,message);if(bad.length)return{intent:'clarify',plan:{type:'clarify',ids:bad.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'valore_contrario']}}
   // Il nome nuovo di una rinomina («rinomina il pollo in Pollo alla diavola») non è un qualificatore del piatto.
   {const fq=plan.actions.reduce((m,a)=>a.kind==='rename'?m.replace(new RegExp(a.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i'),' '):m,message),foreign=plan.actions.filter(a=>'id' in a&&!derived.some(d=>d.id===(a as any).id)).map(a=>refs.find(r=>r.id===(a as any).id)).filter((r):r is MenuRef=>!!r&&!sectionWide.has(r.id)&&foreignQualifier(fq,r,refs));if(foreign.length)return{intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_diverso']}}
   const rel=relativeNumbers(message);if(plan.actions.some(a=>(a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&rel.has(Math.round((a.price as number)*100)/100)&&!deltaIds.has(a.id)))return{intent:'clarify',plan:{type:'clarify',ids:ids.slice(0,5)},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'differenza_come_prezzo']}
@@ -380,10 +434,14 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // o per quelli dell'ultima risposta del bot; con due piatti prima, o un altro argomento in mezzo, si chiede.
   if(ctxOK){const prevOwner=owners.at(-1)??'',pd=refs.filter(r=>g9DishMentioned(r.name,prevOwner,refs)).map(r=>r.id),bd=refs.filter(r=>g9DishMentioned(r.name,lastBotText,refs)).map(r=>r.id)
    const bare=ids.filter(id=>!trustedHas(id)&&!g9DishMentioned(byId.get(id)!.name,message,refs)&&!derived.some(d=>d.refId===id))
+   // notte 22/10 (cc-giornata-01/04/06): «quanto costa la gricia?» → «mettila a 12»: il pronome singolare va al piatto UNICO del messaggio
+   // precedente del titolare (ripetuto dal bot nella risposta), anche se quel messaggio era una domanda e il modello ha scelto l'ultima modifica.
+   const bdFull=refs.filter(r=>plain(r.name).length>=3&&(' '+plain(lastBotText)+' ').includes(' '+plain(r.name)+' ')).map(r=>r.id),one=pd.length===1?pd:pd.filter(id=>bdFull.includes(id))
+   if(bare.length===1&&one.length===1&&bare[0]!==one[0]&&bd.includes(one[0]!)&&!ids.includes(one[0]!)&&(ONE_PRONOUN.test(msg)||ELLIPTIC.test(msg)&&msg.split(' ').length<=5)&&!DEIX_PLURAL.test(' '+msg+' ')&&looksLikeQuestion(prevOwner)&&!/\b(?:prima|precedente|altr[oaie])\b/.test(msg)){const from=bare[0]!,to=one[0]!;for(const a of plan.actions)if('id' in a&&(a as any).id===from)(a as any).id=to;ids[ids.indexOf(from)]=to;bare[0]=to}
    // Un prezzo senza piatto («no scusa 14») corregge solo un prezzo detto nel messaggio precedente, mai un «finito».
    // Fase R: «anche la lasagna» → «no scusa 14»: il prezzo cambiato l'ha scritto il server nell'ultima risposta (riga «X: prezzo da»).
    const botChanged=(id:string)=>{const r=byId.get(id);return !!r&&plain(lastBotText).includes(plain(r.name)+' prezzo da')}
-   const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length&&!looksLikeQuestion(prevOwner)&&!botChanged(id)
+   const priceBare=(id:string)=>plan.actions.some(a=>'id' in a&&a.id===id&&(a.kind==='price'||a.kind==='promo'))&&!g9Prices(prevOwner).length&&!looksLikeQuestion(prevOwner)&&!botChanged(id)&&!(ONE_PRONOUN.test(msg)&&pd.length===1&&pd[0]===id)
    // Risposta a una domanda del bot sulla richiesta di prima: quella richiesta (anche con più piatti) torna valida per intero.
    const answering=BOT_QUESTION.test(lastBotText)
    const botList=/(?:^|\s)[-•]\s+\S/.test(lastBotText)&&!/\?/.test(lastBotText)?refs.filter(r=>g9DishMentioned(r.name,lastBotText,refs)).sort((a,b)=>lastBotText.indexOf(a.name)-lastBotText.indexOf(b.name)).map(r=>r.id):[]
@@ -402,7 +460,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  // comparire nel messaggio o in un messaggio recente del titolare; completezza ricontrollata sul solo messaggio.
  // Fase R: «no, nei primi» subito dopo uno spostamento corregge lo spostamento (il verbo era nel messaggio di prima).
  const moveFix=/^(?:no|anzi|scusa)\b/.test(msg)&&/\b(?:nei|negli|nelle|nella|nel|tra|fra|in)\s/.test(msg)&&/\b(?:spost\w*|mett\w*)\b/.test(plain(owners.at(-1)??''))
- const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message+(moveFix||input.twinIds?.length?' (sposta)':''),implicitSections:true,freshIds:input.freshIds}):{type:'change',actions:[]} as MenuPlan
+ const base=legacy.length?validateMenuPlan({intent:'change',actions:legacy},refs,{...opts,message:dishText,checkCompleteness:false,verbText:message+(moveFix||input.twinIds?.length?' (sposta)':'')+(input.clarifySource&&MOVE_VERB_RE.test(plain(input.clarifySource))?' (sposta)':''),implicitSections:true,freshIds:input.freshIds}):{type:'change',actions:[]} as MenuPlan
  if(base.type!=='change')return{intent:'clarify',plan:base,exclude,aliasesUsed,replyDraft:'',notes}
  if(ctxOK){const said=g9Prices(priceText),inMsg=g9Prices(message),prevOwner=owners.at(-1)??''
   // Un prezzo preso dal contesto (non detto in QUESTO messaggio) vale solo se è il prezzo attuale di un piatto del messaggio
@@ -417,7 +475,7 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   const refPlusOK=(v:number)=>{const rd=relativeDelta(message);return !!rd&&refs.some(r=>new RegExp('\\b(?:come|ugual\\w*|stess\\w* prezzo d\\w*)\\s+(?:(?:a|al|alla|allo|il|la|lo|l|del|della)\\s+)*'+plain(r.name).split(' ')[0]!+'\\b').test(msg)&&Math.abs(r.price+rd.delta-v)<0.005)}
   // «metti la carbonara a 13» → «e la gricia a uno in meno» = 12: la differenza è rispetto al prezzo appena scritto (riga del bot).
   const rdc=relativeDelta(message),botNew=[...lastBotText.replace(/\*/g,'').matchAll(/prezzo da [\d.,]+\s*€ a ([\d.,]+)\s*€/g)].map(m=>Number(m[1]!.replace(/\./g,'').replace(',','.'))),compar=!!rdc&&/^(?:e|ed|anche|pure)\b/.test(msg)
-  for(const a of base.actions)if((a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&!deltaIds.has(a.id)){const v=Math.round((a.price as number)*100)/100;if(!inMsg.includes(v)&&!afterQuestion.includes(v)&&!(ctxPriceOK&&said.includes(v)&&ctxPrices.has(v))&&!(compar&&botNew.some(b=>Math.abs(b+rdc!.delta-v)<0.005))&&!refPlusOK(v))return no('prezzo_non_detto',[a.id])}
+  for(const a of base.actions)if((a.kind==='price'||(a.kind==='promo'&&a.price!==null))&&!deltaIds.has(a.id)){const v=Math.round((a.price as number)*100)/100;if(!pendPrice(a.id,v)&&!inMsg.includes(v)&&!afterQuestion.includes(v)&&!(ctxPriceOK&&said.includes(v)&&ctxPrices.has(v))&&!(compar&&botNew.some(b=>Math.abs(b+rdc!.delta-v)<0.005))&&!refPlusOK(v))return no('prezzo_non_detto',[a.id])}
   // Comparativo con una differenza applicata al prezzo attuale dell'altro piatto: ambiguo, si chiede (o si scrive il prezzo esplicito).
   if(compar&&botNew.length&&deltaIds.size)return no('differenza_come_prezzo',[...deltaIds])}
   // «la gricia come la carbonara più 1»: la differenza è rispetto al piatto di riferimento, non al prezzo attuale.
@@ -460,6 +518,8 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
   // «metti il tiramisù a 6 come la panna cotta»: il piatto di riferimento non manca (se il prezzo detto è il suo).
   if(out.every(a=>a.kind!=='price'||Math.abs(a.price-r.price)<0.005)&&new RegExp('\\b(?:come|ugual\\w*|stess\\w* prezzo d\\w*|pari)\\s+(?:(?:a|al|alla|allo|il|la|lo|l|del|della)\\s+)*'+plain(r.name).split(' ')[0]!+'\\b').test(msg))return false
  const idx=clauses.map((x,i)=>(' '+plain(x)+' ').includes(' '+plain(r.name)+' ')?i:-1).filter(i=>i>=0),parts=idx.map(i=>clauses[i]!);if(!parts.length)return true
+  // notte 22/10 (bv-deixis-003): il piatto detto col prezzo che HA GIÀ («la parmigiana a 10», già a 10) non ha niente da cambiare: non manca.
+  if(parts.every(x=>{const n=[...x.replace(/(\d)\s*,\s*(\d{1,2})(?!\d)/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(m=>Number(m[0]));return n.length>0&&n.every(v=>Math.abs(v-r.price)<0.005)&&!/\b(?:finit|esaurit|nascond|togli|evidenz|elimin|cancell|rinomin|spost|promo|scont)\w*/i.test(x)}))return false
   // «la bomba... no aspetta, le bombette»: il piatto detto e subito ritirato non manca.
   if(idx.every(i=>!ACTV.test(clauses[i]!)&&/^\s*(?:no\s+aspetta|no\s+scusa|anzi|cioe|cioè|no\s+no|aspetta)\b/i.test(clauses[i+1]??'')))return false
   // R6.1 (M2): «la carbonara a 13, no lascia / annulla / cancella questa, …», «(no, lasciala)»: la parte ritirata subito dopo non manca.
@@ -474,7 +534,9 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
  if(said.length)return{intent:'clarify',plan:{type:'clarify',ids:said.map(r=>r.id).slice(0,5),actions:out},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'piatto_nominato_senza_azione']}
  if(!out.length&&asks.length===1&&asks[0]!.type==='confirm')return{intent:'clarify',plan:{type:'clarify',ids:[]},hold:{kind:'hold',actions:[],asks},exclude,aliasesUsed,replyDraft:'',notes:[...notes,'nome_a_suono']}
  if(!out.length)return asks.length>=2?withHold({intent:'clarify',plan:{type:'clarify',ids:[]},exclude,aliasesUsed,replyDraft:'',notes}):no('nessuna_azione')
- const res0=withHold(guard({type:'change',actions:out})),res=twinIds.length&&res0.plan.type==='change'&&!mix?{...res0,plan:{...res0.plan,after:{type:'read' as const,read:'items' as const,ids:twinIds.slice(0,6)}},notes:[...res0.notes,'gia_nel_menu']}:res0
+ // Menu a prezzo fisso: l'omonimo in un ALTRO Menu non è «già nel menu» (le Patate al forno del pranzo per un piatto nuovo della cena).
+ const twinShow=twinIds.filter(id=>{const r=byId.get(id)!;return !legacy.some((a:any)=>a?.action==='create_item'&&input.fixedSecIds?.has(a.section_id)&&typeof a.name==='string'&&sameDishName(a.name,r.name)&&sections.find(x=>x.id===a.section_id)?.menu!==r.menu)})
+ const res0=withHold(guard({type:'change',actions:out})),res=twinShow.length&&res0.plan.type==='change'&&!mix?{...res0,plan:{...res0.plan,after:{type:'read' as const,read:'items' as const,ids:twinShow.slice(0,6)}},notes:[...res0.notes,'gia_nel_menu']}:res0
  if(mix&&res.plan.type==='change'){const qp=plain(mix.question),ask=/\b(cosa|cos|quali|quale|che)\b/.test(qp)
   const after=data.read==='unavailable'||data.read==='hidden'?{type:'read' as const,read:data.read as 'unavailable'|'hidden'}:ask&&/\b(finit\w*|esaurit\w*)\b/.test(qp)?{type:'read' as const,read:'unavailable' as const}:ask&&/\bnascost\w*\b/.test(qp)?{type:'read' as const,read:'hidden' as const}:/\b(sai fare|puoi fare|cosa fai)\b/.test(qp)?{type:'capability' as const,ids:['all']}:(()=>{const changed=new Set(res.plan.type==='change'?res.plan.actions.flatMap(a=>'id' in a?[a.id]:[]):[]),ids=[...new Set([...refIds(data.item_refs),...refs.filter(r=>g9DishMentioned(r.name,mix.question,refs)).map(r=>r.id)])].filter(id=>!changed.has(id)).slice(0,6);return ids.length?{type:'read' as const,read:'items' as const,ids}:undefined})()
   if(after)return{...res,plan:{...res.plan,after},notes:[...res.notes,'misto']}}
@@ -482,22 +544,76 @@ const lastBotTurn=[...history].reverse().find(t=>t.role==='bot'),staleQuestion=!
 }
 
 /** Pianifica un messaggio del titolare: contesto → una chiamata → validatore. Mai eccezioni verso il route: o una decisione, o la riserva. */
-export async function planOwnerMessage(input:BrainInput,key:string,opts:BrainCallOptions={}):Promise<BrainDecision|BrainFallback>{
+/** Motore del cervello (PIANO bot-haiku §1.5): `haiku` → Claude Haiku 5.5, `groq` → Groq. Default qui `groq` (test storici invariati);
+ * il route passa SEMPRE il motore letto da `readBotEngine`. Con haiku nessuna chiamata Groq, nessuna riserva. */
+export type PlanOptions=BrainCallOptions&{engine?:'haiku'|'groq',effort?:'low'|'medium',retryDelayMs?:number,thinking?:'disabled'}
+export async function planOwnerMessage(input:BrainInput,key:string,opts:PlanOptions={}):Promise<BrainDecision|BrainFallback>{
  let ctx:BrainContext
- try{ctx=buildBrainContext(input)}catch(error){return{path:'fallback',reason:'contesto: '+String((error as any)?.message??error)}}
+ try{ctx=buildBrainContext(opts.engine==='haiku'?{...input,engine:'haiku'}:input)}catch(error){return{path:'fallback',reason:'contesto: '+String((error as any)?.message??error)}}
  if(input.refs.length>1500||input.message.length>30000)return{path:'fallback',reason:'troppo_grande',tokens:ctx.tokens}
  // Fase R (R2.3): auto-correzione. Il piano rifiutato e il motivo tornano al modello una volta sola.
  if(input.correction)ctx={...ctx,messages:[...ctx.messages,{role:'assistant',content:input.correction.previous.slice(0,4000)},{role:'user',content:CORRECTION_HEAD+input.correction.reason+'. Rifai il JSON: correggi il piano se il messaggio lo permette, altrimenti intent=clarify con la domanda per il titolare in reply_draft.'}]}
  let call:BrainCall
- try{call=await callBrain(ctx,key,opts)}catch(error){return{path:'fallback',reason:error instanceof BrainUnavailable?error.reason:error instanceof GroqBusy?'busy':'errore',tokens:ctx.tokens}}
+ try{call=opts.engine==='haiku'?await callHaiku(ctx,key,opts):await callBrain(ctx,key,opts)}catch(error){return{path:'fallback',reason:error instanceof BrainUnavailable?error.reason:error instanceof GroqBusy?'busy':'errore',tokens:ctx.tokens}}
  if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'RAW '+call.content+'\n')).catch(()=>{})
  // Strumenti di controllo (confirm_pending, cancel_pending, undo_last): fuori dal validatore delle azioni, li verifica il route.
  const parsed=parseJson(call.content),control:ControlAction[]=parsed&&Array.isArray(parsed.actions)?[...new Set<ControlAction>(parsed.actions.filter((a:any)=>a&&CONTROL_ACTIONS.includes(a.action)).map((a:any)=>a.action as ControlAction))]:[]
- const rest=control.length&&parsed?JSON.stringify({...parsed,actions:parsed.actions.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action))}):call.content
- const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:input.sections,message:input.message,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,freshIds:input.freshIds,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n '),twinIds:input.pending?.clarify?.twins?.map(t=>t.id)})
+ let rest=control.length&&parsed?JSON.stringify({...parsed,actions:parsed.actions.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action))}):call.content
+ // run Haiku 21/10: struttura (Menu nuovi e Sottomenu in un Menu preciso, anche vuoti) letta e controllata qui, fuori dal validatore
+ // dei piatti: nomi detti dal titolare (adesso o nei suoi ultimi messaggi), Menu indicato o unico, niente doppioni. Si applica subito.
+ let struct:{actions:MenuAction[],notes:string[],ask:string|null}={actions:[],notes:[],ask:null}
+ // Menu a prezzo fisso: piatto nuovo senza prezzo → 0 (mai chiedere); prezzo su un piatto di un menu fisso → domanda (vedi haikuChecks).
+ const fixedSecIds=new Set((input.menus??[]).filter(m=>m.pricing==='fisso').flatMap(m=>(m.secs??[]).map(x=>x.id)))
+ if(opts.engine==='haiku'&&parsed&&Array.isArray(parsed.actions)&&fixedSecIds.size)for(const a of parsed.actions){if(a&&a.action==='create_item'&&(a.price==null)){const sid=typeof a.section==='string'?ctx.codes.get(a.section.trim().toLowerCase()):undefined;if(sid&&fixedSecIds.has(sid))a.price=0}}
+ if(opts.engine==='haiku'&&parsed&&Array.isArray(parsed.actions)&&parsed.actions.some((a:any)=>a&&(['create_menu','create_section','delete_menu','delete_section','set_menu_visible','set_section_visible','set_formula_price','create_formula','delete_formula','replace_section_items','set_menu_pricing'].includes(a.action)))){
+  // Banco prezzofisso 21/10 (pf-sostituzione-01): il modello chiedeva della Carbonara (intent=clarify) e il server applicava lo
+  // stesso la sostituzione dei Secondi rimasta nel piano. Una domanda non è mai una modifica: niente struttura applicata.
+  if(parsed.intent==='clarify'||parsed.intent==='read')return{path:'brain',intent:'clarify',plan:{type:'clarify',ids:[]},exclude:[],aliasesUsed:[],replyDraft:'',notes:['struttura_in_domanda'],usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
+  struct=structureActions(parsed.actions,{...input,codes:ctx.codes})
+  const others=parsed.actions.filter((a:any)=>!a||!['create_menu','create_section','delete_menu','delete_section','set_menu_visible','set_section_visible','set_formula_price','create_formula','delete_formula','replace_section_items','set_menu_pricing'].includes(a.action))
+  rest=JSON.stringify({...parsed,actions:others.filter((a:any)=>!a||!CONTROL_ACTIONS.includes(a.action)),intent:others.length||parsed.intent!=='change'?parsed.intent:'change'})
+  if(struct.ask)return{path:'brain',intent:'clarify',plan:{type:'clarify',ids:[]},exclude:[],aliasesUsed:[],replyDraft:'',notes:['struttura_incompleta:'+struct.ask],usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
+  if(!others.length){const decision={intent:'change' as const,plan:{type:'change',actions:struct.actions} as MenuPlan,exclude:[],aliasesUsed:[],replyDraft:'',notes:struct.notes}
+   return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}}
+ // Sottomenu creati in questo stesso piano: i piatti che li nominano ci vanno (mai nell'unico sottomenu esistente per ripiego).
+ const planSections:SectionRef[]=[...input.sections,...struct.actions.flatMap(a=>a.kind==='create_section'?[{id:a.newSectionId,name:a.name,menu:a.menuName??''} as SectionRef]:[])]
+ // La creazione di struttura l'ha già letta il pre-passo: «crealo/crea» non è una parte persa per il validatore dei piatti.
+ const vMessage0=struct.actions.some(a=>a.kind==='create_section'||a.kind==='create_menu')?input.message.replace(/\bcre(?:a|al[oaie]|ami|are|ato|ati)\b/gi,' ').replace(/\s+/g,' ').trim():input.message
+ // Prova dal vivo 21/10 (vocale «il solo primo mettilo a 10… poi tra i secondi aggiungi…»): la parte dell'opzione l'ha già letta il
+ // pre-passo della struttura; per il validatore dei piatti il suo «10» era una parte persa → domanda e niente scritto.
+ const vMessage=formulaClausesOut(vMessage0,struct.actions,input.refs)
+ const decision=validateBrainPlan(rest,ctx,{refs:input.refs,sections:planSections,message:vMessage,memory:input.memory,pendingActions:input.pendingActions,clarifySource:input.pending?.clarify?.source??input.pending?.hold?.source,clarifyIds:input.pending?.clarify?.itemIds??(input.pending?.hold?[...new Set(input.pending.hold.asks.flatMap(q=>q.itemIds))]:undefined),history:recentHistory(input.history??[],input.now),restorable:input.restorable,now:input.now,exclude:input.exclude,freshIds:input.freshIds,draftText:[draftText(input.pending?.draft),input.pending?.clarify?.source??input.pending?.hold?.source??''].filter(Boolean).join(' \n '),twinIds:input.pending?.clarify?.twins?.map(t=>t.id),fixedSecIds,menus:input.menus})
  if(decision.notes.includes('json_non_oggetto'))return{path:'fallback',reason:'invalid_json',usage:call.usage,tokens:ctx.tokens}
+
+ if(struct.actions.length){if(decision.plan.type!=='change')return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
+  // Un Sottomenu creato insieme ai piatti che ci vanno dentro (spostati o nuovi) nasce visibile: il titolare lo sta riempiendo adesso.
+  const filled=new Set(decision.plan.actions.flatMap((a:any)=>a.kind==='create'||a.kind==='move'?[a.sectionId as string]:[]))
+  const structActs=struct.actions.map(a=>a.kind==='create_section'&&a.hidden&&filled.has(a.newSectionId)?{...a,hidden:false}:a)
+  decision.plan={...decision.plan,actions:[...structActs,...decision.plan.actions]};decision.notes=[...decision.notes,...struct.notes]}
+ if(opts.engine==='haiku'){const h=haikuChecks(decision,input.message,input.sections,input.refs,new Set((input.menus??[]).filter(m=>m.pricing==='fisso').flatMap(m=>(m.secs??[]).map(x=>x.id))));if(h)return{path:'brain',...h,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}}
  return{path:'brain',...decision,usage:call.usage,tokens:ctx.tokens,control,raw:parsed,content:call.content,draft:typeof parsed?.reply_draft==='string'?parsed.reply_draft:''}
 }
+/** Prova dal vivo 21/10: sottomenu di arrivo detto in «rimetti/riporta X in/nei/tra i <sottomenu> [del Menu Y]». null = nessuna
+ * destinazione (o è il sottomenu dove il piatto sta già: ripristino), 'ambiguous' = più sottomenu possibili. Solo testo, nessuna scelta. */
+export function restoreDestination(message:string,item:MenuRef,sections:SectionRef[]):string|null|'ambiguous'{
+ const m=plain(message).match(/\b(?:rimett\w*|riport\w*|ripon\w*|torn\w*)\b(?:.*?)\s(?:in|nei|negli|nelle|nel|nella|tra|fra|sotto|dentro)\s+(.+)$/);if(!m)return null
+ const tail=m[1]!,hit=namedSections(tail,sections).ids;if(!hit.length)return null
+ // Menu detto («…del Menu di verifica»): solo i suoi sottomenu.
+ const said=sections.filter(s=>hit.includes(s.id)&&!!s.menu&&(()=>{const k=plain(s.menu).replace(/^menu /,'');return k.length>=3&&(' '+tail+' ').includes(' '+k+' ')})())
+ let cands=said.length?said:sections.filter(s=>hit.includes(s.id))
+ if(cands.some(s=>s.id===item.sectionId))return null
+ if(cands.length>1){const cur=sections.find(s=>s.id===item.sectionId)?.menu,same=cands.filter(s=>s.menu===cur);if(same.length===1)cands=same}
+ return cands.length===1?cands[0]!.id:'ambiguous'}
+/** Prova dal vivo 21/10: toglie dal testo per il validatore dei piatti le parti che nominano un'opzione di prezzo (Completo, Solo
+ * primo…) già cambiata dal pre-passo della struttura, se non nominano anche un piatto del menu. Le altre parti restano intatte. */
+export function formulaClausesOut(message:string,struct:MenuAction[],refs:MenuRef[]):string{
+ const names=struct.flatMap(a=>a.kind==='set_formula'||a.kind==='delete_formula'?[plain(a.name)]:[]).filter(n=>n.length>=3);if(!names.length)return message
+ // «9,50»: la virgola fra due cifre non separa le parti (banco adv-sera 21/10: restava «50» come parte persa).
+ const segs=message.split(/((?:(?<!\d)[,.]|[,.](?!\d)|[;!?\u2026])+|\s+(?:e|ed|poi|e poi)\s+)/i)
+ const out=segs.map((x,i)=>{if(i%2)return x;const p=' '+plain(x)+' ';if(!names.some(n=>p.includes(' '+n+' ')))return x;if(refs.some(r=>{const k=plain(r.name);return k.length>=3&&!names.includes(k)&&p.includes(' '+k+' ')}))return x;return ' '})
+ return out.join('').replace(/\s+/g,' ').trim()}
+// 21/10: risposta a una TUA domanda nata da «sposta X…» («nei panini, crealo»): il verbo vale dalla richiesta in sospeso.
+const MOVE_VERB_RE=/\b(?:spost\w*|trasferisc\w*|porta\w*)\b/
 export const CORRECTION_HEAD='IL SERVER HA RIFIUTATO IL PIANO: '
 
 // Parole d'esito: una bozza del modello che le contiene non arriva mai al titolare (il «fatto» lo scrive solo il server).
@@ -527,3 +643,217 @@ export function composeReply(decision:Pick<BrainDecision,'intent'|'plan'|'replyD
  return planText(plan,before,sections)
 }
 
+
+// run Haiku 21/10 — vincoli deterministici in più sul piano (solo motore haiku; il percorso Groq resta com'era):
+// (7) «sconto/promo/offerta» → mai un cambio del prezzo pieno: le azioni di prezzo diventano promo allo stesso prezzo;
+// (4) numero col separatore delle migliaia («13.000», «1.500») → nessun prezzo: si chiede;
+// (6) azioni opposte sullo stesso piatto (nascondi+evidenza, finito+disponibile, nascondi+mostra, due prezzi diversi) → si chiede.
+const SALE_WORDS=/\b(?:scont\w*|promo\w*|offert\w*|in saldo)\b/,SALE_OFF=/\b(?:togli\w*|lev\w*|rimuov\w*|via|niente|senza|fine)\b\s+(?:\w+\s+){0,2}(?:scont\w*|promo\w*|offert\w*)/
+export function haikuChecks(d:Omit<BrainDecision,'path'|'usage'|'tokens'>,message:string,sections:SectionRef[]=[],refs:MenuRef[]=[],fixedSecIds:Set<string>=new Set()):Omit<BrainDecision,'path'|'usage'|'tokens'>|null{
+ if(d.plan.type!=='change')return null
+ const m=plain(message),acts=d.plan.actions
+ const ask=(note:string,ids:string[])=>({...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(ids)].slice(0,5)},notes:[...d.notes,note]})
+ // Menu a prezzo fisso: i piatti non hanno prezzo → nessun set_price/promo su di loro.
+ {const bad=acts.filter(a=>(a.kind==='price'||a.kind==='promo')&&fixedSecIds.has(refs.find(r=>r.id===(a as any).id)?.sectionId??''));if(bad.length)return ask('prezzo_piatto_menu_fisso',bad.map(a=>(a as any).id))}
+ // «tutti i secondi» con un Sottomenu Secondi in più Menu e nessun Menu nominato → una sola domanda (quale Menu).
+ // 21/10 sera («aumenta tutti i primi di 1 euro»): per un cambio di prezzo contano solo i sottomenu con piatti che hanno un prezzo
+ // (fuori dai Menu fissi e dai sottomenu vuoti): un solo sottomenu così = nessuna domanda.
+ const priceOnly=acts.length>0&&acts.every(a=>a.kind==='price')
+ for(const g of m.matchAll(/\btutt[ieoa] (?:i |le |gli )?(\w+)|\b(?:i|le|gli) (\w+) tutt[ieoa]\b/g)){const secs=sections.filter(x=>sameSection(x.name,(g[1]??g[2])!)&&(!priceOnly||!refs.length||refs.some(r=>r.sectionId===x.id&&r.price>0&&!fixedSecIds.has(x.id)))),menusOf=[...new Set(secs.map(x=>x.menu))]
+  if(menusOf.length>=2&&!menusOf.some(n=>{const k=plain(n).replace(/^menu /,'');return k.length>=3&&(' '+m+' ').includes(' '+k+' ')})&&acts.some(a=>'id' in a))return ask('sottomenu_in_piu_menu',[])}
+ const pricey=acts.filter(a=>(a.kind==='price'||a.kind==='create'||a.kind==='special'||(a.kind==='promo'&&(a as any).price!==null)))
+ if(pricey.length&&/(?<![\d.,])\d{1,3}(?:\.\d{3})+(?![\d.,])/.test(message))return ask('prezzo_migliaia',pricey.flatMap(a=>'id' in a?[(a as any).id as string]:[]))
+ // «aggiungi la carbonara a 13» con la carbonara già nel menu → domanda, ma SOLO per i piatti nominati nella stessa frase dell'«aggiungi»
+ // (in un messaggio lungo «…aggiungi la bufalina a 10, la margherita a 8» la margherita resta un cambio di prezzo).
+ {const parts=message.split(/\s*[,;]\s*|\s+(?:e|ed|poi|e poi)\s+/i),ADD=/\b(?:aggiung\w*|inserisc\w*|nuov[oa])\b/,PRICEV=/\b(?:mett\w*|port\w*|cambi\w*|alz\w*|abbass\w*|aument\w*|diminu\w*|costa\w*|pass\w*|aggiorn\w*)\b/
+  // «…dovevi aggiungere il piatto, la parmigiana a 10»: un «aggiungi» senza piatto vale per i piatti delle frasi dopo (fino a un verbo di prezzo).
+  const inherit=new Set<number>();{let carry=false;parts.forEach((p,i)=>{const pp=plain(p),named=refs.some(r=>g9DishMentioned(r.name,p,refs));if(PRICEV.test(pp))carry=false;if(carry&&named)inherit.add(i);if(ADD.test(pp)&&!named&&!/\d/.test(pp))carry=true})}
+  const flagged=acts.filter(a=>a.kind==='price'&&parts.some((p,i)=>{const pp=plain(p);const r=refs.find((x:MenuRef)=>x.id===(a as any).id);return !!r&&(ADD.test(pp)||inherit.has(i))&&!PRICEV.test(pp)&&!/\baggiung\w* (?:un|uno|\d+(?:[.,]\d+)?) euro\b/.test(pp)&&g9DishMentioned(r.name,p,refs)}))
+  if(flagged.length)return ask('piatto_gia_presente',flagged.map(a=>(a as any).id))}
+ // (A) data futura: il bot non programma → domanda «lo cambio subito?» con l'azione capita in attesa della risposta.
+ if(/\b(?:da|dal|dalla|a partire da|per|solo)\s+(?:domani|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|stasera|stanotte|settimana prossima|prossima settimana)\b|\bdomani\b/.test(m)&&acts.some(a=>a.kind!=='special'))
+  return{...d,intent:'clarify' as const,plan:{type:'clarify' as const,ids:[...new Set(acts.flatMap(a=>'id' in a?[(a as any).id as string]:[]))].slice(0,5),actions:acts},notes:[...d.notes,'data_futura']}
+ // adv-sera 21/10 notte: «togli la diavola, per oggi non la facciamo» = nascondi; «finito» in più solo se il titolare lo dice.
+ if(!/\b(?:finit\w*|esaurit\w*|terminat\w*|non c e piu|fernut\w*|sold out)\b/.test(m)){const hidIds=new Set(acts.flatMap(a=>a.kind==='hidden'&&a.value?[a.id]:[]));const drop=acts.filter(a=>a.kind==='available'&&!a.value&&hidIds.has(a.id));if(drop.length){d={...d,plan:{...d.plan,actions:acts.filter(a=>!drop.includes(a))} as MenuPlan,notes:[...d.notes,'nascondi_non_finito']};return haikuChecks(d,message,sections,refs,fixedSecIds)??d}}
+ const by=new Map<string,MenuAction[]>();for(const a of acts)if('id' in a&&typeof (a as any).id==='string')by.set((a as any).id,[...(by.get((a as any).id)??[]),a])
+ for(const [id,list] of by){const v=(k:string)=>list.filter(a=>a.kind===k).map(a=>(a as any).value)
+  const hid=v('hidden'),av=v('available'),fe=v('featured'),pr=new Set(list.filter(a=>a.kind==='price').map(a=>Math.round((a as any).price*100)))
+  if((hid.includes(true)&&hid.includes(false))||(av.includes(true)&&av.includes(false))||(fe.includes(true)&&fe.includes(false))||(hid.includes(true)&&fe.includes(true))||pr.size>1)return ask('azioni_contraddittorie',[id])}
+ // notte 22/10 (bv-correzioni-003 «la parmigiana a 15 e il tiramisù in promo a 3»): se il piano ha già una promo, il modello ha distinto
+ // prezzo e promo: i prezzi restano prezzi (prima diventava «promo della parmigiana a 15 > pieno 10»).
+ if(SALE_WORDS.test(m)&&!SALE_OFF.test(m)&&acts.some(a=>a.kind==='price')&&!acts.some(a=>a.kind==='promo')){const conv=acts.map(a=>a.kind==='price'?{kind:'promo',id:a.id,price:a.price,until:null} as MenuAction:a);return{...d,plan:{...d.plan,actions:conv},notes:[...d.notes,'sconto_come_promo']}}
+ return null}
+
+const STRUCT_VERB=/\b(?:ho detto|devi|dovevi|crea\w*|aggiung\w*|mett\w*|voglio|vorrei|fai|fammi|inizia|nuov[oa]|chiama\w*)\b/
+const menuKey=(n:string)=>plain(n).replace(/^(?:il |un |nuovo )?menu /,'').replace(/^(?:del |della |di )/,'').trim()
+/** Menu nuovi e Sottomenu dal piano del modello (solo motore haiku). `ask` = cosa manca per farlo (si chiede, non si scrive). */
+export function structureActions(raw:any[],input:{message:string,history?:BrainTurn[],sections:SectionRef[],refs?:MenuRef[],codes?:Map<string,string>,menus?:{id:string,name:string,sections:number,active?:boolean,pricing?:'carta'|'fisso',formulas?:{id:string,name:string,price:number}[],included?:string|null,secs?:{id:string,name:string,active:boolean,parent:string|null,items:number}[]}[],pending?:BrainContextInput['pending'],now?:number}):{actions:MenuAction[],notes:string[],ask:string|null}{
+ const said=plain([input.message,...(input.history??[]).filter(t=>t.role==='owner').slice(-4).map(t=>t.text)].join(' \n '))
+ const okName=(n:unknown)=>{if(typeof n!=='string')return null;const t=n.replace(/[*_~`]/g,'').replace(/\s+/g,' ').trim().slice(0,60);const k=plain(t);if(!k||k.split(' ').length>5||STRUCT_VERB.test(k)||/\p{Extended_Pictographic}/u.test(t))return null
+  return (' '+said+' ').includes(' '+k+' ')||(' '+said+' ').includes(' '+k.replace(/i$/,'o')+' ')||(' '+said+' ').includes(' '+k.replace(/o$/,'i')+' ')?t.charAt(0).toLocaleUpperCase('it')+t.slice(1):null}
+ const menus=[...(input.menus??[...new Map(input.sections.map(s=>[s.menu,{id:s.menu,name:s.menu,sections:1}])).values()])].map(m=>({...m,fresh:false}))
+ const actions:MenuAction[]=[],notes:string[]=[]
+ const typeOf=(n:string):'main'|'lunch'|'dinner'|'drinks'=>{const k=plain(n);return /\bpranz/.test(k)?'lunch':/\bcen[ae]\b/.test(k)?'dinner':/\b(?:bevand|bibit|vin[io]|drink|cocktail|bar)\b/.test(k)?'drinks':'main'}
+ for(const a of raw){if(!a||a.action!=='create_menu')continue;const name=okName(a.name??a.menu);if(!name)return{actions:[],notes:[],ask:'nome_menu'}
+  if(menus.some(m=>menuKey(m.name)===menuKey(name))){notes.push('menu_esistente:'+name);continue}
+  const id=randomUUID();menus.push({id,name,sections:0,fresh:true});actions.push({kind:'create_menu',newMenuId:id,name,type:typeOf(name)} as MenuAction)}
+ const itemsIn=(sectionId:string)=>(input.refs??[]).filter(r=>r.sectionId===sectionId).length
+ const secOfMenu=(menuName:string)=>input.sections.filter(x=>x.menu===menuName)
+ // Correzioni di una struttura appena creata: si toglie solo ciò che è vuoto (Menu senza piatti, Sottomenu senza piatti).
+ // «no, anche Cocktail» aggiunge: con «anche/pure/in più» nessuna rimozione; senza un segnale di correzione nessuna rimozione.
+ const pm=plain(input.message),allowDel=!/\b(?:anche|pure|inoltre|in piu|e poi|aggiungi)\b/.test(pm)&&/\b(?:no|non|invece|chiamal\w*|rinomin\w*|sbagliat\w*|intendevo|togli\w*|lev\w*|elimin\w*|cancell\w*|rimuov\w*)\b/.test(pm)
+ if(!allowDel&&raw.some((a:any)=>a&&(a.action==='delete_menu'||a.action==='delete_section'))){notes.push('rimozione_scartata');raw=raw.filter((a:any)=>!a||(a.action!=='delete_menu'&&a.action!=='delete_section'))}
+ for(const a of raw){if(!a||a.action!=='delete_menu')continue;const k=menuKey(String(a.name??a.menu??''));const m=menus.find(x=>!x.fresh&&menuKey(x.name)===k);if(!m)return{actions:[],notes:[],ask:'menu_da_togliere'}
+  if(secOfMenu(m.name).some(x=>itemsIn(x.id)))return{actions:[],notes:[],ask:'menu_non_vuoto'}
+  actions.push({kind:'delete_menu',menuId:m.id,name:m.name} as MenuAction);menus.splice(menus.indexOf(m),1)}
+ for(const a of raw){if(!a||a.action!=='delete_section')continue;const n=String(a.name??'');const want=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null
+  const cands=input.sections.filter(x=>sameSection(x.name,n)&&(!want||menuKey(x.menu)===want));if(cands.length!==1)return{actions:[],notes:[],ask:'sottomenu_da_togliere'}
+  if(itemsIn(cands[0]!.id))return{actions:[],notes:[],ask:'sottomenu_non_vuoto'}
+  actions.push({kind:'delete_section',sectionId:cands[0]!.id,name:cands[0]!.name,menuName:cands[0]!.menu} as MenuAction)}
+ for(const a of raw){if(!a||a.action!=='create_section')continue;const name=okName(a.name??a.section);if(!name)return{actions:[],notes:[],ask:'nome_sottomenu'}
+  const parentId=typeof a.section==='string'?input.codes?.get(a.section.trim().toLowerCase()):undefined
+  let parent=parentId?input.sections.find(x=>x.id===parentId):undefined
+  // notte 22/10 (cieco b1 «nella cena dentro le pizze crea la sezione Pizze rosse»): «sezione» + «dentro/nelle/tra le X» con X un sottomenu
+  // (di primo livello) del Menu detto = Sezione dentro X (prima diventava un sottomenu nuovo).
+  if(!parent&&/\bsezion\w*/.test(plain(input.message))){const want0=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null,pm0=plain(input.message)
+   const said=[...pm0.matchAll(/\b(?:dentro|dentro a|dentro al|dentro alla|dentro le|dentro i|nel|nei|nelle|nella|negli|tra|fra|sotto)\s+(?:(?:il|i|le|la|lo|gli|l)\s+)?([a-z]+)/g)].map(m=>m[1]!)
+   const cands=input.sections.filter(x=>!(x as any).parent&&(!want0||menuKey(x.menu)===want0)&&plain(x.name)!==plain(name)&&said.some(w=>sameSection(x.name,w)||sameSection(x.name,w.split(' ')[0]!)))
+   if(cands.length===1)parent=cands[0]}
+  if(parent){const pm=menus.find(m=>m.name===parent.menu);if(!pm)return{actions:[],notes:[],ask:'menu_del_sottomenu'}
+   if(input.sections.some(x=>x.menu===parent.menu&&sameSection(x.name,name))){notes.push('sottomenu_esistente:'+name);continue}
+   actions.push({kind:'create_section',newSectionId:randomUUID(),name,menuId:pm.id,menuName:pm.name,parentSectionId:parent.id,parentName:parent.name} as MenuAction);continue}
+  const want=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null
+  const menu=want?menus.find(m=>menuKey(m.name)===want)??menus.find(m=>menuKey(m.name).includes(want)||want.includes(menuKey(m.name))):menus.length===1?menus[0]:null
+  if(!menu)return{actions:[],notes:[],ask:'menu_del_sottomenu'}
+  // Sottomenu col nome del suo stesso Menu («Aperitivo» → «Aperitivi») dopo un «vai»: inventato, si scarta se il titolare non l'ha detto adesso.
+  if(sameSection(menuKey(menu.name),plain(name))&&!/\b(?:sottomenu|categori\w*|sezion\w*)\b/.test(plain(input.message))){notes.push('sottomenu_come_menu:'+name);continue}
+  const dup=input.sections.some(s=>s.menu===menu.name&&sameSection(s.name,name))||actions.some(x=>x.kind==='create_section'&&x.menuId===menu.id&&sameSection(x.name,name))
+  if(dup){notes.push('sottomenu_esistente:'+name);continue}
+  actions.push({kind:'create_section',newSectionId:randomUUID(),name,menuId:menu.id,menuName:menu.name,hidden:!menu.fresh&&(menu as {active?:boolean}).active!==false} as MenuAction)}
+ // Menu a prezzo fisso (21/10): opzioni di prezzo, tipo di prezzo, sostituzione giornaliera dei piatti di un sottomenu.
+ // Banco prezzofisso 21/10 (pf-ambigua-04/05): «il completo a 17» → «pranzo o cena?» → «a cena»: il prezzo detto nella richiesta a cui
+ // il titolare sta rispondendo vale (domanda aperta del bot, entro 10 minuti). Mai numeri presi dalle risposte del bot.
+ const hist=input.history??[],lastBotT=[...hist].reverse().find(t=>t.role==='bot'),answering=!!lastBotT&&BOT_QUESTION.test(lastBotT.text)&&(input.now??Date.now())-lastBotT.at<=PENDING_MS
+ const prevOwner=answering?[...hist].reverse().find(t=>t.role==='owner'&&t.at<=lastBotT!.at)?.text??'':''
+ const srcText=[input.pending?.clarify?.source??'',input.pending?.hold?.source??'',prevOwner].filter(Boolean).join(' \n ')
+ const saidNums=[...numbersIn(input.message),...(srcText?numbersIn(srcText):[])].map(n=>Math.round(n*100)/100),said2=(v:unknown)=>typeof v==='number'&&saidNums.includes(Math.round(v*100)/100)
+ const menuOf=(v:unknown)=>{const k=menuKey(String(v??''));if(!k)return (input.menus??[]).length===1?input.menus![0]:null;return (input.menus??[]).find(x=>menuKey(x.name)===k)??(input.menus??[]).find(x=>k.length>=3&&(menuKey(x.name).includes(k)||k.includes(menuKey(x.name))))??null}
+ const fixedMenus=(input.menus??[]).filter(m=>m.pricing==='fisso')
+ for(const a of raw){if(!a||(a.action!=='set_formula_price'&&a.action!=='create_formula'))continue
+  let m=menuOf(a.menu);if(!m&&!(typeof a.menu==='string'&&a.menu.trim())&&fixedMenus.length===1)m=fixedMenus[0]!
+  if(!m)return{actions:[],notes:[],ask:'menu_della_formula'}
+  const n=String(a.name??'').trim(),fk=plain(n),fs=m.formulas??[],hit=fs.find(f=>plain(f.name)===fk)??fs.find(f=>fk.length>=3&&(plain(f.name).includes(fk)||fk.includes(plain(f.name))))
+  // «alza il completo della cena di un euro»: differenza detta (letta dal server sul messaggio, stesso verso del modello) sul prezzo attuale.
+  // Banco prezzofisso finale 21/10 (pf-ambigua-01/04, sicurezza): «il completo a 17» con un Completo a pranzo E a cena → il modello
+  // sceglieva il pranzo da solo. Opzione omonima in più Menu fissi e nessuno nominato dal titolare (messaggio o richiesta a cui
+  // risponde) → domanda, mai una scelta del modello.
+  if(hit){const ctx=' '+plain(input.message+' '+srcText)+' ',said3=(x:{name:string})=>{const k=menuKey(x.name);return(!!k&&ctx.includes(' '+k))||(/pranz/.test(k)&&/ (?:pranz|mezzogiorn)/.test(ctx))||(/cena/.test(k)&&/ (?:cen|sera|stasera|stasser)/.test(ctx))}
+   const twins=fixedMenus.filter(x=>(x.formulas??[]).some(f=>plain(f.name)===plain(hit.name)))
+   if(twins.length>1&&!twins.some(said3))return{actions:[],notes:[],ask:'menu_della_formula'}}
+  let price:number|null=typeof a.price==='number'&&said2(a.price)?a.price:null
+  if(price===null&&a.price==null&&typeof a.price_delta==='number'&&hit){const rd=relativeDelta(dialectNumbers(input.message));if(rd&&Math.sign(rd.delta)===Math.sign(a.price_delta)&&Math.abs(Math.abs(rd.delta)-Math.abs(a.price_delta))<0.005){const v=Math.round((hit.price+rd.delta)*100)/100;if(v>0)price=v}}
+  if(price===null)return{actions:[],notes:[],ask:'prezzo_formula_non_detto'}
+  if(hit){if(Math.abs(hit.price-price)<0.005){notes.push('formula_gia:'+hit.name);continue};actions.push({kind:'set_formula',menuId:m.id,menuName:m.name,formulaId:hit.id,isNew:false,name:hit.name,price,before:hit.price} as MenuAction);continue}
+  if(a.action==='set_formula_price'&&fs.length)return{actions:[],notes:[],ask:'formula_da_trovare'}
+  const name=okName(n);if(!name)return{actions:[],notes:[],ask:'nome_formula'}
+  actions.push({kind:'set_formula',menuId:m.id,menuName:m.name,formulaId:randomUUID(),isNew:true,name,price,note:typeof a.text==='string'&&a.text.trim()?a.text.trim().slice(0,300):null} as MenuAction)}
+ for(const a of raw){if(!a||a.action!=='delete_formula')continue;const m=menuOf(a.menu)??(fixedMenus.length===1?fixedMenus[0]!:null);if(!m)return{actions:[],notes:[],ask:'menu_della_formula'}
+  const fk=plain(String(a.name??'')),hit=(m.formulas??[]).find(f=>plain(f.name)===fk)??(m.formulas??[]).find(f=>fk.length>=3&&plain(f.name).includes(fk));if(!hit)return{actions:[],notes:[],ask:'formula_da_trovare'}
+  actions.push({kind:'delete_formula',menuId:m.id,menuName:m.name,formulaId:hit.id,name:hit.name} as MenuAction)}
+ for(const a of raw){if(!a||a.action!=='set_menu_pricing')continue;const m=menuOf(a.menu??a.name);if(!m)return{actions:[],notes:[],ask:'menu_da_trovare'};const v=/fiss/.test(plain(String(a.text??a.value??'')))?'fisso':'carta'
+  if((m.pricing??'carta')===v){notes.push('pricing_gia:'+m.name);continue};actions.push({kind:'set_menu_pricing',menuId:m.id,name:m.name,value:v} as MenuAction)}
+ for(const a of raw){if(!a||a.action!=='replace_section_items')continue
+  const code=typeof a.section==='string'?input.codes?.get(a.section.trim().toLowerCase()):undefined
+  let sec=code?input.sections.find(x=>x.id===code):undefined
+  if(!sec){const n=String(a.section??a.name??''),want=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null,c=input.sections.filter(x=>sameSection(x.name,n)&&(!want||menuKey(x.menu)===want));if(c.length!==1)return{actions:[],notes:[],ask:c.length?'sottomenu_ambiguo':'sottomenu_da_trovare'};sec=c[0]}
+  const menu=(input.menus??[]).find(m=>m.name===sec!.menu),fixed=menu?.pricing==='fisso'
+  const names=String(a.text??'').split(/\s*[;\n]\s*/).map(x=>x.replace(/[*_~`]/g,'').trim()).filter(Boolean).slice(0,40)
+  if(!names.length)return{actions:[],notes:[],ask:'piatti_mancanti'}
+  // 21/10 sera: dentro una sessione di modifica dei piatti di oggi vale anche per un Menu alla carta (i nuovi vogliono il prezzo).
+  const inSession=(input.pending as any)?.session?.menu===sec!.menu
+  if(!fixed&&!inSession)return{actions:[],notes:[],ask:'sostituzione_alla_carta'}
+  const inSec=(input.refs??[]).filter(r=>r.sectionId===sec!.id),used=new Set<string>()
+  for(const raw1 of names){const pm=fixed?null:raw1.match(/^(.*?)\s+(?:a\s+)?(\d+(?:[.,]\d{1,2})?)\s*(?:€|euro)?$/i),raw0=pm?pm[1]!.trim():raw1,cartaPrice=pm?Number(pm[2]!.replace(',','.')):null,nm=raw0.charAt(0).toLocaleUpperCase('it')+raw0.slice(1);if(STRUCT_VERB.test(plain(nm))||plain(nm).split(' ').length>8)return{actions:[],notes:[],ask:'nome_piatto'}
+   if(!(' '+said+' ').includes(' '+plain(nm).split(' ')[0]!.slice(0,5)))return{actions:[],notes:[],ask:'nome_non_detto'}
+   // Banco prezzofisso 21/10 (pf-sostituzione-01: «secondi cotoletta» creava «Cotoletta» e nascondeva «Cotoletta alla milanese»):
+   // il nome detto che indica senza ambiguità un piatto di QUESTO sottomenu (contenuto, prefisso, plurali, accenti) è quel piatto;
+   // nuovo solo senza candidati; più candidati veri → domanda. Mai un piatto di un altro Menu.
+   let free=inSec.filter(r=>!used.has(r.id)),c=replaceCandidates(nm,free),hit=free.find(r=>plain(r.name)===plain(nm))??free.find(r=>sameDishName(r.name,nm))??(c.length===1?c[0]:undefined)
+   // Banco prezzofisso finale 21/10 (pf-sostituzione-16): detto «gnocchi al ragù», il modello passa «Gnocchi al pomodoro» (piatto
+   // esistente simile) → rimostrava quello sbagliato. Se il titolare ha detto per quel piatto una frase con parole che il nome
+   // scelto NON ha, vale la frase detta: un solo piatto che la contiene tutta → quello; nessuno → nuovo; più di uno → domanda.
+   if(hit){const h0=hit,hw=replWords(h0.name)
+    // Prefisso della frase con tante parole significative quante il nome scelto (i vocali non hanno punteggiatura).
+    const head=(x:string)=>{const ws=x.split(/\s+/),o:string[]=[];let n=0;for(const w of ws){if(n>=hw.length)break;o.push(w);if(!REPL_STOP.has(plain(w)))n++}return o.join(' ')}
+    const fits=(x:string)=>replWords(head(x)).every(w=>replWordIn(w,hw))
+    const phs=replaceSaidPhrases(nm,[input.message,...(input.history??[]).filter(t=>t.role==='owner').slice(-2).map(t=>t.text)],input.sections.map(x=>plain(x.name)))
+    // Si cambia il nome scelto dal modello SOLO se nessuna lettura della frase detta (tagliata a «e» o intera) è compatibile:
+    // «pasta e fagioli» resta Pasta e fagioli; «gnocchi al ragù e risotto» non è mai Gnocchi al pomodoro.
+    if(phs.length&&!phs.some(p=>fits(p.cut)||fits(p.full))){const ph=head(phs[0]!.cut),c2=replaceCandidates(ph,free)
+     if(c2.length>1)return{actions:[],notes:[],ask:'piatto_ambiguo_sostituzione'}
+     if(c2.length===1)hit=c2[0];else{if(!fixed&&!(cartaPrice&&cartaPrice>0))return{actions:[],notes:[],ask:'prezzo_nuovo_alla_carta'};actions.push({kind:'create',sectionId:sec!.id,name:ph.charAt(0).toLocaleUpperCase('it')+ph.slice(1),price:fixed?0:cartaPrice!,description:null,fromReplace:true} as any);continue}}}
+   if(!hit&&c.length>1)return{actions:[],notes:[],ask:'piatto_ambiguo_sostituzione'}
+   if(hit){used.add(hit.id);if(hit.hidden)actions.push({kind:'hidden',id:hit.id,value:false,fromReplace:true} as any);if(!fixed&&cartaPrice&&cartaPrice>0&&Math.abs(cartaPrice-hit.price)>=0.005)actions.push({kind:'price',id:hit.id,price:cartaPrice,fromReplace:true} as any)}
+   else{if(!replaceWordsSaid(nm,said))return{actions:[],notes:[],ask:'nome_non_detto'};if(!fixed&&!(cartaPrice&&cartaPrice>0))return{actions:[],notes:[],ask:'prezzo_nuovo_alla_carta'};actions.push({kind:'create',sectionId:sec!.id,name:nm,price:fixed?0:cartaPrice!,description:null,fromReplace:true} as any)}}
+  for(const r of inSec)if(!used.has(r.id)&&!r.hidden)actions.push({kind:'hidden',id:r.id,value:true,fromReplace:true} as any)
+  notes.push('sostituzione:'+sec!.id+':'+names.map(x=>x.replace(/[:;]/g,' ')).join(';'))}
+ // Mostrare/nascondere un intero Menu o Sottomenu (decisione Manuel 21/10). Già così → niente azione, nota per la risposta.
+ for(const a of raw){if(!a||a.action!=='set_menu_visible')continue;const k=menuKey(String(a.menu??a.name??''));const m=(input.menus??[]).find(x=>menuKey(x.name)===k)??(input.menus??[]).find(x=>k.length>=3&&(menuKey(x.name).includes(k)||k.includes(menuKey(x.name))))
+  if(!m)return{actions:[],notes:[],ask:'menu_da_mostrare'};const value=a.value!==false;if((m.active!==false)===value){notes.push('menu_gia:'+m.name);continue}
+  actions.push({kind:'set_menu_active',menuId:m.id,name:m.name,value,items:(m.secs??[]).reduce((n,x)=>n+x.items,0)} as MenuAction)}
+ for(const a of raw){if(!a||a.action!=='set_section_visible')continue;const n=String(a.name??'');const want=typeof a.menu==='string'&&a.menu.trim()?menuKey(a.menu):null
+  const cands0=(input.menus??[]).flatMap(m=>(m.secs??[]).filter(x=>sameSection(x.name,n)&&(!want||menuKey(m.name)===want)).map(x=>({...x,menu:m.name})))
+  // notte 22/10 (str-v-08 «fai vedere i dolci della cena»): il Menu detto nel messaggio sceglie tra sottomenu con lo stesso nome.
+  const inMsg=cands0.filter(c=>{const k=menuKey(c.menu);return k.length>=3&&(' '+plain(input.message)+' ').includes(' '+k+' ')}),cands=cands0.length>1&&inMsg.length===1?inMsg:cands0
+  if(cands.length!==1)return{actions:[],notes:[],ask:cands.length?'sottomenu_ambiguo':'sottomenu_da_mostrare'};const c=cands[0]!,value=a.value!==false
+  if(c.active===value){notes.push('sottomenu_gia:'+c.name);continue}
+  actions.push({kind:'set_section_active',sectionId:c.id,name:c.name,menuName:c.menu,value,items:c.items} as MenuAction)}
+ return{actions,notes,ask:null}}
+
+// Sostituzione giornaliera (banco prezzofisso 21/10): ritrovare il piatto esistente di un sottomenu dal nome detto.
+const REPL_STOP=new Set(['al','alla','alle','allo','all','ai','agli','di','del','della','dello','dei','degli','delle','dell','con','e','ed','in','la','il','lo','l','le','i','gli','un','una','uno','da','nel','nella','sul','sulla'])
+const replStem=(w:string)=>w.length>4?w.replace(/[aeio]$/,''):w
+const replWords=(n:string)=>plain(n).split(' ').filter(w=>w&&!REPL_STOP.has(w))
+const replWordIn=(w:string,pool:string[])=>pool.some(c=>replStem(c)===replStem(w)||(w.length>=4&&c.startsWith(w)))
+/** Piatti del sottomenu che contengono TUTTE le parole significative del nome detto (stessa radice o prefisso ≥4 lettere):
+ * «cotoletta» → Cotoletta alla milanese, «polpetta» → Polpette al sugo; «gnocchi al ragù» non è Gnocchi al pomodoro. */
+export function replaceCandidates(said:string,inSec:MenuRef[]):MenuRef[]{
+ const ws=replWords(said);if(!ws.length)return[]
+ const all=inSec.filter(r=>{const rs=replWords(r.name);return ws.every(w=>replWordIn(w,rs))})
+ // Fra più candidati vale quello col nome uguale (a meno di plurali/articoli) a quello detto.
+ const same=all.filter(r=>{const rs=replWords(r.name);return rs.length===ws.length&&rs.every(w=>replWordIn(w,ws))});if(same.length===1)return same;if(all.length)return all
+ // 21/10 notte (refusi: «risoto», «pomodorro», «cotolleta»): una lettera in più/meno/diversa per parola (≥5 lettere) = stesso piatto, solo se uno.
+ const fz=inSec.filter(r=>{const rs=replWords(r.name);return ws.every(w=>rs.some(c=>c===w||(w.length>=5&&c.length>=5&&lev1(c,w))))});return fz.length===1?fz:[]}
+const lev1=(a:string,b:string)=>{if(Math.abs(a.length-b.length)>1)return false;let i=0,j=0,e=0;while(i<a.length&&j<b.length){if(a[i]===b[j]){i++;j++;continue}if(++e>1)return false;if(a.length>b.length)i++;else if(b.length>a.length)j++;else{i++;j++}}return e+(a.length-i)+(b.length-j)<=1}
+/** Frase detta dal titolare per un piatto della sostituzione: dal primo termine del nome (stessa radice) fino al prossimo
+ * separatore («,», «;», «.», « e », a capo). null se non trovata. «stasera i primi sono gnocchi al ragù e risotto» + «Gnocchi…» → «gnocchi al ragù». */
+const PHRASE_STOP=/^(?:primi|primo|secondi|secondo|contorni|contorno|dolci|dolce|antipasti|antipasto|pizze|panini|stasera|oggi|domani|pranzo|cena|sono|c|ce|poi|invece|anche|mentre)$/
+export function replaceSaidPhrases(name:string,texts:string[],stops?:string[]):{cut:string,full:string}[]{const first=replWords(name)[0];if(!first)return[]
+ const out:{cut:string,full:string}[]=[]
+ for(const t of texts){for(const seg of String(t??'').replace(/[*_~`🎤…]/g,' ').split(/[,;.:\n]/)){const ws=seg.trim().split(/\s+/).filter(Boolean)
+  ws.forEach((w,i)=>{if(!replWordIn(first,[plain(w)]))return
+   const stop=(k:number)=>PHRASE_STOP.test(plain(ws[k]!))||(stops??[]).some(x=>sameSection(x,plain(ws[k]!)))
+   let j=i+1;while(j<ws.length&&j<i+6&&!stop(j))j++;const full=ws.slice(i,j).join(' ')
+   let k=i+1;while(k<j&&!/^(?:e|ed|poi)$/i.test(ws[k]!))k++;const cut=ws.slice(i,k).join(' ')
+   if(full)out.push({cut,full})})}}
+ return out}
+/** Frase detta per il piatto (la prima, tagliata a «e»): solo per i test e i messaggi. */
+export function replaceSaidPhrase(name:string,texts:string[],stops?:string[]):string|null{return replaceSaidPhrases(name,texts,stops)[0]?.cut??null}
+/** Un piatto NUOVO della sostituzione ha un nome detto per intero dal titolare (ogni parola significativa nel testo detto). */
+export function replaceWordsSaid(name:string,said:string):boolean{const pool=plain(said).split(' ');return replWords(name).every(w=>replWordIn(w,pool))}
+
+/** Menu a prezzo fisso (banco prezzofisso 21/10): domanda su opzioni / prezzo fisso → testo del server dal menu (null = non è una
+ * domanda sulle opzioni). Menu nominati («a cena», «la sera», «il pranzo») o, senza nome, tutti i Menu fissi. */
+export function formulaRead(message:string,menus:BrainContextInput['menus']=[]):string|null{
+ const all=menus??[],fixed=all.filter(m=>m.pricing==='fisso');if(!fixed.length)return null
+ const p=' '+plain(message)+' ',num=(n:number)=>n.toFixed(2).replace('.',',')+' €'
+ const isNamed=(m:{name:string})=>{const k=menuKey(m.name);return (k.length>=3&&p.includes(' '+k+' '))||(/\bcen[ae]\b/.test(k)&&/ (?:sera|stasera|serale|cena) /.test(p))||(/\bpranz/.test(k)&&/ (?:pranzo|mezzogiorno) /.test(p))}
+ const named=all.filter(isNamed),fNamed=fixed.filter(m=>(m.formulas??[]).some(f=>{const k=plain(f.name);return k.length>=3&&p.includes(' '+k+' ')}))
+ const fixedWord=/ (?:prezzo fisso|menu fisso|opzion\w*|formul\w*) /.test(p)
+ if(!(fixedWord||fNamed.length||(named.some(m=>m.pricing==='fisso')&&/ (?:quanto|costa\w*|prezz\w*|viene|vengono) /.test(p))))return null
+ const pick=named.length?(fNamed.length&&named.filter(m=>fNamed.includes(m)).length?named.filter(m=>fNamed.includes(m)):named):fNamed.length?fNamed:fixed
+ const yesNo=/ (?:prezzo fisso|menu fisso) /.test(p)&&pick.length===1
+ const label=(m:{name:string},lead:string)=>{const n=/^men[uù]\b/i.test(m.name.trim())?'*'+m.name.trim()+'*':'Menu *'+m.name.trim()+'*';return lead?lead+'il '+n:'Il '+n}
+ return pick.map(m=>{if(m.pricing!=='fisso')return label(m,yesNo?'No, ':'')+' è alla carta: ogni piatto ha il suo prezzo.'
+  const fs=(m.formulas??[]).filter(f=>f&&f.name.trim())
+  return label(m,yesNo?'Sì, ':'')+' è a prezzo fisso. '+(fs.length?'Opzioni: '+fs.map(f=>'*'+f.name.trim()+'* '+num(f.price)).join(' · ')+'.':'Nessuna opzione di prezzo salvata.')+(m.included?' Compreso: '+m.included+'.':'')}).join('\n')}

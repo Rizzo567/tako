@@ -34,10 +34,10 @@ CREATE POLICY takomenu_runtime_backend ON public.menu_item_translations FOR ALL 
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.menu_item_translations TO takomenu_runtime;
 ALTER TABLE public.rooms ENABLE ROW LEVEL SECURITY;
 CREATE POLICY takomenu_runtime_backend ON public.rooms FOR ALL TO takomenu_runtime USING (true) WITH CHECK (true);
-GRANT SELECT ON public.rooms TO takomenu_runtime;
+GRANT SELECT, INSERT ON public.rooms TO takomenu_runtime;
 ALTER TABLE public.tables ENABLE ROW LEVEL SECURITY;
 CREATE POLICY takomenu_runtime_backend ON public.tables FOR ALL TO takomenu_runtime USING (true) WITH CHECK (true);
-GRANT SELECT, UPDATE ON public.tables TO takomenu_runtime;
+GRANT SELECT, INSERT, UPDATE ON public.tables TO takomenu_runtime;
 ALTER TABLE public.waiter_calls ENABLE ROW LEVEL SECURITY;
 CREATE POLICY takomenu_runtime_backend ON public.waiter_calls FOR ALL TO takomenu_runtime USING (true) WITH CHECK (true);
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.waiter_calls TO takomenu_runtime;

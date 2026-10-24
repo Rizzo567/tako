@@ -36,7 +36,7 @@ export async function readOnlyMenu(response,method){
   headers.set('Cache-Control','no-store');
   return new Response(JSON.stringify(data),{status:response.status,headers});
 }
-export async function proxy(request, env, fetcher = fetch) {
+export async function proxy(request, env, fetcher = fetch, options = {}) {
   const base = backendURL(env);
   if (!base) return unavailable();
   if(typeof env.TAKO_GATEWAY_SECRET!=='string'||env.TAKO_GATEWAY_SECRET.length<32)return unavailable();
@@ -45,16 +45,26 @@ export async function proxy(request, env, fetcher = fetch) {
   const incoming = new URL(request.url);
   const target = new URL(base.href.replace(/\/$/, '') + incoming.pathname + incoming.search);
   const headers = new Headers(request.headers);
-  for (const key of ['host','connection','x-forwarded-host','x-forwarded-proto','x-forwarded-for','forwarded','x-tako-gateway-secret','x-tako-gateway-origin','x-tako-client-ip','x-restaurant-id','x-user-id','x-role']) headers.delete(key);
+  for (const key of ['host','connection','x-forwarded-host','x-forwarded-proto','x-forwarded-for','forwarded','x-tako-gateway-secret','x-tako-gateway-origin','x-tako-client-ip','x-tako-gateway-received-at','x-restaurant-id','x-user-id','x-role']) headers.delete(key);
   headers.set('x-forwarded-host', incoming.host);
   headers.set('x-forwarded-proto', 'https');
   headers.set('x-tako-gateway-secret',env.TAKO_GATEWAY_SECRET);
   headers.set('x-tako-gateway-origin',incoming.origin);
   headers.set('x-tako-client-ip',trustedIP);
+  if(Number.isSafeInteger(options.receivedAt))headers.set('x-tako-gateway-received-at',String(options.receivedAt));
   // Origin, Cookie, Authorization, CSRF and multipart boundary remain intact.
   try {
     const upstream = await fetcher(new Request(target, {method:request.method,headers,body:['GET','HEAD'].includes(request.method)?undefined:request.body,redirect:'manual',duplex:'half',signal:request.signal}));
     const responseHeaders = new Headers(upstream.headers);
+    // Supabase replaces HTML Content-Type and CSP. Only the two server-generated account pages opt in.
+    const emailNonce=responseHeaders.get('X-Takomenu-Email-Nonce');
+    if (['GET','HEAD'].includes(request.method) && ['/api/web-accounts/email/settings','/api/web-accounts/email/confirm'].includes(incoming.pathname) && upstream.ok && /^[A-Za-z0-9+/]{24}$/.test(emailNonce||'')) {
+      responseHeaders.set('Content-Type','text/html; charset=utf-8');
+      responseHeaders.set('Content-Security-Policy',`default-src 'none'; script-src 'nonce-${emailNonce}'; style-src 'nonce-${emailNonce}'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'`);
+      responseHeaders.set('X-Content-Type-Options','nosniff');
+      responseHeaders.set('Cache-Control','no-store');
+      responseHeaders.delete('X-Takomenu-Email-Nonce');
+    }
     const image=/^\/uploads\/[a-f0-9-]{36}\/[A-Za-z0-9_-]{16}\.(?:jpg|png|webp|gif)$/.test(incoming.pathname)&&['GET','HEAD'].includes(request.method)&&upstream.ok&&/^image\/(?:jpeg|png|webp|gif)(?:;|$)/.test(upstream.headers.get('Content-Type')||'');
     if(!image)responseHeaders.set('Cache-Control','no-store');
     const cookies = upstream.headers.getSetCookie?.() ?? [];
@@ -71,6 +81,21 @@ export async function proxy(request, env, fetcher = fetch) {
     }
     return new Response(upstream.body,{status:upstream.status,statusText:upstream.statusText,headers:responseHeaders});
   } catch { return unavailable(); }
+}
+// Webhook WhatsApp (22/10): dopo un deploy dell'edge il router Supabase può tenere ferma la richiesta oltre i 15 s di Twilio.
+// Twilio allora chiude, e con request.signal la richiesta inoltrata moriva con lui: il messaggio del titolare andava perso.
+// Qui il corpo (piccolo, form firmato) si legge subito, la richiesta verso Supabase NON eredita il segnale del client
+// e resta viva in ctx.waitUntil (fino a 30 s dopo la chiusura di Twilio). L'ora di arrivo al gateway viaggia nell'header
+// x-tako-gateway-received-at (impostato solo qui, rimosso se arriva dall'esterno) così l'edge può capire che è in ritardo.
+export const TWILIO_WEBHOOK_PATH='/api/whatsapp/twilio';
+export async function twilioWebhook(request,env,ctx,fetcher=fetch,now=Date.now){
+  const receivedAt=now();
+  let body;try{body=await request.arrayBuffer()}catch{return unavailable()}
+  // Request nuova senza signal: la chiusura di Twilio non interrompe più l'inoltro.
+  const detached=new Request(request.url,{method:'POST',headers:request.headers,body});
+  const work=proxy(detached,env,fetcher,{receivedAt});
+  if(ctx?.waitUntil)ctx.waitUntil(work.catch(()=>{}));
+  return work;
 }
 // Rilettura live (17/10): dopo un segnale del menu i telefoni rileggono con ?live=<k> (gettone casuale del cambio, 16 hex).
 // Il primo telefono del data center legge dall'origine; gli altri, nello stesso momento, aspettano la sua copia
@@ -111,6 +136,7 @@ const worker = {
     // Immutable snapshots are used only while the cloud backend is disabled.
     if(customerMenuPath(path)&&!['GET','HEAD'].includes(request.method))return Response.json({error:'Metodo non consentito'},{status:405,headers:{Allow:'GET, HEAD'}});
     if(customerMenuPath(path)&&request.method==='GET'&&backendURL(env)&&new URL(request.url).searchParams.has('live')&&typeof caches!=='undefined'){const plain=new URL(request.url);plain.searchParams.delete('live');return liveMenu(request,ctx,()=>worker.fetch(new Request(plain,request),env,ctx))}
+    if(path===TWILIO_WEBHOOK_PATH&&request.method==='POST'&&backendURL(env))return twilioWebhook(request,env,ctx);
     if (/^\/(api|uploads)(\/|$)/.test(path) && backendURL(env)) {
       const isImage=/^\/uploads\/[a-f0-9-]{36}\/[A-Za-z0-9_-]{16}\.(?:jpg|png|webp|gif)$/.test(path)&&['GET','HEAD'].includes(request.method);
       const cacheKey=isImage?new Request(new URL(path,request.url),{method:'GET'}):null;

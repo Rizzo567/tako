@@ -26,3 +26,23 @@ export function whatsappAudioType(type:unknown,body:unknown):string|null{
  if(/^(?:application\/octet-stream|video\/mp4|application\/mp4)$/.test(t)){const ext=name.match(/\.(m4a|aac|mp3|mpeg|ogg|oga|opus|wav|webm|amr)$/)?.[1];if(ext)return ext==='m4a'||ext==='aac'?'audio/mp4':ext==='mp3'||ext==='mpeg'?'audio/mpeg':ext==='wav'?'audio/wav':ext==='webm'?'audio/webm':ext==='amr'?'audio/amr':'audio/ogg'}
  return null
 }
+
+/** notte 22/10 (worker gateway con header x-tako-gateway-received-at): se la richiesta arriva al server oltre 12 s dopo il gateway, Twilio
+ * ha già chiuso la connessione e il TwiML non arriva più al titolare. Le risposte immediate vanno allora mandate via REST (una per parte,
+ * divise con nextMessage) e il TwiML resta vuoto. Mai con la verifica sincrona TakoSyncTest=1. Funzione pura (testata). */
+export const LATE_GATEWAY_MS=12_000
+export function lateReply(text:string,o:{gatewayAt:unknown,arrivedAt:number,syncTest?:boolean}):{xml:string,send:string[]}{
+ const g=Number(o.gatewayAt),late=Number.isSafeInteger(g)&&g>0&&o.arrivedAt-g>LATE_GATEWAY_MS&&!o.syncTest
+ if(!late||!text)return{xml:twiml(text),send:[]}
+ return{xml:twiml(''),send:text.split(nextMessage).map(x=>x.trim()).filter(Boolean)}}
+// notte 22/10 (sicurezza dati): allo scadere del tempo massimo del turno il titolare riceve un testo fisso. Mai una scrittura dopo
+// quel testo, e mai quel testo mentre una scrittura è già partita. `beginWrite` (controllo e prenotazione nello stesso istante, JS a
+// thread singolo): false = tempo già scaduto → nessuna scrittura; true = da ora il tempo non scade più a metà scrittura.
+export type WriteBudget={expired:boolean,committing?:boolean}
+export function beginWrite(b:WriteBudget):boolean{if(b.expired)return false;b.committing=true;return true}
+/** Gara lavoro/tempo massimo: se allo scadere una scrittura è già partita si aspetta il lavoro (che dice cosa ha cambiato) fino a
+ * `graceMs` in più; solo dopo vale `onTimeout` (che non deve dire «non ho cambiato nulla»). */
+export function raceDeadline<T>(job:Promise<T>,b:WriteBudget,ms:number,onTimeout:()=>T,graceMs=30_000):Promise<T>{
+ let t:ReturnType<typeof setTimeout>|undefined
+ const timeout=new Promise<T>(resolve=>{const fire=(grace:boolean)=>{if(b.committing&&!grace){t=setTimeout(()=>fire(true),graceMs);return}b.expired=true;resolve(onTimeout())};t=setTimeout(()=>fire(false),ms)})
+ return Promise.race([job,timeout]).finally(()=>clearTimeout(t))}

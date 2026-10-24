@@ -1,0 +1,153 @@
+{
+ "set": "adv-sera",
+ "metriche": {
+  "set": "adv-sera",
+  "modo": "record",
+  "conversazioni": 1,
+  "misurate": 1,
+  "nonMisurate": [],
+  "messaggi": 3,
+  "corrette": 1,
+  "percentuale": 100,
+  "gravi": 0,
+  "graviSicurezza": 0,
+  "graviAltri": 0,
+  "medi": 0,
+  "domandePer10Messaggi": 6.7,
+  "domandeNonAttesePer10": 6.7,
+  "latenzaAnthropicMs": {
+   "p50": 4174,
+   "p95": 6267,
+   "chiamate": 3
+  },
+  "latenzaTurnoMs": {
+   "p50": 54,
+   "p95": 155,
+   "nota": "misurata dal vivo"
+  },
+  "chiamatePerMessaggio": 1,
+  "tokenMediPerMessaggio": {
+   "input": 198,
+   "output": 336,
+   "cacheRead": 9670,
+   "cacheWrite": 202
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 3,
+   "su": 3,
+   "percentuale": 100
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.000929,
+   "perMessaggioUsd": 0.00031,
+   "tetto": 0.4
+  },
+  "anthropic": {
+   "hit": 3,
+   "vere": 0,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 1.5,
+  "strati": {
+   "elimina-senza-si": 0,
+   "conferme-senza-sospeso": 0,
+   "vocali-asr": 0,
+   "prezzi-lettere": 0,
+   "preamboli": 0,
+   "correzioni-anzi": 0,
+   "multi-turno": 0,
+   "dialetto": 0,
+   "nomi-insidiosi": 0,
+   "altro": 1
+  }
+ },
+ "codici": {},
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "as-no-03",
+   "family": "bv-multiple",
+   "menu": "qasera",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|la parmigiana|14"
+   ],
+   "actual": [
+    "price|la parmigiana|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNel *Menu pranzo* non c’è un sottomenu adatto a *Lasagna*: creo il sottomenu *Primi* e la metto lì? Rispondi *sì* oppure dimmi il nome del sottomenu. Dimmi anche il prezzo.",
+    "Quanto costa la *Lasagna*?",
+    "Ok, aggiorno *la parmigiana* a 14 €.\n\n*la parmigiana*: prezzo da 15,00 € a *14,00 €*"
+   ],
+   "turns": [
+    "aggiungi nel menu pranzo le lasagne",
+    "niente",
+    "la parmigiana passa a 14"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 31219,
+   "latencyMs": [
+    154.9,
+    38.3,
+    53.6
+   ],
+   "recordedLlmMs": 11774,
+   "usedLlm": true,
+   "source": "adv-sera 21/10 (fixture qasera)",
+   "nonMisurato": false,
+   "strato": "altro"
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "as-no-03",
+   "hash": "53511b2cdccc2cb3",
+   "source": "hit",
+   "status": 200,
+   "ms": 4174,
+   "usage": {
+    "input": 54,
+    "output": 700,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "as-no-03",
+   "hash": "e3de43a630550287",
+   "source": "hit",
+   "status": 200,
+   "ms": 1333,
+   "usage": {
+    "input": 358,
+    "output": 122,
+    "cacheRead": 9872,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "as-no-03",
+   "hash": "040dc46071032f93",
+   "source": "hit",
+   "status": 200,
+   "ms": 6267,
+   "usage": {
+    "input": 183,
+    "output": 186,
+    "cacheRead": 9267,
+    "cacheWrite": 605
+   }
+  }
+ ]
+}

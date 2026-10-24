@@ -1,0 +1,44 @@
+{
+  "ambito": "componenti veri della dashboard, API finta in memoria, nessun DB/login/messaggio",
+  "viewport": {
+    "desktop": {
+      "width": 1280,
+      "height": 900,
+      "deviceScaleFactor": 1
+    },
+    "mobile": {
+      "width": 375,
+      "height": 812,
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true
+    }
+  },
+  "risultati": [
+    "desktop-1-vuoto",
+    "desktop-2-un-numero-collegato",
+    "desktop-4-aggiungi-aperto",
+    "desktop-5-errore",
+    "desktop: email dell’altro numero → errore sotto l’email",
+    "desktop: aggiunta del secondo numero dal form",
+    "desktop-3-collegato-e-in-attesa",
+    "desktop-7-conferma-scollega",
+    "desktop: scollega uno, l’altro resta",
+    "desktop-6-due-di-due",
+    "desktop-8-modifica",
+    "desktop: Esc chiude la modifica e rimette il focus su Modifica",
+    "mobile-1-vuoto",
+    "mobile-2-un-numero-collegato",
+    "mobile-4-aggiungi-aperto",
+    "mobile-5-errore",
+    "mobile: email dell’altro numero → errore sotto l’email",
+    "mobile: aggiunta del secondo numero dal form",
+    "mobile-3-collegato-e-in-attesa",
+    "mobile-7-conferma-scollega",
+    "mobile: scollega uno, l’altro resta",
+    "mobile-6-due-di-due",
+    "mobile-8-modifica",
+    "mobile: Esc chiude la modifica e rimette il focus su Modifica",
+    "nessun errore nel browser"
+  ]
+}

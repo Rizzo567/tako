@@ -87,7 +87,43 @@ export const victoria=build('victoria',12,{restaurant:'Victoria Bar',menus:[['Me
  ['Secondi di pesce',[['Tagliata di orata o branzino con rucola e grana',20]]],
  ['Contorni',[['Patate al forno',5]]],['Dolci',[['Tiramisù della casa',6]]],['Pizze e calzoni',[['Margherita',7]]],['Bevande',[['Acqua naturale',2]]]]]]})
 
-export const FIXTURES:Record<string,MenuFixture>={romana,pizzeria,bar,pesce,mario,qa,qasporco,qamattina,qa1016,qa1323,collaudo,victoria}
+// ---------------- Motore Haiku 5.5 (run 21/10/2026, perimetro B) ----------------
+// victoria4: locale «tipo Victoria» a 4 menu (Menu pranzo, Menu cena, Bevande, Alla carta) con DATI INVENTATI di comodo (mai letti
+// dal DB di Victoria). Due sottomenu omonimi «Primi» (pranzo e cena) e due «Secondi»; una Sezione (gruppo pubblico di livello 3,
+// `parentSectionId` = sottomenu «Pizze») «Pizze bianche». «Pizza Sorrentina» + «Gnocchi alla sorrentina»: l'alias attivo
+// «la sorrentina» = Pizza Sorrentina (seminato da eval-haiku.test.ts) toglie l'ambiguità. La chiave «victoria» resta quella del banco vero.
+export const victoria4=build('victoria4',13,{restaurant:'Victoria Bar (prova)',menus:[
+ ['Menu pranzo','lunch',[
+  ['Antipasti',[['Bruschetta classica',6],['Caprese',9]]],
+  ['Primi',[['Spaghetti alle vongole',15],['Gnocchi alla sorrentina',11],['Paccheri al ragù',12]]],
+  ['Secondi',[['Cotoletta alla milanese',14],['Tagliata rucola e grana',20]]]]],
+ ['Menu cena','dinner',[
+  ['Primi',[['Risotto ai frutti di mare',18],['Tagliatelle ai porcini',16],['Carbonara',13]]],
+  ['Secondi',[['Filetto al pepe verde',24],['Branzino al forno',22]]],
+  ['Dolci',[['Tiramisù della casa',6],['Panna cotta ai frutti di bosco',6],['Cheesecake',6.5]]]]],
+ ['Bevande','drinks',[
+  ['Bibite',[['Acqua naturale',2],['Acqua frizzante',2],['Coca Cola',3.5]]],
+  ['Birre',[['Birra media',5],['Birra piccola',3.5]]],
+  ['Vini',[['Calice di rosso',6],['Calice di bianco',6]]]]],
+ ['Alla carta','main',[
+  ['Pizze',[['Margherita',7],['Pizza Sorrentina',9],['Diavola',8.5],['Capricciosa',9.5]]],
+  ['Pizze bianche',[['Pizza bianca al rosmarino',6],['Focaccia crudo e burrata',12]]]]]]})
+{const carta=victoria4.menu.menus[3]!,pizze=carta.sections[0]!;(carta.sections[1] as any).parentSectionId=pizze.id}
+
+// mariopg: il menu «Trattoria Da Mario» del playground del 20/10 (PLAYGROUND-1-SYSTEM: p1…p30 = stessi piatti, stessi prezzi e
+// stesso ordine della fixture mario). Chiave separata perché il set playground semina gli alias «la carbo», «la coca», «la tagliata».
+export const mariopg:MenuFixture={key:'mariopg',restaurant:'Trattoria Da Mario',menu:structuredClone(mario.menu)}
+
+// anziano: trattoria romana per il set «parlato sporco» (vocali di un ristoratore anziano trascritti male).
+export const anziano=build('anziano',14,{restaurant:'Trattoria Er Sor Gigi',menus:[['Pranzo e cena','lunch',[
+ ['Primi',[['Carbonara',12],['Amatriciana',11],['Gricia',11],['Cacio e pepe',10],['Lasagna',11]]],
+ ['Secondi',[['Saltimbocca alla romana',15],['Abbacchio scottadito',18],['Coda alla vaccinara',16],['Polpette al sugo',12]]],
+ ['Contorni',[['Cicoria ripassata',5],['Patate al forno',4.5]]],
+ ['Pizze',[['Margherita',7],['Sorrentina',9],['Diavola',8]]],
+ ['Dolci',[['Tiramisù',6],['Panna cotta',5],['Crostata',5]]]]],
+ ['Bevande','drinks',[['Bevande',[['Coca Cola',3],['Acqua naturale',2],['Birra',5],['Vino della casa 1/4',5],['Caffè',1.5]]]]]]})
+
+export const FIXTURES:Record<string,MenuFixture>={romana,pizzeria,bar,pesce,mario,qa,qasporco,qamattina,qa1016,qa1323,collaudo,victoria,victoria4,mariopg,anziano}
 
 /** Menu iniziale di una conversazione: fixture + variazioni `mods` (copia profonda). */
 export function initialMenu(key:string,mods:Mods={}):EvalMenu{
@@ -102,3 +138,100 @@ export function initialMenu(key:string,mods:Mods={}):EvalMenu{
  return menu
 }
 export const dishNames=(key:string)=>FIXTURES[key]!.menu.menus.flatMap(m=>m.sections.flatMap(s=>s.items.map(i=>i.name)))
+
+// ---------------- Set STRUTTURA (motore Haiku, 21/10/2026: creazione di Menu e Sottomenu, cases/struttura-1021.ts) ----------------
+// qastruttura: il QA come lo ha usato Manuel il 21/10 (un solo Menu «Menu» con tre sottomenu e piatti, NESSUN Menu «Pranzo» o «Cena»).
+export const qastruttura=build('qastruttura',15,{restaurant:'Tako · Verifica web',menus:[['Menu','lunch',[
+ ['Antipasti',[['Bruschetta al pomodoro',5],['Tagliere misto',14]]],
+ ['Piatti di prova',[['Piatto di verifica',13.5],['pasta al ragù',12]]],
+ ['Dolci',[['tiramisù',6]]]]]]})
+// strutt: tre Menu (Pranzo, Cena, Bevande) per la batteria avversaria della struttura; «Primi» e «Secondi» in due Menu; Sezione
+// «Pizze bianche» (parentSectionId = sottomenu «Pizze» della Cena). Nessun «Dolci», «Contorni», «Insalate», «Amari».
+export const strutt=build('strutt',16,{restaurant:'Osteria della Prova',menus:[
+ ['Pranzo','lunch',[['Antipasti',[['Bruschetta',5],['Caprese',8]]],['Primi',[['Carbonara',12],['Amatriciana',11]]],['Secondi',[['Cotoletta',14],['Tagliata',18]]]]],
+ ['Cena','dinner',[['Primi',[['Risotto ai funghi',15],['Tagliatelle al ragù',13]]],['Secondi',[['Filetto al pepe',24],['Branzino al forno',22]]],['Pizze',[['Margherita',7],['Diavola',8.5]]],['Pizze bianche',[['Focaccia rosmarino',6]]]]],
+ ['Bevande','drinks',[['Bibite',[['Acqua naturale',2],['Coca Cola',3.5]]],['Vini',[['Calice di rosso',6],['Calice di bianco',6]]]]]]})
+{const cena=strutt.menu.menus[1]!;(cena.sections[3] as any).parentSectionId=cena.sections[2]!.id}
+// bimbum: un Menu con un sottomenu «Secondi» di 4 piatti (frasi di Bim Bum Bar). bimbum2: «Secondi» in DUE Menu (Pranzo e Cena).
+export const bimbum=build('bimbum',17,{restaurant:'Bim Bum Bar (prova)',menus:[['Menu','main',[
+ ['Antipasti',[['Tagliere bimbum',12],['Fritto misto',9]]],
+ ['Primi',[['Carbonara',11],['Gnocchi al pomodoro',9]]],
+ ['Secondi',[['Cotoletta alla milanese',14],['Hamburger di manzo',13],['Salsiccia ai ferri',10],['Pollo alla piastra',11]]],
+ ['Dolci',[['Tiramisù',5]]]]]]})
+export const bimbum2=build('bimbum2',18,{restaurant:'Bim Bum Bar (prova)',menus:[
+ ['Pranzo','lunch',[['Primi',[['Carbonara',11]]],['Secondi',[['Cotoletta alla milanese',14],['Salsiccia ai ferri',10]]]]],
+ ['Cena','dinner',[['Secondi',[['Filetto al pepe verde',22],['Grigliata mista',18]]],['Dolci',[['Tiramisù',5]]]]]]})
+Object.assign(FIXTURES,{qastruttura,strutt,bimbum,bimbum2})
+
+// struttvis (21/10, Menu nascosti / «rendi visibile»): strutt + Menu nascosti «Brunch» (vuoto) e «Aperitivo» (con Spritz), sottomenu
+// «Dolci» vuoto e nascosto in Pranzo e in Cena (omonimi), «Vini» nascosto con piatti.
+export const struttvis:MenuFixture=(()=>{const f:MenuFixture={key:'struttvis',restaurant:'Osteria della Prova',menu:structuredClone(strutt.menu)}
+ const id=(n:number)=>'5000aa00-5555-4555-8555-'+String(n).padStart(12,'0'),W=f.menu as any
+ W.menus.push({id:id(1),name:'Brunch',description:null,type:'main',active:false,translations:{},sections:[]})
+ W.menus.push({id:id(2),name:'Aperitivo',description:null,type:'drinks',active:false,translations:{},sections:[{id:id(3),parentSectionId:null,name:'Spritz',description:null,active:true,translations:{},items:[{...structuredClone(W.menus[2].sections[0].items[0]),id:id(4),name:'Aperol spritz',price:6}]}]})
+ for(const [mi,n] of [[0,5],[1,6]] as const)W.menus[mi].sections.push({id:id(n),parentSectionId:null,name:'Dolci',description:null,active:false,translations:{},items:[]})
+ W.menus[2].sections[1].active=false
+ return f})()
+Object.assign(FIXTURES,{struttvis})
+
+// ---------------- Set PREZZO FISSO (21/10/2026, docs/webapp/menu-prezzo-fisso-2026-10-21/CONTRATTO.md, cases/prezzo-fisso-1021.ts) ----------------
+// prezzofisso: locale «tipo Victoria» INVENTATO (nessun dato vero). Alla carta con prezzi · Menu pranzo pricing:'fisso' (Completo 12 €,
+// primo + secondo con contorno) · Menu cena pricing:'fisso' (Completo 16,90 €, Solo primo 9 €, Solo secondo 10 €). Piatti dei menu fissi
+// a prezzo 0; «Compreso: ¼ di vino oppure ½ l d'acqua + caffè». Nascosti da ieri: Pasta e fagioli e Arrosto di vitello (pranzo),
+// Risotto ai funghi (cena), per provare che la sostituzione li fa tornare con lo stesso id.
+export const prezzofisso:MenuFixture=(()=>{const f=build('prezzofisso',19,{restaurant:'Trattoria La Pergola (prova)',menus:[
+ ['Alla carta','main',[['Antipasti',[['Bruschetta',5],['Tagliere della casa',14]]],['Primi',[['Carbonara',12],['Amatriciana',11]]],['Secondi',[['Filetto al pepe verde',22],['Grigliata mista',18]]],['Pizze',[['Margherita',7],['Diavola',8.5]]],['Dolci',[['Tiramisù',6],['Panna cotta',5]]]]],
+ ['Menu pranzo','lunch',[['Primi',[['Pasta al pomodoro',0],["Penne all'arrabbiata",0],['Risotto alla milanese',0],['Pasta e fagioli',0]]],['Secondi',[['Cotoletta alla milanese',0],['Petto di pollo ai ferri',0],['Polpette al sugo',0],['Arrosto di vitello',0]]],['Contorni',[['Patate al forno',0],['Insalata mista',0],['Spinaci al burro',0]]]]],
+ ['Menu cena','dinner',[['Primi',[['Tagliatelle al ragù',0],['Spaghetti alle vongole',0],['Gnocchi al pomodoro',0],['Risotto ai funghi',0]]],['Secondi',[['Tagliata di manzo',0],['Salmone alla griglia',0],['Scaloppine al limone',0]]],['Contorni',[['Patatine fritte',0],['Verdure grigliate',0]]]]]]})
+ const W=f.menu as any,fid=(n:number)=>'5000bb00-5555-4555-8555-'+String(n).padStart(12,'0'),inc="¼ di vino oppure ½ l d'acqua + caffè",secs=(m:number,ix:number[])=>ix.map(i=>W.menus[m].sections[i].id)
+ W.menus[1].pricing='fisso';W.menus[1].included=inc;W.menus[1].formulas=[{id:fid(1),name:'Completo',price:12,note:'primo + secondo con contorno',sectionIds:secs(1,[0,1,2]),translations:{}}]
+ W.menus[2].pricing='fisso';W.menus[2].included=inc;W.menus[2].formulas=[{id:fid(2),name:'Completo',price:16.9,note:'primo + secondo con contorno',sectionIds:secs(2,[0,1,2]),translations:{}},{id:fid(3),name:'Solo primo',price:9,note:null,sectionIds:secs(2,[0]),translations:{}},{id:fid(4),name:'Solo secondo',price:10,note:'con contorno',sectionIds:secs(2,[1,2]),translations:{}}]
+ for(const n of ['Pasta e fagioli','Arrosto di vitello','Risotto ai funghi'])for(const m of W.menus)for(const s of m.sections)for(const i of s.items)if(i.name===n)i.hidden=true
+ return f})()
+Object.assign(FIXTURES,{prezzofisso})
+
+// ---------------- Set MULTITURNO / ADV-SERA (21/10/2026 sera, prova dal vivo di Manuel sul QA 26050ecd) ----------------
+// qasera: stessa FORMA del QA di quella sera (riletto in sola lettura): «Menu di verifica · web QA» con Piatti di prova (alcuni nascosti)
+// e Primi (paste, due nascoste in più rispetto al QA per provare «solo i visibili»), «Menu pranzo» col solo sottomenu «Completo» (vuoto),
+// «Menu cena» con «Primi» nascosto e vuoto, «Menu del giorno» a PREZZO FISSO (nascosto) con Gnocchi al ragù. Nomi inventati dove servono.
+export const qasera:MenuFixture=(()=>{const f=build('qasera',20,{restaurant:'Tako · Verifica web',menus:[
+ ['Menu di verifica · web QA','lunch',[['Piatti di prova',[['Piatto di verifica',13.5],['Che ne sacc',20],['boh',20],['pasta al ragù',10],['Inserisce il piatto la parmigiana',12],['Pasta al sugo',9],['Pasta al pesto e lasagna',10.01],['tiramisù',15]]],
+  ['Primi',[['la parmigiana',15],['pasta al pesto',11],['pasta carbonara',10],['riso giallo',8],["pasta all'amatriciana",11],['pasta alla norma',10]]]]],
+ ['Menu pranzo','lunch',[['Completo',[]]]],
+ ['Menu cena','dinner',[['Primi',[]]]],
+ ['Menu del giorno','lunch',[['Primi',[['Lasagna',0],['Carbonara',0],['Gnocchi al ragù',0]]],['Secondi',[['Cotoletta',0],['Polpette',0],['Frittata di zucchine',0],['Frittata di patate',0]]]]]]})
+ const W=f.menu as any,hide=['Piatto di verifica','Che ne sacc','boh','Inserisce il piatto la parmigiana',"pasta all'amatriciana",'pasta alla norma','Carbonara','Polpette','Frittata di zucchine','Frittata di patate']
+ for(const m of W.menus)for(const s of m.sections)for(const i of s.items){if(hide.includes(i.name))i.hidden=true;if(i.name==='boh')i.available=false}
+ W.menus[2].sections[0].active=false
+ W.menus[3].pricing='fisso';W.menus[3].active=false;W.menus[3].formulas=[{id:'5000cc00-5555-4555-8555-000000000001',name:'Completo',price:18,note:null,sectionIds:W.menus[3].sections.map((s:any)=>s.id),translations:{}},{id:'5000cc00-5555-4555-8555-000000000002',name:'Solo primo',price:11,note:null,sectionIds:[W.menus[3].sections[0].id],translations:{}}]
+ return f})()
+Object.assign(FIXTURES,{qasera})
+// qasera139: qasera dopo la sera (v139 dal vivo, 22/10): nel Menu pranzo c'è già «Primi» con Gnocchi al ragù a 10.
+export const qasera139:MenuFixture=(()=>{const f:MenuFixture={key:'qasera139',restaurant:'Tako · Verifica web',menu:structuredClone(qasera.menu)};(f.menu as any).menus[1].sections.push({id:'7bbbbbbb-7777-4777-8777-000000000001',name:'Primi',items:[{id:'5bbbbbbb-5555-4555-8555-000000000001',name:'Gnocchi al ragù',price:10}]});return f})()
+Object.assign(FIXTURES,{qasera139})
+
+// ---------------- Set NOTTE-1022 (22/10/2026 notte, cases/notte-1022.ts) ----------------
+// notte: locale INVENTATO con nomi simili (Carbonara / Carbonara di mare, Cotoletta / Cotoletta alla bolognese, Tiramisù / Tiramisù al
+// pistacchio, Margherita / Margherita bufala) e un Menu «Pizze» con il sottomenu «Pizze», più «Pizze» anche nel Menu «Cena».
+export const notte=build('notte',21,{restaurant:'Osteria Notturna (prova)',menus:[
+ ['Pranzo','lunch',[['Primi',[['Carbonara',12],['Carbonara di mare',15],['Amatriciana',11],['Gricia',11]]],['Secondi',[['Cotoletta',14],['Cotoletta alla bolognese',16],['Tagliata',18]]],['Dolci',[['Tiramisù',6],['Tiramisù al pistacchio',7]]]]],
+ ['Pizze','dinner',[['Pizze',[['Margherita',7],['Margherita bufala',9],['Diavola',8.5],['Capricciosa',9]]],['Fritti',[['Supplì',2.5],['Crocchetta',2]]]]],
+ ['Cena','dinner',[['Pizze',[['Marinara',6],['Napoli',7.5]]],['Primi',[['Risotto ai funghi',14]]]]],
+ ['Bevande','drinks',[['Bibite',[['Acqua',2],['Coca Cola',3.5],['Birra media',5]]]]]]})
+Object.assign(FIXTURES,{notte})
+
+// qavero (22/10 notte, dal JSON pubblicato del QA dopo v146, riletto in sola lettura): identico al QA vero — Primi del Menu di verifica con
+// 4 piatti (niente paste nascoste in più), Menu pranzo con «Completo» vuoto, Menu cena con «Primi» vuoto e nascosto, Menu del giorno
+// nascosto a prezzo fisso (Completo 18, Solo primo 11). Serve a riprodurre le divergenze banco ↔ QA vero.
+export const qavero:MenuFixture=(()=>{const f=build('qavero',23,{restaurant:'Tako · Verifica web',menus:[
+ ['Menu di verifica · web QA','lunch',[['Piatti di prova',[['Piatto di verifica',13.5],['Che ne sacc',20],['boh',20],['pasta al ragù',10],['Inserisce il piatto la parmigiana',12],['Pasta al sugo',9],['Pasta al pesto e lasagna',10.01],['tiramisù',15]]],
+  ['Primi',[['la parmigiana',12.5],['pasta al pesto',9],['pasta carbonara',9],['riso giallo',8]]]]],
+ ['Menu pranzo','lunch',[['Completo',[]]]],
+ ['Menu cena','dinner',[['Primi',[]]]],
+ ['Menu del giorno','lunch',[['Primi',[['Lasagna',0],['Carbonara',0],['Gnocchi al ragù',0]]],['Secondi',[['Cotoletta',0],['Polpette',0],['Frittata di zucchine',0],['Frittata di patate',0]]]]]]})
+ const W=f.menu as any,hide=['Piatto di verifica','Che ne sacc','boh','Inserisce il piatto la parmigiana','Carbonara','Polpette','Frittata di zucchine','Frittata di patate']
+ for(const m of W.menus)for(const s of m.sections)for(const i of s.items){if(hide.includes(i.name))i.hidden=true;if(i.name==='boh')i.available=false}
+ W.menus[2].sections[0].active=false
+ W.menus[3].pricing='fisso';W.menus[3].active=false;W.menus[3].formulas=[{id:'5000dd00-5555-4555-8555-000000000001',name:'Completo',price:18,note:null,sectionIds:W.menus[3].sections.map((s:any)=>s.id),translations:{}},{id:'5000dd00-5555-4555-8555-000000000002',name:'Solo primo',price:11,note:null,sectionIds:[W.menus[3].sections[0].id],translations:{}}]
+ return f})()
+Object.assign(FIXTURES,{qavero})

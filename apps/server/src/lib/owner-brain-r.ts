@@ -4,7 +4,7 @@
  * Testi fissi ammessi: la riga «assistente automatico» (route) e `copy.brainDown` quando Groq non risponde.
  * Modulo puro (niente DB, niente rete): stato in sospeso, strumenti di controllo, esito del turno, motivi di rifiuto per
  * l'auto-correzione, fatti della risposta. */
-import {plain,g9Prices,describeAction,withNewSections,itemLabel,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
+import {plain,safe,g9Prices,relativeDelta,describeAction,withNewSections,itemLabel,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
 import type {Hold} from './twilio-menu-hold.js'
 import {sameSection} from './twilio-menu-structure.js'
 import {allOfSections,namedSections,nameInText,unknownSectionPhrase,sectionListText} from './owner-brain-sections.js'
@@ -17,7 +17,9 @@ export type BatchWhy='delete'|'recap'|'section'|'price'
 /** R9: `twins` = piatti già nel menu con lo STESSO nome di un piatto chiesto come nuovo (domanda «lo aggiorno o ne creo un altro?»),
  * col prezzo detto nella richiesta; `actions` = le parti chiare della richiesta originale che aspettano la risposta. */
 export type Twin={id:string,name:string,price:number|null,sectionId:string|null}
-export type BrainAsk={kind:'brain_ask',question:string,ids:string[],actions:MenuAction[],source:string,draft?:{name:string,price:number|null,sectionId:string|null,sectionName:string|null}|null,twins?:Twin[]}
+export type BrainAsk={kind:'brain_ask',question:string,ids:string[],actions:MenuAction[],source:string,
+ /** 21/10 sera: richiesta che ha aperto la domanda e giri fatti (tetto 2, owner-brain-sera.ts). */
+ origin?:string,rounds?:number,draft?:{name:string,price:number|null,sectionId:string|null,sectionName:string|null}|null,twins?:Twin[]}
 export type Pend={kind:'batch',actions:MenuAction[],why:BatchWhy}|{kind:'hold',actions:MenuAction[],hold:Hold}|{kind:'ask',ask:BrainAsk}|{kind:'other'}|null
 export function pendOf(cmd:any):Pend{
  if(!cmd||typeof cmd!=='object')return null
@@ -42,6 +44,7 @@ export function confirmBlocked(message:string,refs:{name:string}[]=[]){const p=p
 // Richiesta di annullamento: deve esserci nel messaggio (il modello non annulla di sua iniziativa).
 const UNDO_CUE=/\b(annull\w*|torna\w* (?:indietro|come prima|com era)|tornare indietro|indietro|com era|come prima|com eri|anzi no|anzi|ho sbagliato|sbagliato|sbagliata|errore|rimett\w* (?:tutto )?(?:a )?(?:posto|come)|disfa\w*|lascia\w* (?:stare|perdere)|non (?:lo |la |li |le )?volevo|ripristin\w*|no no|era giusto|andava bene)\b|^(?:no|scusa|aspetta|ops)(?: (?:no|scusa|aspetta|ops))*$/
 export const undoRequested=(message:string)=>UNDO_CUE.test(plain(message))
+const YES_HEAD=/^(?:s[iì]|ok|okay|va bene|certo|confermo|esatto|perfetto)\b,?\s+(?:e|ed|ma|poi|e poi|pero)\s+(?:anche\s+)?/
 const ONLY_CANCEL=/^(?:(?:no|ah|allora|aspetta|scusa|ok)\s+)*(?:annulla(?: tutto)?|lascia (?:stare|perdere)|niente|no|non (?:farlo|pubblicare)|no grazie|lascia stare tutto)$/
 // R5.1 (nota 64): «no, il caviale lascialo stare» → il caviale (nuovo o in sospeso) non si crea. Vincolo sul testo, non interpretazione.
 const NEG_KEEP=/\b(?:lascia\w* (?:stare|perdere)|non (?:lo |la |li |le )?(?:aggiung\w*|mett\w*|cre\w*|vogli\w*|volevo)|niente|tranne|senza)\b/
@@ -50,6 +53,9 @@ const CANCEL_WORDS=/\b(annull\w*|lascia\w* (?:stare|perdere)|niente|non pubblica
 
 // ---------- motivi di rifiuto (auto-correzione: il server rimanda al modello il perché, una volta) ----------
 const REASON:Record<string,string>={
+ data_futura:'il titolare parla di una data futura («da domani», «da lunedì»): il bot non programma le modifiche; chiedi se cambiarlo subito dicendo cosa cambia (intent=clarify, reply_draft breve tipo «Le modifiche per domani non le programmo: metto subito *Carbonara* a 13 €? Rispondi sì o no.»), nessuna azione',
+ prezzo_migliaia:'il titolare ha scritto un numero col separatore delle migliaia («13.000»): non è un prezzo da menu, chiedi il prezzo esatto (intent=clarify), nessuna azione',
+ azioni_contraddittorie:'il piano ha azioni opposte sullo stesso piatto (es. nascondi e metti in evidenza, finito e disponibile, due prezzi diversi): chiedi al titolare cosa vuole (intent=clarify), nessuna azione',
  prezzo_non_detto:'un prezzo del piano non è stato detto dal titolare (né in questo messaggio né, con un rimando esplicito, prima)',
  riferimento_prezzo_non_valido:'il riferimento «stesso prezzo di» non è valido: il piatto di riferimento deve essere nominato',
  delta_senza_verbo:'una differenza di prezzo senza un verbo che la dica (aumenta/abbassa/togli N euro…)',
@@ -67,13 +73,20 @@ const REASON:Record<string,string>={
  piatto_nominato_senza_azione:'un piatto nominato nel messaggio non ha nessuna azione nel piano (parte persa?)',
  azione_sconosciuta:'azione non prevista dallo schema',
  ripristino_non_valido:'restore su un piatto non nominato',
+ ripristino_con_destinazione:'«rimetti/riporta X in/nei <sottomenu>» con un sottomenu diverso da quello attuale è uno spostamento (move_item), non un restore: indica il sottomenu col suo codice; se il sottomenu detto è in più Menu e il Menu non è detto, chiedi quale',
  ripristino_impossibile:'restore impossibile: quel piatto non è stato cambiato da qui negli ultimi 30 minuti',
  domanda_zero_scritture:'il messaggio è una domanda: nessuna modifica, rispondi alla domanda (intent=read)',
  nessuna_azione:'il piano non contiene azioni valide',
  azione_sul_piatto_della_domanda:'nel messaggio misto l’azione è finita sul piatto della domanda invece che su quello del comando',
  nome_a_suono:'il piatto è riconosciuto solo a suono e non con certezza: chiedi conferma',
  parte_persa:'una parte del messaggio non è usata dal piano',
- conferma_senza_proposta:'non c’è nessuna proposta in sospeso da confermare',
+ gemello_dimenticato:'il titolare dice «quei due / entrambi / quelli» e tra quei piatti c\u2019è anche il piatto già nel menu della domanda di prima (stesso nome): il piano deve fare qualcosa anche su quello (spostarlo, aggiornarlo) come chiede il messaggio',
+ conferma_senza_proposta:'non c’è nessuna proposta in sospeso da confermare: NON chiedere di nuovo conferma. Se nella CRONOLOGIA c’è una richiesta chiara del titolare non ancora fatta, scrivila ora come piano con le sue azioni (intent=change); se non è possibile, dillo in UNA frase semplice (mai «il sistema»)',
+ prezzo_piatto_menu_fisso:'quel piatto è in un Menu a PREZZO FISSO: i piatti non hanno prezzo, il prezzo è delle opzioni (Completo, Solo primo…). Nessuna azione sul piatto: se il titolare voleva cambiare un\'opzione usa set_formula_price, altrimenti spiegalo in una frase',
+ struttura_incompleta_formula:'',
+ piatto_gia_presente:'il titolare ha detto «aggiungi» un piatto che c’è già: non cambiare il prezzo, chiedi in UNA domanda «C’è già *X* a N €: lo aggiorno o ne creo un altro?» (intent=clarify)',
+ sottomenu_in_piu_menu:'il sottomenu nominato con «tutti» esiste in più Menu e il titolare non ha detto quale: chiedi in UNA domanda breve in quale Menu (intent=clarify), nessuna azione',
+ struttura_incompleta:'per creare un Menu o un Sottomenu serve il nome detto dal titolare e, se ci sono più Menu, in quale Menu: fai UNA domanda breve (intent=clarify), nessuna azione; mai chiedere se crearli vuoti o con i piatti',
  conferma_non_esplicita:'per pubblicare questa proposta serve un messaggio di sola conferma del titolare («sì», «ok»): questo messaggio non lo è',
  conferma_con_altro:'confirm_pending su una proposta da confermare va da solo, senza altre azioni',
  annulla_senza_richiesta:'undo_last solo se il titolare chiede di annullare / tornare indietro in questo messaggio',
@@ -86,15 +99,30 @@ const REASON:Record<string,string>={
  piatto_doppio:'il piano crea un piatto che c\u2019è già nel menu (o due volte lo stesso): non cambiare quello esistente, chiedi al titolare (intent=clarify, domanda in reply_draft) se aggiornare quello che c\u2019è o crearne un altro, per esempio «C\u2019è già X a N €: lo aggiorno o ne creo un altro?»; nelle azioni lascia le altre parti chiare',
  elimina_fuori_portata:'un piatto da eliminare è detto in una parte del messaggio con un\u2019altra azione (nascondi, prezzo, finito…): elimina solo i piatti del verbo «elimina/cancella»',
  riferimento_come_bersaglio:'il prezzo è stato cambiato al piatto di riferimento («uguale alla X»): va cambiato all\u2019altro piatto, X resta com\u2019è',
- nome_con_coda:'un nome nuovo (piatto, categoria, rinomina) contiene parole che non sono del nome («per favore», «se puoi», «grazie»…): il nome è solo la parte detta come nome',
+ nome_con_coda:'un nome nuovo (piatto, sottomenu, rinomina) contiene parole che non sono del nome («per favore», «se puoi», «grazie»…): il nome è solo la parte detta come nome',
  azione_fuori_portata:'un piatto è nascosto o segnato finito ma nel messaggio è detto in una parte con un\u2019altra azione (prezzo, aggiungi…): l\u2019azione vale solo per i piatti del suo verbo',
- categoria_non_detta:'il titolare ha nominato una categoria che nel menu non c\u2019è: chiedi in quale categoria metterlo o se crearla, non usarne un\u2019altra',
+ categoria_non_detta:'il titolare ha nominato un sottomenu che nel menu non c\u2019è: chiedi in quale sottomenu metterlo o se crearlo, non usarne un altro',
  conferma_di_domanda:'non c\u2019è una proposta da confermare: c\u2019era una TUA domanda aperta (IN SOSPESO) e questo messaggio è la risposta del titolare. Non usare confirm_pending: scrivi nel piano le azioni della richiesta originale secondo la scelta del titolare (prezzi e nomi detti in quella richiesta), oppure, se la risposta non sceglie, una domanda diversa con le opzioni numerate',
  gia_risposto:'il titolare ha già risposto alla tua domanda in sospeso: non ripeterla. Se la risposta sceglie un\u2019opzione (anche «sì», «aggiornali», «il primo», «crea nuovi»), scrivi il piano con le azioni della richiesta originale; se davvero non sceglie, fai una domanda DIVERSA da quella di prima, breve, con le opzioni numerate (1. … 2. …)',
  domanda_ripetuta:'la domanda è di nuovo uguale a quella già fatta: è vietato rimandarla. Esegui la scelta se la risposta la indica; altrimenti scrivi una domanda con parole diverse che elenca le opzioni numerate (1. … 2. …) e chiede di rispondere col numero',
  doppio_falso:'la domanda dice che c\u2019è già un piatto che nel menu ha un nome diverso (più lungo): un nome contenuto in un altro è un piatto nuovo, si crea; chiedi solo per i piatti con lo stesso nome',
  bozza_non_sicura:'reply_draft non va bene: non dire che qualcosa è fatto/aggiornato se non lo è e non scrivere prezzi non detti'}
-export const reasonText=(notes:string[])=>{const out:string[]=[];for(const n of notes){const k=n.split(':')[0]!;const r=REASON[k];if(r&&!out.includes(r))out.push(r+(k==='parte_persa'&&n.includes(':')?' («'+n.split(':').slice(1).join(':').replace(/,/g,'», «')+'»)':''))}return out.join('; ')||'il piano non supera i controlli del server'}
+/** Banco prezzofisso 21/10: il motivo di `struttura_incompleta:<codice>` per opzioni e sostituzioni (prima ogni codice tornava al
+ * modello come «per creare un Menu serve il nome», e il modello chiedeva il nome di un Menu nuovo su «alza il completo di un euro»). */
+const STRUCT_REASON:Record<string,string>={
+ prezzo_formula_non_detto:'il prezzo dell\u2019opzione (Completo, Solo primo…) non è detto dal titolare in questo messaggio né nella richiesta a cui risponde: se ha detto una differenza («alza di un euro») usa price_delta con price=null; se il prezzo manca davvero chiedilo in UNA domanda (intent=clarify), nessuna azione',
+ menu_della_formula:'l\u2019opzione esiste in più Menu a prezzo fisso e il titolare non ha detto quale: chiedi in UNA domanda breve in quale Menu (pranzo o cena), nessuna azione',
+ formula_da_trovare:'nel Menu indicato non c\u2019è un\u2019opzione con quel nome: usa il nome di un\u2019opzione del Menu (elencate in MENU DEL LOCALE) o chiedi quale',
+ nome_formula:'il nome dell\u2019opzione nuova deve essere quello detto dal titolare: chiedi il nome in UNA domanda',
+ sottomenu_ambiguo:'il sottomenu nominato esiste in più Menu e il titolare non ha detto quale: chiedi in UNA domanda breve in quale Menu (pranzo o cena), nessuna azione',
+ sottomenu_da_trovare:'il sottomenu nominato non c\u2019è nel Menu indicato: usa il codice cN di un sottomenu esistente o chiedi quale',
+ prezzo_nuovo_alla_carta:'nel Menu alla carta un piatto nuovo vuole il prezzo: se il titolare l\u2019ha detto scrivilo nel text dopo il nome («Lasagna 12»), altrimenti chiedi in UNA domanda il prezzo di quel piatto (intent=clarify), nessuna azione',
+ piatti_mancanti:'replace_section_items vuole in text i piatti detti dal titolare, separati da «;»',
+ sostituzione_alla_carta:'la sostituzione dei piatti del giorno vale solo nei Menu a prezzo fisso: in un Menu alla carta chiedi cosa vuole fare (nascondere o aggiungere piatti), nessuna azione',
+ nome_piatto:'in text vanno solo i nomi dei piatti detti, senza verbi né frasi',
+ nome_non_detto:'in text c\u2019è un piatto che il titolare non ha detto: usa solo i nomi detti (il server ritrova da solo il piatto esistente: «cotoletta» = Cotoletta alla milanese)',
+ piatto_ambiguo_sostituzione:'un nome detto corrisponde a più piatti dello stesso sottomenu: chiedi in UNA domanda quale (con i nomi), nessuna azione'}
+export const reasonText=(notes:string[])=>{const out:string[]=[];for(const n of notes){const k=n.split(':')[0]!;const r=(k==='struttura_incompleta'?STRUCT_REASON[n.split(':')[1]??'']:undefined)??REASON[k];if(r&&!out.includes(r))out.push(r+(k==='parte_persa'&&n.includes(':')?' («'+n.split(':').slice(1).join(':').replace(/,/g,'», «')+'»)':''))}return out.join('; ')||'il piano non supera i controlli del server'}
 
 // ---------- esito del turno ----------
 export type Outcome=
@@ -105,19 +133,38 @@ export type Outcome=
  |{kind:'ask',ids:string[],actions:MenuAction[],hold?:Hold,createDraft?:BrainAsk['draft'],twins?:Twin[]}
  |{kind:'read',plan:any}
  |{kind:'say'}
- |{kind:'reject',reason:string,ids:string[],actions:MenuAction[],hold?:Hold,twins?:Twin[]}
+ |{kind:'reject',reason:string,ids:string[],actions:MenuAction[],hold?:Hold,twins?:Twin[],createDraft?:BrainAsk['draft']}
 type Decision={intent:string,plan:any,hold?:Hold,notes:string[],exclude:{id:string}[]}
 const VALIDATOR_HOLD=new Set(['parte_persa','piatto_ambiguo','nome_a_suono'])
 /** Esito del turno dal piano del modello già passato dal validatore. `raw` = JSON del modello (intento e azioni originali). */
-export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,message:string,pend:Pend,undoOK:boolean,sections:SectionRef[],refs?:MenuRef[],lastBot?:string}):Outcome{
- const {decision:d,control,raw,message,pend}=o,rawIntent=String(raw?.intent??''),rawActs=(Array.isArray(raw?.actions)?raw.actions:[]).filter((a:any)=>a&&!CONTROL_ACTIONS.includes(a.action))
+export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,message:string,pend:Pend,undoOK:boolean,sections:SectionRef[],refs?:MenuRef[],lastBot?:string,fixedSecIds?:Set<string>}):Outcome{
+ let {decision:d}=o;const {control,raw,message,pend}=o,rawIntent=String(raw?.intent??''),rawActs=(Array.isArray(raw?.actions)?raw.actions:[]).filter((a:any)=>a&&!CONTROL_ACTIONS.includes(a.action))
  const reject=(note:string,ids:string[]=[],actions:MenuAction[]=[],hold?:Hold):Outcome=>({kind:'reject',reason:reasonText([note]),ids,actions,...(hold?{hold}:{})})
  const changeActs=d.plan?.type==='change'&&!d.hold?d.plan.actions as MenuAction[]:[]
+ // Menu a prezzo fisso (21/10, banco prezzofisso): un piatto nuovo in un sottomenu di un Menu fisso ha come «gemelli» solo i piatti
+ // con lo stesso nome nello STESSO Menu (le Patate al forno del pranzo non sono un candidato per la cena, la Carbonara alla carta
+ // non lo è per il Menu cena). Il controllo dei doppioni ignora le creazioni che hanno un omonimo solo in un altro Menu.
+ const fixedSecs=o.fixedSecIds??new Set<string>(),menuOfSec=(id:string)=>o.sections.find(s=>s.id===id)?.menu
+ const dupScope=(acts:MenuAction[])=>acts.filter((a:any)=>!(a.kind==='create'&&(fixedSecs.has(a.sectionId)||a.fromReplace||(o.refs??[]).filter(r=>sameDishName(r.name,a.name)).every(r=>fixedSecs.has(r.sectionId??'')&&r.menu!==menuOfSec(a.sectionId)))&&!(o.refs??[]).some(r=>sameDishName(r.name,a.name)&&r.menu===menuOfSec(a.sectionId))))
+ // run Haiku 21/10 (z-annulla-018): con un'eliminazione in attesa del «sì», «annulla», «lascia stare», «no», «niente» scartano la
+ // proposta (mai «annulla l'ultima pubblicazione», mai una nuova domanda che tenga l'eliminazione confermabile).
+ if(pend?.kind==='batch'&&pend.why==='delete'&&!changeActs.length&&(ONLY_CANCEL.test(plain(message))||CANCEL_WORDS.test(plain(message))))return{kind:'cancel'}
+ // notte 22/10 (n-annulla-domanda, n-annulla-poi-comando): «annulla», «lascia stare», «no» mentre il bot aspetta una risposta alla SUA domanda
+ // chiudono la domanda (salvo un «annulla» dell'ultima pubblicazione ancora annullabile): prima «non c’è nulla da annullare» + la stessa domanda.
+ // notte 22/10 (QA v147 GRAVE: «aggiungi il vitello tonnato» → domanda → «annulla» → annullata una modifica della conversazione PRIMA): con una
+ // domanda aperta «annulla» chiude SOLO la domanda, sempre.
+ if(!changeActs.length&&(pend?.kind==='ask'||pend?.kind==='hold'||pend?.kind==='other')&&ONLY_CANCEL.test(plain(message)))return{kind:'cancel'}
  if(control.includes('undo_last')){if(!o.undoOK)return reject('annulla_scaduto');if(!undoRequested(message))return reject('annulla_senza_richiesta');if(rawActs.length||control.length>1)return reject('annulla_con_altro');return{kind:'undo'}}
  if(control.includes('confirm_pending')){
   // R9: con una TUA domanda aperta (brain_ask) non c'è nulla da confermare: la risposta va scritta come piano con le azioni della richiesta originale.
   if(pend?.kind==='ask')return reject('conferma_di_domanda',pend.ask.twins?.map(t=>t.id)??pend.ask.ids,pend.ask.actions??[])
   if(!pend||(pend.kind!=='batch'&&pend.kind!=='hold'))return reject('conferma_senza_proposta')
+  // notte 22/10 (z-interruzioni-008 «sì e anche il tiramisù»): un sì in testa conferma la proposta; il resto è una richiesta nuova
+  // (un'altra eliminazione chiede il SUO sì). Prima il sì veniva ignorato.
+  if(pend.kind==='batch'&&rawActs.length&&YES_HEAD.test(plain(message))&&!CONFIRM_STOP.test(plain(message).replace(YES_HEAD,' ').replace(/\d+/g,' '))){
+   const rest=plain(message).replace(YES_HEAD,' '),named=(o.refs??[]).filter(r=>plain(r.name).length>=3&&(' '+rest+' ').includes(' '+plain(r.name)+' ')).map(r=>r.id)
+   const dels=rawActs.some((a:any)=>a.action==='delete_item')?(d.plan?.ids??[]).filter((id:string)=>named.includes(id)).map((id:string)=>({kind:'delete',id}) as MenuAction):[]
+   if(changeActs.length||dels.length)return{kind:'confirm',extra:changeActs.length?changeActs:dels}}
   if(pend.kind==='batch'){if(rawActs.length)return reject('conferma_con_altro');if(confirmBlocked(message,o.refs??[]))return reject('conferma_non_esplicita');return{kind:'confirm',extra:[]}}
   if(CANCEL_WORDS.test(plain(message)))return reject('conferma_non_esplicita')
   // Domanda sì/no in sospeso («Intendi boh? Rispondi sì o no.»): una richiesta nuova non è un sì (R5.1, banco vero asr-005).
@@ -132,12 +179,19 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
  if(pend?.kind==='batch'&&(pend.why==='recap'||pend.why==='price')&&!control.length&&d.exclude.some(e=>pend.actions.some(a=>'id' in a&&(a as any).id===e.id)))return{kind:'change',actions:changeActs}
  if(d.intent==='chat'||d.intent==='capability'||(!rawActs.length&&(rawIntent==='chat'||rawIntent==='capability')))return{kind:'say'}
  if(d.plan?.type==='read')return d.notes.includes('domanda_zero_scritture')&&rawIntent==='change'?{kind:'read',plan:d.plan}:{kind:'read',plan:d.plan}
+ // notte 22/10 (bv-categorie-001 «…e lì aggiungi quei due piatti che ti ho detto»): «quei due» comprende il piatto già nel menu della
+ // domanda di prima; un piano che lo dimentica perde una parte (prima: pasta al pesto creata, pasta al ragù mai spostata).
+ {const tw:{id:string,name:string}[]=pend?.kind==='ask'?(pend.ask.twins??[]):pend?.kind==='hold'?((pend.hold.asks??(pend.hold.ask?[pend.hold.ask]:[])) as any[]).flatMap(a=>a.type==='choose'&&Array.isArray(a.options)&&a.options.length===1?[a.options[0]]:a.type==='confirm'&&a.action?.id?[a.action.id]:[]).map((id:string)=>({id,name:(o.refs??[]).find(r=>r.id===id)?.name??''})).filter(t=>t.name):[]
+  if(tw.length&&changeActs.length&&/\b(?:quei|quegli|quelli|quelle|entramb\w*|ambedue|tutti e due|tutte e due)\b/.test(plain(message))&&tw.some(t=>!changeActs.some((a:any)=>a.id===t.id||(a.kind==='create'&&sameDishName(a.name,t.name)))))return reject('gemello_dimenticato',tw.map(t=>t.id),changeActs)}
  // R9: risposta alla domanda sui piatti con lo stesso nome: un'azione su un piatto dal nome PIÙ LUNGO che contiene un nome della richiesta
  // («pasta al pesto» → «Pasta al pesto e lasagna») non è la scelta del titolare: quel nome è un piatto nuovo.
  if(d.plan?.type==='change'&&!d.hold&&pend?.kind==='ask'&&pend.ask.twins?.length){const said=[...pend.ask.twins.map(t=>t.name),...(pend.ask.actions??[]).flatMap(a=>a.kind==='create'?[a.name]:[])],refs=o.refs??[]
   const bad=d.plan.actions.flatMap((a:any)=>{if(!('id' in a)||pend.ask.twins!.some(t=>t.id===a.id))return[];const r=refs.find(x=>x.id===a.id);return r&&!(' '+plain(message)+' ').includes(' '+plain(r.name)+' ')&&said.some(n=>!sameDishName(n,r.name)&&(' '+dishKey(r.name)+' ').includes(' '+dishKey(n)+' '))?[r.id]:[]})
   if(bad.length)return reject('doppio_falso',bad,[])}
- if(d.plan?.type==='change'&&!d.hold){if(d.plan.actions.some((a:any)=>a.kind==='create'&&negatedName(message,a.name)))return reject('creazione_negata',[],[]);{const dup=d.plan.actions.filter((a:any)=>a.kind==='rename'&&(o.refs??[]).some(r=>r.id!==a.id&&plain(r.name)===plain(a.name)));if(dup.length)return reject('nome_doppio',dup.map((a:any)=>a.id),[])}if(namedSectionMismatch(message,d.plan.actions,o.sections))return reject('categoria_non_detta',[],d.plan.actions);if(duplicateCreate(d.plan.actions.filter((x:any)=>!(x.kind==='create'&&pend?.kind==='ask'&&(pend.ask.twins??[]).some(t=>sameDishName(t.name,x.name)))),o.refs??[])){const tw=duplicateTwins(d.plan.actions,o.refs??[]),refs=o.refs??[],twins=twinsOf(d.plan.actions,refs);return{kind:'reject',reason:twinReason(twins,d.plan.actions,refs),ids:tw,actions:d.plan.actions.filter((a:any)=>!(a.kind==='create'&&refs.some(r=>tw.includes(r.id)&&sameDishName(r.name,a.name)))),...(twins.length?{twins}:{})}}if(d.plan.actions.some((a:any)=>(a.kind==='create'||a.kind==='create_section'||a.kind==='rename'||a.kind==='rename_section'||a.kind==='special')&&nameWithTail(a.name)))return reject('nome_con_coda',[],[]);{const tw=pend?.kind==='ask'?pend.ask.twins??[]:[],bad=moveTargetProblem(message,d.plan.actions,o.sections,o.lastBot??'').filter(id=>!d.plan.actions.some((a:any)=>a.kind==='move'&&a.id===id&&tw.some(t=>t.id===id&&t.sectionId===a.sectionId)));if(bad.length)return reject('categoria_non_detta',bad,[])}if(/\b(?:finit\w*|esaurit\w*)\b/.test(plain(message))&&!/\b(?:nascond\w*|togli\w*|lev[ai]\w*|non (?:la |lo )?(?:fare )?vedere)\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='hidden'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='hidden'?[a.id]:[]),[]);{const lost=lostClauses(message,d.plan.actions,o.refs??[],d.exclude??[]);if(lost.length)return{kind:'reject',reason:reasonText(['parte_persa:'+lost.join(',')]),ids:[],actions:d.plan.actions}}{const bad=deleteScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('elimina_fuori_portata',bad,[])}{const bad=verbScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('azione_fuori_portata',bad,[])}{const bad=referenceAsTarget(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('riferimento_come_bersaglio',bad,[])}if(/\brimett\w*\b/.test(plain(message))&&!/\bevidenza\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='featured'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='featured'?[a.id]:[]),[]);{const bad=twinMoveMissing(d.plan.actions,pend,o.refs??[],o.sections);if(bad)return{kind:'reject',reason:bad.reason,ids:bad.ids,actions:d.plan.actions}}{const bad=allSubsetProblem(message+(pend?.kind==='ask'?' \n '+pend.ask.source:''),d.plan.actions,o.refs??[],o.sections);if(bad)return{kind:'reject',reason:bad.reason,ids:[],actions:d.plan.actions}}return{kind:'change',actions:d.plan.actions,...(d.plan.after?{after:d.plan.after}:{})}}
+ // notte 22/10 (bv-deixis-003 «aggiungi la parmigiana a 10» con «la parmigiana» già a 10): un piatto nuovo uguale per nome E prezzo a
+ // uno che c'è già non cambia nulla: niente domanda «lo aggiorno o ne creo un altro?», la creazione cade (il resto prosegue).
+ if(d.plan?.type==='change'&&!d.hold&&!(pend?.kind==='ask'&&pend.ask.twins?.length)){const same=(a:any)=>a.kind==='create'&&!(o.fixedSecIds??new Set()).has(a.sectionId)&&(o.refs??[]).some(r=>sameDishName(r.name,a.name)&&!r.hidden&&r.price>0&&Math.abs(r.price-a.price)<0.005);if(d.plan.actions.some(same))d={...d,plan:{...d.plan,actions:d.plan.actions.filter((a:any)=>!same(a))}}}
+ if(d.plan?.type==='change'&&!d.hold){if(d.plan.actions.some((a:any)=>a.kind==='create'&&negatedName(message,a.name)))return reject('creazione_negata',[],[]);{const dup=d.plan.actions.filter((a:any)=>a.kind==='rename'&&(o.refs??[]).some(r=>r.id!==a.id&&plain(r.name)===plain(a.name)));if(dup.length)return reject('nome_doppio',dup.map((a:any)=>a.id),[])}if(namedSectionMismatch(message,d.plan.actions,o.sections))return reject('categoria_non_detta',[],d.plan.actions);if(duplicateCreate(dupScope(d.plan.actions.filter((x:any)=>!(x.kind==='create'&&pend?.kind==='ask'&&(pend.ask.twins??[]).some(t=>sameDishName(t.name,x.name))))),o.refs??[])){const tw=duplicateTwins(dupScope(d.plan.actions),o.refs??[]),refs=o.refs??[],twins=twinsOf(dupScope(d.plan.actions),refs);return{kind:'reject',reason:twinReason(twins,d.plan.actions,refs),ids:tw,actions:d.plan.actions.filter((a:any)=>!(a.kind==='create'&&refs.some(r=>tw.includes(r.id)&&sameDishName(r.name,a.name)))),...(twins.length?{twins}:{})}}if(d.plan.actions.some((a:any)=>(a.kind==='create'||a.kind==='create_section'||a.kind==='rename'||a.kind==='rename_section'||a.kind==='special')&&nameWithTail(a.name)))return reject('nome_con_coda',[],[]);{const tw=pend?.kind==='ask'?pend.ask.twins??[]:[],bad=moveTargetProblem(message,d.plan.actions,o.sections,o.lastBot??'').filter(id=>!d.plan.actions.some((a:any)=>a.kind==='move'&&a.id===id&&tw.some(t=>t.id===id&&t.sectionId===a.sectionId)));if(bad.length)return reject('categoria_non_detta',bad,[])}if(/\b(?:finit\w*|esaurit\w*)\b/.test(plain(message))&&!/\b(?:nascond\w*|togli\w*|lev[ai]\w*|non (?:la |lo )?(?:fare )?vedere)\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='hidden'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='hidden'?[a.id]:[]),[]);{const lost=d.plan.actions.length&&d.plan.actions.every((a:any)=>a.fromReplace)?[]:lostClauses(message,d.plan.actions,o.refs??[],d.exclude??[]);if(lost.length)return{kind:'reject',reason:reasonText(['parte_persa:'+lost.join(',')]),ids:[],actions:d.plan.actions}}{const bad=deleteScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('elimina_fuori_portata',bad,[])}{const bad=verbScopeProblem(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('azione_fuori_portata',bad,[])}{const bad=referenceAsTarget(message,d.plan.actions,o.refs??[]);if(bad.length)return reject('riferimento_come_bersaglio',bad,[])}if(/\brimett\w*\b/.test(plain(message))&&!/\bevidenza\b/.test(plain(message))&&d.plan.actions.some((a:any)=>a.kind==='featured'&&a.value))return reject('valore_contrario',d.plan.actions.flatMap((a:any)=>a.kind==='featured'?[a.id]:[]),[]);{const bad=twinMoveMissing(d.plan.actions,pend,o.refs??[],o.sections);if(bad)return{kind:'reject',reason:bad.reason,ids:bad.ids,actions:d.plan.actions}}{const bad=allSubsetProblem(message+(pend?.kind==='ask'?' \n '+pend.ask.source:''),d.plan.actions,o.refs??[],o.sections);if(bad)return{kind:'reject',reason:bad.reason,ids:[],actions:d.plan.actions}}return{kind:'change',actions:d.plan.actions,...(d.plan.after?{after:d.plan.after}:{})}}
  // Domande del modello (intent=clarify) e parti incerte che il modello stesso ha segnato: domanda, stato in sospeso.
  const modelAsk=rawIntent==='clarify'||(d.hold&&d.notes.includes('parti_incerte')&&!d.notes.some(n=>VALIDATOR_HOLD.has(n.split(':')[0]!)))
  if(modelAsk){const cr=rawActs.find((a:any)=>a.action==='create_item'),sec=cr&&typeof cr.section==='string'?o.sections.find(s=>s.id===cr.section||plain(s.name)===plain(cr.section)):undefined
@@ -146,6 +200,10 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
   const inMsg=(t:unknown)=>typeof t==='string'&&!!plain(t)&&(' '+plain(message)+' ').includes(' '+plain(t)+' ')
   const createDraft=cr?{name:inMsg(cr.name)?String(cr.name).trim().slice(0,120):'',price:typeof cr.price==='number'&&cr.price>0&&g9Prices(message).includes(Math.round(cr.price*100)/100)?Math.round(cr.price*100)/100:null,sectionId:sec&&(o.sections.length===1||inMsg(sec.name))?sec.id:null,sectionName:!sec&&inMsg(cr.section)&&!/^c\d+$/.test(cr.section)?String(cr.section).slice(0,60):null}:null
   return{kind:'ask',ids:d.plan?.ids??[],actions:d.hold?d.hold.actions:d.plan?.actions??[],...(d.hold?{hold:d.hold}:{}),...(createDraft?{createDraft}:{})}}
+ // notte 22/10 (z-interruzioni-017 «aggiungi nei dolci la cassata» → «6»): piatto nuovo senza prezzo (piano 'missing'): la bozza (nome
+ // detto + sottomenu detto) resta con la domanda, così il prezzo dopo crea il piatto (prima la bozza si perdeva e «6» diventava un'altra domanda).
+ if(d.plan?.type==='missing'&&typeof d.plan.name==='string'&&d.plan.name.trim()&&(' '+plain(message)+' ').includes(' '+plain(d.plan.name)+' ')&&(d.plan.missing??[]).every((m:string)=>m==='price')){const ns=namedSections(message,o.sections).ids,sec=ns.length===1?ns[0]!:(d.plan.sectionIds??[]).length===1?d.plan.sectionIds[0]:o.sections.length===1?o.sections[0]!.id:null
+  return{kind:'reject',reason:reasonText(['nessuna_azione']),ids:[],actions:[],createDraft:{name:String(d.plan.name).trim().slice(0,120),price:null,sectionId:sec,sectionName:null}}}
  // Il modello voleva modificare e il validatore non lo permette: rifiuto, con il motivo per l'auto-correzione.
  return{kind:'reject',reason:reasonText(d.notes.length?d.notes:['nessuna_azione']),ids:d.plan?.ids?.length?d.plan.ids:(d.hold?.asks??[]).flatMap((a:any)=>a.options??(a.action?.id?[a.action.id]:[])),actions:d.hold?d.hold.actions:d.plan?.actions??[],...(d.hold?{hold:d.hold}:{})}}
 
@@ -154,10 +212,15 @@ export function decideTurn(o:{decision:Decision,control:ControlAction[],raw:any,
 const HIDE_V=/\b(?:nascond\w*|togli\w*|toglil\w*|lev[ai]\w*|levall?\w*|rimuov\w*|non (?:lo |la |li |le )?(?:fa\w* )?vedere)\b/,FIN_V=/\b(?:finit\w*|esaurit\w*|terminat\w*|fernut\w*|non c e piu|sold out)\b/
 export function verbScopeProblem(message:string,actions:MenuAction[],refs:MenuRef[]):string[]{
  const want:[string,string][]=actions.flatMap((a):[string,string][]=>a.kind==='hidden'&&a.value?[[a.id,'hide']]:a.kind==='available'&&!a.value?[[a.id,'fin']]:[]);if(!want.length)return[]
- const parts=message.split(/[,;]|\s+(?:e|ed|poi|anche)\s+/i).map(x=>plain(x)).filter(Boolean),scope=new Map<string,Set<string>>();let cur='none'
+ const parts=message.split(/[,;]|\s+(?:e|ed|poi|anche)\s+/i).map(x=>plain(x)).filter(Boolean),scope=new Map<string,Set<string>>();let cur='none',lastIds:string[]=[]
  for(const p of parts){const h=HIDE_V.test(p),f=FIN_V.test(p),other=/\b(?:aggiung\w*|metti\w*|mettil\w*|costa\w*|prezzo|spost\w*|rinomin\w*|evidenza|aument\w*|abbass\w*)\b|\b(?:a|costa)\s+\d/.test(p.replace(HIDE_V,' ').replace(FIN_V,' '))
   if(h&&!other)cur='hide';else if(f&&!other)cur='fin';else if(h||f)cur=h?'hide':'fin';else if(other)cur='other'
-  for(const r of refs){const n=plain(r.name);if((' '+p+' ').includes(' '+n+' ')||(!n.includes(' ')&&/h/.test(n)&&(' '+p+' ').includes(' '+n.replace(/h/g,'')+' '))){const s=scope.get(r.id)??new Set<string>();s.add((h||f)&&other?'mixed':cur);scope.set(r.id,s)}}}
+  let hit=false
+  for(const r of refs){const n=plain(r.name);if((' '+p+' ').includes(' '+n+' ')||(!n.includes(' ')&&/h/.test(n)&&(' '+p+' ').includes(' '+n.replace(/h/g,'')+' '))){hit=true;const s=scope.get(r.id)??new Set<string>();s.add((h||f)&&other?'mixed':cur);scope.set(r.id,s)}}
+  // notte 22/10 (z-rinomine-009 «rinomina il babà in babà al rum, e nascondilo»): verbo col pronome attaccato senza piatti nella sua parte =
+  // i piatti della parte prima.
+  if(!hit&&(h||f)&&/\b\w+(?:l[oaie])\b/.test(p)&&/\b(?:nascondil|toglil|levall?|segnal|rimuovil)[oaie]\b/.test(p))for(const [id,sc] of scope)if(lastIds.includes(id))sc.add(h?'hide':'fin')
+  if(hit){lastIds=refs.filter(r=>{const n=plain(r.name);return (' '+p+' ').includes(' '+n+' ')}).map(r=>r.id)}}
  // Solo un piatto detto in una parte con un'altra azione esplicita (prezzo, aggiungi…) e mai nella portata del verbo.
  return want.filter(([id,k])=>{const s=scope.get(id);return !!s&&s.has('other')&&!s.has(k)&&!s.has('mixed')}).map(([id])=>id)}
 /** R10 (QA 16:03 «nei primi aggiungi … pasta al ragù» → «confermo»: ragù aggiornato ma rimasto in «Piatti di prova»). Risposta
@@ -190,8 +253,10 @@ export function allSubsetProblem(text:string,actions:MenuAction[],refs:MenuRef[]
 export function namedSectionMismatch(message:string,actions:MenuAction[],sections:SectionRef[]):boolean{
  const creates=actions.filter(a=>a.kind==='create') as Extract<MenuAction,{kind:'create'}>[];if(!creates.length)return false
  const fresh=new Set(actions.flatMap(a=>a.kind==='create_section'?[plain(a.name)]:[]))
- for(const m of plain(message).matchAll(/\b(?:nei|negli|nelle|tra i|tra gli|tra le|fra i|fra gli|fra le|categoria|sezione)\s+([a-z]+)(?:\s+([a-z]+))?/g)){const w0=m[1]!,w1=m[2]??''
-  if(w0.length<3||['che','si','chiama','nuova','nuovo','piu','di'].includes(w0))continue
+ for(const m of plain(message).matchAll(/\b(?:nei|negli|nelle|tra i|tra gli|tra le|fra i|fra gli|fra le|categoria|sezione)\s+([a-z]+)(?:\s+([a-z]+))?/g)){let w0=m[1]!,w1=m[2]??''
+  // notte 22/10 (bv-categorie-001 «un'altra categoria, ovvero primi», «un'altra categoria ancora, chiamandola speciali»): le parole di raccordo non sono il nome.
+  if(['ovvero','cioe','ossia','ancora','chiamata','chiamandola','chiamato','detta'].includes(w0)){if(!w1)continue;w0=w1;w1=''}
+  if(w0.length<3||['che','si','chiama','nuova','nuovo','piu','di','ancora','chiamandola'].includes(w0))continue
   const known=sections.some(s=>{const sw=plain(s.name).split(' ');return sw[0]!.slice(0,5)===w0.slice(0,5)||sameSection(s.name,w0)||(!!w1&&sameSection(s.name,w0+' '+w1))})||[...fresh].some(f=>f.split(' ')[0]!.slice(0,5)===w0.slice(0,5))||sections.some(s=>!!s.pub&&nameInText(s.pub,w0+' '+w1,true))
   if(!known)return true}
  return false}
@@ -289,25 +354,46 @@ const CLAIM=/\b(confermato|fatto|fatta|aggiornat\w*|modificat\w*|salvat\w*|pubbl
 // R8 (18/10, QA dal vivo «Aggiunti i nuovi piatti…» senza scrittura): anche i participi da soli («aggiunti», «creata», «spostati»…)
 // in una frase che non è una domanda sono un «fatto». Le domande («Vuoi che la sposti?», «La creo?») restano ammesse.
 const CLAIM_PART=/\b(?:aggiunt[oaie]|creat[oaie]|inserit[oaie]|spostat[oaie]|rinominat[oaie]|eliminat[oaie]|cancellat[oaie]|nascost[oaie]|rimoss[oaie]|tolt[oaie]|mess[oaie]|cambiat[oaie]|segnat[oaie]|rimess[oaie]|annullat[oaie]|ho (?:inserito|rimosso|reso|fatto|messo|tolto|aggiunto|creato|spostato))\b/
-export const claimsWrite=(s:string)=>CLAIM.test(plain(s))||s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_PART.test(plain(x)))
+// run Haiku 21/10: Haiku scrive al presente («Ok, rimetto *X* disponibile.», «Tolgo il tiramisù.»): in una frase che non è una
+// domanda vale come «fatto», a meno che la bozza chieda una conferma (rispondi/confermi/ok per…).
+const CLAIM_NOW=/^(?:ok|va bene|perfetto|d accordo|bene)?\s*(?:allora\s+)?(?:ti\s+)?(?:rimetto|tolgo|levo|metto|segno|nascondo|cambio|aggiorno|aggiungo|creo|sposto|rinomino|imposto|porto|abbasso|alzo|aumento|elimino|cancello|pubblico|preparo|faccio|inserisco|apro)\b/
+const ASKS_OK=/\b(?:rispondi|confermi|conferma|scrivi ok|ok per|dimmi (?:si|ok)|vuoi che|procedo)\b/
+const claimsNow=(s:string)=>!/\?/.test(s)&&!ASKS_OK.test(plain(s))&&s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_NOW.test(plain(x).trim()))
+// Banco prezzofisso 21/10 (pf-ambigua-04/05: «Ok, il *Completo* del Menu cena passa a 17 €.» senza nessuna scrittura): anche lo stato
+// nuovo detto in terza persona («X passa a 17 €», «diventa 12,50», «ora costa 9») in una frase che non è una domanda è un «fatto».
+const CLAIM_STATE=/\b(?:passa|passano|passera|passeranno|diventa|diventano|diventera|sale a \d|salgono|scende|scendono|ora costa\w*|adesso costa\w*|costa ora|costano ora|e ora a|e adesso a|sono ora a|ora e a|ora sono a)\b/
+const claimsState=(s:string)=>!ASKS_OK.test(plain(s))&&s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&!/^(?:se|quando|appena)\b/.test(plain(x))&&CLAIM_STATE.test(plain(x)))
+export const claimsWrite=(s:string)=>CLAIM.test(plain(s))||claimsNow(s)||claimsState(s)||s.split(/(?<=[.!?\n])\s*/).some(x=>!/\?\s*$/.test(x.trim())&&CLAIM_PART.test(plain(x)))
 /** Bozza utilizzabile o null. `wrote` = il server ha scritto e riletto tutte le azioni; `numbers` = numeri ammessi
  * (detti dal titolare, prezzi scritti, prezzi dei piatti citati). */
 export function cleanDraft(draft:unknown,o:{wrote:boolean,numbers:number[]}):string|null{
  if(typeof draft!=='string')return null;let s=draft.replace(/[`~]/g,'').replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim();if(!s||s.length>600)return null
+ // run Haiku 21/10 (prova di Manuel sul QA): mai gergo tecnico né scelte numerate inventate («il sistema non può…», «rispondi 1 per sì»).
+ if(/\bil sistema\b/i.test(s)||/\b[12]\*?\s+per\s+(?:dire\s+)?(?:s[iì]|no)\b/i.test(s))return null
+ // 22/10: mai «non posso / non ho un comando» verso il titolare: la frase cade, il resto della bozza resta.
+ if(/\bnon posso\b|non ho un comando|non riesco a\b/i.test(s)){s=s.split(/(?<=[.!?])\s+/).filter(x=>!/\bnon posso\b|non ho un comando|non riesco a\b/i.test(x)).join(' ').trim();if(!s)return null}
  if(!o.wrote&&claimsWrite(s))return null
+ // fase 3 (tono, QA v145 «Vuoi che ti dica altro?»): le frasi di cortesia finali a vuoto cadono (risposte corte e chiare).
+ {const FILLER=/^(?:vuoi (?:che ti dica (?:altro|qualcos\w*)|altro|fare altro|cambiare altro|altre informazioni)|ti serve altro|serve altro|posso aiutarti(?: in| con)? (?:altro|qualcos\w*)|hai bisogno d.altro|c.è altro|desideri altro)[^.!?\n]*\?$/i
+  for(let k=0;k<2;k++){const m=s.match(/([.!?])\s+([^.!?\n]*\?)\s*$/);if(!m||!FILLER.test(m[2]!.trim()))break;s=s.slice(0,m.index!+1).trim()}}
  // Codici interni del contesto («p5», «c2») mai al titolare.
  if(/\b[pc]\d{1,3}\b/i.test(s))return null
  const allowed=new Set(o.numbers.map(n=>Math.round(n*100)/100))
  for(const m of s.replace(/(\d)\s*,\s*(\d{2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)){const v=Number(m[0]);if(Number.isInteger(v)&&v<=9&&!/€|euro/i.test(s.slice(m.index!,m.index!+m[0].length+6)))continue;if(!allowed.has(Math.round(v*100)/100))return null}
  return s}
-export const numbersIn=(s:string)=>[...s.replace(/(\d)\s*,\s*(\d{2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(m=>Number(m[0]))
+// run Haiku 21/10: anche i numeri detti a parole («di un euro», «dodici e cinquanta») e la differenza relativa: il modello li
+// ripete in cifre nella domanda («Aumento di 1 euro…?») e una bozza giusta non deve cadere per questo.
+export const numbersIn=(s:string)=>{const d=[...s.replace(/(\d)\s*,\s*(\d{2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(m=>Number(m[0]))
+ try{d.push(...g9Prices(s),...g9Prices(s,false));const r=relativeDelta(s);if(r)d.push(Math.abs(r.delta))}catch{/* solo cifre */}
+ if(/\b(?:di|da|a|per) (?:un|uno|1) (?:euro|eur)\b/i.test(plain(s)))d.push(1)
+ return d}
 
 // ---------- fatti del server ----------
 const num=(n:number)=>n.toFixed(2).replace('.',',')+' €'
 export const changeFacts=(actions:MenuAction[],before:MenuRef[],sections:SectionRef[])=>{const all=withNewSections(sections,actions);return actions.map(a=>describeAction(a,before,all)).join('\n')}
 /** Proposta in attesa: righe numerate (il numero tiene le righe fuori dalle frasi «X: nascosto» lette come fatti già avvenuti). */
 export function pendingFacts(why:BatchWhy,actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]){const all=withNewSections(sections,actions)
- const head=why==='delete'?'Da eliminare, serve il tuo sì:':why==='section'?'Categoria nuova, serve il tuo sì:':'Non ancora pubblicato, da confermare con OK:'
+ const head=why==='delete'?'Da eliminare, serve il tuo sì:':why==='section'?'Sottomenu nuovo, serve il tuo sì:':'Non ancora pubblicato, da confermare con OK:'
  return head+'\n'+actions.map((a,i)=>(i+1)+'. '+(a.kind==='delete'?'*'+(refs.find(r=>r.id===a.id)?itemLabel(refs.find(r=>r.id===a.id)!,refs):'?')+'*: da eliminare':describeAction(a,refs,all))).join('\n')}
 export const candidateFacts=(ids:string[],refs:MenuRef[])=>ids.map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r).map((r,i)=>`${i+1}. *${itemLabel(r,refs)}* (${num(r.price)})`).join('\n')
 export function holdFacts(h:Hold,refs:MenuRef[],sections:SectionRef[]){const all=withNewSections(sections,h.actions),out:string[]=[]
@@ -315,3 +401,85 @@ export function holdFacts(h:Hold,refs:MenuRef[],sections:SectionRef[]){const all
  for(const a of (h.asks??(h.ask?[h.ask]:[])) as any[])if(a.type==='choose'&&Array.isArray(a.options))out.push('«'+String(a.word).slice(0,60)+'»:\n'+candidateFacts(a.options,refs))
  return out.join('\n\n')}
 export const NOTHING='Non ho cambiato nulla.'
+
+// ── PIANO bot-haiku T4b (21/10/2026): correzioni dalla prova playground del 20/10 ──────────────────────────────────────────
+const euroShort=(n:number)=>(Number.isInteger(n)?String(n):n.toFixed(2).replace('.',','))+' €'
+/** (1) Azioni che non cambiano niente (prezzo uguale all'attuale, esaurito già esaurito…): il server non scrive e dice com'è già,
+ * coi fatti del menu. `effective` = le azioni che cambiano davvero (effectiveMenuActions). */
+export function noopFacts(actions:MenuAction[],effective:MenuAction[],refs:MenuRef[]):string{
+ const out:string[]=[],seen=new Set<string>()
+ for(const a of actions){if(effective.includes(a)||!('id' in a)||typeof (a as any).id!=='string')continue;const r=refs.find(x=>x.id===(a as any).id);if(!r)continue
+  const k=a.kind+':'+r.id;if(seen.has(k)||effective.some(e=>e.kind===a.kind&&'id' in e&&(e as any).id===r.id))continue;seen.add(k)
+  const n='*'+r.name+'*'
+  if(a.kind==='price')out.push(n+' è già a *'+euroShort(r.price)+'*.')
+  else if(a.kind==='available')out.push(n+(a.value?' è già disponibile.':' è già segnato come finito.'))
+  else if(a.kind==='hidden')out.push(n+(a.value?' è già nascosto dal menu.':' è già visibile nel menu.'))
+  else if(a.kind==='featured')out.push(n+(a.value?' è già in evidenza.':' non è in evidenza.'))}
+ return out.join('\n')
+}
+/** (3) Un intero menu o sottomenu nascosto/eliminato piatto per piatto («nascondi tutta la cena»): il server lo riconosce e chiede
+ * SEMPRE conferma col riepilogo. Coperto = ogni piatto del gruppo è nelle azioni o è già nello stato chiesto. Gruppi da ≥3 piatti. */
+export function wholeGroup(actions:MenuAction[],refs:MenuRef[],sections:SectionRef[]):{kind:'hidden'|'delete',label:string,count:number}|null{
+ if(actions.length<3)return null
+ const kind=actions.every(a=>a.kind==='hidden'&&a.value)?'hidden' as const:actions.every(a=>a.kind==='delete'&&!a.undoCreate)?'delete' as const:null;if(!kind)return null
+ const ids=new Set(actions.map(a=>(a as any).id as string)),covered=(r:MenuRef)=>ids.has(r.id)||(kind==='hidden'&&r.hidden)
+ const menus=[...new Set(refs.map(r=>r.menu))]
+ for(const m of menus){const items=refs.filter(r=>r.menu===m);if(items.length>=3&&items.every(covered)&&items.some(r=>ids.has(r.id)))return{kind,label:'tutto il '+(/^men[uù]\b/i.test(m.trim())?m.trim():'Menu '+m.trim()),count:items.filter(r=>ids.has(r.id)).length}}
+ for(const s of sections){const items=refs.filter(r=>r.sectionId===s.id);if(items.length>=3&&items.every(covered)&&items.some(r=>ids.has(r.id)))return{kind,label:'tutto il sottomenu '+s.name.trim()+(menus.length>1?' ('+s.menu.trim()+')':''),count:items.filter(r=>ids.has(r.id)).length}}
+ return null
+}
+export const wholeGroupText=(w:{kind:'hidden'|'delete',label:string,count:number})=>(w.kind==='hidden'?'Nascondo':'Elimino')+' *'+w.label+'* ('+w.count+(w.count===1?' piatto':' piatti')+')? Rispondi *sì*. Non ho ancora cambiato nulla.'
+
+// run Haiku 21/10 (parlato sporco): Whisper su un ristoratore che biascica tronca i numeri («dodic», «diciott e cinquant»,
+// «cinque e mezz»). Il modello li capisce, il controllo «prezzo detto» no: si completano le parole-numero troncate SOLO quando
+// il troncamento è univoco, prima del cervello. Le parole intere e il resto del testo restano identici.
+const TRUNC:[RegExp,string][]=[[/\bundic\b/g,'undici'],[/\bdodic\b/g,'dodici'],[/\btredic\b/g,'tredici'],[/\bquattordic\b/g,'quattordici'],[/\bquindic\b/g,'quindici'],[/\bsedic\b/g,'sedici'],
+ [/\bdiciasset+\b/g,'diciassette'],[/\bdiciott\b/g,'diciotto'],[/\bdiciannov\b/g,'diciannove'],[/\bvent\b/g,'venti'],[/\btrent\b/g,'trenta'],[/\bquarant\b/g,'quaranta'],
+ [/\bcinquant\b/g,'cinquanta'],[/\bsessant\b/g,'sessanta'],[/\bsettant\b/g,'settanta'],[/\bottant\b/g,'ottanta'],[/\bnovant\b/g,'novanta'],[/\be mezz\b/g,'e mezzo'],[/\bquattr\b/g,'quattro'],[/\bcinqu\b/g,'cinque']]
+export function fixTruncatedNumbers(text:string):string{let t=text;for(const [re,w] of TRUNC)t=t.replace(new RegExp(re.source,'gi'),w);return t}
+
+// ── Banco prezzofisso 21/10 (menu a prezzo fisso): vincoli puri usati dal route ─────────────────────────────────────────────
+/** La bozza di un piano di MODIFICA (intent=change) racconta la modifica («Ok, il Completo passa a 17 €.»): se il server non scrive,
+ * non arriva mai al titolare, a meno che sia una domanda. true = bozza da scartare in un esito senza scrittura. */
+// Restano: le domande, le bozze che chiedono l'OK di un riepilogo («Rispondi OK per pubblicare») e quelle degli strumenti di controllo
+// (annulla/conferma/scarta: lì la bozza racconta proprio ciò che fa il server).
+export const draftOfUnappliedChange=(raw:any,draft:unknown)=>String(raw?.intent??'')==='change'&&!/\?/.test(String(draft??''))&&!/\b(?:rispondi|confermi|conferm\w* con ok|scrivi ok|ok per)\b/.test(plain(String(draft??'')))&&!(Array.isArray(raw?.actions)&&raw.actions.some((a:any)=>a&&(CONTROL_ACTIONS as readonly string[]).includes(a.action)))
+/** Il modello chiede conferma («…Va bene?») su una modifica con una data («da domani», «stasera») → riepilogo in attesa dell'OK.
+ * Mai per la sostituzione dei piatti di oggi (solo azioni `fromReplace`): si applica subito, «annulla» entro 10 minuti è la rete. */
+export function draftAsksOkOnDate(effective:MenuAction[],draft:string,text:string){
+ if(effective.length&&effective.every(a=>(a as any).fromReplace))return false
+ return /\?|\brispondi\b|\bconfermi\b/i.test(draft)&&/\b(?:domani|dopodomani|stasera|stanotte|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|settimana prossima|prossima settimana|dal \d+|fra \d+|tra \d+)\b/.test(plain(text))}
+/** Piatti di un Menu a prezzo fisso tra quelli in questione: la frase del server che spiega dove sta il prezzo (null = nessuno). */
+export function fixedDishFact(ids:string[],refs:MenuRef[],menus:{id:string,name:string,pricing:'carta'|'fisso',formulas:{name:string,price:number}[],secs:{id:string}[]}[]):string|null{
+ const hits=[...new Set(ids)].map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r).flatMap(r=>{const m=menus.find(x=>x.pricing==='fisso'&&x.secs.some(s=>s.id===r.sectionId));return m?[{r,m}]:[]});if(!hits.length)return null
+ const m=hits[0]!.m,fs=m.formulas.filter(f=>f.name.trim()),menuName=/^men[uù]\b/i.test(m.name.trim())?'*'+safe(m.name.trim())+'*':'Menu *'+safe(m.name.trim())+'*'
+ return [...new Set(hits.filter(h=>h.m===m).map(h=>'*'+safe(h.r.name)+'*'))].join(', ')+' '+(hits.filter(h=>h.m===m).length>1?'sono':'è')+' nel '+menuName+', che è a prezzo fisso: i piatti non hanno un prezzo, il prezzo è delle opzioni'+(fs.length?' ('+fs.map(f=>'*'+safe(f.name.trim())+'* '+f.price.toFixed(2).replace('.',',')+' €').join(', ')+')':'')+'. Se vuoi cambiare un\'opzione scrivi per esempio «il '+(fs[0]?.name.trim().toLowerCase()??'completo')+' a 13». Non ho cambiato nulla.'}
+// Banco prezzofisso 21/10 (pf-sostituzione-19): «Intendi per il Menu cena, dove nascondo gli altri primi…?» diventava la proposta
+// di nascondere TUTTO il Menu cena (un «sì» l'avrebbe tolto ai clienti). Vale solo la domanda che nasconde il Menu stesso:
+// «Nascondo (tutto) il Menu *Cena*?», mai una frase che nasconde dei piatti o un sottomenu dentro il Menu.
+export const HIDE_WHOLE_MENU_Q=/\bnascond\w* (?:tutt[oa] |anche )?(?:il |l intero |l )?menu\b(?! [^?]*\b(?:gli altri|le altre|i piatti|piatti|primi|secondi|contorni|dolci|antipasti|sottomenu)\b)/
+
+// ── Prova dal vivo 21/10 sera (QA): il testo segue il dato ─────────────────────────────────────────────────────────────────────
+/** Stessa differenza di prezzo (≠0) su almeno 2 piatti e nient'altro: aumento/ribasso uniforme. La differenza in euro, oppure null. */
+export function uniformDelta(actions:MenuAction[],refs:MenuRef[]):number|null{
+ if(actions.length<2)return null;const d=new Set<number>()
+ for(const a of actions){if(a.kind!=='price')return null;const r=refs.find(x=>x.id===a.id);if(!r)return null;d.add(Math.round((a.price-r.price)*100))}
+ const [v]=[...d];return d.size===1&&v!==0?v!/100:null}
+/** Risposta del server per un aumento/ribasso uniforme già applicato: la riga d'esito e i fatti riletti (mai la bozza del modello,
+ * che prometteva un riepilogo o nominava come esclusi piatti cambiati). */
+export function uniformReply(delta:number,count:number,facts:string):string{
+ const eur=Math.abs(delta).toFixed(2).replace('.',',')+' €'
+ return [(delta>0?'Aumentati':'Abbassati')+' di '+eur+' i prezzi di '+count+' piatti.',facts].filter(Boolean).join('\n\n')}
+// Frasi della bozza che non possono stare sopra una scrittura già fatta: promessa di un riepilogo da confermare prima di pubblicare.
+const PROMISE_RECAP=/\b(?:riepilogo|prima di pubblicare|da confermare|prima di salvare|aspetto (?:il tuo|la tua) (?:ok|conferma))\b/
+const EXCLUDED_SAY=/\b(?:lascio fuori|lasciamo fuori|lascio (?:stare|com e|come sono|invariat\w*)|restano fuori|resta fuori|rimangono fuori|escludo|esclus\w*|non (?:li |la |lo |le )?tocco|non (?:sono|e) (?:nei|nel|tra|fra)|non (?:li |la |lo |le )?cambio)\b/
+/** Bozza del modello dopo una scrittura: via le frasi che promettono un riepilogo e quelle che dicono «esclusi» piatti che invece
+ * sono stati cambiati. null = non resta niente. */
+export function pruneWroteDraft(draft:string,actions:MenuAction[],refs:MenuRef[]):string|null{
+ const touched=new Set(actions.flatMap(a=>'id' in a&&typeof (a as any).id==='string'?[(a as any).id as string]:[]))
+ const names=refs.filter(r=>touched.has(r.id)&&plain(r.name).length>=3).map(r=>' '+plain(r.name)+' ')
+ // notte 22/10 (cc-giornata-01): una frase della bozza che nomina per intero un piatto NON toccato (e che non è parte del nome di uno
+ // toccato) racconta una modifica che non c'è: cade, restano i fatti riletti.
+ const others=refs.filter(r=>!touched.has(r.id)&&plain(r.name).length>=4).map(r=>' '+plain(r.name)+' ').filter(o=>!names.some(n=>n.includes(o)||o.includes(n)))
+ const keep=draft.split(/(?<=[.!?])\s+/).filter(x=>{const p=' '+plain(x)+' ';if(PROMISE_RECAP.test(p))return false;if(EXCLUDED_SAY.test(p)&&names.some(n=>p.includes(n)))return false;if(!EXCLUDED_SAY.test(p)&&names.length&&others.some(o=>p.includes(o))&&!names.some(n=>p.includes(n)))return false;return true})
+ return keep.join(' ').trim()||null}

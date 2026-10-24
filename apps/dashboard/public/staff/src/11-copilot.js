@@ -571,7 +571,7 @@
     // "Buonasera, Marco" e non "Buonasera, Pizzeria da Marco".
     const _role = window.__takoRole || "owner";
     const _uname = (window.ROLES && ROLES[_role] && ROLES[_role].name) || "";
-    const owner = (_uname && _uname !== "—") ? _uname.split(" ")[0] : "";
+    const owner = greetName(_uname);
     const canSend = (!!input.trim() || !!attachedImage) && !busy;
 
     // Composer stile Claude: box arrotondato, textarea, mic a sinistra, invio a destra.

@@ -1,0 +1,15 @@
+import {readFile,writeFile,mkdir,cp}from'node:fs/promises';import{transform}from'esbuild';
+const dir='release/reservation-preview';await mkdir(dir,{recursive:true});
+await cp('apps/dashboard/public/staff/assets',dir+'/staff/assets',{recursive:true});await cp('apps/dashboard/public/staff/lib',dir+'/lib',{recursive:true});
+const source=await readFile('apps/dashboard/public/staff/src/09-reservations.js','utf8');const component=source.slice(source.indexOf('function ReservationTool'),source.indexOf('function ScreenPrenotazioni'));
+const kit=(await readFile('apps/dashboard/public/staff/src/02-kit.js','utf8')).split('/* badge / status */')[0];
+const stub=`const toast=(s)=>document.getElementById('status').textContent=s;
+${kit}
+const RoomFormModal=()=>null;const TableFormModal=()=>null;
+const tableAsset=t=>t.shape==='round'?(t.posti<=2?'round-2':'round-4'):t.posti>6?'rect-8':t.posti>4?'rect-6':'square-4';
+window.TakoActions={tableUpdate:async(id,p)=>{window.lastSaved={id,...p}}};
+${component}
+const rooms=[{id:'r1',nome:'Sala principale',tables:[{_id:'t1',n:'1',posti:4,shape:'round',_hasPos:true,x:25,y:30},{_id:'t2',n:'2',posti:6,shape:'rectangle',_hasPos:true,x:70,y:30},{_id:'t3',n:'3',posti:2,shape:'round',_hasPos:true,x:25,y:73},{_id:'t4',n:'4',posti:4,shape:'square',_hasPos:true,x:70,y:73},{_id:'t5',n:'5',posti:4,shape:'square',_hasPos:false}]},{id:'r2',nome:'Terrazza',tables:[{_id:'t6',n:'6',posti:4,shape:'round',_hasPos:true,x:50,y:50}]}];
+ReactDOM.createRoot(document.getElementById('root')).render(<ReservationRoomMap rooms={rooms} mobile={innerWidth<600} reservations={[]} onNewReservation={()=>toast('QA: nuova prenotazione')} onReserve={t=>toast('QA: tavolo selezionato '+t.n)}/>);`;
+const compiled=await transform(stub,{loader:'jsx',target:'es2020'});await writeFile(dir+'/preview.js',compiled.code);
+await writeFile(dir+'/index.html',`<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>QA piantina prenotazioni</title><style>:root{--ink:#242424;--ink-2:#656565;--ink-3:#888;--surface:#fff;--sunken:#f2f0eb;--hairline:#dedbd4;--brand:#252525;--brand-tint:#eee;--btn-h-sm:38px;--btn-fs-sm:13px;--btn-weight:600;--r-btn:12px;--btn-brand-bg:#242424;--on-brand:#fff;--btn-soft-bg:#f5f4f0}*{box-sizing:border-box}body{font:15px system-ui;background:#faf9f6;margin:0;padding:24px}main{max-width:1000px;margin:auto}section{padding:24px;background:white;border-radius:18px;border:1px solid #ddd}button{font:inherit;cursor:pointer;padding:9px 13px;border:1px solid #ddd;background:white;border-radius:10px}button:focus-visible{outline:3px solid #1b7fa1}button:disabled{opacity:.5;cursor:wait}h3,p{margin:0}#status{padding:16px}</style><main><p style="margin-bottom:18px">ANTEPRIMA QA · dati fittizi, nessuna modifica ai locali</p><div id="root"></div><div id="status" role="status"></div></main><script src="lib/react-18.3.1.production.min.js"></script><script src="lib/react-dom-18.3.1.production.min.js"></script><script src="preview.js"></script></html>`);

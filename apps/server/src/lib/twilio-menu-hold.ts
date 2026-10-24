@@ -236,7 +236,8 @@ const holdHash=(s:string)=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.ch
 export const undoWindowMs=10*60*1000
 const holdCanon=(v:any):string=>v===null||typeof v!=='object'?JSON.stringify(v??null):Array.isArray(v)?'['+v.map(holdCanon).join(',')+']':'{'+Object.keys(v).filter(k=>v[k]!==undefined).sort().map(k=>JSON.stringify(k)+':'+holdCanon(v[k])).join(',')+'}'
 const holdItemsOf=(w:any)=>new Map<string,{item:any,sectionId:string}>(w.menus.flatMap((m:any)=>m.sections.flatMap((s:any)=>s.items.map((i:any)=>[i.id,{item:i,sectionId:s.id}]))))
-const holdSectionShape=(w:any)=>holdCanon(w.menus.map((m:any)=>m.sections.map((s:any)=>({...s,items:undefined}))))
+// run Haiku 21/10: anche i campi del Menu (attivo/nascosto, nome) contano come struttura: «annulla» li rimette.
+const holdSectionShape=(w:any)=>holdCanon(w.menus.map((m:any)=>({...m,sections:m.sections.map((s:any)=>({...s,items:undefined}))})))
 /** Le voci cambiate da una pubblicazione WhatsApp (prima/dopo). null se cambia altro oltre ai piatti (sezioni, design). */
 export function undoRecordFor(before:any,after:any,now=Date.now()):UndoRecord|null{
  if(holdCanon({...before,menus:undefined})!==holdCanon({...after,menus:undefined}))return null

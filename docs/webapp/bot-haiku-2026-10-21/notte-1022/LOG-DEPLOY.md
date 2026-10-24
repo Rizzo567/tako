@@ -1,0 +1,15 @@
+- 00:38 v141 = commit 5503161e (bundle candidate-index-v141.ts, ezbr 7784fdb8…), rollback-v140.ts; wait-edge-ready 15 s; live QA 5 messaggi ok (3–5,5 s), QA identico dopo.
+- 00:47 worker takomenu-web 20ba6b07 (prima 49846043): webhook Twilio staccato dal segnale di Twilio + waitUntil. Smoke: / 200, /api/auth/me 401, webhook QA ok. Rollback: CI=true npx wrangler rollback 49846043-0b54-4759-bb28-9013ca33ca3e --config deploy/cloudflare/wrangler.jsonc
+- 01:05 v142 = commit 267fcd47, rollback-v141.ts; live QA ok, QA identico.
+- 01:15 v143 = commit bc65013c (candidate-index-v143.ts), rollback-v142.ts; live QA ok, QA identico. Visto dal vivo: lettura «quante paste ho nei primi?» con piatti di altri sottomenu/menu (sbagliata); «la carbonara a dieci e mezzo» sceglie la Carbonara del Menu del giorno nascosto invece della pasta carbonara alla carta.
+- 01:24 v144 = commit 3a134b4a, rollback-v143.ts; live QA ok, QA identico.
+- 01:44 v145 = commit 61ee758a, rollback-v144.ts; QA identico. Cieco b2 67/72 (era 60/72). Dal vivo: «quanto costa il riso giallo?»→«alzalo di un euro»→«Intendi il riso giallo a 8 €? Dimmi se è lui» (non agisce, prezzo sbagliato nel testo); «aggiungi le patatine fritte»→«In quale sottomenu la metto?»→«4»→ richiede il sottomenu con lista.
+- 01:58 v146 = commit 1c06b82f, rollback-v145.ts; attivazione 40 s; pronome dopo lettura OK dal vivo; «aggiungi le patatine fritte»→«4» ripete ancora la domanda (dal vivo; nel banco passa). QA identico.
+- 02:14 v147 = commit dfe3ddf5, rollback-v146.ts. Batteria v146: 21/27 (stessi KO di v145, correzioni in v147).
+- 02:24 ROLLBACK a v146 (online come v148 = bundle v146): batteria v147 21/27 con 2 GRAVI nuovi (alzali tutti e due → tiramisù alzato al posto del riso; «annulla» con domanda aperta annulla una modifica di prima).
+- 02:47 v149 = commit 37ddd9dd (candidate-index-v149.ts), rollback-v146.ts (ultima buona prima). Cieco b4 72/72. Batteria v149 25/27 (era 21/27), QA identico. KO: «aggiungi patatine fritte a 4» crea subito in Piatti di prova (sottomenu del contesto vecchio) e la lista include «Completo (Menu pranzo)» vuoto; «il riso giallo a 9»→«anzi rimettilo a 8»→«Intendi pasta al pesto a 8?».
+- 05:36 v150 = commit 5e6c0798 (candidate-index-v150.ts), rollback-v149.ts. cieco 72/72, finale (cieco n.2) 68/73.
+- 05:44 batteria v150: 27/27, QA identico.
+- 05:53 batteria v150b: 27/27, QA identico.
+- 05:55 v151 = commit 72dcad41 (candidate-index-v151.ts), rollback-v150.ts; primo contatto dal vivo ok.
+- 06:11 batteria v151 ×2: 27/27 e 27/27, QA identico. VERSIONE FINALE.

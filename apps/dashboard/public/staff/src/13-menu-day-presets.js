@@ -118,7 +118,7 @@ function MenuDayPresetStage({dp,contentKey,itemCount,children}){
  const style=MW_DP_STYLE();
  return <div ref={stageRef} className={'mw-dp-stage'+(open?' is-open':'')} style={style}>
   {dp.eligible&&<div className="mw-dp-tray" id="mw-dp-tray" role="group" aria-label={`Preset del menu ${dp.settings.enabled?'':'(non attivi)'}`} inert={open?undefined:''} onBlur={onBlur}><div ref={innerRef} className="mw-dp-tray-inner">{dp.settings.enabled?<MenuDayPresetChips dp={dp} picked={picked} onPick={id=>{setPicked(id);dp.pick(id);}}/>:<MenuDayPresetActivate dp={dp}/>}</div></div>}
-  <div className="mw-dp-list-wrap">{dp.viewing&&<MenuDayPresetBar dp={dp}/>}{dp.notices.length>0&&!dp.viewing&&<MenuDayPresetNotices dp={dp}/>}<div ref={frameRef} className="mw-dp-list-frame"><div className="mw-dp-list-content" aria-busy={dp.pending==='view'||undefined}>{dp.viewing&&!itemCount&&<p className="mw-dp-empty"><strong>«{dp.viewing.name}» è vuoto</strong>Aggiungi categorie e piatti con «+», oppure crea un preset come copia di un altro giorno.</p>}{children}</div></div></div>
+  <div className="mw-dp-list-wrap">{dp.viewing&&<MenuDayPresetBar dp={dp}/>}{dp.notices.length>0&&!dp.viewing&&<MenuDayPresetNotices dp={dp}/>}<div ref={frameRef} className="mw-dp-list-frame"><div className="mw-dp-list-content" aria-busy={dp.pending==='view'||undefined}>{dp.viewing&&!itemCount&&<p className="mw-dp-empty"><strong>«{dp.viewing.name}» è vuoto</strong>Aggiungi sottomenu e piatti con «+», oppure crea un preset come copia di un altro giorno.</p>}{children}</div></div></div>
   {dp.guardState&&<MenuDayPresetGuard dp={dp}/>}
   {dp.confirmState&&<MenuDayPresetConfirm dp={dp}/>}
  </div>;

@@ -1,9 +1,31 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db, restaurants } from '@tako/db'
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 import { readRestaurantMe } from '../lib/read-queries.js'
+
+/**
+ * Chiavi di `restaurants.settings` scritte da ALTRE route (PDF salvati, interruttori del bot, prova/rimozione agenzia).
+ * PATCH /me non le gestisce: restano quelle già nel database, lette sotto lock, salvo che il client le mandi esplicitamente.
+ */
+export const SYSTEM_SETTINGS_KEYS = [
+  'pdfDocuments', 'botEngine', 'botBrain',
+  'takomenuTrial', 'trialLeadId', 'trialActivatedAt', 'trialActivatedBy',
+  'takomenuRemoved', 'takomenuRemovedAt', 'takomenuRemovedBy', 'takomenuRemovedLeadId', 'takomenuRemovedPreviousActive',
+] as const
+
+/** Merge superficiale delle impostazioni: le chiavi di sistema non mandate dal client vengono dal valore corrente (letto con FOR UPDATE). */
+export function mergeRestaurantSettings(current: unknown, patch: Record<string, unknown>): Record<string, unknown> {
+  const base = current && typeof current === 'object' && !Array.isArray(current) ? current as Record<string, unknown> : {}
+  const next: Record<string, unknown> = { ...base, ...patch }
+  for (const key of SYSTEM_SETTINGS_KEYS) {
+    if (Object.hasOwn(patch, key)) continue
+    if (Object.hasOwn(base, key)) next[key] = base[key]
+    else delete next[key]
+  }
+  return next
+}
 
 export async function restaurantRoutes(fastify: FastifyInstance) {
   fastify.get('/me', { preHandler: requireAuth }, async (req, reply) => {
@@ -68,15 +90,20 @@ export async function restaurantRoutes(fastify: FastifyInstance) {
 
     // settings è un blob jsonb unico: fai MERGE coi valori esistenti, altrimenti
     // aggiornare una sola chiave (es. printerIp) cancellerebbe tutte le altre
-    // (vatRate, languages, timezone…).
+    // (vatRate, languages, timezone…). 21/10: lettura e scrittura nella stessa transazione
+    // con la riga bloccata (FOR UPDATE), così un salvataggio con dati vecchi non riscrive
+    // pdfDocuments/botEngine/botBrain… salvati nel frattempo da altre route.
     const { settings, ...rest } = body.data
-    const updateData: Record<string, unknown> = { ...rest, updatedAt: new Date() }
-    if (settings) {
-      const [current] = await db.select({ settings: restaurants.settings }).from(restaurants).where(eq(restaurants.id, req.user!.restaurantId)).limit(1)
-      updateData.settings = { ...(current?.settings ?? {}), ...settings }
-    }
-
-    const [updated] = await db.update(restaurants).set(updateData).where(eq(restaurants.id, req.user!.restaurantId)).returning()
+    const restaurantId = req.user!.restaurantId
+    const updated = await db.transaction(async (tx) => {
+      const updateData: Record<string, unknown> = { ...rest, updatedAt: new Date() }
+      if (settings) {
+        const rows = await tx.execute(sql`SELECT settings FROM restaurants WHERE id=${restaurantId} FOR UPDATE`)
+        updateData.settings = mergeRestaurantSettings((rows[0] as { settings?: unknown } | undefined)?.settings, settings)
+      }
+      const [row] = await tx.update(restaurants).set(updateData).where(eq(restaurants.id, restaurantId)).returning()
+      return row
+    })
     return { data: updated }
   })
 }

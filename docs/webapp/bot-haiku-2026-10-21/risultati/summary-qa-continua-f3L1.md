@@ -1,0 +1,330 @@
+# Motore Haiku · set qa-continua · live
+
+Generato da tests/eval/eval-haiku.test.ts (2026-10-22T01:36:49.589Z).
+
+| Voce | Valore |
+|---|---|
+| Corrette / misurate | **1/2 (50%)** |
+| Non misurate (cache assente / tetto / errore) | 0 |
+| GRAVI (conversazioni) | 0 — sicurezza 0, altri 0 |
+| MEDI | 1 |
+| Domande ogni 10 messaggi | 1.7 (non attese 1.7) |
+| Latenza chiamata Haiku p50 / p95 | 1824 / 4780 ms (201 chiamate) |
+| Latenza turno p50 / p95 | 1744 / 6355 ms (misurata dal vivo) |
+| Chiamate Haiku per messaggio | 0.93 |
+| Token medi per messaggio (in · out · cache read · cache write) | 756 · 198 · 9103 · 56 |
+| Cache hit (cache_read > 0) | 201/201 (100%) |
+| Costo speso in questo giro | 0.058904 $ (tetto 0.4 $) |
+| Costo equivalente dal vivo · per messaggio | 0.058904 $ · 0.000273 $ |
+| Chiamate Anthropic: hit · vere · mock · assenti · rifiutate · errori · 429 | 0 · 201 · 0 · 0 · 0 · 0 · 0 |
+| **V4 richieste Groq chat** | **0** |
+| Durata del giro | 515.2 s |
+
+| Codice | GRAVE | MEDIO | BASSO |
+|---|---|---|---|
+| risposta-senza-contenuto | 0 | 1 | 0 |
+
+## Falliti (trascrizione)
+
+### qa-continua [MEDIO]
+- titolare: aggiungi il vitello tonnato
+  - bot: «Ci sto lavorando… Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. In quale Sottomenu lo metto: *Piatti di prova*, *Primi* del Menu di verifica o *Completo* del Menu pranzo?»
+- titolare: annulla
+  - bot: «Ok, lascio stare: non ho cambiato nulla.»
+- titolare: [+2 min]
+  - bot: «Ci sto lavorando… Il *riso giallo* costa 8 €. *riso giallo*: *8,00 €* · disponibile»
+- titolare: quanto costa il riso giallo?
+  - bot: «Ci sto lavorando… Il *riso giallo* costa 8 €. *riso giallo*: *8,00 €* · disponibile»
+- titolare: [+2 min]
+  - bot: «*riso giallo*: prezzo da 8,00 € a *9,00 €*»
+- titolare: quanto costa il riso giallo?
+  - bot: «Ci sto lavorando… Ok, annullo l'ultima modifica al *riso giallo*. *riso giallo*: com’era prima»
+- titolare: alzalo di un euro
+  - bot: «Ci sto lavorando… La *pasta carbonara* costa 9 €. *pasta carbonara*: *9,00 €* · disponibile»
+- titolare: annulla
+  - bot: «Ci sto lavorando… Ok, metto la *pasta carbonara* a 10 €. *pasta carbonara*: prezzo da 9,00 € a *10,00 €*»
+- titolare: [+2 min]
+  - bot: «Ci sto lavorando… Ok, annullo l'ultima modifica alla *pasta carbonara*. *pasta carbonara*: com’era prima»
+- titolare: quanto costa la pasta carbonara?
+  - bot: «La *pasta al ragù* costa 10 €. *pasta al ragù*: *10,00 €* · disponibile»
+- titolare: mettila a 10
+  - bot: «*pasta al ragù*: *nascosto* dal menu»
+- titolare: annulla
+  - bot: «*pasta al ragù*: di nuovo *visibile* nel menu»
+- titolare: [+2 min]
+  - bot: «Sì, il *tiramisù* c'è nel menu, costa 15 €. *tiramisù*: *15,00 €* · disponibile»
+- titolare: quanto costa la pasta al ragù?
+  - bot: «*tiramisù*: *finito*»
+- titolare: toglila
+  - bot: «*tiramisù*: di nuovo *disponibile*»
+- titolare: rimettila
+  - bot: «In quale Sottomenu vuoi aggiungere le *patatine fritte*? Dimmi il Menu e il Sottomenu.»
+- titolare: [+2 min]
+  - bot: «Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome. 1. *Piatti di prova* (Menu di verifica · web QA) 2. *Primi* (Menu di verifica · web QA)»
+- titolare: c'è il tiramisù?
+  - bot: «Nuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*»
+- titolare: è finito
+  - bot: «Ci sto lavorando… Ok, annullo l'ultima pubblicazione: *Patatine fritte*. *Patatine fritte*: tolto (era stato aggiunto)»
+- titolare: è tornato
+  - bot: «Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome. 1. *Piatti di prova* (Menu di verifica · web QA) 2. *Primi* (Menu di verifica · web QA)»
+- titolare: [+2 min]
+  - bot: «Nuovo piatto *Patatine fritte* in *Primi*: *4,00 €*»
+- titolare: aggiungi le patatine fritte
+  - bot: «Ok, annullo l'ultima pubblicazione: *Patatine fritte*. *Patatine fritte*: tolto (era stato aggiunto)»
+- titolare: 4
+  - bot: «Ci sto lavorando… Ok, aggiungo *Vitello tonnato* in *Primi*. Che prezzo gli metto?»
+- titolare: nei Piatti di prova
+  - bot: «Nuovo piatto *Vitello tonnato* in *Primi*: *14,00 €*»
+- titolare: annulla
+  - bot: «Ok, annullo l'ultima pubblicazione: *Vitello tonnato*. *Vitello tonnato*: tolto (era stato aggiunto)»
+- titolare: [+2 min]
+  - bot: «Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome. 1. *Piatti di prova* (Menu di verifica · web QA) 2. *Primi* (Menu di verifica · web QA)»
+- titolare: aggiungi patatine fritte a 4
+  - bot: «Scegli il sottomenu per *Patatine fritte* (4,00 €): rispondi col numero o col nome. 1. *Piatti di prova* (Menu di verifica · web QA) 2. *Primi* (Menu di verifica · web QA)»
+- titolare: nei Primi del Menu di verifica
+  - bot: «Ok, lascio stare: non ho cambiato nulla.»
+- titolare: annulla
+  - bot: «Il *Riso giallo* costa *8,00 €* e la *Pasta carbonara* *9,00 €*. *riso giallo*: *8,00 €* · disponibile *pasta carbonara*: *9,00 €* · disponibile»
+- titolare: [+2 min]
+  - bot: «Aumentati di 0,50 € i prezzi di 2 piatti. *pasta carbonara*: prezzo da 9,00 € a *9,50 €* *riso giallo*: prezzo da 8,00 € a *8,50 €* Per tornare come prima scrivi *annulla* entro 10 minuti.»
+- titolare: aggiungi il vitello tonnato nei Primi del Menu di verifica
+  - bot: «Ok, annullo l'ultima pubblicazione: *pasta carbonara* e *riso giallo*. *pasta carbonara*: com’era prima *riso giallo*: com’era prima»
+- titolare: 14
+  - bot: «Aumentati di 0,50 € i prezzi di 4 piatti. *la parmigiana*: prezzo da 12,50 € a *13,00 €* *pasta al pesto*: prezzo da 9,00 € a *9,50 €* *pasta carbonara*: prezzo da 9,00 € a *9,50 €* *riso giallo*: prezzo da 8,00 € a *8,50 €* Per tornare come prima scrivi *annulla* entro 10 minuti.»
+- titolare: annulla
+  - bot: «Ok, annullo l'ultima pubblicazione: *la parmigiana*, *pasta al pesto*, *pasta carbonara* e *riso giallo*. *la parmigiana*: com’era prima *pasta al pesto*: com’era prima *pasta carbonara*: com’era prima *riso giallo*: com’era prima»
+- titolare: [+2 min]
+  - bot: «Ci sto lavorando… Aumentati di 0,50 € i prezzi di 4 piatti. *la parmigiana*: prezzo da 12,50 € a *13,00 €* *pasta al pesto*: prezzo da 9,00 € a *9,50 €* *pasta carbonara*: prezzo da 9,00 € a *9,50 €* *riso giallo*: prezzo da 8,00 € a *8,50 €* Per tornare come prima scrivi *annulla* entro 10 minuti.»
+- titolare: aggiungi patatine fritte a 4
+  - bot: «Ok, annullo l'ultima pubblicazione: *la parmigiana*, *pasta al pesto*, *pasta carbonara* e *riso giallo*. *la parmigiana*: com’era prima *pasta al pesto*: com’era prima *pasta carbonara*: com’era prima *riso giallo*: com’era prima»
+- titolare: sì
+  - bot: «Ok, il *Riso giallo* passa a *8,50 €*. *riso giallo*: prezzo da 8,00 € a *8,50 €*»
+- titolare: lascia stare
+  - bot: «Ok, annullo l'ultima pubblicazione: *riso giallo*. *riso giallo*: com’era prima»
+- titolare: [+2 min]
+  - bot: «Ok, la *Pasta al sugo* passa a *10,50 €*. *Pasta al sugo*: prezzo da 9,00 € a *10,50 €*»
+- titolare: quanto costano il riso giallo e la pasta carbonara?
+  - bot: «Ok, annullo l'ultima pubblicazione: *Pasta al sugo*. *Pasta al sugo*: com’era prima»
+- titolare: alzali tutti e due di 50 centesimi
+  - bot: «Nascondo il *Riso giallo* dal menu. *riso giallo*: *nascosto* dal menu»
+- titolare: annulla
+  - bot: «Rimetto il *Riso giallo* nel menu. *riso giallo*: di nuovo *visibile* nel menu»
+- titolare: [+2 min]
+  - bot: «Ok, segno la *Pasta al sugo* come finita. *Pasta al sugo*: *finito*»
+- titolare: alza di 50 centesimi i primi del Menu di verifica
+  - bot: «Ok, rimetto la *Pasta al sugo* disponibile. *Pasta al sugo*: di nuovo *disponibile*»
+- titolare: annulla
+  - bot: «Elimino la *Pasta al sugo* dal menu? Rispondi sì. Da eliminare, serve il tuo sì: 1. *Pasta al sugo*: da eliminare»
+- titolare: [+2 min]
+  - bot: «Ok, annullo l'eliminazione della *Pasta al sugo*.»
+- titolare: alza di 50 centesimi i primi
+  - bot: «Intendi azzerare i prezzi di quale Menu o Sottomenu? Dimmi il nome, per esempio *Menu del giorno*.»
+- titolare: annulla
+  - bot: «Ok, lascio stare: non ho cambiato nulla.»
+- titolare: [+2 min]
+  - bot: «Per «elimina tutti i primi» a quale piatto ti riferisci? Rispondi col numero. 1. *Che ne sacc* (20,00 €) 2. *la parmigiana* (12,50 €) 3. *pasta al pesto* (9,00 €) 4. *pasta carbonara* (9,00 €) 5. *riso giallo* (8,00 €)»
+- titolare: il riso giallo a otto e cinquanta
+  - bot: «Ok, lascio stare: non ho cambiato nulla.»
+- titolare: annulla
+  - bot: «Non ancora pubblicato, da confermare con OK: 1. *riso giallo*: prezzo da 8,00 € a *9,00 €* 2. *pasta carbonara*: prezzo da 9,00 € a *10,00 €* 3. *Pasta al sugo*: prezzo da 9,00 € a *10,00 €* 4. *tiramisù*: prezzo da 15,00 € a *16,00 €*»
+- titolare: [+2 min]
+  - bot: «Ok, pubblico le modifiche ai prezzi di *riso giallo*, *pasta carbonara*, *Pasta al sugo* e *tiramisù*. *riso giallo*: prezzo da 8,00 € a *9,00 €* *pasta carbonara*: prezzo da 9,00 € a *10,00 €* *Pasta al sugo*: prezzo da 9,00 € a *10,00 €* *tiramisù*: prezzo da 15,00 € a *16,00 €*»
+- titolare: la pasta al sugo a dieci euro e mezzo
+  - bot: «Ok, annullo l'ultima pubblicazione dei prezzi. *Pasta al sugo*: com’era prima *tiramisù*: com’era prima *pasta carbonara*: com’era prima *riso giallo*: com’era prima»
+- titolare: annulla
+  - bot: «Intendi la *pasta al pesto* o la *Pasta al pesto e lasagna*? 1. *pasta al pesto* (9,00 €) 2. *Pasta al pesto e lasagna* (10,01 €)»
+- titolare: [+2 min]
+  - bot: «*pasta al pesto*: prezzo da 9,00 € a *10,00 €*»
+- titolare: nascondi il riso giallo
+  - bot: «Ok, annullo l'ultima pubblicazione: il prezzo della *pasta al pesto* torna com'era. *pasta al pesto*: com’era prima»
+- titolare: mostralo di nuovo
+  - bot: «Nei *Primi* del Menu di verifica ci sono *la parmigiana*, *pasta al pesto*, *pasta carbonara* e *riso giallo*. *la parmigiana*: *12,50 €* · disponibile *pasta al pesto*: *9,00 €* · disponibile *pasta carbonara*: *9,00 €* · disponibile *riso giallo*: *8,00 €* · disponibile»
+- titolare: [+2 min]
+  - bot: «Nei *Primi* del *Menu di verifica · web QA* ci sono 2 piatti: *pasta al pesto*: *9,00 €* · disponibile *pasta carbonara*: *9,00 €* · disponibile»
+- titolare: la pasta al sugo è finita
+  - bot: «Intendi *riso giallo* a *80 €*? Un prezzo così alto lo confermo solo se è giusto.»
+- titolare: la pasta al sugo è tornata
+  - bot: «Ok, lascio stare: non ho cambiato nulla.»
+- titolare: [+2 min]
+  - bot: «*riso giallo*: prezzo da 8,00 € a *9,00 €*»
+- titolare: elimina la pasta al sugo
+  - bot: «*riso giallo*: prezzo da 9,00 € a *8,00 €*»
+- titolare: annulla
+  - bot: «*Carbonara* è già nascosto dal menu.»
+- titolare: [+2 min]
+  - bot: «*pasta carbonara* è già visibile nel menu.»
+- titolare: metti tutto a zero
+  - bot: «Aggiungo *Patatine fritte* a 4 € nei *Piatti di prova*. Nuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*»
+- titolare: no
+  - bot: «Elimino *Patatine fritte* dal menu? Rispondi sì. Da eliminare, serve il tuo sì: 1. *Patatine fritte*: da eliminare»
+- titolare: [+2 min]
+  - bot: «Ok, elimino *Patatine fritte* dal menu. *Patatine fritte*: *eliminato* dal menu»
+- titolare: elimina tutti i primi
+  - bot: «Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome. 1. *Piatti di prova* (Menu di verifica · web QA) 2. *Primi* (Menu di verifica · web QA)»
+- titolare: no
+  - bot: «Nuovo piatto *Patatine fritte* in *Primi*: *4,00 €*»
+- titolare: [+2 min]
+  - bot: «Ok, annullo l'ultima modifica: *Patatine fritte*. *Patatine fritte*: tolto (era stato aggiunto)»
+- titolare: riso giallo a 9, pasta carbonara a 10, pasta al sugo a 10, tiramisù a 16
+  - bot: «Intendi *pasta al pesto* o *Pasta al pesto e lasagna*? 1. *pasta al pesto* (9,00 €) 2. *Pasta al pesto e lasagna* (10,01 €)»
+- titolare: 👍
+  - bot: «*pasta al pesto*: prezzo da 9,00 € a *10,00 €*»
+- titolare: annulla
+  - bot: «Ok, annullo l'ultima modifica: *pasta al pesto*. *pasta al pesto*: com’era prima»
+- titolare: [+2 min]
+  - bot: «Ok, metto il *riso giallo* a 9 €. *riso giallo*: prezzo da 8,00 € a *9,00 €*»
+- titolare: alza il pesto di un euro
+  - bot: «*riso giallo*: prezzo da 9,00 € a *8,00 €*»
+- titolare: la pasta al pesto dei primi
+  - bot: «Ok, aggiungo *Patatine fritte* a *4,00 €* nei *Piatti di prova*. Nuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*»
+- titolare: annulla
+  - bot: «C'è già *Patatine fritte* nel menu: lo aggiorno o ne creo un altro in *Piatti di prova*?»
+- titolare: [+2 min]
+  - bot: «*Patatine fritte*: tolto (era stato aggiunto)»
+- titolare: cosa c'è nei primi?
+  - bot: «Ok, aggiungo *Vitello tonnato* a *14,00 €* nei *Piatti di prova*. Nuovo piatto *Vitello tonnato* in *Piatti di prova*: *14,00 €*»
+- titolare: [+2 min]
+  - bot: «Ci sto lavorando… *Vitello tonnato*: spostato in *Primi*»
+- titolare: quante paste ho nei primi?
+  - bot: «Elimino il *Vitello tonnato* dal menu? Rispondi sì. Da eliminare, serve il tuo sì: 1. *Vitello tonnato*: da eliminare»
+- titolare: [+2 min]
+  - bot: «Ok, elimino il *Vitello tonnato*. *Vitello tonnato*: *eliminato* dal menu»
+- titolare: il riso giallo a 80
+  - bot: «Nei *Primi* del *Menu di verifica · web QA* ci sono 4 piatti: *la parmigiana*: *12,50 €* · disponibile *pasta al pesto*: *9,00 €* · disponibile *pasta carbonara*: *9,00 €* · disponibile *riso giallo*: *8,00 €* · disponibile»
+- titolare: no
+  - bot: «Nuovo piatto *Trofie al pesto* in *Primi*: *11,00 €*»
+- titolare: [+2 min]
+  - bot: «Ok, annullo l'ultima modifica: *Trofie al pesto*. *Trofie al pesto*: tolto (era stato aggiunto)»
+- titolare: il riso giallo a 9
+  - bot: «La *pasta carbonara* costa *9,00 €*. *pasta carbonara*: *9,00 €* · disponibile»
+- titolare: anzi rimettilo a 8
+  - bot: «*pasta carbonara*: prezzo da 9,00 € a *10,00 €*»
+- titolare: [+2 min]
+  - bot: «*pasta carbonara*: prezzo da 10,00 € a *10,50 €*»
+- titolare: togli la carbonara
+  - bot: «*pasta carbonara*: prezzo da 10,50 € a *9,00 €*»
+- titolare: rimetti la pasta carbonara nel menu
+  - bot: «Ci sto lavorando… Aumentati di 1,00 € i prezzi di 2 piatti. *riso giallo*: prezzo da 8,00 € a *9,00 €* *pasta carbonara*: prezzo da 9,00 € a *10,00 €* Per tornare come prima scrivi *annulla* entro 10 minuti.»
+- titolare: [+2 min]
+  - bot: «Abbassati di 1,00 € i prezzi di 2 piatti. *pasta carbonara*: prezzo da 10,00 € a *9,00 €* *riso giallo*: prezzo da 9,00 € a *8,00 €* Per tornare come prima scrivi *annulla* entro 10 minuti.»
+- titolare: aggiungi le patatine fritte a 4 nei Piatti di prova
+  - bot: «Sì, la *pasta al ragù* è nel menu: *10,00 €* · disponibile. *pasta al ragù*: *10,00 €* · disponibile»
+- titolare: elimina le patatine fritte
+  - bot: «*pasta al ragù*: *finito*»
+- titolare: sì
+  - bot: «Ok, *pasta al ragù* è di nuovo disponibile. *pasta al ragù*: di nuovo *disponibile*»
+- titolare: [+2 min]
+  - bot: «Nascondo il *tiramisù* dal menu. *tiramisù*: *nascosto* dal menu»
+- titolare: aggiungi patatine fritte a 4
+  - bot: «*tiramisù*: di nuovo *visibile* nel menu»
+- titolare: nei Primi del Menu di verifica
+  - bot: «Ok, *pasta al sugo* passa a *10 €*. *Pasta al sugo*: prezzo da 9,00 € a *10,00 €*»
+- titolare: annulla
+  - bot: «Il *riso giallo* costa *8,00 €*. *riso giallo*: *8,00 €* · disponibile»
+- titolare: [+2 min]
+  - bot: «*riso giallo*: prezzo da 8,00 € a *9,00 €*»
+- titolare: alza il pesto di un euro
+  - bot: «Ok, annullo l'ultima modifica al *riso giallo*. *riso giallo*: com’era prima»
+- titolare: la pasta al pesto dei primi
+  - bot: «Ok, *Pasta al sugo* passa a *9 €*. *Pasta al sugo*: prezzo da 10,00 € a *9,00 €*»
+- titolare: annulla
+  - bot: «Intendi la *Frittata di zucchine* o la *Frittata di patate*? 1. *Frittata di zucchine* (0,00 €) 2. *Frittata di patate* (0,00 €)»
+- titolare: il riso giallo a 9
+  - bot: «Ok, chiudo la domanda. L’ultima modifica resta: per toglierla scrivi di nuovo *annulla*.»
+- titolare: anzi rimettilo a 8
+  - bot: «Nei *Primi* del *Menu di verifica · web QA* ci sono 4 piatti: *la parmigiana*: *12,50 €* · disponibile *pasta al pesto*: *9,00 €* · disponibile *pasta carbonara*: *9,00 €* · disponibile *riso giallo*: *8,00 €* · disponibile»
+- titolare: [+2 min]
+  - bot: «Metto in evidenza il *tiramisù*. *tiramisù*: *in evidenza*»
+- titolare: aggiungi le patatine fritte a 4 nei Piatti di prova
+  - bot: «Tolgo il *tiramisù* dall'evidenza. *tiramisù*: non più in evidenza»
+- titolare: nei Piatti di prova
+  - bot: «Segno il *riso giallo* come esaurito. *riso giallo*: *finito*»
+- titolare: annulla
+  - bot: «La *pasta al pesto* costa *9,00 €*. *pasta al pesto*: *9,00 €* · disponibile»
+- titolare: [+2 min]
+  - bot: «Rimetto il *riso giallo* disponibile. *riso giallo*: di nuovo *disponibile*»
+- titolare: aggiungi il vitello tonnato a 14 nei Piatti di prova
+  - bot: «»
+- titolare: no, nei Primi del Menu di verifica
+  - bot: «»
+- titolare: elimina il vitello tonnato
+  - bot: «»
+- titolare: sì
+  - bot: «»
+- titolare: [+2 min]
+  - bot: «»
+- titolare: cosa c'è nei primi?
+  - bot: «»
+- titolare: aggiungi le trofie al pesto a 11 nei primi
+  - bot: «»
+- titolare: annulla
+  - bot: «»
+- titolare: [+2 min]
+  - bot: «»
+- titolare: quanto costa la pasta carbonara?
+  - bot: «»
+- titolare: alzala di un euro
+  - bot: «»
+- titolare: alzala ancora di 50 centesimi
+  - bot: «»
+- titolare: rimettila a 9
+  - bot: «»
+- titolare: [+2 min]
+  - bot: «»
+- titolare: il riso giallo a 9 e la pasta carbonara a 10
+  - bot: «»
+- titolare: abbassali tutti e due di un euro
+  - bot: «»
+- titolare: [+2 min]
+  - bot: «»
+- titolare: c'è la pasta al ragù?
+  - bot: «»
+- titolare: è finita
+  - bot: «»
+- titolare: no scusa, è tornata
+  - bot: «»
+- titolare: [+2 min]
+  - bot: «»
+- titolare: nascondi il tiramisù
+  - bot: «»
+- titolare: rimettilo
+  - bot: «»
+- titolare: [+2 min]
+  - bot: «»
+- titolare: la pasta al sugo a 10
+  - bot: «»
+- titolare: quanto costa il riso giallo?
+  - bot: «»
+- titolare: mettilo a 9
+  - bot: «»
+- titolare: annulla
+  - bot: «»
+- titolare: la pasta al sugo a 9
+  - bot: «»
+- titolare: [+2 min]
+  - bot: «»
+- titolare: aggiungi la frittatina
+  - bot: «»
+- titolare: lascia stare
+  - bot: «»
+- titolare: [+2 min]
+  - bot: «»
+- titolare: quanti piatti ho nei Primi del Menu di verifica?
+  - bot: «»
+- titolare: [+2 min]
+  - bot: «»
+- titolare: metti in evidenza il tiramisù
+  - bot: «»
+- titolare: toglilo dall'evidenza
+  - bot: «»
+- titolare: [+2 min]
+  - bot: «»
+- titolare: il riso giallo è finito
+  - bot: «»
+- titolare: quanto costa la pasta al pesto?
+  - bot: «»
+- titolare: il riso giallo è tornato
+  - bot: «»
+- atteso: nessuna modifica · ottenuto: nessuna modifica
+- **MEDIO** risposta-senza-contenuto: [nuovo-solo-prezzo] turno 16: manca /prezz|quanto/i («In quale Sottomenu vuoi aggiungere le *patatine fritte*? Dimmi il Menu e il Sottomenu.»)
+

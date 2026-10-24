@@ -88,7 +88,7 @@ const TakoAPI = {
     let r;
     for(let attempt=0;attempt<3;attempt++){r=await fetch("/api"+path,opt);if(!read||![429,502,503,504].includes(r.status)||attempt===2)break;await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));}
     let j = null; try { j = await r.json(); } catch (_) {}
-    if (!r.ok) { const e = new Error(j?.error?.message || r.statusText); e.code = j?.error?.code; e.status = r.status; throw e; }
+    if (!r.ok) { const e = new Error(j?.error?.message || r.statusText); e.code = j?.error?.code; e.field = j?.error?.field; e.status = r.status; throw e; }
     return j ? j.data : null;})();if(read)this._pending.set(key,task);
     try{return await task}finally{if(this._pending.get(key)===task)this._pending.delete(key)}
   },

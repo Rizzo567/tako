@@ -1,0 +1,85 @@
+tests/copilot-owner.test.ts > F5.1 · il copilot PROPONE la mutation, non la esegue dopo /execute il piatto è esaurito davvero
+tests/copilot-owner.test.ts > F5.1 · il gate dei ruoli vale anche passando dal copilot un dipendente non può eseguire 'apply_bill_discount'
+tests/copilot-owner.test.ts > F5.1 · il gate dei ruoli vale anche passando dal copilot un dipendente non può eseguire 'clock_in_staff'
+tests/copilot-owner.test.ts > F5.1 · il gate dei ruoli vale anche passando dal copilot un dipendente non può eseguire 'clock_out_staff'
+tests/copilot-owner.test.ts > F5.1 · il gate dei ruoli vale anche passando dal copilot un dipendente non può eseguire 'close_bill'
+tests/copilot-owner.test.ts > F5.1 · il gate dei ruoli vale anche passando dal copilot un dipendente non può eseguire 'create_staff'
+tests/copilot-owner.test.ts > F5.1 · il gate dei ruoli vale anche passando dal copilot un dipendente non può eseguire 'set_cover_charge'
+tests/copilot-owner.test.ts > F5.1 · il gate dei ruoli vale anche passando dal copilot un dipendente non può eseguire 'set_staff_active'
+tests/copilot-owner.test.ts > F5.1 · il gate dei ruoli vale anche passando dal copilot un dipendente può invece usare le azioni non ristrette (lettura)
+tests/copilot-owner.test.ts > F5.1 · il gate dei ruoli vale anche passando dal copilot un'azione fuori scope owner non esiste per questa rotta
+tests/correctness.test.ts > Conti: pagamenti e importi creare due conti per lo stesso tavolo ritorna lo stesso conto (no duplicati)
+tests/correctness.test.ts > Conti: pagamenti e importi pagare un conto già chiuso → 409 (no doppio incasso)
+tests/correctness.test.ts > Conti: pagamenti e importi sconto negativo nella creazione conto → 400
+tests/correctness.test.ts > Integrità stati ordine transizione non valida (cancelled → preparing) → 409
+tests/correctness.test.ts > Integrità stati ordine un ordine pagato non può essere annullato → 409
+tests/correctness.test.ts > Sicurezza: IDOR tracking ordine con sessione tavolo legge il proprio ordine (200) ma non un id altrui (404)
+tests/correctness.test.ts > Sicurezza: IDOR tracking ordine GET /customer/orders/:id senza sessione tavolo → 401
+tests/correctness.test.ts > Soldi: varianti e prezzi il modificatore di prezzo della variante è incluso nel totale
+tests/correctness.test.ts > Soldi: varianti e prezzi una variante inesistente o di un altro piatto → 409
+tests/load-review-fixes.test.ts > bump portata su ordine pagato (P1 resurrezione) PATCH items/status su ordine paid risponde 409 e non tocca lo stato
+tests/load-review-fixes.test.ts > cassa mobile: incasso concorrente (P0 doppio addebito) 20 esecuzioni consecutive: mai due pagamenti sullo stesso conto
+tests/load-review-fixes.test.ts > cassa mobile: incasso concorrente (P0 doppio addebito) due POST /payments simultanei: uno chiude, l'altro 409 BILL_NOT_OPEN
+tests/load-review-fixes.test.ts > cassa mobile: incasso concorrente (P0 doppio addebito) liberare un tavolo con conto aperto → 409 TABLE_HAS_OPEN_BILL
+tests/load-review-fixes.test.ts > cassa mobile: incasso concorrente (P0 doppio addebito) lo sconto è applicato dal SERVER e il totale ricalcolato sotto lock
+tests/load-review-fixes.test.ts > probe by-key per invii incerti (P1 doppio addebito) chiave atterrata → 200 con lo stesso ordine; chiave mai vista → 404
+tests/load-review-fixes.test.ts > probe by-key per invii incerti (P1 doppio addebito) la chiave di un ALTRO tavolo non è leggibile (anti-IDOR)
+tests/load-review-fixes.test.ts > stats dashboard: finestra default include gli ordini appena creati (fix timestamptz) un ordine paid di adesso compare nei topItems senza from/to
+tests/menu-availability.test.ts > [LOAD] fetch failed
+tests/menu-controls-images-output.test.ts > Actual PDF local image controls logo shape clips corner pixels while configured logo background and transparent image preserve actual colors
+tests/menu-workspace-presentation.test.ts > Workspace presentation envelope reads only authenticated tenant name and keeps draft/revisions intact
+tests/menu-workspace-presentation.test.ts > Workspace presentation envelope returns display fallback when restaurant record is absent
+tests/oggi-summary.test.ts > incassi del giorno (F2.6) due conti chiusi con mancia: i numeri combaciano al centesimo, e la mancia NON è ricavo
+tests/oggi-summary.test.ts > incassi del giorno (F2.6) il confine di mezzanotte è quello del ristorante (Europe/Rome), non del server
+tests/oggi-summary.test.ts > incassi del giorno (F2.6) summary/today e stats/dashboard concordano sul numero di conti di oggi
+tests/parity/agency-isolation.test.ts > hosted Tako: real credentials and tenant isolation public helper exposes published content only, honors schedules and live sold-out state
+tests/parity/menu-controls-persistence.integration.test.ts > extended menu controls HTTP persistence legacy DTO and extended controls persist; stale revisions and foreign PDF asset cannot change the draft
+tests/realtime.test.ts > Affidabilità: reconnection + re-join room dopo una riconnessione il socket continua a ricevere gli eventi della room
+tests/realtime.test.ts > Real-time cliente → dashboard due ordini simultanei arrivano entrambi alla dashboard (order:new x2)
+tests/realtime.test.ts > Real-time cliente → dashboard lo staff risolve una chiamata cameriere → waiter:resolved a tutti i device
+tests/realtime.test.ts > Real-time cliente → dashboard un ordine cliente arriva live nella room ristorante (order:new)
+tests/realtime.test.ts > Real-time cliente → dashboard un tavolo passa a occupied live (table:updated)
+tests/realtime.test.ts > Real-time cliente → dashboard una chiamata cameriere arriva live (waiter:called)
+tests/realtime.test.ts > Real-time dashboard → cliente un cambio di stato in cucina arriva live al tavolo del cliente (order:updated)
+tests/realtime.test.ts > Real-time menu → cliente (room pubblica) il cliente nella room menu riceve l'esaurito live, senza eventi staff
+tests/realtime.test.ts > Real-time staff → dashboard (menu/cucina) l'annullamento di un ordine arriva live al tavolo del cliente
+tests/realtime.test.ts > Real-time staff → dashboard (menu/cucina) lo stato di una singola portata avanza il tracking del cliente (order:updated al tavolo)
+tests/realtime.test.ts > Real-time staff → dashboard (menu/cucina) segnare un piatto esaurito emette menu:item_availability alla dashboard
+tests/realtime.test.ts > Sicurezza cross-tenant cambio stato ordine senza sessione staff → 401
+tests/realtime.test.ts > Sicurezza cross-tenant chiamata cameriere con restaurantId diverso dal cookie tavolo → 403 (anti-spoofing)
+tests/realtime.test.ts > Sicurezza cross-tenant ordine con un piatto non del ristorante → 409 (item non disponibile)
+tests/realtime.test.ts > Sicurezza cross-tenant ordine con un tavolo che non appartiene al ristorante → 403
+tests/realtime.test.ts > Sicurezza cross-tenant ordine senza voci → 400
+tests/realtime.test.ts > Sicurezza ordini doppio-tap in gara (stesso idempotencyKey insieme) → nessun duplicato, nessun 500
+tests/realtime.test.ts > Sicurezza ordini idempotenza: stesso idempotencyKey non crea due ordini
+tests/realtime.test.ts > Sicurezza ordini piatto esaurito tra menu e invio → 409 pulito, non 500
+tests/realtime.test.ts > Sicurezza ordini prezzo sempre dal DB: il totale riflette il prezzo del menu, non il client
+tests/realtime.test.ts > Sicurezza ordini quantità oltre il massimo per voce → 400
+tests/realtime.test.ts > Sicurezza ordini senza cookie tavolo l'ordine è respinto (401)
+tests/reservations.test.ts > [LOAD] fetch failed
+tests/review-fixes.test.ts > AI copilot: autorizzazione per-ruolo su /execute l'owner NON viene bloccato dal gate di ruolo (può creare staff)
+tests/review-fixes.test.ts > AI copilot: autorizzazione per-ruolo su /execute un dipendente NON può applicare sconti al conto (owner/cassa)
+tests/review-fixes.test.ts > AI copilot: autorizzazione per-ruolo su /execute un dipendente NON può creare staff (azione owner-only)
+tests/review-fixes.test.ts > Asporto: tracking realtime via room dell'ordine lo staff avanza lo stato → il cliente asporto riceve order:updated
+tests/review-fixes.test.ts > Asporto: tracking realtime via room dell'ordine un'altra sessione asporto NON può iscriversi al mio ordine (join:order negato)
+tests/shifts.test.ts > [LOAD] fetch failed
+tests/simulation.test.ts > [LOAD] connect timeout
+tests/stats-export.test.ts > [LOAD] fetch failed
+tests/takeaway.test.ts > Asporto: conto + incasso al banco IDOR: una sessione asporto non legge gli ordini di un'altra → 404
+tests/takeaway.test.ts > Asporto: conto + incasso al banco ordine asporto genera un conto; pagarlo porta l'ordine a paid
+tests/twilio-menu-ai-flow.test.ts > WhatsApp bot: deterministic first, Groq only for what is left common phrases are handled by the server without Groq; ambiguity asks with real options and the answer picks one
+tests/twilio-menu-hold.test.ts > richiesta multipla con una parte incerta (vocale di Manuel, 17/10) un piatto nuovo senza prezzo: si chiede il prezzo e la risposta completa tutto; tutto chiaro con «togli» dentro → si applica
+tests/twilio-owner-link.test.ts > avvisi di guasto a Manuel ≥3 errori
+tests/twilio-owner-link.test.ts > avvisi di guasto a Manuel flusso: guasto simulato
+tests/twilio-owner-link.test.ts > avvisi di guasto a Manuel flusso: job in timeout
+tests/twilio-owner-link.test.ts > avvisi di guasto a Manuel fuori dalla finestra
+tests/twilio-owner-link.test.ts > avvisi di guasto a Manuel registra ogni errore
+tests/twilio-owner-link.test.ts > collegamento del titolare dalla dashboard un telefono ha un solo locale
+tests/twilio-owner-link.test.ts > numero del titolare: normalizzazione accetta i formati comuni italiani e restituisce E.164
+tests/waiter-calls.test.ts > chiamate cameriere persistite (F2.5) cinque tocchi sul pulsante producono UNA chiamata aperta
+tests/waiter-calls.test.ts > chiamate cameriere persistite (F2.5) la chiamata di un altro ristorante non è MAI visibile (anti cross-tenant)
+tests/waiter-calls.test.ts > chiamate cameriere persistite (F2.5) risolta: sparisce dall'elenco e l'evento waiter:resolved viene emesso
+tests/waiter-calls.test.ts > chiamate cameriere persistite (F2.5) una chiamata fatta ADESSO è ancora lì quando l'app si apre dopo
+tests/parity/web-accounts-capacity.test.ts > hosted Tako: real credentials and tenant isolation forgot: risposta identica se l’email non esiste; token solo come hash; nuova richiesta annulla il link precedente; due consumi concorrenti → uno vince; email di conferma   [rosso anche su base v127 0fa42a6 da sola]
+tests/parity/web-accounts-capacity.test.ts > hosted Tako: real credentials and tenant isolation link scaduto o già usato → «Link scaduto»; password corta rifiutata; massimo 3 link l’ora   [rosso anche su base v127 0fa42a6 da sola]
+tests/parity/web-accounts-capacity.test.ts > hosted Tako: real credentials and tenant isolation cambio password da loggato: serve quella attuale; chiude le altre sessioni, non questa; isolamento tra locali   [rosso anche su base v127 0fa42a6 da sola]

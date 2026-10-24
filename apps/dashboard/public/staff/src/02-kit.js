@@ -284,9 +284,15 @@ function Toaster({ mobile }) {
     );
   }
 
-  // mobile: piccoli toast in alto al centro (conferme azioni)
+  // mobile: piccoli toast in basso al centro, sopra la barra di navigazione (21/10: in alto coprivano intestazione e comandi).
+  // La distanza si misura sulla barra vera; senza barra restano sopra il bordo inferiore e l'area sicura.
+  const nav = typeof document !== "undefined" ? document.querySelector(".mobile-bottom-nav") : null;
+  const host = nav && nav.closest(".screen");
+  const navRect = nav && nav.offsetParent !== null ? nav.getBoundingClientRect() : null;
+  const hostBottom = host ? host.getBoundingClientRect().bottom : (typeof window !== "undefined" ? window.innerHeight : 0);
+  const bottom = navRect ? Math.max(12, Math.round(hostBottom - navRect.top + 10)) : "calc(max(12px, env(safe-area-inset-bottom, 0px)) + 12px)";
   return (
-    <div style={{ position: "absolute", top: 66, left: 0, right: 0, zIndex: 300, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, pointerEvents: "none", padding: "0 16px" }}>
+    <div className="ds-toaster-mobile" role="status" aria-live="polite" style={{ position: "absolute", bottom, left: 0, right: 0, zIndex: 300, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, pointerEvents: "none", padding: "0 16px" }}>
       {_toast.list.map(t => {
         const c = t.type === "success" ? "var(--ok)" : t.type === "error" ? "var(--danger)" : t.type === "warn" ? "var(--wait)" : "var(--brand)";
         const ic = t.icon || (t.type === "success" ? "check" : t.type === "error" ? "alert" : "bell");

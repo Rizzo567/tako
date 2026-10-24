@@ -100,7 +100,24 @@ export interface PublicMenu {
   description?: string
   /** Lingua di origine quando la nota non è tradotta nella lingua richiesta. */
   descriptionLang?: string
+  /** Menu attivo ma senza piatti nel documento pubblicato: la pagina mostra «Menu in arrivo». */
+  empty?: boolean
+  /** Menu «a prezzo fisso» (21/10): assente = alla carta. Con 'fisso' i prezzi dei piatti non si mostrano. */
+  pricing?: 'carta' | 'fisso'
+  /** Opzioni di prezzo del menu fisso (nome · prezzo · nota), già tradotte; presenti solo con pricing 'fisso'. */
+  formulas?: PublicFormula[]
+  /** «Compreso: …» del menu fisso, già tradotto. */
+  included?: string
   sections: PublicSection[]
+}
+
+export interface PublicFormula {
+  id: string
+  name: string
+  price: number
+  note?: string
+  /** Sottomenu compresi (id di sezioni di questo menu): la pagina mostra un blocco per opzione con sotto quei Sottomenu. */
+  sectionIds?: string[]
 }
 
 export interface PublicSection {
@@ -112,6 +129,8 @@ export interface PublicSection {
   /** Lingua di origine quando nome/descrizione non sono tradotti nella lingua richiesta. */
   nameLang?: string
   descriptionLang?: string
+  /** Sottomenu attivo ma senza piatti nel documento pubblicato: la pagina mostra «Menu in arrivo». */
+  empty?: boolean
   items: PublicItem[]
 }
 

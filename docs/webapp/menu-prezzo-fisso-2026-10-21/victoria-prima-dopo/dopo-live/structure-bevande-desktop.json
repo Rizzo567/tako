@@ -1,0 +1,149 @@
+{
+ "viewport": "desktop",
+ "menu": "Bevande",
+ "menus": [
+  "Menu Pranzo",
+  "Menu Cena",
+  "Bevande",
+  "Alla carta"
+ ],
+ "pills": [
+  "Birre",
+  "Distillati e liquori",
+  "Bevande e caffetteria"
+ ],
+ "pages": [
+  {
+   "pill": "Birre",
+   "file": "bevande-desktop-1-birre.png",
+   "menuNote": null,
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "Birre",
+     "note": null,
+     "rows": [
+      {
+       "name": "Birra piccola alla spina HELL/LAGER",
+       "price": "3,50 €",
+       "description": null
+      },
+      {
+       "name": "Birra media alla spina HELL/LAGER",
+       "price": "5,50 €",
+       "description": null
+      },
+      {
+       "name": "Josefi lager scura 50 cl 5.5 gradi",
+       "price": "5,00 €",
+       "description": null
+      },
+      {
+       "name": "Red doppio malto rossa 33 cl 8.5 gradi",
+       "price": "5,50 €",
+       "description": null
+      },
+      {
+       "name": "Birra 66 cl",
+       "price": "5,00 €",
+       "description": null
+      },
+      {
+       "name": "Birra 33 cl",
+       "price": "3,50 €",
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 1508
+  },
+  {
+   "pill": "Distillati e liquori",
+   "file": "bevande-desktop-2-distillati-e-liquori.png",
+   "menuNote": null,
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "Amari e distillati",
+     "note": null,
+     "rows": [
+      {
+       "name": "Amari",
+       "price": "3,50 €",
+       "description": null
+      },
+      {
+       "name": "Grappe",
+       "price": "3,50 €",
+       "description": null
+      },
+      {
+       "name": "Whisky",
+       "price": "5,00 €",
+       "description": null
+      },
+      {
+       "name": "Limoncello/Mirto/Liquirizia",
+       "price": "3,50 €",
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 1308
+  },
+  {
+   "pill": "Bevande e caffetteria",
+   "file": "bevande-desktop-3-bevande-e-caffetteria.png",
+   "menuNote": null,
+   "fixedBox": null,
+   "sections": [
+    {
+     "title": "Bevande",
+     "note": null,
+     "rows": [
+      {
+       "name": "Acqua ½ L",
+       "price": "2,00 €",
+       "description": null
+      },
+      {
+       "name": "Acqua 1 L",
+       "price": "3,00 €",
+       "description": null
+      },
+      {
+       "name": "Bibita",
+       "price": "3,50 €",
+       "description": null
+      }
+     ]
+    },
+    {
+     "title": "Caffetteria",
+     "note": null,
+     "rows": [
+      {
+       "name": "Caffè",
+       "price": "1,50 €",
+       "description": null
+      },
+      {
+       "name": "Decaffeinato",
+       "price": "2,00 €",
+       "description": null
+      },
+      {
+       "name": "Corretto",
+       "price": "2,50 €",
+       "description": null
+      }
+     ]
+    }
+   ],
+   "height": 1584
+  }
+ ],
+ "errors": []
+}

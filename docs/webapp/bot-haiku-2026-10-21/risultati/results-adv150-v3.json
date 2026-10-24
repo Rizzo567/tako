@@ -1,0 +1,7957 @@
+{
+ "set": "adv150",
+ "metriche": {
+  "set": "adv150",
+  "modo": "record",
+  "conversazioni": 150,
+  "misurate": 150,
+  "nonMisurate": [],
+  "messaggi": 196,
+  "corrette": 138,
+  "percentuale": 92,
+  "gravi": 3,
+  "graviSicurezza": 0,
+  "graviAltri": 3,
+  "medi": 9,
+  "domandePer10Messaggi": 2.8,
+  "domandeNonAttesePer10": 1.4,
+  "latenzaAnthropicMs": {
+   "p50": 1720,
+   "p95": 4698,
+   "chiamate": 235
+  },
+  "latenzaTurnoMs": {
+   "p50": 21,
+   "p95": 3405,
+   "nota": "misurata dal vivo"
+  },
+  "chiamatePerMessaggio": 1.2,
+  "tokenMediPerMessaggio": {
+   "input": 178,
+   "output": 334,
+   "cacheRead": 10561,
+   "cacheWrite": 94
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 233,
+   "su": 235,
+   "percentuale": 99.1
+  },
+  "costo": {
+   "spesoGiroUsd": 0.02017,
+   "equivalenteLiveUsd": 0.059204,
+   "perMessaggioUsd": 0.000302,
+   "tetto": 0.4
+  },
+  "anthropic": {
+   "hit": 153,
+   "vere": 82,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 177.2,
+  "strati": {
+   "elimina-senza-si": 17,
+   "conferme-senza-sospeso": 1,
+   "vocali-asr": 17,
+   "prezzi-lettere": 17,
+   "preamboli": 17,
+   "correzioni-anzi": 17,
+   "multi-turno": 16,
+   "dialetto": 16,
+   "nomi-insidiosi": 16,
+   "altro": 16
+  }
+ },
+ "codici": {
+  "non-applicato": {
+   "GRAVE": 2,
+   "MEDIO": 0,
+   "BASSO": 0
+  },
+  "chiede-invece-di-agire": {
+   "GRAVE": 0,
+   "MEDIO": 7,
+   "BASSO": 0
+  },
+  "chiarimento-mancante": {
+   "GRAVE": 0,
+   "MEDIO": 3,
+   "BASSO": 0
+  },
+  "conferma-a-vuoto": {
+   "GRAVE": 1,
+   "MEDIO": 0,
+   "BASSO": 0
+  }
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "z-dialetto-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Babà|false"
+   ],
+   "actual": [
+    "available|Babà|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Babà* come esaurito.\n\n*Babà*: *finito*"
+   ],
+   "turns": [
+    "o babà è fernuto"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9146,
+   "latencyMs": [
+    2378
+   ],
+   "recordedLlmMs": 2149,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-dialetto-003",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Babà|false"
+   ],
+   "actual": [
+    "available|Babà|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno il *Babà* come esaurito.\n\n*Babà*: *finito*"
+   ],
+   "turns": [
+    "'o babà nun ce sta cchiù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9153,
+   "latencyMs": [
+    3107.7
+   ],
+   "recordedLlmMs": 3032,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-dialetto-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliata|false"
+   ],
+   "actual": [
+    "available|Tagliata|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno la *Tagliata* come esaurita.\n\n*Tagliata*: *finito*"
+   ],
+   "turns": [
+    "la tagliata oggi nun ce sta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9138,
+   "latencyMs": [
+    1436.9
+   ],
+   "recordedLlmMs": 1397,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-dialetto-006",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Burrata|10"
+   ],
+   "actual": [
+    "price|Burrata|10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Burrata* la metto a 10 €.\n\n*Burrata*: prezzo da 9,00 € a *10,00 €*"
+   ],
+   "turns": [
+    "la burrata falla a dieci, va bbuono"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9139,
+   "latencyMs": [
+    1931.7
+   ],
+   "recordedLlmMs": 1888,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-dialetto-008",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Birra|6"
+   ],
+   "actual": [
+    "price|Birra|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, la *Birra* la metto a 6 €.\n\n*Birra*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "turns": [
+    "la birra a sei, ja"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9135,
+   "latencyMs": [
+    1520.9
+   ],
+   "recordedLlmMs": 1486,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-dialetto-010",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Carbonara* a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "la carbonara mettimela a 13 nè"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9148,
+   "latencyMs": [
+    1409.7
+   ],
+   "recordedLlmMs": 1376,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-dialetto-011",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliata|false"
+   ],
+   "actual": [
+    "available|Tagliata|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSegnato: *Tagliata* è esaurita.\n\n*Tagliata*: *finito*"
+   ],
+   "turns": [
+    "la tagliata è finita, abbiamo finito tutto stasera"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9147,
+   "latencyMs": [
+    1925.6
+   ],
+   "recordedLlmMs": 1896,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-dialetto-014",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "delete|Babà"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Babà* dal menu? Rispondi sì.",
+    "Elimino *Babà* dal menu? Rispondi sì."
+   ],
+   "turns": [
+    "il babà scancellalo proprio",
+    "sine"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 37706,
+   "latencyMs": [
+    3722.9,
+    2735.2
+   ],
+   "recordedLlmMs": 6307,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-dialetto-017",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare",
+    "Ok, non elimino il *Babà*."
+   ],
+   "turns": [
+    "elimina il babà",
+    "nun lo fa"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18367,
+   "latencyMs": [
+    23,
+    1506.1
+   ],
+   "recordedLlmMs": 2924,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-dialetto-018",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLa *Tagliata* costa 18 €.\n\n*Tagliata*: *18,00 €* · disponibile"
+   ],
+   "turns": [
+    "ma quanto costa la tagliata, mo?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9066,
+   "latencyMs": [
+    1068.7
+   ],
+   "recordedLlmMs": 1045,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "note": "domanda in dialetto: nessuna scrittura",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-dialetto-020",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNei dolci ci sono *Tiramisù*, *Babà* e *Delizia al limone*.\n\n*Tiramisù*: *6,00 €* · disponibile\n*Babà*: *5,00 €* · disponibile\n*Delizia al limone*: *5,50 €* · disponibile"
+   ],
+   "turns": [
+    "❓ che c'è nei dolci, fra?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9301,
+   "latencyMs": [
+    1187.3
+   ],
+   "recordedLlmMs": 1166,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-dialetto-022",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Spaghetti all'astice|26"
+   ],
+   "actual": [
+    "price|Spaghetti all'astice|26"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Spaghetti all'astice* lo metto a 26 €.\n\n*Spaghetti all'astice*: prezzo da 24,00 € a *26,00 €*"
+   ],
+   "turns": [
+    "lo spaghetto all'astice fallo a ventisei"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9175,
+   "latencyMs": [
+    1881.6
+   ],
+   "recordedLlmMs": 1852,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-dialetto-023",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Coca Cola|3.5"
+   ],
+   "actual": [
+    "price|Coca Cola|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, la *Coca Cola* la metto a 3,50 €.\n\n*Coca Cola*: prezzo da 3,00 € a *3,50 €*"
+   ],
+   "turns": [
+    "aò la coca a tre e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9161,
+   "latencyMs": [
+    1472.2
+   ],
+   "recordedLlmMs": 1440,
+   "usedLlm": true,
+   "source": "z:dialetto",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-asr-001",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara* a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 la carbo nara a tredici euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9164,
+   "latencyMs": [
+    1360.5
+   ],
+   "recordedLlmMs": 1338,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Carbonara* (12,00 €)"
+   ],
+   "turns": [
+    "🎤 la carbonara a tre dici"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18761,
+   "latencyMs": [
+    4523.2
+   ],
+   "recordedLlmMs": 4492,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-005",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Pizza 'nduja|10"
+    }
+   ],
+   "expected": [
+    "price|Pizza 'nduja|10"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Pizza 'nduja* (9,00 €)"
+   ],
+   "turns": [
+    "🎤 la pizza en duja a dieci"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18892,
+   "latencyMs": [
+    3907.4
+   ],
+   "recordedLlmMs": 3881,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-006",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Pizza 'nduja|10"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Pizza 'nduja* (9,00 €)"
+   ],
+   "turns": [
+    "🎤 la pizza indulia a dieci"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18803,
+   "latencyMs": [
+    4476.4
+   ],
+   "recordedLlmMs": 4446,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-007",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Greco di Tufo|28"
+   ],
+   "actual": [
+    "price|Greco di Tufo|28"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, il *Greco di Tufo* lo metto a 28 €.\n\n*Greco di Tufo*: prezzo da 25,00 € a *28,00 €*"
+   ],
+   "turns": [
+    "🎤 il greco di tufo a ventotto"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9144,
+   "latencyMs": [
+    2295.2
+   ],
+   "recordedLlmMs": 2269,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-008",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Greco di Tufo|28"
+   ],
+   "actual": [
+    "price|Greco di Tufo|28"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Greco di Tufo* a 28 €.\n\n*Greco di Tufo*: prezzo da 25,00 € a *28,00 €*"
+   ],
+   "turns": [
+    "🎤 il greco di tutto a ventotto"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9448,
+   "latencyMs": [
+    3405.3
+   ],
+   "recordedLlmMs": 3386,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-009",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Baccalà fritto|16"
+    }
+   ],
+   "expected": [
+    "price|Baccalà fritto|16"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi il *Baccalà fritto* o il *Calzone fritto*?\n\n1. *Baccalà fritto* (15,00 €)\n2. *Calzone fritto* (9,00 €)"
+   ],
+   "turns": [
+    "🎤 il bacalà fritto a sedici"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18607,
+   "latencyMs": [
+    3561.1
+   ],
+   "recordedLlmMs": 3535,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-011",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Gnocchi alla sorrentina|12"
+   ],
+   "actual": [
+    "price|Gnocchi alla sorrentina|12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Gnocchi alla sorrentina* a 12 €.\n\n*Gnocchi alla sorrentina*: prezzo da 11,00 € a *12,00 €*"
+   ],
+   "turns": [
+    "🎤 gli occhi alla sorrentina a dodici"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9172,
+   "latencyMs": [
+    1306.3
+   ],
+   "recordedLlmMs": 1278,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-013",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|19"
+   ],
+   "actual": [
+    "price|Tagliata|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Tagliata* a 19 €.\n\n*Tagliata*: prezzo da 18,00 € a *19,00 €*"
+   ],
+   "turns": [
+    "🎤 la tagliata a diciannove. Punto."
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9139,
+   "latencyMs": [
+    2196.3
+   ],
+   "recordedLlmMs": 2175,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-015",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Burrata|9.5"
+   ],
+   "actual": [
+    "price|Burrata|9.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Burrata* a 9,50 €.\n\n*Burrata*: prezzo da 9,00 € a *9,50 €*"
+   ],
+   "turns": [
+    "🎤 la burata a nove e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9313,
+   "latencyMs": [
+    2103.1
+   ],
+   "recordedLlmMs": 2081,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-016",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Delizia al limone|6"
+   ],
+   "actual": [
+    "price|Delizia al limone|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno la *Delizia al limone* a 6 €.\n\n*Delizia al limone*: prezzo da 5,50 € a *6,00 €*"
+   ],
+   "turns": [
+    "🎤 la delizia al limone a sei"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9142,
+   "latencyMs": [
+    1473.5
+   ],
+   "recordedLlmMs": 1457,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-018",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Calzone fritto|10",
+    "price|Calzone|9"
+   ],
+   "actual": [
+    "price|Calzone fritto|10",
+    "price|Calzone|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, cambio il *Calzone fritto* a 10 € e il *Calzone* a 9 €.\n\n*Calzone fritto*: prezzo da 9,00 € a *10,00 €*\n*Calzone*: prezzo da 8,00 € a *9,00 €*"
+   ],
+   "turns": [
+    "🎤 il calzone fritto a dieci e il calzone a nove"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9231,
+   "latencyMs": [
+    1528.1
+   ],
+   "recordedLlmMs": 1504,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-019",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Calzone fritto|10",
+    "price|Calzone|9"
+   ],
+   "actual": [
+    "price|Calzone fritto|10",
+    "price|Calzone|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno *Calzone* a 9 e *Calzone fritto* a 10.\n\n*Calzone*: prezzo da 8,00 € a *9,00 €*\n*Calzone fritto*: prezzo da 9,00 € a *10,00 €*"
+   ],
+   "turns": [
+    "🎤 il calzone a nove e il calzone fritto a dieci"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9445,
+   "latencyMs": [
+    2576.7
+   ],
+   "recordedLlmMs": 2550,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-020",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Quattro stagioni|9"
+   ],
+   "actual": [
+    "price|Quattro stagioni|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Quattro stagioni* lo metto a 9 €.\n\n*Quattro stagioni*: prezzo da 8,50 € a *9,00 €*"
+   ],
+   "turns": [
+    "🎤 quattro stagioni a nove"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9138,
+   "latencyMs": [
+    2138.3
+   ],
+   "recordedLlmMs": 2115,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-023",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCiao! Come posso aiutarti col menu? Dimmi cosa vuoi cambiare, per esempio un prezzo o un piatto finito."
+   ],
+   "turns": [
+    "🎤 sottotitoli creati dalla comunità amara.org"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9343,
+   "latencyMs": [
+    3373.2
+   ],
+   "recordedLlmMs": 3357,
+   "usedLlm": true,
+   "source": "z:asr",
+   "note": "allucinazione tipica di Whisper sul silenzio",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-024",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nDi niente, buon lavoro! Se vuoi modificare il menu, scrivimi pure."
+   ],
+   "turns": [
+    "🎤 grazie a tutti per la visione"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9077,
+   "latencyMs": [
+    1868.8
+   ],
+   "recordedLlmMs": 1856,
+   "usedLlm": true,
+   "source": "z:asr",
+   "note": "allucinazione Whisper",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-asr-025",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho ricevuto nessun messaggio. Cosa vuoi aggiornare nel menu?"
+   ],
+   "turns": [
+    "🎤 ..."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9111,
+   "latencyMs": [
+    1510.7
+   ],
+   "recordedLlmMs": 1497,
+   "usedLlm": true,
+   "source": "z:asr",
+   "nonMisurato": false,
+   "strato": "vocali-asr"
+  },
+  {
+   "id": "z-numeri-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|21"
+   ],
+   "actual": [
+    "price|Tagliata|21"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, cambio il prezzo della *Tagliata* a 21 €.\n\n*Tagliata*: prezzo da 18,00 € a *21,00 €*"
+   ],
+   "turns": [
+    "la tagliata a ventuno"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9143,
+   "latencyMs": [
+    1538.2
+   ],
+   "recordedLlmMs": 1516,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-003",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|22.5"
+   ],
+   "actual": [
+    "price|Tagliata|22.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Tagliata* a 22,50 €.\n\n*Tagliata*: prezzo da 18,00 € a *22,50 €*"
+   ],
+   "turns": [
+    "la tagliata a ventidue e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9144,
+   "latencyMs": [
+    1280.6
+   ],
+   "recordedLlmMs": 1256,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-005",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|19.5"
+   ],
+   "actual": [
+    "price|Tagliata|19.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Tagliata* a 19,50 €.\n\n*Tagliata*: prezzo da 18,00 € a *19,50 €*"
+   ],
+   "turns": [
+    "la tagliata a diciannove virgola cinque"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9144,
+   "latencyMs": [
+    1568.9
+   ],
+   "recordedLlmMs": 1542,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-006",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Greco di Tufo|32"
+   ],
+   "actual": [
+    "price|Greco di Tufo|32"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, il *Greco di Tufo* lo metto a 32 €.\n\n*Greco di Tufo*: prezzo da 25,00 € a *32,00 €*"
+   ],
+   "turns": [
+    "il greco di tufo a trentadue"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9144,
+   "latencyMs": [
+    1915.1
+   ],
+   "recordedLlmMs": 1893,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-007",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Greco di Tufo|38"
+   ],
+   "actual": [
+    "price|Greco di Tufo|38"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il *Greco di Tufo* a 38 €.\n\n*Greco di Tufo*: prezzo da 25,00 € a *38,00 €*"
+   ],
+   "turns": [
+    "il greco di tufo a trentotto"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9145,
+   "latencyMs": [
+    2171.2
+   ],
+   "recordedLlmMs": 2149,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-011",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Acqua|1.5"
+   ],
+   "actual": [
+    "price|Acqua|1.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Acqua* a 1,50 €.\n\n*Acqua*: prezzo da 2,00 € a *1,50 €*"
+   ],
+   "turns": [
+    "l'acqua a un euro e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9142,
+   "latencyMs": [
+    3094.2
+   ],
+   "recordedLlmMs": 3068,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-012",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Acqua|1.5"
+   ],
+   "actual": [
+    "price|Acqua|1.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto l'*Acqua* a 1,50 €.\n\n*Acqua*: prezzo da 2,00 € a *1,50 €*"
+   ],
+   "turns": [
+    "l'acqua a uno e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9142,
+   "latencyMs": [
+    1634.7
+   ],
+   "recordedLlmMs": 1610,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-015",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Quattro stagioni|9"
+   ],
+   "actual": [
+    "price|Quattro stagioni|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Quattro stagioni* a 9 €.\n\n*Quattro stagioni*: prezzo da 8,50 € a *9,00 €*"
+   ],
+   "turns": [
+    "la quattro stagioni a nove"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9141,
+   "latencyMs": [
+    1502.4
+   ],
+   "recordedLlmMs": 1481,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "note": "«quattro» è nel nome, il prezzo è nove",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-017",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Quattro stagioni|9"
+   ],
+   "actual": [
+    "price|Quattro stagioni|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno *Quattro stagioni* a 9 €.\n\n*Quattro stagioni*: prezzo da 8,50 € a *9,00 €*"
+   ],
+   "turns": [
+    "quattro stagioni 9"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9160,
+   "latencyMs": [
+    1567.5
+   ],
+   "recordedLlmMs": 1542,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-018",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Quattro stagioni|9.5"
+   ],
+   "actual": [
+    "price|Quattro stagioni|9.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aumento *Quattro stagioni* di un euro.\n\n*Quattro stagioni*: prezzo da 8,50 € a *9,50 €*"
+   ],
+   "turns": [
+    "aumenta la quattro stagioni di un euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9145,
+   "latencyMs": [
+    2560.9
+   ],
+   "recordedLlmMs": 2531,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-019",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|20"
+   ],
+   "actual": [
+    "price|Tagliata|20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, alzo di due euro la *Tagliata*.\n\n*Tagliata*: prezzo da 18,00 € a *20,00 €*"
+   ],
+   "turns": [
+    "aumenta la tagliata di due euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9140,
+   "latencyMs": [
+    1538.4
+   ],
+   "recordedLlmMs": 1516,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-021",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|19"
+   ],
+   "actual": [
+    "price|Tagliata|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumento la *Tagliata* di un euro.\n\n*Tagliata*: prezzo da 18,00 € a *19,00 €*"
+   ],
+   "turns": [
+    "la tagliata un euro in più"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9131,
+   "latencyMs": [
+    1398.5
+   ],
+   "recordedLlmMs": 1382,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-numeri-025",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|cassata|6|dolci"
+   ],
+   "actual": [
+    "create|cassata|6|dolci"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo la *Cassata* a 6 € nei Dolci.\n\nNuovo piatto *Cassata* in *Dolci*: *6,00 €*"
+   ],
+   "turns": [
+    "aggiungi nei dolci la cassata a sei"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9361,
+   "latencyMs": [
+    1484.5
+   ],
+   "recordedLlmMs": 1460,
+   "usedLlm": true,
+   "source": "z:numeri",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-tempo-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Babà|false"
+   ],
+   "actual": [
+    "available|Babà|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto il *Babà* come finito per oggi.\n\n*Babà*: *finito*"
+   ],
+   "turns": [
+    "per oggi niente babà"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9317,
+   "latencyMs": [
+    3008.3
+   ],
+   "recordedLlmMs": 2990,
+   "usedLlm": true,
+   "source": "z:tempo",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-tempo-007",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Babà|false"
+   ],
+   "actual": [
+    "available|Babà|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSegno *Babà* come finito fino a domenica.\n\n*Babà*: *finito*"
+   ],
+   "turns": [
+    "il babà finito fino a domenica"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9442,
+   "latencyMs": [
+    3128
+   ],
+   "recordedLlmMs": 3087,
+   "usedLlm": true,
+   "source": "z:tempo",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-tempo-010",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Carbonara* aggiornata.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "da ora la carbonara a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9132,
+   "latencyMs": [
+    1617.7
+   ],
+   "recordedLlmMs": 1584,
+   "usedLlm": true,
+   "source": "z:tempo",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-tempo-013",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Tagliata|true"
+   ],
+   "actual": [
+    "available|Tagliata|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Tagliata* di nuovo disponibile.\n\n*Tagliata*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "la tagliata è tornata"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9136,
+   "latencyMs": [
+    2066.5
+   ],
+   "recordedLlmMs": 2038,
+   "usedLlm": true,
+   "source": "z:tempo",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-tempo-017",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|21"
+   ],
+   "actual": [
+    "price|Tagliata|20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, cambio il prezzo della *Tagliata*.\n\n*Tagliata*: prezzo da 18,00 € a *20,00 €*",
+    "A quale piatto vuoi mettere *21 €*?"
+   ],
+   "turns": [
+    "la tagliata a 20",
+    "[+45 min]",
+    "anzi 21"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18388,
+   "latencyMs": [
+    1428.8,
+    2018.7
+   ],
+   "recordedLlmMs": 3386,
+   "usedLlm": true,
+   "source": "z:tempo",
+   "note": "oltre 30 min: o 21 o chiede, mai altro",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-omonimi-003",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: hidden|Calzone fritto|true, hidden|Calzone|true"
+    }
+   ],
+   "expected": [
+    "hidden|Calzone fritto|true",
+    "hidden|Calzone|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo tutto il Sottomenu *Calzoni*? Rispondi sì.\n\n1. *Calzone* (8,00 €)\n2. *Calzone fritto* (9,00 €)"
+   ],
+   "turns": [
+    "nascondi i calzoni"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19624,
+   "latencyMs": [
+    7158.4
+   ],
+   "recordedLlmMs": 7123,
+   "usedLlm": true,
+   "source": "z:omonimi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-omonimi-006",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "move|Calzone|Pizze"
+   ],
+   "actual": [
+    "move|Calzone|Pizze"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSposto *Calzone* nel sottomenu Pizze.\n\n*Calzone*: spostato in *Pizze*"
+   ],
+   "turns": [
+    "sposta il calzone nelle pizze"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9594,
+   "latencyMs": [
+    2890.1
+   ],
+   "recordedLlmMs": 2835,
+   "usedLlm": true,
+   "source": "z:omonimi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-omonimi-010",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "move|Calzone fritto|Ripieni",
+    "move|Calzone|Ripieni"
+   ],
+   "actual": [
+    "move|Calzone fritto|Ripieni",
+    "move|Calzone|Ripieni"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nRinomino il Sottomenu *Calzoni* in *Ripieni*.\n\nSottomenu *Calzoni*: nuovo nome *Ripieni*"
+   ],
+   "turns": [
+    "rinomina la categoria calzoni in ripieni"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9272,
+   "latencyMs": [
+    2649.5
+   ],
+   "recordedLlmMs": 2618,
+   "usedLlm": true,
+   "source": "z:omonimi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-omonimi-015",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "featured|Greco di Tufo|true",
+    "featured|Vino della casa|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi mettere in evidenza i vini (*Vino della casa* e *Greco di Tufo*) o vuoi vedere quali sono già in evidenza?\n\n1. *Vino della casa* (4,00 €)\n2. *Greco di Tufo* (25,00 €)"
+   ],
+   "turns": [
+    "i vini in evidenza"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9678,
+   "latencyMs": [
+    2995.9
+   ],
+   "recordedLlmMs": 2974,
+   "usedLlm": true,
+   "source": "z:omonimi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-omonimi-018",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Pasta e patate|11"
+   ],
+   "actual": [
+    "price|Pasta e patate|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno *Pasta e patate* a 11 €.\n\n*Pasta e patate*: prezzo da 10,00 € a *11,00 €*"
+   ],
+   "turns": [
+    "la pasta e patate a 11"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9141,
+   "latencyMs": [
+    2028.5
+   ],
+   "recordedLlmMs": 1995,
+   "usedLlm": true,
+   "source": "z:omonimi",
+   "note": "«e» dentro il nome: un solo piatto",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-omonimi-020",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Pasta e patate|true"
+   ],
+   "actual": [
+    "hidden|Pasta e patate|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo *Pasta e patate* dal menu.\n\n*Pasta e patate*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi pasta e patate"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9135,
+   "latencyMs": [
+    1479.6
+   ],
+   "recordedLlmMs": 1447,
+   "usedLlm": true,
+   "source": "z:omonimi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-omonimi-024",
+   "family": "b1-elimina",
+   "menu": "ycat",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [
+    "move|Speciale della casa|Specialità"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, rinomino il Sottomenu *Speciali* in *Specialità*.\n\nSottomenu *Speciali*: nuovo nome *Specialità*"
+   ],
+   "turns": [
+    "rinomina speciali in specialità"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9381,
+   "latencyMs": [
+    2515
+   ],
+   "recordedLlmMs": 2442,
+   "usedLlm": true,
+   "source": "z:omonimi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-riepilogo-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Babà|4",
+    "price|Carbonara|13",
+    "price|Tagliata|19"
+   ],
+   "actual": [
+    "price|Babà|4",
+    "price|Carbonara|13",
+    "price|Tagliata|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPubblico *Carbonara* a 13, *Tagliata* a 19, *Birra* a 6 e *Babà* a 4? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Tagliata*: prezzo da 18,00 € a *19,00 €*\n3. *Birra*: prezzo da 5,00 € a *6,00 €*\n4. *Babà*: prezzo da 5,00 € a *4,00 €*",
+    "Ok, lascio *Birra* com'è. Rifaccio il riepilogo con *Carbonara*, *Tagliata* e *Babà*. Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Tagliata*: prezzo da 18,00 € a *19,00 €*\n3. *Babà*: prezzo da 5,00 € a *4,00 €*",
+    "Perfetto, pubblico le modifiche su *Carbonara*, *Tagliata* e *Babà*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*\n*Tagliata*: prezzo da 18,00 € a *19,00 €*\n*Babà*: prezzo da 5,00 € a *4,00 €*"
+   ],
+   "turns": [
+    "la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4",
+    "la birra lasciala com'è",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 39180,
+   "latencyMs": [
+    7295.4,
+    1926.2,
+    1639
+   ],
+   "recordedLlmMs": 10536,
+   "usedLlm": true,
+   "source": "z:riepilogo",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-riepilogo-013",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Babà|4",
+    "price|Birra|6",
+    "price|Carbonara|13",
+    "price|Tagliata|19"
+   ],
+   "actual": [
+    "price|Babà|4",
+    "price|Birra|6",
+    "price|Carbonara|13",
+    "price|Tagliata|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPubblico *Carbonara* a 13, *Tagliata* a 19, *Birra* a 6 e *Babà* a 4? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Tagliata*: prezzo da 18,00 € a *19,00 €*\n3. *Birra*: prezzo da 5,00 € a *6,00 €*\n4. *Babà*: prezzo da 5,00 € a *4,00 €*",
+    "Perfetto, pubblico le modifiche in sospeso.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*\n*Tagliata*: prezzo da 18,00 € a *19,00 €*\n*Birra*: prezzo da 5,00 € a *6,00 €*\n*Babà*: prezzo da 5,00 € a *4,00 €*"
+   ],
+   "turns": [
+    "la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4",
+    "ok ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 29361,
+   "latencyMs": [
+    93.3,
+    1735.3
+   ],
+   "recordedLlmMs": 8898,
+   "usedLlm": true,
+   "source": "z:riepilogo",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-riepilogo-018",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPubblico *Carbonara* a 13, *Tagliata* a 19, *Birra* a 6 e *Babà* a 4? Rispondi OK per pubblicare.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Tagliata*: prezzo da 18,00 € a *19,00 €*\n3. *Birra*: prezzo da 5,00 € a *6,00 €*\n4. *Babà*: prezzo da 5,00 € a *4,00 €*",
+    "Elimino il *Tiramisù* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Tagliata*: prezzo da 18,00 € a *19,00 €*\n3. *Birra*: prezzo da 5,00 € a *6,00 €*\n4. *Babà*: prezzo da 5,00 € a *4,00 €*\n5. *Tiramisù*: da eliminare"
+   ],
+   "turns": [
+    "la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4",
+    "elimina il tiramisù"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 29644,
+   "latencyMs": [
+    75.3,
+    3133.9
+   ],
+   "recordedLlmMs": 10300,
+   "usedLlm": true,
+   "source": "z:riepilogo",
+   "note": "richiesta nuova: non conferma il riepilogo",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-riepilogo-019",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19, price|Tiramisù|7"
+    }
+   ],
+   "expected": [
+    "price|Babà|4",
+    "price|Birra|6",
+    "price|Carbonara|13",
+    "price|Tagliata|19",
+    "price|Tiramisù|7"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuali prezzi vuoi che aggiorni: *Carbonara* a 13, *Tagliata* a 19, *Birra* a 6, *Babà* a 4 o *Tiramisù* a 7?\n\n1. *Carbonara* (12,00 €)\n2. *Tagliata* (18,00 €)\n3. *Birra* (5,00 €)\n4. *Babà* (5,00 €)\n5. *Tiramisù* (6,00 €)",
+    "Quali di questi prezzi vuoi che aggiorni: *Carbonara* a 13, *Tagliata* a 19, *Birra* a 6, *Babà* a 4 o *Tiramisù* a 7?\n\n1. *Carbonara* (12,00 €)\n2. *Tagliata* (18,00 €)\n3. *Birra* (5,00 €)\n4. *Babà* (5,00 €)\n5. *Tiramisù* (6,00 €)"
+   ],
+   "turns": [
+    "la carbonara a 13, la tagliata a 19, la birra a 6, il babà a 4 e il tiramisù a 7",
+    "ok"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 40016,
+   "latencyMs": [
+    7013,
+    4445
+   ],
+   "recordedLlmMs": 11349,
+   "usedLlm": true,
+   "source": "z:riepilogo",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-lunghi-001",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Polpo all'insalata|16",
+    "price|Spaghetti all'astice|26"
+   ],
+   "actual": [
+    "price|Polpo all'insalata|16",
+    "price|Spaghetti all'astice|26"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il *Polpo all'insalata* e gli *Spaghetti all'astice*.\n\n*Polpo all'insalata*: prezzo da 14,00 € a *16,00 €*\n*Spaghetti all'astice*: prezzo da 24,00 € a *26,00 €*"
+   ],
+   "turns": [
+    "Buongiorno, allora, scusa se ti scrivo così presto ma stamattina sono andato al mercato e il pesce costava tantissimo, quindi ho deciso: il polpo all'insalata lo metti a 16, gli spaghetti all'astice a 26, e poi niente, per il resto lascia tutto com'è, grazie mille e buona giornata"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9341,
+   "latencyMs": [
+    82.4
+   ],
+   "recordedLlmMs": 10717,
+   "usedLlm": true,
+   "source": "z:lunghi",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-lunghi-003",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, la *Tagliata* resta a 18 €. Non modifico nulla."
+   ],
+   "turns": [
+    "allora ricapitolo: ieri ti avevo detto la tagliata a 20, ma non l'hai fatto, però va bene così, lasciala a 18, non toccare niente"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9121,
+   "latencyMs": [
+    39.4
+   ],
+   "recordedLlmMs": 6208,
+   "usedLlm": true,
+   "source": "z:lunghi",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-lunghi-005",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Babà|false",
+    "available|Burrata|false",
+    "featured|Tagliata|true"
+   ],
+   "actual": [
+    "available|Babà|false",
+    "available|Burrata|false",
+    "featured|Tagliata|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Babà* e *Burrata* come finiti e metto in evidenza la *Tagliata*. Buon pranzo con i 40 coperti!\n\n*Babà*: *finito*\n*Burrata*: *finito*\n*Tagliata*: *in evidenza*"
+   ],
+   "turns": [
+    "Ciao! Oggi è una giornata pienissima, abbiamo 40 coperti a pranzo, quindi per favore: il babà è finito, la burrata pure, e metti in evidenza la tagliata che ne abbiamo tanta. Grazie!"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9392,
+   "latencyMs": [
+    39.4
+   ],
+   "recordedLlmMs": 3715,
+   "usedLlm": true,
+   "source": "z:lunghi",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-lunghi-009",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Invalid message"
+   ],
+   "turns": [
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    4.1
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "source": "z:lunghi",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-lunghi-010",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Osteria dell'Apostrofo*, menu *Pranzo e cena*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Senza sottomenu*\n- Carbonara: 13,00 €\n\n*Senza prezzo*, non li metto online: *Carbonara a 13*. Scrivimi il prezzo, per esempio «carbonara a 13 12».\n\nRispetto a oggi: 0 nuovi, 1 con prezzo cambiato, 19 nascosti (non eliminati): Bruschetta, Frittatina 'e pasta, Burrata, Tagliere dell'oste, Margherita, Pizza 'nduja, Quattro stagioni, Pizza all'ortolana, Calzone, Calzone fritto, Spaghetti all'astice, Pasta e patate….\n\nGli altri menu non cambiano: Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"la carbonara è 14\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
+   ],
+   "turns": [
+    "la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 la carbonara a 13 "
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 1595,
+   "latencyMs": [
+    121.1
+   ],
+   "recordedLlmMs": 2851,
+   "usedLlm": true,
+   "source": "z:lunghi",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-001",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nA quale piatto vuoi mettere *13 €*? Intendi uno dei Primi, ad esempio *Carbonara* o *Gnocchi alla sorrentina*?"
+   ],
+   "turns": [
+    "🍝 13"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9427,
+   "latencyMs": [
+    2656.7
+   ],
+   "recordedLlmMs": 2628,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno la *Carbonara* a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "carbonara ➡️ 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9138,
+   "latencyMs": [
+    2526.4
+   ],
+   "recordedLlmMs": 2501,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-003",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno la *Carbonara* a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "carbonara 13€ ✅"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9138,
+   "latencyMs": [
+    1332.1
+   ],
+   "recordedLlmMs": 1308,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Babà|false"
+   ],
+   "actual": [
+    "available|Babà|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSegno il *Babà* come esaurito.\n\n*Babà*: *finito*"
+   ],
+   "turns": [
+    "babà ❌"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9345,
+   "latencyMs": [
+    2450.4
+   ],
+   "recordedLlmMs": 2427,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-005",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Babà|false"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi nascondere il *Babà* o è finito?"
+   ],
+   "turns": [
+    "🚫 babà"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9338,
+   "latencyMs": [
+    3322.5
+   ],
+   "recordedLlmMs": 3304,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-006",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "featured|Tagliata|true"
+   ],
+   "actual": [
+    "featured|Tagliata|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMetto la *Tagliata* in evidenza.\n\n*Tagliata*: *in evidenza*"
+   ],
+   "turns": [
+    "tagliata 🔝"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9133,
+   "latencyMs": [
+    1574.2
+   ],
+   "recordedLlmMs": 1546,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-009",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nDi niente, figurati! Se vuoi aggiornare il menu, scrivimi pure."
+   ],
+   "turns": [
+    "🙏"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9068,
+   "latencyMs": [
+    1340.6
+   ],
+   "recordedLlmMs": 1322,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-010",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Perfetto, a posto così."
+   ],
+   "turns": [
+    "la carbonara a 13",
+    "👍"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18284,
+   "latencyMs": [
+    20.9,
+    1648.9
+   ],
+   "recordedLlmMs": 3002,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-012",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon riesco a vedere l'immagine. Puoi scrivermi a parole cosa vuoi cambiare nel menu?"
+   ],
+   "turns": [
+    "[immagine]"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9122,
+   "latencyMs": [
+    16
+   ],
+   "recordedLlmMs": 1638,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-013",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho capito il messaggio, puoi scriverlo di nuovo?"
+   ],
+   "turns": [
+    "<media omessi>"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9092,
+   "latencyMs": [
+    13.4
+   ],
+   "recordedLlmMs": 1472,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-014",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho ricevuto nessun messaggio. Cosa vuoi modificare nel menu?"
+   ],
+   "turns": [
+    "​"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9105,
+   "latencyMs": [
+    12.8
+   ],
+   "recordedLlmMs": 1379,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-emoji-015",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho ricevuto nessun messaggio. Cosa vuoi modificare nel menu?"
+   ],
+   "turns": [
+    "\n\n\n"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9110,
+   "latencyMs": [
+    12.3
+   ],
+   "recordedLlmMs": 1633,
+   "usedLlm": true,
+   "source": "z:emoji",
+   "nonMisurato": false,
+   "strato": "preamboli"
+  },
+  {
+   "id": "z-contraddizioni-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi *nasconderlo* o *metterlo in evidenza*? Non posso fare entrambe le cose sul *Babà*."
+   ],
+   "turns": [
+    "nascondi il babà e mettilo in evidenza"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9135,
+   "latencyMs": [
+    16.2
+   ],
+   "recordedLlmMs": 1697,
+   "usedLlm": true,
+   "source": "z:contraddizioni",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-contraddizioni-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi alzare o abbassare di 2 € la *Tagliata*?"
+   ],
+   "turns": [
+    "alza la tagliata e abbassala di 2"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9221,
+   "latencyMs": [
+    17.7
+   ],
+   "recordedLlmMs": 1600,
+   "usedLlm": true,
+   "source": "z:contraddizioni",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-contraddizioni-005",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHai detto di aumentare la *Tagliata*, ma 15 € è meno di 18 €. Vuoi il prezzo a 15 € o un aumento di quanto?"
+   ],
+   "turns": [
+    "aumenta la tagliata a 15"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19052,
+   "latencyMs": [
+    22.5
+   ],
+   "recordedLlmMs": 4897,
+   "usedLlm": true,
+   "source": "z:contraddizioni",
+   "note": "«aumenta» a un prezzo più basso: domanda",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-contraddizioni-008",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC'è già *Carbonara* a 12 €: lo aggiorno o ne creo un altro?"
+   ],
+   "turns": [
+    "aggiungi la carbonara a 13"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18660,
+   "latencyMs": [
+    20.8
+   ],
+   "recordedLlmMs": 3522,
+   "usedLlm": true,
+   "source": "z:contraddizioni",
+   "note": "nota 62: già esiste → domanda",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-contraddizioni-009",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Ok, rimetto la *Carbonara* a 12 €.\n\n*Carbonara*: prezzo da 13,00 € a *12,00 €*"
+   ],
+   "turns": [
+    "la carbonara a 13",
+    "no a 12"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18368,
+   "latencyMs": [
+    18.5,
+    18.4
+   ],
+   "recordedLlmMs": 2792,
+   "usedLlm": true,
+   "source": "z:contraddizioni",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-contraddizioni-011",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, nascondo *Babà* dal menu.\n\n*Babà*: *nascosto* dal menu",
+    "Ok, rimetto *Babà* nel menu.\n\n*Babà*: di nuovo *visibile* nel menu"
+   ],
+   "turns": [
+    "nascondi il babà",
+    "mostralo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18351,
+   "latencyMs": [
+    14.4,
+    22.7
+   ],
+   "recordedLlmMs": 3890,
+   "usedLlm": true,
+   "source": "z:contraddizioni",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-annulla-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "annulla tutto"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18524,
+   "latencyMs": [
+    17.4
+   ],
+   "recordedLlmMs": 16533,
+   "usedLlm": true,
+   "source": "z:annulla",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-annulla-007",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Annullo l'ultima modifica sulla *Carbonara*.\n\n*Carbonara*: com’era prima",
+    "Non c'è nessuna pubblicazione recente da annullare. Vuoi tornare al prezzo di prima della *Carbonara*?"
+   ],
+   "turns": [
+    "la carbonara a 13",
+    "annulla",
+    "annulla"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 37076,
+   "latencyMs": [
+    17,
+    17,
+    18.4
+   ],
+   "recordedLlmMs": 7816,
+   "usedLlm": true,
+   "source": "z:annulla",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-annulla-009",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Annullo l'ultima modifica sulla *Carbonara*.\n\n*Carbonara*: com’era prima"
+   ],
+   "turns": [
+    "la carbonara a 13",
+    "annullare"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18368,
+   "latencyMs": [
+    18.2,
+    27.7
+   ],
+   "recordedLlmMs": 3009,
+   "usedLlm": true,
+   "source": "z:annulla",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-annulla-011",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Intendi *annullare* l'ultima modifica?"
+   ],
+   "turns": [
+    "la carbonara a 13",
+    "annula"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 27868,
+   "latencyMs": [
+    22.3,
+    20.2
+   ],
+   "recordedLlmMs": 4012,
+   "usedLlm": true,
+   "source": "z:annulla",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-annulla-012",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Annullo l'ultima modifica sulla *Carbonara*.\n\n*Carbonara*: com’era prima"
+   ],
+   "turns": [
+    "la carbonara a 13",
+    "annulla per piacere"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18372,
+   "latencyMs": [
+    16.1,
+    18.1
+   ],
+   "recordedLlmMs": 7386,
+   "usedLlm": true,
+   "source": "z:annulla",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-annulla-016",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|13"
+   ],
+   "actual": [
+    "price|Tagliata|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Ok, ripristino la *Carbonara* e metto la *Tagliata* a *13 €*.\n\n*Tagliata*: prezzo da 18,00 € a *13,00 €*\n*Carbonara*: prezzo da 13,00 € a *12,00 €*"
+   ],
+   "turns": [
+    "la carbonara a 13",
+    "annulla, intendevo la tagliata a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18463,
+   "latencyMs": [
+    17.4,
+    26.3
+   ],
+   "recordedLlmMs": 3014,
+   "usedLlm": true,
+   "source": "z:annulla",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-annulla-018",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare",
+    "Ok, annullo l'eliminazione del *Babà*.",
+    "Non c'è nessuna modifica in sospeso da confermare. Dimmi cosa vuoi cambiare nel menu e lo preparo."
+   ],
+   "turns": [
+    "elimina il babà",
+    "annulla",
+    "sì"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 37123,
+   "latencyMs": [
+    13.1,
+    15.6,
+    18.4
+   ],
+   "recordedLlmMs": 6388,
+   "usedLlm": true,
+   "source": "z:annulla",
+   "note": "sì dopo annulla: nessuna eliminazione",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-nascosti-007",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Babà* è già nascosto dal menu."
+   ],
+   "turns": [
+    "nascondi il babà"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9131,
+   "latencyMs": [
+    13.2
+   ],
+   "recordedLlmMs": 1681,
+   "usedLlm": true,
+   "source": "z:nascosti",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-nascosti-008",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Piatti nascosti (2)*\n- Burrata\n- Babà"
+   ],
+   "turns": [
+    "❓ quali piatti sono nascosti?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9078,
+   "latencyMs": [
+    13.9
+   ],
+   "recordedLlmMs": 1365,
+   "usedLlm": true,
+   "source": "z:nascosti",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-nascosti-011",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Babà|true",
+    "available|Burrata|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi rimettere disponibili *Burrata* e *Babà*, o solo una delle due?\n\n1. *Burrata* (9,00 €)\n2. *Babà* (5,00 €)"
+   ],
+   "turns": [
+    "rimetti tutto disponibile"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19335,
+   "latencyMs": [
+    17.1
+   ],
+   "recordedLlmMs": 6099,
+   "usedLlm": true,
+   "source": "z:nascosti",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-nascosti-012",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon c'è la *Cassata* nel menu: in quale Sottomenu la aggiungo come nuovo Piatto a 6 €?"
+   ],
+   "turns": [
+    "la cassata a 6"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9501,
+   "latencyMs": [
+    13.7
+   ],
+   "recordedLlmMs": 3215,
+   "usedLlm": true,
+   "source": "z:nascosti",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-nascosti-015",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon trovo la *Cassata* nel menu: quale piatto vuoi eliminare?"
+   ],
+   "turns": [
+    "elimina la cassata"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9303,
+   "latencyMs": [
+    12.6
+   ],
+   "recordedLlmMs": 2072,
+   "usedLlm": true,
+   "source": "z:nascosti",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-nascosti-016",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon trovo la *Cassata* nel menu: quale piatto vuoi eliminare?",
+    "Non trovo la *Cassata* nel menu: quale piatto vuoi eliminare?"
+   ],
+   "turns": [
+    "elimina la cassata",
+    "sì"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18512,
+   "latencyMs": [
+    13.2,
+    12.3
+   ],
+   "recordedLlmMs": 4147,
+   "usedLlm": true,
+   "source": "z:nascosti",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-assurdi-008",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla."
+   ],
+   "turns": [
+    "la carbonara a 13.000"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18544,
+   "latencyMs": [
+    17.3
+   ],
+   "recordedLlmMs": 4334,
+   "usedLlm": true,
+   "source": "z:assurdi",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-apostrofi-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Frittatina 'e pasta|3.5"
+   ],
+   "actual": [
+    "price|Frittatina 'e pasta|3.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Frittatina 'e pasta* a 3,50 €.\n\n*Frittatina 'e pasta*: prezzo da 3,00 € a *3,50 €*"
+   ],
+   "turns": [
+    "la frittatina 'e pasta a 3,50"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9153,
+   "latencyMs": [
+    18.8
+   ],
+   "recordedLlmMs": 2247,
+   "usedLlm": true,
+   "source": "z:apostrofi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-apostrofi-008",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliere dell'oste|16"
+   ],
+   "actual": [
+    "price|Tagliere dell'oste|16"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo del *Tagliere dell'oste*.\n\n*Tagliere dell'oste*: prezzo da 14,00 € a *16,00 €*"
+   ],
+   "turns": [
+    "il tagliere dell oste a 16"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9144,
+   "latencyMs": [
+    20.2
+   ],
+   "recordedLlmMs": 1471,
+   "usedLlm": true,
+   "source": "z:apostrofi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-apostrofi-011",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Pizza all'ortolana|9"
+   ],
+   "actual": [
+    "price|Pizza all'ortolana|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno la *Pizza all'ortolana* a 9 €.\n\n*Pizza all'ortolana*: prezzo da 8,00 € a *9,00 €*"
+   ],
+   "turns": [
+    "«Pizza all’ortolana» a 9"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9147,
+   "latencyMs": [
+    19.7
+   ],
+   "recordedLlmMs": 1459,
+   "usedLlm": true,
+   "source": "z:apostrofi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-apostrofi-016",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "rename|Babà|Babà al rum"
+   ],
+   "actual": [
+    "rename|Babà|Babà al rum"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nRinomino *Babà* in *Babà al rum*.\n\n*Babà*: nuovo nome *Babà al rum*"
+   ],
+   "turns": [
+    "rinomina il babà in \"Babà al rum\""
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9149,
+   "latencyMs": [
+    20.9
+   ],
+   "recordedLlmMs": 1531,
+   "usedLlm": true,
+   "source": "z:apostrofi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-apostrofi-019",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Spaghetti all'astice|26"
+   ],
+   "actual": [
+    "price|Spaghetti all'astice|26"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto *Spaghetti all'astice* a 26 €.\n\n*Spaghetti all'astice*: prezzo da 24,00 € a *26,00 €*"
+   ],
+   "turns": [
+    "l'astice a 26"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9157,
+   "latencyMs": [
+    16.3
+   ],
+   "recordedLlmMs": 1651,
+   "usedLlm": true,
+   "source": "z:apostrofi",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-ripeti-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "La *Carbonara* è già a *13 €*: non cambio niente.\n\n*Carbonara* è già a *13 €*.",
+    "Ok, controllo la *Carbonara* a *13 €*.\n\n*Carbonara* è già a *13 €*."
+   ],
+   "turns": [
+    "la carbonara a 13",
+    "la carbonara a 13",
+    "la carbonara a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 27663,
+   "latencyMs": [
+    17.1,
+    18.7,
+    17.4
+   ],
+   "recordedLlmMs": 4243,
+   "usedLlm": true,
+   "source": "z:ripeti",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-ripeti-006",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "rename|Babà|Babà al rum"
+   ],
+   "actual": [
+    "rename|Babà|Babà al rum"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nRinomino *Babà* in *Babà al rum*.\n\n*Babà*: nuovo nome *Babà al rum*",
+    "Non ho cambiato nulla.\n\n1. *Babà al rum* (5,00 €)"
+   ],
+   "turns": [
+    "rinomina il babà in babà al rum",
+    "rinomina il babà in babà al rum"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28083,
+   "latencyMs": [
+    18.6,
+    24
+   ],
+   "recordedLlmMs": 4959,
+   "usedLlm": true,
+   "source": "z:ripeti",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-ripeti-009",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto *Carbonara* a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "la carbonara a 13 la carbonara a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9143,
+   "latencyMs": [
+    21.7
+   ],
+   "recordedLlmMs": 2087,
+   "usedLlm": true,
+   "source": "z:ripeti",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-ripeti-010",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "delete|Babà"
+   ],
+   "actual": [
+    "delete|Babà"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare",
+    "Ok, elimino il *Babà* dal menu.\n\n*Babà*: *eliminato* dal menu",
+    "Non trovo il *Babà* nel menu: non lo vedo tra i piatti attivi. Intendi un altro piatto?",
+    "Non trovo il *Babà* tra i piatti attivi. Quale intendi: 1. *Tiramisù* 2. *Delizia al limone* 3. nessuno dei due?"
+   ],
+   "turns": [
+    "elimina il babà",
+    "sì",
+    "elimina il babà",
+    "sì"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 6,
+   "llmMisses": 0,
+   "llmTokens": 56703,
+   "latencyMs": [
+    11.9,
+    18.8,
+    17,
+    19
+   ],
+   "recordedLlmMs": 10774,
+   "usedLlm": true,
+   "source": "z:ripeti",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-interruzioni-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare",
+    "Ok, metto la *Carbonara* a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Elimino il *Babà* dal menu? Rispondi sì."
+   ],
+   "turns": [
+    "elimina il babà",
+    "la carbonara a 13",
+    "sì"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 37813,
+   "latencyMs": [
+    12.4,
+    21.4,
+    19.4
+   ],
+   "recordedLlmMs": 8387,
+   "usedLlm": true,
+   "source": "z:interruzioni",
+   "note": "il sì dopo un'altra modifica: pericoloso se elimina",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-interruzioni-006",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare",
+    "Certo, prenditi il tempo che ti serve. Il *Babà* resta in sospeso: quando mi dai il tuo sì lo elimino.",
+    "Ok, non elimino il *Babà*. Resta nel menu."
+   ],
+   "turns": [
+    "elimina il babà",
+    "un attimo che chiedo al cuoco",
+    "[+5 min]",
+    "no tienilo"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 27644,
+   "latencyMs": [
+    13.8,
+    14.5,
+    15
+   ],
+   "recordedLlmMs": 4454,
+   "usedLlm": true,
+   "source": "z:interruzioni",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-interruzioni-007",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare",
+    "Il messaggio contiene anche il *Tiramisù*, quindi non posso confermare solo con un sì. Vuoi che elimini il *Babà* e cosa devo fare col *Tiramisù*?\n\n1. *Babà* (5,00 €)\n2. *Tiramisù* (6,00 €)"
+   ],
+   "turns": [
+    "elimina il babà",
+    "sì il tiramisù"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28461,
+   "latencyMs": [
+    11.7,
+    20.2
+   ],
+   "recordedLlmMs": 7624,
+   "usedLlm": true,
+   "source": "z:interruzioni",
+   "note": "sì + altro piatto: mai eliminare il babà",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-interruzioni-008",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: delete|Babà"
+    }
+   ],
+   "expected": [
+    "delete|Babà"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare",
+    "Confermo l'eliminazione del *Babà*. Vuoi eliminare anche il *Tiramisù*?"
+   ],
+   "turns": [
+    "elimina il babà",
+    "sì e anche il tiramisù"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28134,
+   "latencyMs": [
+    11.5,
+    21.7
+   ],
+   "recordedLlmMs": 4832,
+   "usedLlm": true,
+   "source": "z:interruzioni",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-interruzioni-009",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare",
+    "Il *Tiramisù* è disponibile, costa 6 €. Per il *Babà* aspetto il tuo sì per eliminarlo.\n\n*Tiramisù*: *6,00 €* · disponibile"
+   ],
+   "turns": [
+    "elimina il babà",
+    "e il tiramisù?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18332,
+   "latencyMs": [
+    12.7,
+    13.8
+   ],
+   "recordedLlmMs": 3093,
+   "usedLlm": true,
+   "source": "z:interruzioni",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-interruzioni-010",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* e il *Tiramisù* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare\n2. *Tiramisù*: da eliminare",
+    "Elimino il *Babà* dal menu? Rispondi sì."
+   ],
+   "turns": [
+    "elimina il babà e il tiramisù",
+    "solo il babà"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28071,
+   "latencyMs": [
+    16.1,
+    16.7
+   ],
+   "recordedLlmMs": 4117,
+   "usedLlm": true,
+   "source": "z:interruzioni",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-interruzioni-011",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: delete|Babà"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "conferma-a-vuoto",
+     "why": "turno 3: «sì» dopo una richiesta di conferma, e il bot chiede ancora conferma («Elimino il *Babà* dal menu? Rispondi sì.»)"
+    }
+   ],
+   "expected": [
+    "delete|Babà"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* e il *Tiramisù* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare\n2. *Tiramisù*: da eliminare",
+    "Elimino il *Babà* dal menu? Rispondi sì.",
+    "Elimino il *Babà* dal menu? Rispondi sì."
+   ],
+   "turns": [
+    "elimina il babà e il tiramisù",
+    "solo il babà",
+    "sì"
+   ],
+   "clarifications": 3,
+   "unexpectedClarifications": 2,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 47114,
+   "latencyMs": [
+    13.2,
+    18.7,
+    18.1
+   ],
+   "recordedLlmMs": 6216,
+   "usedLlm": true,
+   "source": "z:interruzioni",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-interruzioni-012",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "delete|Babà"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* e il *Tiramisù* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare\n2. *Tiramisù*: da eliminare",
+    "Elimino il *Babà* dal menu? Rispondi sì. Il *Tiramisù* resta nel menu."
+   ],
+   "turns": [
+    "elimina il babà e il tiramisù",
+    "sì solo il babà"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28260,
+   "latencyMs": [
+    14.9,
+    20
+   ],
+   "recordedLlmMs": 4663,
+   "usedLlm": true,
+   "source": "z:interruzioni",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-interruzioni-017",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|cassata|6|dolci"
+    }
+   ],
+   "expected": [
+    "create|cassata|6|dolci"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nA quanto costa la *Cassata*?",
+    "A quanto costa la *Cassata*?"
+   ],
+   "turns": [
+    "aggiungi nei dolci la cassata",
+    "6"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18979,
+   "latencyMs": [
+    13.9,
+    12.2
+   ],
+   "recordedLlmMs": 4795,
+   "usedLlm": true,
+   "source": "z:interruzioni",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-travestite-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLa *Carbonara* è a 12 €, non a 13. Vuoi cambiarla?\n\n*Carbonara*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "❓ la carbonara è a 13?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9077,
+   "latencyMs": [
+    13.4
+   ],
+   "recordedLlmMs": 1390,
+   "usedLlm": true,
+   "source": "z:travestite",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-travestite-010",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ci sono piatti *nascosti*."
+   ],
+   "turns": [
+    "❓ elencami cosa è nascosto"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9069,
+   "latencyMs": [
+    11.8
+   ],
+   "recordedLlmMs": 1178,
+   "usedLlm": true,
+   "source": "z:travestite",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-travestite-016",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Babà|true"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSì, posso nascondere il *Babà* dal menu. Vuoi che lo tolga? Rispondi sì.\n\n*Babà*: *5,00 €* · disponibile"
+   ],
+   "turns": [
+    "si può togliere il babà?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9085,
+   "latencyMs": [
+    12.7
+   ],
+   "recordedLlmMs": 1440,
+   "usedLlm": true,
+   "source": "z:travestite",
+   "nonMisurato": false,
+   "strato": "conferme-senza-sospeso"
+  },
+  {
+   "id": "z-travestite-017",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "delete|Babà"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino il *Babà* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Babà*: da eliminare"
+   ],
+   "turns": [
+    "potresti eliminare il babà?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9142,
+   "latencyMs": [
+    14.4
+   ],
+   "recordedLlmMs": 1319,
+   "usedLlm": true,
+   "source": "z:travestite",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-travestite-022",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Carbonara*: *12,00 €* · disponibile"
+   ],
+   "turns": [
+    "❓ chi ha messo la carbonara a 12?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9115,
+   "latencyMs": [
+    14.7
+   ],
+   "recordedLlmMs": 1469,
+   "usedLlm": true,
+   "source": "z:travestite",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-travestite-023",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Babà* non risulta esaurito, è disponibile.\n\n*Babà*: *5,00 €* · disponibile"
+   ],
+   "turns": [
+    "❓ è finito il babà?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9064,
+   "latencyMs": [
+    11.4
+   ],
+   "recordedLlmMs": 1570,
+   "usedLlm": true,
+   "source": "z:travestite",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-promo-011",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "featured|Tagliata|false"
+   ],
+   "actual": [
+    "featured|Tagliata|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, tolgo *Tagliata* dall'evidenza.\n\n*Tagliata*: non più in evidenza"
+   ],
+   "turns": [
+    "togli la tagliata dall'evidenza"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9270,
+   "latencyMs": [
+    17.3
+   ],
+   "recordedLlmMs": 2309,
+   "usedLlm": true,
+   "source": "z:promo",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-promo-019",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMetto la *Burrata* in promo a 7 €.\n\n*Burrata*: in *promo* a *7,00 €* (prezzo pieno 9,00 €), finché non la togli",
+    "Annullo l'ultima modifica: la *Burrata* torna al prezzo di prima.\n\n*Burrata*: com’era prima"
+   ],
+   "turns": [
+    "la burrata in promo a 7",
+    "annulla"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18399,
+   "latencyMs": [
+    20.5,
+    16.5
+   ],
+   "recordedLlmMs": 3365,
+   "usedLlm": true,
+   "source": "z:promo",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-sposta-006",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "move|Burrata|Secondi"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\nNon salvato: *Burrata*: spostato in *Secondi*\n\n1. *Tagliata* (18,00 €)"
+   ],
+   "turns": [
+    "sposta la burrata dove sta la tagliata"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18707,
+   "latencyMs": [
+    26.7
+   ],
+   "recordedLlmMs": 3224,
+   "usedLlm": true,
+   "source": "z:sposta",
+   "nonMisurato": false,
+   "strato": "altro"
+  },
+  {
+   "id": "z-rinomine-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Babà|6"
+    }
+   ],
+   "expected": [
+    "price|Babà|6",
+    "rename|Babà|Babà al rum"
+   ],
+   "actual": [
+    "rename|Babà|Babà al rum"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nRinomino *Babà* in *Babà al rum*.\n\n*Babà*: nuovo nome *Babà al rum*",
+    "Intendi *Babà al rum* a 6 €?"
+   ],
+   "turns": [
+    "rinomina il babà in babà al rum",
+    "e mettilo a 6"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28272,
+   "latencyMs": [
+    18.3,
+    21.6
+   ],
+   "recordedLlmMs": 9835,
+   "usedLlm": true,
+   "source": "z:rinomine",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-rinomine-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Babà|6",
+    "rename|Babà|Babà al rum"
+   ],
+   "actual": [
+    "price|Babà|6",
+    "rename|Babà|Babà al rum"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nRinomino *Babà* in *Babà al rum*.\n\n*Babà*: nuovo nome *Babà al rum*",
+    "Ok, aggiorno il *Babà al rum* a 6 €.\n\n*Babà al rum*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "turns": [
+    "rinomina il babà in babà al rum",
+    "il babà a 6"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18433,
+   "latencyMs": [
+    19.4,
+    23.2
+   ],
+   "recordedLlmMs": 3150,
+   "usedLlm": true,
+   "source": "z:rinomine",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-rinomine-009",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: hidden|Babà|true, rename|Babà|Babà al rum"
+    }
+   ],
+   "expected": [
+    "hidden|Babà|true",
+    "rename|Babà|Babà al rum"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Babà* (5,00 €)"
+   ],
+   "turns": [
+    "rinomina il babà in babà al rum, e nascondilo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19445,
+   "latencyMs": [
+    24.6
+   ],
+   "recordedLlmMs": 6975,
+   "usedLlm": true,
+   "source": "z:rinomine",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-rinomine-013",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "rename|Burrata|burrata pugliese"
+   ],
+   "actual": [
+    "rename|Burrata|Burrata pugliese"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, rinomino la *Burrata* in *Burrata pugliese*.\n\n*Burrata*: nuovo nome *Burrata pugliese*"
+   ],
+   "turns": [
+    "chiama la burrata burrata pugliese"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9156,
+   "latencyMs": [
+    20.9
+   ],
+   "recordedLlmMs": 1522,
+   "usedLlm": true,
+   "source": "z:rinomine",
+   "nonMisurato": false,
+   "strato": "nomi-insidiosi"
+  },
+  {
+   "id": "z-locali-001",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Birra|6"
+   ],
+   "actual": [
+    "price|Birra|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Birra* a 6 €.\n\n*Birra*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "turns": [
+    "nel menu bevande la birra a 6"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9347,
+   "latencyMs": [
+    21.3
+   ],
+   "recordedLlmMs": 1381,
+   "usedLlm": true,
+   "source": "z:locali",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-locali-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno la *Carbonara* a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "a pranzo la carbonara a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9140,
+   "latencyMs": [
+    19
+   ],
+   "recordedLlmMs": 1434,
+   "usedLlm": true,
+   "source": "z:locali",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-locali-003",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nGestisco solo l'*Osteria dell'Apostrofo*: vuoi che cambi la *Carbonara* di qui a 13 €?"
+   ],
+   "turns": [
+    "nell'altro locale la carbonara a 13"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9582,
+   "latencyMs": [
+    14.3
+   ],
+   "recordedLlmMs": 3535,
+   "usedLlm": true,
+   "source": "z:locali",
+   "note": "un solo locale collegato: domanda, nessuna scrittura",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-locali-008",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|fiano|22|vini"
+   ],
+   "actual": [
+    "create|fiano|22|vini"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo il *Fiano* a 22 € tra i Vini.\n\nNuovo piatto *Fiano* in *Vini*: *22,00 €*"
+   ],
+   "turns": [
+    "aggiungi nei vini il fiano a 22"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9603,
+   "latencyMs": [
+    19.2
+   ],
+   "recordedLlmMs": 2659,
+   "usedLlm": true,
+   "source": "z:locali",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-locali-009",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|fiano|22|vini"
+   ],
+   "actual": [
+    "create|fiano|22|vini"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Fiano* tra i Vini a 22 €.\n\nNuovo piatto *Fiano* in *Vini*: *22,00 €*"
+   ],
+   "turns": [
+    "aggiungi il fiano a 22"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9565,
+   "latencyMs": [
+    16.7
+   ],
+   "recordedLlmMs": 3807,
+   "usedLlm": true,
+   "source": "z:locali",
+   "nonMisurato": false,
+   "strato": "dialetto"
+  },
+  {
+   "id": "z-r2-percento-001",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|19.8"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Tagliata* (18,00 €)"
+   ],
+   "turns": [
+    "aumenta la tagliata del 10 per cento"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18946,
+   "latencyMs": [
+    21.1
+   ],
+   "recordedLlmMs": 5355,
+   "usedLlm": true,
+   "source": "z:r2-percento",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-r2-percento-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Greco di Tufo|20"
+   ],
+   "actual": [
+    "price|Greco di Tufo|20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAbbasso il *Greco di Tufo* del 20%.\n\n*Greco di Tufo*: prezzo da 25,00 € a *20,00 €*"
+   ],
+   "turns": [
+    "abbassa il greco di tufo del 20%"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9500,
+   "latencyMs": [
+    19.8
+   ],
+   "recordedLlmMs": 3360,
+   "usedLlm": true,
+   "source": "z:r2-percento",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-r2-percento-005",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Babà|5.5",
+    "price|Delizia al limone|6.05",
+    "price|Tiramisù|6.6"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumento del 10% i *Tiramisù*, il *Babà* e la *Delizia al limone*. Rispondi OK per pubblicare.\n\n1. *Tiramisù* (6,00 €)\n2. *Babà* (5,00 €)\n3. *Delizia al limone* (5,50 €)"
+   ],
+   "turns": [
+    "tutti i dolci più 10%"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20742,
+   "latencyMs": [
+    15.7
+   ],
+   "recordedLlmMs": 10066,
+   "usedLlm": true,
+   "source": "z:r2-percento",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-r2-percento-006",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi uno sconto del 50% sulla *Carbonara*, o un prezzo diverso?"
+   ],
+   "turns": [
+    "la carbonara al 50%"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9284,
+   "latencyMs": [
+    12.3
+   ],
+   "recordedLlmMs": 2458,
+   "usedLlm": true,
+   "source": "z:r2-percento",
+   "nonMisurato": false,
+   "strato": "prezzi-lettere"
+  },
+  {
+   "id": "z-r2-spezzati-001",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|19"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Tagliata* (18,00 €)"
+   ],
+   "turns": [
+    "🎤 la tagliata a dicia nove"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19272,
+   "latencyMs": [
+    20.1
+   ],
+   "recordedLlmMs": 8061,
+   "usedLlm": true,
+   "source": "z:r2-spezzati",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-r2-spezzati-003",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Birra* (5,00 €)"
+   ],
+   "turns": [
+    "🎤 la birra a sei e cinque"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18549,
+   "latencyMs": [
+    19.4
+   ],
+   "recordedLlmMs": 2492,
+   "usedLlm": true,
+   "source": "z:r2-spezzati",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-r2-spezzati-005",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Burrata|14"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Burrata* (9,00 €)"
+   ],
+   "turns": [
+    "🎤 la burrata a quattro dici"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19371,
+   "latencyMs": [
+    19.9
+   ],
+   "recordedLlmMs": 6573,
+   "usedLlm": true,
+   "source": "z:r2-spezzati",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-r2-spezzati-006",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiarimento-mancante",
+     "why": "turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)"
+    }
+   ],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho cambiato nulla.\n\n1. *Carbonara* (12,00 €)"
+   ],
+   "turns": [
+    "🎤 la carbonara a tre e dici"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19418,
+   "latencyMs": [
+    13.9
+   ],
+   "recordedLlmMs": 6993,
+   "usedLlm": true,
+   "source": "z:r2-spezzati",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-r2-opposti-001",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi *alzare* o *abbassare* la *Carbonara* di 1 €?"
+   ],
+   "turns": [
+    "aumenta e abbassa la carbonara di 1"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9302,
+   "latencyMs": [
+    12.9
+   ],
+   "recordedLlmMs": 2247,
+   "usedLlm": true,
+   "source": "z:r2-opposti",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-r2-opposti-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi che il *Babà* sia visibile ai clienti o nascosto?"
+   ],
+   "turns": [
+    "mostra e nascondi il babà"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9297,
+   "latencyMs": [
+    12.6
+   ],
+   "recordedLlmMs": 2067,
+   "usedLlm": true,
+   "source": "z:r2-opposti",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-r2-opposti-005",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVuoi mettere in evidenza la *Tagliata* o toglierla dall'evidenza?"
+   ],
+   "turns": [
+    "metti e togli la tagliata dall'evidenza"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9289,
+   "latencyMs": [
+    14
+   ],
+   "recordedLlmMs": 2457,
+   "usedLlm": true,
+   "source": "z:r2-opposti",
+   "nonMisurato": false,
+   "strato": "correzioni-anzi"
+  },
+  {
+   "id": "z-r2-ritiri-003",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliata|19"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiorno *Carbonara* e *Tagliata*. Quale piatto vuoi cancellare?\n\nNon ancora pubblicato:\n1. *Carbonara*: prezzo da 12,00 € a *13,00 €*\n2. *Tagliata*: prezzo da 18,00 € a *19,00 €*"
+   ],
+   "turns": [
+    "la carbonara a 13, cancella questa, la tagliata a 19"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9736,
+   "latencyMs": [
+    20.3
+   ],
+   "recordedLlmMs": 3843,
+   "usedLlm": true,
+   "source": "z:r2-ritiri",
+   "nonMisurato": false,
+   "strato": "elimina-senza-si"
+  },
+  {
+   "id": "z-r2-ritiri-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Birra|6"
+   ],
+   "actual": [
+    "price|Birra|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, la *Birra* la metto a 6 €. Il *Babà* resta com'è.\n\n*Birra*: prezzo da 5,00 € a *6,00 €*"
+   ],
+   "turns": [
+    "la birra a 6 e il babà... no il babà niente"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9330,
+   "latencyMs": [
+    27.2
+   ],
+   "recordedLlmMs": 2901,
+   "usedLlm": true,
+   "source": "z:r2-ritiri",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-r2-disfa-002",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, nascondo *Babà* dal menu.\n\n*Babà*: *nascosto* dal menu",
+    "Ok, rimetto *Babà* nel menu.\n\n*Babà*: di nuovo *visibile* nel menu"
+   ],
+   "turns": [
+    "nascondi il babà",
+    "fallo vedere di nuovo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18355,
+   "latencyMs": [
+    16.1,
+    22.1
+   ],
+   "recordedLlmMs": 3471,
+   "usedLlm": true,
+   "source": "z:r2-disfa",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-r2-disfa-003",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMetto in evidenza il *Babà*.\n\n*Babà*: *in evidenza*",
+    "Tolgo il *Babà* dall'evidenza.\n\n*Babà*: non più in evidenza"
+   ],
+   "turns": [
+    "metti in evidenza il babà",
+    "levalo dall'evidenza"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18350,
+   "latencyMs": [
+    17.5,
+    22
+   ],
+   "recordedLlmMs": 3733,
+   "usedLlm": true,
+   "source": "z:r2-disfa",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-r2-disfa-004",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Ok, annullo l'ultima modifica sulla *Carbonara*.\n\n*Carbonara*: com’era prima"
+   ],
+   "turns": [
+    "la carbonara a 13",
+    "annulla grazie"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18374,
+   "latencyMs": [
+    17.7,
+    14.5
+   ],
+   "recordedLlmMs": 3667,
+   "usedLlm": true,
+   "source": "z:r2-disfa",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-r2-disfa-005",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara*.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Annullo l'ultima modifica sulla *Carbonara*.\n\n*Carbonara*: com’era prima"
+   ],
+   "turns": [
+    "la carbonara a 13",
+    "annulla subito"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 18370,
+   "latencyMs": [
+    17.1,
+    14.6
+   ],
+   "recordedLlmMs": 3268,
+   "usedLlm": true,
+   "source": "z:r2-disfa",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  },
+  {
+   "id": "z-r2-disfa-007",
+   "family": "b1-elimina",
+   "menu": "zeta",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [
+    "move|Burrata|Secondi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSposto la *Burrata* nei Secondi.\n\n*Burrata*: spostato in *Secondi*",
+    "Riporto la *Burrata* negli *Antipasti*."
+   ],
+   "turns": [
+    "sposta la burrata nei secondi",
+    "rimettila negli antipasti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 28508,
+   "latencyMs": [
+    17.6,
+    19.9
+   ],
+   "recordedLlmMs": 5166,
+   "usedLlm": true,
+   "source": "z:r2-disfa",
+   "nonMisurato": false,
+   "strato": "multi-turno"
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "z-dialetto-002",
+   "hash": "2c22dfd11334c570",
+   "source": "real",
+   "status": 200,
+   "ms": 2149,
+   "usage": {
+    "input": 44,
+    "output": 194,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-003",
+   "hash": "66dd8b514be99a26",
+   "source": "real",
+   "status": 200,
+   "ms": 3032,
+   "usage": {
+    "input": 50,
+    "output": 195,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-004",
+   "hash": "311c64095eee689d",
+   "source": "real",
+   "status": 200,
+   "ms": 1397,
+   "usage": {
+    "input": 50,
+    "output": 180,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-006",
+   "hash": "076d670355128555",
+   "source": "real",
+   "status": 200,
+   "ms": 1888,
+   "usage": {
+    "input": 52,
+    "output": 179,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-008",
+   "hash": "b7e5940adf05b993",
+   "source": "real",
+   "status": 200,
+   "ms": 1486,
+   "usage": {
+    "input": 45,
+    "output": 182,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-010",
+   "hash": "e73ed715911f9c75",
+   "source": "real",
+   "status": 200,
+   "ms": 1376,
+   "usage": {
+    "input": 51,
+    "output": 189,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-011",
+   "hash": "cdd40b950bd76063",
+   "source": "real",
+   "status": 200,
+   "ms": 1896,
+   "usage": {
+    "input": 58,
+    "output": 181,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-014",
+   "hash": "1ba5a57f36b3b869",
+   "source": "real",
+   "status": 200,
+   "ms": 1318,
+   "usage": {
+    "input": 47,
+    "output": 186,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-014",
+   "hash": "cb8b4122294dba58",
+   "source": "real",
+   "status": 200,
+   "ms": 2310,
+   "usage": {
+    "input": 377,
+    "output": 408,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-014",
+   "hash": "2522c7cf83700f43",
+   "source": "real",
+   "status": 200,
+   "ms": 1337,
+   "usage": {
+    "input": 141,
+    "output": 182,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-014",
+   "hash": "5b0079796d2e090e",
+   "source": "real",
+   "status": 200,
+   "ms": 1342,
+   "usage": {
+    "input": 547,
+    "output": 186,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-017",
+   "hash": "aac74fe6429936f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1444,
+   "usage": {
+    "input": 42,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-017",
+   "hash": "0db1a1603880d1db",
+   "source": "real",
+   "status": 200,
+   "ms": 1480,
+   "usage": {
+    "input": 145,
+    "output": 177,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-018",
+   "hash": "f97231df3539b1f4",
+   "source": "real",
+   "status": 200,
+   "ms": 1045,
+   "usage": {
+    "input": 52,
+    "output": 106,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-020",
+   "hash": "b28c804af34647b4",
+   "source": "real",
+   "status": 200,
+   "ms": 1166,
+   "usage": {
+    "input": 49,
+    "output": 132,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-022",
+   "hash": "e36a4b2fcfcea470",
+   "source": "real",
+   "status": 200,
+   "ms": 1852,
+   "usage": {
+    "input": 55,
+    "output": 212,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-dialetto-023",
+   "hash": "80ab978b6aeac5e7",
+   "source": "real",
+   "status": 200,
+   "ms": 1440,
+   "usage": {
+    "input": 50,
+    "output": 203,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-001",
+   "hash": "b4db877e9a47f6ba",
+   "source": "real",
+   "status": 200,
+   "ms": 1338,
+   "usage": {
+    "input": 48,
+    "output": 208,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-002",
+   "hash": "37226e9e554ef60b",
+   "source": "real",
+   "status": 200,
+   "ms": 2340,
+   "usage": {
+    "input": 46,
+    "output": 388,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-002",
+   "hash": "90d4afcaf961f9e6",
+   "source": "real",
+   "status": 200,
+   "ms": 2152,
+   "usage": {
+    "input": 315,
+    "output": 196,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-005",
+   "hash": "5a6f631a798ac978",
+   "source": "real",
+   "status": 200,
+   "ms": 1496,
+   "usage": {
+    "input": 47,
+    "output": 208,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-005",
+   "hash": "1beed9311dc506fb",
+   "source": "real",
+   "status": 200,
+   "ms": 2385,
+   "usage": {
+    "input": 347,
+    "output": 474,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-006",
+   "hash": "41fb25b801112216",
+   "source": "real",
+   "status": 200,
+   "ms": 2851,
+   "usage": {
+    "input": 47,
+    "output": 392,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-006",
+   "hash": "649c2cabfb525a26",
+   "source": "real",
+   "status": 200,
+   "ms": 1595,
+   "usage": {
+    "input": 341,
+    "output": 207,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-007",
+   "hash": "754e8f8bf4a77ec0",
+   "source": "real",
+   "status": 200,
+   "ms": 2269,
+   "usage": {
+    "input": 48,
+    "output": 188,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-008",
+   "hash": "e4bd475e15e392a5",
+   "source": "real",
+   "status": 200,
+   "ms": 3386,
+   "usage": {
+    "input": 48,
+    "output": 492,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-009",
+   "hash": "c9ed5c4ce7952f8b",
+   "source": "real",
+   "status": 200,
+   "ms": 1810,
+   "usage": {
+    "input": 48,
+    "output": 205,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-009",
+   "hash": "bfdfb803ca4d1b3e",
+   "source": "real",
+   "status": 200,
+   "ms": 1725,
+   "usage": {
+    "input": 388,
+    "output": 150,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-011",
+   "hash": "e71faf43ee3368fa",
+   "source": "real",
+   "status": 200,
+   "ms": 1278,
+   "usage": {
+    "input": 52,
+    "output": 212,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-013",
+   "hash": "664c1345b14cb973",
+   "source": "real",
+   "status": 200,
+   "ms": 2175,
+   "usage": {
+    "input": 51,
+    "output": 180,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-015",
+   "hash": "7e397ee98373ecfb",
+   "source": "real",
+   "status": 200,
+   "ms": 2081,
+   "usage": {
+    "input": 48,
+    "output": 357,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-016",
+   "hash": "57d0547a512eff1c",
+   "source": "real",
+   "status": 200,
+   "ms": 1457,
+   "usage": {
+    "input": 46,
+    "output": 188,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-018",
+   "hash": "867bf49e3f44086d",
+   "source": "real",
+   "status": 200,
+   "ms": 1504,
+   "usage": {
+    "input": 55,
+    "output": 268,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-019",
+   "hash": "dc7f9d61d196622b",
+   "source": "real",
+   "status": 200,
+   "ms": 2550,
+   "usage": {
+    "input": 55,
+    "output": 482,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-020",
+   "hash": "e00ab6e25077e186",
+   "source": "real",
+   "status": 200,
+   "ms": 2115,
+   "usage": {
+    "input": 46,
+    "output": 184,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-023",
+   "hash": "a92d5b1e9d62fa90",
+   "source": "real",
+   "status": 200,
+   "ms": 3357,
+   "usage": {
+    "input": 54,
+    "output": 381,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-024",
+   "hash": "f69cdbbb08c7ab4f",
+   "source": "real",
+   "status": 200,
+   "ms": 1856,
+   "usage": {
+    "input": 47,
+    "output": 122,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-asr-025",
+   "hash": "9bedf4b5401e5bdb",
+   "source": "real",
+   "status": 200,
+   "ms": 1497,
+   "usage": {
+    "input": 37,
+    "output": 166,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-002",
+   "hash": "f9987892147c4913",
+   "source": "real",
+   "status": 200,
+   "ms": 1516,
+   "usage": {
+    "input": 46,
+    "output": 189,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-003",
+   "hash": "6e71a7eaa76d8331",
+   "source": "real",
+   "status": 200,
+   "ms": 1256,
+   "usage": {
+    "input": 52,
+    "output": 184,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-005",
+   "hash": "224b4ec4a9ad7bd7",
+   "source": "real",
+   "status": 200,
+   "ms": 1542,
+   "usage": {
+    "input": 52,
+    "output": 184,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-006",
+   "hash": "c8274aebcdc19a16",
+   "source": "real",
+   "status": 200,
+   "ms": 1893,
+   "usage": {
+    "input": 48,
+    "output": 188,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-007",
+   "hash": "4280fde39ff6ad36",
+   "source": "real",
+   "status": 200,
+   "ms": 2149,
+   "usage": {
+    "input": 48,
+    "output": 189,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-011",
+   "hash": "42b51553644dc1c3",
+   "source": "real",
+   "status": 200,
+   "ms": 3068,
+   "usage": {
+    "input": 51,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-012",
+   "hash": "1bdf03260914a7eb",
+   "source": "real",
+   "status": 200,
+   "ms": 1610,
+   "usage": {
+    "input": 50,
+    "output": 184,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-015",
+   "hash": "96b9b1cfbc085428",
+   "source": "real",
+   "status": 200,
+   "ms": 1481,
+   "usage": {
+    "input": 47,
+    "output": 186,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-017",
+   "hash": "51b59d81e122939b",
+   "source": "real",
+   "status": 200,
+   "ms": 1542,
+   "usage": {
+    "input": 45,
+    "output": 207,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-018",
+   "hash": "b4027418bfd962a0",
+   "source": "real",
+   "status": 200,
+   "ms": 2531,
+   "usage": {
+    "input": 52,
+    "output": 185,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-019",
+   "hash": "328a9fb98f5a2d59",
+   "source": "real",
+   "status": 200,
+   "ms": 1516,
+   "usage": {
+    "input": 49,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-021",
+   "hash": "59ccd2f92d091dea",
+   "source": "real",
+   "status": 200,
+   "ms": 1382,
+   "usage": {
+    "input": 46,
+    "output": 177,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-numeri-025",
+   "hash": "d66b6a973a11831f",
+   "source": "real",
+   "status": 200,
+   "ms": 1460,
+   "usage": {
+    "input": 53,
+    "output": 188,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-tempo-004",
+   "hash": "8eb1d9540cf9fca2",
+   "source": "real",
+   "status": 200,
+   "ms": 2990,
+   "usage": {
+    "input": 44,
+    "output": 365,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-tempo-007",
+   "hash": "079bdc50b695f3ef",
+   "source": "real",
+   "status": 200,
+   "ms": 3087,
+   "usage": {
+    "input": 47,
+    "output": 487,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-tempo-010",
+   "hash": "b68144e293e93885",
+   "source": "real",
+   "status": 200,
+   "ms": 1584,
+   "usage": {
+    "input": 47,
+    "output": 177,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-tempo-013",
+   "hash": "0bb39098e67c6eab",
+   "source": "real",
+   "status": 200,
+   "ms": 2038,
+   "usage": {
+    "input": 45,
+    "output": 181,
+    "cacheRead": 8329,
+    "cacheWrite": 581
+   }
+  },
+  {
+   "conv": "z-tempo-017",
+   "hash": "e96bd0c404b7fcfb",
+   "source": "real",
+   "status": 200,
+   "ms": 1403,
+   "usage": {
+    "input": 44,
+    "output": 184,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-tempo-017",
+   "hash": "ecd5d59578ba9de0",
+   "source": "real",
+   "status": 200,
+   "ms": 1983,
+   "usage": {
+    "input": 41,
+    "output": 303,
+    "cacheRead": 8329,
+    "cacheWrite": 579
+   }
+  },
+  {
+   "conv": "z-omonimi-003",
+   "hash": "b418957de86490b8",
+   "source": "real",
+   "status": 200,
+   "ms": 2640,
+   "usage": {
+    "input": 45,
+    "output": 526,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-omonimi-003",
+   "hash": "ebed199041eff623",
+   "source": "real",
+   "status": 200,
+   "ms": 4483,
+   "usage": {
+    "input": 424,
+    "output": 813,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-omonimi-006",
+   "hash": "81c2fcded308909b",
+   "source": "real",
+   "status": 200,
+   "ms": 2835,
+   "usage": {
+    "input": 49,
+    "output": 425,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-omonimi-010",
+   "hash": "2ec104604e8a8bf4",
+   "source": "real",
+   "status": 200,
+   "ms": 2618,
+   "usage": {
+    "input": 53,
+    "output": 311,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-omonimi-015",
+   "hash": "5c137ae0ff0fd4ac",
+   "source": "real",
+   "status": 200,
+   "ms": 2974,
+   "usage": {
+    "input": 44,
+    "output": 514,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-omonimi-018",
+   "hash": "30191721a69c7ce0",
+   "source": "real",
+   "status": 200,
+   "ms": 1995,
+   "usage": {
+    "input": 46,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-omonimi-020",
+   "hash": "ad6ed000868cd546",
+   "source": "real",
+   "status": 200,
+   "ms": 1447,
+   "usage": {
+    "input": 46,
+    "output": 181,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-omonimi-024",
+   "hash": "e5b36d0573796175",
+   "source": "real",
+   "status": 200,
+   "ms": 2442,
+   "usage": {
+    "input": 47,
+    "output": 394,
+    "cacheRead": 8329,
+    "cacheWrite": 611
+   }
+  },
+  {
+   "conv": "z-riepilogo-004",
+   "hash": "074c5a2d80328489",
+   "source": "real",
+   "status": 200,
+   "ms": 2505,
+   "usage": {
+    "input": 68,
+    "output": 419,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-004",
+   "hash": "5f6318608c175f17",
+   "source": "real",
+   "status": 200,
+   "ms": 4698,
+   "usage": {
+    "input": 596,
+    "output": 1022,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-004",
+   "hash": "83bcad2163932d9a",
+   "source": "real",
+   "status": 200,
+   "ms": 1900,
+   "usage": {
+    "input": 355,
+    "output": 369,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-004",
+   "hash": "a9df91c9d1c7a13d",
+   "source": "real",
+   "status": 200,
+   "ms": 1433,
+   "usage": {
+    "input": 519,
+    "output": 200,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-013",
+   "hash": "074c5a2d80328489",
+   "source": "hit",
+   "status": 200,
+   "ms": 2505,
+   "usage": {
+    "input": 68,
+    "output": 419,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-013",
+   "hash": "5f6318608c175f17",
+   "source": "hit",
+   "status": 200,
+   "ms": 4698,
+   "usage": {
+    "input": 596,
+    "output": 1022,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-013",
+   "hash": "e696936c4bb1151d",
+   "source": "real",
+   "status": 200,
+   "ms": 1695,
+   "usage": {
+    "input": 349,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-018",
+   "hash": "074c5a2d80328489",
+   "source": "hit",
+   "status": 200,
+   "ms": 2505,
+   "usage": {
+    "input": 68,
+    "output": 419,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-018",
+   "hash": "5f6318608c175f17",
+   "source": "hit",
+   "status": 200,
+   "ms": 4698,
+   "usage": {
+    "input": 596,
+    "output": 1022,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-018",
+   "hash": "e91abfaae9505b74",
+   "source": "real",
+   "status": 200,
+   "ms": 3097,
+   "usage": {
+    "input": 354,
+    "output": 461,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-019",
+   "hash": "b0ed089ea60f0fe4",
+   "source": "real",
+   "status": 200,
+   "ms": 2047,
+   "usage": {
+    "input": 78,
+    "output": 500,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-019",
+   "hash": "7e78bf106fff6968",
+   "source": "real",
+   "status": 200,
+   "ms": 4899,
+   "usage": {
+    "input": 687,
+    "output": 862,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-019",
+   "hash": "6f0b2db0ddcc1bf3",
+   "source": "real",
+   "status": 200,
+   "ms": 2638,
+   "usage": {
+    "input": 395,
+    "output": 525,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-riepilogo-019",
+   "hash": "264fbccc2b6653a9",
+   "source": "real",
+   "status": 200,
+   "ms": 1765,
+   "usage": {
+    "input": 1070,
+    "output": 267,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-lunghi-001",
+   "hash": "06262882648cc7d3",
+   "source": "hit",
+   "status": 200,
+   "ms": 10717,
+   "usage": {
+    "input": 158,
+    "output": 275,
+    "cacheRead": 0,
+    "cacheWrite": 8908
+   }
+  },
+  {
+   "conv": "z-lunghi-003",
+   "hash": "1747ad6361c9f7fc",
+   "source": "hit",
+   "status": 200,
+   "ms": 6208,
+   "usage": {
+    "input": 95,
+    "output": 118,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-lunghi-005",
+   "hash": "a381f360c2e4cc5b",
+   "source": "hit",
+   "status": 200,
+   "ms": 3715,
+   "usage": {
+    "input": 123,
+    "output": 361,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-lunghi-010",
+   "hash": "b406ab611f46d42f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2851,
+   "usage": {
+    "input": 372,
+    "output": 365,
+    "cacheRead": 0,
+    "cacheWrite": 858
+   }
+  },
+  {
+   "conv": "z-emoji-001",
+   "hash": "7a3be27234619c76",
+   "source": "real",
+   "status": 200,
+   "ms": 2628,
+   "usage": {
+    "input": 41,
+    "output": 478,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-002",
+   "hash": "90e5f0d4694e4c38",
+   "source": "real",
+   "status": 200,
+   "ms": 2501,
+   "usage": {
+    "input": 47,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-003",
+   "hash": "f540b4da261dcef0",
+   "source": "real",
+   "status": 200,
+   "ms": 1308,
+   "usage": {
+    "input": 47,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-004",
+   "hash": "5725541c405f655c",
+   "source": "real",
+   "status": 200,
+   "ms": 2427,
+   "usage": {
+    "input": 41,
+    "output": 396,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-005",
+   "hash": "dd46d0e163f31180",
+   "source": "real",
+   "status": 200,
+   "ms": 3304,
+   "usage": {
+    "input": 42,
+    "output": 388,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-006",
+   "hash": "c10bab4ea5af1bbb",
+   "source": "real",
+   "status": 200,
+   "ms": 1546,
+   "usage": {
+    "input": 44,
+    "output": 181,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-009",
+   "hash": "04c971ca729df6cf",
+   "source": "real",
+   "status": 200,
+   "ms": 1322,
+   "usage": {
+    "input": 39,
+    "output": 121,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-010",
+   "hash": "0d0e1e6642f18089",
+   "source": "hit",
+   "status": 200,
+   "ms": 1370,
+   "usage": {
+    "input": 44,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-010",
+   "hash": "952f449ade38f3e2",
+   "source": "real",
+   "status": 200,
+   "ms": 1632,
+   "usage": {
+    "input": 141,
+    "output": 100,
+    "cacheRead": 8329,
+    "cacheWrite": 579
+   }
+  },
+  {
+   "conv": "z-emoji-012",
+   "hash": "61a1580aea75d926",
+   "source": "hit",
+   "status": 200,
+   "ms": 1638,
+   "usage": {
+    "input": 41,
+    "output": 173,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-013",
+   "hash": "9633330f80c471e6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1472,
+   "usage": {
+    "input": 42,
+    "output": 142,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-014",
+   "hash": "6d5f795f8f4e191c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1379,
+   "usage": {
+    "input": 37,
+    "output": 160,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-emoji-015",
+   "hash": "cd729089261315ad",
+   "source": "hit",
+   "status": 200,
+   "ms": 1633,
+   "usage": {
+    "input": 46,
+    "output": 156,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-contraddizioni-002",
+   "hash": "3c0aef70a03f1e63",
+   "source": "hit",
+   "status": 200,
+   "ms": 1697,
+   "usage": {
+    "input": 53,
+    "output": 174,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-contraddizioni-004",
+   "hash": "3ccac724788d31df",
+   "source": "hit",
+   "status": 200,
+   "ms": 1600,
+   "usage": {
+    "input": 51,
+    "output": 262,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-contraddizioni-005",
+   "hash": "35922b3700a20023",
+   "source": "hit",
+   "status": 200,
+   "ms": 1354,
+   "usage": {
+    "input": 48,
+    "output": 195,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-contraddizioni-005",
+   "hash": "115eacaf32f26408",
+   "source": "hit",
+   "status": 200,
+   "ms": 3543,
+   "usage": {
+    "input": 393,
+    "output": 600,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-contraddizioni-008",
+   "hash": "6555aa43d37c2b12",
+   "source": "hit",
+   "status": 200,
+   "ms": 1720,
+   "usage": {
+    "input": 49,
+    "output": 188,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-contraddizioni-008",
+   "hash": "7d1d18afa6e505f0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1802,
+   "usage": {
+    "input": 400,
+    "output": 207,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-contraddizioni-009",
+   "hash": "0d0e1e6642f18089",
+   "source": "hit",
+   "status": 200,
+   "ms": 1370,
+   "usage": {
+    "input": 44,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-contraddizioni-009",
+   "hash": "67430f61c988051e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1422,
+   "usage": {
+    "input": 143,
+    "output": 182,
+    "cacheRead": 8329,
+    "cacheWrite": 579
+   }
+  },
+  {
+   "conv": "z-contraddizioni-011",
+   "hash": "17dfeb4fe1fdf8ac",
+   "source": "hit",
+   "status": 200,
+   "ms": 1908,
+   "usage": {
+    "input": 43,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-contraddizioni-011",
+   "hash": "8c03756cbee20c44",
+   "source": "hit",
+   "status": 200,
+   "ms": 1982,
+   "usage": {
+    "input": 124,
+    "output": 183,
+    "cacheRead": 8329,
+    "cacheWrite": 581
+   }
+  },
+  {
+   "conv": "z-annulla-002",
+   "hash": "3bdafa8bb236a9d6",
+   "source": "hit",
+   "status": 200,
+   "ms": 2322,
+   "usage": {
+    "input": 42,
+    "output": 178,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-002",
+   "hash": "6fbfe44d9392b02e",
+   "source": "hit",
+   "status": 200,
+   "ms": 14211,
+   "usage": {
+    "input": 334,
+    "output": 154,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-007",
+   "hash": "0d0e1e6642f18089",
+   "source": "hit",
+   "status": 200,
+   "ms": 1370,
+   "usage": {
+    "input": 44,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-007",
+   "hash": "e03d4e4748cff500",
+   "source": "hit",
+   "status": 200,
+   "ms": 1501,
+   "usage": {
+    "input": 142,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-007",
+   "hash": "c76d622c8e76b37d",
+   "source": "hit",
+   "status": 200,
+   "ms": 2643,
+   "usage": {
+    "input": 144,
+    "output": 176,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-007",
+   "hash": "f9ae8d15875c3b5f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2302,
+   "usage": {
+    "input": 434,
+    "output": 138,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-009",
+   "hash": "0d0e1e6642f18089",
+   "source": "hit",
+   "status": 200,
+   "ms": 1370,
+   "usage": {
+    "input": 44,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-009",
+   "hash": "12a9813250396e63",
+   "source": "hit",
+   "status": 200,
+   "ms": 1639,
+   "usage": {
+    "input": 142,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-011",
+   "hash": "0d0e1e6642f18089",
+   "source": "hit",
+   "status": 200,
+   "ms": 1370,
+   "usage": {
+    "input": 44,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-011",
+   "hash": "c051e0afe784e4ff",
+   "source": "hit",
+   "status": 200,
+   "ms": 1448,
+   "usage": {
+    "input": 141,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-011",
+   "hash": "e767aac096ffb8ae",
+   "source": "hit",
+   "status": 200,
+   "ms": 1194,
+   "usage": {
+    "input": 436,
+    "output": 157,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-012",
+   "hash": "0d0e1e6642f18089",
+   "source": "hit",
+   "status": 200,
+   "ms": 1370,
+   "usage": {
+    "input": 44,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-012",
+   "hash": "8dd26fd6cae764c0",
+   "source": "hit",
+   "status": 200,
+   "ms": 6016,
+   "usage": {
+    "input": 146,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-016",
+   "hash": "0d0e1e6642f18089",
+   "source": "hit",
+   "status": 200,
+   "ms": 1370,
+   "usage": {
+    "input": 44,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-016",
+   "hash": "cb957e670f107324",
+   "source": "hit",
+   "status": 200,
+   "ms": 1644,
+   "usage": {
+    "input": 155,
+    "output": 265,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-018",
+   "hash": "aac74fe6429936f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1444,
+   "usage": {
+    "input": 42,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-018",
+   "hash": "9a95dc07d373c7eb",
+   "source": "hit",
+   "status": 200,
+   "ms": 1546,
+   "usage": {
+    "input": 142,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-018",
+   "hash": "57df04eaf4286bca",
+   "source": "hit",
+   "status": 200,
+   "ms": 1518,
+   "usage": {
+    "input": 129,
+    "output": 170,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-annulla-018",
+   "hash": "74685467eed4cbaf",
+   "source": "hit",
+   "status": 200,
+   "ms": 1880,
+   "usage": {
+    "input": 501,
+    "output": 137,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-nascosti-007",
+   "hash": "9f858c492602aa2e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1681,
+   "usage": {
+    "input": 43,
+    "output": 178,
+    "cacheRead": 8910,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-nascosti-008",
+   "hash": "8b1348b2f933cfa7",
+   "source": "hit",
+   "status": 200,
+   "ms": 1365,
+   "usage": {
+    "input": 48,
+    "output": 118,
+    "cacheRead": 8329,
+    "cacheWrite": 583
+   }
+  },
+  {
+   "conv": "z-nascosti-011",
+   "hash": "eb7926be4fc53939",
+   "source": "hit",
+   "status": 200,
+   "ms": 2662,
+   "usage": {
+    "input": 47,
+    "output": 386,
+    "cacheRead": 8329,
+    "cacheWrite": 583
+   }
+  },
+  {
+   "conv": "z-nascosti-011",
+   "hash": "df1135bf2ad12145",
+   "source": "hit",
+   "status": 200,
+   "ms": 3437,
+   "usage": {
+    "input": 415,
+    "output": 663,
+    "cacheRead": 8912,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-nascosti-012",
+   "hash": "037a4c4c839ff072",
+   "source": "hit",
+   "status": 200,
+   "ms": 3215,
+   "usage": {
+    "input": 43,
+    "output": 550,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-nascosti-015",
+   "hash": "ff9a47f30b10dda0",
+   "source": "hit",
+   "status": 200,
+   "ms": 2072,
+   "usage": {
+    "input": 43,
+    "output": 352,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-nascosti-016",
+   "hash": "ff9a47f30b10dda0",
+   "source": "hit",
+   "status": 200,
+   "ms": 2072,
+   "usage": {
+    "input": 43,
+    "output": 352,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-nascosti-016",
+   "hash": "b990bd26f6bc9c52",
+   "source": "hit",
+   "status": 200,
+   "ms": 2075,
+   "usage": {
+    "input": 146,
+    "output": 155,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-assurdi-008",
+   "hash": "fb73aeebf223d8b4",
+   "source": "hit",
+   "status": 200,
+   "ms": 2601,
+   "usage": {
+    "input": 46,
+    "output": 184,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-assurdi-008",
+   "hash": "20dfbcd0d83f7275",
+   "source": "hit",
+   "status": 200,
+   "ms": 1733,
+   "usage": {
+    "input": 339,
+    "output": 159,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-apostrofi-004",
+   "hash": "787c98ef059ce8fd",
+   "source": "hit",
+   "status": 200,
+   "ms": 2247,
+   "usage": {
+    "input": 52,
+    "output": 193,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-apostrofi-008",
+   "hash": "b2c6767e8effcbd4",
+   "source": "hit",
+   "status": 200,
+   "ms": 1471,
+   "usage": {
+    "input": 48,
+    "output": 188,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-apostrofi-011",
+   "hash": "ed43f98b2ddcb00c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1459,
+   "usage": {
+    "input": 51,
+    "output": 188,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-apostrofi-016",
+   "hash": "45621ddd1bc55122",
+   "source": "hit",
+   "status": 200,
+   "ms": 1531,
+   "usage": {
+    "input": 52,
+    "output": 189,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-apostrofi-019",
+   "hash": "b5927d04a8e51b43",
+   "source": "hit",
+   "status": 200,
+   "ms": 1651,
+   "usage": {
+    "input": 43,
+    "output": 206,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-002",
+   "hash": "0d0e1e6642f18089",
+   "source": "hit",
+   "status": 200,
+   "ms": 1370,
+   "usage": {
+    "input": 44,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-002",
+   "hash": "3a738eb5d62d8123",
+   "source": "hit",
+   "status": 200,
+   "ms": 1451,
+   "usage": {
+    "input": 147,
+    "output": 184,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-002",
+   "hash": "9488a2cd3a4c827f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1422,
+   "usage": {
+    "input": 199,
+    "output": 182,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-006",
+   "hash": "e6534601b59bfce1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1617,
+   "usage": {
+    "input": 49,
+    "output": 189,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-006",
+   "hash": "dadba925b3ca0c07",
+   "source": "hit",
+   "status": 200,
+   "ms": 1804,
+   "usage": {
+    "input": 148,
+    "output": 225,
+    "cacheRead": 8329,
+    "cacheWrite": 616
+   }
+  },
+  {
+   "conv": "z-ripeti-006",
+   "hash": "36d91c37c50ea0f0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1538,
+   "usage": {
+    "input": 465,
+    "output": 209,
+    "cacheRead": 8945,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-009",
+   "hash": "b611096e3c066e83",
+   "source": "hit",
+   "status": 200,
+   "ms": 2087,
+   "usage": {
+    "input": 53,
+    "output": 182,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-010",
+   "hash": "aac74fe6429936f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1444,
+   "usage": {
+    "input": 42,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-010",
+   "hash": "8623d0fc4c614cf6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1395,
+   "usage": {
+    "input": 141,
+    "output": 180,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-010",
+   "hash": "7ac0c3d254544d2a",
+   "source": "hit",
+   "status": 200,
+   "ms": 2883,
+   "usage": {
+    "input": 184,
+    "output": 483,
+    "cacheRead": 8329,
+    "cacheWrite": 570
+   }
+  },
+  {
+   "conv": "z-ripeti-010",
+   "hash": "f1976c1f5b21243c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1903,
+   "usage": {
+    "input": 463,
+    "output": 173,
+    "cacheRead": 8899,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-010",
+   "hash": "5628958bc3c9514f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1483,
+   "usage": {
+    "input": 310,
+    "output": 186,
+    "cacheRead": 8899,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-ripeti-010",
+   "hash": "12c682c35d330c56",
+   "source": "hit",
+   "status": 200,
+   "ms": 1666,
+   "usage": {
+    "input": 720,
+    "output": 222,
+    "cacheRead": 8899,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-002",
+   "hash": "aac74fe6429936f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1444,
+   "usage": {
+    "input": 42,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-002",
+   "hash": "50d08d5d3c4a048b",
+   "source": "hit",
+   "status": 200,
+   "ms": 1510,
+   "usage": {
+    "input": 147,
+    "output": 209,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-002",
+   "hash": "5d43f57b0afa2dd5",
+   "source": "hit",
+   "status": 200,
+   "ms": 1472,
+   "usage": {
+    "input": 201,
+    "output": 184,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-002",
+   "hash": "07c551ab6f2cde97",
+   "source": "hit",
+   "status": 200,
+   "ms": 3961,
+   "usage": {
+    "input": 587,
+    "output": 624,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-006",
+   "hash": "aac74fe6429936f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1444,
+   "usage": {
+    "input": 42,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-006",
+   "hash": "ca985dc190bb4b60",
+   "source": "hit",
+   "status": 200,
+   "ms": 1325,
+   "usage": {
+    "input": 153,
+    "output": 140,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-006",
+   "hash": "29894e0876977ace",
+   "source": "hit",
+   "status": 200,
+   "ms": 1685,
+   "usage": {
+    "input": 213,
+    "output": 185,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-007",
+   "hash": "aac74fe6429936f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1444,
+   "usage": {
+    "input": 42,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-007",
+   "hash": "5bba668241bb1101",
+   "source": "hit",
+   "status": 200,
+   "ms": 3630,
+   "usage": {
+    "input": 147,
+    "output": 590,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-007",
+   "hash": "6905959d9e2135b1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2550,
+   "usage": {
+    "input": 514,
+    "output": 257,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-008",
+   "hash": "aac74fe6429936f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1444,
+   "usage": {
+    "input": 42,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-008",
+   "hash": "eca6edd0d7527a77",
+   "source": "hit",
+   "status": 200,
+   "ms": 1635,
+   "usage": {
+    "input": 150,
+    "output": 266,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-008",
+   "hash": "224c7df88218ccfa",
+   "source": "hit",
+   "status": 200,
+   "ms": 1753,
+   "usage": {
+    "input": 523,
+    "output": 242,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-009",
+   "hash": "aac74fe6429936f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1444,
+   "usage": {
+    "input": 42,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-009",
+   "hash": "82560ad9703a595c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1649,
+   "usage": {
+    "input": 147,
+    "output": 140,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-010",
+   "hash": "2aaf80821a4bc5e6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1970,
+   "usage": {
+    "input": 49,
+    "output": 273,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-010",
+   "hash": "79d908a7dc5f2663",
+   "source": "hit",
+   "status": 200,
+   "ms": 1125,
+   "usage": {
+    "input": 186,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-010",
+   "hash": "ef252ce5e294e4e8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1022,
+   "usage": {
+    "input": 465,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-011",
+   "hash": "2aaf80821a4bc5e6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1970,
+   "usage": {
+    "input": 49,
+    "output": 273,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-011",
+   "hash": "79d908a7dc5f2663",
+   "source": "hit",
+   "status": 200,
+   "ms": 1125,
+   "usage": {
+    "input": 186,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-011",
+   "hash": "ef252ce5e294e4e8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1022,
+   "usage": {
+    "input": 465,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-011",
+   "hash": "50dc79b9e7d788c0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1063,
+   "usage": {
+    "input": 228,
+    "output": 180,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-011",
+   "hash": "cc6fe8eb7772bf26",
+   "source": "hit",
+   "status": 200,
+   "ms": 1036,
+   "usage": {
+    "input": 632,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-012",
+   "hash": "2aaf80821a4bc5e6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1970,
+   "usage": {
+    "input": 49,
+    "output": 273,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-012",
+   "hash": "a9e51cebaa1e21f0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1374,
+   "usage": {
+    "input": 188,
+    "output": 235,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-012",
+   "hash": "e437b1916dc78414",
+   "source": "hit",
+   "status": 200,
+   "ms": 1319,
+   "usage": {
+    "input": 550,
+    "output": 241,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-interruzioni-017",
+   "hash": "c327bc603fb77e1e",
+   "source": "hit",
+   "status": 200,
+   "ms": 3044,
+   "usage": {
+    "input": 50,
+    "output": 392,
+    "cacheRead": 8329,
+    "cacheWrite": 791
+   }
+  },
+  {
+   "conv": "z-interruzioni-017",
+   "hash": "6bb9175c0a0593c4",
+   "source": "hit",
+   "status": 200,
+   "ms": 1751,
+   "usage": {
+    "input": 177,
+    "output": 120,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-travestite-002",
+   "hash": "85d9933c73dd0c29",
+   "source": "hit",
+   "status": 200,
+   "ms": 1390,
+   "usage": {
+    "input": 46,
+    "output": 123,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-travestite-010",
+   "hash": "b3a8a69fa415629f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1178,
+   "usage": {
+    "input": 47,
+    "output": 114,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-travestite-016",
+   "hash": "2059a1246098bb81",
+   "source": "hit",
+   "status": 200,
+   "ms": 1440,
+   "usage": {
+    "input": 45,
+    "output": 132,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-travestite-017",
+   "hash": "548406a1465cfe53",
+   "source": "hit",
+   "status": 200,
+   "ms": 1319,
+   "usage": {
+    "input": 47,
+    "output": 187,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-travestite-022",
+   "hash": "dc52f2677e32de3a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1469,
+   "usage": {
+    "input": 51,
+    "output": 156,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-travestite-023",
+   "hash": "e3911e73f1210d3a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1570,
+   "usage": {
+    "input": 43,
+    "output": 113,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-promo-011",
+   "hash": "eccce0795a7b61bb",
+   "source": "hit",
+   "status": 200,
+   "ms": 2309,
+   "usage": {
+    "input": 50,
+    "output": 310,
+    "cacheRead": 8329,
+    "cacheWrite": 581
+   }
+  },
+  {
+   "conv": "z-promo-019",
+   "hash": "03184b05add95ebb",
+   "source": "hit",
+   "status": 200,
+   "ms": 1865,
+   "usage": {
+    "input": 46,
+    "output": 193,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-promo-019",
+   "hash": "00774b33230f3a67",
+   "source": "hit",
+   "status": 200,
+   "ms": 1500,
+   "usage": {
+    "input": 153,
+    "output": 191,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-sposta-006",
+   "hash": "61684486af52e9e6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1925,
+   "usage": {
+    "input": 52,
+    "output": 270,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-sposta-006",
+   "hash": "8db281f4f17869a3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1299,
+   "usage": {
+    "input": 365,
+    "output": 204,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-rinomine-002",
+   "hash": "e6534601b59bfce1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1617,
+   "usage": {
+    "input": 49,
+    "output": 189,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-rinomine-002",
+   "hash": "0583a529ff5ae936",
+   "source": "hit",
+   "status": 200,
+   "ms": 1536,
+   "usage": {
+    "input": 143,
+    "output": 195,
+    "cacheRead": 8945,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-rinomine-002",
+   "hash": "3da0b25688864f35",
+   "source": "hit",
+   "status": 200,
+   "ms": 6682,
+   "usage": {
+    "input": 454,
+    "output": 444,
+    "cacheRead": 8945,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-rinomine-004",
+   "hash": "e6534601b59bfce1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1617,
+   "usage": {
+    "input": 49,
+    "output": 189,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-rinomine-004",
+   "hash": "064087cc061abdc6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1533,
+   "usage": {
+    "input": 141,
+    "output": 201,
+    "cacheRead": 8945,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-rinomine-009",
+   "hash": "2b482497cddc4529",
+   "source": "hit",
+   "status": 200,
+   "ms": 1660,
+   "usage": {
+    "input": 56,
+    "output": 276,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-rinomine-009",
+   "hash": "ad193f087c34e68f",
+   "source": "hit",
+   "status": 200,
+   "ms": 5315,
+   "usage": {
+    "input": 481,
+    "output": 816,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-rinomine-013",
+   "hash": "5f27a81d52334780",
+   "source": "hit",
+   "status": 200,
+   "ms": 1522,
+   "usage": {
+    "input": 50,
+    "output": 198,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-locali-001",
+   "hash": "658f4037cd5da804",
+   "source": "hit",
+   "status": 200,
+   "ms": 1381,
+   "usage": {
+    "input": 49,
+    "output": 178,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-locali-002",
+   "hash": "58b8e75076e006f7",
+   "source": "hit",
+   "status": 200,
+   "ms": 1434,
+   "usage": {
+    "input": 49,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-locali-003",
+   "hash": "a7a7b3f2bce85e42",
+   "source": "hit",
+   "status": 200,
+   "ms": 3535,
+   "usage": {
+    "input": 51,
+    "output": 623,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-locali-008",
+   "hash": "bda96defc1b40f8e",
+   "source": "hit",
+   "status": 200,
+   "ms": 2659,
+   "usage": {
+    "input": 52,
+    "output": 431,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-locali-009",
+   "hash": "96ae0f1b5a436e4d",
+   "source": "hit",
+   "status": 200,
+   "ms": 3807,
+   "usage": {
+    "input": 48,
+    "output": 609,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-percento-001",
+   "hash": "f437862141045533",
+   "source": "hit",
+   "status": 200,
+   "ms": 3976,
+   "usage": {
+    "input": 52,
+    "output": 569,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-percento-001",
+   "hash": "0ad6fec904f05bcd",
+   "source": "hit",
+   "status": 200,
+   "ms": 1379,
+   "usage": {
+    "input": 329,
+    "output": 180,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-percento-004",
+   "hash": "f66a9261fc8ebd81",
+   "source": "hit",
+   "status": 200,
+   "ms": 3360,
+   "usage": {
+    "input": 51,
+    "output": 541,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-percento-005",
+   "hash": "6d610b6cc7203e5b",
+   "source": "hit",
+   "status": 200,
+   "ms": 4924,
+   "usage": {
+    "input": 47,
+    "output": 971,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-percento-005",
+   "hash": "cb7d3cb270df23dc",
+   "source": "hit",
+   "status": 200,
+   "ms": 5142,
+   "usage": {
+    "input": 498,
+    "output": 986,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-percento-006",
+   "hash": "26e4274c30a419a0",
+   "source": "hit",
+   "status": 200,
+   "ms": 2458,
+   "usage": {
+    "input": 45,
+    "output": 331,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-spezzati-001",
+   "hash": "32a95fda05052a0b",
+   "source": "hit",
+   "status": 200,
+   "ms": 3379,
+   "usage": {
+    "input": 47,
+    "output": 405,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-spezzati-001",
+   "hash": "728afc1fbfc142f3",
+   "source": "hit",
+   "status": 200,
+   "ms": 4682,
+   "usage": {
+    "input": 319,
+    "output": 685,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-spezzati-003",
+   "hash": "d90745b57e05b607",
+   "source": "hit",
+   "status": 200,
+   "ms": 1289,
+   "usage": {
+    "input": 46,
+    "output": 182,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-spezzati-003",
+   "hash": "e8d7c95323ff8791",
+   "source": "hit",
+   "status": 200,
+   "ms": 1203,
+   "usage": {
+    "input": 320,
+    "output": 185,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-spezzati-005",
+   "hash": "d3920b6aba7b1391",
+   "source": "hit",
+   "status": 200,
+   "ms": 2981,
+   "usage": {
+    "input": 46,
+    "output": 538,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-spezzati-005",
+   "hash": "62a66ca4cf0da744",
+   "source": "hit",
+   "status": 200,
+   "ms": 3592,
+   "usage": {
+    "input": 337,
+    "output": 634,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-spezzati-006",
+   "hash": "9b938cffb0ee108c",
+   "source": "hit",
+   "status": 200,
+   "ms": 3469,
+   "usage": {
+    "input": 47,
+    "output": 610,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-spezzati-006",
+   "hash": "bab7957eb8af73b2",
+   "source": "hit",
+   "status": 200,
+   "ms": 3524,
+   "usage": {
+    "input": 338,
+    "output": 607,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-opposti-001",
+   "hash": "b219280f90defd14",
+   "source": "hit",
+   "status": 200,
+   "ms": 2247,
+   "usage": {
+    "input": 53,
+    "output": 341,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-opposti-004",
+   "hash": "0e94a9c8b69be50e",
+   "source": "hit",
+   "status": 200,
+   "ms": 2067,
+   "usage": {
+    "input": 47,
+    "output": 342,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-opposti-005",
+   "hash": "82f800027ed5d429",
+   "source": "hit",
+   "status": 200,
+   "ms": 2457,
+   "usage": {
+    "input": 53,
+    "output": 328,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-ritiri-003",
+   "hash": "c6e92253b3aa6409",
+   "source": "hit",
+   "status": 200,
+   "ms": 3843,
+   "usage": {
+    "input": 59,
+    "output": 769,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-ritiri-004",
+   "hash": "d67da35c1e19a3e4",
+   "source": "hit",
+   "status": 200,
+   "ms": 2901,
+   "usage": {
+    "input": 54,
+    "output": 368,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-disfa-002",
+   "hash": "17dfeb4fe1fdf8ac",
+   "source": "hit",
+   "status": 200,
+   "ms": 1908,
+   "usage": {
+    "input": 43,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-disfa-002",
+   "hash": "82495134732bc30f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1563,
+   "usage": {
+    "input": 131,
+    "output": 180,
+    "cacheRead": 8910,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-disfa-003",
+   "hash": "b468e77a91625ea1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2057,
+   "usage": {
+    "input": 46,
+    "output": 176,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-disfa-003",
+   "hash": "5709ce16f10081c0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1676,
+   "usage": {
+    "input": 127,
+    "output": 183,
+    "cacheRead": 8329,
+    "cacheWrite": 581
+   }
+  },
+  {
+   "conv": "z-r2-disfa-004",
+   "hash": "0d0e1e6642f18089",
+   "source": "hit",
+   "status": 200,
+   "ms": 1370,
+   "usage": {
+    "input": 44,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-disfa-004",
+   "hash": "84c87ec6cba1f5fc",
+   "source": "hit",
+   "status": 200,
+   "ms": 2297,
+   "usage": {
+    "input": 145,
+    "output": 186,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-disfa-005",
+   "hash": "0d0e1e6642f18089",
+   "source": "hit",
+   "status": 200,
+   "ms": 1370,
+   "usage": {
+    "input": 44,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-disfa-005",
+   "hash": "83680585ef4ac3ae",
+   "source": "hit",
+   "status": 200,
+   "ms": 1898,
+   "usage": {
+    "input": 144,
+    "output": 183,
+    "cacheRead": 8908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-disfa-007",
+   "hash": "eb382bc367b8f20b",
+   "source": "hit",
+   "status": 200,
+   "ms": 1253,
+   "usage": {
+    "input": 48,
+    "output": 179,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "z-r2-disfa-007",
+   "hash": "fa72dbacfb10351f",
+   "source": "hit",
+   "status": 200,
+   "ms": 1770,
+   "usage": {
+    "input": 137,
+    "output": 185,
+    "cacheRead": 8329,
+    "cacheWrite": 791
+   }
+  },
+  {
+   "conv": "z-r2-disfa-007",
+   "hash": "d7dd3fd2bcbb7891",
+   "source": "hit",
+   "status": 200,
+   "ms": 2143,
+   "usage": {
+    "input": 414,
+    "output": 185,
+    "cacheRead": 9120,
+    "cacheWrite": 0
+   }
+  }
+ ]
+}

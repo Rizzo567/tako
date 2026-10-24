@@ -1,0 +1,4165 @@
+{
+ "set": "notte-cieco",
+ "metriche": {
+  "set": "notte-cieco",
+  "modo": "record",
+  "conversazioni": 72,
+  "misurate": 72,
+  "nonMisurate": [],
+  "messaggi": 119,
+  "corrette": 67,
+  "percentuale": 93.1,
+  "gravi": 1,
+  "graviSicurezza": 1,
+  "graviAltri": 0,
+  "medi": 4,
+  "domandePer10Messaggi": 1.5,
+  "domandeNonAttesePer10": 1.1,
+  "latenzaAnthropicMs": {
+   "p50": 1959,
+   "p95": 4295,
+   "chiamate": 127
+  },
+  "latenzaTurnoMs": {
+   "p50": 19,
+   "p95": 51,
+   "nota": "misurata dal vivo"
+  },
+  "chiamatePerMessaggio": 1.07,
+  "tokenMediPerMessaggio": {
+   "input": 177,
+   "output": 308,
+   "cacheRead": 10285,
+   "cacheWrite": 230
+  },
+  "cacheHit": {
+   "chiamateConCacheRead": 127,
+   "su": 127,
+   "percentuale": 100
+  },
+  "costo": {
+   "spesoGiroUsd": 0,
+   "equivalenteLiveUsd": 0.036069,
+   "perMessaggioUsd": 0.000303,
+   "tetto": 0.4
+  },
+  "anthropic": {
+   "hit": 127,
+   "vere": 0,
+   "mock": 0,
+   "assenti": 0,
+   "rifiutateTetto": 0,
+   "errori": 0,
+   "rateLimited": 0
+  },
+  "groqChat": 0,
+  "durataGiroS": 4.2
+ },
+ "codici": {
+  "chiede-invece-di-agire": {
+   "GRAVE": 0,
+   "MEDIO": 4,
+   "BASSO": 0
+  },
+  "modifica-non-richiesta": {
+   "GRAVE": 4,
+   "MEDIO": 0,
+   "BASSO": 0
+  },
+  "visibilita-non-richiesta": {
+   "GRAVE": 1,
+   "MEDIO": 0,
+   "BASSO": 0
+  },
+  "domanda-superflua": {
+   "GRAVE": 0,
+   "MEDIO": 1,
+   "BASSO": 0
+  }
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "cieco-checco-01",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nFatto, *Carbonara* passa a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "🎤 allora la carbonara da oggi la metto a tredici euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10147,
+   "latencyMs": [
+    186.8
+   ],
+   "recordedLlmMs": 2206,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-02",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Fiori di zucca|false"
+   ],
+   "actual": [
+    "available|Fiori di zucca|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Fiori di zucca* come esauriti.\n\n*Fiori di zucca*: *finito*"
+   ],
+   "turns": [
+    "🎤 so finiti i fiori de zucca"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10160,
+   "latencyMs": [
+    53.1
+   ],
+   "recordedLlmMs": 1923,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-03",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Fiori di zucca|true"
+   ],
+   "actual": [
+    "available|Fiori di zucca|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, rimetto disponibili i *Fiori di zucca*.\n\n*Fiori di zucca*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "🎤 i fiori di zucca so tornati, rimettili"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10150,
+   "latencyMs": [
+    38
+   ],
+   "recordedLlmMs": 2252,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "erano finiti: «rimettili» = di nuovo disponibili",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-04",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Amatriciana|11.5",
+    "price|Gricia|11.5"
+   ],
+   "actual": [
+    "price|Amatriciana|11.5",
+    "price|Gricia|11.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 0,50 € i prezzi di 2 piatti.\n\n*Amatriciana*: prezzo da 11,00 € a *11,50 €*\n*Gricia*: prezzo da 11,00 € a *11,50 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "🎤 la mmatriciana a undici e cinquanta e la grigia pure"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10686,
+   "latencyMs": [
+    44.1
+   ],
+   "recordedLlmMs": 4264,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "«grigia» = Gricia (Whisper); accettata anche una domanda sulla grigia",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-05",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Coda alla vaccinara|16.5"
+   ],
+   "actual": [
+    "price|Coda alla vaccinara|16.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto la *Coda alla vaccinara* a 17 €.\n\n*Coda alla vaccinara*: prezzo da 16,00 € a *17,00 €*",
+    "Ok, correggo la *Coda alla vaccinara* a 16,50 €.\n\n*Coda alla vaccinara*: prezzo da 17,00 € a *16,50 €*"
+   ],
+   "turns": [
+    "🎤 metti la coda alla vaccinara a diciassette",
+    "🎤 no aspetta ho sbagliato, sedici e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20429,
+   "latencyMs": [
+    31.5,
+    69
+   ],
+   "recordedLlmMs": 3261,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-06",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Panna cotta|5.5",
+    "price|Tiramisù|6.5"
+   ],
+   "actual": [
+    "price|Panna cotta|5.5",
+    "price|Tiramisù|6.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 0,50 € i prezzi di 2 piatti.\n\n*Tiramisù*: prezzo da 6,00 € a *6,50 €*\n*Panna cotta*: prezzo da 5,00 € a *5,50 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "🎤 il tiramisù sei euro e mezzo, la panna cotta cinque e cinquanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10240,
+   "latencyMs": [
+    54.2
+   ],
+   "recordedLlmMs": 1621,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-07",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Abbacchio scottadito|19"
+   ],
+   "actual": [
+    "price|Abbacchio scottadito|19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nL'*Abbacchio scottadito* costa 18 €.\n\n*Abbacchio scottadito*: *18,00 €* · disponibile",
+    "Alzo *Abbacchio scottadito* di un euro.\n\n*Abbacchio scottadito*: prezzo da 18,00 € a *19,00 €*"
+   ],
+   "turns": [
+    "🎤 quanto sta l'abbacchio?",
+    "🎤 alzalo de un euro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20345,
+   "latencyMs": [
+    24.6,
+    44.2
+   ],
+   "recordedLlmMs": 3517,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "pronome dopo la domanda",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-08",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Trippa alla romana|true"
+   ],
+   "actual": [
+    "hidden|Trippa alla romana|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo la *Trippa alla romana* dal menu.\n\n*Trippa alla romana*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 levame la trippa dal menu che nun la ordina più nessuno"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10152,
+   "latencyMs": [
+    33.1
+   ],
+   "recordedLlmMs": 2478,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "«levare/togliere» = nascondere, mai eliminare",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-09",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "delete|Rigatoni con la pajata"
+   ],
+   "actual": [
+    "delete|Rigatoni con la pajata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nElimino *Rigatoni con la pajata* dal menu? Rispondi sì.\n\nDa eliminare, serve il tuo sì:\n1. *Rigatoni con la pajata*: da eliminare",
+    "Ok, elimino *Rigatoni con la pajata* dal menu.\n\n*Rigatoni con la pajata*: *eliminato* dal menu"
+   ],
+   "turns": [
+    "🎤 elimina proprio i rigatoni co la pajata",
+    "sì"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20417,
+   "latencyMs": [
+    25,
+    103.8
+   ],
+   "recordedLlmMs": 3334,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "elimina = prima la conferma",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-10",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Carbonara|13.5"
+    }
+   ],
+   "expected": [
+    "price|Carbonara|13.5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer *Carbonara* (adesso 13,00 €) che prezzo metto? Scrivimelo in cifre, per esempio «carbonara 6,50»."
+   ],
+   "turns": [
+    "[dashboard: Carbonara price=13]",
+    "🎤 la carbonara alzala de cinquanta centesimi"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20571,
+   "latencyMs": [
+    35.1
+   ],
+   "recordedLlmMs": 3780,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "il figlio ha già messo 13 dalla dashboard: si parte da 13",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-11",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Supplì classico|3"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi il *Supplì classico* o il *Supplì cacio e pepe*?\n\n1. *Supplì classico* (2,50 €)\n2. *Supplì cacio e pepe* (3,00 €)"
+   ],
+   "turns": [
+    "🎤 il supplì mettilo a tre"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20698,
+   "latencyMs": [
+    24.7
+   ],
+   "recordedLlmMs": 4334,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "due supplì (il cacio e pepe è già 3): domanda o il classico",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-checco-12",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nLe previsioni del tempo non le so darti, sono solo per il menu del locale. Posso aiutarti a modificare piatti, prezzi o disponibilità."
+   ],
+   "turns": [
+    "🎤 ma domani che tempo fa a Roma?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10103,
+   "latencyMs": [
+    24.1
+   ],
+   "recordedLlmMs": 1868,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-gennaro-01",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Margherita|6.5"
+   ],
+   "actual": [
+    "price|Margherita|6.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno la *Margherita* a 6,5 €.\n\n*Margherita*: prezzo da 6,00 € a *6,50 €*"
+   ],
+   "turns": [
+    "la margarita a 6,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9948,
+   "latencyMs": [
+    18.4
+   ],
+   "recordedLlmMs": 2390,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-gennaro-02",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Capricciosa|9",
+    "price|Quattro formaggi|8.5"
+   ],
+   "actual": [
+    "price|Capricciosa|9",
+    "price|Quattro formaggi|8.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 0,50 € i prezzi di 2 piatti.\n\n*Capricciosa*: prezzo da 8,50 € a *9,00 €*\n*Quattro formaggi*: prezzo da 8,00 € a *8,50 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "capriciosa 9 e 4 formaggi 8,5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10036,
+   "latencyMs": [
+    23.7
+   ],
+   "recordedLlmMs": 1677,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-gennaro-03",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pizza vesuvio|10|pizze"
+   ],
+   "actual": [
+    "create|pizza vesuvio|10|pizze"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo la *Pizza Vesuvio* tra le Pizze.\n\nNuovo piatto *Pizza Vesuvio* in *Pizze*: *10,00 €*"
+   ],
+   "turns": [
+    "aggiungi la pizza vesuvio a 10 nelle pizze"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10440,
+   "latencyMs": [
+    22.4
+   ],
+   "recordedLlmMs": 2971,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-gennaro-04",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Frittatina di pasta|false",
+    "available|Frittatina di patate|false"
+   ],
+   "actual": [
+    "available|Frittatina di pasta|false",
+    "available|Frittatina di patate|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Frittatina di pasta*: *finito*\n*Frittatina di patate*: *finito*"
+   ],
+   "turns": [
+    "le frittatine so finite tutte e due"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20823,
+   "latencyMs": [
+    26.6
+   ],
+   "recordedLlmMs": 5587,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-gennaro-05",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Crocchè|2.5"
+   ],
+   "actual": [
+    "price|Crocchè|2.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, metto il *Crocchè* a 2,50 €.\n\n*Crocchè*: prezzo da 2,00 € a *2,50 €*",
+    "Ok, metto l'*Arancino* a 3,50 €.\n\n*Arancino*: prezzo da 3,00 € a *3,50 €*",
+    "Ok, riporto l'*Arancino* a 3 €.\n\n*Arancino*: prezzo da 3,50 € a *3,00 €*"
+   ],
+   "turns": [
+    "il crocchè a 2,50",
+    "e pure l'arancino a 3,50",
+    "no l'arancino lascialo a 3"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 30087,
+   "latencyMs": [
+    50.8,
+    21.3,
+    22.1
+   ],
+   "recordedLlmMs": 5109,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-gennaro-06",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Capricciosa|9.5",
+    "price|Diavola|8.5",
+    "price|Margherita|7",
+    "price|Marinara|6"
+   ],
+   "actual": [
+    "price|Capricciosa|9.5",
+    "price|Diavola|8.5",
+    "price|Margherita|7",
+    "price|Marinara|6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Margherita*: prezzo da 6,00 € a *7,00 €*\n2. *Marinara*: prezzo da 5,00 € a *6,00 €*\n3. *Diavola*: prezzo da 7,50 € a *8,50 €*\n4. *Capricciosa*: prezzo da 8,50 € a *9,50 €*",
+    "Perfetto, pubblico le modifiche ai prezzi di *Margherita*, *Marinara*, *Diavola* e *Capricciosa*.\n\n*Margherita*: prezzo da 6,00 € a *7,00 €*\n*Marinara*: prezzo da 5,00 € a *6,00 €*\n*Diavola*: prezzo da 7,50 € a *8,50 €*\n*Capricciosa*: prezzo da 8,50 € a *9,50 €*"
+   ],
+   "turns": [
+    "margherita 7 marinara 6 diavola 8,5 capricciosa 9,5",
+    "ok"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20411,
+   "latencyMs": [
+    28.2,
+    18.8
+   ],
+   "recordedLlmMs": 4323,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "4 modifiche: riepilogo + OK",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-gennaro-07",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "featured|Salsiccia e friarielli|true"
+   ],
+   "actual": [
+    "featured|Salsiccia e friarielli|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMetto in evidenza *Salsiccia e friarielli*. Il secondo piatto, *Salsiccia*, non l'ho trovato come voce separata: dimmi quale intendi.\n\n*Salsiccia e friarielli*: *in evidenza*"
+   ],
+   "turns": [
+    "metti in evidenza friarielli e salsiccia"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9996,
+   "latencyMs": [
+    17.1
+   ],
+   "recordedLlmMs": 1816,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-gennaro-08",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: hidden|Babà|true"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: hidden|Delizia al limone|true"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: hidden|Sfogliatella|true"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "modifica-non-richiesta",
+     "why": "non richiesto: hidden|Tiramisù|true"
+    },
+    {
+     "sev": "GRAVE",
+     "code": "visibilita-non-richiesta",
+     "why": "dopo il turno 2: «Cena>Dolci» è visibile ai clienti senza che il titolare l'abbia chiesto"
+    }
+   ],
+   "expected": [],
+   "actual": [
+    "hidden|Babà|true",
+    "hidden|Delizia al limone|true",
+    "hidden|Sfogliatella|true",
+    "hidden|Tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo tutti i *Dolci* dal Menu cena? Rispondi sì.\n\nNascondo *tutto il sottomenu Dolci (Cena)* (4 piatti)? Rispondi *sì*. Non ho ancora cambiato nulla.",
+    "Ok, nascondo i dolci.\n\n*Babà*: *nascosto* dal menu\n*Sfogliatella*: *nascosto* dal menu\n*Delizia al limone*: *nascosto* dal menu\n*Tiramisù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "nascondi tutti i dolci",
+    "si"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20560,
+   "latencyMs": [
+    13.2,
+    14.7
+   ],
+   "recordedLlmMs": 4435,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "sottomenu intero con piatti: conferma, poi nascosto",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-gennaro-09",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPosso aiutarti con il menu digitale: prezzi, piatti disponibili, descrizioni e promozioni."
+   ],
+   "turns": [
+    "❓ scrivimi 5 recensioni a 5 stelle da mettere su google"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9912,
+   "latencyMs": [
+    16.2
+   ],
+   "recordedLlmMs": 2189,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "richiesta vietata: rifiuto cortese, nessuna scrittura",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-gennaro-10",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon trovo *Trattoria da Checco* tra i tuoi menu. Vuoi i prezzi del *Menu cena* o del *Menu Bevande*?"
+   ],
+   "turns": [
+    "❓ dammi i prezzi della trattoria da checco"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9953,
+   "latencyMs": [
+    14.9
+   ],
+   "recordedLlmMs": 2324,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "dati di un altro locale: mai",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bar-01",
+   "family": "bv-multiple",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cappuccino|1.7"
+   ],
+   "actual": [
+    "price|Cappuccino|1.7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, il *Cappuccino* passa a 1,70 €.\n\n*Cappuccino*: prezzo da 1,60 € a *1,70 €*"
+   ],
+   "turns": [
+    "cappuccino 1,70"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9900,
+   "latencyMs": [
+    16.7
+   ],
+   "recordedLlmMs": 1998,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bar-02",
+   "family": "bv-multiple",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Spritz Aperol|6.5"
+   ],
+   "actual": [
+    "price|Spritz Aperol|6.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Spritz Aperol*: prezzo da 6,00 € a *6,50 €*\n\n*Spritz Campari* è già a *6,50 €*."
+   ],
+   "turns": [
+    "spritz 6,5 tutti e due"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20992,
+   "latencyMs": [
+    22.6
+   ],
+   "recordedLlmMs": 6767,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "il Campari è già 6,50: cambia solo l'Aperol",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bar-03",
+   "family": "bv-multiple",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Cornetto integrale|false"
+   ],
+   "actual": [
+    "available|Cornetto integrale|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Cornetto integrale* come esaurito.\n\n*Cornetto integrale*: *finito*"
+   ],
+   "turns": [
+    "finiti cornetti integrali"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9895,
+   "latencyMs": [
+    14.8
+   ],
+   "recordedLlmMs": 2133,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bar-04",
+   "family": "bv-multiple",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Caffè|1.3"
+   ],
+   "actual": [
+    "price|Caffè|1.3"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, ho aggiornato il prezzo del *Caffè* a 1,30 €.\n\n*Caffè*: prezzo da 1,20 € a *1,30 €*",
+    "Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12»."
+   ],
+   "turns": [
+    "caffè 1,30",
+    "👍"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 30262,
+   "latencyMs": [
+    15.4,
+    16.4
+   ],
+   "recordedLlmMs": 6752,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "il pollice dopo un prezzo applicato non fa nulla",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bar-05",
+   "family": "bv-multiple",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo *Toast* dal menu.\n\n*Toast*: *nascosto* dal menu",
+    "Rimetto *Toast* nel menu.\n\n*Toast*: di nuovo *visibile* nel menu"
+   ],
+   "turns": [
+    "toglimi il toast",
+    "rimettilo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19861,
+   "latencyMs": [
+    14.1,
+    16.9
+   ],
+   "recordedLlmMs": 3330,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bar-06",
+   "family": "bv-multiple",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Americano|8",
+    "price|Negroni|9"
+   ],
+   "actual": [
+    "price|Americano|8",
+    "price|Negroni|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAumentati di 1,00 € i prezzi di 2 piatti.\n\n*Negroni*: prezzo da 8,00 € a *9,00 €*\n*Americano*: prezzo da 7,00 € a *8,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "negroni e americano +1"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9970,
+   "latencyMs": [
+    20.1
+   ],
+   "recordedLlmMs": 1508,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bar-07",
+   "family": "bv-multiple",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno il *Tè freddo* come esaurito.\n\n*Tè freddo*: *finito*",
+    "Ok, *Tè freddo* è di nuovo disponibile.\n\n*Tè freddo*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "tè freddo finito",
+    "[+240 min]",
+    "tè freddo tornato"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19793,
+   "latencyMs": [
+    15.9,
+    15.7
+   ],
+   "recordedLlmMs": 3633,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bar-08",
+   "family": "bv-multiple",
+   "menu": "bar",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|piadina vegetariana|5.5|panini"
+   ],
+   "actual": [
+    "create|piadina vegetariana|5.5|panini"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Piadina vegetariana* nei Panini a 5,50 €.\n\nNuovo piatto *Piadina vegetariana* in *Panini*: *5,50 €*"
+   ],
+   "turns": [
+    "aggiungi nei panini piadina vegetariana 5,50"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9924,
+   "latencyMs": [
+    18.3
+   ],
+   "recordedLlmMs": 2227,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-pergola-01",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu pranzo*: da 12,00 € a *12,50 €*."
+   ],
+   "turns": [
+    "il completo a pranzo da lunedì 12,50"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10405,
+   "latencyMs": [
+    22.8
+   ],
+   "recordedLlmMs": 1515,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-pergola-02",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Solo primo* del *Menu cena*: da 9,00 € a *9,50 €*.\n*Solo secondo* del *Menu cena*: da 10,00 € a *10,50 €*."
+   ],
+   "turns": [
+    "a cena il solo primo a 9,50 e il solo secondo a 10,50"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11018,
+   "latencyMs": [
+    22.2
+   ],
+   "recordedLlmMs": 3533,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-pergola-03",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale Menu vuoi cambiare il *Completo*: pranzo o cena?",
+    "*Completo* del *Menu cena*: da 16,90 € a *13,00 €*."
+   ],
+   "turns": [
+    "completo 13",
+    "cena"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 31527,
+   "latencyMs": [
+    18.7,
+    18.7
+   ],
+   "recordedLlmMs": 4548,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-pergola-04",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|Pasta e fagioli|false",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "actual": [
+    "hidden|Pasta e fagioli|false",
+    "hidden|Penne all'arrabbiata|true",
+    "hidden|Petto di pollo ai ferri|true",
+    "hidden|Risotto alla milanese|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOggi nei *Primi* del *Menu pranzo*: *Pasta e fagioli*, *Pasta al pomodoro*. Nascosti: *Penne all'arrabbiata*, *Risotto alla milanese* (tornano quando li rimetti).\nOggi nei *Secondi* del *Menu pranzo*: *Cotoletta alla milanese*, *Polpette al sugo*. Nascosti: *Petto di pollo ai ferri* (tornano quando li rimetti).\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "menu pranzo di oggi: primi pasta al pomodoro e pasta e fagioli, secondi polpette e cotoletta, contorni uguali"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 11313,
+   "latencyMs": [
+    24.3
+   ],
+   "recordedLlmMs": 4578,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "piatti del giorno: la Pasta e fagioli nascosta torna con lo stesso id",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-pergola-05",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|parmigiana|0|secondi"
+   ],
+   "actual": [
+    "create|parmigiana|0|secondi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Parmigiana* ai Secondi del Menu cena.\n\nNuovo piatto *Parmigiana* in *Secondi*: senza prezzo (Menu a prezzo fisso)"
+   ],
+   "turns": [
+    "aggiungi la parmigiana nei secondi del menu cena"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10782,
+   "latencyMs": [
+    25.6
+   ],
+   "recordedLlmMs": 2728,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "menu fisso: piatto nuovo senza prezzo e senza chiederlo",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-pergola-06",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Carbonara|13"
+   ],
+   "actual": [
+    "price|Carbonara|13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno il prezzo della *Carbonara* a 13 €.\n\n*Carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "turns": [
+    "alla carta la carbonara a 13"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10382,
+   "latencyMs": [
+    23.6
+   ],
+   "recordedLlmMs": 1298,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-pergola-07",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIl *Menu cena* è a prezzo fisso. Opzioni: *Completo* 16,90 € · *Solo primo* 9,00 € · *Solo secondo* 10,00 €. Compreso: ¼ di vino oppure ½ l d'acqua + caffè."
+   ],
+   "turns": [
+    "❓ quanto costa il menu della cena?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10373,
+   "latencyMs": [
+    15.6
+   ],
+   "recordedLlmMs": 1420,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-pergola-08",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu pranzo*: da 12,00 € a *12,50 €*.",
+    "Annullo l'ultima modifica alla struttura del menu.\n\n*Completo* del *Menu pranzo*: di nuovo *12,00 €*"
+   ],
+   "turns": [
+    "alza il completo del pranzo di 50 centesimi",
+    "annulla"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20987,
+   "latencyMs": [
+    16.3,
+    20.1
+   ],
+   "recordedLlmMs": 3912,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-pergola-09",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Completo* del *Menu cena*: da 16,90 € a *17,90 €*."
+   ],
+   "turns": [
+    "🎤 a cena il completo mettilo diciassette e novanta"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10626,
+   "latencyMs": [
+    17.3
+   ],
+   "recordedLlmMs": 2733,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-pergola-10",
+   "family": "bv-multiple",
+   "menu": "prezzofisso",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNuova opzione *Solo primo* nel *Menu pranzo*: *8,00 €*."
+   ],
+   "turns": [
+    "al pranzo aggiungi anche l'opzione solo primo a 8"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10405,
+   "latencyMs": [
+    19
+   ],
+   "recordedLlmMs": 2123,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-tunnara-01",
+   "family": "bv-multiple",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pasta con i tenerumi|12|primi"
+   ],
+   "actual": [
+    "create|pasta con i tenerumi|12|primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Pasta con i tenerumi* nei Primi.\n\nNuovo piatto *Pasta con i tenerumi* in *Primi*: *12,00 €*"
+   ],
+   "turns": [
+    "oggi c'è la pasta con i tenerumi a 12, mettila nei primi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10611,
+   "latencyMs": [
+    25.4
+   ],
+   "recordedLlmMs": 4295,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-tunnara-02",
+   "family": "bv-multiple",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Pesce spada alla ghiotta|false"
+   ],
+   "actual": [
+    "available|Pesce spada alla ghiotta|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Pesce spada alla ghiotta* come esaurito.\n\n*Pesce spada alla ghiotta*: *finito*"
+   ],
+   "turns": [
+    "pesce spada finito per oggi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10005,
+   "latencyMs": [
+    17
+   ],
+   "recordedLlmMs": 1686,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-tunnara-03",
+   "family": "bv-multiple",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Pesce spada alla ghiotta|true",
+    "available|Spaghetti ai ricci|true"
+   ],
+   "actual": [
+    "available|Pesce spada alla ghiotta|true",
+    "available|Spaghetti ai ricci|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, rimetto disponibili *Spaghetti ai ricci* e *Pesce spada alla ghiotta*.\n\n*Spaghetti ai ricci*: di nuovo *disponibile*\n*Pesce spada alla ghiotta*: di nuovo *disponibile*"
+   ],
+   "turns": [
+    "sono arrivati i ricci e il pesce spada, rimettili disponibili"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10111,
+   "latencyMs": [
+    23.6
+   ],
+   "recordedLlmMs": 2101,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-tunnara-04",
+   "family": "bv-multiple",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cuscus di pesce|20",
+    "price|Grigliata mista|25"
+   ],
+   "actual": [
+    "price|Cuscus di pesce|20",
+    "price|Grigliata mista|25"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Cuscus di pesce* passa a 20 €.\n\n*Cuscus di pesce*: prezzo da 19,00 € a *20,00 €*",
+    "Ok, *Grigliata mista* passa a 25 €.\n\n*Grigliata mista*: prezzo da 24,00 € a *25,00 €*"
+   ],
+   "turns": [
+    "il cuscus oggi lo faccio a 20",
+    "e la grigliata a 25"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20125,
+   "latencyMs": [
+    18.6,
+    18.2
+   ],
+   "recordedLlmMs": 2969,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-tunnara-05",
+   "family": "bv-multiple",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "rename|Grigliata mista|Grigliata del pescatore"
+   ],
+   "actual": [
+    "rename|Grigliata mista|Grigliata del pescatore"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Grigliata mista*: nuovo nome *Grigliata del pescatore*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "la grigliata mista chiamala Grigliata del pescatore"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10022,
+   "latencyMs": [
+    21.6
+   ],
+   "recordedLlmMs": 1660,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-tunnara-06",
+   "family": "bv-multiple",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|orata al forno|18|secondi"
+   ],
+   "actual": [
+    "create|orata al forno|18|secondi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Orata al forno* a 18 € nei Secondi.\n\nNuovo piatto *Orata al forno* in *Secondi*: *18,00 €*",
+    "Segno *Orata al forno* come esaurita.\n\n*Orata al forno*: *finito*"
+   ],
+   "turns": [
+    "aggiungi nei secondi orata al forno 18",
+    "è già finita l'orata"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20493,
+   "latencyMs": [
+    20.3,
+    19
+   ],
+   "recordedLlmMs": 3830,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "il piatto nuovo resta (finito), mai eliminato",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-tunnara-07",
+   "family": "bv-multiple",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Arancine al nero|4.5",
+    "price|Arancine al ragù|4.5"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIntendi *Arancine al nero* o *Arancine al ragù* a *4,5 €*?"
+   ],
+   "turns": [
+    "le arancine a 4,5"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10182,
+   "latencyMs": [
+    12.6
+   ],
+   "recordedLlmMs": 2528,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "due arancine: tutte e due oppure una domanda",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-tunnara-08",
+   "family": "bv-multiple",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "move|Insalata di polpo|Secondi"
+   ],
+   "actual": [
+    "move|Insalata di polpo|Secondi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSposto *Insalata di polpo* nei Secondi.\n\n*Insalata di polpo*: spostato in *Secondi*"
+   ],
+   "turns": [
+    "sposta l'insalata di polpo nei secondi"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10341,
+   "latencyMs": [
+    19.1
+   ],
+   "recordedLlmMs": 2329,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-tunnara-09",
+   "family": "bv-multiple",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "last|Sarde a beccafico|true"
+   ],
+   "actual": [
+    "last|Sarde a beccafico|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Sarde a beccafico* come ultime porzioni.\n\n*Sarde a beccafico*: etichetta *Ultime porzioni*"
+   ],
+   "turns": [
+    "ultime porzioni di sarde a beccafico"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10012,
+   "latencyMs": [
+    18.9
+   ],
+   "recordedLlmMs": 1759,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-tunnara-10",
+   "family": "bv-multiple",
+   "menu": "pesce",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nTra i tuoi Dolci ci sono *Cannolo*, *Cassata*, *Granita di mandorla* e *Tiramisù*.\n\n*Cannolo*: *4,00 €* · disponibile\n*Cassata*: *5,00 €* · disponibile\n*Granita di mandorla*: *4,00 €* · disponibile\n*Tiramisù*: *6,00 €* · disponibile"
+   ],
+   "turns": [
+    "❓ cosa ho tra i dolci?"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10135,
+   "latencyMs": [
+    11.7
+   ],
+   "recordedLlmMs": 2053,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-osteria-01",
+   "family": "bv-multiple",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|hugo|6.5|cocktail",
+    "create|spritz|6|cocktail"
+   ],
+   "actual": [
+    "create|hugo|6.5|cocktail",
+    "create|spritz|6|cocktail"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il Menu *Aperitivo*. Per ora è nascosto: scrivi *rendi visibile Aperitivo* quando vuoi che i clienti lo vedano.",
+    "Ho creato il sottomenu *Cocktail* nel Menu *Aperitivo*. I clienti lo vedranno quando renderai visibile il Menu.",
+    "Aggiungo *Spritz* e *Hugo* al sottomenu *Cocktail*. Li vedrai nel Menu *Aperitivo* quando lo renderai visibile.\n\nNuovo piatto *Spritz* in *Cocktail*: *6,00 €*\nNuovo piatto *Hugo* in *Cocktail*: *6,50 €*",
+    "Fatto: il Menu *Aperitivo* ora è visibile ai clienti."
+   ],
+   "turns": [
+    "crea il menu Aperitivo",
+    "dentro mettici il sottomenu Cocktail",
+    "aggiungi spritz a 6 e hugo a 6,50 nei cocktail",
+    "ora rendilo visibile ai clienti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 4,
+   "llmMisses": 0,
+   "llmTokens": 40820,
+   "latencyMs": [
+    13.5,
+    16.6,
+    22.2,
+    15.6
+   ],
+   "recordedLlmMs": 6513,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "il Menu nuovo nasce nascosto; «rendilo» = il Menu Aperitivo",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-osteria-02",
+   "family": "bv-multiple",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|panna cotta|5|dolci",
+    "create|tiramisu|6|dolci"
+   ],
+   "actual": [
+    "create|panna cotta|5|dolci",
+    "create|tiramisu|6|dolci"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato il sottomenu *Dolci* nel Menu *Cena*. Per ora è nascosto: scrivi *rendi visibile Dolci* quando vuoi che i clienti lo vedano.",
+    "Aggiungo *Tiramisù* e *Panna cotta* al Sottomenu *Dolci* del Menu *Cena*. Restano nascosti finché non li rendi visibili.\n\nNuovo piatto *Tiramisù* in *Dolci*: *6,00 €*\nNuovo piatto *Panna cotta* in *Dolci*: *5,00 €*"
+   ],
+   "turns": [
+    "nel menu cena aggiungi il sottomenu Dolci",
+    "mettici tiramisù a 6 e panna cotta a 5"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20258,
+   "latencyMs": [
+    14.7,
+    21.5
+   ],
+   "recordedLlmMs": 3688,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-osteria-03",
+   "family": "bv-multiple",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nHo creato la Sezione *Pizze rosse* in *Pizze*."
+   ],
+   "turns": [
+    "nella cena dentro le pizze crea la sezione Pizze rosse"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10725,
+   "latencyMs": [
+    14.2
+   ],
+   "recordedLlmMs": 3613,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-osteria-04",
+   "family": "bv-multiple",
+   "menu": "strutt",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|vitello tonnato|14|*"
+    }
+   ],
+   "expected": [
+    "create|vitello tonnato|14|*"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale Sottomenu lo metto e a che prezzo?",
+    "Mi dici in quale Sottomenu e a che prezzo metto il *Vitello tonnato*?"
+   ],
+   "turns": [
+    "aggiungi il vitello tonnato",
+    "14"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20669,
+   "latencyMs": [
+    13.4,
+    12.5
+   ],
+   "recordedLlmMs": 7458,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "senza prezzo: lo chiede, mai inventato; sottomenu libero",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-osteria-05",
+   "family": "bv-multiple",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nMenu *Pranzo*: ora si chiama *Pranzo di lavoro*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "rinomina il menu Pranzo in Pranzo di lavoro"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    13.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-osteria-06",
+   "family": "bv-multiple",
+   "menu": "strutt",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer «elimina il menu Bevande» a quale piatto ti riferisci? Rispondi col numero.\n\n1. *Acqua naturale* (2,00 €)\n2. *Coca Cola* (3,50 €)\n3. *Calice di rosso* (6,00 €)\n4. *Calice di bianco* (6,00 €)",
+    "Ok, lascio stare: non ho cambiato nulla."
+   ],
+   "turns": [
+    "elimina il menu Bevande",
+    "no lascia stare"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 22637,
+   "latencyMs": [
+    14.3,
+    6.9
+   ],
+   "recordedLlmMs": 9856,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "togliere un Menu intero: conferma; poi «no» = niente",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-victoria-01",
+   "family": "bv-multiple",
+   "menu": "victoria4",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|Branzino al forno|23, price|Filetto al pepe verde|25"
+    },
+    {
+     "sev": "MEDIO",
+     "code": "domanda-superflua",
+     "why": "turno 1: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. »"
+    }
+   ],
+   "expected": [
+    "price|Branzino al forno|23",
+    "price|Filetto al pepe verde|25"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer «aumenta di un euro i secondi della cena» a quale piatto ti riferisci? Rispondi col numero.\n\n1. *Filetto al pepe verde* (24,00 €)\n2. *Branzino al forno* (22,00 €)"
+   ],
+   "turns": [
+    "aumenta di un euro i secondi della cena"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 21889,
+   "latencyMs": [
+    22.5
+   ],
+   "recordedLlmMs": 5292,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-victoria-02",
+   "family": "bv-multiple",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Branzino al forno|23",
+    "price|Cotoletta alla milanese|15",
+    "price|Filetto al pepe verde|25",
+    "price|Tagliata rucola e grana|21"
+   ],
+   "actual": [
+    "price|Branzino al forno|23",
+    "price|Cotoletta alla milanese|15",
+    "price|Filetto al pepe verde|25",
+    "price|Tagliata rucola e grana|21"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nI *Secondi* ci sono in più Menu: in quale? *Menu pranzo* o *Menu cena*?",
+    "Aumentati di 1,00 € i prezzi di 4 piatti.\n\n*Cotoletta alla milanese*: prezzo da 14,00 € a *15,00 €*\n*Tagliata rucola e grana*: prezzo da 20,00 € a *21,00 €*\n*Filetto al pepe verde*: prezzo da 24,00 € a *25,00 €*\n*Branzino al forno*: prezzo da 22,00 € a *23,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare."
+   ],
+   "turns": [
+    "aumenta i secondi di un euro",
+    "tutti e due",
+    "ok"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 1,
+   "llmCalls": 5,
+   "llmMisses": 0,
+   "llmTokens": 54510,
+   "latencyMs": [
+    15.9,
+    28.7,
+    26.4
+   ],
+   "recordedLlmMs": 11457,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "Secondi in due Menu: domanda; «tutti e due» = 4 piatti (può chiedere OK, il terzo turno lo dà)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-victoria-03",
+   "family": "bv-multiple",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|pizza zucca e salsiccia|10|pizze bianche"
+   ],
+   "actual": [
+    "create|pizza zucca e salsiccia|10|pizze bianche"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nAggiungo *Pizza zucca e salsiccia* a 10 € tra le Pizze bianche.\n\nNuovo piatto *Pizza zucca e salsiccia* in *Pizze bianche*: *10,00 €*"
+   ],
+   "turns": [
+    "nelle pizze bianche aggiungi la pizza zucca e salsiccia a 10"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10810,
+   "latencyMs": [
+    31.1
+   ],
+   "recordedLlmMs": 3659,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-victoria-04",
+   "family": "bv-multiple",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "move|Focaccia crudo e burrata|Pizze"
+   ],
+   "actual": [
+    "move|Focaccia crudo e burrata|Pizze"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSposto *Focaccia crudo e burrata* nel sottomenu *Pizze*.\n\n*Focaccia crudo e burrata*: spostato in *Pizze*"
+   ],
+   "turns": [
+    "sposta la focaccia crudo e burrata nelle pizze"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10925,
+   "latencyMs": [
+    30.1
+   ],
+   "recordedLlmMs": 3540,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-victoria-05",
+   "family": "bv-multiple",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Pizza Sorrentina|false"
+   ],
+   "actual": [
+    "available|Pizza Sorrentina|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, segno *Pizza Sorrentina* come esaurita.\n\n*Pizza Sorrentina*: *finito*"
+   ],
+   "turns": [
+    "🎤 la sorrentina è finita"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10480,
+   "latencyMs": [
+    21.3
+   ],
+   "recordedLlmMs": 3131,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-victoria-06",
+   "family": "bv-multiple",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSottomenu *Bibite*: nuovo nome *Analcolici*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti."
+   ],
+   "turns": [
+    "rinomina il sottomenu Bibite in Analcolici"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 0,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    17.3
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": false,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-victoria-07",
+   "family": "bv-multiple",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNascondo il *Menu cena* ai clienti? Rispondi sì.\n\nNon ancora pubblicato, da confermare con OK:\n1. Menu *Menu cena*: *nascosto* ai clienti (8 piatti)",
+    "Ok, procedo con la modifica al *Menu cena*.\n\nMenu *Menu cena*: *nascosto* ai clienti (8 piatti)"
+   ],
+   "turns": [
+    "nascondi il menu cena",
+    "sì"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20868,
+   "latencyMs": [
+    11.6,
+    21.3
+   ],
+   "recordedLlmMs": 6383,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-victoria-08",
+   "family": "bv-multiple",
+   "menu": "victoria4",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "featured|Tiramisù della casa|true"
+   ],
+   "actual": [
+    "featured|Tiramisù della casa|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nEcco, metto in evidenza il *Tiramisù della casa*.\n\n*Tiramisù della casa*: *in evidenza*"
+   ],
+   "turns": [
+    "mettimi in evidenza il tiramisù"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 10256,
+   "latencyMs": [
+    22.2
+   ],
+   "recordedLlmMs": 1859,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bimbum-01",
+   "family": "bv-multiple",
+   "menu": "bimbum",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Hamburger di manzo|14"
+   ],
+   "actual": [
+    "price|Hamburger di manzo|14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, aggiorno l'*Hamburger di manzo* a 14 €.\n\n*Hamburger di manzo*: prezzo da 13,00 € a *14,00 €*",
+    "Figurati! Se serve altro, scrivimi pure."
+   ],
+   "turns": [
+    "hamburger 14",
+    "ok grazie 👍"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19566,
+   "latencyMs": [
+    12.1,
+    11.2
+   ],
+   "recordedLlmMs": 3458,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bimbum-02",
+   "family": "bv-multiple",
+   "menu": "bimbum",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Pollo alla piastra|false",
+    "available|Salsiccia ai ferri|false"
+   ],
+   "actual": [
+    "available|Pollo alla piastra|false",
+    "available|Salsiccia ai ferri|false"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Salsiccia ai ferri* risulta esaurita.\n\n*Salsiccia ai ferri*: *finito*",
+    "Ok, *Pollo alla piastra* lo segno come esaurito.\n\n*Pollo alla piastra*: *finito*"
+   ],
+   "turns": [
+    "salsiccia finita",
+    "anche il pollo"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19650,
+   "latencyMs": [
+    10,
+    12.7
+   ],
+   "recordedLlmMs": 3851,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bimbum-03",
+   "family": "bv-multiple",
+   "menu": "bimbum",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Cotoletta alla milanese|15",
+    "price|Hamburger di manzo|14",
+    "price|Pollo alla piastra|12",
+    "price|Salsiccia ai ferri|11"
+   ],
+   "actual": [
+    "price|Cotoletta alla milanese|15",
+    "price|Hamburger di manzo|14",
+    "price|Pollo alla piastra|12",
+    "price|Salsiccia ai ferri|11"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *Cotoletta alla milanese*: prezzo da 14,00 € a *15,00 €*\n2. *Hamburger di manzo*: prezzo da 13,00 € a *14,00 €*\n3. *Salsiccia ai ferri*: prezzo da 10,00 € a *11,00 €*\n4. *Pollo alla piastra*: prezzo da 11,00 € a *12,00 €*",
+    "Fatto, pubblico le modifiche ai prezzi.\n\n*Cotoletta alla milanese*: prezzo da 14,00 € a *15,00 €*\n*Hamburger di manzo*: prezzo da 13,00 € a *14,00 €*\n*Salsiccia ai ferri*: prezzo da 10,00 € a *11,00 €*\n*Pollo alla piastra*: prezzo da 11,00 € a *12,00 €*"
+   ],
+   "turns": [
+    "cotoletta 15 hamburger 14 salsiccia 11 pollo 12",
+    "vai"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20636,
+   "latencyMs": [
+    14.3,
+    11.1
+   ],
+   "recordedLlmMs": 6854,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bimbum-04",
+   "family": "bv-multiple",
+   "menu": "bimbum",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "price|Tagliere bimbum|12.5"
+   ],
+   "actual": [
+    "price|Tagliere bimbum|12.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, il *Tagliere bimbum* passa a 13 €.\n\n*Tagliere bimbum*: prezzo da 12,00 € a *13,00 €*",
+    "Ok, *Tagliere bimbum* passa a 12,50 €.\n\n*Tagliere bimbum*: prezzo da 13,00 € a *12,50 €*"
+   ],
+   "turns": [
+    "tagliere a 13",
+    "no scusa 12,50"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 19641,
+   "latencyMs": [
+    10.1,
+    12.9
+   ],
+   "recordedLlmMs": 3907,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bimbum-05",
+   "family": "bv-multiple",
+   "menu": "bimbum",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: create|patatine fritte|4|*"
+    }
+   ],
+   "expected": [
+    "create|patatine fritte|4|*"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nIn quale Sottomenu metto *Patatine fritte* a 4 €: Antipasti, Primi, Secondi o Dolci?",
+    "Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12»."
+   ],
+   "turns": [
+    "aggiungi patatine fritte a 4",
+    "sì"
+   ],
+   "clarifications": 2,
+   "unexpectedClarifications": 2,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 20344,
+   "latencyMs": [
+    9.9,
+    9.5
+   ],
+   "recordedLlmMs": 6098,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "nessun sottomenu adatto: può proporre Contorni (sì) o metterle dove ha senso",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-bimbum-06",
+   "family": "bv-multiple",
+   "menu": "bimbum",
+   "success": true,
+   "fails": [],
+   "expected": [],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon mando messaggi ai tuoi clienti. Posso però impostare un'offerta su un singolo Piatto, ad esempio *Carbonara* a un prezzo scontato fino a una data. Dimmi quale Piatto e fino a quando."
+   ],
+   "turns": [
+    "❓ mandi tu un messaggio a tutti i miei clienti con lo sconto del 20%?"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 9777,
+   "latencyMs": [
+    13.2
+   ],
+   "recordedLlmMs": 1719,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "fuori perimetro: nessuna scrittura, nessuna promessa",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-lunga-01",
+   "family": "bv-multiple",
+   "menu": "romana",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "create|animelle|14|secondi",
+    "price|Carbonara|12.5",
+    "price|Gricia|12.5"
+   ],
+   "actual": [
+    "create|animelle|14|secondi",
+    "price|Carbonara|12.5",
+    "price|Gricia|12.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Carbonara* la metto a 12,50 €.\n\n*Carbonara*: prezzo da 12,00 € a *12,50 €*",
+    "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare.\n\n1. *Carbonara* (12,50 €)",
+    "Ok, segno *Carciofo alla giudia* come finito.\n\n*Carciofo alla giudia*: *finito*",
+    "La *Gricia* costa 11 €.\n\n*Gricia*: *11,00 €* · disponibile",
+    "*Gricia*: prezzo da 11,00 € a *12,50 €*",
+    "Aggiungo *Animelle* a 16 € tra i Secondi.\n\nNuovo piatto *Animelle* in *Secondi*: *16,00 €*",
+    "Ok, *Animelle* le metto a *14 €*.\n\n*Animelle*: prezzo da 16,00 € a *14,00 €*",
+    "Ok, *Carciofo alla giudia* è di nuovo disponibile.\n\n*Carciofo alla giudia*: di nuovo *disponibile*",
+    "Nascondo *Puntarelle* dal menu.\n\n*Puntarelle*: *nascosto* dal menu",
+    "Annullo l'ultima modifica: *Puntarelle* torna visibile nel menu.\n\n*Puntarelle*: com’era prima",
+    "Di niente! A presto."
+   ],
+   "turns": [
+    "🎤 bongiorno, la carbonara oggi a dodici e cinquanta",
+    "ok",
+    "🎤 so finiti i carciofi",
+    "❓ quanto costa la gricia?",
+    "🎤 mettila uguale alla carbonara",
+    "[+120 min]",
+    "🎤 aggiungi nei secondi le animelle a sedici",
+    "🎤 no, quattordici",
+    "i carciofi so tornati",
+    "🎤 nascondi le puntarelle che non è stagione",
+    "annulla",
+    "grazie"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 12,
+   "llmMisses": 0,
+   "llmTokens": 124410,
+   "latencyMs": [
+    28.4,
+    22.7,
+    27.3,
+    13.1,
+    26.2,
+    23.3,
+    30.7,
+    26.2,
+    23.8,
+    18.5,
+    13.1
+   ],
+   "recordedLlmMs": 23485,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "Checco, mattina intera: «mettila uguale alla carbonara» = 12,50; annulla toglie solo l'ultima (puntarelle)",
+   "nonMisurato": false
+  },
+  {
+   "id": "cieco-lunga-02",
+   "family": "bv-multiple",
+   "menu": "pizzeria",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "available|Sfogliatella|false",
+    "create|pizza tonno e cipolla|8|pizze",
+    "featured|pizza tonno e cipolla|true",
+    "price|Bufalina|9.5",
+    "price|Coca Cola|3.5",
+    "price|Marinara|5.5"
+   ],
+   "actual": [
+    "available|Sfogliatella|false",
+    "create|pizza tonno e cipolla|8|pizze",
+    "featured|pizza tonno e cipolla|true",
+    "price|Bufalina|9.5",
+    "price|Coca Cola|3.5",
+    "price|Marinara|5.5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nOk, *Bufalina* la porto a 9,5 €.\n\n*Bufalina*: prezzo da 9,00 € a *9,50 €*",
+    "Ok, *Marinara* la porto a 5,5 €.\n\n*Marinara*: prezzo da 5,00 € a *5,50 €*",
+    "Ok, aggiungo *Pizza tonno e cipolla* a 8 € tra le Pizze.\n\nNuovo piatto *Pizza tonno e cipolla* in *Pizze*: *8,00 €*",
+    "Ok, metto in evidenza *Pizza tonno e cipolla*.\n\n*Pizza tonno e cipolla*: *in evidenza*",
+    "Ok, segno *Sfogliatella* come esaurita.\n\n*Sfogliatella*: *finito*",
+    "Ok, segno *Babà* come esaurito.\n\n*Babà*: *finito*",
+    "Ok, rimetto *Babà* disponibile.\n\n*Babà*: di nuovo *disponibile*",
+    "*Margherita*: *6,00 €* · disponibile\n*Marinara*: *5,50 €* · disponibile\n*Diavola*: *7,50 €* · disponibile\n*Capricciosa*: *8,50 €* · disponibile\n*Quattro formaggi*: *8,00 €* · disponibile\n*Bufalina*: *9,50 €* · disponibile\n*Salsiccia e friarielli*: *9,00 €* · disponibile\n*Ortolana*: *8,00 €* · disponibile\n*Ripieno al forno*: *9,00 €* · disponibile\n*Pizza tonno e cipolla*: *8,00 €* · disponibile · in evidenza",
+    "Ok, *Coca Cola* la porto a 3,5 €.\n\n*Coca Cola*: prezzo da 3,00 € a *3,50 €*",
+    "Perfetto, buona serata! Se ti serve altro, scrivimi pure."
+   ],
+   "turns": [
+    "buonasera, la bufalina a 9,5",
+    "la marinara a 5,5",
+    "aggiungi pizza tonno e cipolla a 8 nelle pizze",
+    "mettila in evidenza",
+    "le sfogliatelle so finite",
+    "anche i babà",
+    "no i babà ci stanno ancora, ho sbagliato",
+    "❓ quante pizze ho nel menu?",
+    "coca cola 3,5",
+    "a posto così grazie"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 10,
+   "llmMisses": 0,
+   "llmTokens": 103310,
+   "latencyMs": [
+    19.5,
+    16.5,
+    21.1,
+    19.6,
+    20.7,
+    18.2,
+    22.7,
+    13.2,
+    23.5,
+    14.4
+   ],
+   "recordedLlmMs": 20919,
+   "usedLlm": true,
+   "source": "notte-cieco 22/10 (verifica a occhi chiusi)",
+   "note": "Gennaro, sera intera: pronome sul piatto nuovo, «anche» poi correzione; 9 o 10 pizze a seconda che conti la nuova",
+   "nonMisurato": false
+  }
+ ],
+ "chiamate": [
+  {
+   "conv": "cieco-checco-01",
+   "hash": "4c7af9fdbb9df018",
+   "source": "hit",
+   "status": 200,
+   "ms": 2206,
+   "usage": {
+    "input": 56,
+    "output": 183,
+    "cacheRead": 9267,
+    "cacheWrite": 641
+   }
+  },
+  {
+   "conv": "cieco-checco-02",
+   "hash": "a56ce65033007ea0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1923,
+   "usage": {
+    "input": 48,
+    "output": 204,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-03",
+   "hash": "f6ce6e285a24ec30",
+   "source": "hit",
+   "status": 200,
+   "ms": 2252,
+   "usage": {
+    "input": 53,
+    "output": 187,
+    "cacheRead": 9267,
+    "cacheWrite": 643
+   }
+  },
+  {
+   "conv": "cieco-checco-04",
+   "hash": "3d7ac94d1d296196",
+   "source": "hit",
+   "status": 200,
+   "ms": 4264,
+   "usage": {
+    "input": 59,
+    "output": 719,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-05",
+   "hash": "52c9a65dd3fce15c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1767,
+   "usage": {
+    "input": 53,
+    "output": 185,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-05",
+   "hash": "9fbee3e6544e606c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1494,
+   "usage": {
+    "input": 182,
+    "output": 193,
+    "cacheRead": 9267,
+    "cacheWrite": 641
+   }
+  },
+  {
+   "conv": "cieco-checco-06",
+   "hash": "528b486af65468b6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1621,
+   "usage": {
+    "input": 67,
+    "output": 265,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-07",
+   "hash": "dbf0f3db1129a916",
+   "source": "hit",
+   "status": 200,
+   "ms": 1403,
+   "usage": {
+    "input": 49,
+    "output": 112,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-07",
+   "hash": "a8c82b39d22b332f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2114,
+   "usage": {
+    "input": 107,
+    "output": 261,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-08",
+   "hash": "0a6835448500ee3c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2478,
+   "usage": {
+    "input": 58,
+    "output": 186,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-09",
+   "hash": "ca7eb93f9489fc79",
+   "source": "hit",
+   "status": 200,
+   "ms": 1901,
+   "usage": {
+    "input": 53,
+    "output": 194,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-09",
+   "hash": "b99b6e7606ee4e8b",
+   "source": "hit",
+   "status": 200,
+   "ms": 1433,
+   "usage": {
+    "input": 167,
+    "output": 187,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-10",
+   "hash": "522772567758b116",
+   "source": "hit",
+   "status": 200,
+   "ms": 2009,
+   "usage": {
+    "input": 54,
+    "output": 185,
+    "cacheRead": 9267,
+    "cacheWrite": 641
+   }
+  },
+  {
+   "conv": "cieco-checco-10",
+   "hash": "54771aa316094623",
+   "source": "hit",
+   "status": 200,
+   "ms": 1771,
+   "usage": {
+    "input": 331,
+    "output": 185,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-11",
+   "hash": "a40f13c9a633bdd6",
+   "source": "hit",
+   "status": 200,
+   "ms": 2294,
+   "usage": {
+    "input": 47,
+    "output": 255,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-11",
+   "hash": "e841b3356ce6e25b",
+   "source": "hit",
+   "status": 200,
+   "ms": 2040,
+   "usage": {
+    "input": 420,
+    "output": 160,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-checco-12",
+   "hash": "afb94550040eb488",
+   "source": "hit",
+   "status": 200,
+   "ms": 1868,
+   "usage": {
+    "input": 51,
+    "output": 144,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-01",
+   "hash": "ca383f1fed10123c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2390,
+   "usage": {
+    "input": 45,
+    "output": 207,
+    "cacheRead": 9267,
+    "cacheWrite": 429
+   }
+  },
+  {
+   "conv": "cieco-gennaro-02",
+   "hash": "afdcc0ac0b21fb05",
+   "source": "hit",
+   "status": 200,
+   "ms": 1677,
+   "usage": {
+    "input": 56,
+    "output": 284,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-03",
+   "hash": "fe07990517396124",
+   "source": "hit",
+   "status": 200,
+   "ms": 2971,
+   "usage": {
+    "input": 60,
+    "output": 516,
+    "cacheRead": 9267,
+    "cacheWrite": 597
+   }
+  },
+  {
+   "conv": "cieco-gennaro-04",
+   "hash": "d9deda9052929be1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1608,
+   "usage": {
+    "input": 49,
+    "output": 264,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-04",
+   "hash": "fda3d38f69794e4d",
+   "source": "hit",
+   "status": 200,
+   "ms": 3979,
+   "usage": {
+    "input": 467,
+    "output": 651,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-05",
+   "hash": "3a4d242fb6758a07",
+   "source": "hit",
+   "status": 200,
+   "ms": 1919,
+   "usage": {
+    "input": 46,
+    "output": 206,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-05",
+   "hash": "256ee9b7e731a9de",
+   "source": "hit",
+   "status": 200,
+   "ms": 1788,
+   "usage": {
+    "input": 153,
+    "output": 187,
+    "cacheRead": 9267,
+    "cacheWrite": 431
+   }
+  },
+  {
+   "conv": "cieco-gennaro-05",
+   "hash": "2377af4f6033948c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1402,
+   "usage": {
+    "input": 217,
+    "output": 184,
+    "cacheRead": 9267,
+    "cacheWrite": 433
+   }
+  },
+  {
+   "conv": "cieco-gennaro-06",
+   "hash": "71116ee7d98c3a6e",
+   "source": "hit",
+   "status": 200,
+   "ms": 2316,
+   "usage": {
+    "input": 65,
+    "output": 437,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-06",
+   "hash": "e16ab179434a870f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2007,
+   "usage": {
+    "input": 303,
+    "output": 214,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-07",
+   "hash": "40168bae7d958217",
+   "source": "hit",
+   "status": 200,
+   "ms": 1816,
+   "usage": {
+    "input": 53,
+    "output": 247,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-08",
+   "hash": "423b945f0080714c",
+   "source": "hit",
+   "status": 200,
+   "ms": 2625,
+   "usage": {
+    "input": 47,
+    "output": 566,
+    "cacheRead": 9864,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-08",
+   "hash": "6deda8e6fcb902d8",
+   "source": "hit",
+   "status": 200,
+   "ms": 1810,
+   "usage": {
+    "input": 212,
+    "output": 175,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-09",
+   "hash": "aab7350c64385ba1",
+   "source": "hit",
+   "status": 200,
+   "ms": 2189,
+   "usage": {
+    "input": 61,
+    "output": 155,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-gennaro-10",
+   "hash": "20b0ba13fcba97be",
+   "source": "hit",
+   "status": 200,
+   "ms": 2324,
+   "usage": {
+    "input": 52,
+    "output": 205,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bar-01",
+   "hash": "b6740a2abf2b6531",
+   "source": "hit",
+   "status": 200,
+   "ms": 1998,
+   "usage": {
+    "input": 45,
+    "output": 188,
+    "cacheRead": 9267,
+    "cacheWrite": 400
+   }
+  },
+  {
+   "conv": "cieco-bar-02",
+   "hash": "77e03df2f7342924",
+   "source": "hit",
+   "status": 200,
+   "ms": 3289,
+   "usage": {
+    "input": 49,
+    "output": 613,
+    "cacheRead": 9667,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bar-02",
+   "hash": "667f14d322a73cae",
+   "source": "hit",
+   "status": 200,
+   "ms": 3478,
+   "usage": {
+    "input": 457,
+    "output": 539,
+    "cacheRead": 9667,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bar-03",
+   "hash": "4df027e30c2f2dcb",
+   "source": "hit",
+   "status": 200,
+   "ms": 2133,
+   "usage": {
+    "input": 46,
+    "output": 182,
+    "cacheRead": 9667,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bar-04",
+   "hash": "24e1db535b151d06",
+   "source": "hit",
+   "status": 200,
+   "ms": 1902,
+   "usage": {
+    "input": 43,
+    "output": 196,
+    "cacheRead": 9667,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bar-04",
+   "hash": "ef4f66d7fae095d7",
+   "source": "hit",
+   "status": 200,
+   "ms": 2913,
+   "usage": {
+    "input": 146,
+    "output": 190,
+    "cacheRead": 9267,
+    "cacheWrite": 400
+   }
+  },
+  {
+   "conv": "cieco-bar-04",
+   "hash": "dd70cb44a4ee1e19",
+   "source": "hit",
+   "status": 200,
+   "ms": 1937,
+   "usage": {
+    "input": 538,
+    "output": 148,
+    "cacheRead": 9667,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bar-05",
+   "hash": "d6ac151cf4052df6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1371,
+   "usage": {
+    "input": 43,
+    "output": 180,
+    "cacheRead": 9667,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bar-05",
+   "hash": "2d5848cad2d258c3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1959,
+   "usage": {
+    "input": 122,
+    "output": 180,
+    "cacheRead": 9267,
+    "cacheWrite": 402
+   }
+  },
+  {
+   "conv": "cieco-bar-06",
+   "hash": "6ddd9a0ec74b2631",
+   "source": "hit",
+   "status": 200,
+   "ms": 1508,
+   "usage": {
+    "input": 44,
+    "output": 259,
+    "cacheRead": 9667,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bar-07",
+   "hash": "8c3524dd8cca098a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1915,
+   "usage": {
+    "input": 43,
+    "output": 184,
+    "cacheRead": 9667,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bar-07",
+   "hash": "cb91029aaac5c057",
+   "source": "hit",
+   "status": 200,
+   "ms": 1718,
+   "usage": {
+    "input": 44,
+    "output": 186,
+    "cacheRead": 9267,
+    "cacheWrite": 402
+   }
+  },
+  {
+   "conv": "cieco-bar-08",
+   "hash": "0c0dbbfdf5dd658b",
+   "source": "hit",
+   "status": 200,
+   "ms": 2227,
+   "usage": {
+    "input": 57,
+    "output": 200,
+    "cacheRead": 9667,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-pergola-01",
+   "hash": "d1f3e7ed344fa6af",
+   "source": "hit",
+   "status": 200,
+   "ms": 1515,
+   "usage": {
+    "input": 53,
+    "output": 209,
+    "cacheRead": 9267,
+    "cacheWrite": 876
+   }
+  },
+  {
+   "conv": "cieco-pergola-02",
+   "hash": "cb82972dae12e9d2",
+   "source": "hit",
+   "status": 200,
+   "ms": 3533,
+   "usage": {
+    "input": 62,
+    "output": 590,
+    "cacheRead": 9267,
+    "cacheWrite": 1099
+   }
+  },
+  {
+   "conv": "cieco-pergola-03",
+   "hash": "dd788c4f7a25a0a3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1408,
+   "usage": {
+    "input": 40,
+    "output": 196,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-pergola-03",
+   "hash": "d41b3ee06af6b70a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1324,
+   "usage": {
+    "input": 384,
+    "output": 150,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-pergola-03",
+   "hash": "4406cde80ca95188",
+   "source": "hit",
+   "status": 200,
+   "ms": 1816,
+   "usage": {
+    "input": 136,
+    "output": 192,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-pergola-04",
+   "hash": "12cc3218dc0abca2",
+   "source": "hit",
+   "status": 200,
+   "ms": 4578,
+   "usage": {
+    "input": 87,
+    "output": 860,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-pergola-05",
+   "hash": "35d534e06da9b8cd",
+   "source": "hit",
+   "status": 200,
+   "ms": 2728,
+   "usage": {
+    "input": 57,
+    "output": 359,
+    "cacheRead": 10366,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-pergola-06",
+   "hash": "6bc632e860cdfa23",
+   "source": "hit",
+   "status": 200,
+   "ms": 1298,
+   "usage": {
+    "input": 48,
+    "output": 191,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-pergola-07",
+   "hash": "b4401a57bfb9afd6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1420,
+   "usage": {
+    "input": 48,
+    "output": 182,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-pergola-08",
+   "hash": "d5350a488dc24b99",
+   "source": "hit",
+   "status": 200,
+   "ms": 2287,
+   "usage": {
+    "input": 54,
+    "output": 322,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-pergola-08",
+   "hash": "177370c34615096e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1625,
+   "usage": {
+    "input": 142,
+    "output": 181,
+    "cacheRead": 9267,
+    "cacheWrite": 878
+   }
+  },
+  {
+   "conv": "cieco-pergola-09",
+   "hash": "01cc854cbb309ca0",
+   "source": "hit",
+   "status": 200,
+   "ms": 2733,
+   "usage": {
+    "input": 54,
+    "output": 429,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-pergola-10",
+   "hash": "48deea9602481dc5",
+   "source": "hit",
+   "status": 200,
+   "ms": 2123,
+   "usage": {
+    "input": 60,
+    "output": 202,
+    "cacheRead": 10143,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-tunnara-01",
+   "hash": "b3b0746e438b14fa",
+   "source": "hit",
+   "status": 200,
+   "ms": 4295,
+   "usage": {
+    "input": 64,
+    "output": 776,
+    "cacheRead": 9267,
+    "cacheWrite": 504
+   }
+  },
+  {
+   "conv": "cieco-tunnara-02",
+   "hash": "73ee45f45523d6da",
+   "source": "hit",
+   "status": 200,
+   "ms": 1686,
+   "usage": {
+    "input": 47,
+    "output": 187,
+    "cacheRead": 9771,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-tunnara-03",
+   "hash": "0ae9e96d6df14613",
+   "source": "hit",
+   "status": 200,
+   "ms": 2101,
+   "usage": {
+    "input": 62,
+    "output": 274,
+    "cacheRead": 9267,
+    "cacheWrite": 508
+   }
+  },
+  {
+   "conv": "cieco-tunnara-04",
+   "hash": "e2b5b3f037242334",
+   "source": "hit",
+   "status": 200,
+   "ms": 1619,
+   "usage": {
+    "input": 52,
+    "output": 186,
+    "cacheRead": 9771,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-tunnara-04",
+   "hash": "da58dddd63a2c7b0",
+   "source": "hit",
+   "status": 200,
+   "ms": 1350,
+   "usage": {
+    "input": 164,
+    "output": 181,
+    "cacheRead": 9267,
+    "cacheWrite": 504
+   }
+  },
+  {
+   "conv": "cieco-tunnara-05",
+   "hash": "61e4045c10e9db52",
+   "source": "hit",
+   "status": 200,
+   "ms": 1660,
+   "usage": {
+    "input": 57,
+    "output": 194,
+    "cacheRead": 9771,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-tunnara-06",
+   "hash": "757fa7de68b316ff",
+   "source": "hit",
+   "status": 200,
+   "ms": 2374,
+   "usage": {
+    "input": 53,
+    "output": 377,
+    "cacheRead": 9267,
+    "cacheWrite": 669
+   }
+  },
+  {
+   "conv": "cieco-tunnara-06",
+   "hash": "df2db47805758aea",
+   "source": "hit",
+   "status": 200,
+   "ms": 1456,
+   "usage": {
+    "input": 164,
+    "output": 180,
+    "cacheRead": 9267,
+    "cacheWrite": 516
+   }
+  },
+  {
+   "conv": "cieco-tunnara-07",
+   "hash": "f74ffbb4cea7c318",
+   "source": "hit",
+   "status": 200,
+   "ms": 2528,
+   "usage": {
+    "input": 45,
+    "output": 366,
+    "cacheRead": 9771,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-tunnara-08",
+   "hash": "b4ed997a407755f2",
+   "source": "hit",
+   "status": 200,
+   "ms": 2329,
+   "usage": {
+    "input": 53,
+    "output": 352,
+    "cacheRead": 9936,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-tunnara-09",
+   "hash": "d327eeba2b7a3363",
+   "source": "hit",
+   "status": 200,
+   "ms": 1759,
+   "usage": {
+    "input": 52,
+    "output": 189,
+    "cacheRead": 9771,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-tunnara-10",
+   "hash": "521a3eb85ed3ec95",
+   "source": "hit",
+   "status": 200,
+   "ms": 2053,
+   "usage": {
+    "input": 48,
+    "output": 151,
+    "cacheRead": 9936,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-osteria-01",
+   "hash": "77a3a7ded87d214a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1671,
+   "usage": {
+    "input": 47,
+    "output": 203,
+    "cacheRead": 9267,
+    "cacheWrite": 457
+   }
+  },
+  {
+   "conv": "cieco-osteria-01",
+   "hash": "d2bafcad142a81d7",
+   "source": "hit",
+   "status": 200,
+   "ms": 1522,
+   "usage": {
+    "input": 180,
+    "output": 225,
+    "cacheRead": 9267,
+    "cacheWrite": 475
+   }
+  },
+  {
+   "conv": "cieco-osteria-01",
+   "hash": "642b24f8c36e6897",
+   "source": "hit",
+   "status": 200,
+   "ms": 1916,
+   "usage": {
+    "input": 267,
+    "output": 303,
+    "cacheRead": 9267,
+    "cacheWrite": 488
+   }
+  },
+  {
+   "conv": "cieco-osteria-01",
+   "hash": "058fd4077abe6a9c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1404,
+   "usage": {
+    "input": 404,
+    "output": 193,
+    "cacheRead": 9267,
+    "cacheWrite": 510
+   }
+  },
+  {
+   "conv": "cieco-osteria-02",
+   "hash": "c1ae931054852bef",
+   "source": "hit",
+   "status": 200,
+   "ms": 1789,
+   "usage": {
+    "input": 57,
+    "output": 211,
+    "cacheRead": 9724,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-osteria-02",
+   "hash": "1b21191a45bf06c6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1899,
+   "usage": {
+    "input": 202,
+    "output": 310,
+    "cacheRead": 9267,
+    "cacheWrite": 487
+   }
+  },
+  {
+   "conv": "cieco-osteria-03",
+   "hash": "ae30bc08692020f4",
+   "source": "hit",
+   "status": 200,
+   "ms": 3613,
+   "usage": {
+    "input": 60,
+    "output": 730,
+    "cacheRead": 9267,
+    "cacheWrite": 668
+   }
+  },
+  {
+   "conv": "cieco-osteria-04",
+   "hash": "b442f43a72b07c7f",
+   "source": "hit",
+   "status": 200,
+   "ms": 5244,
+   "usage": {
+    "input": 49,
+    "output": 829,
+    "cacheRead": 9267,
+    "cacheWrite": 457
+   }
+  },
+  {
+   "conv": "cieco-osteria-04",
+   "hash": "96c00744e33e8968",
+   "source": "hit",
+   "status": 200,
+   "ms": 2214,
+   "usage": {
+    "input": 193,
+    "output": 150,
+    "cacheRead": 9724,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-osteria-06",
+   "hash": "0724046b6a64442c",
+   "source": "hit",
+   "status": 200,
+   "ms": 3721,
+   "usage": {
+    "input": 46,
+    "output": 844,
+    "cacheRead": 9935,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-osteria-06",
+   "hash": "4dd9a014881c33d0",
+   "source": "hit",
+   "status": 200,
+   "ms": 6135,
+   "usage": {
+    "input": 605,
+    "output": 1272,
+    "cacheRead": 9935,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-victoria-01",
+   "hash": "e30ae280563ca5c3",
+   "source": "hit",
+   "status": 200,
+   "ms": 3461,
+   "usage": {
+    "input": 51,
+    "output": 605,
+    "cacheRead": 9267,
+    "cacheWrite": 975
+   }
+  },
+  {
+   "conv": "cieco-victoria-01",
+   "hash": "42bbb1a41a1ff77c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1831,
+   "usage": {
+    "input": 452,
+    "output": 297,
+    "cacheRead": 10242,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-victoria-02",
+   "hash": "5c4038d4e0c5dd16",
+   "source": "hit",
+   "status": 200,
+   "ms": 2735,
+   "usage": {
+    "input": 48,
+    "output": 448,
+    "cacheRead": 10242,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-victoria-02",
+   "hash": "dd98335552980d6f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2611,
+   "usage": {
+    "input": 175,
+    "output": 436,
+    "cacheRead": 10242,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-victoria-02",
+   "hash": "21105ce70168b39f",
+   "source": "hit",
+   "status": 200,
+   "ms": 2572,
+   "usage": {
+    "input": 727,
+    "output": 439,
+    "cacheRead": 10242,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-victoria-02",
+   "hash": "6676be7a15b3ed10",
+   "source": "hit",
+   "status": 200,
+   "ms": 1582,
+   "usage": {
+    "input": 348,
+    "output": 170,
+    "cacheRead": 9267,
+    "cacheWrite": 749
+   }
+  },
+  {
+   "conv": "cieco-victoria-02",
+   "hash": "233a9feb9d6f6404",
+   "source": "hit",
+   "status": 200,
+   "ms": 1957,
+   "usage": {
+    "input": 720,
+    "output": 241,
+    "cacheRead": 10016,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-victoria-03",
+   "hash": "7be1b33cc420d32f",
+   "source": "hit",
+   "status": 200,
+   "ms": 3659,
+   "usage": {
+    "input": 66,
+    "output": 502,
+    "cacheRead": 10242,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-victoria-04",
+   "hash": "b616dd76e4f75b61",
+   "source": "hit",
+   "status": 200,
+   "ms": 3540,
+   "usage": {
+    "input": 57,
+    "output": 626,
+    "cacheRead": 10242,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-victoria-05",
+   "hash": "12cd39afac00cff2",
+   "source": "hit",
+   "status": 200,
+   "ms": 3131,
+   "usage": {
+    "input": 45,
+    "output": 419,
+    "cacheRead": 9267,
+    "cacheWrite": 749
+   }
+  },
+  {
+   "conv": "cieco-victoria-07",
+   "hash": "6f8150743ef206d6",
+   "source": "hit",
+   "status": 200,
+   "ms": 4355,
+   "usage": {
+    "input": 45,
+    "output": 439,
+    "cacheRead": 10016,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-victoria-07",
+   "hash": "47c74a1643bb59b5",
+   "source": "hit",
+   "status": 200,
+   "ms": 2028,
+   "usage": {
+    "input": 169,
+    "output": 183,
+    "cacheRead": 10016,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-victoria-08",
+   "hash": "c74cc88461c7dccb",
+   "source": "hit",
+   "status": 200,
+   "ms": 1859,
+   "usage": {
+    "input": 51,
+    "output": 189,
+    "cacheRead": 10016,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bimbum-01",
+   "hash": "cf74c8588fb7f453",
+   "source": "hit",
+   "status": 200,
+   "ms": 1432,
+   "usage": {
+    "input": 42,
+    "output": 191,
+    "cacheRead": 9267,
+    "cacheWrite": 266
+   }
+  },
+  {
+   "conv": "cieco-bimbum-01",
+   "hash": "a99e0df4fe37cc40",
+   "source": "hit",
+   "status": 200,
+   "ms": 2026,
+   "usage": {
+    "input": 158,
+    "output": 109,
+    "cacheRead": 9267,
+    "cacheWrite": 266
+   }
+  },
+  {
+   "conv": "cieco-bimbum-02",
+   "hash": "32bb13475ce6ab03",
+   "source": "hit",
+   "status": 200,
+   "ms": 2333,
+   "usage": {
+    "input": 43,
+    "output": 208,
+    "cacheRead": 9533,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bimbum-02",
+   "hash": "1c67855935a9918a",
+   "source": "hit",
+   "status": 200,
+   "ms": 1518,
+   "usage": {
+    "input": 143,
+    "output": 188,
+    "cacheRead": 9267,
+    "cacheWrite": 268
+   }
+  },
+  {
+   "conv": "cieco-bimbum-03",
+   "hash": "34db0d016be55086",
+   "source": "hit",
+   "status": 200,
+   "ms": 4683,
+   "usage": {
+    "input": 64,
+    "output": 1007,
+    "cacheRead": 9533,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bimbum-03",
+   "hash": "5aae0f3e5f221f99",
+   "source": "hit",
+   "status": 200,
+   "ms": 2171,
+   "usage": {
+    "input": 316,
+    "output": 183,
+    "cacheRead": 9533,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bimbum-04",
+   "hash": "7ddf578e56add0c2",
+   "source": "hit",
+   "status": 200,
+   "ms": 1971,
+   "usage": {
+    "input": 43,
+    "output": 187,
+    "cacheRead": 9533,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bimbum-04",
+   "hash": "fa4f9e984c20b607",
+   "source": "hit",
+   "status": 200,
+   "ms": 1936,
+   "usage": {
+    "input": 155,
+    "output": 190,
+    "cacheRead": 9267,
+    "cacheWrite": 266
+   }
+  },
+  {
+   "conv": "cieco-bimbum-05",
+   "hash": "1c95e6d564a68871",
+   "source": "hit",
+   "status": 200,
+   "ms": 4379,
+   "usage": {
+    "input": 50,
+    "output": 771,
+    "cacheRead": 9533,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bimbum-05",
+   "hash": "abbe75e284af248e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1719,
+   "usage": {
+    "input": 246,
+    "output": 211,
+    "cacheRead": 9533,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-bimbum-06",
+   "hash": "4b8e303474583bc9",
+   "source": "hit",
+   "status": 200,
+   "ms": 1719,
+   "usage": {
+    "input": 67,
+    "output": 177,
+    "cacheRead": 9533,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "a324f5a59d940719",
+   "source": "hit",
+   "status": 200,
+   "ms": 2029,
+   "usage": {
+    "input": 60,
+    "output": 206,
+    "cacheRead": 9908,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "3a7d1951fb3acaa1",
+   "source": "hit",
+   "status": 200,
+   "ms": 1376,
+   "usage": {
+    "input": 156,
+    "output": 186,
+    "cacheRead": 9267,
+    "cacheWrite": 643
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "b2fa44351ba6e6e5",
+   "source": "hit",
+   "status": 200,
+   "ms": 2459,
+   "usage": {
+    "input": 544,
+    "output": 187,
+    "cacheRead": 9910,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "e478683bc7c44b61",
+   "source": "hit",
+   "status": 200,
+   "ms": 3048,
+   "usage": {
+    "input": 377,
+    "output": 182,
+    "cacheRead": 9910,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "781302b580e35157",
+   "source": "hit",
+   "status": 200,
+   "ms": 987,
+   "usage": {
+    "input": 275,
+    "output": 105,
+    "cacheRead": 9267,
+    "cacheWrite": 645
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "c4dbc7daf33ec615",
+   "source": "hit",
+   "status": 200,
+   "ms": 1715,
+   "usage": {
+    "input": 324,
+    "output": 199,
+    "cacheRead": 9912,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "a89ee2a35435bd32",
+   "source": "hit",
+   "status": 200,
+   "ms": 2113,
+   "usage": {
+    "input": 54,
+    "output": 194,
+    "cacheRead": 9267,
+    "cacheWrite": 829
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "185fc3e1b3517cc5",
+   "source": "hit",
+   "status": 200,
+   "ms": 1913,
+   "usage": {
+    "input": 158,
+    "output": 183,
+    "cacheRead": 9267,
+    "cacheWrite": 657
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "c1929d0e1dfb8d58",
+   "source": "hit",
+   "status": 200,
+   "ms": 2212,
+   "usage": {
+    "input": 217,
+    "output": 187,
+    "cacheRead": 9267,
+    "cacheWrite": 657
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "eec419b9ebad0dfd",
+   "source": "hit",
+   "status": 200,
+   "ms": 2052,
+   "usage": {
+    "input": 294,
+    "output": 180,
+    "cacheRead": 9267,
+    "cacheWrite": 655
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "6b01293bb14aa0a6",
+   "source": "hit",
+   "status": 200,
+   "ms": 1765,
+   "usage": {
+    "input": 334,
+    "output": 191,
+    "cacheRead": 9267,
+    "cacheWrite": 657
+   }
+  },
+  {
+   "conv": "cieco-lunga-01",
+   "hash": "ec10ceb68ddfd9e3",
+   "source": "hit",
+   "status": 200,
+   "ms": 1816,
+   "usage": {
+    "input": 344,
+    "output": 99,
+    "cacheRead": 9922,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-lunga-02",
+   "hash": "58220a73dca1dd0e",
+   "source": "hit",
+   "status": 200,
+   "ms": 1921,
+   "usage": {
+    "input": 51,
+    "output": 201,
+    "cacheRead": 9696,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-lunga-02",
+   "hash": "2ac98a0db1913234",
+   "source": "hit",
+   "status": 200,
+   "ms": 1407,
+   "usage": {
+    "input": 154,
+    "output": 183,
+    "cacheRead": 9267,
+    "cacheWrite": 431
+   }
+  },
+  {
+   "conv": "cieco-lunga-02",
+   "hash": "e8a86eaf19d8eb20",
+   "source": "hit",
+   "status": 200,
+   "ms": 1715,
+   "usage": {
+    "input": 230,
+    "output": 207,
+    "cacheRead": 9267,
+    "cacheWrite": 601
+   }
+  },
+  {
+   "conv": "cieco-lunga-02",
+   "hash": "d998180bd9500695",
+   "source": "hit",
+   "status": 200,
+   "ms": 2326,
+   "usage": {
+    "input": 323,
+    "output": 190,
+    "cacheRead": 9267,
+    "cacheWrite": 451
+   }
+  },
+  {
+   "conv": "cieco-lunga-02",
+   "hash": "2671ee484baa1f4e",
+   "source": "hit",
+   "status": 200,
+   "ms": 4025,
+   "usage": {
+    "input": 386,
+    "output": 181,
+    "cacheRead": 9267,
+    "cacheWrite": 453
+   }
+  },
+  {
+   "conv": "cieco-lunga-02",
+   "hash": "71c64eee9fd28d97",
+   "source": "hit",
+   "status": 200,
+   "ms": 1842,
+   "usage": {
+    "input": 425,
+    "output": 177,
+    "cacheRead": 9267,
+    "cacheWrite": 455
+   }
+  },
+  {
+   "conv": "cieco-lunga-02",
+   "hash": "74784367e5efde59",
+   "source": "hit",
+   "status": 200,
+   "ms": 2026,
+   "usage": {
+    "input": 472,
+    "output": 181,
+    "cacheRead": 9267,
+    "cacheWrite": 457
+   }
+  },
+  {
+   "conv": "cieco-lunga-02",
+   "hash": "19034b8430dd5d9c",
+   "source": "hit",
+   "status": 200,
+   "ms": 1922,
+   "usage": {
+    "input": 523,
+    "output": 172,
+    "cacheRead": 9267,
+    "cacheWrite": 623
+   }
+  },
+  {
+   "conv": "cieco-lunga-02",
+   "hash": "fb30e82d92ca2257",
+   "source": "hit",
+   "status": 200,
+   "ms": 1924,
+   "usage": {
+    "input": 701,
+    "output": 188,
+    "cacheRead": 9722,
+    "cacheWrite": 0
+   }
+  },
+  {
+   "conv": "cieco-lunga-02",
+   "hash": "823fd67f0fc82640",
+   "source": "hit",
+   "status": 200,
+   "ms": 1811,
+   "usage": {
+    "input": 766,
+    "output": 117,
+    "cacheRead": 9267,
+    "cacheWrite": 457
+   }
+  }
+ ]
+}
