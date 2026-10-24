@@ -1,0 +1,49 @@
+
+[MEDIO] corr-004
+   - MEDIO turno 1: risposta vuota
+     > "togli lasagna metti rigatoni"
+       *Menu Giorno aggiornato* /  / *Primi* / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Rigatoni (nuovo) /  / Tolto: *Lasagna*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni
+     > "rimetti la lasagna"
+       
+       Δ Menu Giorno›Primi: Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni, Lasagna
+
+[MEDIO] nonce-001
+   - MEDIO turno 0: testo vietato «Pirata» in «Intendi *Pirata* a *6,00 €* (adesso 15,00 €)? Rispondi *sì* oppure dimmi il piatto e il prezzo giust»
+     > "porta il tiramisu a 6 euro"
+       Intendi *Pirata* a *6,00 €* (adesso 15,00 €)? Rispondi *sì* oppure dimmi il piatto e il prezzo giusti.
+
+[MEDIO] pron-004
+   - MEDIO turno 1: risposta vuota
+     > "togli la lasagna"
+       *Lasagna*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca
+     > "rimettila"
+       
+       Δ Menu Giorno›Primi: Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Lasagna
+
+[MEDIO] pron-006
+   - MEDIO turno 1: risposta vuota
+     > "togli gli spinaci"
+       *Spinaci*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Contorni: Patate al forno, Spinaci → Patate al forno
+     > "rimettili"
+       
+       Δ Menu Giorno›Contorni: Patate al forno → Patate al forno, Spinaci
+
+[GRAVE] pron-008
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Arrosto, Salsicce] ottenuto [Cotoletta, Arrosto, Salsiccia]
+     > "nei secondi del pranzo aggiungi polpette"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta / • Arrosto / • Polpette (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Polpette
+     > "togli le polpette metti le salsicce"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta / • Arrosto / • Salsiccia (nuovo) /  / Tolto: *Polpette*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto, Polpette → Cotoletta, Arrosto, Salsiccia
+
+[GRAVE] refuso-006
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Arrosto, Polpette al sugo] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Lo metto nei *Secondi* del Menu Giorno o in quelli del Menu Cena?»
+     > "da 12 nei secondi metti polpette al sugo"
+       Lo metto nei *Secondi* del Menu Giorno o in quelli del Menu Cena?
+
+TOTALE 143 casi: ok 137 (95.8%), GRAVI 2, MEDI 4

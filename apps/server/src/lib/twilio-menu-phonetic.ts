@@ -59,3 +59,9 @@ export function phoneticCandidates(target:string,refs:MenuRef[]):MenuRef[]{
  * parola di 4+ lettere, stessa prima e ultima lettera di un piatto dal nome di una parola, chiavi a distanza ≤ metà. */
 export function looseSoundAlike(message:string,refs:MenuRef[]):MenuRef[]{const ws=fold(message).split(' ').filter(w=>w.length>=5&&!SERVICE.has(w)&&!/^\d/.test(w)&&!/^(?:alz|abbass|mett|port|togl|nascond|aggiung|cambi|aument|diminu|segn|rimett|elimin|cancell|sposta|rinomin|quell|quest|tutt|prezz|eur)/.test(w))
  return refs.filter(r=>{const n=fold(r.name);if(n.includes(' ')||n.length<4)return false;return ws.some(w=>w!==n&&w[0]===n[0]&&w.at(-1)===n.at(-1)&&lev(phoneKey(w),phoneKey(n))<=Math.floor(Math.max(phoneKey(w).length,phoneKey(n).length)/2))})}
+/** 24/10 (Manuel 23/10 18:40 «Porta il tiramisu a 6 euro» → «Intendi *Pirata*?»): un piatto proposto «a suono» deve anche SOMIGLIARE
+ * nelle lettere a una parola o a un gruppo di parole detto (distanza ≤ metà del nome e stessa iniziale, o ≤ un terzo). */
+export function spelledAlike(message:string,name:string):boolean{const n=fold(name).replace(/ /g,''),ws=fold(message).split(' ').filter(w=>w&&!SERVICE.has(w)&&!/^\d/.test(w)&&!/^(?:alz|abbass|mett|port|togl|nascond|aggiung|cambi|aument|diminu|segn|rimett|elimin|cancell|sposta|rinomin|quell|quest|tutt|prezz|eur|cost|fall|fai|finit|esaurit)/.test(w))
+ if(n.length<3)return false
+ for(let i=0;i<ws.length;i++)for(let k=1;k<=4&&i+k<=ws.length;k++){const t=ws.slice(i,i+k).join('');const d=lev(t,n);if(d<=Math.floor(n.length/3)||(t[0]===n[0]&&d<=Math.ceil(n.length/2)))return true}
+ return false}

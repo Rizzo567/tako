@@ -1,0 +1,889 @@
+[
+ {
+  "id": "nuova-001",
+  "turns": [
+   "oggi x pranzo niente lasagna mettiamo i cannelloni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Cannelloni"
+    ]
+   },
+   "alt": [
+    {}
+   ],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-002",
+  "turns": [
+   "la lasagna levala e metti le tagliatelle"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Tagliatelle"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-003",
+  "turns": [
+   "pranzo: fuori la cotoletta, dentro le polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [
+    {}
+   ],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-004",
+  "turns": [
+   "menu di mezzogiorno metti i ravioli al posto delle orecchiette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Ravioli"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-005",
+  "turns": [
+   "stasera niente pollo al forno, facciamo la tagliata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Secondi": [
+     "branzino al forno",
+     "scaloppine al vino bianco",
+     "Tagliata"
+    ]
+   },
+   "alt": [
+    {}
+   ],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-006",
+  "turns": [
+   "scambia gli spinaci con le zucchine"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Zucchine"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-007",
+  "turns": [
+   "rimpiazza l arrosto con il vitello tonnato"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Vitello tonnato"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-008",
+  "turns": [
+   "metti le polpette invece della cotoletta"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-009",
+  "turns": [
+   "nel giorno togli gli strozzapreti e ci metti la pasta al forno"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Orecchiette con zucca",
+     "Pasta al forno"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-010",
+  "turns": [
+   "menu mezzogiorno via lasagna e via arrosto, metti rigatoni e salsiccia"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ],
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Salsiccia"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-011",
+  "turns": [
+   "togli lasagne metti cannelloni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Cannelloni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-012",
+  "turns": [
+   "toglimi la cotoletta e mettimi il pollo arrosto"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Pollo arrosto"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-013",
+  "turns": [
+   "cena: al posto della melanzana al forno patate fritte"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "insalata verde",
+     "patate al forno",
+     "Patate fritte"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-014",
+  "turns": [
+   "per stasera cambia le linguine alla carbonara con spaghetti aglio e olio"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Primi": [
+     "tagliatelle vongole totano zucchine e pomodorini",
+     "tortiglioni alla norma con ricotta salata",
+     "Spaghetti aglio e olio"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-015",
+  "turns": [
+   "pranzo togli lasagna metti rigatoni",
+   "si"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-016",
+  "turns": [
+   "pranzo togli lasagna metti rigatoni",
+   "annulla",
+   "al posto della lasagna metti i paccheri"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Paccheri"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-017",
+  "turns": [
+   "togli la cotoletta",
+   "metti le polpette al suo posto"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-018",
+  "turns": [
+   "elimina le orecchiette",
+   "sì",
+   "nei primi del pranzo aggiungi i ravioli"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Ravioli"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-019",
+  "turns": [
+   "la cotoletta è finita",
+   "toglila e metti le polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-020",
+  "turns": [
+   "metti a pranzo nei secondi la frittata",
+   "anzi no toglila"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-021",
+  "turns": [
+   "togli le orecchiete con la zucca metti i gnocchi"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-022",
+  "turns": [
+   "menu mezzo giorno togli lasagna metti rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-023",
+  "turns": [
+   "pranso togli la lasagna e metti i rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-024",
+  "turns": [
+   "menù da 12 al posto della lasagna rigatoni al sugo"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni al sugo"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-025",
+  "turns": [
+   {
+    "voice": "allora senti a pranzo togli la lasagna perché è finita e metti i rigatoni"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [
+    {
+     "Menu Giorno›Primi": [
+      "Lasagna (finito)",
+      "Strozzapreti con zola e pistacchio",
+      "Orecchiette con zucca"
+     ]
+    }
+   ],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-026",
+  "turns": [
+   {
+    "voice": "ehm allora per stasera invece del branzino al forno facciamo l orata al forno"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Secondi": [
+     "scaloppine al vino bianco",
+     "pollo al forno",
+     "Orata al forno"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-027",
+  "turns": [
+   "non togliere la lasagna, aggiungi solo i rigatoni nei primi del pranzo"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-028",
+  "turns": [
+   "togli il tiramisu metti la panna cotta"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-029",
+  "turns": [
+   "porta la cotoletta a 6"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-030",
+  "turns": [
+   "la lasagna è finita mettila a 3 euro"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna (finito)",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [
+    {}
+   ],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-031",
+  "turns": [
+   "al posto della cotoletta metti polpette e l arrosto è finito"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto (finito)",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-032",
+  "turns": [
+   "togli spinaci e patate al forno metti insalata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Insalata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-033",
+  "turns": [
+   "cambia arrosto in arrosto di vitello"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto di vitello"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-034",
+  "turns": [
+   "togli la lasagna",
+   "e al suo posto i rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [
+    {
+     "Menu Giorno›Primi": [
+      "Strozzapreti con zola e pistacchio",
+      "Orecchiette con zucca"
+     ]
+    }
+   ],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-035",
+  "turns": [
+   "stasera nei contorni togli la melanzana al forno metti i peperoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "insalata verde",
+     "patate al forno",
+     "Peperoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-036",
+  "turns": [
+   "a cena togli l insalata verde metti la rucola"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "melanzana al forno",
+     "patate al forno",
+     "Rucola"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-037",
+  "turns": [
+   "pranzo togli lasagna metti rigatoni",
+   "e la cotoletta è finita"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ],
+    "Menu Giorno›Secondi": [
+     "Cotoletta (finito)",
+     "Arrosto"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-038",
+  "turns": [
+   "menu giorno togli la lasagna metti rigatoni",
+   "rimetti la lasagna"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-039",
+  "turns": [
+   "ok primi togli lasagna metti rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-040",
+  "turns": [
+   "secondi via cotoletta metti scaloppine"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Scaloppine"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-041",
+  "turns": [
+   "contorni togli spinaci metti cicoria"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Cicoria"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ },
+ {
+  "id": "nuova-042",
+  "turns": [
+   "togli la Lasagna metti Rigatoni Al Ragù"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni al ragù"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "verifica finale, frasi nuove"
+ }
+]

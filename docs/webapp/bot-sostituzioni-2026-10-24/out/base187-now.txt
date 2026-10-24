@@ -1,0 +1,583 @@
+
+[GRAVE] sost-001
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "togli lasagna metti rigatoni"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «togli lasagna metti rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *L
+
+[GRAVE] sost-002
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+     > "Menù mezzogiorno da 12 euro cambia lasagna con rigatoni"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / *Lasagna* è nel *Menu Giorno*, che è a prezzo fisso: i piatti non hanno un prezzo, il prezzo è delle opzi
+
+[GRAVE] sost-003
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni]
+     > "a pranzo via lasagna metti rigatoni"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Rigatoni (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni
+
+[GRAVE] sost-004
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / I»
+     > "pranzzo invece di lasagna fai rigatoni"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Intendi rinominare *Lasagna* in *Rigatoni* nel Menu Giorno, tra i Primi?
+
+[GRAVE] sost-005
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "x pranzo togli lasagna e metti rigatoni"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «x pranzo togli lasagna e metti rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto.
+
+[GRAVE] sost-006
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "sostituisci lasagna con rigatoni"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «sostituisci lasagna con rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto.
+
+[GRAVE] sost-007
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni]
+     > "Menù mezzogiorno da 12 euro togli lasagna e al suo posto metti rigatoni"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Rigatoni (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni
+
+[GRAVE] sost-008
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / I»
+     > "a pranzo al posto di lasagna rigatoni"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Intendi sostituire solo *Lasagna* con *Rigatoni* tra i Primi del pranzo, oppure rifare tutti i Primi del 
+
+[GRAVE] sost-009
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Gnocchi al pomodoro] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Gnocchi al pomodoro]
+     > "a pranzo via orecchiette con zucca metti gnocchi al pomodoro"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Gnocchi al pomodoro (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Gnocchi al pomodoro
+
+[GRAVE] sost-010
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Gnocchi al pomodoro] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "pranzzo invece di orecchiette con zucca fai gnocchi al pomodoro"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «pranzzo invece di orecchiette con zucca fai gnocchi al pomodoro» intendi *Orecchiette con zucca*? Ri
+
+[GRAVE] sost-011
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Gnocchi al pomodoro] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Gnocchi al pomodoro]
+     > "x pranzo togli orecchiette con zucca e metti gnocchi al pomodoro"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Gnocchi al pomodoro (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Gnocchi al pomodoro
+
+[GRAVE] sost-012
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Gnocchi al pomodoro] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / T»
+     > "sostituisci orecchiette con zucca con gnocchi al pomodoro"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Tolgo *Orecchiette con zucca* e aggiungo *Gnocchi al pomodoro* ai Primi del Menu Giorno. Elimino *Orecchi
+
+[GRAVE] sost-013
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Gnocchi al pomodoro] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Gnocchi al pomodoro]
+     > "Menù mezzogiorno da 12 euro togli orecchiette con zucca e al suo posto metti gnocchi al pomodoro"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Gnocchi al pomodoro (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Gnocchi al pomodoro
+
+[GRAVE] sost-014
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Gnocchi al pomodoro] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "a pranzo al posto di orecchiette con zucca gnocchi al pomodoro"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «a pranzo al posto di orecchiette con zucca gnocchi al pomodoro» intendi *Orecchiette con zucca*? Ris
+
+[GRAVE] sost-015
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Gnocchi al pomodoro] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "pranzzo al posto della orecchiette con zucca metti gnocchi al pomodoro"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «pranzzo al posto della orecchiette con zucca metti gnocchi al pomodoro» intendi *Orecchiette con zuc
+
+[GRAVE] sost-016
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Gnocchi al pomodoro] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Gnocchi al pomodoro]
+     > "x pranzo orecchiette con zucca no metti gnocchi al pomodoro"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Gnocchi al pomodoro (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Gnocchi al pomodoro
+
+[GRAVE] sost-017
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "x pranzo togli cotoletta e metti polpette"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «x pranzo togli cotoletta e metti polpette» intendi *Cotoletta*? Rispondi sì oppure dimmi il nome giu
+
+[GRAVE] sost-018
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "sostituisci cotoletta con polpette"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «sostituisci cotoletta con polpette» intendi *Cotoletta*? Rispondi sì oppure dimmi il nome giusto. / 
+
+[GRAVE] sost-019
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto, Polpette]
+     > "Menù mezzogiorno da 12 euro togli cotoletta e al suo posto metti polpette"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta / • Arrosto / • Polpette (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Polpette
+
+[GRAVE] sost-020
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "a pranzo al posto di cotoletta polpette"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «a pranzo al posto di cotoletta polpette» intendi *Cotoletta*? Rispondi sì oppure dimmi il nome giust
+
+[GRAVE] sost-021
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "pranzzo al posto della cotoletta metti polpette"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «pranzzo al posto della cotoletta metti polpette» intendi *Cotoletta*? Rispondi sì oppure dimmi il no
+
+[GRAVE] sost-022
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto, Polpette]
+     > "x pranzo cotoletta no metti polpette"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta / • Arrosto / • Polpette (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Polpette
+
+[GRAVE] sost-023
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "togli cotoletta  metti polpette"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «togli cotoletta metti polpette» intendi *Cotoletta*? Rispondi sì oppure dimmi il nome giusto. /  / 1
+
+[GRAVE] sost-024
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto]
+     > "Menù mezzogiorno da 12 euro cambia cotoletta in polpette"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / A quale piatto metto *12,00 €*? Scrivimi il nome, per esempio «la carbonara a 12».
+
+[GRAVE] sost-025
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Scaloppine al limone] ottenuto [Cotoletta, Arrosto, Scaloppine al limone]
+     > "Menù mezzogiorno da 12 euro togli arrosto e al suo posto metti scaloppine al limone"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta / • Arrosto / • Scaloppine al limone (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Scaloppine al limone
+
+[GRAVE] sost-026
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Scaloppine al limone] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "a pranzo al posto di arrosto scaloppine al limone"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «a pranzo al posto di arrosto scaloppine al limone» intendi *Arrosto*? Rispondi sì oppure dimmi il no
+
+[GRAVE] sost-027
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Scaloppine al limone] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "pranzzo al posto della arrosto metti scaloppine al limone"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «pranzzo al posto della arrosto metti scaloppine al limone» intendi *Arrosto*? Rispondi sì oppure dim
+
+[GRAVE] sost-028
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Scaloppine al limone] ottenuto [Cotoletta, Arrosto, Scaloppine al limone]
+     > "x pranzo arrosto no metti scaloppine al limone"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta / • Arrosto / • Scaloppine al limone (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Scaloppine al limone
+
+[GRAVE] sost-029
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Scaloppine al limone] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "togli arrosto  metti scaloppine al limone"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «togli arrosto metti scaloppine al limone» intendi *Arrosto*? Rispondi sì oppure dimmi il nome giusto
+
+[GRAVE] sost-030
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Scaloppine al limone] ottenuto [Cotoletta, Arrosto]
+     > "Menù mezzogiorno da 12 euro cambia arrosto in scaloppine al limone"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / A quale piatto metto *12,00 €*? Scrivimi il nome, per esempio «la carbonara a 12».
+
+[GRAVE] sost-031
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Scaloppine al limone] ottenuto [Cotoletta, Arrosto, Scaloppine al limone]
+     > "a pranzo invece della arrosto metti scaloppine al limone"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta / • Arrosto / • Scaloppine al limone (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Scaloppine al limone
+
+[GRAVE] sost-032
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Scaloppine al limone] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / T»
+     > "pranzzo leva arrosto e metti scaloppine al limone"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Tolgo *Arrosto* dal Menu Giorno. Per le *Scaloppine al limone* intendi aggiungerle ai Secondi del pranzo 
+
+[GRAVE] sost-033
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Insalata] ottenuto [Patate al forno, Spinaci]
+   - MEDIO turno 0: domanda inutile «Quale insalata metto al posto degli *Spinaci* nel Menu pranzo: *Insalata mista* o *Insalata verde*?»
+     > "pranzzo al posto della spinaci metti insalata"
+       Quale insalata metto al posto degli *Spinaci* nel Menu pranzo: *Insalata mista* o *Insalata verde*?
+
+[GRAVE] sost-034
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Insalata] ottenuto [Patate al forno, Spinaci, Insalata]
+     > "x pranzo spinaci no metti insalata"
+       *Menu Giorno aggiornato* /  / *Contorni* / • Patate al forno / • Spinaci / • Insalata (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Contorni: Patate al forno, Spinaci → Patate al forno, Spinaci, Insalata
+
+[GRAVE] sost-035
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Insalata] ottenuto [Patate al forno, Spinaci]
+   - MEDIO turno 0: 68268.4 ms
+     > "togli spinaci  metti insalata"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Sono momentaneamente non disponibile, riprova tra un minuto.
+
+[GRAVE] sost-036
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Insalata] ottenuto [Patate al forno, Spinaci]
+     > "Menù mezzogiorno da 12 euro cambia spinaci in insalata"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / *Spinaci* è nel *Menu Giorno*, che è a prezzo fisso: i piatti non hanno un prezzo, il prezzo è delle opzi
+
+[GRAVE] sost-037
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Insalata] ottenuto [Patate al forno, Spinaci, Insalata]
+     > "a pranzo invece della spinaci metti insalata"
+       *Menu Giorno aggiornato* /  / *Contorni* / • Patate al forno / • Spinaci / • Insalata (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Contorni: Patate al forno, Spinaci → Patate al forno, Spinaci, Insalata
+
+[GRAVE] sost-038
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Insalata] ottenuto [Patate al forno, Spinaci]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / T»
+     > "pranzzo leva spinaci e metti insalata"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Tolgo *Spinaci* dal Menu pranzo. Quale insalata metto: *Insalata mista* o *Insalata verde*? /  / Non anco
+
+[GRAVE] sost-039
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Insalata] ottenuto [Patate al forno, Spinaci]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / T»
+     > "x pranzo Togli spinaci. Metti insalata."
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Tolgo *Spinaci* dal Menu pranzo. Quale insalata metto nei Contorni: *Insalata mista* o *Insalata verde*? 
+
+[GRAVE] sost-040
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Insalata] ottenuto [Patate al forno, Spinaci]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / T»
+     > "togli spinaci metti insalata"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Tolgo *Spinaci* dal menu. Quale *insalata* intendi: *Insalata mista* o *Insalata verde*? /  / Non ancora 
+
+[GRAVE] sost-041
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Orecchiette con zucca, Pasta e fagioli] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Q»
+     > "togli strozzapreti  metti pasta e fagioli"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Quale *Strozzapreti* intendi: con zola e pistacchio o con zucchine e speck?
+
+[GRAVE] sost-042
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Orecchiette con zucca, Pasta e fagioli] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+     > "Menù mezzogiorno da 12 euro cambia strozzapreti in pasta e fagioli"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / *Strozzapreti con zola e pistacchio* è nel *Menu Giorno*, che è a prezzo fisso: i piatti non hanno un pre
+
+[GRAVE] sost-043
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Orecchiette con zucca, Pasta e fagioli] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Pasta e fagioli]
+     > "a pranzo invece della strozzapreti metti pasta e fagioli"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Pasta e fagioli (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Pasta e fagioli
+
+[GRAVE] sost-044
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Orecchiette con zucca, Pasta e fagioli] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "pranzzo leva strozzapreti e metti pasta e fagioli"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «pranzzo leva strozzapreti e metti pasta e fagioli» intendi *Strozzapreti con zola e pistacchio*? Ris
+
+[GRAVE] sost-045
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Orecchiette con zucca, Pasta e fagioli] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "x pranzo Togli strozzapreti. Metti pasta e fagioli."
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «x pranzo Togli strozzapreti. Metti pasta e fagioli.» intendi *Strozzapreti con zola e pistacchio*? R
+
+[GRAVE] sost-046
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Orecchiette con zucca, Pasta e fagioli] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Quale *Strozzapreti* tolgo: *Strozzapreti con zola e pistacchio* o *Strozzapreti zucchine e speck*?»
+     > "togli strozzapreti metti pasta e fagioli"
+       Quale *Strozzapreti* tolgo: *Strozzapreti con zola e pistacchio* o *Strozzapreti zucchine e speck*?
+
+[GRAVE] sost-047
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Orecchiette con zucca, Pasta e fagioli] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+     > "Menù mezzogiorno da 12 euro cambia strozzapreti con pasta e fagioli"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / *Strozzapreti con zola e pistacchio* è nel *Menu Giorno*, che è a prezzo fisso: i piatti non hanno un pre
+
+[GRAVE] sost-048
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Orecchiette con zucca, Pasta e fagioli] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Pasta e fagioli]
+     > "a pranzo via strozzapreti metti pasta e fagioli"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Pasta e fagioli (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Pasta e fagioli
+
+[GRAVE] sost-049
+   - GRAVE menu finale: Menu Cena›Secondi: voluto [branzino al forno, scaloppine al vino bianco, Salsiccia alla griglia] ottenuto [branzino al forno, scaloppine al vino bianco, pollo al forno]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "stasera invece della pollo al forno metti salsiccia alla griglia"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «stasera invece della pollo al forno metti salsiccia alla griglia» intendi *pollo al forno*? Rispondi
+
+[GRAVE] sost-050
+   - GRAVE menu finale: Menu Cena›Secondi: voluto [branzino al forno, scaloppine al vino bianco, Salsiccia alla griglia] ottenuto [branzino al forno, scaloppine al vino bianco, pollo al forno, Salsiccia alla griglia]
+     > "nel menu cena togli pollo al forno e al suo posto metti salsiccia alla griglia"
+       *Menu Cena aggiornato* /  / *Secondi* / • branzino al forno / • scaloppine al vino bianco / • pollo al forno / • Salsiccia alla griglia (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Cena›Secondi: branzino al forno, scaloppine al vino bianco, pollo al forno → branzino al forno, scaloppine al vino bianco, pollo al forno, Salsiccia alla griglia
+
+[GRAVE] sost-051
+   - GRAVE menu finale: Menu Cena›Secondi: voluto [branzino al forno, scaloppine al vino bianco, Salsiccia alla griglia] ottenuto [branzino al forno, scaloppine al vino bianco, pollo al forno, Salsiccia alla griglia]
+     > "menu sera togli pollo al forno metti salsiccia alla griglia"
+       *Menu Cena aggiornato* /  / *Secondi* / • branzino al forno / • scaloppine al vino bianco / • pollo al forno / • Salsiccia alla griglia (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Cena›Secondi: branzino al forno, scaloppine al vino bianco, pollo al forno → branzino al forno, scaloppine al vino bianco, pollo al forno, Salsiccia alla griglia
+
+[GRAVE] sost-052
+   - GRAVE menu finale: Menu Cena›Secondi: voluto [branzino al forno, scaloppine al vino bianco, Salsiccia alla griglia] ottenuto [branzino al forno, scaloppine al vino bianco, pollo al forno]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / O»
+     > "stasera pollo al forno no metti salsiccia alla griglia"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Ok, a cena tolgo *Pollo al forno* e aggiungo *Salsiccia alla griglia* tra i Secondi. Il Menu cena è a pre
+
+[GRAVE] sost-053
+   - GRAVE menu finale: Menu Cena›Secondi: voluto [branzino al forno, scaloppine al vino bianco, Salsiccia alla griglia] ottenuto [branzino al forno, scaloppine al vino bianco, pollo al forno]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "nel menu cena invece di pollo al forno fai salsiccia alla griglia"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «nel menu cena invece di pollo al forno fai salsiccia alla griglia» intendi *pollo al forno*? Rispond
+
+[GRAVE] sost-054
+   - GRAVE menu finale: Menu Cena›Primi: voluto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, Spaghetti alla puttanesca] ottenuto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "cena stasera via linguine alla carbonara metti spaghetti alla puttanesca"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «cena stasera via linguine alla carbonara metti spaghetti alla puttanesca» intendi *linguine alla car
+
+[GRAVE] sost-055
+   - GRAVE menu finale: Menu Cena›Primi: voluto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, Spaghetti alla puttanesca] ottenuto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "cena cambia linguine alla carbonara in spaghetti alla puttanesca"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «cena cambia linguine alla carbonara in spaghetti alla puttanesca» intendi *linguine alla carbonara*?
+
+[GRAVE] sost-056
+   - GRAVE menu finale: Menu Cena›Primi: voluto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, Spaghetti alla puttanesca] ottenuto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "x stasera sostituisci linguine alla carbonara con spaghetti alla puttanesca"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «x stasera sostituisci linguine alla carbonara con spaghetti alla puttanesca» intendi *linguine alla 
+
+[GRAVE] sost-057
+   - GRAVE menu finale: Menu Cena›Primi: voluto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, Spaghetti alla puttanesca] ottenuto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "cena stasera Togli linguine alla carbonara. Metti spaghetti alla puttanesca."
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «cena stasera Togli linguine alla carbonara. Metti spaghetti alla puttanesca.» intendi *linguine alla
+
+[GRAVE] sost-058
+   - GRAVE menu finale: Menu Cena›Primi: voluto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, Spaghetti alla puttanesca] ottenuto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara, Spaghetti alla puttanesca]
+     > "cena al posto della linguine alla carbonara metti spaghetti alla puttanesca"
+       *Menu Cena aggiornato* /  / *Primi* / • tagliatelle vongole totano zucchine e pomodorini / • tortiglioni alla norma con ricotta salata / • linguine alla carbonara / • Spaghetti alla puttanesca (nuovo) /  / Per tornare co
+       Δ Menu Cena›Primi: tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara → tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara, Spaghetti alla puttanesca
+
+[GRAVE] sost-059
+   - GRAVE menu finale: Menu Cena›Contorni: voluto [Patate al forno, Insalata mista, insalata verde, patate al forno, Zucchine trifolate] ottenuto [Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "menu sera al posto di melanzana al forno zucchine trifolate"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «menu sera al posto di melanzana al forno zucchine trifolate» intendi *melanzana al forno*? Rispondi 
+
+[GRAVE] sost-060
+   - GRAVE menu finale: Menu Cena›Contorni: voluto [Patate al forno, Insalata mista, insalata verde, patate al forno, Zucchine trifolate] ottenuto [Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "stasera cambia melanzana al forno con zucchine trifolate"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «stasera cambia melanzana al forno con zucchine trifolate» intendi *melanzana al forno*? Rispondi sì 
+
+[GRAVE] sost-061
+   - GRAVE menu finale: Menu Cena›Contorni: voluto [Patate al forno, Insalata mista, insalata verde, patate al forno, Zucchine trifolate] ottenuto [Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "nel menu cena togli melanzana al forno  metti zucchine trifolate"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «nel menu cena togli melanzana al forno metti zucchine trifolate» intendi *melanzana al forno*? Rispo
+
+[GRAVE] sost-062
+   - GRAVE menu finale: Menu Cena›Contorni: voluto [Patate al forno, Insalata mista, insalata verde, patate al forno, Zucchine trifolate] ottenuto [Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "menu sera togli melanzana al forno e metti zucchine trifolate"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «menu sera togli melanzana al forno e metti zucchine trifolate» intendi *melanzana al forno*? Rispond
+
+[GRAVE] sost-063
+   - GRAVE menu finale: Menu Cena›Contorni: voluto [Patate al forno, Insalata mista, insalata verde, patate al forno, Zucchine trifolate] ottenuto [Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "stasera leva melanzana al forno e metti zucchine trifolate"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «stasera leva melanzana al forno e metti zucchine trifolate» intendi *melanzana al forno*? Rispondi s
+
+[GRAVE] voce-002
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette al sugo] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "allora oggi a pranzo al posto della cotoletta mettiamo le polpette al sugo"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «allora oggi a pranzo al posto della cotoletta mettiamo le polpette al sugo» intendi *Cotoletta*? Ris
+
+[GRAVE] voce-003
+   - GRAVE menu finale: Menu Cena›Secondi: voluto [branzino al forno, scaloppine al vino bianco, Salsiccia alla griglia] ottenuto [branzino al forno, scaloppine al vino bianco, pollo al forno]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "ehm allora stasera togli il pollo al forno e metti la salsiccia alla griglia"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «ehm allora stasera togli il pollo al forno e metti la salsiccia alla griglia» intendi *pollo al forn
+
+[GRAVE] voce-004
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Cicoria ripassata] ottenuto [Patate al forno, Spinaci, Cicoria ripassata]
+     > "allora nel menu di mezzogiorno invece degli spinaci metti la cicoria ripassata"
+       *Menu Giorno aggiornato* /  / *Contorni* / • Patate al forno / • Spinaci / • Cicoria ripassata (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Contorni: Patate al forno, Spinaci → Patate al forno, Spinaci, Cicoria ripassata
+
+[GRAVE] multi-001
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Rigatoni, Gnocchi] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "menu giorno togli lasagna e orecchiette metti rigatoni e gnocchi"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «menu giorno togli lasagna e orecchiette metti rigatoni e gnocchi» a quale piatto ti riferisci? Rispo
+
+[GRAVE] multi-002
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca] ; Menu Giorno›Secondi: voluto [Cotoletta (finito), Arrosto] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "togli la lasagna metti rigatoni e la cotoletta è finita"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «togli la lasagna metti rigatoni e la cotoletta è finita» a quale piatto ti riferisci? Rispondi col n
+
+[GRAVE] multi-006
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca] ; Menu Giorno›Secondi: voluto [Cotoletta, Arrosto (finito)] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ok, tolgo la *Lasagna* e segno l'*Arrosto* come finito. I *Rigatoni* vanno nei Primi del *Menu Giorno* o del *»
+     > "togli la lasagna aggiungi rigatoni e l arrosto è finito"
+       Ok, tolgo la *Lasagna* e segno l'*Arrosto* come finito. I *Rigatoni* vanno nei Primi del *Menu Giorno* o del *Menu Cena*? /  / Non ancora pubblicato: / 1. *Lasagna*: *eliminato* dal menu / 2. *Arrosto*: *finito*
+
+[GRAVE] multi-007
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto, Polpette] ; Menu Giorno›Contorni: voluto [Patate al forno, Fagiolini] ottenuto [Patate al forno, Spinaci, Fagiolini]
+     > "x pranzo togli cotoletta metti polpette  contorni togli spinaci metti fagiolini"
+       *Menu Giorno aggiornato* /  / *Contorni* / • Patate al forno / • Spinaci / • Fagiolini (nuovo) /  / *Secondi* / • Cotoletta / • Arrosto / • Polpette (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Polpette ; Menu Giorno›Contorni: Patate al forno, Spinaci → Patate al forno, Spinaci, Fagiolini
+
+[MEDIO] corr-001
+   - MEDIO turno 0: domanda inutile «Per «togli lasagna metti rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *Lasagna*»
+     > "togli lasagna metti rigatoni"
+       Per «togli lasagna metti rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *Lasagna*
+     > "annulla"
+       Ok, lascio stare: non ho cambiato nulla.
+
+[GRAVE] corr-002
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Paccheri] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Per «togli lasagna metti rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *Lasagna*»
+   - MEDIO turno 1: domanda inutile «Per «no scusa al posto dei rigatoni metti i paccheri» intendi *Lasagna*? Rispondi sì oppure dimmi il nome gius»
+     > "togli lasagna metti rigatoni"
+       Per «togli lasagna metti rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *Lasagna*
+     > "no scusa al posto dei rigatoni metti i paccheri"
+       Per «no scusa al posto dei rigatoni metti i paccheri» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *Lasagna*
+
+[GRAVE] corr-003
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette (finito)] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / I»
+     > "al posto della cotoletta metti polpette"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Intendi la *Cotoletta* del Menu Giorno o una delle cotolette alla carta (*Cotoletta di pollo* o *Cotolett
+     > "i rigatoni... no scusa, le polpette sono finite"
+       Non trovo *Polpette* nel menu: quale piatto è finito?
+
+[GRAVE] corr-004
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Per «togli lasagna metti rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *Lasagna*»
+     > "togli lasagna metti rigatoni"
+       Per «togli lasagna metti rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *Lasagna*
+     > "rimetti la lasagna"
+       Cosa vuoi fare con la *Lasagna*?
+
+[GRAVE] si-sost-001
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+     > "togli la lasagnia metti i rigatoni"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «togli la lasagnia metti i rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto. /  /
+     > "si"
+       Ci sto lavorando… / Tolgo *Lasagna* dal menu. /  / *Lasagna*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca
+
+[GRAVE] si-sost-002
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Gnocchi] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+     > "al posto delle orechiette metti gnocchi"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «al posto delle orechiette metti gnocchi» intendi *Orecchiette con zucca*? Rispondi sì oppure dimmi i
+     > "sì"
+       Non ho cambiato nulla. /  / 1. *Orecchiette con zucca*
+
+[GRAVE] si-sost-003
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto]
+     > "togli la coteletta metti le polpette"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Quale *Cotoletta* vuoi togliere: quella del Menu Giorno, la *Cotoletta di pollo* o la *Cotoletta di nodin
+     > "esatto"
+       Ci sto lavorando… / Di quale piatto parli? 1. Cotoletta del Menu Giorno 2. Cotoletta di pollo con contorno 3. Cotoletta di nodino con contorno. Rispondi con il numero. /  / 1. *Cotoletta* / 2. *Cotoletta di pollo con con
+
+[GRAVE] si-sost-004
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Cicoria] ottenuto [Cicoria]
+     > "cambia gli spinacci con la cicoria"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «cambia gli spinacci con la cicoria» intendi *Spinaci*? Rispondi sì oppure dimmi il nome giusto. /  /
+     > "ok sì"
+       *Menu Giorno aggiornato* /  / *Contorni* / • Cicoria /  / Eliminati: Patate al forno, Spinaci /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Contorni: Patate al forno, Spinaci → Cicoria
+
+[GRAVE] si-sost-005
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Rigatoni]
+     > "menu mezzogirno togli lasagnia metti rigatoni"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «menu mezzogirno togli lasagnia metti rigatoni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome g
+     > "si"
+       *Menu Giorno aggiornato* /  / *Primi* / • Rigatoni /  / Eliminati: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Rigatoni
+
+[GRAVE] fisso-002
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta (finito), Arrosto] ottenuto [Cotoletta, Arrosto]
+     > "la cotoletta è finita"
+       Quale cotoletta è finita? Intendi la *Cotoletta* del Menu Giorno, la *Cotoletta di pollo* o la *Cotoletta di nodino*?
+     > "mettila a 5 euro"
+       A quale cotoletta intendi *mettere 5 €*? Scegli: *Cotoletta*, *Cotoletta di pollo* o *Cotoletta di nodino*. /  / 1. *Cotoletta* / 2. *Cotoletta di pollo con contorno* (12,00 €) / 3. *Cotoletta di nodino con contorno* (14
+
+[MEDIO] fisso-004
+   - MEDIO turno 0: testo vietato «A quale piatto metto» in «A quale piatto metto *7,00 €*? Scrivimi il nome, per esempio «la carbonara a 7».»
+     > "la lasagna costa 7"
+       A quale piatto metto *7,00 €*? Scrivimi il nome, per esempio «la carbonara a 7».
+
+[MEDIO] nonce-001
+   - MEDIO turno 0: testo vietato «Pirata» in «Intendi *Pirata* a *6,00 €* (adesso 15,00 €)? Rispondi *sì* oppure dimmi il piatto e il prezzo giust»
+     > "porta il tiramisu a 6 euro"
+       Intendi *Pirata* a *6,00 €* (adesso 15,00 €)? Rispondi *sì* oppure dimmi il piatto e il prezzo giusti.
+
+[GRAVE] pron-004
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca] ottenuto [Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 1: domanda inutile «Ci sto lavorando… / Vuoi annullare l'ultima modifica, cioè l'eliminazione di *Lasagna*?»
+     > "togli la lasagna"
+       *Lasagna*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca
+     > "rimettila"
+       Ci sto lavorando… / Vuoi annullare l'ultima modifica, cioè l'eliminazione di *Lasagna*?
+
+[GRAVE] pron-005
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta (finito), Arrosto (finito)] ottenuto [Cotoletta, Arrosto (finito)]
+   - MEDIO turno 0: domanda inutile «Quale cotoletta è finita? Intendi la *Cotoletta* del Menu Giorno, la *Cotoletta di pollo* o la *Cotoletta di n»
+     > "la cotoletta è finita"
+       Quale cotoletta è finita? Intendi la *Cotoletta* del Menu Giorno, la *Cotoletta di pollo* o la *Cotoletta di nodino*?
+     > "anche l arrosto"
+       Ok, *Arrosto* segnato come esaurito. /  / *Arrosto*: *finito*
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto (finito)
+
+[GRAVE] pron-006
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Patate al forno, Spinaci] ottenuto [Patate al forno]
+   - MEDIO turno 1: domanda inutile «Ci sto lavorando… / Quale piatto vuoi rimettere come prima: *Spinaci*?»
+     > "togli gli spinaci"
+       *Spinaci*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Contorni: Patate al forno, Spinaci → Patate al forno
+     > "rimettili"
+       Ci sto lavorando… / Quale piatto vuoi rimettere come prima: *Spinaci*?
+
+[GRAVE] pron-008
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Arrosto, Salsicce] ottenuto [Cotoletta, Arrosto, Polpette]
+   - MEDIO turno 1: domanda inutile «Ci sto lavorando… / Per «togli le polpette metti le salsicce» intendi *Polpette*? Rispondi sì oppure dimmi il no»
+     > "nei secondi del pranzo aggiungi polpette"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta / • Arrosto / • Polpette (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Polpette
+     > "togli le polpette metti le salsicce"
+       Ci sto lavorando… / Per «togli le polpette metti le salsicce» intendi *Polpette*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *Polpette*
+
+[GRAVE] refuso-001
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Nel *Menu Giorno* o nel *Menu Cena*?»
+     > "menu mezzogirno nei primi aggiungi rigatoni"
+       Nel *Menu Giorno* o nel *Menu Cena*?
+
+[GRAVE] refuso-002
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Arrosto, Polpette] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Nel *Menu Giorno* o nel *Menu Cena*?»
+     > "pranzzo aggiungi nei secondi polpette"
+       Nel *Menu Giorno* o nel *Menu Cena*?
+
+[GRAVE] refuso-005
+   - GRAVE menu finale: Menu Cena›Contorni: voluto [Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno, Zucchine trifolate] ottenuto [Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno, Della le zucchine trifolate]
+   - GRAVE piatto spazzatura «Della le zucchine trifolate» in Menu Cena›Contorni
+     > "aggiungi nei contorni della cena le zucchine trifolate"
+       *Menu Cena aggiornato* /  / *Contorni* / • Patate al forno / • Insalata mista / • melanzana al forno / • insalata verde / • patate al forno / • Della le zucchine trifolate (nuovo) /  / Per tornare come prima scrivi *annu
+       Δ Menu Cena›Contorni: Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno → Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno, Della le zucchine trifolate
+
+[GRAVE] refuso-006
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Cotoletta, Arrosto, Polpette al sugo] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Intendi *Pugliese* a *12,00 €* (adesso 8,00 €)? Rispondi *sì* oppure dimmi il piatto e il prezzo giusti.»
+     > "da 12 nei secondi metti polpette al sugo"
+       Intendi *Pugliese* a *12,00 €* (adesso 8,00 €)? Rispondi *sì* oppure dimmi il piatto e il prezzo giusti.
+
+[GRAVE] refuso-009
+   - GRAVE menu finale: Menu Cena›Primi: voluto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara, Gnocchi al ragù] ottenuto [tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara, Della gli gnocchi al ragù]
+   - GRAVE piatto spazzatura «Della gli gnocchi al ragù» in Menu Cena›Primi
+     > "aggiungi nei primi della cena gli gnocchi al ragù"
+       *Menu Cena aggiornato* /  / *Primi* / • tagliatelle vongole totano zucchine e pomodorini / • tortiglioni alla norma con ricotta salata / • linguine alla carbonara / • Della gli gnocchi al ragù (nuovo) /  / Per tornare co
+       Δ Menu Cena›Primi: tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara → tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara, Della gli gnocchi al ragù
+
+[GRAVE] voce-ins-001
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Pasta alla norma] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+   - MEDIO turno 0: domanda inutile «Nei *Primi* di quale menu la metto, *Menu Giorno* o *Menu Cena*?»
+     > "allora nei primi oggi mettiamo anche la pasta alla norma"
+       Nei *Primi* di quale menu la metto, *Menu Giorno* o *Menu Cena*?
+
+[GRAVE] neg-004
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca] ottenuto [A]
+     > "cosa c è nei primi a pranzo"
+       *Menu Giorno aggiornato* /  / *Primi* / • A /  / Eliminati: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → A
+
+TOTALE 143 casi: ok 50 (35%), GRAVI 90, MEDI 3

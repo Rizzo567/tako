@@ -1,0 +1,85 @@
+[
+ {
+  "id": "d2-b-001",
+  "turns": [
+   "togli la pasta al pesto metti la pasta al ragù",
+   "2"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "linguine allo scoglio",
+     "Rigatoni al sugo",
+     "Pasta al ragù"
+    ]
+   },
+   "alt": [
+    {
+     "Alla carta›Primi piatti": null
+    }
+   ],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "se chiede: 1/2"
+ },
+ {
+  "id": "d2-b-002",
+  "turns": [
+   "al pranzo togli le linguine allo scoglio e la pasta al pesto metti carbonara e amatriciana"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Rigatoni al sugo",
+     "Carbonara",
+     "Amatriciana"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "d2-b-003",
+  "turns": [
+   "alla carta togli la pasta al pesto"
+  ],
+  "expect": {
+   "final": {
+    "Alla carta›Primi piatti": null
+   },
+   "alt": [
+    {}
+   ],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "alla carta: eliminazione (anche col sì)"
+ },
+ {
+  "id": "d2-b-004",
+  "turns": [
+   "togli la pasta al pesto del pranzo e metti trofie"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "linguine allo scoglio",
+     "Rigatoni al sugo",
+     "Trofie"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ }
+]

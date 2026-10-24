@@ -1,0 +1,226 @@
+[
+ {
+  "id": "omon-001",
+  "turns": [
+   "nel menu giorno togli pasta al pesto metti pasta al ragù"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "linguine allo scoglio",
+     "Rigatoni al sugo",
+     "Pasta al ragù"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "omon-002",
+  "turns": [
+   "pranzo togli linguine allo scoglio metti spaghetti alle vongole"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Pasta al pesto",
+     "Rigatoni al sugo",
+     "Spaghetti alle vongole"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "omon-003",
+  "turns": [
+   "togli la pasta al pesto metti trofie al pesto"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "linguine allo scoglio",
+     "Rigatoni al sugo",
+     "Trofie al pesto"
+    ]
+   },
+   "alt": [
+    {}
+   ],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "senza Menu: Menu Giorno o domanda; alla carta mai"
+ },
+ {
+  "id": "omon-004",
+  "turns": [
+   "al posto delle linguine allo scoglio metti spaghetti alle vongole"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Pasta al pesto",
+     "Rigatoni al sugo",
+     "Spaghetti alle vongole"
+    ]
+   },
+   "alt": [
+    {}
+   ],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "omon-005",
+  "turns": [
+   "la pasta al pesto del pranzo è finita"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Pasta al pesto (finito)",
+     "linguine allo scoglio",
+     "Rigatoni al sugo"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "omon-006",
+  "turns": [
+   "a pranzo togli la pasta al pesto"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "linguine allo scoglio",
+     "Rigatoni al sugo"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "omon-007",
+  "turns": [
+   "la pasta al pesto alla carta mettila a 9"
+  ],
+  "expect": {
+   "final": {
+    "Alla carta›Primi piatti": [
+     "Linguine allo scoglio 16",
+     "Linguine alla carbonara di mare 16",
+     "Spaghetti alla carbonara 10",
+     "Spaghetti alle vongole 14",
+     "Paccheri alla pescatora 15",
+     "Paccheri alla Totò 10",
+     "Gnocchi alla sorrentina al forno 10",
+     "Penne alla Victoria 12",
+     "Penne all'arrabbiata 10",
+     "Penne alla corsara 14",
+     "Pasta al pesto 9",
+     "Tortellini Prosciutto e Panna 10",
+     "Strozzapreti zucchine e speck 12",
+     "Paccheri al pomodoro 10",
+     "Penne cremose con rucola, carne e zafferano 12",
+     "Spaghetti o linguine con cozze 14",
+     "Tagliatelle con cozze e pomodorini 14",
+     "Tagliatelle zucchine e gamberi 14"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "solo prezzo alla carta"
+ },
+ {
+  "id": "omon-008",
+  "turns": [
+   "menu mezzogirno togli rigatoni al sugo metti lasagna"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Pasta al pesto",
+     "linguine allo scoglio",
+     "Lasagna"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "omon-009",
+  "turns": [
+   "nel pranzo togli l insalata metti spinaci"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Funghi misti",
+     "Peperoni",
+     "Spinaci"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "Insalata anche alla carta e in cena (mista/verde)"
+ },
+ {
+  "id": "omon-010",
+  "turns": [
+   "menu giorno togli peperoni metti melanzane"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Insalata",
+     "Funghi misti",
+     "Melanzane"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ }
+]

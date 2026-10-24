@@ -1,0 +1,2966 @@
+[
+ {
+  "id": "sost-001",
+  "turns": [
+   "togli lasagna metti rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-002",
+  "turns": [
+   "Menù mezzogiorno da 12 euro cambia lasagna con rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-003",
+  "turns": [
+   "a pranzo via lasagna metti rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-004",
+  "turns": [
+   "pranzzo invece di lasagna fai rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-005",
+  "turns": [
+   "x pranzo togli lasagna e metti rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-006",
+  "turns": [
+   "sostituisci lasagna con rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-007",
+  "turns": [
+   "Menù mezzogiorno da 12 euro togli lasagna e al suo posto metti rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-008",
+  "turns": [
+   "a pranzo al posto di lasagna rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-009",
+  "turns": [
+   "a pranzo via orecchiette con zucca metti gnocchi al pomodoro"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi al pomodoro"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-010",
+  "turns": [
+   "pranzzo invece di orecchiette con zucca fai gnocchi al pomodoro"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi al pomodoro"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-011",
+  "turns": [
+   "x pranzo togli orecchiette con zucca e metti gnocchi al pomodoro"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi al pomodoro"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-012",
+  "turns": [
+   "sostituisci orecchiette con zucca con gnocchi al pomodoro"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi al pomodoro"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-013",
+  "turns": [
+   "Menù mezzogiorno da 12 euro togli orecchiette con zucca e al suo posto metti gnocchi al pomodoro"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi al pomodoro"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-014",
+  "turns": [
+   "a pranzo al posto di orecchiette con zucca gnocchi al pomodoro"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi al pomodoro"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-015",
+  "turns": [
+   "pranzzo al posto della orecchiette con zucca metti gnocchi al pomodoro"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi al pomodoro"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-016",
+  "turns": [
+   "x pranzo orecchiette con zucca no metti gnocchi al pomodoro"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi al pomodoro"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-017",
+  "turns": [
+   "x pranzo togli cotoletta e metti polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-018",
+  "turns": [
+   "sostituisci cotoletta con polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-019",
+  "turns": [
+   "Menù mezzogiorno da 12 euro togli cotoletta e al suo posto metti polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-020",
+  "turns": [
+   "a pranzo al posto di cotoletta polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-021",
+  "turns": [
+   "pranzzo al posto della cotoletta metti polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-022",
+  "turns": [
+   "x pranzo cotoletta no metti polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-023",
+  "turns": [
+   "togli cotoletta  metti polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-024",
+  "turns": [
+   "Menù mezzogiorno da 12 euro cambia cotoletta in polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-025",
+  "turns": [
+   "Menù mezzogiorno da 12 euro togli arrosto e al suo posto metti scaloppine al limone"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Scaloppine al limone"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-026",
+  "turns": [
+   "a pranzo al posto di arrosto scaloppine al limone"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Scaloppine al limone"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-027",
+  "turns": [
+   "pranzzo al posto della arrosto metti scaloppine al limone"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Scaloppine al limone"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-028",
+  "turns": [
+   "x pranzo arrosto no metti scaloppine al limone"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Scaloppine al limone"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-029",
+  "turns": [
+   "togli arrosto  metti scaloppine al limone"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Scaloppine al limone"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-030",
+  "turns": [
+   "Menù mezzogiorno da 12 euro cambia arrosto in scaloppine al limone"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Scaloppine al limone"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-031",
+  "turns": [
+   "a pranzo invece della arrosto metti scaloppine al limone"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Scaloppine al limone"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-032",
+  "turns": [
+   "pranzzo leva arrosto e metti scaloppine al limone"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Scaloppine al limone"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-033",
+  "turns": [
+   "pranzzo al posto della spinaci metti insalata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Insalata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-034",
+  "turns": [
+   "x pranzo spinaci no metti insalata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Insalata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-035",
+  "turns": [
+   "togli spinaci  metti insalata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Insalata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-036",
+  "turns": [
+   "Menù mezzogiorno da 12 euro cambia spinaci in insalata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Insalata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-037",
+  "turns": [
+   "a pranzo invece della spinaci metti insalata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Insalata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-038",
+  "turns": [
+   "pranzzo leva spinaci e metti insalata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Insalata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-039",
+  "turns": [
+   "x pranzo Togli spinaci. Metti insalata."
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Insalata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-040",
+  "turns": [
+   "togli spinaci metti insalata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Insalata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-041",
+  "turns": [
+   "togli strozzapreti  metti pasta e fagioli"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Orecchiette con zucca",
+     "Pasta e fagioli"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-042",
+  "turns": [
+   "Menù mezzogiorno da 12 euro cambia strozzapreti in pasta e fagioli"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Orecchiette con zucca",
+     "Pasta e fagioli"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-043",
+  "turns": [
+   "a pranzo invece della strozzapreti metti pasta e fagioli"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Orecchiette con zucca",
+     "Pasta e fagioli"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-044",
+  "turns": [
+   "pranzzo leva strozzapreti e metti pasta e fagioli"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Orecchiette con zucca",
+     "Pasta e fagioli"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-045",
+  "turns": [
+   "x pranzo Togli strozzapreti. Metti pasta e fagioli."
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Orecchiette con zucca",
+     "Pasta e fagioli"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-046",
+  "turns": [
+   "togli strozzapreti metti pasta e fagioli"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Orecchiette con zucca",
+     "Pasta e fagioli"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-047",
+  "turns": [
+   "Menù mezzogiorno da 12 euro cambia strozzapreti con pasta e fagioli"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Orecchiette con zucca",
+     "Pasta e fagioli"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-048",
+  "turns": [
+   "a pranzo via strozzapreti metti pasta e fagioli"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Orecchiette con zucca",
+     "Pasta e fagioli"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione in una frase"
+ },
+ {
+  "id": "sost-049",
+  "turns": [
+   "stasera invece della pollo al forno metti salsiccia alla griglia"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Secondi": [
+     "branzino al forno",
+     "scaloppine al vino bianco",
+     "Salsiccia alla griglia"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-050",
+  "turns": [
+   "nel menu cena togli pollo al forno e al suo posto metti salsiccia alla griglia"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Secondi": [
+     "branzino al forno",
+     "scaloppine al vino bianco",
+     "Salsiccia alla griglia"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-051",
+  "turns": [
+   "menu sera togli pollo al forno metti salsiccia alla griglia"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Secondi": [
+     "branzino al forno",
+     "scaloppine al vino bianco",
+     "Salsiccia alla griglia"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-052",
+  "turns": [
+   "stasera pollo al forno no metti salsiccia alla griglia"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Secondi": [
+     "branzino al forno",
+     "scaloppine al vino bianco",
+     "Salsiccia alla griglia"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-053",
+  "turns": [
+   "nel menu cena invece di pollo al forno fai salsiccia alla griglia"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Secondi": [
+     "branzino al forno",
+     "scaloppine al vino bianco",
+     "Salsiccia alla griglia"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-054",
+  "turns": [
+   "cena stasera via linguine alla carbonara metti spaghetti alla puttanesca"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Primi": [
+     "tagliatelle vongole totano zucchine e pomodorini",
+     "tortiglioni alla norma con ricotta salata",
+     "Spaghetti alla puttanesca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-055",
+  "turns": [
+   "cena cambia linguine alla carbonara in spaghetti alla puttanesca"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Primi": [
+     "tagliatelle vongole totano zucchine e pomodorini",
+     "tortiglioni alla norma con ricotta salata",
+     "Spaghetti alla puttanesca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-056",
+  "turns": [
+   "x stasera sostituisci linguine alla carbonara con spaghetti alla puttanesca"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Primi": [
+     "tagliatelle vongole totano zucchine e pomodorini",
+     "tortiglioni alla norma con ricotta salata",
+     "Spaghetti alla puttanesca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-057",
+  "turns": [
+   "cena stasera Togli linguine alla carbonara. Metti spaghetti alla puttanesca."
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Primi": [
+     "tagliatelle vongole totano zucchine e pomodorini",
+     "tortiglioni alla norma con ricotta salata",
+     "Spaghetti alla puttanesca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-058",
+  "turns": [
+   "cena al posto della linguine alla carbonara metti spaghetti alla puttanesca"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Primi": [
+     "tagliatelle vongole totano zucchine e pomodorini",
+     "tortiglioni alla norma con ricotta salata",
+     "Spaghetti alla puttanesca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-059",
+  "turns": [
+   "menu sera al posto di melanzana al forno zucchine trifolate"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "insalata verde",
+     "patate al forno",
+     "Zucchine trifolate"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-060",
+  "turns": [
+   "stasera cambia melanzana al forno con zucchine trifolate"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "insalata verde",
+     "patate al forno",
+     "Zucchine trifolate"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-061",
+  "turns": [
+   "nel menu cena togli melanzana al forno  metti zucchine trifolate"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "insalata verde",
+     "patate al forno",
+     "Zucchine trifolate"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-062",
+  "turns": [
+   "menu sera togli melanzana al forno e metti zucchine trifolate"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "insalata verde",
+     "patate al forno",
+     "Zucchine trifolate"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "sost-063",
+  "turns": [
+   "stasera leva melanzana al forno e metti zucchine trifolate"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "insalata verde",
+     "patate al forno",
+     "Zucchine trifolate"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "sostituzione cena"
+ },
+ {
+  "id": "voce-001",
+  "turns": [
+   {
+    "voice": "allora ehm nel menu del giorno togli la lasagna e metti i rigatoni all amatriciana"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni all amatriciana"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "vocale con allora/ehm"
+ },
+ {
+  "id": "voce-002",
+  "turns": [
+   {
+    "voice": "allora oggi a pranzo al posto della cotoletta mettiamo le polpette al sugo"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette al sugo"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "vocale con allora/ehm"
+ },
+ {
+  "id": "voce-003",
+  "turns": [
+   {
+    "voice": "ehm allora stasera togli il pollo al forno e metti la salsiccia alla griglia"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Secondi": [
+     "branzino al forno",
+     "scaloppine al vino bianco",
+     "Salsiccia alla griglia"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "vocale con allora/ehm"
+ },
+ {
+  "id": "voce-004",
+  "turns": [
+   {
+    "voice": "allora nel menu di mezzogiorno invece degli spinaci metti la cicoria ripassata"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Cicoria ripassata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "vocale con allora/ehm"
+ },
+ {
+  "id": "multi-001",
+  "turns": [
+   "menu giorno togli lasagna e orecchiette metti rigatoni e gnocchi"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Rigatoni",
+     "Gnocchi"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "multi-002",
+  "turns": [
+   "togli la lasagna metti rigatoni e la cotoletta è finita"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ],
+    "Menu Giorno›Secondi": [
+     "Cotoletta (finito)",
+     "Arrosto"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "multi-003",
+  "turns": [
+   "togli lasagna e spinaci"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ],
+    "Menu Giorno›Contorni": [
+     "Patate al forno"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "multi-004",
+  "turns": [
+   "la cotoletta è finita e togli gli spinaci"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta (finito)",
+     "Arrosto"
+    ],
+    "Menu Giorno›Contorni": [
+     "Patate al forno"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "multi-005",
+  "turns": [
+   "nei primi del pranzo togli lasagna e orecchiette e aggiungi gnocchi"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "multi-006",
+  "turns": [
+   "togli la lasagna aggiungi rigatoni e l arrosto è finito"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ],
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto (finito)"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "multi-007",
+  "turns": [
+   "x pranzo togli cotoletta metti polpette  contorni togli spinaci metti fagiolini"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ],
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Fagiolini"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "multi-008",
+  "turns": [
+   "pranzo: lasagna finita, nei secondi aggiungi polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna (finito)",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ],
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "corr-001",
+  "turns": [
+   "togli lasagna metti rigatoni",
+   "annulla"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "corr-002",
+  "turns": [
+   "togli lasagna metti rigatoni",
+   "no scusa al posto dei rigatoni metti i paccheri"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Paccheri"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "corr-003",
+  "turns": [
+   "al posto della cotoletta metti polpette",
+   "i rigatoni... no scusa, le polpette sono finite"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette (finito)"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "corr-004",
+  "turns": [
+   "togli lasagna metti rigatoni",
+   "rimetti la lasagna"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": "lasagna ripristinata, rigatoni restano"
+ },
+ {
+  "id": "si-elim-001",
+  "turns": [
+   "elimina la lasagna",
+   "si"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "«elimina» chiede sì: il sì esegue"
+ },
+ {
+  "id": "si-elim-002",
+  "turns": [
+   "elimina la lasagna",
+   "sì"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "«elimina» chiede sì: il sì esegue"
+ },
+ {
+  "id": "si-elim-003",
+  "turns": [
+   "elimina la lasagna",
+   "ok sì"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "«elimina» chiede sì: il sì esegue"
+ },
+ {
+  "id": "si-elim-004",
+  "turns": [
+   "elimina la lasagna",
+   "esatto"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "«elimina» chiede sì: il sì esegue"
+ },
+ {
+  "id": "si-elim-005",
+  "turns": [
+   "elimina la lasagna",
+   "si si"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "«elimina» chiede sì: il sì esegue"
+ },
+ {
+  "id": "si-elim-006",
+  "turns": [
+   "elimina la lasagna",
+   "Si"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "«elimina» chiede sì: il sì esegue"
+ },
+ {
+  "id": "si-elim-007",
+  "turns": [
+   "elimina la lasagna",
+   "ok"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "«elimina» chiede sì: il sì esegue"
+ },
+ {
+  "id": "si-elim-008",
+  "turns": [
+   "elimina la lasagna",
+   "sì grazie"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "«elimina» chiede sì: il sì esegue"
+ },
+ {
+  "id": "si-refuso-001",
+  "turns": [
+   "togli le orechiete",
+   "si"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "refuso: subito o domanda + sì"
+ },
+ {
+  "id": "si-refuso-002",
+  "turns": [
+   "togli le orechiete",
+   "sì"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "refuso: subito o domanda + sì"
+ },
+ {
+  "id": "si-refuso-003",
+  "turns": [
+   "togli le orechiete",
+   "ok sì"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "refuso: subito o domanda + sì"
+ },
+ {
+  "id": "si-refuso-004",
+  "turns": [
+   "togli le orechiete",
+   "esatto"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "refuso: subito o domanda + sì"
+ },
+ {
+  "id": "si-refuso-005",
+  "turns": [
+   "togli le orechiete",
+   "si si"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "refuso: subito o domanda + sì"
+ },
+ {
+  "id": "si-lista-001",
+  "turns": [
+   "nei secondi del pranzo metti salsiccia alla griglia  funghi misti e peperoni",
+   "si"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto",
+     "Salsiccia alla griglia",
+     "Funghi misti",
+     "Peperoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "proposta «Ho capito così»"
+ },
+ {
+  "id": "si-lista-002",
+  "turns": [
+   "nei secondi del pranzo metti salsiccia alla griglia  funghi misti e peperoni",
+   "sì"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto",
+     "Salsiccia alla griglia",
+     "Funghi misti",
+     "Peperoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "proposta «Ho capito così»"
+ },
+ {
+  "id": "si-lista-003",
+  "turns": [
+   "nei secondi del pranzo metti salsiccia alla griglia  funghi misti e peperoni",
+   "ok sì"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto",
+     "Salsiccia alla griglia",
+     "Funghi misti",
+     "Peperoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "proposta «Ho capito così»"
+ },
+ {
+  "id": "si-lista-004",
+  "turns": [
+   "nei secondi del pranzo metti salsiccia alla griglia  funghi misti e peperoni",
+   "esatto"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto",
+     "Salsiccia alla griglia",
+     "Funghi misti",
+     "Peperoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "proposta «Ho capito così»"
+ },
+ {
+  "id": "si-finito-001",
+  "turns": [
+   "la lasagnia è finita",
+   "si"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna (finito)",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "si-finito-002",
+  "turns": [
+   "la lasagnia è finita",
+   "sì"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna (finito)",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "si-finito-003",
+  "turns": [
+   "la lasagnia è finita",
+   "ok sì"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna (finito)",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "si-finito-004",
+  "turns": [
+   "la lasagnia è finita",
+   "esatto"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna (finito)",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "si-sost-001",
+  "turns": [
+   "togli la lasagnia metti i rigatoni",
+   "si"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "refuso nella sostituzione: anche con domanda il sì esegue tutto"
+ },
+ {
+  "id": "si-sost-002",
+  "turns": [
+   "al posto delle orechiette metti gnocchi",
+   "sì"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Gnocchi"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "si-sost-003",
+  "turns": [
+   "togli la coteletta metti le polpette",
+   "esatto"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "si-sost-004",
+  "turns": [
+   "cambia gli spinacci con la cicoria",
+   "ok sì"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Cicoria"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "si-sost-005",
+  "turns": [
+   "menu mezzogirno togli lasagnia metti rigatoni",
+   "si"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "fisso-001",
+  "turns": [
+   "la cotoletta mettila a 5 euro"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": [
+    "A quale piatto metto"
+   ]
+  },
+  "note": "piatto di Menu a prezzo fisso: niente prezzo, spiegalo"
+ },
+ {
+  "id": "fisso-002",
+  "turns": [
+   "la cotoletta è finita",
+   "mettila a 5 euro"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta (finito)",
+     "Arrosto"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": [
+    "A quale piatto metto"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "fisso-003",
+  "turns": [
+   "nei primi del pranzo aggiungi rigatoni",
+   "mettili a 8"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [],
+   "forbid": [
+    "A quale piatto metto"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "fisso-004",
+  "turns": [
+   "la lasagna costa 7"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": [
+    "A quale piatto metto"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "fisso-005",
+  "turns": [
+   "il completo del pranzo a 13"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›opzione Completo": [
+     "13"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "nonce-001",
+  "turns": [
+   "porta il tiramisu a 6 euro"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": [
+    "Pirata",
+    "Turbolenti",
+    "Paoletta"
+   ]
+  },
+  "note": "piatto inesistente: niente nome che non somiglia"
+ },
+ {
+  "id": "nonce-002",
+  "turns": [
+   "togli il tiramisù"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": [
+    "Pirata",
+    "Turbolenti",
+    "Paoletta"
+   ]
+  },
+  "note": "piatto inesistente: niente nome che non somiglia"
+ },
+ {
+  "id": "nonce-003",
+  "turns": [
+   "il tiramisu è finito"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": [
+    "Pirata",
+    "Turbolenti",
+    "Paoletta"
+   ]
+  },
+  "note": "piatto inesistente: niente nome che non somiglia"
+ },
+ {
+  "id": "nonce-004",
+  "turns": [
+   "la panna cotta a 5"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": [
+    "Pirata",
+    "Turbolenti",
+    "Paoletta"
+   ]
+  },
+  "note": "piatto inesistente: niente nome che non somiglia"
+ },
+ {
+  "id": "nonce-005",
+  "turns": [
+   "togli la carbonara dal pranzo"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": [
+    "Pirata",
+    "Turbolenti",
+    "Paoletta"
+   ]
+  },
+  "note": "piatto inesistente: niente nome che non somiglia"
+ },
+ {
+  "id": "pron-001",
+  "turns": [
+   "la lasagna è finita",
+   "rimettila"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "pron-002",
+  "turns": [
+   "la lasagna è finita",
+   "no scusa toglila proprio"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "pron-003",
+  "turns": [
+   "nei primi del pranzo aggiungi carbonara",
+   "toglila"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "pron-004",
+  "turns": [
+   "togli la lasagna",
+   "rimettila"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "pron-005",
+  "turns": [
+   "la cotoletta è finita",
+   "anche l arrosto"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta (finito)",
+     "Arrosto (finito)"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "pron-006",
+  "turns": [
+   "togli gli spinaci",
+   "rimettili"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "pron-007",
+  "turns": [
+   "nei primi del pranzo aggiungi rigatoni al sugo",
+   "i rigatoni sono finiti"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni al sugo (finito)"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "pron-008",
+  "turns": [
+   "nei secondi del pranzo aggiungi polpette",
+   "togli le polpette metti le salsicce"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto",
+     "Salsicce"
+    ]
+   },
+   "alt": [
+    {
+     "Menu Giorno›Secondi": [
+      "Cotoletta",
+      "Arrosto",
+      "Salsiccia"
+     ]
+    }
+   ],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": "«salsicce» → «Salsiccia» (correzione d ortografia verso il lessico): MINORE"
+ },
+ {
+  "id": "pron-009",
+  "turns": [
+   "nei primi del pranzo aggiungi rigatoni",
+   "anzi no toglili"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "pron-010",
+  "turns": [
+   "la lasagna è finita",
+   "e anche le orecchiette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna (finito)",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca (finito)"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0,
+    1
+   ],
+   "forbid": []
+  },
+  "note": ""
+ },
+ {
+  "id": "refuso-001",
+  "turns": [
+   "menu mezzogirno nei primi aggiungi rigatoni"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Rigatoni"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Della*",
+    "*Allora*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "refuso-002",
+  "turns": [
+   "pranzzo aggiungi nei secondi polpette"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Della*",
+    "*Allora*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "refuso-003",
+  "turns": [
+   "menù giorno nei contorni metti insalata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Spinaci",
+     "Insalata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Della*",
+    "*Allora*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "refuso-004",
+  "turns": [
+   "cena stasera nei contorni aggiungi zucchine trifolate"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "melanzana al forno",
+     "insalata verde",
+     "patate al forno",
+     "Zucchine trifolate"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Della*",
+    "*Allora*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "refuso-005",
+  "turns": [
+   "aggiungi nei contorni della cena le zucchine trifolate"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "melanzana al forno",
+     "insalata verde",
+     "patate al forno",
+     "Zucchine trifolate"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Della*",
+    "*Allora*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "refuso-006",
+  "turns": [
+   "da 12 nei secondi metti polpette al sugo"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto",
+     "Polpette al sugo"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Della*",
+    "*Allora*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "refuso-007",
+  "turns": [
+   "nel menu di mezzogiorno nei primi aggiungi pasta e ceci"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Pasta e ceci"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Della*",
+    "*Allora*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "refuso-008",
+  "turns": [
+   "x mezzogiorno nei contorni aggiungi patate fritte"
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Contorni": [
+     "Patate al forno",
+     "Spinaci",
+     "Patate fritte"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Della*",
+    "*Allora*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "refuso-009",
+  "turns": [
+   "aggiungi nei primi della cena gli gnocchi al ragù"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Primi": [
+     "tagliatelle vongole totano zucchine e pomodorini",
+     "tortiglioni alla norma con ricotta salata",
+     "linguine alla carbonara",
+     "Gnocchi al ragù"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Della*",
+    "*Allora*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "refuso-010",
+  "turns": [
+   "nei secondi della sera metti la tagliata"
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Secondi": [
+     "branzino al forno",
+     "scaloppine al vino bianco",
+     "pollo al forno",
+     "Tagliata"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Della*",
+    "*Allora*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "voce-ins-001",
+  "turns": [
+   {
+    "voice": "allora nei primi oggi mettiamo anche la pasta alla norma"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Primi": [
+     "Lasagna",
+     "Strozzapreti con zola e pistacchio",
+     "Orecchiette con zucca",
+     "Pasta alla norma"
+    ]
+   },
+   "alt": [
+    {}
+   ],
+   "noAsk": [],
+   "forbid": [
+    "*Allora*",
+    "*Ehm*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "voce-ins-002",
+  "turns": [
+   {
+    "voice": "ehm allora nel menu del giorno nei secondi aggiungi le polpette"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Giorno›Secondi": [
+     "Cotoletta",
+     "Arrosto",
+     "Polpette"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Allora*",
+    "*Ehm*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "voce-ins-003",
+  "turns": [
+   {
+    "voice": "allora per stasera nei contorni aggiungi le zucchine"
+   }
+  ],
+  "expect": {
+   "final": {
+    "Menu Cena›Contorni": [
+     "Patate al forno",
+     "Insalata mista",
+     "melanzana al forno",
+     "insalata verde",
+     "patate al forno",
+     "Zucchine"
+    ]
+   },
+   "alt": [],
+   "noAsk": [
+    0
+   ],
+   "forbid": [
+    "*Allora*",
+    "*Ehm*"
+   ]
+  },
+  "note": ""
+ },
+ {
+  "id": "neg-001",
+  "turns": [
+   "non togliere la lasagna"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "nessuna scrittura"
+ },
+ {
+  "id": "neg-002",
+  "turns": [
+   "la lasagna resta"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "nessuna scrittura"
+ },
+ {
+  "id": "neg-003",
+  "turns": [
+   "quanto costa il menu del giorno"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "nessuna scrittura"
+ },
+ {
+  "id": "neg-004",
+  "turns": [
+   "cosa c è nei primi a pranzo"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "nessuna scrittura"
+ },
+ {
+  "id": "neg-005",
+  "turns": [
+   "nn togliere niente oggi"
+  ],
+  "expect": {
+   "final": {},
+   "alt": [],
+   "noAsk": [],
+   "forbid": []
+  },
+  "note": "nessuna scrittura"
+ }
+]
