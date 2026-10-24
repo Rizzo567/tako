@@ -1,7 +1,10 @@
 {
  "cases": 189,
  "runs": 249,
- "unknownSql": [],
+ "unknownSql": [
+  "SELECT lpad(((extract(epoch from clock_timestamp())*1000)::bigint)::text,15,'0') AS t",
+  "SELECT sid FROM tako_whatsapp_messages WHERE starts_with(sid,$)"
+ ],
  "results": [
   {
    "id": "alt-01",
@@ -1416,16 +1419,25 @@
     "nascondi il tiramisù, la panna cotta no"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Tiramisù|true"
    ],
    "actual": [
-    "hidden|Tiramisù|true"
+    "delete|Tiramisù"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Tiramisù"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Tiramisù|true"
+    }
+   ]
   },
   {
    "id": "neg-17",
@@ -1597,18 +1609,27 @@
     "nascondi tutte le bibite tranne la birra"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Acqua 0,5 l*: *nascosto* dal menu\n*Coca Cola 33cl*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Acqua 0,5 l*: *eliminato* dal menu\n*Coca Cola 33cl*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Acqua 0,5 l|true",
     "hidden|Coca Cola 33cl|true"
    ],
    "actual": [
-    "hidden|Acqua 0,5 l|true",
-    "hidden|Coca Cola 33cl|true"
+    "delete|Acqua 0,5 l",
+    "delete|Coca Cola 33cl"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Acqua 0,5 l, delete|Coca Cola 33cl"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Acqua 0,5 l|true, hidden|Coca Cola 33cl|true"
+    }
+   ]
   },
   {
    "id": "neg-26",
@@ -2034,16 +2055,25 @@
     "nascondi il caffè e il cappuccino no"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Caffè*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Caffè*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Caffè|true"
    ],
    "actual": [
-    "hidden|Caffè|true"
+    "delete|Caffè"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Caffè"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Caffè|true"
+    }
+   ]
   },
   {
    "id": "neg-41",
@@ -3194,16 +3224,25 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *nascosto* dal menu"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Spaghetti alla carbonara|true"
    ],
    "actual": [
-    "hidden|Spaghetti alla carbonara|true"
+    "delete|Spaghetti alla carbonara"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Spaghetti alla carbonara"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Spaghetti alla carbonara|true"
+    }
+   ]
   },
   {
    "id": "chiar-22",

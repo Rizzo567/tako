@@ -1,7 +1,10 @@
 {
  "cases": 100,
  "runs": 148,
- "unknownSql": [],
+ "unknownSql": [
+  "SELECT lpad(((extract(epoch from clock_timestamp())*1000)::bigint)::text,15,'0') AS t",
+  "SELECT sid FROM tako_whatsapp_messages WHERE starts_with(sid,$)"
+ ],
  "results": [
   {
    "id": "date4-01",
@@ -247,16 +250,25 @@
     "nascondi il menù della domenica"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù della domenica*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù della domenica*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Menù della domenica|true"
    ],
    "actual": [
-    "hidden|Menù della domenica|true"
+    "delete|Menù della domenica"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Menù della domenica"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Menù della domenica|true"
+    }
+   ]
   },
   {
    "id": "date4-11",
@@ -1048,7 +1060,7 @@
     "ok"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu\n*Panna cotta*: *nascosto* dal menu\n*Dolce del giorno*: *nascosto* dal menu",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *eliminato* dal menu\n*Panna cotta*: *eliminato* dal menu\n*Dolce del giorno*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo.",
     "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
    ],
    "expected": [
@@ -1057,12 +1069,21 @@
     "hidden|Dolce del giorno|true"
    ],
    "actual": [
-    "hidden|Tiramisù|true",
-    "hidden|Panna cotta|true",
-    "hidden|Dolce del giorno|true"
+    "delete|Tiramisù",
+    "delete|Panna cotta",
+    "delete|Dolce del giorno"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Tiramisù, delete|Panna cotta, delete|Dolce del giorno"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Tiramisù|true, hidden|Panna cotta|true, hidden|Dolce del giorno|true"
+    }
+   ]
   },
   {
    "id": "tutte4-04",
@@ -1808,7 +1829,7 @@
     "mi dici se posso mettere la carbonara in promo?"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *il sottomenu e il prezzo*.\n\nSottomenu disponibili:\n• Antipasti\n• Primi\n• Secondi\n• Piatti di prova\n• Offerte\n• Contorni\n• Pizze\n• Dolci\n• Proposte\n• Bibite\n• Caffetteria\n• Vini\n\nDimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
    ],
    "expected": [],
    "actual": [],
@@ -1936,7 +1957,7 @@
     "lascia stare il tagliere, metti in evidenza la tagliata"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo.",
     "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *in evidenza*"
    ],
    "expected": [
@@ -1944,11 +1965,20 @@
     "featured|Tagliata di manzo|true"
    ],
    "actual": [
-    "hidden|Bruschetta al pomodoro|true",
-    "featured|Tagliata di manzo|true"
+    "featured|Tagliata di manzo|true",
+    "delete|Bruschetta al pomodoro"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Bruschetta al pomodoro"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Bruschetta al pomodoro|true"
+    }
+   ]
   },
   {
    "id": "lascia4-04",
@@ -2246,16 +2276,25 @@
     "nascondi la pizza mezzo metro"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pizza mezzo metro*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pizza mezzo metro*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Pizza mezzo metro|true"
    ],
    "actual": [
-    "hidden|Pizza mezzo metro|true"
+    "delete|Pizza mezzo metro"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Pizza mezzo metro"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Pizza mezzo metro|true"
+    }
+   ]
   },
   {
    "id": "mezzo-10",
@@ -2547,13 +2586,20 @@
     "torna come prima la bruschetta"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: di nuovo *visibile* nel menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo.",
+    "Non ho una modifica recente su *bruschetta* da annullare. Dimmi cosa vuoi, per esempio «bruschetta è di nuovo disponibile»."
    ],
    "expected": [],
-   "actual": [],
+   "actual": [
+    "delete|Bruschetta al pomodoro"
+   ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Bruschetta al pomodoro"
+    }
+   ]
   },
   {
    "id": "mem60-11",

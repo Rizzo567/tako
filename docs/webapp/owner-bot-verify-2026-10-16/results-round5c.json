@@ -1,7 +1,10 @@
 {
  "cases": 186,
  "runs": 387,
- "unknownSql": [],
+ "unknownSql": [
+  "SELECT lpad(((extract(epoch from clock_timestamp())*1000)::bigint)::text,15,'0') AS t",
+  "SELECT sid FROM tako_whatsapp_messages WHERE starts_with(sid,$)"
+ ],
  "results": [
   {
    "id": "altfp-01",
@@ -509,7 +512,7 @@
     "metti la lasagna nelle ultime porzioni, ne restano cinque o sei"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *il sottomenu e il prezzo*.\n\nSottomenu disponibili:\n• Antipasti\n• Primi\n• Secondi\n• Piatti di prova\n• Offerte\n• Contorni\n• Pizze\n• Dolci\n• Proposte\n• Bibite\n• Caffetteria\n• Vini\n\nDimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
    ],
    "expected": [
     "last|Lasagna al forno|true"
@@ -2170,7 +2173,7 @@
     "non mettere più in evidenza la tagliata"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *il sottomenu e il prezzo*.\n\nSottomenu disponibili:\n• Antipasti\n• Primi\n• Secondi\n• Piatti di prova\n• Offerte\n• Contorni\n• Pizze\n• Dolci\n• Proposte\n• Bibite\n• Caffetteria\n• Vini\n\nDimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
    ],
    "expected": [
     "featured|Tagliata di manzo|false"
@@ -4345,16 +4348,25 @@
     "nascondi tutta la caffetteria tranne il cappuccino"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Caffè*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Caffè*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Caffè|true"
    ],
    "actual": [
-    "hidden|Caffè|true"
+    "delete|Caffè"
    ],
    "aiCalls": 1,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Caffè"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Caffè|true"
+    }
+   ]
   },
   {
    "id": "tranne-05",
@@ -4657,18 +4669,27 @@
     "nascondi tutte le bibite eccetto la coca cola"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Acqua 0,5 l*: *nascosto* dal menu\n*Birra media*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Acqua 0,5 l*: *eliminato* dal menu\n*Birra media*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Acqua 0,5 l|true",
     "hidden|Birra media|true"
    ],
    "actual": [
-    "hidden|Acqua 0,5 l|true",
-    "hidden|Birra media|true"
+    "delete|Acqua 0,5 l",
+    "delete|Birra media"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Acqua 0,5 l, delete|Birra media"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Acqua 0,5 l|true, hidden|Birra media|true"
+    }
+   ]
   },
   {
    "id": "nomi-01",
@@ -6813,16 +6834,25 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *nascosto* dal menu"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Spaghetti alla carbonara|true"
    ],
    "actual": [
-    "hidden|Spaghetti alla carbonara|true"
+    "delete|Spaghetti alla carbonara"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Spaghetti alla carbonara"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Spaghetti alla carbonara|true"
+    }
+   ]
   },
   {
    "id": "sosp-23",

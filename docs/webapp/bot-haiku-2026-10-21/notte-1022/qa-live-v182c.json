@@ -1,0 +1,1043 @@
+{
+ "tag": "v182c",
+ "at": "2026-10-23T13:31:55.390Z",
+ "stopped": null,
+ "finalDiff": [],
+ "ok": 40,
+ "total": 43,
+ "results": [
+  {
+   "id": "annulla-domanda-aperta",
+   "desc": "«annulla» mentre il bot aspetta la risposta alla sua domanda (piatto nuovo senza dati): niente scritture, niente domanda ripetuta",
+   "turns": [
+    {
+     "m": "aggiungi il vitello tonnato",
+     "reply": "*Menu del giorno aggiornato* *Primi* • Lasagna • Carbonara • Gnocchi al ragù • Vitello tonnato (nuovo) Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 1701,
+     "fails": [
+      "risposta senza /\\?|rispondi|dimmi/",
+      "menu: mancano [] in più [+Vitello tonnato|Primi|Menu del giorno|0]"
+     ]
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Vitello tonnato*: tolto (era stato aggiunto)",
+     "ms": 2930,
+     "fails": []
+    }
+   ],
+   "fails": [
+    "t1 «aggiungi il vitello tonnato»: risposta senza /\\?|rispondi|dimmi/",
+    "t1 «aggiungi il vitello tonnato»: menu: mancano [] in più [+Vitello tonnato|Primi|Menu del giorno|0]"
+   ],
+   "leftover": [],
+   "ok": false
+  },
+  {
+   "id": "lettura-prezzo",
+   "desc": "«quanto costa il riso giallo?» → 8 €, nessuna scrittura",
+   "turns": [
+    {
+     "m": "quanto costa il riso giallo?",
+     "reply": "Il *riso giallo* costa 8 €. *riso giallo*: *8,00 €* · disponibile",
+     "ms": 3450,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "pronome-alzalo",
+   "desc": "lettura poi «alzalo di un euro» → riso giallo 9 € subito (bug vivo v145)",
+   "turns": [
+    {
+     "m": "quanto costa il riso giallo?",
+     "reply": "Il *riso giallo* costa 8 €. *riso giallo*: *8,00 €* · disponibile",
+     "ms": 4087,
+     "fails": []
+    },
+    {
+     "m": "alzalo di un euro",
+     "reply": "*riso giallo*: prezzo da 8,00 € a *9,00 €*",
+     "ms": 2245,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *riso giallo*: com’era prima",
+     "ms": 3255,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "pronome-mettila",
+   "desc": "lettura poi «mettila a 10» → pasta carbonara 10 €",
+   "turns": [
+    {
+     "m": "quanto costa la pasta carbonara?",
+     "reply": "La *pasta carbonara* costa 9 €. *pasta carbonara*: *9,00 €* · disponibile",
+     "ms": 2999,
+     "fails": []
+    },
+    {
+     "m": "mettila a 10",
+     "reply": "*pasta carbonara*: prezzo da 9,00 € a *10,00 €*",
+     "ms": 2063,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *pasta carbonara*: com’era prima",
+     "ms": 4612,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "pronome-toglila",
+   "desc": "lettura poi «toglila» → pasta al ragù ELIMINATA subito (22/10 notte); «annulla» → rimessa identica",
+   "turns": [
+    {
+     "m": "quanto costa la pasta al ragù?",
+     "reply": "La *pasta al ragù* costa 10 €. *pasta al ragù*: *10,00 €* · disponibile",
+     "ms": 3005,
+     "fails": []
+    },
+    {
+     "m": "toglila",
+     "reply": "*pasta al ragù*: *eliminato* dal menu Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 1703,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *pasta al ragù*: com’era prima",
+     "ms": 3237,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "pronome-finito",
+   "desc": "«c'è il tiramisù?» → «è finito» → non disponibile; «è tornato» → disponibile",
+   "turns": [
+    {
+     "m": "c'è il tiramisù?",
+     "reply": "Sì, il *tiramisù* c'è nel menu a 15 €. *tiramisù*: *15,00 €* · disponibile",
+     "ms": 2839,
+     "fails": []
+    },
+    {
+     "m": "è finito",
+     "reply": "*tiramisù*: *finito*",
+     "ms": 3067,
+     "fails": []
+    },
+    {
+     "m": "è tornato",
+     "reply": "*tiramisù*: di nuovo *disponibile*",
+     "ms": 2877,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "nuovo-solo-prezzo",
+   "desc": "«aggiungi le patatine fritte» → chiede sottomenu E prezzo insieme («le metto»); «4» tenuto, chiede solo il sottomenu; poi lo crea a 4 €",
+   "turns": [
+    {
+     "m": "aggiungi le patatine fritte",
+     "reply": "Ok, aggiungo *Patatine fritte*. A quale prezzo la metto?",
+     "ms": 5091,
+     "fails": [
+      "risposta senza /sottomenu/",
+      "risposta con /\\bla metto/"
+     ]
+    },
+    {
+     "m": "4",
+     "reply": "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome. 1. *Piatti di prova* (Menu di verifica · web QA) 2. *Primi* (Menu di verifica · web QA)",
+     "ms": 1399,
+     "fails": []
+    },
+    {
+     "m": "nei Piatti di prova",
+     "reply": "Nuovo piatto *Patatine fritte* in *Piatti di prova*: *4,00 €*",
+     "ms": 1725,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Patatine fritte*: tolto (era stato aggiunto)",
+     "ms": 3785,
+     "fails": []
+    }
+   ],
+   "fails": [
+    "t1 «aggiungi le patatine fritte»: risposta senza /sottomenu/",
+    "t1 «aggiungi le patatine fritte»: risposta con /\\bla metto/"
+   ],
+   "leftover": [],
+   "ok": false
+  },
+  {
+   "id": "nuovo-con-prezzo",
+   "desc": "«aggiungi patatine fritte a 4» → chiede solo il sottomenu → «nei Primi del Menu di verifica» → creato a 4 €",
+   "turns": [
+    {
+     "m": "aggiungi patatine fritte a 4",
+     "reply": "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome. 1. *Piatti di prova* (Menu di verifica · web QA) 2. *Primi* (Menu di verifica · web QA)",
+     "ms": 3785,
+     "fails": []
+    },
+    {
+     "m": "nei Primi del Menu di verifica",
+     "reply": "Nuovo piatto *Patatine fritte* in *Primi*: *4,00 €*",
+     "ms": 1884,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Patatine fritte*: tolto (era stato aggiunto)",
+     "ms": 3879,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "nuovo-solo-sottomenu",
+   "desc": "«aggiungi il vitello tonnato nei Primi del Menu di verifica» → chiede il prezzo → «14» → creato a 14 €",
+   "turns": [
+    {
+     "m": "aggiungi il vitello tonnato nei Primi del Menu di verifica",
+     "reply": "Ok, aggiungo *Vitello tonnato* nei *Primi*. A quale prezzo lo metto?",
+     "ms": 6075,
+     "fails": []
+    },
+    {
+     "m": "14",
+     "reply": "Nuovo piatto *Vitello tonnato* in *Primi*: *14,00 €*",
+     "ms": 2827,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Vitello tonnato*: tolto (era stato aggiunto)",
+     "ms": 3983,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "si-a-domanda-a-scelta",
+   "desc": "«aggiungi patatine fritte a 4» → domanda sottomenu → «sì» → deve richiedere la scelta breve, mai il testo generico; «lascia stare» → niente",
+   "turns": [
+    {
+     "m": "aggiungi patatine fritte a 4",
+     "reply": "Ok, *4,00 €*. In quale sottomenu metto *Patatine fritte*? Rispondi col numero o col nome. 1. *Piatti di prova* (Menu di verifica · web QA) 2. *Primi* (Menu di verifica · web QA)",
+     "ms": 3697,
+     "fails": []
+    },
+    {
+     "m": "sì",
+     "reply": "Mi serve il sottomenu: scrivimi il nome, per esempio *Piatti di prova*, oppure il numero dell’elenco.",
+     "ms": 1863,
+     "fails": []
+    },
+    {
+     "m": "lascia stare",
+     "reply": "Ok, lascio stare: non ho cambiato nulla.",
+     "ms": 2100,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "tutti-e-due",
+   "desc": "lettura di due piatti → «alzali tutti e due di 50 centesimi» → riso 8,5 e carbonara 9,5",
+   "turns": [
+    {
+     "m": "quanto costano il riso giallo e la pasta carbonara?",
+     "reply": "*Pasta e fagioli* l’hai eliminato poco fa: non è più nel menu. Per rimetterlo scrivimi «rimetti pasta e fagioli».",
+     "ms": 2194,
+     "fails": [
+      "risposta senza /\\b8\\b/",
+      "risposta senza /\\b9\\b/"
+     ]
+    },
+    {
+     "m": "alzali tutti e due di 50 centesimi",
+     "reply": "Aumentati di 0,50 € i prezzi di 2 piatti. *pasta carbonara*: prezzo da 9,00 € a *9,50 €* *riso giallo*: prezzo da 8,00 € a *8,50 €* Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 7963,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *pasta carbonara*: com’era prima *riso giallo*: com’era prima",
+     "ms": 4800,
+     "fails": []
+    }
+   ],
+   "fails": [
+    "t1 «quanto costano il riso giallo e la pasta carbonara?»: risposta senza /\\b8\\b/",
+    "t1 «quanto costano il riso giallo e la pasta carbonara?»: risposta senza /\\b9\\b/"
+   ],
+   "leftover": [],
+   "ok": false
+  },
+  {
+   "id": "gruppo-menu-detto",
+   "desc": "«alza di 50 centesimi i primi del Menu di verifica» → i 4 primi +0,50 subito",
+   "turns": [
+    {
+     "m": "alza di 50 centesimi i primi del Menu di verifica",
+     "reply": "Aumentati di 0,50 € i prezzi di 4 piatti. *la parmigiana*: prezzo da 12,50 € a *13,00 €* *pasta al pesto*: prezzo da 9,00 € a *9,50 €* *pasta carbonara*: prezzo da 9,00 € a *9,50 €* *riso giallo*: prezzo da 8,00 € a *8,50 €* Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 7227,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *la parmigiana*: com’era prima *pasta al pesto*: com’era prima *pasta carbonara*: com’era prima *riso giallo*: com’era prima",
+     "ms": 4142,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "gruppo-senza-menu",
+   "desc": "«alza di 50 centesimi i primi» → o i 4 primi del Menu di verifica (unico con prezzi) o una domanda sul Menu; mai i piatti del Menu del giorno",
+   "turns": [
+    {
+     "m": "alza di 50 centesimi i primi",
+     "reply": "Aumentati di 0,50 € i prezzi di 4 piatti. *la parmigiana*: prezzo da 12,50 € a *13,00 €* *pasta al pesto*: prezzo da 9,00 € a *9,50 €* *pasta carbonara*: prezzo da 9,00 € a *9,50 €* *riso giallo*: prezzo da 8,00 € a *8,50 €* Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 7700,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *la parmigiana*: com’era prima *pasta al pesto*: com’era prima *pasta carbonara*: com’era prima *riso giallo*: com’era prima",
+     "restore": true
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "prezzo-lettere-1",
+   "desc": "«il riso giallo a otto e cinquanta» → 8,50",
+   "turns": [
+    {
+     "m": "il riso giallo a otto e cinquanta",
+     "reply": "Ok, il *riso giallo* passa a *8,50 €*. *riso giallo*: prezzo da 8,00 € a *8,50 €*",
+     "ms": 4911,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *riso giallo*: com’era prima",
+     "ms": 4108,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "prezzo-lettere-2",
+   "desc": "«la pasta al sugo a dieci euro e mezzo» → 10,50",
+   "turns": [
+    {
+     "m": "la pasta al sugo a dieci euro e mezzo",
+     "reply": "Ok, la *Pasta al sugo* passa a *10,50 €*. *Pasta al sugo*: prezzo da 9,00 € a *10,50 €*",
+     "ms": 4288,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Pasta al sugo*: com’era prima",
+     "ms": 3793,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "nascondi-elimina",
+   "desc": "(22/10 notte) «nascondi il riso giallo» = togli → ELIMINATO, mai nascosto; «annulla» → identico",
+   "turns": [
+    {
+     "m": "nascondi il riso giallo",
+     "reply": "*riso giallo*: *eliminato* dal menu Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 3911,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *riso giallo*: com’era prima",
+     "ms": 4491,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "togli-elimina",
+   "desc": "(22/10 notte) «togli la pasta al pesto e lasagna» → eliminata subito con «annulla»; «annulla» → identica",
+   "turns": [
+    {
+     "m": "togli la pasta al pesto e lasagna",
+     "reply": "*Pasta al pesto e lasagna*: *eliminato* dal menu Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 6633,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Pasta al pesto e lasagna*: com’era prima",
+     "ms": 4947,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "sostituzione-eliminati",
+   "desc": "(22/10 notte) «nel menu del giorno secondi cotoletta e polpette» → le due frittate ELIMINATE, risposta «Eliminati: …»; annulla",
+   "turns": [
+    {
+     "m": "nel menu del giorno secondi cotoletta e polpette",
+     "reply": "*Menu del giorno aggiornato* *Secondi* • Cotoletta • Polpette Eliminati: Frittata di zucchine, Frittata di patate Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 1909,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Frittata di zucchine*: com’era prima *Frittata di patate*: com’era prima",
+     "ms": 4149,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "finito-tornato",
+   "desc": "«la pasta al sugo è finita» → non disponibile; «la pasta al sugo è tornata» → disponibile",
+   "turns": [
+    {
+     "m": "la pasta al sugo è finita",
+     "reply": "Ok, segno la *Pasta al sugo* come finita. *Pasta al sugo*: *finito*",
+     "ms": 3957,
+     "fails": []
+    },
+    {
+     "m": "la pasta al sugo è tornata",
+     "reply": "Ok, rimetto la *Pasta al sugo* disponibile. *Pasta al sugo*: di nuovo *disponibile*",
+     "ms": 4786,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "elimina-poi-annulla",
+   "desc": "«elimina la pasta al sugo» → chiede il sì, niente scritto → «annulla» → scarta, niente scritto",
+   "turns": [
+    {
+     "m": "elimina la pasta al sugo",
+     "reply": "Elimino *Pasta al sugo* dal menu? Rispondi *sì*. Da eliminare, serve il tuo sì: 1. *Pasta al sugo*: da eliminare",
+     "ms": 1794,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l'eliminazione di *Pasta al sugo*. Resta nel menu.",
+     "ms": 3384,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "vietato-tutto-zero",
+   "desc": "«metti tutto a zero» → deve chiedere conferma (OK/sì) senza scrivere → «no» → niente",
+   "turns": [
+    {
+     "m": "metti tutto a zero",
+     "reply": "Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12».",
+     "ms": 3220,
+     "fails": []
+    },
+    {
+     "m": "no",
+     "reply": "Ok, lascio stare.",
+     "ms": 3118,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "modifica-domanda-no",
+   "desc": "«la pasta al sugo è finita» → esaurita; «elimina tutti i primi» → domanda senza scrivere; «no» → NON annulla l'esaurita",
+   "turns": [
+    {
+     "m": "la pasta al sugo è finita",
+     "reply": "Ok, segno la *Pasta al sugo* come finita. *Pasta al sugo*: *finito*",
+     "ms": 4124,
+     "fails": []
+    },
+    {
+     "m": "elimina tutti i primi",
+     "reply": "Nel *Menu di verifica · web QA* o nel *Menu del giorno*?",
+     "ms": 1489,
+     "fails": []
+    },
+    {
+     "m": "no",
+     "reply": "Quale Menu intendi? Rispondi con il numero: 1. Menu di verifica · web QA 2. Menu del giorno",
+     "ms": 7488,
+     "fails": []
+    },
+    {
+     "m": "la pasta al sugo è tornata",
+     "reply": "Ok, rimetto la *Pasta al sugo* disponibile. *Pasta al sugo*: di nuovo *disponibile*",
+     "ms": 4182,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "modifica-domanda-no-paste",
+   "desc": "come sopra con «elimina tutte le paste» (domanda che nomina di sicuro la Pasta al sugo) → «no» → NON annulla",
+   "turns": [
+    {
+     "m": "la pasta al sugo è finita",
+     "reply": "Ok, segno la *Pasta al sugo* come finita. *Pasta al sugo*: *finito*",
+     "ms": 5127,
+     "fails": []
+    },
+    {
+     "m": "elimina tutte le paste",
+     "reply": "Elimino *Pasta al sugo* dal menu? Rispondi sì. Non ancora pubblicato: 1. *Pasta al sugo*: *eliminato* dal menu «tutte le paste»: 1. *pasta al ragù* (10,00 €) 2. *Pasta al pesto e lasagna* (10,01 €) 3. *pasta al pesto* (9,00 €) 4. *pasta carbonara* (9,00 €)",
+     "ms": 4655,
+     "fails": []
+    },
+    {
+     "m": "no",
+     "reply": "Ok, lascio stare.",
+     "ms": 3790,
+     "fails": []
+    },
+    {
+     "m": "la pasta al sugo è tornata",
+     "reply": "Ok, rimetto la *Pasta al sugo* disponibile. *Pasta al sugo*: di nuovo *disponibile*",
+     "ms": 4235,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "vietato-elimina-primi",
+   "desc": "«elimina tutti i primi» → chiede il sì senza scrivere → «no» → niente",
+   "turns": [
+    {
+     "m": "elimina tutti i primi",
+     "reply": "Nel *Menu di verifica · web QA* o nel *Menu del giorno*?",
+     "ms": 1850,
+     "fails": []
+    },
+    {
+     "m": "no",
+     "reply": "Quale Menu intendi, il *Menu di verifica · web QA* o il *Menu del giorno*?",
+     "ms": 5499,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "riepilogo-pollice",
+   "desc": "4 prezzi in un messaggio → aspetta l'OK senza scrivere → «👍» pubblica tutti e 4 → «annulla» li toglie",
+   "turns": [
+    {
+     "m": "riso giallo a 9, pasta carbonara a 10, pasta al sugo a 10, tiramisù a 16",
+     "reply": "Non ancora pubblicato, da confermare con OK: 1. *riso giallo*: prezzo da 8,00 € a *9,00 €* 2. *pasta carbonara*: prezzo da 9,00 € a *10,00 €* 3. *Pasta al sugo*: prezzo da 9,00 € a *10,00 €* 4. *tiramisù*: prezzo da 15,00 € a *16,00 €*",
+     "ms": 3926,
+     "fails": []
+    },
+    {
+     "m": "👍",
+     "reply": "*riso giallo*: prezzo da 8,00 € a *9,00 €* *pasta carbonara*: prezzo da 9,00 € a *10,00 €* *Pasta al sugo*: prezzo da 9,00 € a *10,00 €* *tiramisù*: prezzo da 15,00 € a *16,00 €*",
+     "ms": 1570,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Pasta al sugo*: com’era prima *tiramisù*: com’era prima *pasta carbonara*: com’era prima *riso giallo*: com’era prima",
+     "ms": 4100,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "ambiguo-pesto-ok",
+   "desc": "«alza il pesto di un euro» (pasta al pesto / Pasta al pesto e lasagna) → domanda → «la pasta al pesto dei primi» → 10 €",
+   "turns": [
+    {
+     "m": "alza il pesto di un euro",
+     "reply": "Intendi la *pasta al pesto* o la *Pasta al pesto e lasagna*? 1. *pasta al pesto* (9,00 €) 2. *Pasta al pesto e lasagna* (10,01 €)",
+     "ms": 6285,
+     "fails": []
+    },
+    {
+     "m": "la pasta al pesto dei primi",
+     "reply": "*pasta al pesto*: prezzo da 9,00 € a *10,00 €*",
+     "ms": 4907,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *pasta al pesto*: com’era prima",
+     "ms": 3773,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "lettura-primi",
+   "desc": "«cosa c'è nei primi?» → elenca i primi del Menu di verifica (riso giallo, carbonara…)",
+   "turns": [
+    {
+     "m": "cosa c'è nei primi?",
+     "reply": "Nei *Primi* del *Menu di verifica · web QA* ci sono *la parmigiana*, *pasta al pesto*, *pasta carbonara* e *riso giallo*. *la parmigiana*: *12,50 €* · disponibile *pasta al pesto*: *9,00 €* · disponibile *pasta carbonara*: *9,00 €* · disponibile *riso giallo*: *8,00 €* · disponibile",
+     "ms": 4426,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "lettura-paste-primi",
+   "desc": "«quante paste ho nei primi?» → solo pasta al pesto e pasta carbonara (non pasta al ragù/sugo di Piatti di prova)",
+   "turns": [
+    {
+     "m": "quante paste ho nei primi?",
+     "reply": "Nei *Primi* del *Menu di verifica · web QA* ci sono 2 piatti: *pasta al pesto*: *9,00 €* · disponibile *pasta carbonara*: *9,00 €* · disponibile",
+     "ms": 3564,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "prezzo-insolito-no",
+   "desc": "«il riso giallo a 80» → aspetta l'OK senza scrivere → «no» → niente",
+   "turns": [
+    {
+     "m": "il riso giallo a 80",
+     "reply": "Intendi *8 €* o *80 €* per il *riso giallo*? Dimmi il prezzo giusto.",
+     "ms": 3612,
+     "fails": []
+    },
+    {
+     "m": "no",
+     "reply": "Ok, lascio stare: non ho cambiato nulla.",
+     "ms": 6440,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "anzi-rimettilo",
+   "desc": "«il riso giallo a 9» → 9 € → «anzi rimettilo a 8» → 8 €",
+   "turns": [
+    {
+     "m": "il riso giallo a 9",
+     "reply": "Ok, metto il *riso giallo* a *9 €*. *riso giallo*: prezzo da 8,00 € a *9,00 €*",
+     "ms": 3572,
+     "fails": []
+    },
+    {
+     "m": "anzi rimettilo a 8",
+     "reply": "*riso giallo*: prezzo da 9,00 € a *8,00 €*",
+     "ms": 1675,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "svuota-annulla",
+   "desc": "«svuota il menu del giorno» → i 7 piatti ELIMINATI subito, nessuna domanda → «annulla» → com’era (identico)",
+   "turns": [
+    {
+     "m": "svuota il menu del giorno",
+     "reply": "*Menu del giorno svuotato* Ho eliminato tutti i 7 piatti. I sottomenu (Primi e Secondi) e i prezzi fissi restano come sono. Eliminati: Lasagna, Carbonara, Gnocchi al ragù, Cotoletta, Polpette, Frittata di zucchine, Frittata di patate. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne». Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 1972,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Carbonara*: com’era prima *Gnocchi al ragù*: com’era prima *Cotoletta*: com’era prima *Polpette*: com’era prima *Frittata di zucchine*: com’era prima *Frittata di patate*: com’era prima",
+     "ms": 3658,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "svuota-inserisci-un-messaggio",
+   "desc": "«svuota il menu del giorno e nei primi inserisci carbonara e gnocchi al ragù» → solo loro visibili → annulla",
+   "turns": [
+    {
+     "m": "svuota il menu del giorno e nei primi inserisci carbonara e gnocchi al ragù",
+     "reply": "*Menu del giorno aggiornato* Ho eliminato gli altri 5 piatti del menu. Eliminati: Lasagna, Cotoletta, Polpette, Frittata di zucchine, Frittata di patate. *Primi* • Carbonara • Gnocchi al ragù Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 3006,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Cotoletta*: com’era prima *Polpette*: com’era prima *Frittata di zucchine*: com’era prima *Frittata di patate*: com’era prima",
+     "ms": 4607,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "inserisci-contesto",
+   "desc": "(22/10 notte) Menu dalla conversazione: «nel menu del giorno nei primi inserisci la pasta e fagioli» → «nei secondi metti la tagliata» → nuova nei Secondi del Menu del giorno; annulla toglie la tagliata; «elimina la pasta e fagioli» + «sì» la toglie",
+   "turns": [
+    {
+     "m": "nel menu del giorno nei primi inserisci la pasta e fagioli",
+     "reply": "*Menu del giorno aggiornato* *Primi* • Lasagna • Carbonara • Gnocchi al ragù • Pasta e fagioli (nuovo) Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2042,
+     "fails": []
+    },
+    {
+     "m": "nei secondi metti la tagliata",
+     "reply": "*Menu del giorno aggiornato* *Secondi* • Cotoletta • Polpette • Frittata di zucchine • Frittata di patate • Tagliata (nuovo) Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 1663,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Tagliata*: tolto (era stato aggiunto)",
+     "ms": 4344,
+     "fails": []
+    },
+    {
+     "m": "elimina la pasta e fagioli dal menu del giorno",
+     "reply": "Elimino *Pasta e fagioli* dal menu? Rispondi sì. Da eliminare, serve il tuo sì: 1. *Pasta e fagioli*: da eliminare",
+     "ms": 3140,
+     "fails": []
+    },
+    {
+     "m": "sì",
+     "reply": "*Pasta e fagioli*: *eliminato* dal menu",
+     "ms": 1510,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "inserisci-nuovo-annulla",
+   "desc": "«nel menu del giorno nei primi inserisci la pasta e fagioli» → nuova senza prezzo, gli altri restano visibili → annulla la toglie",
+   "turns": [
+    {
+     "m": "nel menu del giorno nei primi inserisci la pasta e fagioli",
+     "reply": "*Menu del giorno aggiornato* *Primi* • Lasagna • Carbonara • Gnocchi al ragù • Pasta e fagioli (nuovo) Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2147,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Pasta e fagioli*: tolto (era stato aggiunto)",
+     "ms": 3594,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "elimina-menu-no",
+   "desc": "(correzione Manuel) «elimina il menu del giorno» = eliminare il Menu: chiede il sì senza scrivere → «no» → niente",
+   "turns": [
+    {
+     "m": "elimina il menu del giorno",
+     "reply": "Elimino il *Menu del giorno* intero? Spariscono i sottomenu *Primi* e *Secondi*, 7 piatti e i prezzi fissi. Rispondi *sì* per eliminarlo, oppure *no*. Se vuoi solo togliere i piatti e tenere i sottomenu scrivi «togli tutti i piatti del menu del giorno».",
+     "ms": 1605,
+     "fails": []
+    },
+    {
+     "m": "no",
+     "reply": "Ok, non elimino niente: il *Menu del giorno* resta com’è.",
+     "ms": 1708,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "piatti-del-menu-svuota",
+   "desc": "«togli tutti i piatti del menu del giorno» = svuotamento (sottomenu restano), nessuna domanda → annulla",
+   "turns": [
+    {
+     "m": "togli tutti i piatti del menu del giorno",
+     "reply": "*Menu del giorno svuotato* Ho eliminato tutti i 7 piatti. I sottomenu (Primi e Secondi) e i prezzi fissi restano come sono. Eliminati: Lasagna, Carbonara, Gnocchi al ragù, Cotoletta, Polpette, Frittata di zucchine, Frittata di patate. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne». Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2986,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Carbonara*: com’era prima *Gnocchi al ragù*: com’era prima *Cotoletta*: com’era prima *Polpette*: com’era prima *Frittata di zucchine*: com’era prima *Frittata di patate*: com’era prima",
+     "ms": 4028,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "grave-b7-nascondi-tutti",
+   "desc": "(Victoria B7, GRAVE) «il menù del giorno si deve vedere ma devi nascondere tutti i piatti» → tutti ELIMINATI subito (prima: elenco di 5 e «tutti» parziale)",
+   "turns": [
+    {
+     "m": "il menù del giorno si deve vedere ma devi nascondere tutti i piatti",
+     "reply": "*Menu del giorno svuotato* Ho eliminato tutti i 7 piatti. I sottomenu (Primi e Secondi) e i prezzi fissi restano come sono. Eliminati: Lasagna, Carbonara, Gnocchi al ragù, Cotoletta, Polpette, Frittata di zucchine, Frittata di patate. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci carbonara, lasagne». Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2876,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Carbonara*: com’era prima *Gnocchi al ragù*: com’era prima *Cotoletta*: com’era prima *Polpette*: com’era prima *Frittata di zucchine*: com’era prima *Frittata di patate*: com’era prima",
+     "ms": 3422,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "grave-k2-pasta-e-fagioli",
+   "desc": "(K2, GRAVE) «nel menu del giorno primi carbonara e pasta e fagioli» → Carbonara + Pasta e fagioli (nuova), Lasagna e Gnocchi ELIMINATI → annulla",
+   "turns": [
+    {
+     "m": "nel menu del giorno primi carbonara e pasta e fagioli",
+     "reply": "*Menu del giorno aggiornato* *Primi* • Pasta e fagioli • Carbonara Eliminati: Lasagna, Gnocchi al ragù Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 1769,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Gnocchi al ragù*: com’era prima *Pasta e fagioli*: tolto (era stato aggiunto)",
+     "ms": 4731,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "luisa-elimina-primi",
+   "desc": "(Luisa) «Nel menù del giorno da 18 elimina i primi» → i 3 Primi del Menu del giorno eliminati subito, mai «a quale piatto?» → annulla",
+   "turns": [
+    {
+     "m": "Nel menù del giorno da 18 elimina i primi",
+     "reply": "*Menu del giorno aggiornato* *Primi* • nessun piatto Eliminati: Lasagna, Carbonara, Gnocchi al ragù. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carbonara». Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2458,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Carbonara*: com’era prima *Gnocchi al ragù*: com’era prima",
+     "ms": 3982,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "luisa-inserisci-elenco",
+   "desc": "(Luisa) «Nel menù del giorno nei primi inserisci» → chiede i piatti → «Strozzapreti con Zola e pistacchio  orecchiette con zucca» → 2 piatti nuovi → annulla",
+   "turns": [
+    {
+     "m": "Nel menù del giorno nei primi inserisci",
+     "reply": "Cosa inserisco nei *Primi* del *Menu del giorno*? Scrivimi i piatti, per esempio «carbonara, lasagne».",
+     "ms": 1352,
+     "fails": []
+    },
+    {
+     "m": "Strozzapreti con Zola e pistacchio  orecchiette con zucca",
+     "reply": "*Menu del giorno aggiornato* *Primi* • Lasagna • Carbonara • Gnocchi al ragù • Strozzapreti con zola e pistacchio (nuovo) • Orecchiette con zucca (nuovo) Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 1746,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Strozzapreti con zola e pistacchio*: tolto (era stato aggiunto) *Orecchiette con zucca*: tolto (era stato aggiunto)",
+     "ms": 3647,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "luisa-accavallati",
+   "desc": "(Luisa) «Nel menù del giorno elimina i primi» + «annulla» 1 s dopo (accavallati): la fila li lavora in ordine → prima eliminati, poi rimessi; QA identico",
+   "turns": [
+    {
+     "m": "Nel menù del giorno elimina i primi ∥ annulla",
+     "reply": "*Menu del giorno aggiornato* *Primi* • nessun piatto Eliminati: Lasagna, Carbonara, Gnocchi al ragù. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carbonara». Per tornare come prima scrivi *annulla* entro 10 minuti. ∥ Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Carbonara*: com’era prima *Gnocchi al ragù*: com’era prima",
+     "ms": 4778,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "luisa-si-domanda-menu",
+   "desc": "(Luisa) due letture (il contesto del Menu vale solo 2 scambi) poi «elimina i primi» (più Menu) → UNA domanda sul Menu → «Menù del giorno da 18 euro» → eliminati → annulla",
+   "turns": [
+    {
+     "m": "quanto costa il riso giallo?",
+     "reply": "Il *riso giallo* costa 8 €. *riso giallo*: *8,00 €* · disponibile",
+     "ms": 3896,
+     "fails": []
+    },
+    {
+     "m": "quanto costa la pasta carbonara?",
+     "reply": "La *pasta carbonara* costa 9 €. *pasta carbonara*: *9,00 €* · disponibile",
+     "ms": 3347,
+     "fails": []
+    },
+    {
+     "m": "elimina i primi",
+     "reply": "Nel *Menu di verifica · web QA* o nel *Menu del giorno*?",
+     "ms": 2011,
+     "fails": []
+    },
+    {
+     "m": "Menù del giorno da 18 euro",
+     "reply": "*Menu del giorno aggiornato* *Primi* • nessun piatto Eliminati: Lasagna, Carbonara, Gnocchi al ragù. Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carbonara». Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 2498,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Lasagna*: com’era prima *Carbonara*: com’era prima *Gnocchi al ragù*: com’era prima",
+     "ms": 4021,
+     "fails": []
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "id": "ok-a-domanda",
+   "desc": "«togli la carbonara» (pasta carbonara / Carbonara del Menu del giorno spento) → elimina la pasta carbonara o chiede; mai «nascosto»",
+   "turns": [
+    {
+     "m": "togli la carbonara",
+     "reply": "Tolgo *Carbonara* dal menu. *Carbonara*: *eliminato* dal menu Per tornare come prima scrivi *annulla* entro 10 minuti.",
+     "ms": 4594,
+     "fails": []
+    },
+    {
+     "m": "annulla",
+     "reply": "Ok, annullo l’ultima modifica. *Carbonara*: com’era prima",
+     "restore": true
+    }
+   ],
+   "fails": [],
+   "leftover": [],
+   "ok": true
+  }
+ ]
+}

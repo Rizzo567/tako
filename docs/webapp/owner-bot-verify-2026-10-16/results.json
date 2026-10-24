@@ -2,6 +2,8 @@
  "cases": 283,
  "runs": 547,
  "unknownSql": [
+  "SELECT lpad(((extract(epoch from clock_timestamp())*1000)::bigint)::text,15,'0') AS t",
+  "SELECT sid FROM tako_whatsapp_messages WHERE starts_with(sid,$)",
   "SELECT draft->'menus' AS menus FROM menu_workspaces WHERE restaurant_id=$"
  ],
  "results": [
@@ -1488,16 +1490,25 @@
    ],
    "replies": [
     "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale piatto intendi?\n\n1. *Spaghetti alla carbonara*\n2. *Spaghetti aglio olio e peperoncino*\n\nRispondi con il *numero* o il *nome*.",
-    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: *nascosto* dal menu"
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Spaghetti aglio olio e peperoncino|true"
    ],
    "actual": [
-    "hidden|Spaghetti aglio olio e peperoncino|true"
+    "delete|Spaghetti aglio olio e peperoncino"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Spaghetti aglio olio e peperoncino"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Spaghetti aglio olio e peperoncino|true"
+    }
+   ]
   },
   {
    "id": "turni-20",
@@ -3933,7 +3944,7 @@
     "abbiamo di nuovo la cotoletta"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *la categoria e il prezzo*.\nCategorie disponibili: Antipasti, Primi, Secondi, Piatti di prova, Pizze, Dolci, Bibite, Caffetteria. Dimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *il sottomenu e il prezzo*.\n\nSottomenu disponibili:\n• Antipasti\n• Primi\n• Secondi\n• Piatti di prova\n• Pizze\n• Dolci\n• Bibite\n• Caffetteria\n\nDimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
    ],
    "expected": [
     "available|Cotoletta alla milanese|true"
@@ -4003,7 +4014,7 @@
     "la carbonara c è di nuovo"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *la categoria e il prezzo*.\nCategorie disponibili: Antipasti, Primi, Secondi, Piatti di prova, Pizze, Dolci, Bibite, Caffetteria. Dimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *il sottomenu e il prezzo*.\n\nSottomenu disponibili:\n• Antipasti\n• Primi\n• Secondi\n• Piatti di prova\n• Pizze\n• Dolci\n• Bibite\n• Caffetteria\n\nDimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
    ],
    "expected": [
     "available|Spaghetti alla carbonara|true"
@@ -4073,7 +4084,7 @@
     "pasta e fagioli di nuovo disponibile"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *la categoria e il prezzo*.\nCategorie disponibili: Antipasti, Primi, Secondi, Piatti di prova, Pizze, Dolci, Bibite, Caffetteria. Dimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *il sottomenu e il prezzo*.\n\nSottomenu disponibili:\n• Antipasti\n• Primi\n• Secondi\n• Piatti di prova\n• Pizze\n• Dolci\n• Bibite\n• Caffetteria\n\nDimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
    ],
    "expected": [
     "available|Pasta e fagioli|true"
@@ -4194,16 +4205,25 @@
     "nascondi la bruschetta"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Bruschetta al pomodoro|true"
    ],
    "actual": [
-    "hidden|Bruschetta al pomodoro|true"
+    "delete|Bruschetta al pomodoro"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Bruschetta al pomodoro"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Bruschetta al pomodoro|true"
+    }
+   ]
   },
   {
    "id": "nascondi-02",
@@ -4213,16 +4233,25 @@
     "togli la bruschetta dal menu"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Bruschetta al pomodoro|true"
    ],
    "actual": [
-    "hidden|Bruschetta al pomodoro|true"
+    "delete|Bruschetta al pomodoro"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Bruschetta al pomodoro"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Bruschetta al pomodoro|true"
+    }
+   ]
   },
   {
    "id": "nascondi-03",
@@ -4232,16 +4261,25 @@
     "leva il tagliere misto"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliere misto*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliere misto*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Tagliere misto|true"
    ],
    "actual": [
-    "hidden|Tagliere misto|true"
+    "delete|Tagliere misto"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Tagliere misto"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Tagliere misto|true"
+    }
+   ]
   },
   {
    "id": "nascondi-04",
@@ -4251,16 +4289,25 @@
     "non far vedere la diavola"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Diavola|true"
    ],
    "actual": [
-    "hidden|Diavola|true"
+    "delete|Diavola"
    ],
    "aiCalls": 1,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Diavola"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Diavola|true"
+    }
+   ]
   },
   {
    "id": "nascondi-04",
@@ -4321,16 +4368,25 @@
     "togli dal menu la pasta e fagioli"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pasta e fagioli*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pasta e fagioli*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Pasta e fagioli|true"
    ],
    "actual": [
-    "hidden|Pasta e fagioli|true"
+    "delete|Pasta e fagioli"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Pasta e fagioli"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Pasta e fagioli|true"
+    }
+   ]
   },
   {
    "id": "nascondi-06",
@@ -4340,16 +4396,25 @@
     "nascondi pasta e fagioli"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pasta e fagioli*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pasta e fagioli*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Pasta e fagioli|true"
    ],
    "actual": [
-    "hidden|Pasta e fagioli|true"
+    "delete|Pasta e fagioli"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Pasta e fagioli"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Pasta e fagioli|true"
+    }
+   ]
   },
   {
    "id": "nascondi-07",
@@ -4359,16 +4424,25 @@
     "nascondi la pizza 4 formaggi"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pizza 4 formaggi*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pizza 4 formaggi*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Pizza 4 formaggi|true"
    ],
    "actual": [
-    "hidden|Pizza 4 formaggi|true"
+    "delete|Pizza 4 formaggi"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Pizza 4 formaggi"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Pizza 4 formaggi|true"
+    }
+   ]
   },
   {
    "id": "nascondi-08",
@@ -4378,16 +4452,25 @@
     "nascondi il menù del giorno"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù del giorno*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù del giorno*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Menù del giorno|true"
    ],
    "actual": [
-    "hidden|Menù del giorno|true"
+    "delete|Menù del giorno"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Menù del giorno"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Menù del giorno|true"
+    }
+   ]
   },
   {
    "id": "nascondi-09",
@@ -4397,16 +4480,25 @@
     "togli il caffè"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Caffè*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Caffè*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Caffè|true"
    ],
    "actual": [
-    "hidden|Caffè|true"
+    "delete|Caffè"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Caffè"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Caffè|true"
+    }
+   ]
   },
   {
    "id": "nascondi-10",
@@ -4416,16 +4508,25 @@
     "🎤 nascondi gli spaghetti aglio olio e peperoncino"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti aglio olio e peperoncino*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Spaghetti aglio olio e peperoncino|true"
    ],
    "actual": [
-    "hidden|Spaghetti aglio olio e peperoncino|true"
+    "delete|Spaghetti aglio olio e peperoncino"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Spaghetti aglio olio e peperoncino"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Spaghetti aglio olio e peperoncino|true"
+    }
+   ]
   },
   {
    "id": "mostra-01",
@@ -4606,16 +4707,25 @@
     "rimuovi la coca cola 33cl"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: *nascosto* dal menu\n\nL’ho *nascosto*. Se vuoi eliminarlo del tutto scrivi «elimina coca cola 33cl»."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Coca Cola 33cl|true"
    ],
    "actual": [
-    "hidden|Coca Cola 33cl|true"
+    "delete|Coca Cola 33cl"
    ],
    "aiCalls": 0,
-   "fails": [],
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Coca Cola 33cl"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Coca Cola 33cl|true"
+    }
+   ],
    "note": "17/10 regola Manuel: rimuovi = nascondi"
   },
   {
@@ -5049,7 +5159,7 @@
     "aggiungi alla tagliata la descrizione con rucola e grana"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *la categoria e il prezzo*.\nCategorie disponibili: Antipasti, Primi, Secondi, Piatti di prova, Pizze, Dolci, Bibite, Caffetteria. Dimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *il sottomenu e il prezzo*.\n\nSottomenu disponibili:\n• Antipasti\n• Primi\n• Secondi\n• Piatti di prova\n• Pizze\n• Dolci\n• Bibite\n• Caffetteria\n\nDimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
    ],
    "expected": [
     "description|Tagliata di manzo|con rucola e grana"
@@ -5111,58 +5221,7 @@
    "actual": [
     "description|Pasta e fagioli|ricetta della nonna"
    ],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "descrizione-05",
-   "cat": "descrizione",
-   "mode": "empty",
-   "turns": [
-    "per la pasta e fagioli scrivi: ricetta della nonna"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "description|Pasta e fagioli|ricetta della nonna"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "descrizione-05",
-   "cat": "descrizione",
-   "mode": "wrong",
-   "turns": [
-    "per la pasta e fagioli scrivi: ricetta della nonna"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
-   ],
-   "expected": [
-    "description|Pasta e fagioli|ricetta della nonna"
-   ],
-   "actual": [],
-   "aiCalls": 1,
-   "fails": []
-  },
-  {
-   "id": "descrizione-05",
-   "cat": "descrizione",
-   "mode": "wrongCreate",
-   "turns": [
-    "per la pasta e fagioli scrivi: ricetta della nonna"
-   ],
-   "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
-   ],
-   "expected": [
-    "description|Pasta e fagioli|ricetta della nonna"
-   ],
-   "actual": [],
-   "aiCalls": 1,
+   "aiCalls": 0,
    "fails": []
   },
   {
@@ -5834,7 +5893,7 @@
     "🎤 consiglia la lasagna mettila in evidenza"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPer aggiungere il piatto mi manca *il sottomenu e il prezzo*.\n\nSottomenu disponibili:\n• Antipasti\n• Primi\n• Secondi\n• Piatti di prova\n• Pizze\n• Dolci\n• Bibite\n• Caffetteria\n\nDimmelo e lo aggiungo. Non ho ancora aggiunto nulla."
    ],
    "expected": [
     "featured|Lasagna al forno|true"
@@ -6604,7 +6663,7 @@
     "menu di pranzo: primi: carbonara 12, amatriciana 11, gricia 11. secondi: tagliata 18, pollo arrosto 12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Primi*\n- Carbonara: 12,00 €\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\nRispetto a oggi: 5 nuovi, 0 con prezzo cambiato, 11 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"la carbonara è 13\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Primi*\n- Carbonara: 12,00 €\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\nRispetto a oggi: 5 nuovi, 0 con prezzo cambiato, 11 eliminati: Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"la carbonara è 13\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
    ],
    "expected": [],
    "actual": [],
@@ -6623,7 +6682,7 @@
     "menu di pranzo: primi: carbonara 12, amatriciana 11, gricia 11. secondi: tagliata 18, pollo arrosto 12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 eliminati: Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
    ],
    "expected": [],
    "actual": [],
@@ -6642,7 +6701,7 @@
     "menu di pranzo: primi: carbonara 12, amatriciana 11, gricia 11. secondi: tagliata 18, pollo arrosto 12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 eliminati: Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
    ],
    "expected": [],
    "actual": [],
@@ -6661,7 +6720,7 @@
     "menu di pranzo: primi: carbonara 12, amatriciana 11, gricia 11. secondi: tagliata 18, pollo arrosto 12"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 eliminati: Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
    ],
    "expected": [],
    "actual": [],
@@ -6680,7 +6739,7 @@
     "🎤 allora il menu di oggi a pranzo è primi carbonara dodici euro amatriciana undici gricia undici secondi tagliata diciotto pollo arrosto dodici"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho capito dal *vocale*: controlla nomi e prezzi.\n\n*Primi*\n- Carbonara: 12,00 €\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\nRispetto a oggi: 5 nuovi, 0 con prezzo cambiato, 11 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"la carbonara è 13\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho capito dal *vocale*: controlla nomi e prezzi.\n\n*Primi*\n- Carbonara: 12,00 €\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\nRispetto a oggi: 5 nuovi, 0 con prezzo cambiato, 11 eliminati: Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"la carbonara è 13\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*."
    ],
    "expected": [],
    "actual": [],
@@ -6745,7 +6804,7 @@
     "annulla"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Primi*\n- Carbonara: 12,00 €\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\nRispetto a oggi: 5 nuovi, 0 con prezzo cambiato, 11 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"la carbonara è 13\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Primi*\n- Carbonara: 12,00 €\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\nRispetto a oggi: 5 nuovi, 0 con prezzo cambiato, 11 eliminati: Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"la carbonara è 13\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Annullato.* Il menu è rimasto invariato."
    ],
    "expected": [],
@@ -6762,7 +6821,7 @@
     "annulla"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 eliminati: Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Annullato.* Il menu è rimasto invariato."
    ],
    "expected": [],
@@ -6779,7 +6838,7 @@
     "annulla"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 eliminati: Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Annullato.* Il menu è rimasto invariato."
    ],
    "expected": [],
@@ -6796,7 +6855,7 @@
     "annulla"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 nascosti (non eliminati): Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*, menu *Pranzo*, al posto di quello attuale.\nEcco il menu che ho letto.\n\n*Menu di pranzo*\n- Amatriciana: 11,00 €\n- Gricia: 11,00 €\n\n*Secondi*\n- Tagliata: 18,00 €\n- Pollo arrosto: 12,00 €\n\n*Da controllare*:\n- Non ho capito questa parte: «primi: carbonara 12». Riscrivila con nome e prezzo.\n\nRispetto a oggi: 4 nuovi, 0 con prezzo cambiato, 11 eliminati: Bruschetta al pomodoro, Tagliere misto, Spaghetti alla carbonara, Pasta e fagioli, Spaghetti aglio olio e peperoncino, Lasagna al forno, Gnocchi 4 formaggi, Tagliata di manzo, Cotoletta alla milanese, Menù del giorno, Piatto di prova.\n\nGli altri menu non cambiano: Cena, Bevande.\n\nConfermi? Rispondi OK, oppure correggi (es. \"l'amatriciana è 12\").\n*ANNULLA* butta via questa bozza. Vale *30 minuti*.",
     "*Annullato.* Il menu è rimasto invariato."
    ],
    "expected": [],
@@ -6846,11 +6905,56 @@
     "cosa c è lunedì a pranzo?"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon trovo il menu *pranzo*. Menu: ."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, sottomenu e grafica*: usa la dashboard. Scrivi *dashboard* o *link del menu* e ti mando il link."
    ],
    "expected": [],
    "actual": [],
-   "aiCalls": 0,
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "preset-03",
+   "cat": "preset",
+   "mode": "empty",
+   "turns": [
+    "cosa c è lunedì a pranzo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "preset-03",
+   "cat": "preset",
+   "mode": "wrong",
+   "turns": [
+    "cosa c è lunedì a pranzo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "preset-03",
+   "cat": "preset",
+   "mode": "wrongCreate",
+   "turns": [
+    "cosa c è lunedì a pranzo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
    "fails": []
   },
   {
@@ -6876,7 +6980,7 @@
     "cosa c è nel menu"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, sottomenu e grafica*: usa la dashboard. Scrivi *dashboard* o *link del menu* e ti mando il link."
    ],
    "expected": [],
    "actual": [],
@@ -7208,7 +7312,7 @@
     "aiuto"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, sottomenu e grafica*: usa la dashboard. Scrivi *dashboard* o *link del menu* e ti mando il link."
    ],
    "expected": [],
    "actual": [],
@@ -7223,7 +7327,7 @@
     "cosa sai fare"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, sottomenu e grafica*: usa la dashboard. Scrivi *dashboard* o *link del menu* e ti mando il link."
    ],
    "expected": [],
    "actual": [],
@@ -7238,7 +7342,7 @@
     "come funziona"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, sottomenu e grafica*: usa la dashboard. Scrivi *dashboard* o *link del menu* e ti mando il link."
    ],
    "expected": [],
    "actual": [],
@@ -7253,7 +7357,7 @@
     "ciao"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, sottomenu e grafica*: usa la dashboard. Scrivi *dashboard* o *link del menu* e ti mando il link."
    ],
    "expected": [],
    "actual": [],
@@ -7328,7 +7432,7 @@
     "buonasera, tutto bene?"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, categorie e grafica*: usa la dashboard."
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPuoi aggiornare *prezzi, disponibilità, descrizioni, etichette e piatti in evidenza*. Puoi aggiungere *piatti, foto e piatti del giorno*.\n\nScrivi o manda un *vocale*, anche con più richieste. Fino a *3 modifiche* pubblico subito; oltre, aspetto il tuo *OK*.\n\nEsempio: «carbonara finita, diavola a 10 euro».\n\nPuoi mandarmi anche il *menu di oggi* intero, anche a voce: «menu di oggi: primi carbonara 10, amatriciana 9». Lo pubblico dopo il tuo *OK*.\n*Promo*: «carbonara in promo a 9 fino a domenica». Etichette: «carbonara ultime porzioni», «tiramisù solo per oggi».\n\n*Allergeni, nomi, eliminazioni, sottomenu e grafica*: usa la dashboard. Scrivi *dashboard* o *link del menu* e ti mando il link."
    ],
    "expected": [],
    "actual": [],
@@ -8189,18 +8293,27 @@
     "nascondi la bruschetta e metti in evidenza la tagliata"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu\n*Tagliata di manzo*: *in evidenza*"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *eliminato* dal menu\n*Tagliata di manzo*: *in evidenza*\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Bruschetta al pomodoro|true",
     "featured|Tagliata di manzo|true"
    ],
    "actual": [
-    "hidden|Bruschetta al pomodoro|true",
-    "featured|Tagliata di manzo|true"
+    "featured|Tagliata di manzo|true",
+    "delete|Bruschetta al pomodoro"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Bruschetta al pomodoro"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Bruschetta al pomodoro|true"
+    }
+   ]
   },
   {
    "id": "composto-08",
@@ -9062,16 +9175,25 @@
     "nascondi la brushetta"
    ],
    "replies": [
-    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu"
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *eliminato* dal menu\n\nPer 10 minuti puoi scrivere «annulla» per rimetterlo."
    ],
    "expected": [
     "hidden|Bruschetta al pomodoro|true"
    ],
    "actual": [
-    "hidden|Bruschetta al pomodoro|true"
+    "delete|Bruschetta al pomodoro"
    ],
    "aiCalls": 0,
-   "fails": []
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "why": "scrittura sbagliata: delete|Bruschetta al pomodoro"
+    },
+    {
+     "sev": "GRAVE",
+     "why": "non applicato: hidden|Bruschetta al pomodoro|true"
+    }
+   ]
   },
   {
    "id": "refusi-05",

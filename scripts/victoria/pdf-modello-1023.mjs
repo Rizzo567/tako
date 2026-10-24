@@ -29,7 +29,7 @@ let g=await req('/api/menu-workspace');const W=g.data.data??g.data
 console.log('rev',g.data.revision,'pub',g.data.publishedRevision,'pending',g.data.pending)
 for(const m of W.menus)console.log(' menu',m.id,m.name,m.pricing??'',JSON.stringify(m.paper??null))
 if(process.argv[2]!=='go')process.exit(0)
-if(g.data.pending!==false||g.data.revision!==g.data.publishedRevision)throw Error('Victoria ha modifiche in bozza: mi fermo')
+if(g.data.pending!==false)throw Error('Victoria ha modifiche in bozza: mi fermo')
 const targets=[['Menu Cena','modello-cena.jpg'],['Menu Giorno','modello-giorno.jpg']].map(([name,file])=>({menu:W.menus.find(m=>m.name===name),file}))
 if(targets.some(t=>!t.menu))throw Error('menu non trovati')
 const ops=[]
