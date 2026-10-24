@@ -1,3 +1,3 @@
-- **Ultimo fatto:** A1 — checklist nel PIANO, `@anthropic-ai/sdk` installato, typecheck server pulito. In parallelo: misura Groq vero sulle 122 (risultati in `groq/`).
-- **Prossimo:** A2 — schema strumenti + runner del ciclo + client registrato.
-- **Blocchi:** nessuna `ANTHROPIC_API_KEY` → lato Haiku tutto offline (client registrato).
+- **Ultimo fatto:** A1 fatto (checklist nel PIANO, SDK, typecheck). Run interrotta da Manuel il 19/10 durante A2, prima di scrivere codice del motore. Misura Groq: preparato `tests/eval/eval-groq-122.test.ts` (+ lettura chiave da variabile in `groq-cache.ts`); girato solo in modo oracle (`groq/`), il giro col modello vero NON è stato fatto.
+- **Prossimo:** A2 — schema strumenti + runner del ciclo + client registrato (design annotato: ops serializzabili sul workspace, stato in sospeso tenuto dal server, `chiedi` con azioni «se sì», >3 modifiche → riepilogo + OK).
+- **Blocchi:** nessuna `ANTHROPIC_API_KEY` → lato Haiku offline. Prezzi Haiku 5.5 da riferimento SDK: 0,10 $/M in, 0,50 $/M out (≤100k), cache minima 512 token.

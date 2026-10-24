@@ -19,7 +19,11 @@ export function requestHash(path:string,body:any){const b={path,model:body?.mode
 
 // Chiavi (17/10 sera, Manuel): prima groq-key-test.txt, al 429/quota groq-key-test-2.txt (account separati, ≤150k token/giorno
 // ciascuna). La chiave del bot solo se non esiste nessuna chiave di test. Mai stampate né scritte.
-function keyFiles():{file:string,kind:string}[]{const env=process.env.TAKO_EVAL_GROQ_KEY_FILE,dir=join(homedir(),'.config/tako-webapp')
+// Opzione (19/10): TAKO_EVAL_GROQ_KEY_ENV=NOME[,NOME2] legge le chiavi da variabili d'ambiente (in ordine, la successiva al 429
+// giornaliero) invece che da file; letta a ogni chiamata, mai stampata. Senza la variabile il comportamento è quello di prima.
+function keyFiles():{file:string,kind:string,env?:string}[]{const names=process.env.TAKO_EVAL_GROQ_KEY_ENV?.split(',').map(s=>s.trim()).filter(Boolean)
+ if(names?.length)return names.filter(n=>process.env[n]).map(n=>({file:'',kind:'env:'+n,env:n}))
+ const env=process.env.TAKO_EVAL_GROQ_KEY_FILE,dir=join(homedir(),'.config/tako-webapp')
  const list=env?[env]:[join(dir,'groq-key-test.txt'),join(dir,'groq-key-test-2.txt')].filter(f=>existsSync(f));const files=list.length?list:[join(dir,'groq-key.txt')]
  for(const f of files)if(/traduzioni/i.test(f))throw new Error('La chiave traduzioni non si usa mai per i test')
  return files.map(f=>({file:f,kind:f.endsWith('groq-key-test.txt')?'test':f.endsWith('groq-key-test-2.txt')?'test-2':'bot'}))}
@@ -45,7 +49,7 @@ export function createGroq(opts:{mode?:GroqMode,cacheDir:string,ledgerFile:strin
   const estimate=Math.ceil(JSON.stringify(body.messages??'').length/3)+Number(process.env.TAKO_EVAL_GROQ_OUT_EST||800)
   if(mode!=='record'||stopped||spentToday()+estimate>maxTokens){stats.misses++;if(mode==='record')stats.refused++;return{response:unavailable(),hit:false,miss:true,tokens:0,ms:0}}
   const files=keyFiles()
-  const pick=()=>{while(keyIndex<files.length&&spentKey(files[keyIndex]!.kind)+estimate>perKey)keyIndex++;if(keyIndex>=files.length)return false;kind=files[keyIndex]!.kind;key=readFileSync(files[keyIndex]!.file,'utf8').trim();return true}
+  const pick=()=>{while(keyIndex<files.length&&spentKey(files[keyIndex]!.kind)+estimate>perKey)keyIndex++;if(keyIndex>=files.length)return false;kind=files[keyIndex]!.kind;const f=files[keyIndex]!;key=f.env?String(process.env[f.env]??'').trim():readFileSync(f.file,'utf8').trim();return true}
   if(!pick()){stats.misses++;stats.refused++;return{response:unavailable(),hit:false,miss:true,tokens:0,ms:0}}
   // R5.2 (18/10): limite al minuto (TPM, piano free 8k) rispettato PRIMA della chiamata con una finestra di 60 s per chiave;
   // 429 al minuto → attesa (retry-after) e stessa chiave; 429 giornaliero (TPD/RPD) → chiave successiva; finite le chiavi stop.

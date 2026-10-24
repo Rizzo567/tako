@@ -1,0 +1,101 @@
+{
+ "motore": "nuovo (fase R, Groq gpt-oss)",
+ "groq": "oracle",
+ "giorno": "2026-10-19T18:04:45.970Z",
+ "totale": {
+  "n": 122,
+  "ok": 103,
+  "successo": 84.4,
+  "messaggi": 189,
+  "conGRAVI": 3,
+  "graviTotali": 4,
+  "conGRAVIsicurezza": 1,
+  "graviSicurezzaTotali": 2,
+  "idGRAVIsicurezza": [
+   "x-024"
+  ],
+  "domandePer10Messaggi": 3.7,
+  "conIAmancante": 0
+ },
+ "bancoVero92": {
+  "n": 92,
+  "ok": 80,
+  "successo": 87,
+  "messaggi": 149,
+  "conGRAVI": 0,
+  "graviTotali": 0,
+  "conGRAVIsicurezza": 0,
+  "graviSicurezzaTotali": 0,
+  "idGRAVIsicurezza": [],
+  "domandePer10Messaggi": 3.8,
+  "conIAmancante": 0
+ },
+ "nuove30": {
+  "n": 30,
+  "ok": 23,
+  "successo": 76.7,
+  "messaggi": 40,
+  "conGRAVI": 3,
+  "graviTotali": 4,
+  "conGRAVIsicurezza": 1,
+  "graviSicurezzaTotali": 2,
+  "idGRAVIsicurezza": [
+   "x-024"
+  ],
+  "domandePer10Messaggi": 3.3,
+  "conIAmancante": 0
+ },
+ "sempliciBancoVero": {
+  "n": 26,
+  "ok": 26,
+  "successo": 100,
+  "messaggi": 30,
+  "conGRAVI": 0,
+  "graviTotali": 0,
+  "conGRAVIsicurezza": 0,
+  "graviSicurezzaTotali": 0,
+  "idGRAVIsicurezza": [],
+  "domandePer10Messaggi": 0.7,
+  "conIAmancante": 0
+ },
+ "sempliciTutte": {
+  "n": 56,
+  "ok": 49,
+  "successo": 87.5,
+  "messaggi": 70,
+  "conGRAVI": 3,
+  "graviTotali": 4,
+  "conGRAVIsicurezza": 1,
+  "graviSicurezzaTotali": 2,
+  "idGRAVIsicurezza": [
+   "x-024"
+  ],
+  "domandePer10Messaggi": 2.1,
+  "conIAmancante": 0
+ },
+ "latenzaStimataTurnoMs": {
+  "p50": 13,
+  "p95": 29,
+  "turni": 189,
+  "nota": "harness + recordedLlmMs per turno; significativa in replay"
+ },
+ "token": {
+  "usageTotali": 0,
+  "usagePrompt": 0,
+  "usageCompletion": 0,
+  "spesiInQuestoGiro": 0,
+  "perChiave": {}
+ },
+ "chiamateIA": {
+  "risposte": 214,
+  "dallaCache": 0,
+  "registrateOra": 0,
+  "oracolo": 214,
+  "senzaRisposta": 0,
+  "rifiutatePerTetto": 0,
+  "risposte429": 0,
+  "fileCachePrima": 181,
+  "fileCacheDopo": 181
+ },
+ "conversazioniConIAmancante": []
+}
