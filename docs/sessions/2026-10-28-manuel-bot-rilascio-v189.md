@@ -28,3 +28,6 @@ cd release/serverless/candidate-deploy && cp ~/.config/tako-webapp/rollback-edge
 ## Da fare
 - Rinnovare `~/.config/tako-webapp/supabase-management.env` (401).
 - Frasi 017/019/027 («al suo posto», «toglila e metti», «non togliere X, aggiungi Y»).
+
+## Aggiornamento 13:23 — v190
+Richiesta Manuel: «mandami il menu» deve dare il PDF (chiede quale se più Menu); il link del menu digitale solo con «mandami il link» (o «link/indirizzo del menu», «menu digitale», «qr»). Commit `9c7f83a7`, deploy **v190** (ezbr `2cdbc936…`) da base v189 verificata; edge pronta in 69 s. Vitest: stessi 279 rossi della base; batterie 143/143 e 31/31. Copia: `rollback-edge-20261028/candidate-rilascio-1028b.ts`. Rollback a v188 invariato.
