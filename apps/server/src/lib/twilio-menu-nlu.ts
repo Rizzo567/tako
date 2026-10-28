@@ -259,6 +259,8 @@ export function linkIntent(raw:string,dishNames:readonly string[]=[]):LinkIntent
  const dashboard=/\b(dashboard|dashbord|pannello(?! (?:solar\w*|fotovoltaic\w*|elettric\w*))|gestionale|area riservata)\b/.test(t)
  if(dashboard&&!change.test(t)&&!complaint.test(t)&&(w.length<=3||ask.test(t)||password))return 'dashboard'
  if(password&&w.length<=6&&!change.test(t)&&/\b(qual|quale|dammi|mandami|ricordami|password)\b/.test(t)&&!/\b(menu|piatt\w*)\b/.test(t))return 'dashboard'
+ // 28/10 pomeriggio (richiesta Manuel): «mandami il link» da solo = link del menu digitale («mandami il menu» ora dà il PDF).
+ if(/^(?:(?:mi )?(?:puoi |potresti )?(?:mandami|mandarmi|mi mandi|inviami|inviarmi|mi invii|dammi|darmi|mi dai|passami|girami)|me lo mandi|qual e) (?:il |l )?(?:link|indirizzo|url)(?: del sito| giusto| nuovo)?$/.test(t))return 'menu'
  const menu=/\bmenu\b/.test(t)
  if(!menu||change.test(t)||complaint.test(t))return null
  const linkAsked=/\b(link|indirizz\w*|url|sito)\b/.test(t)
@@ -273,7 +275,7 @@ export function linkIntent(raw:string,dishNames:readonly string[]=[]):LinkIntent
 }
 // 28/10 (richiesta Manuel, decisione PDF A4): «mandami il menu giorno» / «il pdf da stampare» → il bot allega il PDF del Menu.
 // Scatta solo con una richiesta rivolta al bot («mandami», «mi mandi»…) o con «pdf» / «da stampare»; «voglio/mi serve» solo con il pdf.
-// Senza il nome di un Menu e senza parole da stampa resta il link del menu digitale («mandami il menu» → linkIntent).
+// «mandami il menu» senza nome → PDF (domanda se più Menu); il link solo con «link», «indirizzo», «menu digitale», «qr».
 // Mai su modifiche, lamentele, link/QR o domande sul contenuto («cosa c è nel menu giorno»).
 export type PdfIntent={menuIds:string[]}|{ask:string[]}
 const pdfKey=(name:string)=>{const k=plainText(name).replace(/[,.]/g,' ').replace(/^menu\s+(?:del\s+|di\s+|della\s+|delle\s+|dei\s+)?/,'').replace(/\s+/g,' ').trim();return k==='menu'?'':k}
@@ -310,7 +312,9 @@ export function pdfIntent(raw:string,menus:readonly {id:string,name:string}[],di
  // «Cena» e «Cena di Natale»: con «menu cena di natale» vale solo il nome più lungo.
  const best=hits.filter(m=>{const k=pdfKey(m.name);return !hits.some(o=>o!==m&&pdfKey(o.name)!==k&&(' '+pdfKey(o.name)+' ').includes(' '+k+' '))})
  if(best.length)return {menuIds:best.map(m=>m.id)}
- if(!paper)return null
+ // 28/10 pomeriggio (richiesta Manuel): «mandami il menu» senza nome = il PDF (chiede quale se sono più di uno); il link del menu
+ // digitale solo se lo si chiede («mandami il link», «link del menu», «menu digitale»: filtrati sopra).
+ if(!paper&&!(ask&&/\bmenu\b/.test(t)))return null
  if(menus.length===1)return {menuIds:[menus[0]!.id]}
  return {ask:menus.map(m=>m.name)}
 }

@@ -18017,6 +18017,48 @@
    "usd": 0,
    "usdEquivalent": 0.002566,
    "finished": true
+  },
+  {
+   "id": "2026-10-28T12:22:02.798Z-sost-1024-record",
+   "at": "2026-10-28T12:22:28.300Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 62,
+   "real": 0,
+   "hits": 62,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 12957,
+    "output": 19635,
+    "cacheRead": 719225,
+    "cacheWrite": 36920
+   },
+   "usd": 0,
+   "usdEquivalent": 0.02292,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T12:22:29.314Z-sost-1024-record",
+   "at": "2026-10-28T12:22:36.195Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 14,
+   "real": 0,
+   "hits": 14,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 2018,
+    "output": 4646,
+    "cacheRead": 153062,
+    "cacheWrite": 17718
+   },
+   "usd": 0,
+   "usdEquivalent": 0.00627,
+   "finished": true
   }
  ],
  "totalUsd": 2.94152

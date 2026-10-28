@@ -1,0 +1,6867 @@
+[
+ {
+  "id": "d2-omon-001",
+  "turns": [
+   {
+    "said": "togli patate al forno metti patate fritte",
+    "reply": "Quale *Patate al forno* tolgo?\n1. *Patate al forno* (Menu Giorno › Contorni)\n2. *Patate al forno* (Menu Cena › Contorni)\n3. *patate al forno* (Menu Cena › Contorni)\n\nRispondi col numero.",
+    "ms": 109.6,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": {
+   "kind": "brain_ask",
+   "question": "Quale *Patate al forno* tolgo?\n1. *Patate al forno* (Menu Giorno › Contorni)\n2. *Patate al forno* (Menu Cena › Contorni)\n3. *patate al forno* (Menu Cena › Contorni)\n\nRispondi col numero.",
+   "ids": [],
+   "actions": [],
+   "source": "togli patate al forno metti patate fritte",
+   "origin": "togli patate al forno metti patate fritte",
+   "rounds": 1,
+   "rule": {
+    "kind": "swap",
+    "text": "togli patate al forno metti patate fritte",
+    "word": "patate al forno",
+    "options": [
+     "a4614a0a-7469-44b7-877c-7a964e2c9202",
+     "04823313-a86b-4765-9076-42685ae7dd58",
+     "6f2b7a86-cae2-45ce-b611-f274cef87d8e"
+    ]
+   }
+  },
+  "ms": 1598
+ },
+ {
+  "id": "d2-omon-002",
+  "turns": [
+   {
+    "said": "togli patate al forno metti patate fritte",
+    "reply": "Quale *Patate al forno* tolgo?\n1. *Patate al forno* (Menu Giorno › Contorni)\n2. *Patate al forno* (Menu Cena › Contorni)\n3. *patate al forno* (Menu Cena › Contorni)\n\nRispondi col numero.",
+    "ms": 61.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "1",
+    "reply": "*Menu Giorno aggiornato*\n\n*Contorni*\n• Spinaci\n• Patate fritte (nuovo)\n\nTolto: *Patate al forno*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 139.5,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Contorni: Patate al forno, Spinaci → Spinaci, Patate fritte"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Spinaci",
+    "Patate fritte"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 230
+ },
+ {
+  "id": "d2-omon-003",
+  "turns": [
+   {
+    "said": "a pranzo togli le patate al forno metti patate fritte",
+    "reply": "*Menu Giorno aggiornato*\n\n*Contorni*\n• Spinaci\n• Patate fritte (nuovo)\n\nTolto: *Patate al forno*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 115.7,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Contorni: Patate al forno, Spinaci → Spinaci, Patate fritte"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Spinaci",
+    "Patate fritte"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 130
+ },
+ {
+  "id": "d2-omon-004",
+  "turns": [
+   {
+    "said": "stasera togli l insalata mista metti la rucola",
+    "reply": "*Menu Cena aggiornato*\n\n*Contorni*\n• Patate al forno\n• melanzana al forno\n• insalata verde\n• patate al forno\n• Rucola, (nuovo)\n\nTolto: *Insalata mista*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 149.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Contorni: Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno → Patate al forno, melanzana al forno, insalata verde, patate al forno, Rucola,"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno",
+    "Rucola,"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 166
+ },
+ {
+  "id": "d2-omon-005",
+  "turns": [
+   {
+    "said": "togli l insalata mista metti la rucola",
+    "reply": "*Menu Cena aggiornato*\n\n*Contorni*\n• Patate al forno\n• melanzana al forno\n• insalata verde\n• patate al forno\n• Rucola, (nuovo)\n\nTolto: *Insalata mista*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 122.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Contorni: Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno → Patate al forno, melanzana al forno, insalata verde, patate al forno, Rucola,"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno",
+    "Rucola,"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 140
+ },
+ {
+  "id": "d2-omon-006",
+  "turns": [
+   {
+    "said": "togli patate al forno metti patate fritte",
+    "reply": "Quale *Patate al forno* tolgo?\n1. *Patate al forno* (Menu Giorno › Contorni)\n2. *Patate al forno* (Menu Cena › Contorni)\n3. *patate al forno* (Menu Cena › Contorni)\n\nRispondi col numero.",
+    "ms": 40.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "quello del pranzo",
+    "reply": "*Menu Giorno aggiornato*\n\n*Contorni*\n• Spinaci\n• Patate fritte (nuovo)\n\nTolto: *Patate al forno*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 108,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Contorni: Patate al forno, Spinaci → Spinaci, Patate fritte"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Spinaci",
+    "Patate fritte"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 168
+ },
+ {
+  "id": "d2-omon-007",
+  "turns": [
+   {
+    "said": "togli patate al forno metti patate fritte",
+    "reply": "Quale *Patate al forno* tolgo?\n1. *Patate al forno* (Menu Giorno › Contorni)\n2. *Patate al forno* (Menu Cena › Contorni)\n3. *patate al forno* (Menu Cena › Contorni)\n\nRispondi col numero.",
+    "ms": 59.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "sì",
+    "reply": "Non c’è niente da confermare: dimmi pure cosa vuoi cambiare, per esempio «la carbonara a 12».",
+    "ms": 98.6,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 178
+ },
+ {
+  "id": "d2-gia-001",
+  "turns": [
+   {
+    "said": "togli spinaci metti patate al forno",
+    "reply": "*Menu Giorno aggiornato*\n\n*Contorni*\n• Patate al forno\n\nTolto: *Spinaci*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 113.1,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Contorni: Patate al forno, Spinaci → Patate al forno"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 132
+ },
+ {
+  "id": "d2-gia-002",
+  "turns": [
+   {
+    "said": "togli la lasagna metti gli strozzapreti",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Strozzapreti con zola e pistacchio\n• Orecchiette con zucca\n• Strozzapreti (nuovo)\n\nTolto: *Lasagna*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 98.4,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Strozzapreti"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca",
+    "Strozzapreti"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 118
+ },
+ {
+  "id": "d2-carta-001",
+  "turns": [
+   {
+    "said": "alla carta togli le penne all arrabbiata metti penne alla puttanesca a 10",
+    "reply": "Ok, tolgo *Penne all'arrabbiata* e aggiungo *Penne alla puttanesca* tra i Primi piatti di Alla carta.\n\n*Penne all'arrabbiata*: *eliminato* dal menu\nNuovo piatto *Penne alla puttanesca* in *Primi piatti*: *10,00 €*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 242,
+    "llm": 1,
+    "miss": 0,
+    "diff": [
+     "Alla carta›Primi piatti: Linguine allo scoglio 16, Linguine alla carbonara di mare 16, Spaghetti alla carbonara 10, Spaghetti alle vongole 14, Paccheri alla pescatora 15, Paccheri alla Totò 10, Gnocchi alla sorrentina al forno 10, Penne alla Victoria 12, Penne all'arrabbiata 10, Penne alla corsara 14, Pasta al pesto 8, Tortellini Prosciutto e Panna 10, Strozzapreti zucchine e speck 12, Paccheri al pomodoro 10, Penne cremose con rucola, carne e zafferano 12, Spaghetti o linguine con cozze 14, Tagliatelle con cozze e pomodorini 14, Tagliatelle zucchine e gamberi 14 → Linguine allo scoglio 16, Linguine alla carbonara di mare 16, Spaghetti alla carbonara 10, Spaghetti alle vongole 14, Paccheri alla pescatora 15, Paccheri alla Totò 10, Gnocchi alla sorrentina al forno 10, Penne alla Victoria 12, Penne alla corsara 14, Pasta al pesto 8, Tortellini Prosciutto e Panna 10, Strozzapreti zucchine e speck 12, Paccheri al pomodoro 10, Penne cremose con rucola, carne e zafferano 12, Spaghetti o linguine con cozze 14, Tagliatelle con cozze e pomodorini 14, Tagliatelle zucchine e gamberi 14, Penne alla puttanesca 10"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14",
+    "Penne alla puttanesca 10"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 258
+ },
+ {
+  "id": "d2-carta-002",
+  "turns": [
+   {
+    "said": "togli il tartufo bianco metti il tiramisù",
+    "reply": "Tolgo il *Tartufo bianco* dal menu. Il *Tiramisù* non c'è ancora: a che prezzo lo metto nei Dolci?\n\nNon ancora pubblicato:\n1. *Tartufo bianco*: *eliminato* dal menu",
+    "ms": 146.3,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": {
+   "kind": "hold",
+   "actions": [
+    {
+     "kind": "delete",
+     "id": "0fb2c1a8-0a78-48a0-a4f1-0a2a2683dbf7",
+     "soft": true
+    }
+   ],
+   "asks": [
+    {
+     "type": "unknown",
+     "word": "metti il tiramisù"
+    }
+   ],
+   "source": "togli il tartufo bianco metti il tiramisù"
+  },
+  "ms": 162
+ },
+ {
+  "id": "d2-si-001",
+  "turns": [
+   {
+    "said": "elimina la lasagna",
+    "reply": "Elimino *Lasagna* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Lasagna*: da eliminare",
+    "ms": 52.2,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "si si",
+    "reply": "*Lasagna*: *eliminato* dal menu",
+    "ms": 104.2,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 176
+ },
+ {
+  "id": "d2-si-002",
+  "turns": [
+   {
+    "said": "elimina le patate al forno",
+    "reply": "Ci sono più *Patate al forno*: quali vuoi eliminare, quelle del Menu Giorno o del Menu Cena?\n\n1. *Patate al forno (Menu Giorno)*\n2. *Patate al forno (Menu Cena)*\n3. *patate al forno (Menu Cena)*",
+    "ms": 102.2,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "1",
+    "reply": "A quale piatto metto *1,00 €*? Scrivimi il nome, per esempio «la carbonara a 1».",
+    "ms": 111.9,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": {
+   "kind": "brain_ask",
+   "question": "A quale piatto metto *1,00 €*? Scrivimi il nome, per esempio «la carbonara a 1».",
+   "ids": [],
+   "actions": [],
+   "source": "elimina le patate al forno \n 1",
+   "origin": "elimina le patate al forno",
+   "rounds": 2,
+   "draft": null
+  },
+  "ms": 236
+ },
+ {
+  "id": "d2-si-003",
+  "turns": [
+   {
+    "said": "nei secondi del pranzo aggiungi polpette e piselli",
+    "reply": "*Menu Giorno aggiornato*\n\n*Secondi*\n• Cotoletta\n• Arrosto\n• Polpette e piselli (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 104.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Polpette e piselli"
+    ]
+   },
+   {
+    "said": "sì",
+    "reply": "Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12».",
+    "ms": 195.3,
+    "llm": 2,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto",
+    "Polpette e piselli"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": {
+   "kind": "brain_ask",
+   "question": "Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12».",
+   "ids": [],
+   "actions": [],
+   "source": "sì",
+   "origin": "sì",
+   "rounds": 1,
+   "draft": null
+  },
+  "ms": 322
+ },
+ {
+  "id": "d2-si-004",
+  "turns": [
+   {
+    "said": "nei contorni della cena metti fagiolini e patate",
+    "reply": "*Menu Cena aggiornato*\n\n*Contorni*\n• Patate al forno\n• Insalata mista\n• melanzana al forno\n• insalata verde\n• patate al forno\n• Fagiolini (nuovo)\n• Patate (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 115.7,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Contorni: Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno → Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno, Fagiolini, Patate"
+    ]
+   },
+   {
+    "said": "esatto",
+    "reply": "Perfetto, allora resta così. Se serve altro scrivimi pure.",
+    "ms": 97.9,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno",
+    "Fagiolini",
+    "Patate"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 234
+ },
+ {
+  "id": "d2-pron-001",
+  "turns": [
+   {
+    "said": "togli la lasagna metti rigatoni",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Strozzapreti con zola e pistacchio\n• Orecchiette con zucca\n• Rigatoni (nuovo)\n\nTolto: *Lasagna*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 117.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni"
+    ]
+   },
+   {
+    "said": "i rigatoni sono finiti",
+    "reply": "*Rigatoni*: *finito*",
+    "ms": 115.5,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni (finito)"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca",
+    "Rigatoni (finito)"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 254
+ },
+ {
+  "id": "d2-pron-002",
+  "turns": [
+   {
+    "said": "togli la lasagna metti rigatoni",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Strozzapreti con zola e pistacchio\n• Orecchiette con zucca\n• Rigatoni (nuovo)\n\nTolto: *Lasagna*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 118.6,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni"
+    ]
+   },
+   {
+    "said": "toglili",
+    "reply": "*Rigatoni*: tolto (l’avevo appena aggiunto)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 119,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni → Strozzapreti con zola e pistacchio, Orecchiette con zucca"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 257
+ },
+ {
+  "id": "d2-pron-003",
+  "turns": [
+   {
+    "said": "togli la lasagna metti rigatoni",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Strozzapreti con zola e pistacchio\n• Orecchiette con zucca\n• Rigatoni (nuovo)\n\nTolto: *Lasagna*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 128.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni"
+    ]
+   },
+   {
+    "said": "annulla",
+    "reply": "Ok, annullo l’ultima modifica.\n\n*Lasagna*: com’era prima\n*Rigatoni*: tolto (era stato aggiunto)",
+    "ms": 197.4,
+    "llm": 1,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca"
+    ]
+   },
+   {
+    "said": "annulla",
+    "reply": "Non c’è niente da annullare: l’ultima modifica è già stata annullata, oppure sono passati più di 10 minuti. Dimmi pure cosa vuoi cambiare.",
+    "ms": 124.1,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 464
+ },
+ {
+  "id": "d2-pron-004",
+  "turns": [
+   {
+    "said": "al posto della cotoletta metti polpette",
+    "reply": "*Menu Giorno aggiornato*\n\n*Secondi*\n• Arrosto\n• Polpette (nuovo)\n\nTolto: *Cotoletta*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 110.8,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Cotoletta, Arrosto → Arrosto, Polpette"
+    ]
+   },
+   {
+    "said": "rimetti la cotoletta",
+    "reply": "Ok, rimesso *Cotoletta* nei *Secondi* del *Menu Giorno*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 95.8,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Arrosto, Polpette → Arrosto, Polpette, Cotoletta"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Arrosto",
+    "Polpette",
+    "Cotoletta"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 226
+ },
+ {
+  "id": "d2-voce-001",
+  "turns": [
+   {
+    "said": "allora oggi a pranzo togliamo la lasagna e mettiamo i rigatoni poi nei secondi al posto della cotoletta facciamo le polpette",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Strozzapreti con zola e pistacchio\n• Orecchiette con zucca\n• Rigatoni (nuovo)\n\n*Secondi*\n• Arrosto\n• Polpette (nuovo)\n\nTolti: *Lasagna*, *Cotoletta*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 109.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni",
+     "Menu Giorno›Secondi: Cotoletta, Arrosto → Arrosto, Polpette"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca",
+    "Rigatoni"
+   ],
+   "Menu Giorno›Secondi": [
+    "Arrosto",
+    "Polpette"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 125
+ },
+ {
+  "id": "d2-voce-002",
+  "turns": [
+   {
+    "said": "ehm togli la lasagna e al posto metti i ravioli ricotta e spinaci",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Strozzapreti con zola e pistacchio\n• Orecchiette con zucca\n• Ravioli ricotta e spinaci (nuovo)\n\nTolto: *Lasagna*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 106.5,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Ravioli ricotta e spinaci"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca",
+    "Ravioli ricotta e spinaci"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 123
+ },
+ {
+  "id": "d2-ref-001",
+  "turns": [
+   {
+    "said": "togli la lasagnia metti rigatoni",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Strozzapreti con zola e pistacchio\n• Orecchiette con zucca\n• Rigatoni (nuovo)\n\nTolto: *Lasagna*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 99.8,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca",
+    "Rigatoni"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 117
+ },
+ {
+  "id": "d2-ref-002",
+  "turns": [
+   {
+    "said": "togli orecchiete metti gnocchi",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Lasagna\n• Strozzapreti con zola e pistacchio\n• Gnocchi (nuovo)\n\nTolto: *Orecchiette con zucca*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 104.7,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Gnocchi"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Gnocchi"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 120
+ },
+ {
+  "id": "d2-ref-003",
+  "turns": [
+   {
+    "said": "togli strozapreti metti tortellini",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Lasagna\n• Orecchiette con zucca\n• Tortellini (nuovo)\n\nTolto: *Strozzapreti con zola e pistacchio*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 98.2,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Orecchiette con zucca, Tortellini"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Orecchiette con zucca",
+    "Tortellini"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 114
+ },
+ {
+  "id": "d2-ref-004",
+  "turns": [
+   {
+    "said": "togli spinacci metti bietole",
+    "reply": "*Menu Giorno aggiornato*\n\n*Contorni*\n• Patate al forno\n• Bietole (nuovo)\n\nTolto: *Spinaci*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 102.4,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Contorni: Patate al forno, Spinaci → Patate al forno, Bietole"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Bietole"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 126
+ },
+ {
+  "id": "d2-ref-005",
+  "turns": [
+   {
+    "said": "togli l arosto metti la tagliata",
+    "reply": "*Menu Giorno aggiornato*\n\n*Secondi*\n• Cotoletta\n• Tagliata (nuovo)\n\nTolto: *Arrosto*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 106.5,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Tagliata"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Tagliata"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 123
+ },
+ {
+  "id": "d2-neg-001",
+  "turns": [
+   {
+    "said": "cosa metto al posto della lasagna?",
+    "reply": "Intendi sostituire la *Lasagna* con un altro piatto? Dimmi come si chiama il nuovo piatto e in quale Sottomenu va.",
+    "ms": 82.5,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": {
+   "kind": "brain_ask",
+   "question": "Intendi sostituire la *Lasagna* con un altro piatto? Dimmi come si chiama il nuovo piatto e in quale Sottomenu va.",
+   "ids": [],
+   "actions": [],
+   "source": "cosa metto al posto della lasagna?",
+   "origin": "cosa metto al posto della lasagna?",
+   "rounds": 1,
+   "draft": null
+  },
+  "ms": 100
+ },
+ {
+  "id": "d2-neg-002",
+  "turns": [
+   {
+    "said": "non togliere la lasagna e non mettere i rigatoni",
+    "reply": "Ok, non tocco la *Lasagna* e non aggiungo i *Rigatoni*.",
+    "ms": 109.1,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 126
+ },
+ {
+  "id": "d2-neg-003",
+  "turns": [
+   {
+    "said": "se tolgo la lasagna cosa metto",
+    "reply": "Intendi *Lasagna* del Menu Giorno: la tolgo dal menu o la elimino del tutto?",
+    "ms": 91.6,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": {
+   "kind": "brain_ask",
+   "question": "Intendi *Lasagna* del Menu Giorno: la tolgo dal menu o la elimino del tutto?",
+   "ids": [
+    "c4eb85ad-e230-4498-aafc-05ca4764cfa6"
+   ],
+   "actions": [],
+   "source": "se tolgo la lasagna cosa metto",
+   "origin": "se tolgo la lasagna cosa metto",
+   "rounds": 1,
+   "draft": null
+  },
+  "ms": 111
+ },
+ {
+  "id": "d2-neg-004",
+  "turns": [
+   {
+    "said": "invece della lasagna?",
+    "reply": "Intendi sostituire la *Lasagna* con un altro piatto? Dimmi quale.",
+    "ms": 61.1,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": {
+   "kind": "brain_ask",
+   "question": "Intendi sostituire la *Lasagna* con un altro piatto? Dimmi quale.",
+   "ids": [],
+   "actions": [],
+   "source": "invece della lasagna?",
+   "origin": "invece della lasagna?",
+   "rounds": 1,
+   "draft": null
+  },
+  "ms": 84
+ },
+ {
+  "id": "d2-neg-005",
+  "turns": [
+   {
+    "said": "ma la lasagna la togliamo?",
+    "reply": "No, la *Lasagna* è ancora nel menu.\n\n*Lasagna*: *senza prezzo* · disponibile",
+    "ms": 101.7,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 119
+ }
+]
