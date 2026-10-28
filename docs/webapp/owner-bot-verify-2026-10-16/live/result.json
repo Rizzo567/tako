@@ -1,0 +1,138 @@
+{
+ "at": "2026-10-16T18:17:34.581Z",
+ "edge": "v105",
+ "turns": [
+  {
+   "in": "il dolce è finito",
+   "out": "Quale piatto intendi? 1. *Tiramisù* 2. *Panna cotta* Rispondi con il *numero* o il *nome*.",
+   "revision": 1
+  },
+  {
+   "in": "che pizze ci sono",
+   "out": "*Margherita*: *7,00 €* · disponibile *Pizza diavola*: *8,00 €* · disponibile *Margherita con bufala*: *9,00 €* · disponibile",
+   "revision": 1
+  },
+  {
+   "in": "sposta il tiramisù nei secondi",
+   "out": "Le *categorie* si creano e si spostano dalla dashboard. Qui posso aggiungere un piatto in una categoria già presente.",
+   "revision": 1
+  },
+  {
+   "in": "cambia il nome della lasagna in lasagna della nonna",
+   "out": "Il *nome del piatto* si cambia dalla dashboard. Qui posso cambiare la descrizione: «nella caprese scrivi: …».",
+   "revision": 1
+  },
+  {
+   "in": "va bene così",
+   "out": "",
+   "revision": 1
+  },
+  {
+   "in": "ok va bene conferma",
+   "out": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €* *Lasagna al forno*: prezzo da 11,00 € a *12,00 €* *Tiramisù*: prezzo da 5,00 € a *6,00 €* *Panna cotta*: prezzo da 5,00 € a *6,00 €*",
+   "revision": 3
+  },
+  {
+   "in": "cosa c'è martedì a pranzo?",
+   "out": "*Martedì* · Pranzo (preset «Martedì»): *Primi* - Gnocchi al pesto: 11,00 €",
+   "revision": 3
+  },
+  {
+   "in": "metti online il menu di martedì",
+   "out": "Metto online il preset *Martedì · Pranzo* (1 piatti) al posto del Pranzo attuale. Scrivi *OK* (o «conferma») per pubblicare, *ANNULLA* per lasciare tutto com&apos;è.",
+   "revision": 3
+  },
+  {
+   "in": "conferma",
+   "out": "*Confermato.* Il preset *Martedì · Pranzo* è online.",
+   "revision": 5
+  },
+  {
+   "in": "attiva la pubblicazione automatica del pranzo",
+   "out": "*Confermato.* Pubblicazione automatica *attiva* per il Pranzo: dal prossimo cambio giornata (06:00) ogni giorno va online il suo preset.",
+   "revision": 5
+  },
+  {
+   "in": "disattiva la pubblicazione automatica del pranzo",
+   "out": "*Confermato.* Pubblicazione automatica *spenta* per il Pranzo. Il menu online resta quello attuale.",
+   "revision": 5
+  }
+ ],
+ "checks": [
+  {
+   "name": "activatedAt nel pannello WhatsApp del titolare",
+   "ok": true,
+   "detail": "2026-10-16T18:17:41.787Z"
+  },
+  {
+   "name": "3: categoria → chiede quale",
+   "ok": true,
+   "detail": "Quale piatto intendi? 1. *Tiramisù* 2. *Panna cotta* Rispondi con il *numero* o il *nome*."
+  },
+  {
+   "name": "3: lista della categoria",
+   "ok": true,
+   "detail": "*Margherita*: *7,00 €* · disponibile *Pizza diavola*: *8,00 €* · disponibile *Margherita con bufala*: *9,00 €* · disponibile"
+  },
+  {
+   "name": "3: limite in una riga",
+   "ok": true,
+   "detail": "Le *categorie* si creano e si spostano dalla dashboard. Qui posso aggiungere un piatto in una categoria già presente."
+  },
+  {
+   "name": "3: rinomina, limite in una riga",
+   "ok": true,
+   "detail": "Il *nome del piatto* si cambia dalla dashboard. Qui posso cambiare la descrizione: «nella caprese scrivi: …»."
+  },
+  {
+   "name": "riepilogo di 4 modifiche in attesa (passa dall'IA, risposta asincrona)",
+   "ok": true,
+   "detail": "batch"
+  },
+  {
+   "name": "1: «va bene così» NON conferma il riepilogo",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "1: «ok va bene conferma» conferma",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. *Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €* *Lasagna al forno*: prezzo da 11,00 € a *12,00 €* *Tiramisù*: prezzo da 5,00 € a *6,00 €* *Panna cotta*: prezzo da 5,00 € a *6,00 €*"
+  },
+  {
+   "name": "2: lettura del preset",
+   "ok": true,
+   "detail": "*Martedì* · Pranzo (preset «Martedì»): *Primi* - Gnocchi al pesto: 11,00 €"
+  },
+  {
+   "name": "2: pubblicazione preset → chiede OK",
+   "ok": true,
+   "detail": "Metto online il preset *Martedì · Pranzo* (1 piatti) al posto del Pranzo attuale. Scrivi *OK* (o «conferma») per pubblicare, *ANNULLA* per lasciare tutto com&apos;è."
+  },
+  {
+   "name": "2: «conferma» → preset online",
+   "ok": true,
+   "detail": "*Confermato.* Il preset *Martedì · Pranzo* è online."
+  },
+  {
+   "name": "2: automatico acceso",
+   "ok": true,
+   "detail": "*Confermato.* Pubblicazione automatica *attiva* per il Pranzo: dal prossimo cambio giornata (06:00) ogni giorno va online il suo preset."
+  },
+  {
+   "name": "2: automatico spento",
+   "ok": true,
+   "detail": "*Confermato.* Pubblicazione automatica *spenta* per il Pranzo. Il menu online resta quello attuale."
+  },
+  {
+   "name": "pulizia completa (locale, menu, collegamento)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "collegamento del QA (numero di Manuel) intatto",
+   "ok": true,
+   "detail": ""
+  }
+ ]
+}

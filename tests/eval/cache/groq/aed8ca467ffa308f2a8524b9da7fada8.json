@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-d7137a86-e127-44fa-82a1-5a916abd1c28",
+  "object": "chat.completion",
+  "created": 1792283139,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": true,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p1\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"Disponibilità del piatto di verifica aggiornata.\"\n}",
+     "reasoning": "User says \"il piatto di verifica è tornato disponibile\". That's p1 currently esaurito (x). So set_available false->true. Action set_available item p1 value=true. Intent change. reply_draft confirm."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.217072189,
+   "prompt_tokens": 3273,
+   "prompt_time": 0.035587747,
+   "completion_tokens": 232,
+   "completion_time": 0.656123297,
+   "total_tokens": 3505,
+   "total_time": 0.691711044,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 48
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_9241e9962b",
+  "x_groq": {
+   "id": "req_01m566cpzbe169sh1wmanjf7tw",
+   "seed": 1547461519
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3273,
+  "completion_tokens": 232,
+  "total_tokens": 3505
+ },
+ "ms": 1009,
+ "recordedAt": "2026-10-18T00:25:39.891Z",
+ "conv": "bv-semplici-009"
+}

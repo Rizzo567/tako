@@ -1,0 +1,377 @@
+[
+ {
+  "label": "nessuno scroll orizzontale",
+  "ok": true,
+  "detail": {
+   "presetX": 487,
+   "pickerRight": 479,
+   "toolsX": 824,
+   "presetRight": 635,
+   "docW": 1280,
+   "vw": 1280
+  }
+ },
+ {
+  "label": "posizione Preset variante a",
+  "ok": true,
+  "detail": {
+   "presetX": 487,
+   "pickerRight": 479,
+   "toolsX": 824,
+   "presetRight": 635,
+   "docW": 1280,
+   "vw": 1280
+  }
+ },
+ {
+  "label": "apertura: aria-expanded true e lista scesa di tray-h+12",
+  "ok": true,
+  "detail": {
+   "label": "Preset",
+   "expanded": "true",
+   "hidden": false,
+   "ty": 136,
+   "trayH": 124,
+   "current": "attuale",
+   "firstDish": "Carbonara",
+   "empty": false,
+   "focus": "pp-preset",
+   "chipOpacity": 1,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "segni oggi (Ven) e online (Gio)",
+  "ok": true,
+  "detail": {
+   "today": "oggi",
+   "online": "online"
+  }
+ },
+ {
+  "label": "scelta Lunedì: etichetta «Lunedì», chiuso, lista di lunedì",
+  "ok": true,
+  "detail": {
+   "label": "Lunedì",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "lun",
+   "firstDish": "Pasta e fagioli",
+   "empty": false,
+   "focus": "pp-preset",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "Esc chiude senza cambiare",
+  "ok": true,
+  "detail": {
+   "label": "Lunedì",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "lun",
+   "firstDish": "Pasta e fagioli",
+   "empty": false,
+   "focus": "pp-preset",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "tap fuori chiude senza cambiare",
+  "ok": true,
+  "detail": {
+   "label": "Lunedì",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "lun",
+   "firstDish": "Pasta e fagioli",
+   "empty": false,
+   "focus": "BODY",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "tap rapidi: stato finale = ultimo gesto (Mercoledì)",
+  "ok": true,
+  "detail": {
+   "label": "Mercoledì",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "mer",
+   "firstDish": "Gnocchi al pomodoro",
+   "empty": false,
+   "focus": "pp-preset",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "retargeting: ogni tap a metà corsa riparte dal valore corrente (|start-before| < 2px)",
+  "ok": true,
+  "detail": {
+   "midFlight": [
+    {
+     "before": 112.3,
+     "start": 112.3,
+     "end": 0,
+     "ms": 280.6850907285681,
+     "delay": 0
+    },
+    {
+     "before": 5.3,
+     "start": 5.3,
+     "end": 136,
+     "ms": 326.7881444861231,
+     "delay": 0
+    },
+    {
+     "before": 7.1,
+     "start": 7.1,
+     "end": 136,
+     "ms": 322.15675002986575,
+     "delay": 0
+    },
+    {
+     "before": 134.3,
+     "start": 134.3,
+     "end": 0,
+     "ms": 335.6822088841066,
+     "delay": 0
+    }
+   ],
+   "taps": 10
+  }
+ },
+ {
+  "label": "tempi della lista solo da token (surface 340, ritardo 0 o 60)",
+  "ok": true,
+  "detail": [
+   [
+    340,
+    0
+   ],
+   [
+    340,
+    60
+   ],
+   [
+    340,
+    0
+   ],
+   [
+    340,
+    0
+   ],
+   [
+    340,
+    0
+   ],
+   [
+    280.6850907285681,
+    0
+   ],
+   [
+    326.7881444861231,
+    0
+   ],
+   [
+    340,
+    60
+   ],
+   [
+    322.15675002986575,
+    0
+   ],
+   [
+    335.6822088841066,
+    0
+   ]
+  ]
+ },
+ {
+  "label": "modifiche non salvate: dialogo aperto, preset non cambiato",
+  "ok": true,
+  "detail": {
+   "label": "Mercoledì",
+   "expanded": "true",
+   "hidden": false,
+   "ty": 136,
+   "trayH": 124,
+   "current": "mer",
+   "firstDish": "Gnocchi al pomodoro",
+   "empty": false,
+   "focus": "pp-dlg-save",
+   "chipOpacity": 1,
+   "dialog": true,
+   "dlgError": "",
+   "status": "Modifiche non salvate a «Mercoledì»",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "Salva: stato pending reale (aria-busy) prima del risultato",
+  "ok": true,
+  "detail": "true"
+ },
+ {
+  "label": "Salva: dopo il risultato passa a Giovedì",
+  "ok": true,
+  "detail": {
+   "label": "Giovedì",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "gio",
+   "firstDish": "Carbonara",
+   "empty": false,
+   "focus": "pp-preset",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "Scarta: Menu attuale, etichetta «Preset», bozza buttata",
+  "ok": true,
+  "detail": {
+   "label": "Preset",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "attuale",
+   "firstDish": "Carbonara",
+   "empty": false,
+   "focus": "pp-preset",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "preset vuoto: stato vuoto esplicito",
+  "ok": true,
+  "detail": {
+   "label": "Domenica",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "dom",
+   "firstDish": null,
+   "empty": true,
+   "focus": "pp-preset",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "+ Nuovo: crea e seleziona «Nuovo preset»",
+  "ok": true,
+  "detail": {
+   "label": "Nuovo preset",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "nuovo1",
+   "firstDish": "Carbonara",
+   "empty": false,
+   "focus": "pp-preset",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "Drinks menu unico: pulsante Preset nascosto",
+  "ok": true,
+  "detail": {
+   "label": "Preset",
+   "expanded": "false",
+   "hidden": true,
+   "ty": 0,
+   "trayH": 70,
+   "current": "attuale",
+   "firstDish": "Acqua naturale",
+   "empty": false,
+   "focus": "pp-picker",
+   "chipOpacity": null,
+   "dialog": false,
+   "dlgError": "",
+   "status": ""
+  }
+ },
+ {
+  "label": "ritorno a Pranzo: Preset visibile e vista conservata",
+  "ok": true,
+  "detail": {
+   "label": "Nuovo preset",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "nuovo1",
+   "firstDish": "Carbonara",
+   "empty": false,
+   "focus": "pp-picker",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "nessun errore JS in pagina",
+  "ok": true,
+  "detail": []
+ }
+]

@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-90d3a02e-8086-49ef-ba0f-fa7337308f48",
+  "object": "chat.completion",
+  "created": 1792249195,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p21\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"A quale vino della casa ti riferisci?\",\n    \"item_refs\": [\"p26\", \"p27\"],\n    \"missing\": []\n  },\n  \"uncertain\": [\n    {\n      \"phrase\": \"il vino della casa costa 4,50\",\n      \"candidates\": [\"p26\", \"p27\"],\n      \"action\": \"set_price\",\n      \"value\": null,\n      \"price\": 4.5\n    }\n  ],\n  \"alias_used\": [],\n  \"reply_draft\": \"A quale vino della casa ti riferisci?\"\n}",
+     "reasoning": "We need intent change. Actions: set_available for tiramisù p21 false. set_price for vino della casa rosso 1/4 p26 price 4.5. Also maybe vino bianco? Message says \"il vino della casa\" ambiguous could be both red and white. Need clarify. ambiguous item_refs candidates p26 and p27. So one action clear, other uncertain. We'll put actions for tiramisù. uncertain for vino. reply_draft ask which wine."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055957974,
+   "prompt_tokens": 3369,
+   "prompt_time": 0.135872077,
+   "completion_tokens": 352,
+   "completion_time": 0.738774548,
+   "total_tokens": 3721,
+   "total_time": 0.874646625,
+   "completion_tokens_details": {
+    "reasoning_tokens": 100
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_8ea50c0161",
+  "x_groq": {
+   "id": "req_01m5560smmes3sv0a5q18772ym",
+   "seed": 812063
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3369,
+  "completion_tokens": 352,
+  "total_tokens": 3721
+ },
+ "ms": 1035,
+ "recordedAt": "2026-10-17T14:59:54.959Z",
+ "conv": "multipla-003"
+}

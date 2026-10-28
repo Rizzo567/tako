@@ -10,6 +10,8 @@ export async function forwardTwilioWebhook(url:string,token:string,form:Record<s
 export type MenuCommand={kind:'price';name:string;price:number}|{kind:'available'|'hidden';name:string;value:boolean}
 export function parseMenuCommand(raw:string):MenuCommand|null{
  const text=raw.trim();const price=text.match(/^(?:prezzo\s+|(?:cambia|imposta|metti|porta)\s+(?:il prezzo (?:di |del |della ))?)(.+?)\s+(?:a|=)\s*(\d+(?:[.,]\d{1,2})?)\s*(?:€|euro)?\s*$/i);
+ // G1: «metti in offerta X a N», «metti nel menu …» non sono cambi prezzo.
+ if(price&&/\b(in (?:offerta|promo\w*|sconto)|nel menu|nuov[oa]|aggiung\w*|tra (?:i|gli|le))\b/i.test(price[1]!))return null
  if(price){const amount=Number(price[2]!.replace(',','.'));return amount<=100000?{kind:'price',name:price[1]!.trim(),price:amount}:null}
  const status=text.match(/^(nascondi|mostra|esaurito|disponibile|rendi disponibile)\s+(.+)$/i);
  if(status){const verb=normalizeMenuText(status[1]!);return {kind:['nascondi','mostra'].includes(verb)?'hidden':'available',name:status[2]!.trim(),value:['nascondi','disponibile','rendi disponibile'].includes(verb)}}return null

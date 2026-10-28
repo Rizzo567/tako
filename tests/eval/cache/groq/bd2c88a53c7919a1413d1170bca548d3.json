@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-24637bf8-58b8-4e79-9093-662c6c64cc53",
+  "object": "chat.completion",
+  "created": 1792321611,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"create_item\",\n      \"section\": \"primi\",\n      \"item\": null,\n      \"name\": \"pasta al pesto\",\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"section\": \"primi\",\n      \"item\": null,\n      \"name\": \"pasta al ragù\",\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"section\": \"primi\",\n      \"item\": null,\n      \"name\": \"pasta carbonara\",\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"section\": \"primi\",\n      \"item\": null,\n      \"name\": \"riso giallo\",\n      \"price\": 8,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Aggiunti i nuovi piatti in \\\"primi\\\": pasta al pesto, pasta al ragù, pasta carbonara a 10 €, riso giallo a 8 €.\"\n}",
+     "reasoning": "We need to output JSON owner_brain_plan. Need to create items: pasta al pesto, pasta al ragù, pasta carbonara, riso giallo in section \"primi\". Prices: pastas 10, riso 8. Names not existing? pasta al pesto not in menu, pasta al ragù exists p4 hidden, but we can create new? Probably create_item for each. Provide actions list. Also clarify none. reply_draft confirming."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.214531386,
+   "prompt_tokens": 3860,
+   "prompt_time": 0.149702299,
+   "completion_tokens": 558,
+   "completion_time": 1.153091364,
+   "total_tokens": 4418,
+   "total_time": 1.302793663,
+   "completion_tokens_details": {
+    "reasoning_tokens": 97
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_ca5edfaab2",
+  "x_groq": {
+   "id": "req_01m57b2qv2e4h9qxns8fatds03",
+   "seed": 348051500
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3860,
+  "completion_tokens": 558,
+  "total_tokens": 4418
+ },
+ "ms": 1600,
+ "recordedAt": "2026-10-18T11:06:51.091Z",
+ "conv": "r8-repro"
+}

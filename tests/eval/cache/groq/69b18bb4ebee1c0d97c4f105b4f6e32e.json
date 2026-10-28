@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-ca5c917c-cfd7-4764-b153-c871ffa1aee6",
+  "object": "chat.completion",
+  "created": 1792248054,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_hidden\",\n      \"item\": \"p17\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": true,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "Need to produce JSON. Intent change, action set_hidden true for p17. Also previous cassata already hidden? It was hidden initially. Now also hide cannolo. No uncertainty. reply_draft empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.405501646,
+   "prompt_tokens": 3246,
+   "prompt_time": 0.150420092,
+   "completion_tokens": 214,
+   "completion_time": 0.448881777,
+   "total_tokens": 3460,
+   "total_time": 0.599301869,
+   "completion_tokens_details": {
+    "reasoning_tokens": 43
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_df9620fe21",
+  "x_groq": {
+   "id": "req_01m554y04fey8r2xwwg9md8dmc",
+   "seed": 713416541
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3246,
+  "completion_tokens": 214,
+  "total_tokens": 3460
+ },
+ "ms": 1086,
+ "recordedAt": "2026-10-17T14:40:54.779Z",
+ "conv": "togli-013"
+}

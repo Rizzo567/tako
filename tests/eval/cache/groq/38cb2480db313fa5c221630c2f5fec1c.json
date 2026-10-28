@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-f8a24044-7c44-4c81-8646-0757c9e82b7f",
+  "object": "chat.completion",
+  "created": 1792284883,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"read\": \"hidden\",\n  \"item_refs\": [],\n  \"actions\": [],\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"reply_draft\": \"Il piatto nascosto è pasta al ragù.\"\n}",
+     "reasoning": "We need to output JSON owner_brain_plan. Intent read? He asks which hidden items. So intent read, read=hidden. item_refs empty. reply_draft ask? Should list hidden items. We have p4 hidden. So reply_draft: \"Il piatto nascosto è pasta al ragù.\" Provide actions none. uncertain empty. alias_used empty. capability_ids maybe list capabilities? Could be empty array. Provide required fields."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.051691345,
+   "prompt_tokens": 3350,
+   "prompt_time": 0.037226311,
+   "completion_tokens": 195,
+   "completion_time": 0.404249578,
+   "total_tokens": 3545,
+   "total_time": 0.441475889,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 91
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m5681yd7e9zr4a6p4vren663",
+   "seed": 649545239
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3350,
+  "completion_tokens": 195,
+  "total_tokens": 3545
+ },
+ "ms": 641,
+ "recordedAt": "2026-10-18T00:54:43.846Z",
+ "conv": "bv-domande-008"
+}

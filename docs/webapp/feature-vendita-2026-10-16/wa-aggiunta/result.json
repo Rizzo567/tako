@@ -1,0 +1,117 @@
+{
+ "at": "2026-10-16T16:33:10.962Z",
+ "turns": [
+  {
+   "in": "aggiungiamo un piatto",
+   "status": 200,
+   "out": "Quanto costa il piatto? Scrivimi il prezzo, per esempio «12 euro»."
+  },
+  {
+   "in": "aggiungi tra piatti di prova il piatto pasta al pesto che costa 12 euro",
+   "status": 200,
+   "out": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Pasta al pesto* in *Piatti di prova*: *12,00 €*"
+  },
+  {
+   "in": "aggiungi piatto di verifica 12 euro",
+   "status": 200,
+   "out": "*Piatto di verifica* è già in *Piatti di prova*. Dimmi cosa vuoi cambiare, per esempio «Piatto di verifica costa 12 euro»."
+  },
+  {
+   "in": "nuovo piatto: tiramisù 6 euro",
+   "status": 200,
+   "out": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*"
+  },
+  {
+   "in": "aggiungi nei piatti di prova panna cotta a cinque euro",
+   "status": 200,
+   "out": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Panna cotta* in *Piatti di prova*: *5,00 €*"
+  },
+  {
+   "in": "prezzo Piatto di verifica a 14.5",
+   "status": 200,
+   "out": "*Confermato.* Ho aggiornato il menu. *Piatto di verifica*: prezzo da 13,50 € a *14,50 €*"
+  },
+  {
+   "in": "la Piatto di verifica è finita",
+   "status": 200,
+   "out": "*Confermato.* Ho aggiornato il menu. *Piatto di verifica*: *finito*"
+  }
+ ],
+ "checks": [
+  {
+   "name": "QA con 1 categorie («Piatti di prova»)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "«aggiungiamo un piatto» → una domanda (una sola categoria: prezzo)",
+   "ok": true,
+   "detail": "Quanto costa il piatto? Scrivimi il prezzo, per esempio «12 euro»."
+  },
+  {
+   "name": "risposta completa → piatto aggiunto e pubblicato (non «Non trovo»)",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Pasta al pesto* in *Piatti di prova*: *12,00 €*"
+  },
+  {
+   "name": "piatto già presente → lo dice, nessun doppione",
+   "ok": true,
+   "detail": "*Piatto di verifica* è già in *Piatti di prova*. Dimmi cosa vuoi cambiare, per esempio «Piatto di verifica costa 12 euro»."
+  },
+  {
+   "name": "una sola categoria → Tiramisù 6 € aggiunto",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Tiramisù* in *Piatti di prova*: *6,00 €*"
+  },
+  {
+   "name": "«a cinque euro» → Panna cotta 5 €",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. Nuovo piatto *Panna cotta* in *Piatti di prova*: *5,00 €*"
+  },
+  {
+   "name": "regressione «prezzo X a N» → cambio prezzo",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. *Piatto di verifica*: prezzo da 13,50 € a *14,50 €*"
+  },
+  {
+   "name": "regressione «la X è finita» → non è un'aggiunta",
+   "ok": true,
+   "detail": "*Confermato.* Ho aggiornato il menu. *Piatto di verifica*: *finito*"
+  },
+  {
+   "name": "collegamento esistente del QA rimesso identico",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "QA ripristinato per hash",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "numero finto scollegato",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "restore": {
+  "before": {
+   "draft": "53c8b2238fac55b8",
+   "published": "53c8b2238fac55b8",
+   "restaurant": "9c4079d025da2f3e",
+   "items": "54e6cde26671e28d",
+   "menus": "2e07fe6544ebe672",
+   "sections": "71685d6d590957ae",
+   "public": "77ce229f82e35f60"
+  },
+  "after": {
+   "draft": "53c8b2238fac55b8",
+   "published": "53c8b2238fac55b8",
+   "restaurant": "9c4079d025da2f3e",
+   "items": "54e6cde26671e28d",
+   "menus": "2e07fe6544ebe672",
+   "sections": "71685d6d590957ae",
+   "public": "77ce229f82e35f60"
+  }
+ }
+}

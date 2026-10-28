@@ -1,0 +1,710 @@
+# Batteria R10 · modo off
+
+| Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
+|---|---|---|---|---|---|
+| macro | 64 | 0 | 64 | 0 | 0 |
+| testardo | 32 | 0 | 32 | 0 | 0 |
+| manuel | 12 | 2 | 10 | 0 | 0 |
+| inesistente | 30 | 0 | 0 | 0 | 30 |
+| sposta-gemello | 28 | 0 | 28 | 0 | 0 |
+| controlli | 15 | 5 | 10 | 0 | 0 |
+| TOTALE | 181 | 7 | 144 | 0 | 30 |
+
+## Fallimenti
+
+- **r10-macro-001** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a
+  - turni: Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-002** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a
+  - turni: nascondi tutti i piatti di altre proposte ⏎ 🎤 sì vai
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-003** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a
+  - turni: 🎤 togli tutto quello che c’è in altre propose, tutti i piatti ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-004** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a
+  - turni: 🎤 leva tutti i piatti della sezione le altre proposta ⏎ 🎤 sì vai
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-005** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a
+  - turni: 🎤 tutti i piatti delle altre propose toglili dal menu ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-006** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: Togli tutti i piatti dalla sezione secondi e panini ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-007** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: nascondi tutti i piatti di secondi e panini ⏎ 🎤 sì vai
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-008** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 togli tutto quello che c’è in secondi e panino, tutti i piatti ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-009** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 leva tutti i piatti della sezione secondi panini ⏎ 🎤 sì vai
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-010** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 tutti i piatti delle secondi e panino toglili dal menu ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-011** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: Togli tutti i piatti dalla sezione dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-012** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: nascondi tutti i piatti di dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-013** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: 🎤 togli tutto quello che c’è in dolci frutta, tutti i piatti
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-014** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: 🎤 leva tutti i piatti della sezione dolcie frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-015** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: 🎤 tutti i piatti delle dolci frutta toglili dal menu
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-016** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true
+  - turni: Togli tutti i piatti dalla sezione bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-017** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true
+  - turni: nascondi tutti i piatti di bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-018** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true
+  - turni: 🎤 togli tutto quello che c’è in bevanda e caffetteria, tutti i piatti
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-019** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true
+  - turni: 🎤 leva tutti i piatti della sezione bevande caffè
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-020** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true
+  - turni: 🎤 tutti i piatti delle bevanda e caffetteria toglili dal menu
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-021** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false
+  - turni: rimetti tutti i piatti di altre proposte
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-022** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false
+  - turni: fai vedere di nuovo tutti i piatti della sezione altre proposte
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-023** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false
+  - turni: 🎤 rimetti nel menu tutti i piatti delle altre propose
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-024** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false
+  - turni: 🎤 mostra tutti i piatti di le altre proposta
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-025** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false
+  - turni: i piatti di altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-026** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false
+  - turni: segna finiti tutti i piatti della sezione altre proposte ⏎ 🎤 sì vai
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-027** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false
+  - turni: 🎤 tutti i piatti delle altre propose sono esauriti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-028** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false
+  - turni: 🎤 oggi è finito tutto in le altre proposta, tutti i piatti ⏎ 🎤 sì vai
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-029** [GRAVE] GRAVE non-applicato: non applicato: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false
+  - turni: i piatti di secondi e panini sono tutti finiti ⏎ ok
+  - atteso: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-030** [GRAVE] GRAVE non-applicato: non applicato: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false
+  - turni: segna finiti tutti i piatti della sezione secondi e panini ⏎ 🎤 sì vai
+  - atteso: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-031** [GRAVE] GRAVE non-applicato: non applicato: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false
+  - turni: 🎤 tutti i piatti delle secondi e panino sono esauriti ⏎ ok
+  - atteso: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-032** [GRAVE] GRAVE non-applicato: non applicato: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false
+  - turni: 🎤 oggi è finito tutto in secondi panini, tutti i piatti ⏎ 🎤 sì vai
+  - atteso: available|Cotoletta|false, available|Panino porchetta|false, available|Panino vegetale|false, available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-033** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: i piatti di dolci e frutta sono tutti finiti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-034** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: segna finiti tutti i piatti della sezione dolci e frutta
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-035** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: 🎤 tutti i piatti delle dolci frutta sono esauriti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-036** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: 🎤 oggi è finito tutto in dolcie frutta, tutti i piatti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-037** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: i piatti di bevande e caffetteria sono tutti finiti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-038** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: segna finiti tutti i piatti della sezione bevande e caffetteria
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-039** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: 🎤 tutti i piatti delle bevanda e caffetteria sono esauriti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-040** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: 🎤 oggi è finito tutto in bevande caffè, tutti i piatti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-041** [GRAVE] GRAVE non-applicato: non applicato: available|Ananas|true
+  - turni: sono tornati tutti i piatti di dolci e frutta
+  - atteso: available|Ananas|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-042** [GRAVE] GRAVE non-applicato: non applicato: available|Ananas|true
+  - turni: rimetti disponibili tutti i piatti della sezione dolci e frutta
+  - atteso: available|Ananas|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-043** [GRAVE] GRAVE non-applicato: non applicato: available|Ananas|true
+  - turni: 🎤 tutti i piatti di dolci frutta sono di nuovo disponibili
+  - atteso: available|Ananas|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-044** [GRAVE] GRAVE non-applicato: non applicato: available|Ananas|true
+  - turni: 🎤 c’è di nuovo tutto in dolcie frutta, tutti i piatti
+  - atteso: available|Ananas|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-045** [GRAVE] GRAVE non-applicato: non applicato: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19
+  - turni: aumenta di un euro tutti i piatti di secondi e panini
+  - atteso: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-046** [GRAVE] GRAVE non-applicato: non applicato: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19
+  - turni: alza di 1 euro tutti i piatti della sezione secondi e panini
+  - atteso: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-047** [GRAVE] GRAVE non-applicato: non applicato: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19
+  - turni: 🎤 tutti i piatti delle secondi e panino aumentali di un euro
+  - atteso: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-048** [GRAVE] GRAVE non-applicato: non applicato: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19
+  - turni: 🎤 aumenta tutti i piatti di secondi panini di 1 euro
+  - atteso: price|Cotoletta|15, price|Panino porchetta|9, price|Panino vegetale|8, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-049** [GRAVE] GRAVE non-applicato: non applicato: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4
+  - turni: aumenta di un euro tutti i piatti di bevande e caffetteria
+  - atteso: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-050** [GRAVE] GRAVE non-applicato: non applicato: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4
+  - turni: alza di 1 euro tutti i piatti della sezione bevande e caffetteria
+  - atteso: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-051** [GRAVE] GRAVE non-applicato: non applicato: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4
+  - turni: 🎤 tutti i piatti delle bevanda e caffetteria aumentali di un euro
+  - atteso: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-052** [GRAVE] GRAVE non-applicato: non applicato: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4
+  - turni: 🎤 aumenta tutti i piatti di bevande caffè di 1 euro
+  - atteso: price|Aranciata|4, price|Caffè|2.2, price|Coca cola|4 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-053** [GRAVE] GRAVE non-applicato: non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, p
+  - turni: aumenta di un euro tutti i piatti di altre proposte
+  - atteso: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-054** [GRAVE] GRAVE non-applicato: non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, p
+  - turni: alza di 1 euro tutti i piatti della sezione altre proposte
+  - atteso: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-055** [GRAVE] GRAVE non-applicato: non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, p
+  - turni: 🎤 tutti i piatti delle altre propose aumentali di un euro
+  - atteso: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-056** [GRAVE] GRAVE non-applicato: non applicato: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, p
+  - turni: 🎤 aumenta tutti i piatti di le altre proposta di 1 euro
+  - atteso: price|Pasta al pesto e lasagna|11.01, price|Pasta al sugo|10, price|Polpette di prova|8, price|Torta salata di prova|6, price|pasta al ragù|11, price|tiramisù|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-057** [GRAVE] GRAVE non-applicato: non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi
+  - turni: sposta tutti i piatti di dolci e frutta in primi
+  - atteso: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-058** [GRAVE] GRAVE non-applicato: non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi
+  - turni: metti tutti i piatti della sezione dolci e frutta nella sezione primi
+  - atteso: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-059** [GRAVE] GRAVE non-applicato: non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi
+  - turni: 🎤 tutti i piatti delle dolci frutta spostali in primi
+  - atteso: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-060** [GRAVE] GRAVE non-applicato: non applicato: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi
+  - turni: 🎤 sposta in primi tutti i piatti di dolcie frutta
+  - atteso: move|Ananas|Primi, move|Cannolo|Primi, move|Panna cotta|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-061** [GRAVE] GRAVE non-applicato: non applicato: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù
+  - turni: sposta tutti i piatti di altre proposte in primi ⏎ ok
+  - atteso: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù|Primi, move|tiramisù|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-062** [GRAVE] GRAVE non-applicato: non applicato: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù
+  - turni: metti tutti i piatti della sezione altre proposte nella sezione primi ⏎ 🎤 sì vai
+  - atteso: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù|Primi, move|tiramisù|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-063** [GRAVE] GRAVE non-applicato: non applicato: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù
+  - turni: 🎤 tutti i piatti delle altre propose spostali in primi ⏎ ok
+  - atteso: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù|Primi, move|tiramisù|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-macro-064** [GRAVE] GRAVE non-applicato: non applicato: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù
+  - turni: 🎤 sposta in primi tutti i piatti di le altre proposta ⏎ 🎤 sì vai
+  - atteso: move|Pasta al pesto e lasagna|Primi, move|Pasta al sugo|Primi, move|Polpette di prova|Primi, move|Torta salata di prova|Primi, move|pasta al ragù|Primi, move|tiramisù|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-001** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-002** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-003** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-004** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta a
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|Polpette di prova|true, hidden|Torta salata di prova|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-005** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione secondi e panini ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-006** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione secondi e panini ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-007** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione secondi e panini ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-008** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione secondi e panini ⏎ ok
+  - atteso: hidden|Cotoletta|true, hidden|Panino porchetta|true, hidden|Panino vegetale|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-009** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false
+  - turni: 🎤 i piatti di altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-010** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false
+  - turni: 🎤 i piatti di altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-011** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false
+  - turni: 🎤 i piatti di altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-012** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false
+  - turni: 🎤 i piatti di altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|Polpette di prova|false, available|Torta salata di prova|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-013** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: 🎤 i piatti di dolci e frutta sono tutti finiti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-014** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: 🎤 i piatti di dolci e frutta sono tutti finiti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-015** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: 🎤 i piatti di dolci e frutta sono tutti finiti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-016** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: 🎤 i piatti di dolci e frutta sono tutti finiti
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-017** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-018** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-019** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-020** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione bevande e caffetteria
+  - atteso: hidden|Aranciata|true, hidden|Caffè|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-021** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false
+  - turni: 🎤 rimetti tutti i piatti di altre proposte
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-022** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false
+  - turni: 🎤 rimetti tutti i piatti di altre proposte
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-023** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false
+  - turni: 🎤 rimetti tutti i piatti di altre proposte
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-024** [GRAVE] GRAVE non-applicato: non applicato: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false
+  - turni: 🎤 rimetti tutti i piatti di altre proposte
+  - atteso: hidden|Che ne sacc|false, hidden|Frittata di prova|false, hidden|Piatto di verifica|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-025** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: 🎤 i piatti di bevande e caffetteria sono tutti finiti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-026** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: 🎤 i piatti di bevande e caffetteria sono tutti finiti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-027** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: 🎤 i piatti di bevande e caffetteria sono tutti finiti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-028** [GRAVE] GRAVE non-applicato: non applicato: available|Aranciata|false, available|Caffè|false, available|Coca cola|false
+  - turni: 🎤 i piatti di bevande e caffetteria sono tutti finiti
+  - atteso: available|Aranciata|false, available|Caffè|false, available|Coca cola|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-029** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-030** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-031** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-testardo-032** [GRAVE] GRAVE non-applicato: non applicato: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione dolci e frutta
+  - atteso: hidden|Ananas|true, hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-manuel-001** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-manuel-002** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: Togli tutti i piatti dalla sezione altre proposte ⏎ 🎤 sì vai
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-manuel-003** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ 🎤 tutti i piatti nella sezione altre proposte ⏎ 🎤 tutti i piatti ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-manuel-004** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ 🎤 tutti i piatti nella sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-manuel-005** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-manuel-006** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-manuel-007** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-manuel-008** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 Togli tutti i piatti dalla sezione altre proposte ⏎ 🎤 tutti i piatti nella sezione altre proposte ⏎ 🎤 tutti i piatti ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-manuel-009** [GRAVE] GRAVE non-applicato: non applicato: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true
+  - turni: 🎤 togli tutti i piatti dalla sezione altre propose ⏎ ok
+  - atteso: hidden|Pasta al pesto e lasagna|true, hidden|Pasta al sugo|true, hidden|pasta al ragù|true, hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-manuel-012** [GRAVE] GRAVE non-applicato: non applicato: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|pasta al ragù|false, available|tiramisù|false
+  - turni: 🎤 i piatti delle altre proposte sono tutti finiti ⏎ ok
+  - atteso: available|Pasta al pesto e lasagna|false, available|Pasta al sugo|false, available|pasta al ragù|false, available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: togli tutti i piatti dalla sezione antipasti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-002** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 togli tutti i piatti dalla sezione antipasti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 togli tutti i piatti dalla sezione antipasti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-004** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: nascondi la categoria pizze
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 nascondi la categoria pizze
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 nascondi la categoria pizze
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: i piatti della sezione contorni sono finiti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 i piatti della sezione contorni sono finiti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 i piatti della sezione contorni sono finiti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: sposta il tiramisù nella sezione gelati
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-011** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 sposta il tiramisù nella sezione gelati
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 sposta il tiramisù nella sezione gelati
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-013** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: togli tutti i piatti della categoria aperitivi
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-014** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 togli tutti i piatti della categoria aperitivi
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 togli tutti i piatti della categoria aperitivi
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-016** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: nascondi tutta la sezione specialità
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 nascondi tutta la sezione specialità
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-018** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 nascondi tutta la sezione specialità
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-019** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: segna finita la sezione insalate
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-020** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 segna finita la sezione insalate
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-021** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: togli i piatti della sezione bruschette
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-022** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 togli i piatti della sezione bruschette
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-023** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: nella categoria taglieri metti tutto a 10
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-024** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 nella categoria taglieri metti tutto a 10
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-025** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: rimetti tutti i piatti della sezione grigliate
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-026** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 rimetti tutti i piatti della sezione grigliate
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-027** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: togli la sezione crudi
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-028** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 togli la sezione crudi
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-029** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: nascondi tutti i piatti della sezione fritti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-inesistente-030** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 nascondi tutti i piatti della sezione fritti
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-001** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|tiramisù|Primi, price|tiramisù|7
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ 🎤 aggiornalo
+  - atteso: move|tiramisù|Primi, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|tiramisù|Primi, price|tiramisù|7
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ confermo
+  - atteso: move|tiramisù|Primi, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-003** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|tiramisù|Primi, price|tiramisù|7
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ 🎤 sì aggiornalo
+  - atteso: move|tiramisù|Primi, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-004** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|tiramisù|Primi, price|tiramisù|7
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ 🎤 il primo
+  - atteso: move|tiramisù|Primi, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-005** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|tiramisu|7|primi
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ 🎤 crea nuovo
+  - atteso: create|tiramisu|7|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-006** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|tiramisu|7|primi
+  - turni: 🎤 nei primi aggiungi tiramisù a 7 ⏎ 🎤 creane un altro
+  - atteso: create|tiramisu|7|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-007** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|tiramisù|Dessert, price|tiramisù|6
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ 🎤 aggiornalo
+  - atteso: move|tiramisù|Dessert, price|tiramisù|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-008** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|tiramisù|Dessert, price|tiramisù|6
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ confermo
+  - atteso: move|tiramisù|Dessert, price|tiramisù|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-009** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|tiramisù|Dessert, price|tiramisù|6
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ 🎤 sì aggiornalo
+  - atteso: move|tiramisù|Dessert, price|tiramisù|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-010** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|tiramisù|Dessert, price|tiramisù|6
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ 🎤 il primo
+  - atteso: move|tiramisù|Dessert, price|tiramisù|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|tiramisu|6|dessert
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ 🎤 crea nuovo
+  - atteso: create|tiramisu|6|dessert · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-012** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|tiramisu|6|dessert
+  - turni: 🎤 nel dessert aggiungi tiramisù a 6 ⏎ 🎤 creane un altro
+  - atteso: create|tiramisu|6|dessert · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-013** [GRAVE] GRAVE non-applicato: non applicato: price|pasta al pesto|12
+  - turni: 🎤 nei primi aggiungi pasta al pesto a 12 ⏎ 🎤 aggiornalo
+  - atteso: price|pasta al pesto|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-014** [GRAVE] GRAVE non-applicato: non applicato: price|pasta al pesto|12
+  - turni: 🎤 nei primi aggiungi pasta al pesto a 12 ⏎ 🎤 sì aggiornalo
+  - atteso: price|pasta al pesto|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-015** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ 🎤 aggiornalo
+  - atteso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-016** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ confermo
+  - atteso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-017** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ 🎤 sì aggiornalo
+  - atteso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-018** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ 🎤 il primo
+  - atteso: create|riso nero|9|primi, move|pasta al ragù|Primi, price|pasta al ragù|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-019** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|12|primi, create|riso nero|9|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ 🎤 crea nuovo
+  - atteso: create|pasta al ragu|12|primi, create|riso nero|9|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-020** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|pasta al ragu|12|primi, create|riso nero|9|primi
+  - turni: 🎤 nei primi aggiungi pasta al ragù a 12 e riso nero a 9 ⏎ 🎤 creane un altro
+  - atteso: create|pasta al ragu|12|primi, create|riso nero|9|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-021** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|Polpette di prova|Carne, price|Polpette di prova|8
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ 🎤 aggiornalo
+  - atteso: move|Polpette di prova|Carne, price|Polpette di prova|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-022** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|Polpette di prova|Carne, price|Polpette di prova|8
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ confermo
+  - atteso: move|Polpette di prova|Carne, price|Polpette di prova|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-023** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|Polpette di prova|Carne, price|Polpette di prova|8
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ 🎤 sì aggiornalo
+  - atteso: move|Polpette di prova|Carne, price|Polpette di prova|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-024** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|Polpette di prova|Carne, price|Polpette di prova|8
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ 🎤 il primo
+  - atteso: move|Polpette di prova|Carne, price|Polpette di prova|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-025** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|polpette di prova|8|carne
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ 🎤 crea nuovo
+  - atteso: create|polpette di prova|8|carne · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-026** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|polpette di prova|8|carne
+  - turni: 🎤 in carne aggiungi Polpette di prova a 8 ⏎ 🎤 creane un altro
+  - atteso: create|polpette di prova|8|carne · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-027** [GRAVE] GRAVE non-applicato: non applicato: price|Panino porchetta|9
+  - turni: 🎤 aggiungi nella sezione panini il Panino porchetta a 9 ⏎ 🎤 aggiornalo
+  - atteso: price|Panino porchetta|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-sposta-gemello-028** [GRAVE] GRAVE non-applicato: non applicato: price|Panino porchetta|9
+  - turni: 🎤 aggiungi nella sezione panini il Panino porchetta a 9 ⏎ 🎤 sì aggiornalo
+  - atteso: price|Panino porchetta|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-controlli-005** [GRAVE] GRAVE non-applicato: non applicato: hidden|Panino porchetta|true, hidden|Panino vegetale|true
+  - turni: nascondi tutti i panini
+  - atteso: hidden|Panino porchetta|true, hidden|Panino vegetale|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-controlli-006** [GRAVE] GRAVE non-applicato: non applicato: available|Cotoletta|false, available|Tagliata|false
+  - turni: segna finiti tutti i piatti della sezione carne
+  - atteso: available|Cotoletta|false, available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-controlli-007** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Coca cola|true
+  - turni: togli tutte le bibite
+  - atteso: hidden|Aranciata|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-controlli-008** [GRAVE] GRAVE non-applicato: non applicato: available|Panino porchetta|false, available|Panino vegetale|false
+  - turni: i panini sono tutti finiti
+  - atteso: available|Panino porchetta|false, available|Panino vegetale|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-controlli-009** [GRAVE] GRAVE non-applicato: non applicato: price|Cotoletta|15, price|Tagliata|19
+  - turni: aumenta di un euro tutti i piatti della sezione carne
+  - atteso: price|Cotoletta|15, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-controlli-010** [GRAVE] GRAVE non-applicato: non applicato: hidden|Aranciata|true, hidden|Coca cola|true
+  - turni: togli tutti i piatti della sezione bibite
+  - atteso: hidden|Aranciata|true, hidden|Coca cola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-controlli-012** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cotoletta|true, hidden|Tagliata|true
+  - turni: nascondi tutti i piatti della carne
+  - atteso: hidden|Cotoletta|true, hidden|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-controlli-013** [GRAVE] GRAVE non-applicato: non applicato: available|Cannolo|false, available|Panna cotta|false
+  - turni: sono finiti tutti i piatti della sezione dessert
+  - atteso: available|Cannolo|false, available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-controlli-014** [GRAVE] GRAVE non-applicato: non applicato: hidden|Caffè|true
+  - turni: nascondi tutti i piatti della sezione caffetteria
+  - atteso: hidden|Caffè|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **r10-controlli-015** [GRAVE] GRAVE non-applicato: non applicato: hidden|Cannolo|true, hidden|Panna cotta|true
+  - turni: togli tutti i dessert
+  - atteso: hidden|Cannolo|true, hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»

@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-2fc2a75a-f489-4210-9af5-452832e7b2e3",
+  "object": "chat.completion",
+  "created": 1792284457,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"capability\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [\n    \"price\",\n    \"unavailable\",\n    \"available\",\n    \"hidden\",\n    \"description\",\n    \"tags\",\n    \"featured\",\n    \"create\",\n    \"special\",\n    \"photo\",\n    \"promo\",\n    \"scarcity\",\n    \"questions\",\n    \"fullmenu\",\n    \"voice\",\n    \"allergens\",\n    \"delete\",\n    \"rename\",\n    \"bulk\",\n    \"graphics\",\n    \"categories\",\n    \"translations\",\n    \"other\",\n    \"all\"\n  ],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Posso gestire prezzi, disponibilità, nascondere o mostrare piatti, aggiungere descrizioni, tag, evidenziare, creare, modificare o eliminare voci, gestire promozioni, speciali, foto, allergeni e molto altro.\"\n}",
+     "reasoning": "User asks capability. Need reply with capability list. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.300265305,
+   "prompt_tokens": 3452,
+   "prompt_time": 0.144900646,
+   "completion_tokens": 266,
+   "completion_time": 0.560785793,
+   "total_tokens": 3718,
+   "total_time": 0.705686439,
+   "completion_tokens_details": {
+    "reasoning_tokens": 14
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_69334c0be3",
+  "x_groq": {
+   "id": "req_01m567mx7ce7wt8fyxjxvk3wg0",
+   "seed": 1399141414
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3452,
+  "completion_tokens": 266,
+  "total_tokens": 3718
+ },
+ "ms": 1096,
+ "recordedAt": "2026-10-18T00:47:37.118Z",
+ "conv": "bv-domande-004"
+}

@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-c1673f9a-6e4b-43ad-95a4-2c22a4c82526",
+  "object": "chat.completion",
+  "created": 1792254347,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": null,\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"pasta al ragù\",\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": null,\n      \"price\": 15,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"pasta al pesto\",\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": null,\n      \"price\": 150,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"caviale\",\n      \"until\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"reply_draft\": \"\",\n  \"uncertain\": []\n}",
+     "reasoning": "We need intent change, actions for create_item. Sections? Not given, maybe default? Use section null. Provide three create_item actions. No uncertainties. reply_draft empty. alias_used empty. capability_ids empty. read none. item_refs empty. clarify empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.300058033,
+   "prompt_tokens": 3049,
+   "prompt_time": 0.141102493,
+   "completion_tokens": 387,
+   "completion_time": 0.819333071,
+   "total_tokens": 3436,
+   "total_time": 0.960435564,
+   "completion_tokens_details": {
+    "reasoning_tokens": 55
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_4a7bb72c24",
+  "x_groq": {
+   "id": "req_01m55ay16nef8vjn64q7nhy6hp",
+   "seed": 1548516174
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3049,
+  "completion_tokens": 387,
+  "total_tokens": 3436
+ },
+ "ms": 1434,
+ "recordedAt": "2026-10-17T16:25:47.650Z",
+ "conv": "v-aggiunte-001"
+}

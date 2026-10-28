@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-c48ade1d-b8f9-4972-8580-aa42a80b17ee",
+  "object": "chat.completion",
+  "created": 1792284211,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [\"p7\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"La Tagliata rucola e grana costa 20 €.\"\n}",
+     "reasoning": "We need to output JSON owner_brain_plan. Intent change? It's read price. So intent read? Actually user asks price, we can answer directly no action. reply_draft should give price. No actions. intent=read? read maybe items? But we just give info. Use intent=read, read=\"items\". reply_draft \"La Tagliata rucola e grana costa 20 €.\" No actions. Provide empty arrays."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.025544635,
+   "prompt_tokens": 3660,
+   "prompt_time": 0.156060871,
+   "completion_tokens": 204,
+   "completion_time": 0.425233393,
+   "total_tokens": 3864,
+   "total_time": 0.581294264,
+   "completion_tokens_details": {
+    "reasoning_tokens": 93
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_87b3c396db",
+  "x_groq": {
+   "id": "req_01m567ddsjezb9y1cnyh6rkje4",
+   "seed": 118382170
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3660,
+  "completion_tokens": 204,
+  "total_tokens": 3864
+ },
+ "ms": 1041,
+ "recordedAt": "2026-10-18T00:43:31.703Z",
+ "conv": "bv-domande-001"
+}

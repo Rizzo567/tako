@@ -1,0 +1,287 @@
+[
+{
+"intent": "change",
+"actions": [
+{
+"action": "create_section",
+"section": "primi",
+"item": null,
+"name": null,
+"price": null,
+"price_delta": null,
+"price_ref": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"section": "primi",
+"item": null,
+"name": "pasta al pesto",
+"price": 10,
+"price_delta": null,
+"price_ref": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"section": "primi",
+"item": null,
+"name": "pasta al ragu",
+"price": 10,
+"price_delta": null,
+"price_ref": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"section": "primi",
+"item": null,
+"name": "pasta carbonara",
+"price": 10,
+"price_delta": null,
+"price_ref": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"section": "primi",
+"item": null,
+"name": "riso giallo",
+"price": 8,
+"price_delta": null,
+"price_ref": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+}
+],
+"item_refs": [],
+"read": "none",
+"clarify": {
+"question": null,
+"item_refs": [],
+"missing": []
+},
+"uncertain": [],
+"alias_used": [],
+"capability_ids": [],
+"reply_draft": "Ho aggiunto pasta al pesto, pasta al ragu, pasta carbonara e riso giallo nella sezione \"primi\" con i prezzi indicati."
+},
+{
+"intent": "change",
+"actions": [
+{
+"action": "set_price",
+"item": "p4",
+"section": null,
+"price": 10,
+"price_delta": null,
+"price_ref": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null,
+"name": null
+},
+{
+"action": "create_item",
+"item": null,
+"section": "primi",
+"name": "pasta al pesto",
+"price": 10,
+"price_delta": null,
+"price_ref": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"item": null,
+"section": "primi",
+"name": "pasta carbonara",
+"price": 10,
+"price_delta": null,
+"price_ref": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"item": null,
+"section": "primi",
+"name": "riso giallo",
+"price": 8,
+"price_delta": null,
+"price_ref": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+}
+],
+"item_refs": [],
+"read": "none",
+"clarify": {
+"question": null,
+"item_refs": [],
+"missing": []
+},
+"uncertain": [],
+"alias_used": [],
+"capability_ids": [],
+"reply_draft": "Ho aggiornato il prezzo della pasta al ragù a 10 € e aggiunto pasta al pesto, pasta carbonara e riso giallo nella sezione \"primi\" con i prezzi indicati."
+},
+{
+"intent": "change",
+"actions": [
+{
+"action": "create_item",
+"section": "primi",
+"item": null,
+"name": "pasta al pesto",
+"price": 10,
+"price_ref": null,
+"price_delta": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"section": "primi",
+"item": null,
+"name": "pasta al ragù",
+"price": 10,
+"price_ref": null,
+"price_delta": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"section": "primi",
+"item": null,
+"name": "pasta carbonara",
+"price": 10,
+"price_ref": null,
+"price_delta": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"section": "primi",
+"item": null,
+"name": "riso giallo",
+"price": 8,
+"price_ref": null,
+"price_delta": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+}
+],
+"item_refs": [],
+"read": "none",
+"capability_ids": [],
+"clarify": {
+"question": null,
+"item_refs": [],
+"missing": []
+},
+"uncertain": [],
+"alias_used": [],
+"reply_draft": "Aggiunti i nuovi piatti in \"primi\": pasta al pesto, pasta al ragù, pasta carbonara a 10 €, riso giallo a 8 €."
+},
+{
+"intent": "change",
+"actions": [
+{
+"action": "set_price",
+"item": "p4",
+"section": null,
+"name": null,
+"price": 10,
+"price_ref": null,
+"price_delta": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"item": null,
+"section": "primi",
+"name": "pasta al pesto",
+"price": 10,
+"price_ref": null,
+"price_delta": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"item": null,
+"section": "primi",
+"name": "pasta carbonara",
+"price": 10,
+"price_ref": null,
+"price_delta": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+},
+{
+"action": "create_item",
+"item": null,
+"section": "primi",
+"name": "riso giallo",
+"price": 8,
+"price_ref": null,
+"price_delta": null,
+"value": null,
+"tag": null,
+"text": null,
+"until": null
+}
+],
+"item_refs": [],
+"read": "none",
+"capability_ids": [],
+"clarify": {
+"question": null,
+"item_refs": [],
+"missing": []
+},
+"uncertain": [],
+"alias_used": [],
+"reply_draft": "Aggiornato il prezzo di \"pasta al ragù\" a 10 €, e aggiunti in \"primi\": pasta al pesto, pasta carbonara a 10 € e riso giallo a 8 €."
+}
+]

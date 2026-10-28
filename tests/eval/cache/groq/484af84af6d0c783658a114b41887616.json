@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-fa686daa-7f2e-4940-a750-37993f6bfd18",
+  "object": "chat.completion",
+  "created": 1792249434,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"unavailable\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "Need to output JSON. User asks what is finished. That's a read intent. item_refs? Diavola is p3. read maybe unavailable? Actually ask \"cosa è finito?\" ambiguous, need clarify. So intent=clarify with question and candidates maybe all unavailable items. Currently only p3 is unavailable. So item_refs list p3. reply_draft ask? We need reply_draft with question. Since ambiguous? It's a question, intent=read? It's a read question about which items are finished. Could be read=unavailable and item_refs empty. Probably read intent. reply_draft empty. Let's do read=unavailable. No actions. No clarify."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054237456,
+   "prompt_tokens": 3277,
+   "prompt_time": 0.060338648,
+   "completion_tokens": 228,
+   "completion_time": 0.474772652,
+   "total_tokens": 3505,
+   "total_time": 0.5351113,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 140
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m556843de2rbdhhdzbt8k4r1",
+   "seed": 2137557980
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3277,
+  "completion_tokens": 228,
+  "total_tokens": 3505
+ },
+ "ms": 670,
+ "recordedAt": "2026-10-17T15:03:54.683Z",
+ "conv": "domanda-014"
+}

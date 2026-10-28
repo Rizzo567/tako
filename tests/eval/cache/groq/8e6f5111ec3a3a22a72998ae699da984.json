@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-73a65372-64d8-4295-8df6-2421a692aeee",
+  "object": "chat.completion",
+  "created": 1792284761,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"unavailable\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Al momento non ci sono piatti esauriti.\"\n}",
+     "reasoning": "User asks \"Ok, adesso dimmi cosa è finito.\" Intent read about unavailable. Need to list items that are finito (esaurito). In menu only p4 is hidden, not esaurito. No esaurito. So reply that none are finito. reply_draft. No actions. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.024850683,
+   "prompt_tokens": 3275,
+   "prompt_time": 0.032504584,
+   "completion_tokens": 174,
+   "completion_time": 0.36371016,
+   "total_tokens": 3449,
+   "total_time": 0.396214744,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 69
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_87b3c396db",
+  "x_groq": {
+   "id": "req_01m567y7ctej7spemmhagar92f",
+   "seed": 1979007006
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3275,
+  "completion_tokens": 174,
+  "total_tokens": 3449
+ },
+ "ms": 510,
+ "recordedAt": "2026-10-18T00:52:41.855Z",
+ "conv": "bv-domande-008"
+}

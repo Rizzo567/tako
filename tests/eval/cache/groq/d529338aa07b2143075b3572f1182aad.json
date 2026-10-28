@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-136680f9-3a94-4b64-b38e-a70f8581c0b5",
+  "object": "chat.completion",
+  "created": 1792284945,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"capability\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [\n    \"price\",\n    \"unavailable\",\n    \"available\",\n    \"hidden\",\n    \"description\",\n    \"tags\",\n    \"featured\",\n    \"create\",\n    \"special\",\n    \"photo\",\n    \"promo\",\n    \"scarcity\",\n    \"questions\",\n    \"fullmenu\",\n    \"voice\",\n    \"allergens\",\n    \"delete\",\n    \"rename\",\n    \"bulk\",\n    \"graphics\",\n    \"categories\",\n    \"translations\",\n    \"other\",\n    \"all\"\n  ],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Posso gestire prezzi, disponibilità, nascondere o mostrare piatti, aggiungere descrizioni, tag, evidenziare, creare, modificare o eliminare voci, gestire promozioni, speciali del giorno e molto altro.\"\n}",
+     "reasoning": "User asks capability. Need reply_draft with answer. intent=capability, no actions. Provide list."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.310705732,
+   "prompt_tokens": 3288,
+   "prompt_time": 0.269757405,
+   "completion_tokens": 272,
+   "completion_time": 0.568649092,
+   "total_tokens": 3560,
+   "total_time": 0.838406497,
+   "completion_tokens_details": {
+    "reasoning_tokens": 23
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_4a7bb72c24",
+  "x_groq": {
+   "id": "req_01m5683stmeqf9c6r4e825vge0",
+   "seed": 303521741
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3288,
+  "completion_tokens": 272,
+  "total_tokens": 3560
+ },
+ "ms": 1338,
+ "recordedAt": "2026-10-18T00:55:45.388Z",
+ "conv": "bv-domande-009"
+}

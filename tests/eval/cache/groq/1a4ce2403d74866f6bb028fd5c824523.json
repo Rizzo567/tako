@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-dfc4f145-614b-45b4-b4b8-adce6c537c84",
+  "object": "chat.completion",
+  "created": 1792254327,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"capability\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [\"delete\"],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. First intent? User says \"anzi no, eliminalo proprio\" referring to previous action hide boh. So they want to delete? Actually \"eliminalo\" means remove item? Not supported action delete not in list. So cannot delete, need clarify? It's a request to delete which is unsupported => capability. intent=capability with capability_ids maybe [\"delete\"]. No actions. reply_draft empty. Also maybe need clarify? It's a request unsupported. So capability. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.299297915,
+   "prompt_tokens": 3089,
+   "prompt_time": 0.131921937,
+   "completion_tokens": 201,
+   "completion_time": 0.420745832,
+   "total_tokens": 3290,
+   "total_time": 0.552667769,
+   "completion_tokens_details": {
+    "reasoning_tokens": 105
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_86dc843b12",
+  "x_groq": {
+   "id": "req_01m55axdnaesc9qpykqgvhmey4",
+   "seed": 143082471
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3089,
+  "completion_tokens": 201,
+  "total_tokens": 3290
+ },
+ "ms": 1073,
+ "recordedAt": "2026-10-17T16:25:27.275Z",
+ "conv": "v-elimina-007"
+}

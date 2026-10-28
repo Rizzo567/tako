@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-2d8dd614-419d-4b1e-bb66-0fead311906d",
+  "object": "chat.completion",
+  "created": 1792284334,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [\"p7\", \"p9\"],\n    \"missing\": [\"price\"],\n    \"question\": \"Quale tagliata intendi? (p7 Tagliata rucola e grana o p9 Tagliata di orata o branzino con rucola e grana)\"\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Quale tagliata vuoi conoscere il prezzo?\"\n}",
+     "reasoning": "User asks price of tagliata. Need read intent. item_refs ambiguous: tagliata could be p7 or p9. So clarify with candidates. reply_draft question. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.052430908,
+   "prompt_tokens": 3453,
+   "prompt_time": 0.008763615,
+   "completion_tokens": 193,
+   "completion_time": 0.669505545,
+   "total_tokens": 3646,
+   "total_time": 0.67826916,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 41
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m567h5bwe8jscsn0290v9bjm",
+   "seed": 1996446254
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3453,
+  "completion_tokens": 193,
+  "total_tokens": 3646
+ },
+ "ms": 891,
+ "recordedAt": "2026-10-18T00:45:34.108Z",
+ "conv": "bv-domande-003"
+}

@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-946ef817-1827-43fd-be17-f85d46e6c12e",
+  "object": "chat.completion",
+  "created": 1792285866,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": 14,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p2\",\n      \"section\": null,\n      \"price\": 21,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": 21,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 13,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Prezzi aggiornati.\"\n}",
+     "reasoning": "We need to output JSON owner_brain_plan with actions set_price for each item. Confirmed. So actions list with set_price for p1 14, p2 21, p3 21, p4 13. reply_draft maybe empty? Since confirmed, we can reply draft confirming. Probably \"Prezzi aggiornati.\" Provide actions and reply_draft. intent change. No uncertainties."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054147676,
+   "prompt_tokens": 3383,
+   "prompt_time": 0.07831848,
+   "completion_tokens": 491,
+   "completion_time": 1.081726513,
+   "total_tokens": 3874,
+   "total_time": 1.160044993,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 83
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m568zxe4em8tac6a8pyys45s",
+   "seed": 318803558
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3383,
+  "completion_tokens": 491,
+  "total_tokens": 3874
+ },
+ "ms": 1393,
+ "recordedAt": "2026-10-18T01:11:06.569Z",
+ "conv": "bv-multiple-004"
+}

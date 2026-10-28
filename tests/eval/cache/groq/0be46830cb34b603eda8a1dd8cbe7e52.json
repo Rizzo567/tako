@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-e51136e4-acdd-450c-a9b4-eed0f2202494",
+  "object": "chat.completion",
+  "created": 1792248631,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p6\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": \"p7\",\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "User wants same price for parmigiana (p6) as carbonara now 13. So set_price for p6 price_ref to p7. Also same action as previous: set_price for p7 already done. So actions: set_price item p6 price_ref p7. reply_draft empty. intent change. No uncertainties."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.05554165,
+   "prompt_tokens": 3439,
+   "prompt_time": 0.160576164,
+   "completion_tokens": 243,
+   "completion_time": 0.509110118,
+   "total_tokens": 3682,
+   "total_time": 0.669686282,
+   "completion_tokens_details": {
+    "reasoning_tokens": 70
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m555fkg0emqse82vztfnjkht",
+   "seed": 1765571729
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3439,
+  "completion_tokens": 243,
+  "total_tokens": 3682
+ },
+ "ms": 874,
+ "recordedAt": "2026-10-17T14:50:31.410Z",
+ "conv": "anche-001"
+}

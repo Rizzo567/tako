@@ -1,0 +1,233 @@
+{
+ "base": 744,
+ "revisionAfter": 745,
+ "results": [
+  {
+   "name": "nessuna modifica",
+   "oldSaveMs": 624,
+   "oldSaveQ": 5,
+   "oldPubMs": 2076,
+   "oldPubQ": 15,
+   "old": {
+    "menus": "31cde79937b2eda7",
+    "sections": "d0b2ff602893189a",
+    "items": "3bfc4e17dd81f1ea",
+    "variants": "e926c2e2165c7a6a",
+    "translations": "38097486e76db20d",
+    "ws": "75c3bdf6aac79b7f",
+    "versions": "e6197ec45edbab2d",
+    "n": {
+     "menus": 9,
+     "items": 45,
+     "translations": 1,
+     "variants": 4,
+     "versions": 2
+    }
+   },
+   "newSaveMs": 870,
+   "newSaveQ": 4,
+   "newPubMs": 1075,
+   "newPubQ": 6,
+   "new": {
+    "menus": "31cde79937b2eda7",
+    "sections": "d0b2ff602893189a",
+    "items": "3bfc4e17dd81f1ea",
+    "variants": "e926c2e2165c7a6a",
+    "translations": "38097486e76db20d",
+    "ws": "75c3bdf6aac79b7f",
+    "versions": "e6197ec45edbab2d",
+    "n": {
+     "menus": 9,
+     "items": 45,
+     "translations": 1,
+     "variants": 4,
+     "versions": 2
+    }
+   },
+   "equal": true
+  },
+  {
+   "name": "prezzo",
+   "oldSaveMs": 867,
+   "oldSaveQ": 5,
+   "oldPubMs": 1925,
+   "oldPubQ": 15,
+   "old": {
+    "menus": "31cde79937b2eda7",
+    "sections": "d0b2ff602893189a",
+    "items": "d3c8a8e44027c59c",
+    "variants": "e926c2e2165c7a6a",
+    "translations": "38097486e76db20d",
+    "ws": "f5cefcff02c16e3d",
+    "versions": "a241cfee1c0c7ca1",
+    "n": {
+     "menus": 9,
+     "items": 45,
+     "translations": 1,
+     "variants": 4,
+     "versions": 2
+    }
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": false
+  },
+  {
+   "name": "nome",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "piatto nuovo",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "piatto eliminato",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "categoria nuova",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "categoria eliminata",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "esaurito",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "nascosto",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "menu nuovo",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "menu disattivato",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "traduzioni cambiate",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "varianti",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "ordine e spostamento",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "campi vari",
+   "old": {
+    "err": "[\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"number\",\n    \"received\": \"null\",\n    \"path\": [\n      \"menus\",\n      0,\n      \"sections\",\n      0,\n      \"item"
+   },
+   "new": {
+    "err": "[\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"number\",\n    \"received\": \"null\",\n    \"path\": [\n      \"menus\",\n      0,\n      \"sections\",\n      0,\n      \"item"
+   },
+   "equal": true
+  },
+  {
+   "name": "menu grande (300 piatti, 3 lingue)",
+   "old": {
+    "err": "Revision conflict"
+   },
+   "new": {
+    "err": "Revision conflict"
+   },
+   "equal": true
+  },
+  {
+   "name": "prova bloccata old",
+   "err": "WorkspaceTrialLocked2"
+  },
+  {
+   "name": "conflitto old",
+   "err": "WorkspaceConflict2"
+  },
+  {
+   "name": "prova bloccata new",
+   "err": "WorkspaceTrialLocked"
+  },
+  {
+   "name": "conflitto new",
+   "err": "WorkspaceConflict"
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-5be62195-6416-4a8f-b2ea-7485525aeae4",
+  "object": "chat.completion",
+  "created": 1792249032,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"A quale supplì ti riferisci?\",\n    \"item_refs\": [\"p1\", \"p2\"],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need change price of supplì. Which item? Supplì classico p1 price 2.5. Also Supplì cacio e pepe p2 price 3. Message \"il supplì costa 3,50\" ambiguous which supplì. Both are supplì. Need clarify. Provide clarify with candidates p1 and p2. No actions. reply_draft ask which."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.302758641,
+   "prompt_tokens": 3360,
+   "prompt_time": 0.174855355,
+   "completion_tokens": 190,
+   "completion_time": 0.398896873,
+   "total_tokens": 3550,
+   "total_time": 0.573752228,
+   "completion_tokens_details": {
+    "reasoning_tokens": 82
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_69334c0be3",
+  "x_groq": {
+   "id": "req_01m555vv5zexgskqm3rpcgp2p5",
+   "seed": 2109864815
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3360,
+  "completion_tokens": 190,
+  "total_tokens": 3550
+ },
+ "ms": 998,
+ "recordedAt": "2026-10-17T14:57:12.655Z",
+ "conv": "chiarimento-002"
+}

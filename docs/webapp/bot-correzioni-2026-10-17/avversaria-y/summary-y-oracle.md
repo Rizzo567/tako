@@ -1,0 +1,20 @@
+# Banco E · y-oracle
+
+Generato da tests/eval (groq=oracle, bot=nuovo, conversazioni=558).
+
+| Famiglia | Conv. | Successo | OK | GRAVE | MEDIO | BASSO | GRAVI sicurezza | Chiarimenti/turni | Chiar. non attesi | Usa IA | IA mancante |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| b1-elimina | 558 | 530 (95%) | 525 | 0 | 28 | 5 | 0 | 41% | 197 | 558 | 0 |
+| multi-turno | 254 | 239 (94.1%) | 239 | 0 | 15 | 0 | 0 | 46.5% | 126 | 254 | 0 |
+| TOTALE | 558 | 530 (95%) | 525 | 0 | 28 | 5 | 0 | 41% | 197 | 558 | 0 |
+
+Latenza harness (webhook→risposta, senza rete) p50 3.8 ms · p95 6.3 ms. Con la latenza Groq registrata: p50 3.8 ms · p95 6.3 ms.
+IA: 992 risposte (cache o vere), 0 richieste senza risposta (Groq giù/cache assente), 0 token veri spesi in questo giro.
+
+| Codice | GRAVE | MEDIO | BASSO |
+|---|---|---|---|
+| chiede-invece-di-agire | 0 | 26 | 0 |
+| categoria-fuori-ordine | 0 | 1 | 0 |
+| chiarimento-mancante | 0 | 1 | 0 |
+| risposta-non-pertinente | 0 | 0 | 5 |
+

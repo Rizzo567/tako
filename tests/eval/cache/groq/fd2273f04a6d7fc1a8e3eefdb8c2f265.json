@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-c79b76c1-1b2c-4d49-ae30-b37c54d08d60",
+  "object": "chat.completion",
+  "created": 1792254390,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"change\",\"actions\":[{\"action\":\"create_item\",\"section_id\":\"c1\",\"name\":\"pasta al pesto\",\"price\":10},{\"action\":\"create_item\",\"section_id\":\"c1\",\"name\":\"lasagna\",\"price\":20}]}",
+     "reasoning": "User wants to add items. Need create_item actions. Need section_id: category id? Category is c1. So two create_item actions. Provide intent change."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.206166059,
+   "prompt_tokens": 1158,
+   "prompt_time": 0.050554734,
+   "completion_tokens": 94,
+   "completion_time": 0.196361643,
+   "total_tokens": 1252,
+   "total_time": 0.246916377,
+   "completion_tokens_details": {
+    "reasoning_tokens": 34
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_90620edd96",
+  "x_groq": {
+   "id": "req_01m55azc3te4x8et9ty3t9vpwj",
+   "seed": 336809447
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1158,
+  "completion_tokens": 94,
+  "total_tokens": 1252
+ },
+ "ms": 512,
+ "recordedAt": "2026-10-17T16:26:30.751Z",
+ "conv": "v-composti-006"
+}

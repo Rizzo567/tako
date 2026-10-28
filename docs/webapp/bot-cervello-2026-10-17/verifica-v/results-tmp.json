@@ -1,0 +1,130 @@
+{
+ "bot": "tmp",
+ "meta": {
+  "groq": "oracle",
+  "bot": "nuovo",
+  "tetto": 20000,
+  "conversazioni": 1
+ },
+ "summary": {
+  "total": {
+   "family": "TOTALE",
+   "n": 1,
+   "ok": 0,
+   "success": 0,
+   "grave": 0,
+   "medio": 1,
+   "basso": 0,
+   "safety": 0,
+   "clarRate": 100,
+   "unexpectedClar": 1,
+   "usedLlm": 1,
+   "llmMissConvs": 0,
+   "detN": 0,
+   "detSuccess": 0
+  },
+  "multi": {
+   "family": "multi-turno",
+   "n": 0,
+   "ok": 0,
+   "success": 0,
+   "grave": 0,
+   "medio": 0,
+   "basso": 0,
+   "safety": 0,
+   "clarRate": 0,
+   "unexpectedClar": 0,
+   "usedLlm": 0,
+   "llmMissConvs": 0,
+   "detN": 0,
+   "detSuccess": 0
+  },
+  "families": [
+   {
+    "family": "v-correzioni",
+    "n": 1,
+    "ok": 0,
+    "success": 0,
+    "grave": 0,
+    "medio": 1,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 100,
+    "unexpectedClar": 1,
+    "usedLlm": 1,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   }
+  ],
+  "codes": {
+   "chiede-invece-di-agire": {
+    "GRAVE": 0,
+    "MEDIO": 1,
+    "BASSO": 0
+   }
+  },
+  "latency": {
+   "harnessP50": 46.6,
+   "harnessP95": 46.6,
+   "withRecordedGroqP50": 46.6,
+   "withRecordedGroqP95": 46.6
+  },
+  "llm": {
+   "calls": 2,
+   "misses": 0,
+   "tokens": 0
+  }
+ },
+ "groqStats": {
+  "calls": 2,
+  "hits": 0,
+  "misses": 0,
+  "recorded": 0,
+  "tokens": 0,
+  "recordedMs": 0,
+  "refused": 0,
+  "rateLimited": 0,
+  "oracle": 2,
+  "byKey": {},
+  "last": null
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "v-correzioni-005",
+   "family": "v-correzioni",
+   "menu": "qa",
+   "success": false,
+   "fails": [
+    {
+     "sev": "MEDIO",
+     "code": "chiede-invece-di-agire",
+     "why": "domanda invece di agire / contesto perso: price|la parmigiana|15, price|tiramisù|10"
+    }
+   ],
+   "expected": [
+    "price|la parmigiana|15",
+    "price|tiramisù|10"
+   ],
+   "actual": [],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?"
+   ],
+   "turns": [
+    "🎤 No, ho detto, mettila parmigiana a 7 euro, anzi no, mettila a 15 euro e il tiramisù mettilo a 3 euro, anzi no, mettila a 10 euro."
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 2,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    46.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true,
+   "source": "Manuel 13:28"
+  }
+ ]
+}

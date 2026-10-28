@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-07a67d02-8c23-4733-a20d-1ee19b62c578",
+  "object": "chat.completion",
+  "created": 1792247103,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_featured\",\n      \"item\": \"p7\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p7\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. The user says \"togli l'evidenza\". No item specified, ambiguous? Likely refers to previously mentioned carbonara. Should set_featured false on p7. intent change, action set_featured. reply_draft empty. No uncertainty. alias none. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055712723,
+   "prompt_tokens": 3348,
+   "prompt_time": 0.156483168,
+   "completion_tokens": 239,
+   "completion_time": 0.497764521,
+   "total_tokens": 3587,
+   "total_time": 0.654247689,
+   "completion_tokens_details": {
+    "reasoning_tokens": 64
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m5540za1em48bdmdz4xjpa2y",
+   "seed": 1277220694
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3348,
+  "completion_tokens": 239,
+  "total_tokens": 3587
+ },
+ "ms": 802,
+ "recordedAt": "2026-10-17T14:25:03.379Z",
+ "conv": "ripristino-006"
+}

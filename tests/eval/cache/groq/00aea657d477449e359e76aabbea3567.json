@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-86953f99-72de-4467-ba7f-95e8ce7dd157",
+  "object": "chat.completion",
+  "created": 1792248751,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p7\",\n      \"section\": null,\n      \"price\": 14,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. User says \"no scusa, 14\" referring to previous carbonara price change. So change price to 14. Action set_price item p7 price 14. No reply. intent change. reply_draft \"\". No uncertainties."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.210298705,
+   "prompt_tokens": 3429,
+   "prompt_time": 0.151108947,
+   "completion_tokens": 227,
+   "completion_time": 0.492029267,
+   "total_tokens": 3656,
+   "total_time": 0.643138214,
+   "prompt_tokens_details": {
+    "cached_tokens": 512
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 55
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_9241e9962b",
+  "x_groq": {
+   "id": "req_01m555k8pxexdsrbqfht6e25rx",
+   "seed": 1977891097
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3429,
+  "completion_tokens": 227,
+  "total_tokens": 3656
+ },
+ "ms": 968,
+ "recordedAt": "2026-10-17T14:52:31.571Z",
+ "conv": "correzione-001"
+}

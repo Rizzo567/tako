@@ -1,0 +1,1097 @@
+{
+  "set": "adv2",
+  "startedAt": "2026-10-16T09:01:48.581Z",
+  "steps": [
+    {
+      "n": 1,
+      "text": "Crea locale Verifica Avversaria Tre. Nel menu Pranzo, categoria Primi, Pasta al pomodoro a 10 euro; nel menu Cena, categoria Panini, Burger classico a 12 euro; nel menu Pranzo, categoria Bevande, Acqua a 2 euro. È solo una bozza privata: non pubblicare e non inviare inviti.",
+      "webhook": {
+        "status": 200,
+        "ack": "Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione."
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6258
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 2 piatti.\n\nFatto: aggiunto *Pasta al pomodoro* (Pranzo · Primi) a 10 €; aggiunto *Acqua* (Pranzo · Bevande) a 2 €.\n\nPer *Burger classico* indica il menu corretto.\nPuoi inviare il dato corretto?\nPoi c’è *un altro dato* da controllare.\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        }
+      ],
+      "unresolved": [
+        "Per *Burger classico* indica il menu corretto.",
+        "Non ho capito questa parte: «Burger classico a 12 euro». Puoi riscriverla con piatto, menu e prezzo?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 2,
+      "text": "Nel menu Cena, categoria Bevande, aggiungi Acqua a 2 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3169
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 3 piatti.\n\nFatto: aggiunto *Acqua* (Cena · Bevande) a 2 €.\n\nPer *Burger classico* indica il menu corretto.\nPuoi inviare il dato corretto?\nPoi c’è *un altro dato* da controllare.\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 3,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        }
+      ],
+      "unresolved": [
+        "Per *Burger classico* indica il menu corretto.",
+        "Non ho capito questa parte: «Burger classico a 12 euro». Puoi riscriverla con piatto, menu e prezzo?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 3,
+      "text": "Nel menu Pranzo, categoria Pizze, aggiungi Porta Nuova a 9 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3176
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 3 piatti.\n\nNon trovo *Nuova* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.\nPuoi inviare il dato corretto?\nPoi ci sono *altri 2 dati* da controllare.\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        }
+      ],
+      "unresolved": [
+        "Non trovo *Nuova* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.",
+        "Per *Burger classico* indica il menu corretto.",
+        "Non ho capito questa parte: «Burger classico a 12 euro». Puoi riscriverla con piatto, menu e prezzo?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 4,
+      "text": "Alza la Pasta al pomodoro di 2 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6276
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 3 piatti.\n\nFatto: *Pasta al pomodoro* (Pranzo) 10 € → 2 €.\n\nNon trovo *Nuova* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.\nPuoi inviare il dato corretto?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 5,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 2,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        }
+      ],
+      "unresolved": [
+        "Non trovo *Nuova* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo."
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 5,
+      "text": "Nel menu Pranzo, categoria Dolci, non aggiungere il Tiramisu a 6 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6248
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 4 piatti.\n\nFatto: aggiunto *Tiramisu* (Pranzo · Dolci) a 6 €.\n\nNon trovo *Nuova* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.\nPuoi inviare il dato corretto?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 6,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 2,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        }
+      ],
+      "unresolved": [
+        "Non trovo *Nuova* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo."
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 6,
+      "text": "Nel menu Cena, categoria Dolci, elimina la Panna cotta a 5 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 34672
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 5 piatti.\n\nFatto: aggiunto *Panna cotta* (Cena · Dolci) a 5 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 7,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 2,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 7,
+      "text": "Porta il Burger classico a 12,50 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3229
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 5 piatti.\n\nNon trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.\nPuoi inviare il dato corretto?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 8,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 2,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [
+        "Non trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo."
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 8,
+      "text": "Il coperto costa 2 euro. Nel menu Pranzo, categoria Dolci, aggiungi Tiramisu a 6 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3177
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 5 piatti.\n\nNon ho capito questa parte: «Il coperto costa 2 euro». Puoi riscriverla con piatto, menu e prezzo?\nPoi c’è *un altro dato* da controllare.\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 9,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 2,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [
+        "Non ho capito questa parte: «Il coperto costa 2 euro». Puoi riscriverla con piatto, menu e prezzo?",
+        "Non trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo."
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 9,
+      "text": "Rinomina Burger classico in Burger della casa.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3182
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 5 piatti.\n\nNon trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.\nPuoi inviare il dato corretto?\nPoi c’è *un altro dato* da controllare.\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 10,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 2,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [
+        "Non trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.",
+        "Non ho capito questa parte: «Il coperto costa 2 euro». Puoi riscriverla con piatto, menu e prezzo?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 10,
+      "text": "Mantieni il Burger classico a 12,50 euro, Panna cotta a 5 euro nel menu Pranzo, categoria Dolci.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3157
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 5 piatti.\n\nNessuna modifica ai piatti: erano già così.\n\nNon ho capito questa parte: «Il coperto costa 2 euro». Puoi riscriverla con piatto, menu e prezzo?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 11,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 2,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [
+        "Non ho capito questa parte: «Il coperto costa 2 euro». Puoi riscriverla con piatto, menu e prezzo?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 11,
+      "text": "porta il burger classico a tredici euro la pasta al pomodoro a undici euro",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3160
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 5 piatti.\n\nFatto: *Pasta al pomodoro* (Pranzo) 2 € → 11 €.\n\nNon trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.\nPuoi inviare il dato corretto?\nPoi c’è *un altro dato* da controllare.\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 12,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 11,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [
+        "Non trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.",
+        "Non ho capito questa parte: «Il coperto costa 2 euro». Puoi riscriverla con piatto, menu e prezzo?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 12,
+      "text": "Nel menu Pranzo, categoria Panini, aggiungi Burger classico a 12 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3163
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 6 piatti.\n\nFatto: aggiunto *Burger classico* (Pranzo · Panini) a 12 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 13,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 11,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "89519ace-e32a-400f-aaa9-469a8d024123"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 13,
+      "text": "Porta il Burger classico a 15 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6245
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 6 piatti.\n\nFatto: *Burger classico* (Pranzo) 12 € → 15 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 14,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 11,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "89519ace-e32a-400f-aaa9-469a8d024123"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 14,
+      "text": "Aggiungi Sorbetto a 4 euro, categoria Dolci.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "failed",
+        "diagnostic": {
+          "cause": "other"
+        },
+        "waitedMs": 3220
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Non sono riuscito a leggere l’ultimo messaggio. *Rimandalo*, la bozza è salva."
+        }
+      ],
+      "revision": 14,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 11,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "89519ace-e32a-400f-aaa9-469a8d024123"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 15,
+      "text": "Cena",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3167
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 6 piatti.\n\nFatto: titolare *Cena*.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 15,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 11,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "89519ace-e32a-400f-aaa9-469a8d024123"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 16,
+      "text": "Mostrami il riepilogo dei menu e dei piatti.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3169
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Tre* · 6 piatti.\n\n*Pranzo*\nPrimi: Pasta al pomodoro 11 €\nBevande: Acqua 2 €\nDolci: Tiramisu 6 €\nPanini: Burger classico 15 €\n*Cena*\nBevande: Acqua 2 €\nDolci: Panna cotta 5 €\n\nRaccolti: nome titolare.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 15,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 11,
+          "id": "4b79f1df-4d38-4b64-b464-c1c29b2da508"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "4309d757-f97e-4d5d-b7a2-101ac6662089"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Dolci",
+          "name": "Tiramisu",
+          "price": 6,
+          "id": "b40c0837-5b34-4a5d-b692-07f16408fad6"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "89519ace-e32a-400f-aaa9-469a8d024123"
+        },
+        {
+          "menu": "Cena",
+          "section": "Bevande",
+          "name": "Acqua",
+          "price": 2,
+          "id": "9a921612-1ea3-4fff-a40b-38f54d83f467"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Panna cotta",
+          "price": 5,
+          "id": "4813a8df-371a-4de9-9b45-277185559ac5"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    }
+  ],
+  "before": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "qaLinkCreated": true,
+  "pass": null,
+  "errors": [
+    {
+      "kind": "onboarding_other",
+      "detail": "Error",
+      "alerted": false,
+      "created_at": "2026-10-16T09:11:12.924Z"
+    }
+  ],
+  "technicalCopy": 0,
+  "cleanup": {
+    "cancel": {
+      "status": "done",
+      "diagnostic": null,
+      "waitedMs": 3195
+    },
+    "openDraftAfter": false
+  },
+  "qaLinkRemoved": true,
+  "after": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "restaurantsChanged": [],
+  "restaurantsAdded": [],
+  "victoriaUnchanged": true,
+  "victoriaMatchesMorningBaseline": false,
+  "finishedAt": "2026-10-16T09:12:45.528Z"
+}

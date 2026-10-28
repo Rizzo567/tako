@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-1669e1a5-beb4-451d-86ed-bcc61fc3413c",
+  "object": "chat.completion",
+  "created": 1792321460,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"create_section\",\n      \"section\": \"primi\",\n      \"item\": null,\n      \"name\": null,\n      \"price\": null,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"move_item\",\n      \"item\": \"p4\",\n      \"section\": \"primi\",\n      \"name\": null,\n      \"price\": null,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"price\": 10,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"section\": null,\n      \"name\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"section\": \"primi\",\n      \"name\": \"pasta al pesto\",\n      \"price\": 10,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"item\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"section\": \"primi\",\n      \"name\": \"pasta carbonara\",\n      \"price\": 10,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"item\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"section\": \"primi\",\n      \"name\": \"riso giallo\",\n      \"price\": 8,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"item\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Quale parmigiana vuoi spostare, quella di p5 o p6?\",\n    \"item_refs\": [\"p5\", \"p6\"],\n    \"missing\": []\n  },\n  \"uncertain\": [\n    {\n      \"phrase\": \"sposta la parmigiana\",\n      \"candidates\": [\"p5\", \"p6\"],\n      \"action\": \"none\",\n      \"value\": null,\n      \"price\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"reply_draft\": \"Quale parmigiana vuoi spostare, quella di p5 o p6?\"\n}",
+     "reasoning": "We need to produce owner_brain_plan JSON. Intent change. Actions: create_section \"primi\", move_item p4 (pasta al ragù) to \"primi\", create_item for pasta al pesto (exists? p9 includes pasta al pesto e lasagna). There's no plain pasta al pesto item. So create_item section \"primi\", name \"pasta al pesto\", price 10. Also create_item for \"pasta carbonara\" price 10. Also create_item for \"riso giallo\" price 8. Also set_price for existing p4? Already moving p4, price currently 20, need set_price to 10. Also set_price for p9? Not moving p9, but we are adding pasta al pesto separate. Also need to handle which parmigiana? The earlier question unresolved. We must ask clarification again? The user now gave new instructions without answering which parmigiana. So we still have pending clarification. We should include that in reply_draft and also include actions for new request? Probably need to ask clarification and also propose actions for new part, but pending clarification must be answered first. So reply_draft should ask which parmigiana, and also maybe confirm new actions? According to spec, unclear parts become uncertain and ask question. So we include clarify with item_refs candidates p5,p6 question. Also actions for new part can be prepared but maybe wait? We can include them now as actions, but pending clarification? Probably include both: actions for create_section and moves, but parmigiana move uncertain -> uncertain entry. So include uncertain with phrase \"sposta la parmigiana\", candidates p5,p6, action none. Also clarify field. reply_draft ask which parmigiana. Also include actions for create_section and other items. Let's craft JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.401937712,
+   "prompt_tokens": 3519,
+   "prompt_time": 0.202975745,
+   "completion_tokens": 1036,
+   "completion_time": 2.158109116,
+   "total_tokens": 4555,
+   "total_time": 2.361084861,
+   "completion_tokens_details": {
+    "reasoning_tokens": 374
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_90620edd96",
+  "x_groq": {
+   "id": "req_01m57ay365egcr2nngnv78g44q",
+   "seed": 1467936568
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3519,
+  "completion_tokens": 1036,
+  "total_tokens": 4555
+ },
+ "ms": 2953,
+ "recordedAt": "2026-10-18T11:04:20.174Z",
+ "conv": "r8-repro"
+}

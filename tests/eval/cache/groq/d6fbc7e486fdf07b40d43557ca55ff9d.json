@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-82a9b1d1-bc10-4901-9855-62d641c03880",
+  "object": "chat.completion",
+  "created": 1792247604,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [\"p10\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need intent read, item_refs p10, read items? It's a price query. So intent read, read maybe \"items\"? Actually read intent for price query is read? Probably read with item_refs and no actions. reply_draft empty. No unclear. alias none. capability none."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.051918832,
+   "prompt_tokens": 3283,
+   "prompt_time": 0.013740735,
+   "completion_tokens": 156,
+   "completion_time": 0.324136732,
+   "total_tokens": 3439,
+   "total_time": 0.337877467,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 60
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m554g8gsehwr2v9bdrperjzd",
+   "seed": 1628650077
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3283,
+  "completion_tokens": 156,
+  "total_tokens": 3439
+ },
+ "ms": 517,
+ "recordedAt": "2026-10-17T14:33:24.047Z",
+ "conv": "domanda-006"
+}

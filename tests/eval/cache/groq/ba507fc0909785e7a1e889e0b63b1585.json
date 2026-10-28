@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-665507c7-754d-4241-b0d7-2ecfb059c0c2",
+  "object": "chat.completion",
+  "created": 1792254369,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"change\",\"actions\":[{\"action\":\"create_item\",\"section_id\":\"c1\",\"name\":\"pasta al pesto\",\"price\":15},{\"action\":\"create_item\",\"section_id\":\"c1\",\"name\":\"caviale\",\"price\":150}]}",
+     "reasoning": "User wants to add two items. Need create_item actions. Need section_id: category id? Category is c1. So create_item for each. Provide name and price. No description. JSON change with actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.051579593,
+   "prompt_tokens": 1158,
+   "prompt_time": 0.235967683,
+   "completion_tokens": 105,
+   "completion_time": 0.216395144,
+   "total_tokens": 1263,
+   "total_time": 0.452362827,
+   "completion_tokens_details": {
+    "reasoning_tokens": 44
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_02b0d31eca",
+  "x_groq": {
+   "id": "req_01m55aypvvemx870kbcngdz4a1",
+   "seed": 1374009182
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1158,
+  "completion_tokens": 105,
+  "total_tokens": 1263
+ },
+ "ms": 591,
+ "recordedAt": "2026-10-17T16:26:09.032Z",
+ "conv": "v-aggiunte-002"
+}

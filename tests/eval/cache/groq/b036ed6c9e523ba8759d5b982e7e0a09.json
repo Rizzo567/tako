@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-ca20acc1-7624-4df7-a1e5-d4b4dcebeb12",
+  "object": "chat.completion",
+  "created": 1792239485,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"change\",\"actions\":[{\"action\":\"set_price\",\"item_id\":\"p7\",\"price\":13},{\"action\":\"set_price\",\"item_id\":\"p10\",\"price\":12},{\"action\":\"set_price\",\"item_id\":\"p1\",\"price\":3}]}",
+     "reasoning": "User wants to change prices. Provide change intent with actions set_price for p7, p10, p4? Supplì likely p1 (Supplì classico) price to 3. Carbonara p7 to 13. Gricia p10 to 12. Return JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.210021334,
+   "prompt_tokens": 1634,
+   "prompt_time": 0.115788798,
+   "completion_tokens": 124,
+   "completion_time": 0.257183613,
+   "total_tokens": 1758,
+   "total_time": 0.372972411,
+   "completion_tokens_details": {
+    "reasoning_tokens": 61
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_19b184c447",
+  "x_groq": {
+   "id": "req_01m54wrg52evhbctafyvpqzck5",
+   "seed": 1043749495
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1634,
+  "completion_tokens": 124,
+  "total_tokens": 1758
+ },
+ "ms": 710,
+ "recordedAt": "2026-10-17T12:18:05.530Z",
+ "conv": "multipla-001"
+}

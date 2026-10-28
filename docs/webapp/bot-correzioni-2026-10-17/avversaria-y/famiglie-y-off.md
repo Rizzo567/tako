@@ -1,0 +1,1703 @@
+# Avversaria Y · modo off
+
+| Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
+|---|---|---|---|---|---|
+| el-conferma | 49 | 1 | 27 | 0 | 21 |
+| el-multi | 16 | 2 | 9 | 0 | 5 |
+| el-misto | 16 | 0 | 15 | 0 | 1 |
+| el-annulla | 16 | 0 | 8 | 0 | 8 |
+| cat-crea | 25 | 18 | 6 | 0 | 1 |
+| cat-piatti | 22 | 3 | 17 | 0 | 2 |
+| cat-rinomina | 19 | 9 | 10 | 0 | 0 |
+| sposta | 37 | 9 | 25 | 0 | 3 |
+| rinomina | 24 | 4 | 18 | 0 | 2 |
+| lunghe | 14 | 2 | 11 | 0 | 1 |
+| cambio | 14 | 1 | 11 | 0 | 2 |
+| ripeti | 12 | 3 | 9 | 0 | 0 |
+| numeri | 31 | 9 | 19 | 0 | 3 |
+| unita | 17 | 5 | 7 | 0 | 5 |
+| emoji | 15 | 6 | 9 | 0 | 0 |
+| refusi | 23 | 16 | 5 | 0 | 2 |
+| vuoti | 15 | 9 | 2 | 0 | 4 |
+| fuoritempo | 11 | 4 | 3 | 0 | 4 |
+| varianti | 37 | 11 | 23 | 0 | 3 |
+| r2-el-misto | 20 | 0 | 15 | 0 | 5 |
+| r2-el-si | 17 | 0 | 1 | 0 | 16 |
+| r2-rinomina | 18 | 4 | 14 | 0 | 0 |
+| r2-cat | 16 | 5 | 9 | 0 | 2 |
+| r2-sposta | 16 | 6 | 10 | 0 | 0 |
+| r2-relativi | 16 | 10 | 6 | 0 | 0 |
+| r2-code | 16 | 0 | 16 | 0 | 0 |
+| r3-conferme | 26 | 4 | 19 | 0 | 3 |
+| TOTALE | 558 | 141 | 324 | 0 | 93 |
+
+## Fallimenti
+
+- **y-el-conferma-001** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: eliminami il tiramisù ⏎ sì sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: cancellalo per sempre il tiramisù ⏎ certo
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-003** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: il tiramisù non lo facciamo più, eliminalo ⏎ confermo
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-004** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|la parmigiana
+  - turni: elimina la parmigiana ⏎ si dai
+  - atteso: delete|la parmigiana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-005** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|boh
+  - turni: cancella boh ⏎ esatto
+  - atteso: delete|boh · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-006** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|pasta al ragù
+  - turni: elimina pasta al ragù ⏎ procedi
+  - atteso: delete|pasta al ragù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-007** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Che ne sacc
+  - turni: elimina che ne sacc ⏎ vai pure
+  - atteso: delete|Che ne sacc · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-008** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù ⏎ SI
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-009** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù ⏎ Sì.
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ sìì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-011** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ 👍
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ sicuro
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-013** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ no
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-014** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ nono
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ ci ho ripensato
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-016** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ meglio di no
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ 👎
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-018** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ no aspetta
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-019** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ boh
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-020** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ forse
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-021** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ non so, dopo
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-022** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|tiramisù|true
+  - turni: elimina il tiramisù ⏎ no, nascondilo e basta
+  - atteso: hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-023** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: available|tiramisù|false
+  - turni: elimina il tiramisù ⏎ no, mettilo solo finito
+  - atteso: available|tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-024** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ sì ma prima mettilo a 7
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-025** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina il tiramisù ⏎ no, elimina la parmigiana
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-026** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: delete|la parmigiana
+  - turni: elimina il tiramisù ⏎ no, elimina la parmigiana ⏎ sì
+  - atteso: delete|la parmigiana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-027** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ [+40 min] ⏎ sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-028** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ [+31 min] ⏎ ok
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-029** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù ⏎ [+5 min] ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-030** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù ⏎ elimina il tiramisù ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-031** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù ⏎ sì ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-032** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù ⏎ sì ⏎ elimina il tiramisù
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-033** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: 🎤 eh senti il tiramisù toglilo proprio dal menu non lo facciamo più ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-034** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|la parmigiana
+  - turni: 🎤 cancella la parmigiana per favore ⏎ 🎤 sì cancellala
+  - atteso: delete|la parmigiana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-035** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: ELIMINA IL TIRAMISU ⏎ SI
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-036** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimna il tiramisù ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-037** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisu 🗑️ ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-039** [GRAVE] GRAVE non-applicato: non applicato: hidden|tiramisù|true
+  - turni: nascondi il tiramisù ⏎ sì
+  - atteso: hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-040** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina ⏎ il tiramisù ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-041** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ ❓ quanto costa la parmigiana? ⏎ no
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-042** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|la parmigiana|11
+  - turni: elimina il tiramisù ⏎ la parmigiana a 11
+  - atteso: price|la parmigiana|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-043** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|la parmigiana|11
+  - turni: elimina il tiramisù ⏎ la parmigiana a 11 ⏎ sì
+  - atteso: price|la parmigiana|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-044** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Pizza fritta
+  - turni: elimina la pizza fritta ⏎ sì
+  - atteso: delete|Pizza fritta · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-045** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Fritto misto
+  - turni: elimina il fritto misto ⏎ sì
+  - atteso: delete|Fritto misto · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-046** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Dolce del giorno
+  - turni: elimina il dolce del giorno ⏎ sì
+  - atteso: delete|Dolce del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-047** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Speciale della casa
+  - turni: elimina lo speciale della casa ⏎ sì
+  - atteso: delete|Speciale della casa · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-048** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il caffè ⏎ sì
+  - atteso: delete|Caffè · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-conferma-049** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina la pizza ⏎ sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-001** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|boh, delete|la parmigiana, delete|tiramisù
+  - turni: elimina tiramisù, parmigiana e boh ⏎ sì
+  - atteso: delete|boh, delete|la parmigiana, delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Che ne sacc, delete|boh, delete|la parmigiana, delete|tiramisù
+  - turni: cancella il tiramisù, la parmigiana, boh e che ne sacc ⏎ sì
+  - atteso: delete|Che ne sacc, delete|boh, delete|la parmigiana, delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina tiramisù e parmigiana ⏎ solo il tiramisù
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-004** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|la parmigiana
+  - turni: elimina tiramisù e parmigiana ⏎ no, solo la parmigiana ⏎ sì
+  - atteso: delete|la parmigiana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-005** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù e la lasagna ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina tutti i dolci ⏎ sì
+  - atteso: delete|Dolce del giorno, delete|Panna cotta, delete|Tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina i fritti ⏎ sì
+  - atteso: delete|Crocchette, delete|Olive ascolane, delete|Supplì · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-010** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Crocchette, delete|Supplì
+  - turni: elimina supplì e crocchette ⏎ sì
+  - atteso: delete|Crocchette, delete|Supplì · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Carbonara, delete|Gricia, delete|Pasta al pesto
+  - turni: elimina la carbonara la gricia e il pesto ⏎ sì
+  - atteso: delete|Carbonara, delete|Gricia, delete|Pasta al pesto · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina la carbonara e la gricia ⏎ sì ⏎ annulla
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-013** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: quali sono i fritti? ⏎ eliminali tutti ⏎ sì
+  - atteso: delete|Crocchette, delete|Olive ascolane, delete|Supplì · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-014** [GRAVE] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: delete|Crocchette, delete|Supplì
+  - turni: nascondi supplì e crocchette ⏎ quei due eliminali ⏎ sì
+  - atteso: delete|Crocchette, delete|Supplì · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-015** [GRAVE] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: delete|Supplì, hidden|Crocchette|true
+  - turni: nascondi supplì e crocchette ⏎ elimina il primo ⏎ sì
+  - atteso: delete|Supplì, hidden|Crocchette|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-multi-016** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Tiramisù
+  - turni: elimina tiramisù e panna cotta ⏎ sì ⏎ rimetti la panna cotta
+  - atteso: delete|Tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-001** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù, price|la parmigiana|11
+  - turni: elimina il tiramisù e metti la parmigiana a 11 ⏎ sì
+  - atteso: delete|tiramisù, price|la parmigiana|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù, price|boh|18
+  - turni: metti boh a 18 e cancella il tiramisù ⏎ sì
+  - atteso: delete|tiramisù, price|boh|18 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-003** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù, hidden|boh|true
+  - turni: togli boh ed elimina il tiramisù ⏎ sì
+  - atteso: delete|tiramisù, hidden|boh|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-004** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|la parmigiana|true
+  - turni: elimina il tiramisù e nascondi la parmigiana ⏎ no
+  - atteso: hidden|la parmigiana|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-005** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|la parmigiana|9
+  - turni: elimina il tiramisù e la parmigiana mettila a 9 ⏎ no
+  - atteso: price|la parmigiana|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-006** [GRAVE] GRAVE non-applicato: non applicato: hidden|tiramisù|true
+  - turni: elimina il tiramisù, anzi no, nascondilo
+  - atteso: hidden|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-007** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|la parmigiana
+  - turni: nascondi la parmigiana, anzi eliminala ⏎ sì
+  - atteso: delete|la parmigiana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-008** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|panna cotta|5|piatti di prova, delete|tiramisù
+  - turni: elimina il tiramisù e aggiungi la panna cotta a 5 ⏎ sì
+  - atteso: create|panna cotta|5|piatti di prova, delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-009** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: available|la parmigiana|false, delete|tiramisù, price|boh|22
+  - turni: il tiramisù cancellalo, boh a 22 e la parmigiana finita ⏎ sì
+  - atteso: available|la parmigiana|false, delete|tiramisù, price|boh|22 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù e metti boh a 18 ⏎ sì ⏎ annulla
+  - atteso: price|boh|18 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Primo del giorno, move|Carbonara|Speciali
+  - turni: elimina il primo del giorno e sposta la carbonara negli speciali ⏎ sì
+  - atteso: delete|Primo del giorno, move|Carbonara|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-012** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Diavola, price|Margherita|8
+  - turni: elimina la diavola e metti la margherita a 8 ⏎ sì
+  - atteso: delete|Diavola, price|Margherita|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-013** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Tagliata, price|Carbonara|13
+  - turni: elimina la tagliata, la carbonara a 13 ⏎ sì
+  - atteso: delete|Tagliata, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-014** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: elimina la tagliata, la carbonara a 13 ⏎ no
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-015** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Tagliata, price|Pollo arrosto|12
+  - turni: elimina la tagliata e togli 2 euro al pollo ⏎ sì
+  - atteso: delete|Tagliata, price|Pollo arrosto|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-misto-016** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: available|Tiramisù|false, delete|Tagliata, price|Pollo arrosto|15
+  - turni: 🎤 allora la tagliata eliminala, il pollo arrosto lo metti a quindici e il tiramisù è finito ⏎ sì
+  - atteso: available|Tiramisù|false, delete|Tagliata, price|Pollo arrosto|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ sì ⏎ [+9 min] ⏎ annulla
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù ⏎ sì ⏎ [+11 min] ⏎ annulla
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-003** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù ⏎ sì ⏎ boh a 18 ⏎ annulla
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-004** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ sì ⏎ annulla ⏎ annulla
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ sì ⏎ rimettilo
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ sì ⏎ no aspetta, rimettilo com'era
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ sì ⏎ ho sbagliato, annulla
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ sì ⏎ annullа
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ annulla
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-010** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù ⏎ sì ⏎ il tiramisù quanto costava?
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|tiramisù|7
+  - turni: elimina il tiramisù ⏎ sì ⏎ annulla ⏎ il tiramisù a 7
+  - atteso: price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-012** [GRAVE] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: hidden|boh|true
+  - turni: nascondi boh ⏎ elimina il tiramisù ⏎ sì ⏎ annulla
+  - atteso: hidden|boh|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-013** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ sì ⏎ annulla il tiramisù
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-014** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù
+  - turni: elimina il tiramisù ⏎ sì ⏎ [+35 min] ⏎ annulla
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-015** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Panna cotta
+  - turni: elimina la panna cotta ⏎ sì ⏎ sposta il tiramisù negli speciali ⏎ annulla
+  - atteso: delete|Panna cotta · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-el-annulla-016** [GRAVE] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: move|Tiramisù|Speciali
+  - turni: sposta il tiramisù negli speciali ⏎ elimina la panna cotta ⏎ sì ⏎ annulla
+  - atteso: move|Tiramisù|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-crea-012** [GRAVE] GRAVE non-applicato: non applicato: section|crudi
+  - turni: voglio una categoria nuova: Crudi
+  - atteso: section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-crea-013** [GRAVE] GRAVE non-applicato: non applicato: section|crudi
+  - turni: crea la categoria crudi
+  - atteso: section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-crea-014** [GRAVE] GRAVE non-applicato: non applicato: section|crudi di mare
+  - turni: crea la categoria Crudi di mare
+  - atteso: section|crudi di mare · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-crea-017** [GRAVE] GRAVE non-applicato: non applicato: section|crudi
+  - turni: crea la categoria crudi ⏎ crea la categoria crudi
+  - atteso: section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-crea-018** [GRAVE] GRAVE non-applicato: non applicato: section|crudi
+  - turni: crea la categoria crudi ⏎ crea la categoria Crudi 🐟
+  - atteso: section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-crea-021** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: crea una categoria
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-crea-022** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: section|crudi
+  - turni: crea una categoria ⏎ crudi
+  - atteso: section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-001** [GRAVE] GRAVE non-applicato: non applicato: create|carpaccio di spada|14|crudi, create|tartare di tonno|16|crudi, section|crudi
+  - turni: crea la categoria crudi con tartare di tonno a 16 e carpaccio di spada a 14
+  - atteso: create|carpaccio di spada|14|crudi, create|tartare di tonno|16|crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-003** [GRAVE] GRAVE non-applicato: non applicato: move|Vino rosso|Vini, section|vini
+  - turni: crea la categoria vini e sposta lì il vino rosso
+  - atteso: move|Vino rosso|Vini, section|vini · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-004** [GRAVE] GRAVE non-applicato: non applicato: move|Insalata di mare|Crudi, section|crudi
+  - turni: crea la categoria crudi e spostaci l'insalata di mare
+  - atteso: move|Insalata di mare|Crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-005** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|tartare|16|crudi, section|crudi
+  - turni: aggiungi nei crudi la tartare a 16 ⏎ sì
+  - atteso: create|tartare|16|crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-006** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|tartare|16|antipasti
+  - turni: aggiungi nei crudi la tartare a 16 ⏎ no, mettila negli antipasti
+  - atteso: create|tartare|16|antipasti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi nei crudi la tartare a 16 ⏎ no
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-008** [GRAVE] GRAVE non-applicato: non applicato: create|tagliatelle al ragu|13|primi
+  - turni: aggiungi nei primi le tagliatelle al ragù a 13
+  - atteso: create|tagliatelle al ragu|13|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-010** [GRAVE] GRAVE non-applicato: non applicato: create|tagliatelle al ragu|13|primi
+  - turni: aggiungi nei PRIMI le tagliatelle al ragù a 13
+  - atteso: create|tagliatelle al ragu|13|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-011** [GRAVE] GRAVE non-applicato: non applicato: create|pizza fritta con ricotta|9|pizze
+  - turni: aggiungi tra le pizze la pizza fritta con ricotta a 9
+  - atteso: create|pizza fritta con ricotta|9|pizze · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-012** [GRAVE] GRAVE non-applicato: non applicato: create|fritto di verdure|6|fritti
+  - turni: aggiungi nei fritti il fritto di verdure a 6
+  - atteso: create|fritto di verdure|6|fritti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-013** [GRAVE] GRAVE non-applicato: non applicato: create|speciale di pesce|22|speciali
+  - turni: aggiungi negli speciali lo speciale di pesce a 22
+  - atteso: create|speciale di pesce|22|speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-014** [GRAVE] GRAVE non-applicato: non applicato: create|dolce della nonna|6|dolci
+  - turni: aggiungi nei dolci il dolce della nonna a 6
+  - atteso: create|dolce della nonna|6|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-015** [GRAVE] GRAVE non-applicato: non applicato: create|caffe corretto|2|caffe
+  - turni: aggiungi nel caffè il caffè corretto a 2
+  - atteso: create|caffe corretto|2|caffe · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-016** [GRAVE] GRAVE non-applicato: non applicato: create|insalata greca|8|insalate
+  - turni: aggiungi nelle insalate la insalata greca a 8
+  - atteso: create|insalata greca|8|insalate · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-017** [GRAVE] GRAVE non-applicato: non applicato: create|carpaccio|14|crudi, create|tartare|16|crudi, section|crudi
+  - turni: crea la categoria crudi e mettici tartare e carpaccio a 16 e 14
+  - atteso: create|carpaccio|14|crudi, create|tartare|16|crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-018** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|tartare|16|crudi, section|crudi
+  - turni: crea la categoria crudi con la tartare ⏎ 16
+  - atteso: create|tartare|16|crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-019** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: crea la categoria crudi con la tartare ⏎ lascia stare la tartare
+  - atteso: section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-020** [GRAVE] GRAVE non-applicato: non applicato: create|amatriciana|11|primi
+  - turni: crea la categoria primi e mettici la amatriciana a 11
+  - atteso: create|amatriciana|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-piatti-022** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|tartare|16|crudi, section|crudi
+  - turni: crea la categoria crudi con la tartare a 16, poi elimina la bruschetta
+  - atteso: create|tartare|16|crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-rinomina-001** [GRAVE] GRAVE non-applicato: non applicato: move|Crocchette|Fritture, move|Olive ascolane|Fritture, move|Supplì|Fritture
+  - turni: rinomina la categoria fritti in fritture
+  - atteso: move|Crocchette|Fritture, move|Olive ascolane|Fritture, move|Supplì|Fritture · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-rinomina-003** [GRAVE] GRAVE non-applicato: non applicato: move|Dolce del giorno|Dessert, move|Panna cotta|Dessert, move|Tiramisù|Dessert
+  - turni: rinomina la categoria dolci in dessert
+  - atteso: move|Dolce del giorno|Dessert, move|Panna cotta|Dessert, move|Tiramisù|Dessert · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-rinomina-004** [GRAVE] GRAVE non-applicato: non applicato: move|Dolce del giorno|Dessert, move|Panna cotta|Dessert, move|Tiramisù|Dessert
+  - turni: la categoria DOLCI chiamala Dessert
+  - atteso: move|Dolce del giorno|Dessert, move|Panna cotta|Dessert, move|Tiramisù|Dessert · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-rinomina-005** [GRAVE] GRAVE non-applicato: non applicato: move|Speciale della casa|Specialità dello chef
+  - turni: chiama la categoria speciali 'Specialità dello chef'
+  - atteso: move|Speciale della casa|Specialità dello chef · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-rinomina-006** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Primi piatti, move|Gricia|Primi piatti, move|Pasta al pesto|Primi piatti, move|Primo del giorno|Primi piatti
+  - turni: rinomina la categoria primi in primi piatti
+  - atteso: move|Carbonara|Primi piatti, move|Gricia|Primi piatti, move|Pasta al pesto|Primi piatti, move|Primo del giorno|Primi piatti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-rinomina-008** [GRAVE] GRAVE non-applicato: non applicato: rename|Primo del giorno|Pasta del giorno
+  - turni: rinomina il primo del giorno in Pasta del giorno
+  - atteso: rename|Primo del giorno|Pasta del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-rinomina-009** [GRAVE] GRAVE non-applicato: non applicato: rename|Dolce del giorno|Torta del giorno
+  - turni: rinomina il dolce del giorno in Torta del giorno
+  - atteso: rename|Dolce del giorno|Torta del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-rinomina-015** [GRAVE] GRAVE non-applicato: non applicato: create|patatine|4|fritture, move|Crocchette|Fritture, move|Olive ascolane|Fritture, move|Supplì|Fritture
+  - turni: rinomina la categoria fritti in fritture ⏎ aggiungi nelle fritture le patatine a 4
+  - atteso: create|patatine|4|fritture, move|Crocchette|Fritture, move|Olive ascolane|Fritture, move|Supplì|Fritture · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-rinomina-016** [GRAVE] GRAVE non-applicato: non applicato: create|patatine|4|fritture, move|Crocchette|Fritture, move|Olive ascolane|Fritture, move|Supplì|Fritture
+  - turni: rinomina la categoria fritti in fritture ⏎ aggiungi nei fritti le patatine a 4
+  - atteso: create|patatine|4|fritture, move|Crocchette|Fritture, move|Olive ascolane|Fritture, move|Supplì|Fritture · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cat-rinomina-017** [GRAVE] GRAVE non-applicato: non applicato: move|Caffè|Caffetteria, move|Cappuccino|Caffetteria
+  - turni: rinomina la categoria caffè in caffetteria
+  - atteso: move|Caffè|Caffetteria, move|Cappuccino|Caffetteria · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-001** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Speciali, price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ spostala negli speciali
+  - atteso: move|Carbonara|Speciali, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-002** [GRAVE] GRAVE non-applicato: non applicato: hidden|Crocchette|true, hidden|Supplì|true, move|Crocchette|Antipasti, move|Supplì|Antipasti
+  - turni: nascondi supplì e crocchette ⏎ quei due mettili negli antipasti
+  - atteso: hidden|Crocchette|true, hidden|Supplì|true, move|Crocchette|Antipasti, move|Supplì|Antipasti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-003** [GRAVE] GRAVE non-applicato: non applicato: move|Crocchette|Antipasti, move|Olive ascolane|Antipasti, move|Supplì|Antipasti
+  - turni: ❓ quali sono i fritti? ⏎ spostali tutti negli antipasti
+  - atteso: move|Crocchette|Antipasti, move|Olive ascolane|Antipasti, move|Supplì|Antipasti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-005** [GRAVE] GRAVE non-applicato: non applicato: move|Pizza fritta|Fritti
+  - turni: sposta la pizza fritta nei fritti
+  - atteso: move|Pizza fritta|Fritti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-006** [GRAVE] GRAVE non-applicato: non applicato: move|Fritto misto|Fritti
+  - turni: sposta il fritto misto nei fritti
+  - atteso: move|Fritto misto|Fritti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-007** [GRAVE] GRAVE non-applicato: non applicato: move|Dolce del giorno|Speciali
+  - turni: metti il dolce del giorno negli speciali
+  - atteso: move|Dolce del giorno|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-008** [GRAVE] GRAVE non-applicato: non applicato: move|Primo del giorno|Secondi
+  - turni: sposta il primo del giorno nei secondi
+  - atteso: move|Primo del giorno|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-009** [GRAVE] GRAVE non-applicato: non applicato: move|Secondo del giorno|Primi
+  - turni: sposta il secondo del giorno nei primi
+  - atteso: move|Secondo del giorno|Primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-012** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi
+  - turni: sposta la carbonara nei secondi
+  - atteso: move|Carbonara|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-014** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi
+  - turni: sposta la carbonara nei SECONDI
+  - atteso: move|Carbonara|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-015** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi, price|Carbonara|14
+  - turni: metti la carbonara nei secondi a 14
+  - atteso: move|Carbonara|Secondi, price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-016** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi, price|Carbonara|14
+  - turni: metti la carbonara a 14 nei secondi
+  - atteso: move|Carbonara|Secondi, price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-017** [GRAVE] GRAVE non-applicato: non applicato: move|Caffè|Bibite
+  - turni: sposta il caffè nelle bibite
+  - atteso: move|Caffè|Bibite · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-019** [GRAVE] GRAVE non-applicato: non applicato: move|Birra|Caffè
+  - turni: sposta la birra nel caffè
+  - atteso: move|Birra|Caffè · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-020** [GRAVE] GRAVE non-applicato: non applicato: move|Tagliata|Pizze
+  - turni: sposta la tagliata nelle pizze
+  - atteso: move|Tagliata|Pizze · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-021** [GRAVE] GRAVE non-applicato: non applicato: move|Pollo arrosto|Speciali, move|Tagliata|Speciali
+  - turni: sposta la tagliata e il pollo arrosto negli speciali
+  - atteso: move|Pollo arrosto|Speciali, move|Tagliata|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-022** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: sposta la tagliata nei crudi
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-023** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: sposta la tagliata nei crudi ⏎ no lascia stare
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-024** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: move|Tagliata|Crudi, section|crudi
+  - turni: sposta la tagliata nei crudi ⏎ sì
+  - atteso: move|Tagliata|Crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-025** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: sposta la tagliata nei crudi ⏎ [+45 min] ⏎ sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-026** [GRAVE] GRAVE non-applicato: non applicato: move|Pollo arrosto|Speciali, move|Tagliata|Speciali, price|Pollo arrosto|15, price|Tagliata|19
+  - turni: la tagliata a 19 ⏎ e il pollo a 15 ⏎ spostali negli speciali
+  - atteso: move|Pollo arrosto|Speciali, move|Tagliata|Speciali, price|Pollo arrosto|15, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-027** [GRAVE] GRAVE non-applicato: non applicato: move|Pollo arrosto|Speciali, price|Pollo arrosto|15, price|Tagliata|19
+  - turni: la tagliata a 19 ⏎ e il pollo a 15 ⏎ spostalo negli speciali
+  - atteso: move|Pollo arrosto|Speciali, price|Pollo arrosto|15, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-028** [GRAVE] GRAVE non-applicato: non applicato: move|Panna cotta|Speciali, move|Tiramisù|Speciali
+  - turni: sposta il tiramisù negli speciali ⏎ anche la panna cotta
+  - atteso: move|Panna cotta|Speciali, move|Tiramisù|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-029** [GRAVE] GRAVE non-applicato: non applicato: move|Tiramisù|Secondi
+  - turni: sposta il tiramisù negli speciali ⏎ anzi nei secondi
+  - atteso: move|Tiramisù|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-031** [GRAVE] GRAVE non-applicato: non applicato: move|Panna cotta|Speciali, move|Tiramisù|Speciali
+  - turni: 🎤 il tiramisù spostalo negli speciali e la panna cotta pure
+  - atteso: move|Panna cotta|Speciali, move|Tiramisù|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-035** [GRAVE] GRAVE non-applicato: non applicato: move|Pizza fritta|Speciali
+  - turni: sposta la pizza negli speciali ⏎ la fritta
+  - atteso: move|Pizza fritta|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-036** [GRAVE] GRAVE non-applicato: non applicato: move|Pizza fritta|Speciali
+  - turni: sposta la pizza negli speciali ⏎ la seconda
+  - atteso: move|Pizza fritta|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-sposta-037** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Speciali
+  - turni: sposta la carbonara nella categoria speciale
+  - atteso: move|Carbonara|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-001** [GRAVE] GRAVE non-applicato: non applicato: price|Gricia|12, rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana ⏎ la gricia a 12
+  - atteso: price|Gricia|12, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-002** [GRAVE] GRAVE non-applicato: non applicato: price|Gricia|12, rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana ⏎ gricia romana a 12
+  - atteso: price|Gricia|12, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-003** [GRAVE] GRAVE non-applicato: non applicato: hidden|Gricia|true, rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana ⏎ nascondi la gricia romana
+  - atteso: hidden|Gricia|true, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-004** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|20, rename|Tagliata|Tagliata di manzo
+  - turni: chiama la tagliata 'Tagliata di manzo' ⏎ la tagliata di manzo a 20
+  - atteso: price|Tagliata|20, rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-006** [GRAVE] GRAVE non-applicato: non applicato: price|Gricia|12, rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana e mettila a 12
+  - atteso: price|Gricia|12, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-009** [GRAVE] GRAVE non-applicato: non applicato: rename|Gricia|Carbonara bianca
+  - turni: rinomina la gricia in Carbonara bianca
+  - atteso: rename|Gricia|Carbonara bianca · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-010** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13, rename|Gricia|Carbonara bianca
+  - turni: rinomina la gricia in Carbonara bianca ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13, rename|Gricia|Carbonara bianca · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-011** [GRAVE] GRAVE non-applicato: non applicato: rename|Bruschetta|Bruschetta al pomodoro
+  - turni: rinomina la bruschetta in Bruschetta al pomodoro 🍅
+  - atteso: rename|Bruschetta|Bruschetta al pomodoro · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-012** [GRAVE] GRAVE non-applicato: non applicato: rename|Bruschetta|BRUSCHETTA AL POMODORO
+  - turni: RINOMINA LA BRUSCHETTA IN BRUSCHETTA AL POMODORO
+  - atteso: rename|Bruschetta|BRUSCHETTA AL POMODORO · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-013** [GRAVE] GRAVE non-applicato: non applicato: rename|Pollo arrosto|Pollo alla diavola
+  - turni: rinomina il pollo in Pollo alla diavola
+  - atteso: rename|Pollo arrosto|Pollo alla diavola · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-014** [GRAVE] GRAVE non-applicato: non applicato: price|Diavola|9, rename|Pollo arrosto|Pollo alla diavola
+  - turni: rinomina il pollo in Pollo alla diavola ⏎ la diavola a 9
+  - atteso: price|Diavola|9, rename|Pollo arrosto|Pollo alla diavola · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: rinomina il tiramisù
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-016** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: rename|Tiramisù|Tiramisù della casa
+  - turni: rinomina il tiramisù ⏎ Tiramisù della casa
+  - atteso: rename|Tiramisù|Tiramisù della casa · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: rinomina il tiramisù ⏎ lascia stare
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-018** [GRAVE] GRAVE non-applicato: non applicato: price|Panna cotta|6, rename|Panna cotta|Panna cotta al caramello
+  - turni: cambia nome alla panna cotta: Panna cotta al caramello ⏎ e mettila a 6
+  - atteso: price|Panna cotta|6, rename|Panna cotta|Panna cotta al caramello · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-019** [GRAVE] GRAVE non-applicato: non applicato: rename|Tagliata|Tagliata di scottona
+  - turni: rinomina la tagliata in Tagliata di manzo ⏎ rinomina la tagliata di manzo in Tagliata di scottona
+  - atteso: rename|Tagliata|Tagliata di scottona · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-020** [GRAVE] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: delete|Panna cotta
+  - turni: rinomina la panna cotta in Panna cotta ai frutti di bosco ⏎ elimina la panna cotta ⏎ sì
+  - atteso: delete|Panna cotta · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-021** [GRAVE] GRAVE non-applicato: non applicato: move|Supplì|Antipasti, rename|Supplì|Supplì al telefono
+  - turni: rinomina il supplì in Supplì al telefono e spostalo negli antipasti
+  - atteso: move|Supplì|Antipasti, rename|Supplì|Supplì al telefono · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-023** [GRAVE] GRAVE non-applicato: non applicato: price|boh|22, rename|boh|Bollito
+  - turni: rinomina boh in Bollito ⏎ bollito a 21 ⏎ boh a 22
+  - atteso: price|boh|22, rename|boh|Bollito · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-rinomina-024** [GRAVE] GRAVE non-applicato: non applicato: create|tiramisu al pistacchio|7|piatti di prova, rename|tiramisù|Tiramisù classico
+  - turni: rinomina tiramisù in Tiramisù classico ⏎ aggiungi il tiramisù al pistacchio a 7
+  - atteso: create|tiramisu al pistacchio|7|piatti di prova, rename|tiramisù|Tiramisù classico · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-001** [GRAVE] GRAVE non-applicato: non applicato: available|Tiramisù|false, hidden|Pasta al pesto|true, price|Carbonara|13, price|Gricia|12
+  - turni: la carbonara a 13 ⏎ la gricia a 12 ⏎ nascondi il pesto ⏎ il tiramisù è finito ⏎ la tagliata in evidenza ⏎ annulla
+  - atteso: available|Tiramisù|false, hidden|Pasta al pesto|true, price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-002** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ anzi 14 ⏎ no scusa 13 ⏎ la gricia uguale ⏎ annulla
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-003** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13, price|Gricia|13
+  - turni: ciao ⏎ la carbonara a 13 ⏎ ❓ quanto costa la gricia? ⏎ mettila uguale alla carbonara ⏎ grazie
+  - atteso: price|Carbonara|13, price|Gricia|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-004** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|cacio e pepe|12|primi, featured|cacio e pepe|true
+  - turni: aggiungi la cacio e pepe ⏎ nei primi ⏎ 12 ⏎ mettila in evidenza ⏎ ❓ che primi ho? ⏎ ok grazie
+  - atteso: create|cacio e pepe|12|primi, featured|cacio e pepe|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-006** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13, price|Diavola|9, price|Gricia|12, price|Margherita|8, price|Tiramisù|7
+  - turni: la carbonara a 13 ⏎ la gricia a 12 ⏎ la margherita a 8 ⏎ la diavola a 9 ⏎ il tiramisù a 7 ⏎ la panna cotta a 6 ⏎ annulla
+  - atteso: price|Carbonara|13, price|Diavola|9, price|Gricia|12, price|Margherita|8, price|Tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-007** [GRAVE] GRAVE non-applicato: non applicato: create|carpaccio|14|crudi di mare, create|tartare|16|crudi di mare, move|Insalata di mare|Crudi di mare, section|crudi di mare
+  - turni: crea la categoria crudi ⏎ aggiungi nei crudi la tartare a 16 ⏎ aggiungi nei crudi il carpaccio a 14 ⏎ sposta l'insalata di mare nei crudi ⏎ rinomina la categoria crudi in Crudi di mare ⏎ ❓ cosa c'è nei crudi di mare?
+  - atteso: create|carpaccio|14|crudi di mare, create|tartare|16|crudi di mare, move|Insalata di mare|Crudi di mare, section|crudi di mare · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 3: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina il primo del giorno ⏎ no ⏎ elimina il secondo del giorno ⏎ sì ⏎ la tagliata a 19 ⏎ annulla ⏎ annulla
+  - atteso: delete|Secondo del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-009** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13, price|Gricia|12
+  - turni: la carbonara a 13 ⏎ [+10 min] ⏎ la gricia a 12 ⏎ [+10 min] ⏎ la margherita a 8 ⏎ [+15 min] ⏎ annulla
+  - atteso: price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-011** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la carbonara a 13 ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-012** [GRAVE] GRAVE non-applicato: non applicato: featured|Diavola|true
+  - turni: nascondi la diavola ⏎ ❓ la diavola è nascosta? ⏎ rimettila ⏎ ❓ e adesso? ⏎ mettila in evidenza
+  - atteso: featured|Diavola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-013** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|lasagna|14|piatti di prova, hidden|boh|true
+  - turni: aggiungi la lasagna ⏎ 14 ⏎ mettila in evidenza ⏎ anzi no ⏎ nascondi boh ⏎ il tiramisù a 7 ⏎ annulla
+  - atteso: create|lasagna|14|piatti di prova, hidden|boh|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-lunghe-014** [GRAVE] GRAVE non-applicato: non applicato: available|Tiramisù|false, price|Carbonara|13
+  - turni: 🎤 allora oggi la carbonara a tredici la gricia a dodici e il tiramisù è finito ⏎ ❓ ok, cosa hai cambiato? ⏎ la gricia no, lasciala a 11
+  - atteso: available|Tiramisù|false, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-001** [GRAVE] GRAVE non-applicato: non applicato: available|Tiramisù|false
+  - turni: la pasta a 11 ⏎ il tiramisù è finito
+  - atteso: available|Tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|boh|true
+  - turni: aggiungi la lasagna ⏎ nascondi boh
+  - atteso: hidden|boh|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-003** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|lasagna|14|piatti di prova, hidden|boh|true
+  - turni: aggiungi la lasagna ⏎ nascondi boh ⏎ 14
+  - atteso: create|lasagna|14|piatti di prova, hidden|boh|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-004** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi la lasagna ⏎ ❓ quanto costa il tiramisù? ⏎ 14
+  - atteso: create|lasagna|14|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-005** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|tiramisù|7
+  - turni: aggiungi la lasagna ⏎ il tiramisù a 7
+  - atteso: price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-006** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|lasagna|14|piatti di prova, price|tiramisù|7
+  - turni: aggiungi la lasagna ⏎ il tiramisù a 7 ⏎ e la lasagna a 14
+  - atteso: create|lasagna|14|piatti di prova, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-007** [GRAVE] GRAVE non-applicato: non applicato: move|Pizza fritta|Speciali, price|Carbonara|13
+  - turni: sposta la pizza negli speciali ⏎ la carbonara a 13
+  - atteso: move|Pizza fritta|Speciali, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-008** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: sposta la pizza negli speciali ⏎ la carbonara a 13 ⏎ la seconda
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina la diavola ⏎ ❓ a che ora chiudete domenica? ⏎ sì
+  - atteso: delete|Diavola · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-010** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: rinomina il tiramisù ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: crea una categoria ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-012** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Gricia|12
+  - turni: aggiungi nei crudi la tartare a 16 ⏎ la gricia a 12
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-cambio-013** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Gricia|12
+  - turni: aggiungi nei crudi la tartare a 16 ⏎ la gricia a 12 ⏎ sì
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-ripeti-001** [GRAVE] GRAVE non-applicato: non applicato: hidden|Tiramisù|true
+  - turni: nascondi il tiramisù ⏎ nascondi il tiramisù
+  - atteso: hidden|Tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-ripeti-002** [GRAVE] GRAVE non-applicato: non applicato: available|Tiramisù|false
+  - turni: il tiramisù è finito ⏎ il tiramisù è finito
+  - atteso: available|Tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-ripeti-003** [GRAVE] GRAVE non-applicato: non applicato: featured|Tagliata|true
+  - turni: metti in evidenza la tagliata ⏎ metti in evidenza la tagliata
+  - atteso: featured|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-ripeti-004** [GRAVE] GRAVE non-applicato: non applicato: create|lasagna|13|primi
+  - turni: aggiungi nei primi la lasagna a 13 ⏎ aggiungi nei primi la lasagna a 13
+  - atteso: create|lasagna|13|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-ripeti-005** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|14
+  - turni: aumenta la carbonara di 1 euro ⏎ aumenta la carbonara di 1 euro
+  - atteso: price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-ripeti-008** [GRAVE] GRAVE non-applicato: non applicato: move|Tagliata|Speciali
+  - turni: sposta la tagliata negli speciali ⏎ sposta la tagliata negli speciali
+  - atteso: move|Tagliata|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-ripeti-009** [GRAVE] GRAVE non-applicato: non applicato: rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana ⏎ rinomina la gricia in Gricia romana
+  - atteso: rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-ripeti-010** [GRAVE] GRAVE non-applicato: non applicato: create|tartare|16|crudi, section|crudi
+  - turni: crea la categoria crudi con la tartare a 16 ⏎ crea la categoria crudi con la tartare a 16
+  - atteso: create|tartare|16|crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-ripeti-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.») · GRAVE non-applicato: non applicato: create|lasagna|14|piatti di prova
+  - turni: aggiungi la lasagna ⏎ aggiungi la lasagna ⏎ 14
+  - atteso: create|lasagna|14|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-001** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a tredici euro
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-004** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara 13€
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-005** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara € 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-006** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara 13,00
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-007** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara 13.00 €
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-008** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara 13 eur
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-009** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara tredici euri
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-010** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|21
+  - turni: la carbonara a ventuno
+  - atteso: price|Carbonara|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-011** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|22.5
+  - turni: la tagliata a ventidue e cinquanta
+  - atteso: price|Tagliata|22.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-012** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|23
+  - turni: la tagliata a ventitré
+  - atteso: price|Tagliata|23 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-013** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|38
+  - turni: la tagliata a trentotto
+  - atteso: price|Tagliata|38 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-015** [GRAVE] GRAVE non-applicato: non applicato: price|Caffè|1.3
+  - turni: il caffè a un euro e trenta
+  - atteso: price|Caffè|1.3 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-016** [GRAVE] GRAVE non-applicato: non applicato: price|Caffè|1.3
+  - turni: il caffè a 1 e 30
+  - atteso: price|Caffè|1.3 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-017** [GRAVE] GRAVE non-applicato: non applicato: price|Cappuccino|1.8
+  - turni: il cappuccino a uno e ottanta
+  - atteso: price|Cappuccino|1.8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-018** [GRAVE] GRAVE non-applicato: non applicato: price|Cappuccino|1.8
+  - turni: il cappuccino 1,8
+  - atteso: price|Cappuccino|1.8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-019** [GRAVE] GRAVE non-applicato: non applicato: price|Cappuccino|1.8
+  - turni: il cappuccino 1.80€
+  - atteso: price|Cappuccino|1.8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-020** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 euro e zero centesimi
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-021** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara da 12 a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-023** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara 12/13
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-024** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 13-14
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-026** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la carbonara a 0
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-numeri-029** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13, price|Gricia|12
+  - turni: la gricia a dodici e la carbonara a tredici
+  - atteso: price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-003** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19
+  - turni: la tagliata a porzione 19
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-004** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19
+  - turni: la tagliata 19 a porzione
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: il vino rosso 5 al calice e 18 la bottiglia
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-006** [GRAVE] GRAVE non-applicato: non applicato: price|Vino rosso|20
+  - turni: il vino rosso 20 euro a bottiglia
+  - atteso: price|Vino rosso|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-009** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|6
+  - turni: la birra da 66 a 6
+  - atteso: price|Birra|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-010** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|5.5
+  - turni: la birra 0,4 l a 5,50
+  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: il supplì 2 pezzi 5 euro
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-013** [GRAVE] GRAVE non-applicato: non applicato: price|Olive ascolane|6
+  - turni: le olive ascolane 6 a piatto
+  - atteso: price|Olive ascolane|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-014** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: le crocchette 4 per 3 euro
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la tagliata per due a 34
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-016** [GRAVE] GRAVE non-applicato: non applicato: price|Fritto misto|14
+  - turni: il fritto misto da 300 grammi a 14
+  - atteso: price|Fritto misto|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-unita-017** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la pizza fritta mezzo metro 15
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-emoji-001** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: carbonara 👉 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-emoji-002** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: 🍝 carbonara a 13 ✅
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-emoji-003** [GRAVE] GRAVE non-applicato: non applicato: hidden|Tiramisù|true
+  - turni: nascondi il tiramisù 🙏
+  - atteso: hidden|Tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-emoji-005** [GRAVE] GRAVE non-applicato: non applicato: available|Tiramisù|false
+  - turni: tiramisù finito 😭
+  - atteso: available|Tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-emoji-006** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: 13€ carbonara 🔥
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-emoji-008** [GRAVE] GRAVE non-applicato: non applicato: featured|Tagliata|true
+  - turni: la tagliata in evidenza ⭐⭐⭐
+  - atteso: featured|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-emoji-011** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ 👍
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-emoji-013** [GRAVE] GRAVE non-applicato: non applicato: price|Diavola|9, price|Margherita|8
+  - turni: 🍕 margherita 8 🍕 diavola 9
+  - atteso: price|Diavola|9, price|Margherita|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-emoji-015** [GRAVE] GRAVE non-applicato: non applicato: price|Gricia|12
+  - turni: la gricia 🤌 a 12
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-refusi-001** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: CARBONARA A 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-refusi-002** [GRAVE] GRAVE non-applicato: non applicato: hidden|Tiramisù|true
+  - turni: NASCONDI IL TIRAMISÙ
+  - atteso: hidden|Tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-refusi-003** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: La CarBonArA a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-refusi-010** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: carbonara a 13 ee
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-refusi-016** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina la diavla
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-refusi-022** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: l'insalata a 7
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-refusi-023** [GRAVE] GRAVE non-applicato: non applicato: price|Insalata mista|7
+  - turni: l'insalata mista a 7
+  - atteso: price|Insalata mista|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-vuoti-008** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ ...
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-vuoti-009** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ ?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-vuoti-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina la diavola ⏎ ...
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-vuoti-011** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina la diavola ⏎ 
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-vuoti-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi la lasagna ⏎ ...
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-vuoti-013** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi la lasagna ⏎ ?
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-fuoritempo-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi la lasagna ⏎ [+35 min] ⏎ 14
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-fuoritempo-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: create|lasagna|14|piatti di prova
+  - turni: aggiungi la lasagna ⏎ [+20 min] ⏎ 14
+  - atteso: create|lasagna|14|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-fuoritempo-006** [GRAVE] GRAVE non-applicato: non applicato: hidden|Carbonara|true
+  - turni: nascondi la carbonara ⏎ [+50 min] ⏎ anche la gricia
+  - atteso: hidden|Carbonara|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-fuoritempo-007** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ [+40 min] ⏎ anzi 14
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-fuoritempo-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: rinomina il tiramisù ⏎ [+35 min] ⏎ Tiramisù della casa
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-fuoritempo-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: crea una categoria ⏎ [+35 min] ⏎ crudi
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-fuoritempo-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi nei crudi la tartare a 16 ⏎ [+40 min] ⏎ sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-001** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: porta la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-004** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|11.5
+  - turni: togli 50 centesimi alla carbonara
+  - atteso: price|Carbonara|11.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-005** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|16.5
+  - turni: togli un euro e mezzo alla tagliata
+  - atteso: price|Tagliata|16.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-006** [GRAVE] GRAVE non-applicato: non applicato: price|Tiramisù|5
+  - turni: leva 1 euro al tiramisù
+  - atteso: price|Tiramisù|5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-008** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|16
+  - turni: la tagliata 2 euro in meno
+  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-014** [GRAVE] GRAVE non-applicato: non applicato: create|linguine|14|primi
+  - turni: aggiungi nei primi le linguine a 14 eh
+  - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-015** [GRAVE] GRAVE non-applicato: non applicato: create|linguine|14|primi
+  - turni: aggiungi nei primi le linguine a 14 se ce la fai
+  - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-016** [GRAVE] GRAVE non-applicato: non applicato: create|linguine|14|primi
+  - turni: aggiungi nei primi le linguine a 14 thx
+  - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-017** [GRAVE] GRAVE non-applicato: non applicato: create|linguine|14|primi
+  - turni: aggiungi nei primi le linguine a 14 quando hai tempo
+  - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-018** [GRAVE] GRAVE non-applicato: non applicato: create|linguine|14|primi
+  - turni: aggiungi nei primi le linguine a 14 mi raccomando
+  - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-019** [GRAVE] GRAVE non-applicato: non applicato: create|linguine|14|primi
+  - turni: aggiungi nei primi le linguine a 14 e basta
+  - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-020** [GRAVE] GRAVE non-applicato: non applicato: create|linguine|14|primi
+  - turni: aggiungi nei primi le linguine a 14 tutto qui
+  - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-021** [GRAVE] GRAVE non-applicato: non applicato: create|linguine|14|primi
+  - turni: aggiungi nei primi le linguine a 14 capito?
+  - atteso: create|linguine|14|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-025** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi le trofie ⏎ fa niente
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-026** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi le trofie ⏎ lascia correre
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-027** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi le trofie ⏎ dimentica
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-028** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|tiramisù|7
+  - turni: aggiungi le trofie ⏎ lascia, ci penso dopo ⏎ il tiramisù a 7
+  - atteso: price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-029** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|boh|21
+  - turni: aggiungi le trofie ⏎ no niente ⏎ boh a 21
+  - atteso: price|boh|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-030** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13, price|Gricia|12
+  - turni: alza di 1 la carbonara e la gricia
+  - atteso: price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-031** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|4.5
+  - turni: abbassa di 50 cent la birra
+  - atteso: price|Birra|4.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-032** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|5.5
+  - turni: la birra 50 cent in più
+  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-033** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|5.5
+  - turni: la birra cinque e mezzo
+  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-034** [GRAVE] GRAVE non-applicato: non applicato: price|Birra|5.5
+  - turni: la birra cinque euro e cinquanta
+  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-035** [GRAVE] GRAVE non-applicato: non applicato: price|Cappuccino|1.9
+  - turni: il cappuccino uno virgola nove
+  - atteso: price|Cappuccino|1.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-036** [GRAVE] GRAVE non-applicato: non applicato: hidden|Margherita|true
+  - turni: nascondi la diavola e la margherita ⏎ il primo rimettilo
+  - atteso: hidden|Margherita|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-varianti-037** [GRAVE] GRAVE non-applicato: non applicato: hidden|Diavola|true
+  - turni: nascondi la diavola e la margherita ⏎ la seconda no
+  - atteso: hidden|Diavola|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-001** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|tiramisù, hidden|boh|true
+  - turni: cancella il tiramisù e nascondi boh ⏎ sì
+  - atteso: delete|tiramisù, hidden|boh|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-002** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|boh, price|la parmigiana|12
+  - turni: la parmigiana a 12 ed elimina boh ⏎ sì
+  - atteso: delete|boh, price|la parmigiana|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-003** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: available|la parmigiana|false, delete|boh
+  - turni: elimina boh, la parmigiana è finita ⏎ sì
+  - atteso: available|la parmigiana|false, delete|boh · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-004** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|boh, delete|tiramisù, price|la parmigiana|12
+  - turni: elimina boh e il tiramisù e metti la parmigiana a 12 ⏎ sì
+  - atteso: delete|boh, delete|tiramisù, price|la parmigiana|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-005** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|boh, featured|tiramisù|true
+  - turni: cancella boh e metti in evidenza il tiramisù ⏎ sì
+  - atteso: delete|boh, featured|tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-006** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|boh, price|tiramisù|7
+  - turni: elimina boh e aumenta il tiramisù di 1 ⏎ sì
+  - atteso: delete|boh, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-007** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|boh, price|tiramisù|7
+  - turni: 🎤 allora boh eliminalo e il tiramisù lo metti a sette ⏎ sì
+  - atteso: delete|boh, price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-008** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|boh, delete|la parmigiana, delete|tiramisù
+  - turni: elimina boh, parmigiana, tiramisù ⏎ sì
+  - atteso: delete|boh, delete|la parmigiana, delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina boh, la parmigiana e il tiramisù ⏎ no
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-010** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|boh, delete|la parmigiana, delete|tiramisù
+  - turni: elimina boh, la parmigiana e il tiramisù ⏎ sì
+  - atteso: delete|boh, delete|la parmigiana, delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|boh, delete|la parmigiana, delete|tiramisù
+  - turni: cancella boh la parmigiana e il tiramisù ⏎ sì
+  - atteso: delete|boh, delete|la parmigiana, delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-012** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Crocchette, delete|Olive ascolane, delete|Supplì
+  - turni: elimina supplì, crocchette e olive ascolane ⏎ sì
+  - atteso: delete|Crocchette, delete|Olive ascolane, delete|Supplì · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-013** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|Margherita|true
+  - turni: elimina la diavola e nascondi la margherita ⏎ no
+  - atteso: hidden|Margherita|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-014** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Diavola, price|Margherita|8
+  - turni: elimina la diavola e la margherita mettila a 8 ⏎ sì
+  - atteso: delete|Diavola, price|Margherita|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: la margherita a 8 e cancella la diavola ⏎ annulla
+  - atteso: price|Margherita|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-016** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Diavola, price|Margherita|6
+  - turni: elimina la diavola e togli 1 euro alla margherita ⏎ sì
+  - atteso: delete|Diavola, price|Margherita|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-017** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Margherita|8
+  - turni: elimina la diavla e la margherita a 8 ⏎ sì
+  - atteso: price|Margherita|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-018** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina la tagliatta
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-019** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: cancella il tiramisu
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-misto-020** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina la panacotta
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-001** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina tiramisù ⏎ no, solo la parmigiana ⏎ sì
+  - atteso: delete|la parmigiana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-002** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina tiramisù ⏎ no, solo la parmigiana
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-003** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina tiramisù ⏎ aspetta, intendevo la parmigiana ⏎ sì
+  - atteso: delete|la parmigiana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-004** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina tiramisù ⏎ aspetta, intendevo la parmigiana
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-005** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina tiramisù ⏎ quello no, la parmigiana ⏎ sì
+  - atteso: delete|la parmigiana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-006** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina tiramisù ⏎ quello no, la parmigiana
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-007** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina tiramisù ⏎ no il tiramisù no, boh ⏎ sì
+  - atteso: delete|boh · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-008** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina tiramisù ⏎ no il tiramisù no, boh
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-009** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina tiramisù ⏎ no scusa, volevo dire boh ⏎ sì
+  - atteso: delete|boh · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: elimina tiramisù ⏎ no scusa, volevo dire boh
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-011** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù e la parmigiana ⏎ solo la parmigiana ⏎ sì
+  - atteso: delete|la parmigiana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-012** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù e la parmigiana ⏎ la parmigiana no ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-013** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù e la parmigiana ⏎ tieni la parmigiana ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-014** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ asdfgh ⏎ sì
+  - atteso: delete|tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ no ⏎ sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-016** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: elimina il tiramisù ⏎ no grazie ⏎ sì
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-el-si-017** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|boh|true
+  - turni: elimina il tiramisù ⏎ nascondi boh ⏎ sì
+  - atteso: hidden|boh|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-001** [GRAVE] GRAVE non-applicato: non applicato: featured|Gricia|true, rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana e mettila in evidenza
+  - atteso: featured|Gricia|true, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-002** [GRAVE] GRAVE non-applicato: non applicato: hidden|Carbonara|true, rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana e nascondi la carbonara
+  - atteso: hidden|Carbonara|true, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-003** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13, rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana, la carbonara a 13
+  - atteso: price|Carbonara|13, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-004** [GRAVE] GRAVE non-applicato: non applicato: rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana grazie
+  - atteso: rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-005** [GRAVE] GRAVE non-applicato: non applicato: rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana per favore
+  - atteso: rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-006** [GRAVE] GRAVE non-applicato: non applicato: rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana se puoi
+  - atteso: rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-007** [GRAVE] GRAVE non-applicato: non applicato: rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in "Gricia romana"
+  - atteso: rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-008** [GRAVE] GRAVE non-applicato: non applicato: rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in «Gricia romana»
+  - atteso: rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-009** [GRAVE] GRAVE non-applicato: non applicato: rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in 'Gricia romana'
+  - atteso: rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-010** [GRAVE] GRAVE non-applicato: non applicato: rename|Gricia|Gricia romana
+  - turni: chiama la gricia "Gricia romana"
+  - atteso: rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-011** [GRAVE] GRAVE non-applicato: non applicato: rename|Gricia|Gricia della casa
+  - turni: la gricia chiamala "Gricia della casa"
+  - atteso: rename|Gricia|Gricia della casa · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-012** [GRAVE] GRAVE non-applicato: non applicato: price|Gricia|12, rename|Gricia|Gricia romana
+  - turni: cambia il nome della gricia in Gricia romana e il prezzo a 12
+  - atteso: price|Gricia|12, rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-014** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: rename|Gricia|Gricia romana
+  - turni: rinomina la gricia in Gricia romana ed eliminare la carbonara
+  - atteso: rename|Gricia|Gricia romana · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-rinomina-018** [GRAVE] GRAVE non-applicato: non applicato: move|Dolce del giorno|Dessert, move|Panna cotta|Dessert, move|Tiramisù|Dessert
+  - turni: rinomina la categoria dolci in Dessert, grazie
+  - atteso: move|Dolce del giorno|Dessert, move|Panna cotta|Dessert, move|Tiramisù|Dessert · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-001** [GRAVE] GRAVE non-applicato: non applicato: create|tartare|16|crudi, section|crudi
+  - turni: crea la categoria crudi e mettici la tartare a 16
+  - atteso: create|tartare|16|crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-002** [GRAVE] GRAVE non-applicato: non applicato: move|Bruschetta|Crudi, section|crudi
+  - turni: crea la categoria crudi e spostaci la bruschetta
+  - atteso: move|Bruschetta|Crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-004** [GRAVE] GRAVE non-applicato: non applicato: move|Bruschetta|Crudi, section|crudi
+  - turni: crea la categoria crudi, poi spostaci la bruschetta
+  - atteso: move|Bruschetta|Crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-005** [GRAVE] GRAVE non-applicato: non applicato: section|crudi
+  - turni: crea la categoria crudi grazie
+  - atteso: section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-006** [GRAVE] GRAVE non-applicato: non applicato: section|crudi
+  - turni: crea la categoria crudi per favore
+  - atteso: section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-007** [GRAVE] GRAVE non-applicato: non applicato: section|crudi
+  - turni: crea la categoria crudi se puoi
+  - atteso: section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-010** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: crea la categoria crudi ed elimina la bruschetta
+  - atteso: section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-012** [GRAVE] GRAVE non-applicato: non applicato: create|carpaccio|14|crudi, create|tartare|16|crudi, section|crudi
+  - turni: crea la categoria crudi con tartare a 16 e carpaccio a 14
+  - atteso: create|carpaccio|14|crudi, create|tartare|16|crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-013** [GRAVE] GRAVE non-applicato: non applicato: create|tartare|16.5|crudi, section|crudi
+  - turni: crea la categoria crudi con la tartare a 16 e 50
+  - atteso: create|tartare|16.5|crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-015** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: aggiungi nei primi gnocchi e ravioli a 10 e 50
+  - atteso: nessuna modifica · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-cat-016** [GRAVE] GRAVE non-applicato: non applicato: create|bianco|14|vini, create|rosso|15|vini, section|vini
+  - turni: crea la categoria vini con il rosso a 15 e il bianco a 14
+  - atteso: create|bianco|14|vini, create|rosso|15|vini, section|vini · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-sposta-001** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi, price|Carbonara|14
+  - turni: sposta la carbonara nei secondi e mettila a 14
+  - atteso: move|Carbonara|Secondi, price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-sposta-003** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi, price|Gricia|12
+  - turni: sposta la carbonara nei secondi, e la gricia a 12
+  - atteso: move|Carbonara|Secondi, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-sposta-004** [GRAVE] GRAVE non-applicato: non applicato: hidden|Gricia|true, move|Carbonara|Secondi
+  - turni: sposta la carbonara nei secondi e nascondi la gricia
+  - atteso: hidden|Gricia|true, move|Carbonara|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-sposta-005** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi
+  - turni: sposta la carbonara nei secondi grazie
+  - atteso: move|Carbonara|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-sposta-006** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi, move|Gricia|Secondi
+  - turni: sposta la carbonara nei secondi ⏎ e anche la gricia
+  - atteso: move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-sposta-007** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi, move|Gricia|Secondi
+  - turni: sposta la carbonara nei secondi ⏎ pure la gricia
+  - atteso: move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-sposta-008** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Secondi, move|Gricia|Secondi
+  - turni: sposta la carbonara nei secondi ⏎ la gricia uguale
+  - atteso: move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-sposta-009** [GRAVE] GRAVE non-applicato: non applicato: hidden|Carbonara|true, hidden|Gricia|true, move|Carbonara|Secondi, move|Gricia|Secondi
+  - turni: nascondi la carbonara e la gricia ⏎ spostale nei secondi
+  - atteso: hidden|Carbonara|true, hidden|Gricia|true, move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-sposta-010** [GRAVE] GRAVE non-applicato: non applicato: hidden|Carbonara|true, hidden|Gricia|true, move|Carbonara|Secondi, move|Gricia|Secondi
+  - turni: nascondi la carbonara e la gricia ⏎ sposta tutte e due nei secondi
+  - atteso: hidden|Carbonara|true, hidden|Gricia|true, move|Carbonara|Secondi, move|Gricia|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-sposta-011** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Speciali
+  - turni: sposta la carbonara nei secondi ⏎ anzi negli speciali
+  - atteso: move|Carbonara|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-relativi-005** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: la carbonara 1 euro in più
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-relativi-009** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|16.5
+  - turni: togli un euro e cinquanta alla tagliata
+  - atteso: price|Tagliata|16.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-relativi-010** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|16.5
+  - turni: togli 1,50 alla tagliata
+  - atteso: price|Tagliata|16.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-relativi-011** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|16.5
+  - turni: togli 1 euro e 50 alla tagliata
+  - atteso: price|Tagliata|16.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-relativi-012** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19.5
+  - turni: aumenta la tagliata di un euro e mezzo
+  - atteso: price|Tagliata|19.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-relativi-013** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|19.5
+  - turni: aumenta la tagliata di 1 e 50
+  - atteso: price|Tagliata|19.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-001** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 eh
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-002** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 thx
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-003** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 grazie mille eh
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-004** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 please
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-005** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 mi raccomando
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-006** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 tutto qui
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-007** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 capito?
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-008** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 ok?
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-009** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 per piacere
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-010** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 ciao ciao
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-011** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 a dopo
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-012** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 top
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-013** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 ti prego
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-014** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 quando puoi
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-015** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 appena puoi
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r2-code-016** [GRAVE] GRAVE non-applicato: non applicato: create|grigliata|22|secondi
+  - turni: aggiungi nei secondi la grigliata a 22 oggi stesso
+  - atteso: create|grigliata|22|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-004** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Speciali
+  - turni: sposta la carbonara negli speciali per favore
+  - atteso: move|Carbonara|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-005** [GRAVE] GRAVE non-applicato: non applicato: move|Carbonara|Speciali
+  - turni: sposta la carbonara negli speciali grazie mille
+  - atteso: move|Carbonara|Speciali · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-007** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|15.5
+  - turni: togli 2,50 alla tagliata
+  - atteso: price|Tagliata|15.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-008** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|11.5
+  - turni: togli 0,50 alla carbonara
+  - atteso: price|Carbonara|11.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-009** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|16.5
+  - turni: leva 1,5 euro alla tagliata
+  - atteso: price|Tagliata|16.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-010** [GRAVE] GRAVE non-applicato: non applicato: price|Carbonara|11.5
+  - turni: togli 50 cent alla carbonara
+  - atteso: price|Carbonara|11.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-011** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: price|Carbonara|13
+  - turni: elimina la gricia e aumenta la carbonara di 1
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-012** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: delete|Gricia, price|Carbonara|13
+  - turni: elimina la gricia e aumenta la carbonara di 1 ⏎ sì
+  - atteso: delete|Gricia, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-013** [GRAVE] GRAVE non-applicato: non applicato: hidden|Gricia|true, price|Carbonara|13
+  - turni: nascondi la gricia e aumenta la carbonara di 1
+  - atteso: hidden|Gricia|true, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-014** [GRAVE] GRAVE non-applicato: non applicato: available|Gricia|false, price|Carbonara|11
+  - turni: la gricia finita e la carbonara abbassala di 1
+  - atteso: available|Gricia|false, price|Carbonara|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-015** [GRAVE] GRAVE non-applicato: non applicato: rename|Tagliata|Tagliata di manzo
+  - turni: rinomina la tagliata in Tagliata di manzo.
+  - atteso: rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-016** [GRAVE] GRAVE non-applicato: non applicato: rename|Tagliata|Tagliata di manzo
+  - turni: rinomina la tagliata in Tagliata di manzo!
+  - atteso: rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-017** [GRAVE] GRAVE non-applicato: non applicato: rename|Tagliata|Tagliata di manzo
+  - turni: rinomina la tagliata in Tagliata di manzo 👍
+  - atteso: rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-018** [GRAVE] GRAVE non-applicato: non applicato: rename|Tagliata|Tagliata di manzo
+  - turni: chiama la tagliata «Tagliata di manzo»
+  - atteso: rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-019** [GRAVE] GRAVE non-applicato: non applicato: price|Tagliata|20, rename|Tagliata|Tagliata di manzo
+  - turni: rinomina la tagliata in Tagliata di manzo ⏎ tagliata di manzo a 20
+  - atteso: price|Tagliata|20, rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-020** [GRAVE] GRAVE non-applicato: non applicato: hidden|Tagliata|true, rename|Tagliata|Tagliata di manzo
+  - turni: rinomina la tagliata in Tagliata di manzo ⏎ nascondila
+  - atteso: hidden|Tagliata|true, rename|Tagliata|Tagliata di manzo · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-021** [GRAVE] GRAVE non-applicato: non applicato: create|tartare|16|crudi, section|crudi
+  - turni: crea la categoria crudi per favore ⏎ aggiungi nei crudi la tartare a 16
+  - atteso: create|tartare|16|crudi, section|crudi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-022** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: hidden|Panna cotta|true
+  - turni: elimina la panna cotta ⏎ no, solo nascosta
+  - atteso: hidden|Panna cotta|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-023** [GRAVE] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una») · GRAVE non-applicato: non applicato: available|Panna cotta|false
+  - turni: elimina la panna cotta ⏎ no, finita
+  - atteso: available|Panna cotta|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-024** [MEDIO] MEDIO chiarimento-mancante: turno 1: doveva chiedere un chiarimento («Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una»)
+  - turni: 🎤 elimina il tiramisù e la panna cotta ⏎ 🎤 no solo la panna cotta ⏎ sì
+  - atteso: delete|Panna cotta · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-025** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: quali sono i dolci? ⏎ elimina il secondo ⏎ sì
+  - atteso: delete|Tiramisù · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»
+- **y-r3-conferme-026** [MEDIO] MEDIO chiarimento-mancante: turno 2: doveva chiedere un chiarimento («Sono momentaneamente non disponibile, riprova tra un minuto.»)
+  - turni: quali sono i dolci? ⏎ elimina il primo ⏎ sì
+  - atteso: delete|Dolce del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.» ⏎ «Sono momentaneamente non disponibile, riprova tra un minuto.»

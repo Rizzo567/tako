@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-845bc410-cd6a-4f0b-9105-06b278ea893f",
+  "object": "chat.completion",
+  "created": 1792247285,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Puoi specificare cosa intendi con \\\"MESSAGGIO 1\\\"?\",\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Puoi spiegarmi meglio cosa vuoi fare con \\\"MESSAGGIO 1\\\"?\"\n}",
+     "reasoning": "User says \"MESSAGGIO 1\". Likely wants read? ambiguous. Probably wants read of message? unclear. Should ask clarification. Provide intent=clarify with question. No actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.052144014,
+   "prompt_tokens": 3308,
+   "prompt_time": 0.012666012,
+   "completion_tokens": 169,
+   "completion_time": 0.476713187,
+   "total_tokens": 3477,
+   "total_time": 0.489379199,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 41
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m5546hjyer682hm33qb1d1rn",
+   "seed": 435688480
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3308,
+  "completion_tokens": 169,
+  "total_tokens": 3477
+ },
+ "ms": 598,
+ "recordedAt": "2026-10-17T14:28:05.762Z",
+ "conv": "chiarimento-003"
+}

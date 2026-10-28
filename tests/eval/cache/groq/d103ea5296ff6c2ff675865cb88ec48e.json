@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-e0ed9359-5205-4b6d-8932-2320831fef11",
+  "object": "chat.completion",
+  "created": 1792321673,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"name\": null,\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"primi\",\n      \"name\": \"pasta al pesto\",\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"primi\",\n      \"name\": \"pasta carbonara\",\n      \"price\": 10,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"primi\",\n      \"name\": \"riso giallo\",\n      \"price\": 8,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Aggiornato il prezzo di \\\"pasta al ragù\\\" a 10 €, e aggiunti in \\\"primi\\\": pasta al pesto, pasta carbonara a 10 € e riso giallo a 8 €.\"\n}",
+     "reasoning": "We need to adjust: pasta al ragù already exists p4 hidden. Also pasta al pesto exists p8 (pasta al pesto e lasagna) but not exact. So need to use set_price for existing, create for new. Pasta carbonara not exist. riso giallo not exist. So actions: set_price for p4 to 10, create_item for pasta al pesto? maybe ambiguous because existing p8 is \"Pasta al pesto e lasagna\". Not same. So create new pasta al pesto. Also set_price for existing p8? No. We'll create new. Also need to reference existing items by code? We have p4 code. Use item field p4. For new items item null. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.214559875,
+   "prompt_tokens": 4400,
+   "prompt_time": 0.198753254,
+   "completion_tokens": 612,
+   "completion_time": 1.274918353,
+   "total_tokens": 5012,
+   "total_time": 1.473671607,
+   "completion_tokens_details": {
+    "reasoning_tokens": 152
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_19b184c447",
+  "x_groq": {
+   "id": "req_01m57b4mbsez58rh7ap9k0b5hn",
+   "seed": 1829466068
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 4400,
+  "completion_tokens": 612,
+  "total_tokens": 5012
+ },
+ "ms": 1943,
+ "recordedAt": "2026-10-18T11:07:53.239Z",
+ "conv": "r8-repro"
+}

@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-98b72695-c727-4ba0-b3c0-fc9255aa3b94",
+  "object": "chat.completion",
+  "created": 1792321799,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [\n    {\n      \"action\": \"create_item\",\n      \"section\": \"primi\",\n      \"item\": null,\n      \"name\": \"pasta al pesto\",\n      \"price\": 10,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"section\": \"primi\",\n      \"item\": null,\n      \"name\": \"pasta carbonara\",\n      \"price\": 10,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"create_item\",\n      \"section\": \"primi\",\n      \"item\": null,\n      \"name\": \"riso giallo\",\n      \"price\": 8,\n      \"price_delta\": null,\n      \"price_ref\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": \"C’è già \\\"pasta al ragù\\\" a 20 €: lo aggiorno a 10 € o ne creo un altro?\",\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"C’è già \\\"pasta al ragù\\\" a 20 €: lo aggiorno a 10 € o ne creo un altro?\"\n}",
+     "reasoning": "We need to clarify for existing items: pasta al pesto? Already exists p8 \"Pasta al pesto e lasagna\". Not same name. pasta al ragu? p4 is \"pasta al ragù\" (different accent). pasta carbonara not exist. riso giallo not exist. So only possible conflict is \"pasta al ragu\" vs \"pasta al ragù\". Likely considered same? Probably treat as same dish. So need clarify. Provide intent clarify with question. Keep other actions for non-conflict items."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054720133,
+   "prompt_tokens": 4404,
+   "prompt_time": 0.174240785,
+   "completion_tokens": 506,
+   "completion_time": 1.058165053,
+   "total_tokens": 4910,
+   "total_time": 1.232405838,
+   "completion_tokens_details": {
+    "reasoning_tokens": 113
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m57b8fqmezsbjtrrbk9ganzy",
+   "seed": 1835622625
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 4404,
+  "completion_tokens": 506,
+  "total_tokens": 4910
+ },
+ "ms": 1531,
+ "recordedAt": "2026-10-18T11:09:59.170Z",
+ "conv": "r8-repro"
+}

@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-7d3da42e-14c9-410a-9d0d-16d1be3f2a0b",
+  "object": "chat.completion",
+  "created": 1792247919,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Cosa vuoi fare con la Gricia?\",\n    \"item_refs\": [\"p10\"],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Vuoi modificare la Gricia? Fammi sapere cosa devo fare.\"\n}",
+     "reasoning": "User says \"anche la gricia\". Means also the gricia (p10). Likely wants to add? Probably set available? ambiguous. Probably wants to make it available? Could be ask to include it? Likely change: set_available true? But default is available. Might be ask to add to menu? ambiguous. We'll ask clarify. intent=clarify, question ask which action? Provide candidates p10. uncertain? We'll set clarify with item_refs [p10], missing none, question \"Cosa vuoi fare con la Gricia?\". reply_draft ask."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.05231931,
+   "prompt_tokens": 3281,
+   "prompt_time": 0.062475915,
+   "completion_tokens": 237,
+   "completion_time": 0.494628341,
+   "total_tokens": 3518,
+   "total_time": 0.557104256,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 117
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m554sw8eeh5brhh9h3fn54gv",
+   "seed": 429036904
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3281,
+  "completion_tokens": 237,
+  "total_tokens": 3518
+ },
+ "ms": 696,
+ "recordedAt": "2026-10-17T14:38:39.342Z",
+ "conv": "ambiguita-005"
+}

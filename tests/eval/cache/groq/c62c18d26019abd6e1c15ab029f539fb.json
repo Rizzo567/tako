@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-9b925301-0009-4578-be59-9ed19a4a904b",
+  "object": "chat.completion",
+  "created": 1792247379,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p7\",\n      \"section\": null,\n      \"price\": 13,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"item_refs\": [\"p7\"],\n  \"read\": \"none\",\n  \"reply_draft\": \"\",\n  \"uncertain\": []\n}",
+     "reasoning": "We need to produce JSON. Intent change. Action set_price for p7 to 13. Lascia stare la lasagna means no action on lasagna (maybe ignore). No uncertain. alias none. reply_draft empty. read none. capability empty. item_refs maybe p7. Clarify none."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054924614,
+   "prompt_tokens": 3334,
+   "prompt_time": 0.014480162,
+   "completion_tokens": 238,
+   "completion_time": 0.4989719,
+   "total_tokens": 3572,
+   "total_time": 0.513452062,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 63
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m5549cp0expbzsh9yz971b47",
+   "seed": 968028607
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3334,
+  "completion_tokens": 238,
+  "total_tokens": 3572
+ },
+ "ms": 613,
+ "recordedAt": "2026-10-17T14:29:39.065Z",
+ "conv": "multipla-002"
+}

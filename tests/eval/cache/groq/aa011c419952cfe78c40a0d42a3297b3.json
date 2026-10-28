@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-678a0380-78cf-414f-afe0-008b7c9170e9",
+  "object": "chat.completion",
+  "created": 1792246877,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p21\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "Need to parse: first message said panna cotta is finita -> set_available false for p24. Already done. Now \"e il tiramisù uguale\" means tiramisù also finita. So change set_available false for p21. No ambiguity. reply_draft empty. intent change. actions one. No uncertain. No alias. No clarify."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.299364552,
+   "prompt_tokens": 3350,
+   "prompt_time": 0.164961481,
+   "completion_tokens": 246,
+   "completion_time": 0.519204715,
+   "total_tokens": 3596,
+   "total_time": 0.684166196,
+   "completion_tokens_details": {
+    "reasoning_tokens": 75
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_69334c0be3",
+  "x_groq": {
+   "id": "req_01m553t25zeacrad25gzey386r",
+   "seed": 1727065951
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3350,
+  "completion_tokens": 246,
+  "total_tokens": 3596
+ },
+ "ms": 1062,
+ "recordedAt": "2026-10-17T14:21:17.218Z",
+ "conv": "anche-003"
+}

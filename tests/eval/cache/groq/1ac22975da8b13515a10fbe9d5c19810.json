@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-8351256f-d716-43d6-bfba-ec110f02a2ae",
+  "object": "chat.completion",
+  "created": 1792249274,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"A cosa ti riferisci con \\\"14\\\"?\",\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [\n    {\n      \"phrase\": \"no scusa 14\",\n      \"candidates\": [],\n      \"action\": \"none\",\n      \"value\": null,\n      \"price\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"reply_draft\": \"Puoi specificare a quale piatto o modifica ti riferisci con \\\"14\\\"?\"\n}",
+     "reasoning": "User says \"no scusa 14\". Likely wants to correct something: maybe price? \"no scusa 14\" means \"no sorry 14\". Probably they want price 14 for something? ambiguous. Need clarify. No clear item. So intent=clarify with question maybe \"A cosa ti riferisci con 14?\" Provide uncertain entry. No actions. reply_draft ask clarification."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054389056,
+   "prompt_tokens": 3357,
+   "prompt_time": 0.007335569,
+   "completion_tokens": 246,
+   "completion_time": 0.5124467,
+   "total_tokens": 3603,
+   "total_time": 0.519782269,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 83
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m55637v3ec6bt2y3bbds9d6w",
+   "seed": 370564523
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3357,
+  "completion_tokens": 246,
+  "total_tokens": 3603
+ },
+ "ms": 771,
+ "recordedAt": "2026-10-17T15:01:14.728Z",
+ "conv": "scaduto-002"
+}

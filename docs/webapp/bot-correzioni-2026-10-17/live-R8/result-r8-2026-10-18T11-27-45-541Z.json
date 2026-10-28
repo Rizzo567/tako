@@ -1,0 +1,66 @@
+{
+ "at": "2026-10-18T11:27:45.541Z",
+ "results": [
+  {
+   "turn": 1,
+   "msg": "sposta la parmigiana in una nuova sezione, crea la nuova sezione \"primi\"",
+   "status": 200,
+   "ms": 4057,
+   "reply": "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale parmigiana vuoi spostare nella nuova sezione \"primi\"?\n\n1. *Inserisce il piatto la parmigiana* (12,00 €)\n2. *la parmigiana* (15,00 €)",
+   "published": [],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 4835
+  },
+  {
+   "turn": 2,
+   "msg": "ora in primi aggiungi pasta al pesto , pasta al ragu, pasta carbonara, riso giallo.\nmetti le paste a 10 euro e il riso a 8 euro",
+   "status": 200,
+   "ms": 6567,
+   "reply": "C’è già \"pasta al ragù\" a 20 €: lo aggiorno a 10 € o ne creo un altro?",
+   "published": [],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 14326
+  }
+ ],
+ "stopped": "tetto token raggiunto prima del turno 3",
+ "twilio": {
+  "before": 0,
+  "after": 0
+ },
+ "errors": {
+  "before": 56,
+  "after": 56
+ },
+ "tokens": 14326,
+ "restore": {
+  "before": {
+   "draft": "229cc4f6b288291b",
+   "published": "229cc4f6b288291b",
+   "items": "a63abc98501e21e5",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "ff0a12e00d2036f5",
+   "translations": "4f53cda18c2baa0c",
+   "public": "f6dec7315fd88a32"
+  },
+  "after": {
+   "draft": "229cc4f6b288291b",
+   "published": "229cc4f6b288291b",
+   "items": "a63abc98501e21e5",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "ff0a12e00d2036f5",
+   "translations": "4f53cda18c2baa0c",
+   "public": "f6dec7315fd88a32"
+  },
+  "ok": true,
+  "extraRows": [],
+  "memory": true
+ }
+}

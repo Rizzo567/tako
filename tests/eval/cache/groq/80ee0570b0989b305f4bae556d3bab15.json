@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-755436b5-a86a-4372-94dc-d52df5e46a6f",
+  "object": "chat.completion",
+  "created": 1792247013,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p9\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "Need to produce JSON. Intent clarify? Actually user says no, intended cacio e pepe. So change action set_available false for p10? Wait they said earlier \"la gricia è finita\" (set unavailable). Now they correct: actually cacio e pepe is finita. So need restore previous? We set p10 unavailable earlier, now set p9 unavailable. Also need restore p10? Not specified. So change: set_available p9 false. Also maybe restore p10? Not requested. So actions list with one action. No uncertain. reply_draft empty. intent change. read none. capability empty. clarify empty. alias_used none."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.301440998,
+   "prompt_tokens": 3350,
+   "prompt_time": 0.158555446,
+   "completion_tokens": 300,
+   "completion_time": 0.623229199,
+   "total_tokens": 3650,
+   "total_time": 0.781784645,
+   "completion_tokens_details": {
+    "reasoning_tokens": 135
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_86dc843b12",
+  "x_groq": {
+   "id": "req_01m553y6r4e21bke399zap56t9",
+   "seed": 1187274896
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3350,
+  "completion_tokens": 300,
+  "total_tokens": 3650
+ },
+ "ms": 1184,
+ "recordedAt": "2026-10-17T14:23:33.077Z",
+ "conv": "correzione-003"
+}

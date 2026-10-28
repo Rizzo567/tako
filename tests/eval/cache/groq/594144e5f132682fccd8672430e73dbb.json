@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-476dbaeb-1184-4744-a39a-944ac39ddb6b",
+  "object": "chat.completion",
+  "created": 1792285743,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": 14,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p2\",\n      \"section\": null,\n      \"price\": 21,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": 21,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 13,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Prezzi aggiornati.\"\n}",
+     "reasoning": "We need to produce owner_brain_plan. Intent change. Actions: set_price for each item. Items codes: p1, p2, p3, p4. Prices given. No uncertainties. reply_draft confirm brief. e.g., \"Prezzi aggiornati.\" Provide actions list. Also capability_ids maybe empty. read none. clarify empty. uncertain empty. alias_used empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054691521,
+   "prompt_tokens": 3295,
+   "prompt_time": 0.032769543,
+   "completion_tokens": 488,
+   "completion_time": 1.029325682,
+   "total_tokens": 3783,
+   "total_time": 1.062095225,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 80
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m568w5qme4nbc5v9tb6t5e5z",
+   "seed": 741202724
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3295,
+  "completion_tokens": 488,
+  "total_tokens": 3783
+ },
+ "ms": 1236,
+ "recordedAt": "2026-10-18T01:09:03.895Z",
+ "conv": "bv-multiple-004"
+}

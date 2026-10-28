@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-2b933698-473a-4696-bd11-d642a6532ffc",
+  "object": "chat.completion",
+  "created": 1792285436,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [\"name\"],\n    \"question\": \"A quale piatto vuoi impostare i nuovi prezzi (Pasta collaudo, Pizza collaudo, Tiramisu collaudo, Acqua collaudo)?\"\n  },\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"reply_draft\": \"A quale piatto vuoi impostare i nuovi prezzi (Pasta collaudo, Pizza collaudo, Tiramisu collaudo, Acqua collaudo)?\",\n  \"uncertain\": []\n}",
+     "reasoning": "We need clarify which item for each? Actually ambiguous because multiple match? But each phrase includes specific name, should be unique. Maybe ambiguous because \"la Pasta collaudo\" matches p2 only, etc. But server says ambiguous all? Might need clarify per item. We'll ask which item for each price? But they are distinct. Might be because names not unique? All have unique codes but names distinct. Still ambiguous? We'll ask clarification: which item to set price for Pasta collaudo? It's clear. But server says ambiguous all. So we ask clarify with list of candidates for each? Probably need intent=clarify with question. Provide missing? We'll ask: \"Quale piatto vuoi modificare a 15 euro?\" etc. But better ask one combined? We'll ask clarify with item_refs empty and missing price? Actually need clarification of items. So intent=clarify, reply_draft question."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.022439816,
+   "prompt_tokens": 3880,
+   "prompt_time": 0.06320127,
+   "completion_tokens": 346,
+   "completion_time": 0.795378406,
+   "total_tokens": 4226,
+   "total_time": 0.858579676,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 185
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_87b3c396db",
+  "x_groq": {
+   "id": "req_01m568jt3meswvenmryg1hqg5q",
+   "seed": 1749386245
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3880,
+  "completion_tokens": 346,
+  "total_tokens": 4226
+ },
+ "ms": 1065,
+ "recordedAt": "2026-10-18T01:03:56.904Z",
+ "conv": "bv-multiple-002"
+}

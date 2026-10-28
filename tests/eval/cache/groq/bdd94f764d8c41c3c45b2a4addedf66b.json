@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-d025dde6-3081-49d1-b9b8-6eb47f24449d",
+  "object": "chat.completion",
+  "created": 1792248189,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": 8,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need parse: \"a caponata a ottu\" likely means set price? \"a\" maybe \"a\" = set price? \"ottu\" = eight euros. So change price of caponata (p1) to 8. Intent change. actions one set_price item p1 price 8. reply_draft empty. No uncertainties. alias? none. capability empty. read none. clarify empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054733265,
+   "prompt_tokens": 3184,
+   "prompt_time": 0.063755335,
+   "completion_tokens": 260,
+   "completion_time": 0.583264601,
+   "total_tokens": 3444,
+   "total_time": 0.647019936,
+   "prompt_tokens_details": {
+    "cached_tokens": 2048
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 88
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m555240pe2vahebwsen62sdp",
+   "seed": 1227761902
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3184,
+  "completion_tokens": 260,
+  "total_tokens": 3444
+ },
+ "ms": 837,
+ "recordedAt": "2026-10-17T14:43:09.572Z",
+ "conv": "vocale-032"
+}

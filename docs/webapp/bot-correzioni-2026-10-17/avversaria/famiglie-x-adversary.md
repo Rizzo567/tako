@@ -1,0 +1,1106 @@
+# Avversaria X · modo adversary
+
+| Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
+|---|---|---|---|---|---|
+| coppie | 30 | 14 | 0 | 0 | 16 |
+| prezzi | 32 | 14 | 0 | 0 | 18 |
+| centesimi | 25 | 7 | 0 | 0 | 18 |
+| nomi | 31 | 7 | 0 | 0 | 24 |
+| deixis | 35 | 9 | 3 | 0 | 23 |
+| anzino | 30 | 7 | 1 | 0 | 22 |
+| misti | 30 | 21 | 0 | 0 | 9 |
+| asr | 50 | 31 | 0 | 0 | 19 |
+| parole | 22 | 0 | 0 | 0 | 22 |
+| vocali | 25 | 6 | 0 | 0 | 19 |
+| sospeso | 25 | 14 | 0 | 0 | 11 |
+| suono | 25 | 12 | 0 | 0 | 13 |
+| code | 31 | 29 | 0 | 0 | 2 |
+| relativi | 20 | 13 | 0 | 0 | 7 |
+| cent2 | 14 | 3 | 0 | 0 | 11 |
+| misti2 | 18 | 6 | 0 | 0 | 12 |
+| ordinali | 8 | 0 | 1 | 0 | 7 |
+| sospeso2 | 15 | 12 | 2 | 0 | 1 |
+| lev1 | 14 | 12 | 0 | 0 | 2 |
+| lasciastare | 10 | 5 | 0 | 0 | 5 |
+| ipotesi | 8 | 8 | 0 | 0 | 0 |
+| toglieuro | 10 | 9 | 0 | 0 | 1 |
+| TOTALE | 508 | 239 | 7 | 0 | 262 |
+
+## Fallimenti
+
+- **adv-coppie-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Cacio e pepe|12
+  - turni: cacio e pepe a 12
+  - atteso: price|Cacio e pepe|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Cacio e pepe|false
+  - turni: la cacio e pepe è finita
+  - atteso: available|Cacio e pepe|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Pasta e ceci|true
+  - turni: nascondi pasta e ceci
+  - atteso: hidden|Pasta e ceci|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|false, available|Gricia|false
+  - turni: carbonara e gricia finite
+  - atteso: available|Carbonara|false, available|Gricia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Cacio e pepe* (10,00 €)»
+- **adv-coppie-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|12, price|Carbonara|13
+  - turni: metti carbonara e amatriciana a 13 e 12
+  - atteso: price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-coppie-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Cacio e pepe|11, price|Gricia|12
+  - turni: la cacio e pepe a 11 e la gricia a 12
+  - atteso: price|Cacio e pepe|11, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Cacio e pepe* (10,00 €)»
+- **adv-coppie-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|branzino|20|secondi, create|orata|18|secondi
+  - turni: aggiungi nei secondi orata e branzino a 18 e 20
+  - atteso: create|branzino|20|secondi, create|orata|18|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-coppie-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova
+  - turni: aggiungi ravioli e cappelletti ⏎ sono due ⏎ 8 tutti e due
+  - atteso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa ravioli?» ⏎ «Quanto costa ravioli?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova
+  - turni: aggiungi ravioli e cappelletti ⏎ due piatti ⏎ entrambi a 8
+  - atteso: create|cappelletti|8|piatti di prova, create|ravioli|8|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa ravioli?» ⏎ «Quanto costa ravioli?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cappelletti|9|piatti di prova, create|ravioli|8|piatti di prova
+  - turni: aggiungi ravioli e cappelletti ⏎ due piatti ⏎ a 8 e a 9
+  - atteso: create|cappelletti|9|piatti di prova, create|ravioli|8|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa ravioli?» ⏎ «Quanto costa ravioli?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|ravioli e cappelletti|14|piatti di prova
+  - turni: aggiungi ravioli e cappelletti ⏎ uno solo, a 14
+  - atteso: create|ravioli e cappelletti|14|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa ravioli e cappelletti?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|agnolotti|10|piatti di prova, create|tortelli|9|piatti di prova
+  - turni: aggiungi tortelli e agnolotti ⏎ due ⏎ tortelli 9 e agnolotti 10
+  - atteso: create|agnolotti|10|piatti di prova, create|tortelli|9|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa tortelli?» ⏎ «Quanto costa tortelli?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|agnolotti|10|piatti di prova, create|tortelli|10|piatti di prova
+  - turni: aggiungi tortelli e agnolotti ⏎ sono due piatti ⏎ tutti e due a 10
+  - atteso: create|agnolotti|10|piatti di prova, create|tortelli|10|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa tortelli?» ⏎ «Quanto costa tortelli?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|canederli|11|piatti di prova, create|pizzoccheri|12|piatti di prova
+  - turni: aggiungi pizzoccheri e canederli a 12 e 11
+  - atteso: create|canederli|11|piatti di prova, create|pizzoccheri|12|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta e lenticchie|9|piatti di prova
+  - turni: aggiungi pasta e lenticchie a 9
+  - atteso: create|pasta e lenticchie|9|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-coppie-027** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13, price|Tagliata di tonno|21
+  - turni: carbonara e tagliata di tonno a 13 e 21
+  - atteso: price|Carbonara|13, price|Tagliata di tonno|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Pollo al curry* (14,00 €)»
+- **adv-prezzi-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|12, price|Carbonara|13, price|Gricia|12.5
+  - turni: carbonara 13, amatriciana 12 e gricia 12,50
+  - atteso: price|Amatriciana|12, price|Carbonara|13, price|Gricia|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|12, price|Carbonara|13, price|Gricia|12.5
+  - turni: carbonara a 13 amatriciana a 12 gricia a 12 e 50
+  - atteso: price|Amatriciana|12, price|Carbonara|13, price|Gricia|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Gricia* (11,00 €) 3. *Cacio e pepe* (10,00 €)»
+- **adv-prezzi-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Acqua|2.5
+  - turni: l'acqua 2 e 50 e la birra media 5
+  - atteso: price|Acqua|2.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|20
+  - turni: la tagliata 19 anzi 20
+  - atteso: price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|21
+  - turni: la tagliata 19 no 21
+  - atteso: price|Tagliata|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-prezzi-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|22
+  - turni: la tagliata a 19... no aspetta, 22
+  - atteso: price|Tagliata|22 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|13, price|Carbonara|13
+  - turni: carbonara 13 e amatriciana uguale
+  - atteso: price|Amatriciana|13, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|12, price|Carbonara|13
+  - turni: carbonara 13 e l'amatriciana un euro in meno
+  - atteso: price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|16
+  - turni: abbassa la tagliata di 2 euro
+  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-prezzi-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra piccola|3.5
+  - turni: la birra media a 5 e la piccola a 3 e 50
+  - atteso: price|Birra piccola|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Coca Cola 33cl|3.5
+  - turni: la coca cola 33 a 3,50
+  - atteso: price|Coca Cola 33cl|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Coca Cola 33cl|4
+  - turni: la coca da 33 mettila a 4
+  - atteso: price|Coca Cola 33cl|4 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Acqua 0,5 l|2
+  - turni: l'acqua da mezzo litro a 2
+  - atteso: price|Acqua 0,5 l|2 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pizza 4 formaggi|10
+  - turni: la pizza 4 formaggi a 10
+  - atteso: price|Pizza 4 formaggi|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-027** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gnocchi 4 formaggi|11
+  - turni: gnocchi 4 formaggi 11
+  - atteso: price|Gnocchi 4 formaggi|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-prezzi-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra media|6, price|Coca Cola 33cl|3.5
+  - turni: metti la birra media a 6 e la coca a 3 e 50
+  - atteso: price|Birra media|6, price|Coca Cola 33cl|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Coca Cola 33cl* (3,00 €) 2. *Birra media* (5,00 €)»
+- **adv-prezzi-031** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: promo|Carbonara|9.9
+  - turni: metti la promo sulla carbonara a 9 e 90
+  - atteso: promo|Carbonara|9.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-prezzi-032** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: promo|Carbonara|10
+  - turni: carbonara in promo a 10 fino a domenica
+  - atteso: promo|Carbonara|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12.5
+  - turni: carbonara dodici e cinquanta
+  - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12.5
+  - turni: carbonara dodici euro e mezzo
+  - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-centesimi-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12.5
+  - turni: la carbonara a 12 e mezzo
+  - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12.5
+  - turni: la carbonara dodici virgola cinque
+  - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|17.5
+  - turni: il polpo diciassette e cinquanta
+  - atteso: price|Polpo alla griglia|17.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-centesimi-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bomba|3.5
+  - turni: la bomba tre e cinquanta
+  - atteso: price|Bomba|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bomba|3.5
+  - turni: la bomba a tre e mezzo
+  - atteso: price|Bomba|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tiramisù|7.9
+  - turni: il tiramisù sette euro e novanta centesimi
+  - atteso: price|Tiramisù|7.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tiramisù|7.9
+  - turni: il tiramisù 7.90
+  - atteso: price|Tiramisù|7.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tiramisù|7.9
+  - turni: il tiramisù a 7,9
+  - atteso: price|Tiramisù|7.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tiramisù|7.5
+  - turni: il tiramisù €7,50
+  - atteso: price|Tiramisù|7.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra piccola|3.5
+  - turni: la birra piccola a tre e 50
+  - atteso: price|Birra piccola|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-centesimi-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Supplì|3.2
+  - turni: il supplì a 3 e 20
+  - atteso: price|Supplì|3.2 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Supplì|3.2
+  - turni: il supplì a 3 euro e 20 centesimi
+  - atteso: price|Supplì|3.2 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Acqua|1.5
+  - turni: acqua a uno e cinquanta
+  - atteso: price|Acqua|1.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Fritto misto|14.9
+  - turni: il fritto misto a 14 e 90
+  - atteso: price|Fritto misto|14.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-centesimi-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Fritto misto|14.9, price|Supplì|3.5
+  - turni: il fritto misto a 14,90 e il supplì a 3,50
+  - atteso: price|Fritto misto|14.9, price|Supplì|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Supplì* (3,00 €) 2. *boh* (8,00 €)»
+- **adv-centesimi-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|7.5, price|Marinara|6.5
+  - turni: la margherita a sette e cinquanta e la marinara a sei e cinquanta
+  - atteso: price|Margherita|7.5, price|Marinara|6.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Marinara* (6,00 €) 2. *Bufala* (9,00 €)»
+- **adv-nomi-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|linguine allo scoglio|18|primi
+  - turni: aggiungi nei primi le linguine allo scoglio a 18 grazie
+  - atteso: create|linguine allo scoglio|18|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tagliata di pollo|14|secondi
+  - turni: aggiungi tra i secondi la tagliata di pollo a 14 per favore grazie
+  - atteso: create|tagliata di pollo|14|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|paccheri alla genovese|13|primi
+  - turni: nei primi aggiungimi i paccheri alla genovese a 13, ok?
+  - atteso: create|paccheri alla genovese|13|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tagliere di salumi|15|antipasti
+  - turni: allora tipo aggiungi negli antipasti il tagliere di salumi a 15 diciamo
+  - atteso: create|tagliere di salumi|15|antipasti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-nomi-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|carciofi alla romana|7|antipasti
+  - turni: aggiungi un nuovo piatto: carciofi alla romana, 7, negli antipasti
+  - atteso: create|carciofi alla romana|7|antipasti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|torta caprese|6|dolci, price|Tiramisù|7
+  - turni: aggiungi nei dolci la torta caprese a 6 e già che ci sei metti il tiramisù a 7
+  - atteso: create|torta caprese|6|dolci, price|Tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tagliatelle ai funghi porcini|14|primi
+  - turni: aggiungi nei primi le tagliatelle ai funghi porcini a 14 ok grazie ciao
+  - atteso: create|tagliatelle ai funghi porcini|14|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|orecchiette alle cime di rapa|12|primi
+  - turni: aggiungi il piatto che si chiama orecchiette alle cime di rapa a 12 nei primi
+  - atteso: create|orecchiette alle cime di rapa|12|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|baccala alla livornese|17|secondi
+  - turni: inserisci nei secondi baccalà alla livornese a 17
+  - atteso: create|baccala alla livornese|17|secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|panzanella|8|antipasti
+  - turni: aggiungi la panzanella a 8 nella sezione antipasti
+  - atteso: create|panzanella|8|antipasti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|diavola|8|pizze
+  - turni: aggiungi tra le pizze la diavola a 8
+  - atteso: create|diavola|8|pizze · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-nomi-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|spritz|6|bevande
+  - turni: aggiungi alle bevande lo spritz a 6
+  - atteso: create|spritz|6|bevande · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pizza 5 formaggi|10|pizze
+  - turni: aggiungi tra le pizze la pizza 5 formaggi a 10
+  - atteso: create|pizza 5 formaggi|10|pizze · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|birra grande|7|bevande
+  - turni: aggiungi tra le bevande la birra grande a 7
+  - atteso: create|birra grande|7|bevande · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|carbonara di mare|15|primi
+  - turni: aggiungi nei primi la carbonara di mare a 15
+  - atteso: create|carbonara di mare|15|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|gricia con i carciofi|13|primi
+  - turni: aggiungi nei primi la gricia con i carciofi a 13
+  - atteso: create|gricia con i carciofi|13|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|risotto alla milanese|14|primi
+  - turni: aggiungi un piatto nei primi ⏎ sì ⏎ si chiama risotto alla milanese, 14
+  - atteso: create|risotto alla milanese|14|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Come si chiama il piatto nuovo?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-nomi-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|tonnarelli cacio e pepe|12|primi
+  - turni: aggiungi nei primi ⏎ ok ⏎ tonnarelli cacio e pepe a 12
+  - atteso: create|tonnarelli cacio e pepe|12|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Come si chiama il piatto nuovo?» ⏎ «Come si chiama il piatto nuovo?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|panna cotta|5|dolci
+  - turni: aggiungi un dolce ⏎ va bene ⏎ panna cotta, 5
+  - atteso: create|panna cotta|5|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Come si chiama il piatto nuovo?» ⏎ «Come si chiama il piatto nuovo?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|lasagna|13|piatti di prova
+  - turni: aggiungi ⏎ certo ⏎ lasagna 13
+  - atteso: create|lasagna|13|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Come si chiama il piatto nuovo?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|burrata|9|piatti di prova
+  - turni: aggiungi per piacere la burrata a 9 grazie mille
+  - atteso: create|burrata|9|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|burrata|9|piatti di prova
+  - turni: ciao, vorrei aggiungere al menu la burrata a 9
+  - atteso: create|burrata|9|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-nomi-028** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|burrata|9|piatti di prova
+  - turni: senti aggiungi la burrata, costa 9
+  - atteso: create|burrata|9|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-nomi-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|burrata|9|piatti di prova
+  - turni: fammi un favore, aggiungi la burrata a 9 euro e basta
+  - atteso: create|burrata|9|piatti di prova · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Amatriciana|true, hidden|Carbonara|true, price|Amatriciana|12, price|Carbonara|13
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ quei due nascondili
+  - atteso: hidden|Amatriciana|true, hidden|Carbonara|true, price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ l'ultimo rimettilo com'era
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ il primo mettilo in evidenza
+  - atteso: featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Amatriciana* (11,00 €)»
+- **adv-deixis-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Gricia|true
+  - turni: nascondi carbonara, gricia e amatriciana ⏎ rimettili tutti tranne la gricia
+  - atteso: hidden|Gricia|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Gricia* (11,00 €) 3. *Cacio e pepe* (10,00 €)» ⏎ «Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Gricia* (11,00 €) 3. *Cacio e pepe* (10,00 €)»
+- **adv-deixis-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|13, price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ e anche l'amatriciana
+  - atteso: price|Amatriciana|13, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|20
+  - turni: ❓ quanto costa la tagliata? ⏎ mettila a 20
+  - atteso: price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Birra piccola*: *3,00 €* · disponibile *Tagliata*: *18,00 €* · disponibile» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata di tonno|19, price|Tagliata|19
+  - turni: ❓ quanto costa la tagliata? ⏎ ❓ e quella di tonno? ⏎ mettile tutte e due a 19
+  - atteso: price|Tagliata di tonno|19, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Birra piccola*: *3,00 €* · disponibile *Tagliata*: *18,00 €* · disponibile» ⏎ «*Bruschetta*: *5,00 €* · disponibile *Tagliata di tonno*: *20,00 €* · disponibile» ⏎ «Quale intendi? 1. *Tagliata di tonno* (20,00 €) 2. *Pollo al curry* (14,00 €)»
+- **adv-deixis-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Gricia|false, hidden|Pasta al sugo|false
+  - turni: ❓ quali piatti sono nascosti? ⏎ rimettili tutti
+  - atteso: hidden|Gricia|false, hidden|Pasta al sugo|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Fritto misto*: *12,00 €* · disponibile» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|true, available|Tiramisù|true
+  - turni: ❓ cosa è finito? ⏎ sono tornati entrambi
+  - atteso: available|Carbonara|true, available|Tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Bruschetta*: *5,00 €* · disponibile» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-deixis-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12
+  - turni: carbonara 13 ⏎ gricia 12 ⏎ amatriciana 12 ⏎ il primo e l'ultimo mettili in evidenza
+  - atteso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Gricia* (11,00 €) 3. *Amatriciana* (11,00 €)»
+- **adv-deixis-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al sugo|10
+  - turni: la pasta a 10 ⏎ quella al sugo
+  - atteso: price|Pasta al sugo|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)» ⏎ «Quale intendi? 1. *Pasta al sugo* (9,00 €) 2. *Polpette al sugo* (11,00 €)»
+- **adv-deixis-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al sugo|10
+  - turni: la pasta a 10 ⏎ la seconda
+  - atteso: price|Pasta al sugo|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)» ⏎ «Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)»
+- **adv-deixis-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Pasta al pesto|true, hidden|Pasta al ragù|true, hidden|Pasta al sugo|true, hidden|Pasta e ceci|true
+  - turni: nascondi la pasta ⏎ tutte
+  - atteso: hidden|Pasta al pesto|true, hidden|Pasta al ragù|true, hidden|Pasta al sugo|true, hidden|Pasta e ceci|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pasta al ragù* (12,00 €) 2. *Pasta al sugo* (9,00 €) 3. *Pasta al pesto* (10,00 €) 4. *Pasta e ceci* (9,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare? 1. *Pasta al sugo* (9,00 €) 2. *Pasta al pesto* (10,00 €) 3. *Pasta e ceci* (9,00 €) 4. *Tagliata* (18,00 €)»
+- **adv-deixis-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Torta della nonna|7
+  - turni: la torta a 7 ⏎ quella della nonna
+  - atteso: price|Torta della nonna|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Torta della nonna* (6,00 €) 2. *Amatriciana* (11,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-023** [GRAVE] GRAVE non-applicato: non applicato: hidden|Tagliata|true
+  - turni: nascondi la tagliata ⏎ anche quella di tonno
+  - atteso: hidden|Tagliata di tonno|true, hidden|Tagliata|true · ottenuto: hidden|Tagliata di tonno|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Fatto. *Tagliata di tonno*: *nascosto* dal menu»
+- **adv-deixis-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la gricia a 12 ⏎ annulla quello di prima
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Cacio e pepe* (10,00 €)»
+- **adv-deixis-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Amatriciana|false, available|Carbonara|false
+  - turni: la carbonara è finita ⏎ e pure l'amatriciana
+  - atteso: available|Amatriciana|false, available|Carbonara|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-deixis-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|false
+  - turni: la carbonara è finita ⏎ anche gli altri due primi romani
+  - atteso: available|Carbonara|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-027** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ gricia 12 ⏎ tutti tranne la gricia in evidenza
+  - atteso: featured|Amatriciana|true, featured|Carbonara|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Gricia* (11,00 €) 2. *Amatriciana* (11,00 €)»
+- **adv-deixis-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|14, price|Carbonara|14
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ metti quei due a 14
+  - atteso: price|Amatriciana|14, price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Gricia* (11,00 €)»
+- **adv-deixis-030** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la seconda a 12
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-031** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13, price|Gricia|13
+  - turni: la carbonara a 13 ⏎ e la stessa cosa per la gricia
+  - atteso: price|Carbonara|13, price|Gricia|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-deixis-032** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Bomba|false
+  - turni: la bomba è finita ⏎ rimettila disponibile ⏎ no anzi è finita davvero
+  - atteso: available|Bomba|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-033** [GRAVE] GRAVE non-applicato: non applicato: hidden|Bomba|true
+  - turni: nascondi la bomba ⏎ e anche quelle pugliesi
+  - atteso: hidden|Bomba|true, hidden|Bombette pugliesi|true · ottenuto: hidden|Bombette pugliesi|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Fatto. *Bombette pugliesi*: *nascosto* dal menu»
+- **adv-deixis-034** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: featured|Polpo alla griglia|true
+  - turni: metti in evidenza il polpo ⏎ toglilo
+  - atteso: nessuna modifica · ottenuto: featured|Polpo alla griglia|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Polpo alla griglia*: *in evidenza*» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-deixis-035** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata di tonno|19, price|Tagliata|19
+  - turni: la tagliata a 19 ⏎ quella di tonno uguale
+  - atteso: price|Tagliata di tonno|19, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Quale intendi? 1. *Pollo al curry* (14,00 €) 2. *Tagliata* (18,00 €)»
+- **adv-anzino-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.5
+  - turni: carbonara 13, anzi no 14, anzi 13 e 50
+  - atteso: price|Carbonara|13.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-anzino-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: carbonara 13 ⏎ anzi no, 14 ⏎ no scusa avevi ragione 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-anzino-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Cacio e pepe|true
+  - turni: nascondi la gricia ⏎ anzi no, la cacio e pepe
+  - atteso: hidden|Cacio e pepe|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-anzino-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Amatriciana|false
+  - turni: la carbonara è finita ⏎ no l'amatriciana
+  - atteso: available|Amatriciana|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|13
+  - turni: la carbonara a 13 ⏎ no, intendevo l'amatriciana
+  - atteso: price|Amatriciana|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|13
+  - turni: la carbonara a 13 ⏎ no, l'amatriciana a 13, la carbonara lasciala stare
+  - atteso: price|Amatriciana|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Amatriciana* (11,00 €)»
+- **adv-anzino-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12.5, price|Gricia|13
+  - turni: la carbonara a 13 ⏎ no, 13 la gricia, la carbonara 12,50
+  - atteso: price|Carbonara|12.5, price|Gricia|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Quale intendi? 1. *Gricia* (11,00 €) 2. *Carbonara* (12,00 €)»
+- **adv-anzino-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Tagliata di tonno|true
+  - turni: metti in evidenza la tagliata ⏎ no anzi tutte e due
+  - atteso: featured|Tagliata di tonno|true, featured|Tagliata|true · ottenuto: featured|Tagliata|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Tagliata*: *in evidenza*» ⏎ «Quale intendi? 1. *Tagliata* (18,00 €) 2. *Tagliata di tonno* (20,00 €)»
+- **adv-anzino-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|trofie|12|primi
+  - turni: aggiungi nei primi le trofie a 11 ⏎ anzi 12
+  - atteso: create|trofie|12|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|trofie al pesto|11|primi
+  - turni: aggiungi nei primi le trofie a 11 ⏎ no scusa, si chiamano trofie al pesto
+  - atteso: create|trofie al pesto|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Come si chiama il piatto nuovo?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara 13 ⏎ l'amatriciana 12 ⏎ annulla
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-anzino-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara 13 ⏎ l'amatriciana 12 ⏎ annulla ⏎ annulla
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
+  - turni: la gricia a 12 ⏎ [+15 min] ⏎ annulla
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|15
+  - turni: carbonara 13 ⏎ no 14 ⏎ no 15 ⏎ ok così
+  - atteso: price|Carbonara|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Tagliata|true, price|Tagliata|19
+  - turni: la tagliata a 20 ⏎ anzi no, a 19, e mettila in evidenza
+  - atteso: featured|Tagliata|true, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Gricia|false
+  - turni: la carbonara è finita ⏎ no scusa, è finita la gricia, la carbonara c'è
+  - atteso: available|Gricia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Cacio e pepe* (10,00 €)»
+- **adv-anzino-022** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Bufala|true · MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Bufala|true
+  - turni: nascondi la bufala ⏎ anzi no, mettila in evidenza
+  - atteso: featured|Bufala|true · ottenuto: hidden|Bufala|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. *Bufala*: *nascosto* dal menu» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-anzino-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|8, price|Marinara|6.5
+  - turni: la margherita a 8 ⏎ e la marinara a 7 ⏎ no, la marinara a 6,50
+  - atteso: price|Margherita|8, price|Marinara|6.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|13
+  - turni: la carbonara a 13 ⏎ scusa ho sbagliato piatto, era la gricia
+  - atteso: price|Gricia|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-027** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra piccola|6
+  - turni: la birra media a 6 ⏎ no la piccola
+  - atteso: price|Birra piccola|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-028** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la carbonara a 14 ⏎ torna a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tiramisù|false
+  - turni: nascondi il tiramisù ⏎ anzi no, è solo finito
+  - atteso: available|Tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-anzino-030** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12, price|Gricia|13
+  - turni: carbonara a 13 e gricia a 12 ⏎ no, al contrario
+  - atteso: price|Carbonara|12, price|Gricia|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Carbonara* (12,00 €) 2. *Gricia* (11,00 €)» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Gricia* (11,00 €)»
+- **adv-misti-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
+  - turni: metti la carbonara a 13, e la gricia quanto la tengo?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Bomba|true
+  - turni: nascondi la bomba. quanti piatti ho nei primi?
+  - atteso: hidden|Bomba|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara costa 12? se sì mettila a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-misti-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Tagliata|true
+  - turni: cosa ho in evidenza? metti anche la tagliata
+  - atteso: featured|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
+  - turni: mi dici il prezzo della gricia e poi la metti a 12
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|12
+  - turni: quanto costa la gricia? e mettimi l'amatriciana a 12
+  - atteso: price|Amatriciana|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-misti-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: ciao! la carbonara a 13 grazie, come va?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Polpo alla griglia|false · BASSO risposta-non-pertinente: risposta finale senza /20/
+  - turni: il polpo è finito, e la tagliata di tonno quanto costa?
+  - atteso: available|Polpo alla griglia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti-030** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Polpo alla griglia|true · BASSO risposta-non-pertinente: risposta finale senza /gricia/i
+  - turni: metti in evidenza il polpo e dimmi cosa è finito
+  - atteso: featured|Polpo alla griglia|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 la carbonare a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|12
+  - turni: 🎤 la matriciana a 12
+  - atteso: price|Amatriciana|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bomba|5
+  - turni: 🎤 la bomba a 5
+  - atteso: price|Bomba|5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-asr-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|boh|9
+  - turni: 🎤 il bo a 9
+  - atteso: price|boh|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bombette pugliesi|10
+  - turni: 🎤 le bombette a 10
+  - atteso: price|Bombette pugliesi|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al ragù|13
+  - turni: 🎤 pasta al ragu a 13
+  - atteso: price|Pasta al ragù|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al sugo|10
+  - turni: 🎤 pasta al sugo a 10
+  - atteso: price|Pasta al sugo|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
+  - turni: 🎤 pasta alla gricia a 12
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|17
+  - turni: 🎤 il polpo a 17
+  - atteso: price|Polpo alla griglia|17 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pollo al curry|15
+  - turni: 🎤 il pollo a 15
+  - atteso: price|Pollo al curry|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tortino al cioccolato|8
+  - turni: 🎤 il tortino a 8
+  - atteso: price|Tortino al cioccolato|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-029** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|8
+  - turni: 🎤 la margarita a 8
+  - atteso: price|Margherita|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-asr-030** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Marinara|7
+  - turni: 🎤 la marinera 7
+  - atteso: price|Marinara|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-032** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Cacio e pepe|11
+  - turni: 🎤 cacio pepe a 11
+  - atteso: price|Cacio e pepe|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-034** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpette al sugo|12
+  - turni: 🎤 le polpette a 12
+  - atteso: price|Polpette al sugo|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-038** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Supplì|3.5
+  - turni: 🎤 il suplì a 3,50
+  - atteso: price|Supplì|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-039** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bruschetta|6
+  - turni: 🎤 la brusketta a 6
+  - atteso: price|Bruschetta|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-044** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Amatriciana|false
+  - turni: 🎤 'a matriciana è fernuta
+  - atteso: available|Amatriciana|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-asr-046** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tiramisù|7
+  - turni: 🎤 o tiramisù costa sette
+  - atteso: price|Tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
+  - turni: la tagliata a diciannove
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-parole-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|21
+  - turni: la tagliata ventuno
+  - atteso: price|Tagliata|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata di tonno|28
+  - turni: la tagliata di tonno a ventotto
+  - atteso: price|Tagliata di tonno|28 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata di tonno|32
+  - turni: la tagliata di tonno a trentadue
+  - atteso: price|Tagliata di tonno|32 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|15.9
+  - turni: la carbonara quindici e novanta
+  - atteso: price|Carbonara|15.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|7.5
+  - turni: la margherita sette e mezzo
+  - atteso: price|Margherita|7.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bomba|4.2
+  - turni: la bomba a quattro e venti
+  - atteso: price|Bomba|4.2 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tiramisù|6.3
+  - turni: il tiramisù a sei e trenta
+  - atteso: price|Tiramisù|6.3 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|16.5
+  - turni: il polpo a sedici euro e cinquanta
+  - atteso: price|Polpo alla griglia|16.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|24
+  - turni: la tagliata ventiquattro euro
+  - atteso: price|Tagliata|24 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-parole-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra media|5.5
+  - turni: la birra media cinque e cinquanta
+  - atteso: price|Birra media|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Acqua|2.5
+  - turni: l'acqua due euro e cinquanta
+  - atteso: price|Acqua|2.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|11.5
+  - turni: la gricia undici e cinquanta
+  - atteso: price|Gricia|11.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.5
+  - turni: la carbonara a tredici e 50
+  - atteso: price|Carbonara|13.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.5
+  - turni: la carbonara tredici virgola cinquanta
+  - atteso: price|Carbonara|13.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata di tonno|22
+  - turni: la tagliata diciotto e la tagliata di tonno ventidue
+  - atteso: price|Tagliata di tonno|22 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Cacio e pepe|9, price|Gricia|10
+  - turni: la gricia dieci e la cacio e pepe nove
+  - atteso: price|Cacio e pepe|9, price|Gricia|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Gricia* (11,00 €) 2. *Cacio e pepe* (10,00 €)»
+- **adv-parole-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|23
+  - turni: la carbonara a ventitré
+  - atteso: price|Carbonara|23 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|31
+  - turni: la tagliata a trentuno
+  - atteso: price|Tagliata|31 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Fritto misto|13
+  - turni: il fritto misto a tredici euro
+  - atteso: price|Fritto misto|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Supplì|2.5
+  - turni: il supplì a due e cinquanta
+  - atteso: price|Supplì|2.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-parole-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bufala|10, price|Margherita|8
+  - turni: la bufala a dieci euro e la margherita a otto
+  - atteso: price|Bufala|10, price|Margherita|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Bomba* (4,00 €) 2. *Marinara* (6,00 €)»
+- **adv-vocali-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 allora ehm... la carbonara, la carbonara mettila a... a tredici, sì tredici, e poi... boh... l'amatriciana lasciala com'è
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-vocali-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Gricia|false, price|Tiramisù|7
+  - turni: 🎤 ok allora praticamente volevo dire che la gricia è finita, eh, e niente, poi il tiramisù mettilo a sette, grazie ciao
+  - atteso: available|Gricia|false, price|Tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-vocali-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|17
+  - turni: 🎤 eh niente boh non so, la tagliata costa troppo, mettila a diciassette
+  - atteso: price|Tagliata|17 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-vocali-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bombette pugliesi|10
+  - turni: 🎤 senti una cosa, ehm, la bomba... no aspetta, le bombette, mettile a dieci euro
+  - atteso: price|Bombette pugliesi|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-vocali-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Cacio e pepe|false, available|Carbonara|false
+  - turni: 🎤 allora oggi abbiamo, ehm, finito la carbonara e anche, come si chiama, la cacio e pepe, poi per il resto tutto uguale
+  - atteso: available|Cacio e pepe|false, available|Carbonara|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Pasta al ragù* (12,00 €)»
+- **adv-vocali-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta al ragù|12.5
+  - turni: 🎤 mettimi la... com'è... la pasta al ragù a tredici, no anzi a dodici e cinquanta
+  - atteso: price|Pasta al ragù|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-vocali-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata di tonno|21
+  - turni: 🎤 la tagliata, quella di tonno non quella normale, a ventuno
+  - atteso: price|Tagliata di tonno|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-vocali-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|13, price|Carbonara|13
+  - turni: 🎤 allora la carbonara a tredici e l'amatriciana pure, e la gricia invece la lasci a undici
+  - atteso: price|Amatriciana|13, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-vocali-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|linguine al limone|12|primi
+  - turni: 🎤 ehm aggiungi nei primi, aspetta, sì nei primi, le linguine al limone a dodici euro
+  - atteso: create|linguine al limone|12|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-vocali-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Pasta al pesto|true
+  - turni: 🎤 allora allora allora, nascondi la pasta al pesto e... e... basta
+  - atteso: hidden|Pasta al pesto|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-vocali-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 boh fai tu, la carbonara mettila a tredici
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-vocali-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|boh|false
+  - turni: 🎤 boh è finito
+  - atteso: available|boh|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-vocali-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|false
+  - turni: 🎤 non so boh, la carbonara è finita
+  - atteso: available|Carbonara|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-vocali-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tiramisù|false, featured|Bomba|true, price|Carbonara|13
+  - turni: 🎤 e niente, tre cose: la carbonara a tredici, il tiramisù finito, e la bomba in evidenza
+  - atteso: available|Tiramisù|false, featured|Bomba|true, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-vocali-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12, price|Tagliata|20
+  - turni: 🎤 due cose veloci, la gricia a dodici e la tagliata a venti
+  - atteso: price|Gricia|12, price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Cacio e pepe* (10,00 €) 2. *Tagliata di tonno* (20,00 €)»
+- **adv-vocali-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Gricia|false, price|Carbonara|13
+  - turni: 🎤 allora, uno: la carbonara a tredici. due: la gricia finita. tre: niente
+  - atteso: available|Gricia|false, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Carbonara* (12,00 €) 2. *Gricia* (11,00 €)»
+- **adv-vocali-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|11.5
+  - turni: 🎤 allora metti la gricia a dodici no dico a undici e cinquanta
+  - atteso: price|Gricia|11.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-vocali-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Amatriciana|12
+  - turni: 🎤 la carbonara la tengo a dodici, l'amatriciana invece la porto a dodici pure lei
+  - atteso: price|Amatriciana|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Carbonara* (12,00 €) 2. *Amatriciana* (11,00 €)»
+- **adv-vocali-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|13
+  - turni: 🎤 mi raccomando non toccare la carbonara, solo la gricia a tredici
+  - atteso: price|Gricia|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-sospeso-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Amatriciana|true, hidden|Cacio e pepe|true, hidden|Carbonara|true, hidden|Gricia|true
+  - turni: nascondi carbonara, gricia, amatriciana e cacio e pepe ⏎ ok
+  - atteso: hidden|Amatriciana|true, hidden|Cacio e pepe|true, hidden|Carbonara|true, hidden|Gricia|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Rispondi OK per pubblicare. Non ancora pubblicato, da confermare con OK: 1. *Carbonara*: *nascosto* dal menu 2. *Amatriciana*: *na» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-sospeso-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
+  - turni: nascondi carbonara, gricia, amatriciana e cacio e pepe ⏎ la tagliata a 19
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-sospeso-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Amatriciana|true, hidden|Bomba|true, hidden|Cacio e pepe|true, hidden|Carbonara|true, hidden|Gricia|true
+  - turni: nascondi carbonara, gricia, amatriciana e cacio e pepe ⏎ sì ma anche la bomba ⏎ ok
+  - atteso: hidden|Amatriciana|true, hidden|Bomba|true, hidden|Cacio e pepe|true, hidden|Carbonara|true, hidden|Gricia|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Rispondi OK per pubblicare. Non ancora pubblicato, da confermare con OK: 1. *Carbonara*: *nascosto* dal menu 2. *Amatriciana*: *na» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-sospeso-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra piccola|4, price|Torta della nonna|7
+  - turni: la torta a 7 e la birra a 4 ⏎ la nonna e la piccola
+  - atteso: price|Birra piccola|4, price|Torta della nonna|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-sospeso-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la torta a 7, la birra a 4 e la carbonara a 13 ⏎ no
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-sospeso-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra media|4, price|Carbonara|13, price|Torta della nonna|7
+  - turni: la torta a 7, la birra a 4 e la carbonara a 13 ⏎ la nonna e la media
+  - atteso: price|Birra media|4, price|Carbonara|13, price|Torta della nonna|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Per «la birra a 4» quale intendi? Per «Amatriciana» quale intendi? Per «Acqua» quale intendi?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-sospeso-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13, price|Torta della nonna|7
+  - turni: la torta a 7, la birra a 4 e la carbonara a 13 ⏎ la nonna
+  - atteso: price|Carbonara|13, price|Torta della nonna|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Per «la birra a 4» quale intendi? Per «Amatriciana» quale intendi? Per «Acqua» quale intendi?» ⏎ «Per «la birra a 4» quale intendi? Per «Amatriciana» quale intendi? Per «Acqua» quale intendi?»
+- **adv-sospeso-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|risotto alla zucca|14|piatto del giorno
+  - turni: piatto del giorno: risotto alla zucca a 14 ⏎ la carbonara a 13 ⏎ annulla
+  - atteso: create|risotto alla zucca|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-sospeso-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|risotto ai funghi|14|piatto del giorno
+  - turni: oggi piatto del giorno risotto ai funghi ⏎ 14
+  - atteso: create|risotto ai funghi|14|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quanto costa risotto ai funghi?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-sospeso-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|risotto ai funghi|15|piatto del giorno
+  - turni: piatto del giorno risotto ai funghi a 14 ⏎ no a 15
+  - atteso: create|risotto ai funghi|15|piatto del giorno · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-sospeso-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
+  - turni: la carbonara a 13 ⏎ annulla ⏎ la gricia a 12
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la carbonara a 14 ⏎ torna a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 grazie
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: grazie, la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 poi la carbonara a tredici
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 bon, la carbonara a tredici
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 mo la carbonara a tredici
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 porta la carbonara a tredici
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-suono-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
+  - turni: 🎤 porta la gricia a dodici
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bomba|5
+  - turni: 🎤 pure la bomba a cinque
+  - atteso: price|Bomba|5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bufala|10
+  - turni: la bufala a 10 ⏎ tonno a 9
+  - atteso: price|Bufala|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Acqua|2.5
+  - turni: 🎤 acqua a due e cinquanta
+  - atteso: price|Acqua|2.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra media|6
+  - turni: 🎤 allora birra media sei
+  - atteso: price|Birra media|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-suono-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Torta della nonna|7
+  - turni: 🎤 allora la torta della nonna a sette
+  - atteso: price|Torta della nonna|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-code-026** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|linguine allo scoglio|18|primi
+  - turni: aggiungi nei primi le linguine allo scoglio a 18 e mettile in evidenza
+  - atteso: create|linguine allo scoglio|18|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-code-028** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|gnocchi|10|primi, create|tagliatelle|11|primi
+  - turni: aggiungi nei primi gnocchi e tagliatelle a 10 e 11
+  - atteso: create|gnocchi|10|primi, create|tagliatelle|11|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-relativi-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|16
+  - turni: abbassa la tagliata di 2
+  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-relativi-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tiramisù|5
+  - turni: abbassa il tiramisù di un euro
+  - atteso: price|Tiramisù|5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-relativi-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: alza la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-relativi-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|11
+  - turni: abbassa la carbonara a 11
+  - atteso: price|Carbonara|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-relativi-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|12
+  - turni: ❓ quanto costa la gricia? ⏎ alzala di 1
+  - atteso: price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Tortino al cioccolato*: *7,00 €* · disponibile *Gricia*: *11,00 €* · disponibile» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-relativi-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|15
+  - turni: ❓ quanto costa la tagliata? ⏎ abbassala di 3
+  - atteso: price|Tagliata|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. *Birra piccola*: *3,00 €* · disponibile *Tagliata*: *18,00 €* · disponibile» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-relativi-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|18
+  - turni: aumenta il polpo di due euro
+  - atteso: price|Polpo alla griglia|18 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-cent2-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gricia|11.9
+  - turni: la gricia undici e novanta
+  - atteso: price|Gricia|11.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-cent2-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|17.8
+  - turni: il polpo diciassette e ottanta
+  - atteso: price|Polpo alla griglia|17.8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-cent2-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19.5
+  - turni: la tagliata diciannove e cinquanta
+  - atteso: price|Tagliata|19.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-cent2-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.9
+  - turni: la carbonara 13 e 90
+  - atteso: price|Carbonara|13.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-cent2-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.9
+  - turni: la carbonara tredici e novanta
+  - atteso: price|Carbonara|13.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-cent2-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.9
+  - turni: la carbonara tredici virgola novanta
+  - atteso: price|Carbonara|13.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Pasta al sugo* (9,00 €)»
+- **adv-cent2-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13.5
+  - turni: la carbonara 13 virgola 50
+  - atteso: price|Carbonara|13.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-cent2-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra media|5.5
+  - turni: la birra media cinque euro e cinquanta centesimi
+  - atteso: price|Birra media|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-cent2-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bomba|4.8
+  - turni: 🎤 la bomba quattro e ottanta
+  - atteso: price|Bomba|4.8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-cent2-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo alla griglia|16.9
+  - turni: 🎤 il polpo sedici e novanta
+  - atteso: price|Polpo alla griglia|16.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-cent2-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|7.5
+  - turni: 🎤 la margherita sette euro e cinquanta
+  - atteso: price|Margherita|7.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti2-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
+  - turni: la carbonara a 13, e la gricia quanto costa?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-misti2-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
+  - turni: la carbonara a 13. la gricia quanto costa?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti2-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13 · BASSO risposta-non-pertinente: risposta finale senza /11/
+  - turni: metti la carbonara a 13 e poi dimmi quanto costa la gricia
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti2-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Bomba|true
+  - turni: nascondi la bomba, quanti piatti ho nei primi?
+  - atteso: hidden|Bomba|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti2-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tagliata|false
+  - turni: la tagliata è finita. il polpo c'è ancora?
+  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti2-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tagliata|false
+  - turni: la tagliata è finita, ma il polpo c'è?
+  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti2-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: buongiorno! la carbonara a 13 grazie
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-misti2-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13, come va?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti2-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Carbonara|false
+  - turni: ciao come stai? la carbonara è finita
+  - atteso: available|Carbonara|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti2-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13, ok?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti2-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: metti la carbonara a 13, poi ti chiedo una cosa
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-misti2-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Polpo alla griglia|false · BASSO risposta-non-pertinente: risposta finale senza /20/
+  - turni: il polpo è finito. la tagliata di tonno quanto costa?
+  - atteso: available|Polpo alla griglia|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-ordinali-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Amatriciana|true, price|Amatriciana|12, price|Carbonara|13
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ l'ultimo mettilo in evidenza
+  - atteso: featured|Amatriciana|true, price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-ordinali-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Amatriciana|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ gricia 12 ⏎ il secondo nascondilo
+  - atteso: hidden|Amatriciana|true, price|Amatriciana|12, price|Carbonara|13, price|Gricia|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Gricia* (11,00 €) 3. *Cacio e pepe* (10,00 €)»
+- **adv-ordinali-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Carbonara|true, price|Amatriciana|12, price|Carbonara|13
+  - turni: carbonara 13 ⏎ amatriciana 12 ⏎ il primo nascondilo
+  - atteso: hidden|Carbonara|true, price|Amatriciana|12, price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Amatriciana* (11,00 €) 2. *Gricia* (11,00 €)»
+- **adv-ordinali-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Polpo alla griglia|true
+  - turni: nascondi la bomba ⏎ metti in evidenza il polpo ⏎ il primo rimettilo
+  - atteso: featured|Polpo alla griglia|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Polpo alla griglia* (16,00 €) 2. *Bomba* (4,00 €)»
+- **adv-ordinali-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Bufala|false, price|Bufala|10, price|Marinara|7
+  - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ il primo è finito
+  - atteso: available|Bufala|false, price|Bufala|10, price|Marinara|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-ordinali-006** [GRAVE] GRAVE non-applicato: non applicato: price|Bufala|10, price|Marinara|7
+  - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ l'ultimo è finito
+  - atteso: available|Marinara|false, price|Bufala|10, price|Marinara|7 · ottenuto: available|Marinara|false
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Fatto. *Marinara*: *finito*»
+- **adv-ordinali-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Bufala|true, featured|Marinara|true, price|Bufala|10, price|Marinara|7
+  - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ tutti e due in evidenza
+  - atteso: featured|Bufala|true, featured|Marinara|true, price|Bufala|10, price|Marinara|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-ordinali-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Bufala|11, price|Marinara|7
+  - turni: la bufala a 10 ⏎ la marinara a 7 ⏎ il primo a 11
+  - atteso: price|Bufala|11, price|Marinara|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-sospeso2-009** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: hidden|Gricia|true
+  - turni: nascondi la gricia ⏎ anzi no, lasciala
+  - atteso: nessuna modifica · ottenuto: hidden|Gricia|true
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Fatto. *Gricia*: *nascosto* dal menu»
+- **adv-sospeso2-012** [GRAVE] GRAVE correzione-non-applicata: resta la modifica poi corretta/annullata: available|Carbonara|false
+  - turni: la carbonara è finita ⏎ anzi no
+  - atteso: nessuna modifica · ottenuto: available|Carbonara|false
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Fatto. *Carbonara*: *finito*»
+- **adv-sospeso2-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|la parmigiana|11
+  - turni: aggiungi le trofie ⏎ no niente, lascia stare ⏎ la parmigiana a 11
+  - atteso: price|la parmigiana|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-lev1-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|14
+  - turni: la carbonara a 13 ⏎ portala a 14
+  - atteso: price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-lev1-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Torta della nonna|false, available|Tortino al cioccolato|false
+  - turni: torta della nonna e tortino finiti
+  - atteso: available|Torta della nonna|false, available|Tortino al cioccolato|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Torta della nonna* (6,00 €) 2. *Acqua* (2,00 €)»
+- **adv-lasciastare-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|la parmigiana|11
+  - turni: aggiungi le trofie ⏎ no niente, lascia stare ⏎ la parmigiana a 11
+  - atteso: price|la parmigiana|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-lasciastare-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|tiramisù|7
+  - turni: aggiungi le trofie ⏎ niente, lascia perdere ⏎ il tiramisù a 7
+  - atteso: price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-lasciastare-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|la parmigiana|11
+  - turni: aggiungi le trofie ⏎ lascia stare dai ⏎ la parmigiana a 11
+  - atteso: price|la parmigiana|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **adv-lasciastare-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|tiramisù|7
+  - turni: aggiungi le trofie ⏎ no, non fa niente ⏎ il tiramisù a 7
+  - atteso: price|tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-lasciastare-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|boh|false
+  - turni: aggiungi le trofie ⏎ niente ⏎ boh è finito
+  - atteso: available|boh|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **adv-toglieuro-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: promo|Tagliata|null
+  - turni: togli lo sconto dalla tagliata
+  - atteso: promo|Tagliata|null · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»

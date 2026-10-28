@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-22bea346-324a-41a2-8d85-077d547b11d5",
+  "object": "chat.completion",
+  "created": 1792254307,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"capability\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [\"delete\"],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need intent=change, action remove? There's no delete action defined. Delete not supported, so capability? Deleting not supported, so intent=capability with capability_ids maybe \"delete\". Provide no actions. reply_draft empty? For capability, reply_draft maybe empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054811348,
+   "prompt_tokens": 3027,
+   "prompt_time": 0.146866266,
+   "completion_tokens": 154,
+   "completion_time": 0.326023491,
+   "total_tokens": 3181,
+   "total_time": 0.472889757,
+   "completion_tokens_details": {
+    "reasoning_tokens": 58
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_4200b3f836",
+  "x_groq": {
+   "id": "req_01m55awt56e6mrrfsvzep9kjmg",
+   "seed": 136350527
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3027,
+  "completion_tokens": 154,
+  "total_tokens": 3181
+ },
+ "ms": 818,
+ "recordedAt": "2026-10-17T16:25:07.000Z",
+ "conv": "v-elimina-006"
+}

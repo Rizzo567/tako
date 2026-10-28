@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-3ac7b108-464b-4093-bd7e-b6efbb0cc5f4",
+  "object": "chat.completion",
+  "created": 1792283078,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p1\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Impostato p1 come finito.\"\n}",
+     "reasoning": "User says \"il piatto di verifica è finito\". That's set_available false for p1. Intent change. Action set_available item p1 value false. No price. reply_draft confirm brief. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054355554,
+   "prompt_tokens": 3270,
+   "prompt_time": 0.031610445,
+   "completion_tokens": 228,
+   "completion_time": 0.47373553,
+   "total_tokens": 3498,
+   "total_time": 0.505345975,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 45
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_dee443f41b",
+  "x_groq": {
+   "id": "req_01m566avh7e8x94sgsc9dybbtp",
+   "seed": 898523789
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3270,
+  "completion_tokens": 228,
+  "total_tokens": 3498
+ },
+ "ms": 649,
+ "recordedAt": "2026-10-18T00:24:38.677Z",
+ "conv": "bv-semplici-008"
+}

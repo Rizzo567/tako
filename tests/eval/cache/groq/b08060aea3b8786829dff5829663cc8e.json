@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-dc70a3bc-8827-4f56-a3d0-3a2e43902ed0",
+  "object": "chat.completion",
+  "created": 1792247148,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"restore\",\n      \"item\": \"p7\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p7\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "User says \"no rimettila come prima\" meaning restore previous. Need intent change with restore action on p7. reply_draft empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.300584476,
+   "prompt_tokens": 3332,
+   "prompt_time": 0.205957079,
+   "completion_tokens": 203,
+   "completion_time": 0.427855033,
+   "total_tokens": 3535,
+   "total_time": 0.633812112,
+   "completion_tokens_details": {
+    "reasoning_tokens": 30
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_27194a498a",
+  "x_groq": {
+   "id": "req_01m5542b9aenfb44z00h4bfxwb",
+   "seed": 516183524
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3332,
+  "completion_tokens": 203,
+  "total_tokens": 3535
+ },
+ "ms": 1040,
+ "recordedAt": "2026-10-17T14:25:48.635Z",
+ "conv": "ripristino-007"
+}

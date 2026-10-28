@@ -1,0 +1,189 @@
+{
+ "bot": "tmp",
+ "meta": {
+  "groq": "oracle",
+  "riferimento": "attuale-oracle",
+  "tetto": 20000,
+  "conversazioni": 2
+ },
+ "summary": {
+  "total": {
+   "family": "TOTALE",
+   "n": 2,
+   "ok": 0,
+   "success": 0,
+   "grave": 2,
+   "medio": 0,
+   "basso": 0,
+   "safety": 0,
+   "clarRate": 50,
+   "unexpectedClar": 1,
+   "usedLlm": 2,
+   "llmMissConvs": 0,
+   "detN": 0,
+   "detSuccess": 0
+  },
+  "multi": {
+   "family": "multi-turno",
+   "n": 2,
+   "ok": 0,
+   "success": 0,
+   "grave": 2,
+   "medio": 0,
+   "basso": 0,
+   "safety": 0,
+   "clarRate": 50,
+   "unexpectedClar": 1,
+   "usedLlm": 2,
+   "llmMissConvs": 0,
+   "detN": 0,
+   "detSuccess": 0
+  },
+  "families": [
+   {
+    "family": "anche",
+    "n": 1,
+    "ok": 0,
+    "success": 0,
+    "grave": 1,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 50,
+    "unexpectedClar": 1,
+    "usedLlm": 1,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   },
+   {
+    "family": "multipla",
+    "n": 1,
+    "ok": 0,
+    "success": 0,
+    "grave": 1,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 50,
+    "unexpectedClar": 0,
+    "usedLlm": 1,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   }
+  ],
+  "codes": {
+   "non-applicato": {
+    "GRAVE": 2,
+    "MEDIO": 0,
+    "BASSO": 0
+   }
+  },
+  "latency": {
+   "harnessP50": 17.6,
+   "harnessP95": 41.9,
+   "withRecordedGroqP50": 17.6,
+   "withRecordedGroqP95": 41.9
+  },
+  "llm": {
+   "calls": 6,
+   "misses": 0,
+   "tokens": 0
+  }
+ },
+ "groqStats": {
+  "calls": 6,
+  "hits": 0,
+  "misses": 0,
+  "recorded": 0,
+  "tokens": 0,
+  "recordedMs": 0,
+  "refused": 0,
+  "rateLimited": 0,
+  "oracle": 6,
+  "byKey": {},
+  "last": null
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "anche-027",
+   "family": "anche",
+   "menu": "pesce",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Pasta con le sarde|15"
+    }
+   ],
+   "expected": [
+    "price|Busiate al pesto trapanese|15",
+    "price|Pasta con le sarde|15"
+   ],
+   "actual": [
+    "price|Busiate al pesto trapanese|15"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nQuale intendi?\n\n1. *Pasta con le sarde* (14,00 €)\n2. *Busiate al pesto trapanese* (13,00 €)",
+    "Fatto.\n\n*Busiate al pesto trapanese*: prezzo da 13,00 € a *15,00 €*"
+   ],
+   "turns": [
+    "la pasta con le sarde a 15",
+    "e le busiate uguale"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 1,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    41.9,
+    17.6
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  },
+  {
+   "id": "multipla-016",
+   "family": "multipla",
+   "menu": "mario",
+   "success": false,
+   "fails": [
+    {
+     "sev": "GRAVE",
+     "code": "non-applicato",
+     "why": "non applicato: price|Spaghetti alla carbonara|13"
+    }
+   ],
+   "expected": [
+    "price|Spaghetti aglio olio e peperoncino|9",
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti aglio olio e peperoncino|9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?",
+    "Fatto.\n\n*Spaghetti aglio olio e peperoncino*: prezzo da 8,00 € a *9,00 €*"
+   ],
+   "turns": [
+    "la carbonara a 13 e gli spaghetti a 9",
+    "aglio e olio"
+   ],
+   "clarifications": 1,
+   "unexpectedClarifications": 0,
+   "llmCalls": 3,
+   "llmMisses": 0,
+   "llmTokens": 0,
+   "latencyMs": [
+    12.3,
+    12.8
+   ],
+   "recordedLlmMs": 0,
+   "usedLlm": true
+  }
+ ]
+}

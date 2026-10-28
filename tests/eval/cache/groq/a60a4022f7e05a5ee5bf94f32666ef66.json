@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-3de3eca8-04c2-4ba3-963b-96fae5034ff6",
+  "object": "chat.completion",
+  "created": 1792285805,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": \"Confermi i nuovi prezzi per tutti i piatti?\"\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Confermi i nuovi prezzi per tutti i piatti?\"\n}",
+     "reasoning": "We need clarify because multiple price changes? It's allowed but maybe need confirmation? Probably need ask confirmation? The server wants a question. So intent=clarify, ask \"Confermi i nuovi prezzi per tutti i piatti?\" Provide item_refs candidates? We'll set clarify with missing none and question. No actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.301812663,
+   "prompt_tokens": 3766,
+   "prompt_time": 0.076101809,
+   "completion_tokens": 175,
+   "completion_time": 0.362751006,
+   "total_tokens": 3941,
+   "total_time": 0.438852815,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 64
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_5a93aea882",
+  "x_groq": {
+   "id": "req_01m568y1qfe7nsgkddr70z21nq",
+   "seed": 159388890
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3766,
+  "completion_tokens": 175,
+  "total_tokens": 3941
+ },
+ "ms": 872,
+ "recordedAt": "2026-10-18T01:10:04.971Z",
+ "conv": "bv-multiple-004"
+}

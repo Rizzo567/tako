@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-4264afc5-10e6-4ba4-9bdd-12c6a72c8f5d",
+  "object": "chat.completion",
+  "created": 1792282588,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"confirm_pending\",\n      \"item\": null,\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Confermo la modifica: Polpo rucola e patate è stato nascosto dal menu.\"\n}",
+     "reasoning": "We need to output JSON owner_brain_plan. Intent likely confirm_pending? Actually user says \"conferma\". They want to confirm pending action? Previously we gave reply but not pending. Actually we should have set_hidden action pending. Need confirm_pending action. So intent change? Probably confirm_pending. reply_draft confirming. Provide actions: confirm_pending. No other. Provide fields."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054048007,
+   "prompt_tokens": 3527,
+   "prompt_time": 0.044493693,
+   "completion_tokens": 268,
+   "completion_time": 0.557982561,
+   "total_tokens": 3795,
+   "total_time": 0.602476254,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 78
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_dee443f41b",
+  "x_groq": {
+   "id": "req_01m565vwjwe25bcgv5595mthep",
+   "seed": 1561035967
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3527,
+  "completion_tokens": 268,
+  "total_tokens": 3795
+ },
+ "ms": 818,
+ "recordedAt": "2026-10-18T00:16:28.341Z",
+ "conv": "bv-semplici-003"
+}

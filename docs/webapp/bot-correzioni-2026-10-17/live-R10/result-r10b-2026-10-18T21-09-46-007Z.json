@@ -1,0 +1,96 @@
+{
+ "at": "2026-10-18T21:09:46.007Z",
+ "results": [
+  {
+   "turn": 1,
+   "msg": "[vocale 16:03] Nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo…",
+   "status": 200,
+   "ms": 7384,
+   "reply": "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSpostato \"pasta al ragù\" nei Primi e impostati tutti i piatti a 10 € eccetto il riso giallo a 8 €.\n\n*pasta al ragù*: spostato in *Primi*",
+   "published": [],
+   "wrote": false,
+   "pending": 0,
+   "checkOk": false,
+   "aiOk": true,
+   "reOk": false,
+   "tokensSoFar": 8452
+  },
+  {
+   "turn": 2,
+   "msg": "aggiornali",
+   "status": 200,
+   "ms": 2685,
+   "reply": "Sono momentaneamente non disponibile, riprova tra un minuto.",
+   "published": [],
+   "wrote": false,
+   "pending": 0,
+   "checkOk": false,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 8452
+  },
+  {
+   "turn": 3,
+   "msg": "[vocale 16:05] Togli tutti i piatti dalla sezione altre proposte",
+   "status": 200,
+   "ms": 3515,
+   "reply": "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nSono momentaneamente non disponibile, riprova tra un minuto.",
+   "published": [],
+   "wrote": false,
+   "pending": 0,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": false,
+   "tokensSoFar": 8452
+  },
+  {
+   "turn": 4,
+   "msg": "ok",
+   "status": 200,
+   "ms": 2080,
+   "reply": "Sono momentaneamente non disponibile, riprova tra un minuto.",
+   "published": [],
+   "wrote": false,
+   "pending": 0,
+   "checkOk": false,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 8452
+  }
+ ],
+ "stopped": null,
+ "twilio": {
+  "before": 0,
+  "after": 0,
+  "manuelBefore": 0,
+  "manuelAfter": 1
+ },
+ "errors": {
+  "before": 56,
+  "after": 56
+ },
+ "tokens": 8452,
+ "restore": {
+  "before": {
+   "draft": "ff26d47781b2f3c5",
+   "published": "ff26d47781b2f3c5",
+   "items": "56bc15e7ce7e8e14",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "ff0a12e00d2036f5",
+   "translations": "4f53cda18c2baa0c",
+   "public": "b065edd2ae64f9fc"
+  },
+  "after": {
+   "draft": "ff26d47781b2f3c5",
+   "published": "ff26d47781b2f3c5",
+   "items": "56bc15e7ce7e8e14",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "ff0a12e00d2036f5",
+   "translations": "4f53cda18c2baa0c",
+   "public": "b065edd2ae64f9fc"
+  },
+  "ok": true,
+  "extraRows": [],
+  "memory": true
+ }
+}

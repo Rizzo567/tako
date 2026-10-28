@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-9496281a-a38c-4880-b9e6-8316769e1ec0",
+  "object": "chat.completion",
+  "created": 1792249875,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 5,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "User says \"e puru i panelli a cincu\" meaning also the panelle to five. So change price of p4 to 5. Also previous action was change price of caponata? Actually first message \"a caponata a ottu\" ambiguous? It said caponata to eight, already 8. Might be clarify? But we treat as change price to 8 (already 8). No action needed? Could be set_price same. We'll output change action for p4 set_price 5. No reply."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.052283674,
+   "prompt_tokens": 3308,
+   "prompt_time": 0.0570848,
+   "completion_tokens": 284,
+   "completion_time": 0.594306739,
+   "total_tokens": 3592,
+   "total_time": 0.651391539,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 112
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_8ea50c0161",
+  "x_groq": {
+   "id": "req_01m556njr0etjrn6pk8a2rpkwy",
+   "seed": 190881817
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3308,
+  "completion_tokens": 284,
+  "total_tokens": 3592
+ },
+ "ms": 753,
+ "recordedAt": "2026-10-17T15:11:15.772Z",
+ "conv": "vocale-032"
+}

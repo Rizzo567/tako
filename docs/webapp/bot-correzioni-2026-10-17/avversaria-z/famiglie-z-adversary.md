@@ -1,0 +1,746 @@
+# Avversaria Z · modo adversary
+
+| Famiglia | Conv. | OK | GRAVE | GRAVE sicurezza | MEDIO |
+|---|---|---|---|---|---|
+| dialetto | 25 | 12 | 0 | 0 | 13 |
+| asr | 25 | 7 | 0 | 0 | 18 |
+| numeri | 25 | 5 | 0 | 0 | 20 |
+| tempo | 20 | 11 | 0 | 0 | 9 |
+| omonimi | 24 | 12 | 0 | 0 | 12 |
+| riepilogo | 20 | 10 | 0 | 0 | 10 |
+| lunghi | 10 | 8 | 0 | 0 | 2 |
+| emoji | 15 | 12 | 0 | 0 | 3 |
+| contraddizioni | 15 | 14 | 0 | 0 | 1 |
+| annulla | 20 | 15 | 0 | 0 | 5 |
+| nascosti | 20 | 14 | 1 | 0 | 5 |
+| assurdi | 15 | 15 | 0 | 0 | 0 |
+| apostrofi | 20 | 1 | 0 | 0 | 19 |
+| ripeti | 10 | 1 | 0 | 0 | 9 |
+| interruzioni | 20 | 12 | 0 | 0 | 8 |
+| travestite | 25 | 21 | 0 | 0 | 4 |
+| promo | 20 | 9 | 0 | 0 | 11 |
+| sposta | 15 | 9 | 0 | 0 | 6 |
+| rinomine | 15 | 5 | 0 | 0 | 10 |
+| locali | 10 | 7 | 0 | 0 | 3 |
+| r2-percento | 8 | 8 | 0 | 0 | 0 |
+| r2-spezzati | 6 | 6 | 0 | 0 | 0 |
+| r2-opposti | 5 | 4 | 0 | 0 | 1 |
+| r2-ritiri | 5 | 1 | 0 | 0 | 4 |
+| r2-nonprezzi | 7 | 3 | 0 | 0 | 4 |
+| r2-disfa | 8 | 8 | 0 | 0 | 0 |
+| TOTALE | 408 | 230 | 1 | 0 | 177 |
+
+## Fallimenti
+
+- **z-dialetto-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Babà|false
+  - turni: o babà è fernuto
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-dialetto-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Babà|false
+  - turni: 'o babà nun ce sta cchiù
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-dialetto-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Burrata|10
+  - turni: mettece la burrata a diece euro
+  - atteso: price|Burrata|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: cosa vuoi cambiare?»
+- **z-dialetto-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Burrata|10
+  - turni: la burrata falla a dieci, va bbuono
+  - atteso: price|Burrata|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-dialetto-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|8
+  - turni: ué, 'a margherita a otto
+  - atteso: price|Margherita|8 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-dialetto-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|6
+  - turni: la birra a sei, ja
+  - atteso: price|Birra|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-dialetto-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: daje, la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-dialetto-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara mettimela a 13 nè
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-dialetto-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tagliata|false
+  - turni: la tagliata è finita, abbiamo finito tutto stasera
+  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-dialetto-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Babà|true
+  - turni: il babà levalo che non è venuto bene
+  - atteso: hidden|Babà|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-dialetto-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Spaghetti all'astice|26
+  - turni: lo spaghetto all'astice fallo a ventisei
+  - atteso: price|Spaghetti all'astice|26 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-dialetto-023** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Coca Cola|3.5
+  - turni: aò la coca a tre e cinquanta
+  - atteso: price|Coca Cola|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-dialetto-024** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Vino della casa|5
+  - turni: mette o vino da casa a cinque
+  - atteso: price|Vino della casa|5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-asr-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: 🎤 la carbo nara a tredici euro
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tiramisù|false
+  - turni: 🎤 il tira mi su è finito
+  - atteso: available|Tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tiramisù|false
+  - turni: 🎤 il tiramisu e finito
+  - atteso: available|Tiramisù|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pizza 'nduja|10
+  - turni: 🎤 la pizza en duja a dieci
+  - atteso: price|Pizza 'nduja|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-asr-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Greco di Tufo|28
+  - turni: 🎤 il greco di tufo a ventotto
+  - atteso: price|Greco di Tufo|28 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-asr-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Baccalà fritto|16
+  - turni: 🎤 il bacalà fritto a sedici
+  - atteso: price|Baccalà fritto|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Calzone fritto* (9,00 €) 2. *Baccalà fritto* (15,00 €)»
+- **z-asr-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Gnocchi alla sorrentina|12
+  - turni: 🎤 i gnocchi alla sorrentina a dodici
+  - atteso: price|Gnocchi alla sorrentina|12 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
+  - turni: 🎤 la tagliata a diciotto anzi diciannove
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
+  - turni: 🎤 la tagliata a diciannove. Punto.
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|6
+  - turni: 🎤 eeeh allora... la birra... sei euro
+  - atteso: price|Birra|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Burrata|9.5
+  - turni: 🎤 la burata a nove e cinquanta
+  - atteso: price|Burrata|9.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Delizia al limone|6
+  - turni: 🎤 la delizia al limone a sei
+  - atteso: price|Delizia al limone|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Delizia al limone|false
+  - turni: 🎤 la delizia a limone e finita
+  - atteso: available|Delizia al limone|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Calzone fritto|10, price|Calzone|9
+  - turni: 🎤 il calzone fritto a dieci e il calzone a nove
+  - atteso: price|Calzone fritto|10, price|Calzone|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Calzone fritto* (9,00 €) 2. *Calzone* (8,00 €)»
+- **z-asr-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Calzone fritto|10, price|Calzone|9
+  - turni: 🎤 il calzone a nove e il calzone fritto a dieci
+  - atteso: price|Calzone fritto|10, price|Calzone|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Carbonara* (12,00 €) 2. *Calzone fritto* (9,00 €)»
+- **z-asr-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Quattro stagioni|9
+  - turni: 🎤 quattro stagioni a nove
+  - atteso: price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-asr-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Quattro stagioni|9
+  - turni: 🎤 la 4 stagioni a 9
+  - atteso: price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Pizza all'ortolana* (8,00 €) 2. *Baccalà fritto* (15,00 €)»
+- **z-asr-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Quattro stagioni|9
+  - turni: 🎤 la quattro stagione a nove euro
+  - atteso: price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|20
+  - turni: la tagliata a venti
+  - atteso: price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|21
+  - turni: la tagliata a ventuno
+  - atteso: price|Tagliata|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|22.5
+  - turni: la tagliata a ventidue e cinquanta
+  - atteso: price|Tagliata|22.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19.9
+  - turni: la tagliata a diciannove e novanta
+  - atteso: price|Tagliata|19.9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-numeri-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19.5
+  - turni: la tagliata a diciannove virgola cinque
+  - atteso: price|Tagliata|19.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Greco di Tufo|32
+  - turni: il greco di tufo a trentadue
+  - atteso: price|Greco di Tufo|32 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Greco di Tufo|38
+  - turni: il greco di tufo a trentotto
+  - atteso: price|Greco di Tufo|38 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|5.5
+  - turni: la birra a cinque e mezzo
+  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|5.5
+  - turni: la birra a cinque euro e mezzo
+  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|5.5
+  - turni: la birra a 5 e mezzo
+  - atteso: price|Birra|5.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Acqua|1.5
+  - turni: l'acqua a un euro e cinquanta
+  - atteso: price|Acqua|1.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Acqua|1.5
+  - turni: l'acqua a uno e cinquanta
+  - atteso: price|Acqua|1.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Acqua|1.5
+  - turni: l'acqua a 1 e 50
+  - atteso: price|Acqua|1.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|12.5
+  - turni: la carbonara a dodici e mezzo
+  - atteso: price|Carbonara|12.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Quattro stagioni|9
+  - turni: la quattro stagioni a nove
+  - atteso: price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Quattro stagioni|9
+  - turni: quattro stagioni 9
+  - atteso: price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Quattro stagioni|9.5
+  - turni: aumenta la quattro stagioni di un euro
+  - atteso: price|Quattro stagioni|9.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-021** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
+  - turni: la tagliata un euro in più
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-022** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|16
+  - turni: la tagliata due euro in meno
+  - atteso: price|Tagliata|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-numeri-025** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cassata|6|dolci
+  - turni: aggiungi nei dolci la cassata a sei
+  - atteso: create|cassata|6|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-tempo-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tagliata|false
+  - turni: solo stasera la tagliata è finita
+  - atteso: available|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-tempo-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Babà|false
+  - turni: per oggi niente babà
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-tempo-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Babà|false
+  - turni: stasera il babà non c'è
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-tempo-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 da adesso
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-tempo-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: da ora la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-tempo-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Tagliata|true
+  - turni: la tagliata è tornata
+  - atteso: available|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-tempo-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|21
+  - turni: la tagliata a 20 ⏎ [+15 min] ⏎ anzi 21
+  - atteso: price|Tagliata|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-tempo-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|21
+  - turni: la tagliata a 20 ⏎ [+45 min] ⏎ anzi 21
+  - atteso: price|Tagliata|21 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
+- **z-tempo-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|20
+  - turni: la tagliata a 20 ⏎ [+12 min] ⏎ annulla
+  - atteso: price|Tagliata|20 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-omonimi-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Calzone|9
+  - turni: il calzone a 9
+  - atteso: price|Calzone|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-omonimi-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Calzone fritto|true, hidden|Calzone|true
+  - turni: nascondi i calzoni
+  - atteso: hidden|Calzone fritto|true, hidden|Calzone|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-omonimi-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Calzone|true
+  - turni: nascondi il calzone
+  - atteso: hidden|Calzone|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-omonimi-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Calzone|false
+  - turni: il calzone è finito
+  - atteso: available|Calzone|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-omonimi-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Calzone|Pizze
+  - turni: sposta il calzone nelle pizze
+  - atteso: move|Calzone|Pizze · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-omonimi-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Calzone fritto|Antipasti
+  - turni: sposta il calzone fritto negli antipasti
+  - atteso: move|Calzone fritto|Antipasti · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-omonimi-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|calzone con ricotta|9|calzoni
+  - turni: aggiungi nei calzoni il calzone con ricotta a 9
+  - atteso: create|calzone con ricotta|9|calzoni · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-omonimi-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Calzone|calzone classico
+  - turni: rinomina il calzone in calzone classico
+  - atteso: rename|Calzone|calzone classico · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-omonimi-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Vino della casa|Bibite
+  - turni: sposta il vino della casa nelle bibite
+  - atteso: move|Vino della casa|Bibite · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-omonimi-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pasta e patate|11
+  - turni: la pasta e patate a 11
+  - atteso: price|Pasta e patate|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-omonimi-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13, price|Pasta e patate|11
+  - turni: la pasta e patate a 11 e la carbonara a 13
+  - atteso: price|Carbonara|13, price|Pasta e patate|11 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-omonimi-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Pasta e patate|true
+  - turni: nascondi pasta e patate
+  - atteso: hidden|Pasta e patate|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-riepilogo-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ ok
+  - atteso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Coca Cola* (3,00 €) 4. *Delizia al limone* (5» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-riepilogo-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Birra|5.5, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ la birra però a 5,50 ⏎ ok
+  - atteso: price|Babà|4, price|Birra|5.5, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €) 4. *Coca Cola* (3» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €) 4. *Coca Cola* (3,00 €)»
+- **z-riepilogo-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ togli la birra dalla lista ⏎ ok
+  - atteso: price|Babà|4, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)» ⏎ «Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)» ⏎ «Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)»
+- **z-riepilogo-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ la birra lasciala com'è ⏎ ok
+  - atteso: price|Babà|4, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Tagliata* (18,00 €) 3. *Babà* (5,00 €)»
+- **z-riepilogo-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Birra|6, price|Burrata|10, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ aggiungi anche la burrata a 10 ⏎ ok
+  - atteso: price|Babà|4, price|Birra|6, price|Burrata|10, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Coca Cola* (3,00 €) 4. *Delizia al limone* (5» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Tagliata* (18,00 €) 3. *Birra* (5,00 €) 4. *Babà* (5,00 €) 5. *Burrata* (9,00 €)»
+- **z-riepilogo-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4.5, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ il babà a 4,50 non 4 ⏎ ok
+  - atteso: price|Babà|4.5, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €) 4. *Coca Cola* (3» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-riepilogo-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ ❓ quanto costava la birra prima? ⏎ ok
+  - atteso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Coca Cola* (3,00 €) 4. *Delizia al limone* (5» ⏎ «*Vino della casa*: *4,00 €* · disponibile *Birra*: *5,00 €* · disponibile» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-riepilogo-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ ok ok
+  - atteso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Coca Cola* (3,00 €) 4. *Delizia al limone* (5» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-riepilogo-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ OK!
+  - atteso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Coca Cola* (3,00 €) 4. *Delizia al limone* (5» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-riepilogo-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19, price|Tiramisù|7
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6, il babà a 4 e il tiramisù a 7 ⏎ ok
+  - atteso: price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19, price|Tiramisù|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Carbonara* (12,00 €) 2. *Tagliata* (18,00 €) 3. *Birra* (5,00 €) 4. *Babà* (5,00 €) 5. *Tiramisù* (6,00 €)» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-lunghi-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Polpo all'insalata|16, price|Spaghetti all'astice|26
+  - turni: Buongiorno, allora, scusa se ti scrivo così presto ma stamattina sono andato al mercato e il pesce costava tantissimo, quindi ho deciso: il polpo all'insalata lo metti a 16, gli spaghetti all'astice a 26, e poi niente, per il resto lascia tutto com'è, grazie mille e buona giornata
+  - atteso: price|Polpo all'insalata|16, price|Spaghetti all'astice|26 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-lunghi-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Babà|false, available|Burrata|false, featured|Tagliata|true
+  - turni: Ciao! Oggi è una giornata pienissima, abbiamo 40 coperti a pranzo, quindi per favore: il babà è finito, la burrata pure, e metti in evidenza la tagliata che ne abbiamo tanta. Grazie!
+  - atteso: available|Babà|false, available|Burrata|false, featured|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Tagliere dell'oste* (14,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Delizia al limone* (5,50 €)»
+- **z-emoji-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: carbonara ➡️ 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-emoji-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: carbonara 13€ ✅
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-emoji-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ 👍
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-contraddizioni-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13, anzi no, a 14, anzi lascia 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-annulla-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
+  - turni: la carbonara a 13, annulla, la tagliata a 19
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-annulla-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la tagliata a 19 ⏎ annulla
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Tagliata* (18,00 €)»
+- **z-annulla-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|14
+  - turni: la carbonara a 13 ⏎ annulla ⏎ la carbonara a 14
+  - atteso: price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-annulla-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Babà|false
+  - turni: nascondi il babà ⏎ annulla e mettilo finito
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-annulla-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|13
+  - turni: la carbonara a 13 ⏎ annulla, intendevo la tagliata a 13
+  - atteso: price|Tagliata|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-nascosti-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|6
+  - turni: il babà a 6
+  - atteso: price|Babà|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-nascosti-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Babà|false
+  - turni: rimetti il babà
+  - atteso: hidden|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-nascosti-010** [GRAVE] GRAVE non-applicato: non applicato: hidden|Babà|false, hidden|Burrata|false
+  - turni: ❓ quali sono nascosti? ⏎ rimettili tutti
+  - atteso: hidden|Babà|false, hidden|Burrata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Posso cambiare prezzi e disponibilità, nascondere o mettere in evidenza i piatti, aggiungerne di nuovi, eliminarli, spostarli e rinominarli, e gestire le categorie.»
+- **z-nascosti-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Babà|false, hidden|Burrata|false
+  - turni: il babà finito e rimetti la burrata
+  - atteso: available|Babà|false, hidden|Burrata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-nascosti-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Burrata|10
+  - turni: la burrata a 10
+  - atteso: price|Burrata|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-nascosti-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Babà|true
+  - turni: metti in evidenza il babà
+  - atteso: featured|Babà|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-apostrofi-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pizza 'nduja|10
+  - turni: la pizza 'nduja a 10
+  - atteso: price|Pizza 'nduja|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pizza 'nduja|10
+  - turni: la pizza ’nduja a 10
+  - atteso: price|Pizza 'nduja|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pizza 'nduja|10
+  - turni: la pizza nduja a 10
+  - atteso: price|Pizza 'nduja|10 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Frittatina 'e pasta|3.5
+  - turni: la frittatina 'e pasta a 3,50
+  - atteso: price|Frittatina 'e pasta|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Frittatina 'e pasta|3.5
+  - turni: la frittatina e pasta a 3,50
+  - atteso: price|Frittatina 'e pasta|3.5 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliere dell'oste|16
+  - turni: il tagliere dell'oste a 16
+  - atteso: price|Tagliere dell'oste|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliere dell'oste|16
+  - turni: il tagliere dell’oste a 16
+  - atteso: price|Tagliere dell'oste|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliere dell'oste|16
+  - turni: il tagliere dell oste a 16
+  - atteso: price|Tagliere dell'oste|16 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Spaghetti all'astice|false
+  - turni: lo spaghetto all'astice finito
+  - atteso: available|Spaghetti all'astice|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Pizza all'ortolana|true
+  - turni: nascondi "pizza all'ortolana"
+  - atteso: hidden|Pizza all'ortolana|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pizza all'ortolana|9
+  - turni: «Pizza all’ortolana» a 9
+  - atteso: price|Pizza all'ortolana|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-012** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pasta e fagioli|10|primi
+  - turni: aggiungi nei primi "pasta e fagioli" a 10
+  - atteso: create|pasta e fagioli|10|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pizza a scarola|9|pizze
+  - turni: aggiungi nelle pizze la pizza 'a scarola a 9
+  - atteso: create|pizza a scarola|9|pizze · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-apostrofi-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|spaghetti all aglio|9|primi
+  - turni: aggiungi nei primi gli spaghetti all'aglio a 9
+  - atteso: create|spaghetti all aglio|9|primi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Pizza 'nduja|Pizza calabrese
+  - turni: rinomina la pizza 'nduja in Pizza calabrese
+  - atteso: rename|Pizza 'nduja|Pizza calabrese · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Babà|Babà al rum
+  - turni: rinomina il babà in "Babà al rum"
+  - atteso: rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Pizza all'ortolana|9, price|Polpo all'insalata|15
+  - turni: il polpo all'insalata e la pizza all'ortolana a 15 e 9
+  - atteso: price|Pizza all'ortolana|9, price|Polpo all'insalata|15 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Tiramisù* (6,00 €) 2. *Calzone* (8,00 €)»
+- **z-apostrofi-019** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Spaghetti all'astice|26
+  - turni: l'astice a 26
+  - atteso: price|Spaghetti all'astice|26 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-apostrofi-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: po' di più sulla carbonara, mettila a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-ripeti-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-ripeti-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 ⏎ la carbonara a 13 ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-ripeti-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cassata|6|dolci
+  - turni: aggiungi nei dolci la cassata a 6 ⏎ aggiungi nei dolci la cassata a 6
+  - atteso: create|cassata|6|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-ripeti-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|14
+  - turni: aumenta la carbonara di 1 ⏎ aumenta la carbonara di 1
+  - atteso: price|Carbonara|14 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-ripeti-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Babà|true
+  - turni: nascondi il babà ⏎ nascondi il babà
+  - atteso: hidden|Babà|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-ripeti-007** [MEDIO] MEDIO categoria-fuori-ordine: turno 1: Contorni
+  - turni: crea la categoria contorni ⏎ crea la categoria contorni
+  - atteso: section|contorni · ottenuto: section|contorni
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. Nuova categoria *Contorni*» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-ripeti-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Burrata|Secondi
+  - turni: sposta la burrata nei secondi ⏎ sposta la burrata nei secondi
+  - atteso: move|Burrata|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-ripeti-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: la carbonara a 13 la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-ripeti-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: delete|Babà
+  - turni: elimina il babà ⏎ sì ⏎ elimina il babà ⏎ sì
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
+- **z-interruzioni-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: elimina il babà ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-interruzioni-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: elimina il babà ⏎ la carbonara a 13 ⏎ sì
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-interruzioni-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: delete|Babà
+  - turni: elimina il babà ⏎ sì e anche il tiramisù
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
+- **z-interruzioni-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: delete|Babà
+  - turni: elimina il babà e il tiramisù ⏎ solo il babà ⏎ sì
+  - atteso: delete|Babà · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Babà* (5,00 €) 2. *Tiramisù* (6,00 €)» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: cosa vuoi cambiare?»
+- **z-interruzioni-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Tiramisù|true, price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19
+  - turni: la carbonara a 13, la tagliata a 19, la birra a 6 e il babà a 4 ⏎ nascondi il tiramisù ⏎ ok
+  - atteso: hidden|Tiramisù|true, price|Babà|4, price|Birra|6, price|Carbonara|13, price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Spaghetti all'astice* (24,00 €) 2. *Baccalà fritto* (15,00 €) 3. *Coca Cola* (3,00 €) 4. *Delizia al limone* (5» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Quale intendi? 1. *Carbonara* (12,00 €) 2. *Tagliata* (18,00 €) 3. *Tiramisù* (6,00 €) 4. *Babà* (5,00 €) 5. *Birra* (5,00 €)»
+- **z-interruzioni-016** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: aggiungi nei dolci la cassata ⏎ la carbonara a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-interruzioni-017** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cassata|6|dolci
+  - turni: aggiungi nei dolci la cassata ⏎ 6
+  - atteso: create|cassata|6|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-interruzioni-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cassata|6|dolci
+  - turni: aggiungi nei dolci la cassata ⏎ sei euro
+  - atteso: create|cassata|6|dolci · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-travestite-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: puoi mettere la carbonara a 13?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-travestite-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: mi metti la carbonara a 13?
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-travestite-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Babà|true
+  - turni: riesci a nascondere il babà?
+  - atteso: hidden|Babà|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-travestite-018** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Carbonara|13
+  - turni: perché la carbonara è a 12? mettila a 13
+  - atteso: price|Carbonara|13 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-promo-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: promo|Burrata|7
+  - turni: la burrata in promo a 7
+  - atteso: promo|Burrata|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-promo-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: promo|Burrata|7
+  - turni: la burrata in offerta a 7
+  - atteso: promo|Burrata|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-promo-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: promo|Burrata|7
+  - turni: sconto sulla burrata: 7 invece di 9
+  - atteso: promo|Burrata|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-promo-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: promo|Burrata|null
+  - turni: togli lo sconto alla burrata
+  - atteso: promo|Burrata|null · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-promo-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Tagliata|true, promo|Burrata|7
+  - turni: la burrata in promo a 7 e la tagliata in evidenza
+  - atteso: featured|Tagliata|true, promo|Burrata|7 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Burrata* (9,00 €) 2. *Tagliata* (18,00 €)»
+- **z-promo-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Tagliata|true
+  - turni: metti in evidenza la tagliata
+  - atteso: featured|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-promo-010** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Tagliata|false
+  - turni: la tagliata non più in evidenza
+  - atteso: featured|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-promo-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Tagliata|false
+  - turni: togli la tagliata dall'evidenza
+  - atteso: featured|Tagliata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-promo-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Babà|true, featured|Carbonara|false, featured|Tagliata|true
+  - turni: in evidenza la tagliata e il babà, il resto no
+  - atteso: featured|Babà|true, featured|Carbonara|false, featured|Tagliata|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Baccalà fritto* (15,00 €) 2. *Delizia al limone* (5,50 €)»
+- **z-promo-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: featured|Babà|true, featured|Delizia al limone|true, featured|Tiramisù|true
+  - turni: metti tutti i dolci in evidenza
+  - atteso: featured|Babà|true, featured|Delizia al limone|true, featured|Tiramisù|true · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-promo-020** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: promo|Burrata|6
+  - turni: la burrata in promo a 7 ⏎ anzi a 6
+  - atteso: promo|Burrata|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-sposta-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Burrata|Secondi
+  - turni: la burrata mettila nei secondi
+  - atteso: move|Burrata|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-sposta-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Burrata|Secondi, move|Tagliere dell'oste|Secondi
+  - turni: sposta la burrata e il tagliere nei secondi
+  - atteso: move|Burrata|Secondi, move|Tagliere dell'oste|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Tagliere dell'oste* (14,00 €) 2. *Margherita* (7,00 €)»
+- **z-sposta-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Babà|Antipasti, move|Burrata|Secondi
+  - turni: sposta la burrata nei secondi e il babà negli antipasti
+  - atteso: move|Babà|Antipasti, move|Burrata|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-sposta-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Burrata|Contorni, section|contorni
+  - turni: sposta la burrata nei contorni ⏎ sì
+  - atteso: move|Burrata|Contorni, section|contorni · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-sposta-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Baccalà fritto|Calzoni
+  - turni: sposta il baccalà fritto nei calzoni
+  - atteso: move|Baccalà fritto|Calzoni · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-sposta-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: move|Burrata|Secondi, move|Tagliere dell'oste|Secondi
+  - turni: sposta la burrata nei secondi ⏎ e anche il tagliere
+  - atteso: move|Burrata|Secondi, move|Tagliere dell'oste|Secondi · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-rinomine-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Babà|Babà napoletano
+  - turni: rinomina il babà in babà al rum ⏎ rinomina il babà al rum in babà napoletano
+  - atteso: rename|Babà|Babà napoletano · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-rinomine-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|6, rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum ⏎ e mettilo a 6
+  - atteso: price|Babà|6, rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-rinomine-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|6, rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum ⏎ il babà al rum a 6
+  - atteso: price|Babà|6, rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-rinomine-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Babà|6, rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum ⏎ il babà a 6
+  - atteso: price|Babà|6, rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-rinomine-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Babà|Babà classico
+  - turni: rinomina il babà in babà al rum ⏎ annulla ⏎ rinomina il babà in babà classico
+  - atteso: rename|Babà|Babà classico · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-rinomine-009** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: hidden|Babà|true, rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum, e nascondilo
+  - atteso: hidden|Babà|true, rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-rinomine-011** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|cassata|6|dessert
+  - turni: rinomina la categoria dolci in dessert ⏎ aggiungi nei dessert la cassata a 6
+  - atteso: create|cassata|6|dessert, move|Babà|Dessert, move|Delizia al limone|Dessert, move|Tiramisù|Dessert · ottenuto: move|Babà|Dessert, move|Delizia al limone|Dessert, move|Tiramisù|Dessert
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Fatto. Categoria *Dolci*: nuovo nome *Dessert*» ⏎ «Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-rinomine-013** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Burrata|burrata pugliese
+  - turni: chiama la burrata burrata pugliese
+  - atteso: rename|Burrata|burrata pugliese · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-rinomine-014** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Burrata|burrata di andria
+  - turni: la burrata da ora si chiama burrata di andria
+  - atteso: rename|Burrata|burrata di andria · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-rinomine-015** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: rename|Babà|Babà al rum
+  - turni: rinomina il babà in babà al rum ⏎ sì
+  - atteso: rename|Babà|Babà al rum · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?» ⏎ «Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-locali-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|6
+  - turni: nel menu bevande la birra a 6
+  - atteso: price|Birra|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Quale intendi? 1. *Birra* (5,00 €) 2. *Delizia al limone* (5,50 €)»
+- **z-locali-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|fanta|3|bibite
+  - turni: aggiungi nelle bibite la fanta a 3
+  - atteso: create|fanta|3|bibite · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-locali-008** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|fiano|22|vini
+  - turni: aggiungi nei vini il fiano a 22
+  - atteso: create|fiano|22|vini · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-r2-opposti-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|4
+  - turni: alza la birra, anzi abbassala di 1
+  - atteso: price|Birra|4 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-r2-ritiri-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
+  - turni: la carbonara a 13, no lascia, la tagliata a 19
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-r2-ritiri-002** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
+  - turni: la carbonara a 13 (no, lasciala) e la tagliata a 19
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-r2-ritiri-004** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Birra|6
+  - turni: la birra a 6 e il babà... no il babà niente
+  - atteso: price|Birra|6 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-r2-ritiri-005** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Tagliata|19
+  - turni: la tagliata a 19 e la carbonara a 13, la carbonara no
+  - atteso: price|Tagliata|19 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-r2-nonprezzi-001** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: price|Margherita|8, price|Quattro stagioni|9
+  - turni: la quattro stagioni a 9 e la margherita a 8
+  - atteso: price|Margherita|8, price|Quattro stagioni|9 · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»
+- **z-r2-nonprezzi-003** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Babà|false
+  - turni: siamo in 3 stasera, il babà è finito
+  - atteso: available|Babà|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-r2-nonprezzi-006** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: available|Burrata|false
+  - turni: alle 13 la burrata era finita, ora mettila finita
+  - atteso: available|Burrata|false · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Non sono sicuro di aver capito: puoi dirmi esattamente cosa vuoi cambiare?»
+- **z-r2-nonprezzi-007** [MEDIO] MEDIO chiede-invece-di-agire: domanda invece di agire / contesto perso: create|pizza 5 formaggi|9|pizze
+  - turni: aggiungi nelle pizze la pizza 5 formaggi a 9
+  - atteso: create|pizza 5 formaggi|9|pizze · ottenuto: nessuna modifica
+  - risposte: «Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. Vuoi che pubblichi le modifiche in sospeso? Rispondi sì o no.»

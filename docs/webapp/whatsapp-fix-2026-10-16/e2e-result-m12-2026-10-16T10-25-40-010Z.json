@@ -1,0 +1,290 @@
+{
+  "set": "m12",
+  "startedAt": "2026-10-16T10:25:40.010Z",
+  "steps": [
+    {
+      "n": 1,
+      "text": "Crea locale Verifica Avversaria Sedici. Crea due menu: Pranzo, categoria Primi, Pasta al pomodoro a 10 euro; Cena, categoria Panini, Burger classico a 12 euro. È solo una bozza privata: non pubblicare e non inviare inviti.",
+      "webhook": {
+        "status": 200,
+        "ack": "Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione."
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3389
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 2 piatti.\n\nFatto: aggiunto *Pasta al pomodoro* (Pranzo · Primi) a 10 €; aggiunto *Burger classico* (Cena · Panini) a 12 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "9da3b856-1d16-4c79-ab8d-e80d59c9bb6d"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "c10a4a57-d0f9-4fec-b952-d1e34951cb86"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 2,
+      "text": "Nel menu Pranzo, categoria Primi, aggiungi Risotto ai funghi a quattordici euro. Nel menu Cena cambia il Burger classico da dodici a tredici euro. Non cambiare la Pasta al pomodoro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 50045
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 3 piatti.\n\nFatto: aggiunto *Risotto ai funghi* (Pranzo · Primi) a 14 €; *Burger classico* (Cena) 12 € → 13 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 3,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "9da3b856-1d16-4c79-ab8d-e80d59c9bb6d"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 14,
+          "id": "062cb53a-27f6-4e61-a595-1b931bd11033"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 13,
+          "id": "c10a4a57-d0f9-4fec-b952-d1e34951cb86"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 3,
+      "text": "Metti il Risotto ai funghi a 15 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6282
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Risotto ai funghi* · 3 piatti.\n\nFatto: *Risotto ai funghi* (Pranzo) 14 € → 15 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "9da3b856-1d16-4c79-ab8d-e80d59c9bb6d"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 15,
+          "id": "062cb53a-27f6-4e61-a595-1b931bd11033"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 13,
+          "id": "c10a4a57-d0f9-4fec-b952-d1e34951cb86"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 4,
+      "text": "Mostrami il riepilogo dei menu e dei piatti.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3158
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Risotto ai funghi* · 3 piatti.\n\n*Pranzo*\nPrimi: Pasta al pomodoro 10 €, Risotto ai funghi 15 €\n*Cena*\nPanini: Burger classico 13 €\n\nNessun contatto del titolare ancora raccolto.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "9da3b856-1d16-4c79-ab8d-e80d59c9bb6d"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Risotto ai funghi",
+          "price": 15,
+          "id": "062cb53a-27f6-4e61-a595-1b931bd11033"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 13,
+          "id": "c10a4a57-d0f9-4fec-b952-d1e34951cb86"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    }
+  ],
+  "before": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "qaLinkCreated": true,
+  "expected": {
+    "name": "Verifica Avversaria Sedici",
+    "dishes": [
+      "Cena/Panini/Burger classico/13",
+      "Pranzo/Primi/Pasta al pomodoro/10",
+      "Pranzo/Primi/Risotto ai funghi/15"
+    ]
+  },
+  "actual": {
+    "dishes": [
+      "Cena/Panini/Burger classico/13",
+      "Pranzo/Primi/Pasta al pomodoro/10",
+      "Pranzo/Primi/Risotto ai funghi/15"
+    ],
+    "name": "Risotto ai funghi",
+    "ownerName": null,
+    "everyStepAnswered": true,
+    "pastaAfterStep": [
+      10,
+      10,
+      10,
+      10
+    ],
+    "recapReturned": true,
+    "failedJobs": []
+  },
+  "pass": false,
+  "errors": [],
+  "technicalCopy": 0,
+  "cleanup": {
+    "cancel": {
+      "status": "done",
+      "diagnostic": null,
+      "waitedMs": 3177
+    },
+    "openDraftAfter": false
+  },
+  "qaLinkRemoved": true,
+  "after": {
+    "restaurantCount": 35,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "restaurantsChanged": [],
+  "restaurantsAdded": [
+    "378605ab-1bf7-4c78-a5a0-8ee2060ec3de",
+    "582da234-7b1e-460b-a841-d7be25d3f764",
+    "642223c8-2afa-4156-aba5-71623dcd0ff4",
+    "739024ee-e3f4-49d2-a913-8ed3b7ac5d3e",
+    "a01167ed-5a5d-4ce4-aa7c-0435ea4bf894",
+    "a298b723-de6c-4990-a758-f338c3cbc1ce",
+    "a87d79da-3c4d-4e3c-aea4-a35686547bcb",
+    "b5ad6c01-56b1-4ef5-a6ba-57e48926860f",
+    "d13cf984-7aab-40e3-a1f9-658cc8cb490f",
+    "e4619a7e-1c1e-4885-a2b8-bca0e70e4dad"
+  ],
+  "victoriaUnchanged": true,
+  "victoriaMatchesMorningBaseline": false,
+  "finishedAt": "2026-10-16T10:30:18.555Z"
+}

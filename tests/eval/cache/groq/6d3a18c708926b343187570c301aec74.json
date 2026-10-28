@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-9a4357af-5e42-425e-ad7a-f7d57fd9ef38",
+  "object": "chat.completion",
+  "created": 1792284579,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"capability\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [\n    \"price\",\n    \"unavailable\",\n    \"available\",\n    \"hidden\",\n    \"description\",\n    \"tags\",\n    \"featured\",\n    \"create\",\n    \"special\",\n    \"photo\",\n    \"promo\",\n    \"scarcity\",\n    \"questions\",\n    \"fullmenu\",\n    \"voice\",\n    \"allergens\",\n    \"delete\",\n    \"rename\",\n    \"bulk\",\n    \"graphics\",\n    \"categories\",\n    \"translations\",\n    \"other\",\n    \"all\"\n  ],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Sei collegato al Victoria Bar. Posso leggere, modificare prezzi, disponibilità, nascondere, evidenziare, creare, eliminare, rinominare piatti, gestire promozioni, tag, descrizioni e molto altro.\"\n}",
+     "reasoning": "User asks which locale and capabilities. Intent capability. reply_draft answer. No actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.056633917,
+   "prompt_tokens": 3461,
+   "prompt_time": 0.209419867,
+   "completion_tokens": 267,
+   "completion_time": 0.557419955,
+   "total_tokens": 3728,
+   "total_time": 0.766839822,
+   "completion_tokens_details": {
+    "reasoning_tokens": 19
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_4200b3f836",
+  "x_groq": {
+   "id": "req_01m567rmh6ee8s2t7v4j420fmt",
+   "seed": 1082882856
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3461,
+  "completion_tokens": 267,
+  "total_tokens": 3728
+ },
+ "ms": 1029,
+ "recordedAt": "2026-10-18T00:49:39.209Z",
+ "conv": "bv-domande-005"
+}

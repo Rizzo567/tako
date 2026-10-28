@@ -1,0 +1,2759 @@
+{
+ "cases": 100,
+ "runs": 148,
+ "unknownSql": [],
+ "results": [
+  {
+   "id": "date4-01",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "fino a domenica la carbonara in promo a 10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-02",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara fino a domenica in promo a 10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-03",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "in promo a 10 fino a domenica la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-03",
+   "cat": "date4",
+   "mode": "empty",
+   "turns": [
+    "in promo a 10 fino a domenica la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-03",
+   "cat": "date4",
+   "mode": "wrong",
+   "turns": [
+    "in promo a 10 fino a domenica la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-03",
+   "cat": "date4",
+   "mode": "wrongCreate",
+   "turns": [
+    "in promo a 10 fino a domenica la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-04",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "stasera la carbonara in promo a 10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *venerdì 16/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-16"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-16"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-05",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "da domani la carbonara costa 13"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-06",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "il menù della domenica costa 25"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù della domenica*: prezzo da 22,00 € a *25,00 €*"
+   ],
+   "expected": [
+    "price|Menù della domenica|25"
+   ],
+   "actual": [
+    "price|Menù della domenica|25"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-07",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "il menù della domenica in promo a 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù della domenica*: in *promo* a *20,00 €* (prezzo pieno 22,00 €), finché non la togli"
+   ],
+   "expected": [
+    "promo|Menù della domenica|20"
+   ],
+   "actual": [
+    "promo|Menù della domenica|20"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "«domenica» è nel nome: nessuna scadenza"
+  },
+  {
+   "id": "date4-08",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "il menù della domenica in promo a 20 fino a sabato"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù della domenica*: in *promo* a *20,00 €* (prezzo pieno 22,00 €), fino a *sabato 17/10*"
+   ],
+   "expected": [
+    "promo|Menù della domenica|20",
+    "until|Menù della domenica|2026-10-17"
+   ],
+   "actual": [
+    "promo|Menù della domenica|20",
+    "until|Menù della domenica|2026-10-17"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-09",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "il menù della domenica è finito"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù della domenica*: *finito*"
+   ],
+   "expected": [
+    "available|Menù della domenica|false"
+   ],
+   "actual": [
+    "available|Menù della domenica|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-10",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "nascondi il menù della domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù della domenica*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Menù della domenica|true"
+   ],
+   "actual": [
+    "hidden|Menù della domenica|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-11",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra le offerte il pranzo del sabato a 18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pranzo del sabato* in *Offerte*: *18,00 €*"
+   ],
+   "expected": [
+    "create|pranzo del sabato|18|offerte"
+   ],
+   "actual": [
+    "create|pranzo del sabato|18|offerte"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-11",
+   "cat": "date4",
+   "mode": "empty",
+   "turns": [
+    "aggiungi tra le offerte il pranzo del sabato a 18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "create|pranzo del sabato|18|offerte"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-11",
+   "cat": "date4",
+   "mode": "wrong",
+   "turns": [
+    "aggiungi tra le offerte il pranzo del sabato a 18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "create|pranzo del sabato|18|offerte"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-11",
+   "cat": "date4",
+   "mode": "wrongCreate",
+   "turns": [
+    "aggiungi tra le offerte il pranzo del sabato a 18"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "create|pranzo del sabato|18|offerte"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-12",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la pizza del lunedì in promo a 6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pizza del lunedì*: in *promo* a *6,00 €* (prezzo pieno 7,00 €), finché non la togli"
+   ],
+   "expected": [
+    "promo|Pizza del lunedì|6"
+   ],
+   "actual": [
+    "promo|Pizza del lunedì|6"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-13",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la pizza del lunedì in promo a 6 solo oggi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pizza del lunedì*: in *promo* a *6,00 €* (prezzo pieno 7,00 €), fino a *venerdì 16/10*"
+   ],
+   "expected": [
+    "promo|Pizza del lunedì|6",
+    "until|Pizza del lunedì|2026-10-16"
+   ],
+   "actual": [
+    "promo|Pizza del lunedì|6",
+    "until|Pizza del lunedì|2026-10-16"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-14",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara in promo a 10 fino al 20/10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *martedì 20/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-20"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-20"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-15",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara in promo a 10 fino al 25 ottobre"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 25/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-25"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-25"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-16",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "domenica la carbonara in promo a 10"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non trovo «domenica la carbonara».* Scrivi il nome come appare nel menu."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "«domenica» all'inizio: scadenza o inizio? va bene chiedere"
+  },
+  {
+   "id": "date4-17",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "per tutto il weekend la tagliata in promo a 15"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: in *promo* a *15,00 €* (prezzo pieno 18,00 €), fino a *domenica 18/10*"
+   ],
+   "expected": [
+    "promo|Tagliata di manzo|15",
+    "until|Tagliata di manzo|2026-10-18"
+   ],
+   "actual": [
+    "promo|Tagliata di manzo|15",
+    "until|Tagliata di manzo|2026-10-18"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-18",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata a 15 in promo fino a domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: in *promo* a *15,00 €* (prezzo pieno 18,00 €), fino a *domenica 18/10*"
+   ],
+   "expected": [
+    "promo|Tagliata di manzo|15",
+    "until|Tagliata di manzo|2026-10-18"
+   ],
+   "actual": [
+    "promo|Tagliata di manzo|15",
+    "until|Tagliata di manzo|2026-10-18"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-18",
+   "cat": "date4",
+   "mode": "empty",
+   "turns": [
+    "la tagliata a 15 in promo fino a domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Tagliata di manzo|15",
+    "until|Tagliata di manzo|2026-10-18"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-18",
+   "cat": "date4",
+   "mode": "wrong",
+   "turns": [
+    "la tagliata a 15 in promo fino a domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "promo|Tagliata di manzo|15",
+    "until|Tagliata di manzo|2026-10-18"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-18",
+   "cat": "date4",
+   "mode": "wrongCreate",
+   "turns": [
+    "la tagliata a 15 in promo fino a domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Tagliata di manzo|15",
+    "until|Tagliata di manzo|2026-10-18"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-19",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara in promo a 10 fino a domenica, la lasagna è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*\n*Lasagna al forno*: *finito*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18",
+    "available|Lasagna al forno|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-19",
+   "cat": "date4",
+   "mode": "empty",
+   "turns": [
+    "la carbonara in promo a 10 fino a domenica, la lasagna è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-19",
+   "cat": "date4",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara in promo a 10 fino a domenica, la lasagna è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-19",
+   "cat": "date4",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara in promo a 10 fino a domenica, la lasagna è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18",
+    "available|Lasagna al forno|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-20",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara in promo a 10 fino a domenica e la lasagna in promo a 9 fino a sabato"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*\n*Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *sabato 17/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18",
+    "promo|Lasagna al forno|9",
+    "until|Lasagna al forno|2026-10-17"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18",
+    "promo|Lasagna al forno|9",
+    "until|Lasagna al forno|2026-10-17"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-21",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "sabato sera chiudiamo, la carbonara è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-21",
+   "cat": "date4",
+   "mode": "empty",
+   "turns": [
+    "sabato sera chiudiamo, la carbonara è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-21",
+   "cat": "date4",
+   "mode": "wrong",
+   "turns": [
+    "sabato sera chiudiamo, la carbonara è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-21",
+   "cat": "date4",
+   "mode": "wrongCreate",
+   "turns": [
+    "sabato sera chiudiamo, la carbonara è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-22",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la grigliata del venerdì costa 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Grigliata del venerdì*: prezzo da 18,00 € a *20,00 €*"
+   ],
+   "expected": [
+    "price|Grigliata del venerdì|20"
+   ],
+   "actual": [
+    "price|Grigliata del venerdì|20"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-23",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "promo grigliata del venerdì a 15 fino a domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Grigliata del venerdì*: in *promo* a *15,00 €* (prezzo pieno 18,00 €), fino a *domenica 18/10*"
+   ],
+   "expected": [
+    "promo|Grigliata del venerdì|15",
+    "until|Grigliata del venerdì|2026-10-18"
+   ],
+   "actual": [
+    "promo|Grigliata del venerdì|15",
+    "until|Grigliata del venerdì|2026-10-18"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-24",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la grigliata del venerdì in promo a 15"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Grigliata del venerdì*: in *promo* a *15,00 €* (prezzo pieno 18,00 €), finché non la togli"
+   ],
+   "expected": [
+    "promo|Grigliata del venerdì|15"
+   ],
+   "actual": [
+    "promo|Grigliata del venerdì|15"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-25",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "🎤 metti fino a domenica sera la carbonara in promo a dieci euro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-26",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "tutta la settimana la lasagna in promo a 9"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: in *promo* a *9,00 €* (prezzo pieno 11,00 €), fino a *domenica 18/10*"
+   ],
+   "expected": [
+    "promo|Lasagna al forno|9",
+    "until|Lasagna al forno|2026-10-18"
+   ],
+   "actual": [
+    "promo|Lasagna al forno|9",
+    "until|Lasagna al forno|2026-10-18"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-27",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "il menù della domenica solo oggi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù della domenica*: etichetta *Solo oggi*, sparisce domani alle 6"
+   ],
+   "expected": [
+    "today|Menù della domenica|true"
+   ],
+   "actual": [
+    "today|Menù della domenica|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-28",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "togli la promo dal menù della domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Menù della domenica*: tolgo la *promo*, torna a 22,00 €"
+   ],
+   "expected": [
+    "promo|Menù della domenica|null"
+   ],
+   "actual": [
+    "promo|Menù della domenica|null"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "date4-29",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "fino a domenica niente tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *finito*"
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [
+    "available|Tagliata di manzo|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-29",
+   "cat": "date4",
+   "mode": "empty",
+   "turns": [
+    "fino a domenica niente tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-29",
+   "cat": "date4",
+   "mode": "wrong",
+   "turns": [
+    "fino a domenica niente tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-29",
+   "cat": "date4",
+   "mode": "wrongCreate",
+   "turns": [
+    "fino a domenica niente tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "date4-30",
+   "cat": "date4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara a 10 fino a domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: in *promo* a *10,00 €* (prezzo pieno 12,00 €), fino a *domenica 18/10*"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "prezzo più basso con scadenza: promo, o domanda"
+  },
+  {
+   "id": "date4-30",
+   "cat": "date4",
+   "mode": "empty",
+   "turns": [
+    "la carbonara a 10 fino a domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "prezzo più basso con scadenza: promo, o domanda"
+  },
+  {
+   "id": "date4-30",
+   "cat": "date4",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara a 10 fino a domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "prezzo più basso con scadenza: promo, o domanda"
+  },
+  {
+   "id": "date4-30",
+   "cat": "date4",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara a 10 fino a domenica"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|10",
+    "until|Spaghetti alla carbonara|2026-10-18"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": [],
+   "note": "prezzo più basso con scadenza: promo, o domanda"
+  },
+  {
+   "id": "tutte4-01",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "togli la promo a tutti i primi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 €\n*Lasagna al forno*: tolgo la *promo*, torna a 11,00 €"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|null",
+    "promo|Lasagna al forno|null"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|null",
+    "promo|Lasagna al forno|null"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-02",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "tutte le pizze sono finite",
+    "ok"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Margherita*: *finito*\n2. *Pizza 4 formaggi*: *finito*\n3. *Diavola*: *finito*\n4. *Capricciosa*: *finito*\n5. *Margherita con bufala*: *finito*\n6. *Pizza del lunedì*: *finito*\n7. *Pizza mezzo metro*: *finito*\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: *finito*\n*Pizza 4 formaggi*: *finito*\n*Diavola*: *finito*\n*Capricciosa*: *finito*\n*Margherita con bufala*: *finito*\n*Pizza del lunedì*: *finito*\n*Pizza mezzo metro*: *finito*"
+   ],
+   "expected": [
+    "available|Margherita|false",
+    "available|Pizza 4 formaggi|false",
+    "available|Diavola|false",
+    "available|Capricciosa|false",
+    "available|Margherita con bufala|false",
+    "available|Pizza del lunedì|false",
+    "available|Pizza mezzo metro|false"
+   ],
+   "actual": [
+    "available|Margherita|false",
+    "available|Pizza 4 formaggi|false",
+    "available|Diavola|false",
+    "available|Capricciosa|false",
+    "available|Margherita con bufala|false",
+    "available|Pizza del lunedì|false",
+    "available|Pizza mezzo metro|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-03",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "nascondi tutti i dolci",
+    "ok"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: *nascosto* dal menu\n*Panna cotta*: *nascosto* dal menu\n*Dolce del giorno*: *nascosto* dal menu",
+    "Non ci sono modifiche da confermare. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "hidden|Tiramisù|true",
+    "hidden|Panna cotta|true",
+    "hidden|Dolce del giorno|true"
+   ],
+   "actual": [
+    "hidden|Tiramisù|true",
+    "hidden|Panna cotta|true",
+    "hidden|Dolce del giorno|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-04",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "togli tutte le etichette dalle pizze"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: tolgo l’etichetta *Vegetariano*\n*Diavola*: tolgo l’etichetta *Piccante*"
+   ],
+   "expected": [
+    "tag|Diavola|piccante|false",
+    "tag|Margherita|vegetariano|false"
+   ],
+   "actual": [
+    "tag|Margherita|vegetariano|false",
+    "tag|Diavola|piccante|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-05",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "togli le ultime porzioni a tutti i secondi"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: tolgo *Ultime porzioni*\n*Cotoletta alla milanese*: tolgo *Ultime porzioni*"
+   ],
+   "expected": [
+    "last|Tagliata di manzo|false",
+    "last|Cotoletta alla milanese|false"
+   ],
+   "actual": [
+    "last|Tagliata di manzo|false",
+    "last|Cotoletta alla milanese|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-06",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "togli piccante da tutte le pizze"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Diavola*: tolgo l’etichetta *Piccante*"
+   ],
+   "expected": [
+    "tag|Diavola|piccante|false"
+   ],
+   "actual": [
+    "tag|Diavola|piccante|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-07",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "metti in promo tutte le pizze a 6"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non trovo «tutte le pizze».* Scrivi il nome come appare nel menu."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-08",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "tutti i contorni sono finiti"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Patate al forno*: *finito*\n*Insalata mista*: *finito*"
+   ],
+   "expected": [
+    "available|Patate al forno|false",
+    "available|Insalata mista|false"
+   ],
+   "actual": [
+    "available|Patate al forno|false",
+    "available|Insalata mista|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-09",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "togli la promo a tutti tranne la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: tolgo la *promo*, torna a 18,00 €"
+   ],
+   "expected": [
+    "promo|Tagliata di manzo|null"
+   ],
+   "actual": [
+    "promo|Tagliata di manzo|null"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-10",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "togli tutte le promo dalle bevande"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: tolgo la *promo*, torna a 3,00 €"
+   ],
+   "expected": [
+    "promo|Coca Cola 33cl|null"
+   ],
+   "actual": [
+    "promo|Coca Cola 33cl|null"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-11",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "rimetti disponibili tutte le pizze"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Margherita*: di nuovo *disponibile*\n*Diavola*: di nuovo *disponibile*"
+   ],
+   "expected": [
+    "available|Diavola|true",
+    "available|Margherita|true"
+   ],
+   "actual": [
+    "available|Margherita|true",
+    "available|Diavola|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-12",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "tutti i primi a 10 euro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non trovo «tutti i primi».* Scrivi il nome come appare nel menu."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "prezzo in blocco: non va applicato senza riepilogo"
+  },
+  {
+   "id": "tutte4-13",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "togli tutte le promo",
+    "ok"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Trattoria Da Mario*: ecco le modifiche.\n\n1. *Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 €\n2. *Lasagna al forno*: tolgo la *promo*, torna a 11,00 €\n3. *Tagliata di manzo*: tolgo la *promo*, torna a 18,00 €\n4. *Diavola*: tolgo la *promo*, torna a 8,50 €\n\nHai dimenticato qualcosa o vuoi cambiare una voce? Mandami le correzioni, oppure scrivi *OK* per pubblicare tutto.\n\n*ANNULLA* lascia il menu invariato. Il riepilogo vale *10 minuti*.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: tolgo la *promo*, torna a 12,00 €\n*Lasagna al forno*: tolgo la *promo*, torna a 11,00 €\n*Tagliata di manzo*: tolgo la *promo*, torna a 18,00 €\n*Diavola*: tolgo la *promo*, torna a 8,50 €"
+   ],
+   "expected": [
+    "promo|Spaghetti alla carbonara|null",
+    "promo|Tagliata di manzo|null",
+    "promo|Lasagna al forno|null",
+    "promo|Diavola|null"
+   ],
+   "actual": [
+    "promo|Spaghetti alla carbonara|null",
+    "promo|Lasagna al forno|null",
+    "promo|Tagliata di manzo|null",
+    "promo|Diavola|null"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-14",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "togli ultime porzioni dai dolci"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tiramisù*: tolgo *Ultime porzioni*"
+   ],
+   "expected": [
+    "last|Tiramisù|false"
+   ],
+   "actual": [
+    "last|Tiramisù|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "tutte4-15",
+   "cat": "tutte4",
+   "mode": "ideal",
+   "turns": [
+    "tutte le bibite sono finite tranne l'acqua"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Coca Cola 33cl*: *finito*\n*Birra media*: *finito*"
+   ],
+   "expected": [
+    "available|Coca Cola 33cl|false",
+    "available|Birra media|false"
+   ],
+   "actual": [
+    "available|Coca Cola 33cl|false",
+    "available|Birra media|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "domcort-01",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "mi dici quanto costa la carbonara?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Spaghetti alla carbonara*: *12,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-01",
+   "cat": "domcort",
+   "mode": "empty",
+   "turns": [
+    "mi dici quanto costa la carbonara?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-01",
+   "cat": "domcort",
+   "mode": "wrong",
+   "turns": [
+    "mi dici quanto costa la carbonara?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-01",
+   "cat": "domcort",
+   "mode": "wrongCreate",
+   "turns": [
+    "mi dici quanto costa la carbonara?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-02",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "puoi dirmi se la lasagna è finita?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Lasagna al forno*: *11,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "domcort-03",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "mi sai dire il prezzo della tagliata?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tagliere misto*: *14,00 €* · disponibile\n*Tagliata di manzo*: *18,00 €* · disponibile\n*Menù della domenica*: *22,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-03",
+   "cat": "domcort",
+   "mode": "empty",
+   "turns": [
+    "mi sai dire il prezzo della tagliata?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-03",
+   "cat": "domcort",
+   "mode": "wrong",
+   "turns": [
+    "mi sai dire il prezzo della tagliata?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-03",
+   "cat": "domcort",
+   "mode": "wrongCreate",
+   "turns": [
+    "mi sai dire il prezzo della tagliata?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-04",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "potresti dirmi cosa è finito?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNessun piatto è *finito*: sono tutti disponibili."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "domcort-05",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "riesci a dirmi quanto costa la diavola?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Diavola*: *8,50 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "domcort-06",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "mi ricordi quanto avevo messo la carbonara?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Spaghetti alla carbonara*: *12,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-06",
+   "cat": "domcort",
+   "mode": "empty",
+   "turns": [
+    "mi ricordi quanto avevo messo la carbonara?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-06",
+   "cat": "domcort",
+   "mode": "wrong",
+   "turns": [
+    "mi ricordi quanto avevo messo la carbonara?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-06",
+   "cat": "domcort",
+   "mode": "wrongCreate",
+   "turns": [
+    "mi ricordi quanto avevo messo la carbonara?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-07",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "puoi controllare se la carbonara è in promo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Spaghetti alla carbonara*: *12,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-07",
+   "cat": "domcort",
+   "mode": "empty",
+   "turns": [
+    "puoi controllare se la carbonara è in promo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-07",
+   "cat": "domcort",
+   "mode": "wrong",
+   "turns": [
+    "puoi controllare se la carbonara è in promo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-07",
+   "cat": "domcort",
+   "mode": "wrongCreate",
+   "turns": [
+    "puoi controllare se la carbonara è in promo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-08",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "ce la fai a dirmi quali piatti sono nascosti?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ci sono piatti *nascosti*."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "domcort-09",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "possiamo vedere quanto costa il tiramisù?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tiramisù*: *5,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-09",
+   "cat": "domcort",
+   "mode": "empty",
+   "turns": [
+    "possiamo vedere quanto costa il tiramisù?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-09",
+   "cat": "domcort",
+   "mode": "wrong",
+   "turns": [
+    "possiamo vedere quanto costa il tiramisù?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-09",
+   "cat": "domcort",
+   "mode": "wrongCreate",
+   "turns": [
+    "possiamo vedere quanto costa il tiramisù?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-10",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "mi dici se ho messo la tagliata in evidenza?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tagliata di manzo*: *18,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "domcort-11",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "puoi dirmi se la carbonara costa 13?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Spaghetti alla carbonara*: *12,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "NON deve mettere 13"
+  },
+  {
+   "id": "domcort-12",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "mi confermi che la lasagna è finita?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Lasagna al forno*: *11,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "NON deve segnarla finita"
+  },
+  {
+   "id": "domcort-13",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "mi sapresti dire se il tiramisù è finito?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Tiramisù*: *5,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "domcort-14",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "🎤 mi dici quanto costa la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Spaghetti alla carbonara*: *12,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-14",
+   "cat": "domcort",
+   "mode": "empty",
+   "turns": [
+    "🎤 mi dici quanto costa la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-14",
+   "cat": "domcort",
+   "mode": "wrong",
+   "turns": [
+    "🎤 mi dici quanto costa la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-14",
+   "cat": "domcort",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 mi dici quanto costa la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-15",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "mi dici se posso mettere la carbonara in promo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Spaghetti alla carbonara*: *12,00 €* · disponibile"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-15",
+   "cat": "domcort",
+   "mode": "empty",
+   "turns": [
+    "mi dici se posso mettere la carbonara in promo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-15",
+   "cat": "domcort",
+   "mode": "wrong",
+   "turns": [
+    "mi dici se posso mettere la carbonara in promo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-15",
+   "cat": "domcort",
+   "mode": "wrongCreate",
+   "turns": [
+    "mi dici se posso mettere la carbonara in promo?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "domcort-16",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "puoi mettere la carbonara a 13?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "domcort-17",
+   "cat": "domcort",
+   "mode": "ideal",
+   "turns": [
+    "mi segni finita la carbonara?"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*"
+   ],
+   "expected": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "actual": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "lascia4-01",
+   "cat": "lascia4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "lascia stare la lasagna, la tagliata è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *finito*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "available|Tagliata di manzo|false"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "available|Tagliata di manzo|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "lascia4-02",
+   "cat": "lascia4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "lascia stare la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Va bene, non cambio nulla."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "lascia4-03",
+   "cat": "lascia4",
+   "mode": "ideal",
+   "turns": [
+    "nascondi la bruschetta",
+    "lascia stare il tagliere, metti in evidenza la tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: *in evidenza*"
+   ],
+   "expected": [
+    "hidden|Bruschetta al pomodoro|true",
+    "featured|Tagliata di manzo|true"
+   ],
+   "actual": [
+    "hidden|Bruschetta al pomodoro|true",
+    "featured|Tagliata di manzo|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "lascia4-04",
+   "cat": "lascia4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "la lasagna è finita",
+    "lascia stare la carbonara, la tagliata costa 19"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: prezzo da 18,00 € a *19,00 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13",
+    "available|Lasagna al forno|false",
+    "price|Tagliata di manzo|19"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "available|Lasagna al forno|false",
+    "price|Tagliata di manzo|19"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "lascia4-05",
+   "cat": "lascia4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "lascia stare la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 13,00 € a *12,00 €*"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "lascia4-06",
+   "cat": "lascia4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "lascia stare la carbonara, la lasagna costa 12"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 13,00 € a *12,00 €*\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*"
+   ],
+   "expected": [
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [
+    "price|Lasagna al forno|12"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "lascia4-07",
+   "cat": "lascia4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[B] lascia stare la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVa bene, non cambio nulla."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "lascia4-08",
+   "cat": "lascia4",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[+30 min]",
+    "lascia stare la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 13,00 € a *12,00 €*"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "lascia4-09",
+   "cat": "lascia4",
+   "mode": "ideal",
+   "turns": [
+    "lascia stare la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nVa bene, non cambio nulla."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "lascia4-10",
+   "cat": "lascia4",
+   "mode": "ideal",
+   "turns": [
+    "la lasagna è finita",
+    "lascia stare la lasagna, è tornata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: *finito*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: di nuovo *disponibile*"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-01",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "la pizza mezzo metro costa 20"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pizza mezzo metro*: prezzo da 18,00 € a *20,00 €*"
+   ],
+   "expected": [
+    "price|Pizza mezzo metro|20"
+   ],
+   "actual": [
+    "price|Pizza mezzo metro|20"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-02",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "il mezzo litro di vino costa 7"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Mezzo litro di vino*: prezzo da 6,00 € a *7,00 €*"
+   ],
+   "expected": [
+    "price|Mezzo litro di vino|7"
+   ],
+   "actual": [
+    "price|Mezzo litro di vino|7"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-03",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "la mezza porzione bimbi costa 6 e mezzo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Mezza porzione bimbi*: prezzo da 6,00 € a *6,50 €*"
+   ],
+   "expected": [
+    "price|Mezza porzione bimbi|6.5"
+   ],
+   "actual": [
+    "price|Mezza porzione bimbi|6.5"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-04",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "la mezza porzione bimbi è finita"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Mezza porzione bimbi*: *finito*"
+   ],
+   "expected": [
+    "available|Mezza porzione bimbi|false"
+   ],
+   "actual": [
+    "available|Mezza porzione bimbi|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-05",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "🎤 la carbonara costa dodici e mezzo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *12,50 €*"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|12.5"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-06",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra le pizze la pizza un metro e mezzo a 30"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pizza un metro e mezzo* in *Pizze*: *30,00 €*"
+   ],
+   "expected": [
+    "create|pizza un metro e mezzo|30|pizze"
+   ],
+   "actual": [
+    "create|pizza un metro e mezzo|30|pizze"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-07",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "🎤 la pizza mezzo metro costa diciotto e mezzo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pizza mezzo metro*: prezzo da 18,00 € a *18,50 €*"
+   ],
+   "expected": [
+    "price|Pizza mezzo metro|18.5"
+   ],
+   "actual": [
+    "price|Pizza mezzo metro|18.5"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-08",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "il mezzo litro di vino in promo a 5"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Mezzo litro di vino*: in *promo* a *5,00 €* (prezzo pieno 6,00 €), finché non la togli"
+   ],
+   "expected": [
+    "promo|Mezzo litro di vino|5"
+   ],
+   "actual": [
+    "promo|Mezzo litro di vino|5"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-09",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "nascondi la pizza mezzo metro"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pizza mezzo metro*: *nascosto* dal menu"
+   ],
+   "expected": [
+    "hidden|Pizza mezzo metro|true"
+   ],
+   "actual": [
+    "hidden|Pizza mezzo metro|true"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-10",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "🎤 il mezzo litro di vino costa sei e mezzo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Mezzo litro di vino*: prezzo da 6,00 € a *6,50 €*"
+   ],
+   "expected": [
+    "price|Mezzo litro di vino|6.5"
+   ],
+   "actual": [
+    "price|Mezzo litro di vino|6.5"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mezzo-11",
+   "cat": "mezzo",
+   "mode": "ideal",
+   "turns": [
+    "🎤 la pizza mezzo metro è finita e la margherita costa sette e mezzo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Pizza mezzo metro*: *finito*\n*Margherita*: prezzo da 7,00 € a *7,50 €*"
+   ],
+   "expected": [
+    "available|Pizza mezzo metro|false",
+    "price|Margherita|7.5"
+   ],
+   "actual": [
+    "price|Margherita|7.5",
+    "available|Pizza mezzo metro|false"
+   ],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "mezzo-11",
+   "cat": "mezzo",
+   "mode": "empty",
+   "turns": [
+    "🎤 la pizza mezzo metro è finita e la margherita costa sette e mezzo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Pizza mezzo metro|false",
+    "price|Margherita|7.5"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "mezzo-11",
+   "cat": "mezzo",
+   "mode": "wrong",
+   "turns": [
+    "🎤 la pizza mezzo metro è finita e la margherita costa sette e mezzo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nCosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "available|Pizza mezzo metro|false",
+    "price|Margherita|7.5"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "mezzo-11",
+   "cat": "mezzo",
+   "mode": "wrongCreate",
+   "turns": [
+    "🎤 la pizza mezzo metro è finita e la margherita costa sette e mezzo"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "available|Pizza mezzo metro|false",
+    "price|Margherita|7.5"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "mem60-01",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[+30 min]",
+    "torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 13,00 € a *12,00 €*"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-02",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[+59 min]",
+    "torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 13,00 € a *12,00 €*"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-03",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[+61 min]",
+    "torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Non ho una modifica recente su *carbonara* da annullare. Dimmi cosa vuoi, per esempio «carbonara è di nuovo disponibile»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-04",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[cambio da dashboard]",
+    "torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Non ho una modifica recente su *carbonara* da annullare. Dimmi cosa vuoi, per esempio «carbonara è di nuovo disponibile»."
+   ],
+   "expected": [],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "la dashboard ha toccato un altro piatto"
+  },
+  {
+   "id": "mem60-05",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[dashboard: Spaghetti alla carbonara price 15]",
+    "torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Non ho una modifica recente su *carbonara* da annullare. Dimmi cosa vuoi, per esempio «carbonara è di nuovo disponibile»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "la dashboard ha messo 15: non va riportata a 12 in silenzio"
+  },
+  {
+   "id": "mem60-06",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara è finita",
+    "[+40 min]",
+    "[cambio da dashboard]",
+    "torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*",
+    "Non ho una modifica recente su *carbonara* da annullare. Dimmi cosa vuoi, per esempio «carbonara è di nuovo disponibile»."
+   ],
+   "expected": [],
+   "actual": [
+    "available|Spaghetti alla carbonara|false"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-07",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[+30 min]",
+    "torna come prima"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Posso annullare solo le modifiche fatte qui negli *ultimi 10 minuti*. Non ho toccato nulla. Dimmi cosa vuoi cambiare."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-08",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "la lasagna costa 12",
+    "[+20 min]",
+    "torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Lasagna al forno*: prezzo da 11,00 € a *12,00 €*",
+    "Non ho una modifica recente su *carbonara* da annullare. Dimmi cosa vuoi, per esempio «carbonara è di nuovo disponibile»."
+   ],
+   "expected": [
+    "price|Lasagna al forno|12"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13",
+    "price|Lasagna al forno|12"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-09",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[dashboard: Spaghetti alla carbonara hidden true]",
+    "torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Non ho una modifica recente su *carbonara* da annullare. Dimmi cosa vuoi, per esempio «carbonara è di nuovo disponibile»."
+   ],
+   "expected": [],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-10",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "nascondi la bruschetta",
+    "[+45 min]",
+    "torna come prima la bruschetta"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: *nascosto* dal menu",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Bruschetta al pomodoro*: di nuovo *visibile* nel menu"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-11",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la tagliata in promo a 15",
+    "[+50 min]",
+    "torna come prima la tagliata"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: in *promo* a *15,00 €* (prezzo pieno 18,00 €), finché non la togli",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Tagliata di manzo*: tolgo la *promo*, torna a 18,00 €"
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-12",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[+30 min]",
+    "torna come prima la lasagna"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Non ho una modifica recente su *lasagna* da annullare. Dimmi cosa vuoi, per esempio «lasagna è di nuovo disponibile»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-13",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[+30 min]",
+    "[B] torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ho una modifica recente su *carbonara* da annullare. Dimmi cosa vuoi, per esempio «carbonara è di nuovo disponibile»."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "actual": [
+    "price|Spaghetti alla carbonara|13"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-14",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "torna come prima la carbonara",
+    "torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 13,00 € a *12,00 €*",
+    "Non ho una modifica recente su *carbonara* da annullare. Dimmi cosa vuoi, per esempio «carbonara è di nuovo disponibile»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-15",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "aggiungi tra i primi la pasta al ragù a 12",
+    "[+20 min]",
+    "torna come prima la pasta al ragù"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\nNuovo piatto *Pasta al ragù* in *Primi*: *12,00 €*",
+    "Non ho una modifica recente su *pasta al ragu* da annullare. Dimmi cosa vuoi, per esempio «pasta al ragu è di nuovo disponibile»."
+   ],
+   "expected": [],
+   "actual": [
+    "create|pasta al ragu|12|primi"
+   ],
+   "aiCalls": 0,
+   "fails": []
+  },
+  {
+   "id": "mem60-16",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara costa 13",
+    "[dashboard: Spaghetti alla carbonara price 15]",
+    "no scusa 14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "mem60-16",
+   "cat": "mem60",
+   "mode": "empty",
+   "turns": [
+    "la carbonara costa 13",
+    "[dashboard: Spaghetti alla carbonara price 15]",
+    "no scusa 14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "mem60-16",
+   "cat": "mem60",
+   "mode": "wrong",
+   "turns": [
+    "la carbonara costa 13",
+    "[dashboard: Spaghetti alla carbonara price 15]",
+    "no scusa 14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "Cosa vuoi cambiare per *Panna cotta*: il prezzo, se è finito o altro? Non ho cambiato nulla."
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "mem60-16",
+   "cat": "mem60",
+   "mode": "wrongCreate",
+   "turns": [
+    "la carbonara costa 13",
+    "[dashboard: Spaghetti alla carbonara price 15]",
+    "no scusa 14"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: prezzo da 12,00 € a *13,00 €*",
+    "*Non ho capito la richiesta.* Puoi riscriverla o mandare un altro vocale?"
+   ],
+   "expected": [
+    "price|Spaghetti alla carbonara|14"
+   ],
+   "actual": [],
+   "aiCalls": 1,
+   "fails": []
+  },
+  {
+   "id": "mem60-17",
+   "cat": "mem60",
+   "mode": "ideal",
+   "turns": [
+    "la carbonara è finita",
+    "[dashboard: Spaghetti alla carbonara available true]",
+    "torna come prima la carbonara"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*Spaghetti alla carbonara*: *finito*",
+    "Non ho una modifica recente su *carbonara* da annullare. Dimmi cosa vuoi, per esempio «carbonara è di nuovo disponibile»."
+   ],
+   "expected": [],
+   "actual": [],
+   "aiCalls": 0,
+   "fails": [],
+   "note": "già tornata dalla dashboard: non va rimessa esaurita"
+  }
+ ]
+}

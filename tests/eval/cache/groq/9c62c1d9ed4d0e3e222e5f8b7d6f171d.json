@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-bac311bd-8922-4992-8b1e-1fa3448c9ec5",
+  "object": "chat.completion",
+  "created": 1792284118,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Quale tagliata vuoi conoscere? (p7, p8, p9)\",\n    \"item_refs\": [\"p7\", \"p8\", \"p9\"],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Quale tagliata vuoi conoscere? (Tagliata rucola e grana, Tagliata con funghi porcini e panna, Tagliata di orata o branzino)\"\n}",
+     "reasoning": "User asks price of tagliata. Need read intent. Identify which tagliata? There are p7 Tagliata rucola e grana, p8 Tagliata con funghi porcini e panna, p9 Tagliata di orata o branzino... ambiguous. So need clarify with candidates. Intent read? It's a question about price, so read intent. reply_draft should ask which one. Provide clarify fields. So output JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055019965,
+   "prompt_tokens": 3454,
+   "prompt_time": 0.040234296,
+   "completion_tokens": 258,
+   "completion_time": 0.572158775,
+   "total_tokens": 3712,
+   "total_time": 0.612393071,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 96
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_dee443f41b",
+  "x_groq": {
+   "id": "req_01m567ak7ke09bweqrec72heme",
+   "seed": 1234896036
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3454,
+  "completion_tokens": 258,
+  "total_tokens": 3712
+ },
+ "ms": 866,
+ "recordedAt": "2026-10-18T00:41:58.905Z",
+ "conv": "bv-domande-001"
+}

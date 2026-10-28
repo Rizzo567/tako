@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-c45a1a0c-d54a-47ae-ac54-6291abc21bb2",
+  "object": "chat.completion",
+  "created": 1792249033,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p2\",\n      \"section\": null,\n      \"price\": 3.5,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p2\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "User says \"sì la seconda\" referring to previous clarification. Second suppli is p2 Supplì cacio e pepe. So change price to 3.5. Action set_price item p2 price 3.5. reply_draft empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.30175352,
+   "prompt_tokens": 3417,
+   "prompt_time": 0.188357372,
+   "completion_tokens": 231,
+   "completion_time": 0.483884928,
+   "total_tokens": 3648,
+   "total_time": 0.6722423,
+   "completion_tokens_details": {
+    "reasoning_tokens": 54
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_4727af4560",
+  "x_groq": {
+   "id": "req_01m555vw4bexmtt327ty29j7m3",
+   "seed": 2030092036
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3417,
+  "completion_tokens": 231,
+  "total_tokens": 3648
+ },
+ "ms": 1076,
+ "recordedAt": "2026-10-17T14:57:13.745Z",
+ "conv": "chiarimento-002"
+}

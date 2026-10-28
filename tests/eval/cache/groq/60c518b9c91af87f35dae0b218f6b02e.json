@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-44d00c75-1f09-4119-b3f2-a569fa428ea7",
+  "object": "chat.completion",
+  "created": 1792282466,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Cosa devo confermare?\",\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Cosa devo confermare?\"\n}",
+     "reasoning": "We need to see message: \"ULTIMA PUBBLICAZIONE (annullabile con undo_last per altri 10 min): Piatto di verifica\n\nMESSAGGIO\nconferma\"\n\nHe wants to confirm last publication? Actually there is no pending. So we need clarify? The message \"conferma\" likely wants to confirm something but no pending. So we ask clarification: what to confirm? reply_draft question. So intent=clarify, no actions. Provide question. Probably ask \"Cosa vuoi confermare?\" Provide generic."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055206047,
+   "prompt_tokens": 3593,
+   "prompt_time": 0.013629969,
+   "completion_tokens": 213,
+   "completion_time": 0.442742617,
+   "total_tokens": 3806,
+   "total_time": 0.456372586,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 114
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m565r5hreg2s4tft5wdxwj2c",
+   "seed": 2094693270
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3593,
+  "completion_tokens": 213,
+  "total_tokens": 3806
+ },
+ "ms": 658,
+ "recordedAt": "2026-10-18T00:14:26.302Z",
+ "conv": "bv-semplici-002"
+}

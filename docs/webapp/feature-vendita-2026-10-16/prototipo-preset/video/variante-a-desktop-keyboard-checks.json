@@ -1,0 +1,230 @@
+[
+ {
+  "label": "nessuno scroll orizzontale",
+  "ok": true,
+  "detail": {
+   "presetX": 487,
+   "pickerRight": 479,
+   "toolsX": 824,
+   "presetRight": 635,
+   "docW": 1280,
+   "vw": 1280
+  }
+ },
+ {
+  "label": "posizione Preset variante a",
+  "ok": true,
+  "detail": {
+   "presetX": 487,
+   "pickerRight": 479,
+   "toolsX": 824,
+   "presetRight": 635,
+   "docW": 1280,
+   "vw": 1280
+  }
+ },
+ {
+  "label": "Tab raggiunge Preset con focus visibile",
+  "ok": true,
+  "detail": "pp-preset"
+ },
+ {
+  "label": "Invio apre e porta il focus sul chip corrente",
+  "ok": true,
+  "detail": {
+   "label": "Preset",
+   "expanded": "true",
+   "hidden": false,
+   "ty": 136,
+   "trayH": 124,
+   "current": "attuale",
+   "firstDish": "Carbonara",
+   "empty": false,
+   "focus": "attuale",
+   "chipOpacity": 1,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "frecce spostano il focus (Home → Lun, → Mar)",
+  "ok": true,
+  "detail": "mar"
+ },
+ {
+  "label": "Invio sceglie Martedì, focus torna al pulsante",
+  "ok": true,
+  "detail": {
+   "label": "Martedì",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "mar",
+   "firstDish": "Lasagna al ragù",
+   "empty": false,
+   "focus": "pp-preset",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "Freccia giù apre, focus su Martedì",
+  "ok": true,
+  "detail": {
+   "label": "Martedì",
+   "expanded": "true",
+   "hidden": false,
+   "ty": 136,
+   "trayH": 124,
+   "current": "mar",
+   "firstDish": "Lasagna al ragù",
+   "empty": false,
+   "focus": "mar",
+   "chipOpacity": 1,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "Esc chiude senza cambiare, focus al pulsante",
+  "ok": true,
+  "detail": {
+   "label": "Martedì",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "mar",
+   "firstDish": "Lasagna al ragù",
+   "empty": false,
+   "focus": "pp-preset",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "Tab fuori dal vassoio lo chiude",
+  "ok": true,
+  "detail": {
+   "label": "Martedì",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "mar",
+   "firstDish": "Lasagna al ragù",
+   "empty": false,
+   "focus": "BUTTON",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "dialogo «Salva o scarta» aperto da tastiera, focus su Salva",
+  "ok": true,
+  "detail": {
+   "label": "Martedì",
+   "expanded": "true",
+   "hidden": false,
+   "ty": 136,
+   "trayH": 124,
+   "current": "mar",
+   "firstDish": "Lasagna al ragù",
+   "empty": false,
+   "focus": "pp-dlg-save",
+   "chipOpacity": 1,
+   "dialog": true,
+   "dlgError": "",
+   "status": "Modifiche non salvate a «Martedì»",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "Esc nel dialogo = Annulla: bozza conservata, focus al chip",
+  "ok": true,
+  "detail": {
+   "label": "Martedì",
+   "expanded": "true",
+   "hidden": false,
+   "ty": 136,
+   "trayH": 124,
+   "current": "mar",
+   "firstDish": "Lasagna al ragù",
+   "empty": false,
+   "focus": "mer",
+   "chipOpacity": 1,
+   "dialog": false,
+   "dlgError": "",
+   "status": "Modifiche non salvate a «Martedì»",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "errore di salvataggio: messaggio, dialogo aperto, dati conservati",
+  "ok": true,
+  "detail": {
+   "label": "Martedì",
+   "expanded": "true",
+   "hidden": false,
+   "ty": 136,
+   "trayH": 124,
+   "current": "mar",
+   "firstDish": "Lasagna al ragù",
+   "empty": false,
+   "focus": "pp-dlg-save",
+   "chipOpacity": 1,
+   "dialog": true,
+   "dlgError": "Connessione assente: le modifiche sono ancora qui. Riprova.",
+   "status": "Modifiche non salvate a «Martedì»",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "Riprova Salva: successo, passa a Mercoledì",
+  "ok": true,
+  "detail": {
+   "label": "Mercoledì",
+   "expanded": "false",
+   "hidden": false,
+   "ty": 0,
+   "trayH": 124,
+   "current": "mer",
+   "firstDish": "Gnocchi al pomodoro",
+   "empty": false,
+   "focus": "pp-preset",
+   "chipOpacity": 0,
+   "dialog": false,
+   "dlgError": "",
+   "status": "",
+   "todayTag": "oggi",
+   "onlineTag": "online"
+  }
+ },
+ {
+  "label": "nessun errore JS in pagina",
+  "ok": true,
+  "detail": []
+ }
+]

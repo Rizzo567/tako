@@ -1,0 +1,524 @@
+{
+  "set": "names",
+  "startedAt": "2026-10-16T10:40:44.225Z",
+  "steps": [
+    {
+      "n": 1,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Crea locale Verifica Avversaria Sedici. Crea due menu: Pranzo, categoria Primi, Pasta al pomodoro a 10 euro; Cena, categoria Panini, Burger classico a 12 euro. È solo una bozza privata: non pubblicare e non inviare inviti.",
+      "webhook": {
+        "status": 200,
+        "ack": "Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione."
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6350
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 2 piatti.\n\nFatto: aggiunto *Pasta al pomodoro* (Pranzo · Primi) a 10 €; aggiunto *Burger classico* (Cena · Panini) a 12 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "9bd82ca0-e762-42c0-9c62-038bbe8bc19e"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "7e5a8efb-5652-456f-8b12-a63a92304366"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 2,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Aggiungi nel menu Cena, categoria Pizze, Pizza Mario a 9 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3214
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 3 piatti.\n\nFatto: aggiunto *Pizza Mario* (Cena · Pizze) a 9 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 3,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "9bd82ca0-e762-42c0-9c62-038bbe8bc19e"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "7e5a8efb-5652-456f-8b12-a63a92304366"
+        },
+        {
+          "menu": "Cena",
+          "section": "Pizze",
+          "name": "Pizza Mario",
+          "price": 9,
+          "id": "b4bc7dc5-44b7-4165-ba5c-86255be05518"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 3,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Nel menu Pranzo, categoria Primi, aggiungi Trattoria della nonna a 12 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3296
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 4 piatti.\n\nFatto: aggiunto *Trattoria della nonna* (Pranzo · Primi) a 12 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "9bd82ca0-e762-42c0-9c62-038bbe8bc19e"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Trattoria della nonna",
+          "price": 12,
+          "id": "64cc177e-cbc7-490d-861f-814a43d4925c"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "7e5a8efb-5652-456f-8b12-a63a92304366"
+        },
+        {
+          "menu": "Cena",
+          "section": "Pizze",
+          "name": "Pizza Mario",
+          "price": 9,
+          "id": "b4bc7dc5-44b7-4165-ba5c-86255be05518"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 4,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Porta la Pasta al pomodoro a 11 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3316
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 4 piatti.\n\nFatto: *Pasta al pomodoro* (Pranzo) 10 € → 11 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 5,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 11,
+          "id": "9bd82ca0-e762-42c0-9c62-038bbe8bc19e"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Trattoria della nonna",
+          "price": 12,
+          "id": "64cc177e-cbc7-490d-861f-814a43d4925c"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "7e5a8efb-5652-456f-8b12-a63a92304366"
+        },
+        {
+          "menu": "Cena",
+          "section": "Pizze",
+          "name": "Pizza Mario",
+          "price": 9,
+          "id": "b4bc7dc5-44b7-4165-ba5c-86255be05518"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 5,
+      "name": "Verifica Avversaria Sedici",
+      "owner": "Mario Collaudo",
+      "text": "Mario Collaudo",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3287
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 4 piatti.\n\nFatto: titolare *Mario Collaudo*.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 6,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 11,
+          "id": "9bd82ca0-e762-42c0-9c62-038bbe8bc19e"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Trattoria della nonna",
+          "price": 12,
+          "id": "64cc177e-cbc7-490d-861f-814a43d4925c"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "7e5a8efb-5652-456f-8b12-a63a92304366"
+        },
+        {
+          "menu": "Cena",
+          "section": "Pizze",
+          "name": "Pizza Mario",
+          "price": 9,
+          "id": "b4bc7dc5-44b7-4165-ba5c-86255be05518"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 6,
+      "name": "Verifica Avversaria Sedici Bis",
+      "owner": "Mario Collaudo",
+      "text": "Il locale si chiama Verifica Avversaria Sedici Bis.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3287
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici Bis* · 4 piatti.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 7,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 11,
+          "id": "9bd82ca0-e762-42c0-9c62-038bbe8bc19e"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Trattoria della nonna",
+          "price": 12,
+          "id": "64cc177e-cbc7-490d-861f-814a43d4925c"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "7e5a8efb-5652-456f-8b12-a63a92304366"
+        },
+        {
+          "menu": "Cena",
+          "section": "Pizze",
+          "name": "Pizza Mario",
+          "price": 9,
+          "id": "b4bc7dc5-44b7-4165-ba5c-86255be05518"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 7,
+      "name": "Verifica Avversaria Sedici Bis",
+      "owner": "Mario Collaudo",
+      "text": "Mostrami il riepilogo dei menu e dei piatti.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3169
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici Bis* · 4 piatti.\n\n*Pranzo*\nPrimi: Pasta al pomodoro 11 €, Trattoria della nonna 12 €\n*Cena*\nPanini: Burger classico 12 €\nPizze: Pizza Mario 9 €\n\nRaccolti: nome titolare.\n\nQual è il *numero WhatsApp del titolare*, con prefisso internazionale?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 7,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 11,
+          "id": "9bd82ca0-e762-42c0-9c62-038bbe8bc19e"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Trattoria della nonna",
+          "price": 12,
+          "id": "64cc177e-cbc7-490d-861f-814a43d4925c"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "7e5a8efb-5652-456f-8b12-a63a92304366"
+        },
+        {
+          "menu": "Cena",
+          "section": "Pizze",
+          "name": "Pizza Mario",
+          "price": 9,
+          "id": "b4bc7dc5-44b7-4165-ba5c-86255be05518"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    }
+  ],
+  "before": {
+    "restaurantCount": 35,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "qaLinkCreated": true,
+  "expected": {
+    "name": "Verifica Avversaria Sedici Bis",
+    "dishes": [
+      "Cena/Panini/Burger classico/12",
+      "Cena/Pizze/Pizza Mario/9",
+      "Pranzo/Primi/Pasta al pomodoro/11",
+      "Pranzo/Primi/Trattoria della nonna/12"
+    ],
+    "nameAfterStep": [
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici Bis",
+      "Verifica Avversaria Sedici Bis"
+    ],
+    "ownerAfterStep": [
+      null,
+      null,
+      null,
+      null,
+      "Mario Collaudo",
+      "Mario Collaudo",
+      "Mario Collaudo"
+    ]
+  },
+  "actual": {
+    "dishes": [
+      "Cena/Panini/Burger classico/12",
+      "Cena/Pizze/Pizza Mario/9",
+      "Pranzo/Primi/Pasta al pomodoro/11",
+      "Pranzo/Primi/Trattoria della nonna/12"
+    ],
+    "name": "Verifica Avversaria Sedici Bis",
+    "ownerName": "Mario Collaudo",
+    "everyStepAnswered": true,
+    "pastaAfterStep": [
+      10,
+      10,
+      10,
+      11,
+      11,
+      11,
+      11
+    ],
+    "recapReturned": true,
+    "failedJobs": [],
+    "nameAfterStep": [
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici Bis",
+      "Verifica Avversaria Sedici Bis"
+    ],
+    "ownerAfterStep": [
+      null,
+      null,
+      null,
+      null,
+      "Mario Collaudo",
+      "Mario Collaudo",
+      "Mario Collaudo"
+    ]
+  },
+  "pass": true,
+  "errors": [],
+  "technicalCopy": 0,
+  "cleanup": {
+    "cancel": {
+      "status": "done",
+      "diagnostic": null,
+      "waitedMs": 3200
+    },
+    "openDraftAfter": false
+  },
+  "qaLinkRemoved": true,
+  "after": {
+    "restaurantCount": 35,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "restaurantsChanged": [
+    "26050ecd-2e55-4057-a4c5-bff2b449cd47"
+  ],
+  "restaurantsAdded": [],
+  "victoriaUnchanged": true,
+  "victoriaMatchesMorningBaseline": false,
+  "finishedAt": "2026-10-16T10:46:33.163Z"
+}

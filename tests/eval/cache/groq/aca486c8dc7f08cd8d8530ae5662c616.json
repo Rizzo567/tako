@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-0b031db5-5a8d-405c-bfa2-0d34825922c4",
+  "object": "chat.completion",
+  "created": 1792239399,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"change\",\"actions\":[{\"action\":\"set_price\",\"item_id\":\"p21\",\"price\":6}]}",
+     "reasoning": "User gave catalog and message. Need to interpret: \"il tiramisù a 6 euro e tojibo\". Likely wants change price of tiramisù to 6 euro. tiramisù id p21. So intent change set_price. Also \"tojibo\"? unclear maybe typo, ignore? It's ambiguous request? Probably just price change. It's clear. Return JSON change."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.207573701,
+   "prompt_tokens": 1638,
+   "prompt_time": 0.081160505,
+   "completion_tokens": 111,
+   "completion_time": 0.228432089,
+   "total_tokens": 1749,
+   "total_time": 0.309592594,
+   "completion_tokens_details": {
+    "reasoning_tokens": 78
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_803c0ba83d",
+  "x_groq": {
+   "id": "req_01m54wnvp0ezc95k8hyg7pf39k",
+   "seed": 1757018568
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1638,
+  "completion_tokens": 111,
+  "total_tokens": 1749
+ },
+ "ms": 622,
+ "recordedAt": "2026-10-17T12:16:38.986Z",
+ "conv": "manuel-001"
+}

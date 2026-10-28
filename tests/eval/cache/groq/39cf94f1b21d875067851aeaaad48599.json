@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-201b0edc-f755-4dc6-8a78-161e33cd4e30",
+  "object": "chat.completion",
+  "created": 1792284273,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"capability\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [\n    \"price\",\n    \"unavailable\",\n    \"available\",\n    \"hidden\",\n    \"description\",\n    \"tags\",\n    \"featured\",\n    \"create\",\n    \"special\",\n    \"photo\",\n    \"promo\",\n    \"scarcity\",\n    \"questions\",\n    \"fullmenu\",\n    \"voice\",\n    \"allergens\",\n    \"delete\",\n    \"rename\",\n    \"bulk\",\n    \"graphics\",\n    \"categories\",\n    \"translations\",\n    \"other\",\n    \"all\"\n  ],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Posso gestire prezzi, disponibilità, nascondere o mostrare piatti, aggiungere descrizioni, tag, evidenziare, creare, modificare o eliminare voci, gestire promozioni, speciali del giorno e molto altro.\"\n}",
+     "reasoning": "User asks what you can do. Intent capability. Need reply_draft with description. No actions. Provide capability_ids list. uncertain empty. alias_used empty. read none. item_refs empty. clarify empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055193968,
+   "prompt_tokens": 3457,
+   "prompt_time": 0.21871607,
+   "completion_tokens": 292,
+   "completion_time": 0.605729223,
+   "total_tokens": 3749,
+   "total_time": 0.824445293,
+   "completion_tokens_details": {
+    "reasoning_tokens": 43
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m567f9gpe7mbrbq6kz7nf08x",
+   "seed": 1674917076
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3457,
+  "completion_tokens": 292,
+  "total_tokens": 3749
+ },
+ "ms": 1107,
+ "recordedAt": "2026-10-18T00:44:33.014Z",
+ "conv": "bv-domande-002"
+}

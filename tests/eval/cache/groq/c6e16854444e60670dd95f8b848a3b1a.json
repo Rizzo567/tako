@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-d205142a-b619-4064-9d02-63a45db50fd9",
+  "object": "chat.completion",
+  "created": 1792283873,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [\"p1\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Il piatto di verifica costa 13,5 €.\"\n}",
+     "reasoning": "User asks price. Intent read. Need reply_draft with answer. No actions. Provide read items? item_refs p1. reply_draft \"Il piatto di verifica costa 13,5 €.\" JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054407817,
+   "prompt_tokens": 3270,
+   "prompt_time": 0.011314283,
+   "completion_tokens": 153,
+   "completion_time": 0.316957049,
+   "total_tokens": 3423,
+   "total_time": 0.328271332,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 45
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_dee443f41b",
+  "x_groq": {
+   "id": "req_01m5673446evs9rwd8enawrzap",
+   "seed": 211077693
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3270,
+  "completion_tokens": 153,
+  "total_tokens": 3423
+ },
+ "ms": 478,
+ "recordedAt": "2026-10-18T00:37:53.726Z",
+ "conv": "bv-semplici-021"
+}

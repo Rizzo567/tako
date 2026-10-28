@@ -1,0 +1,26 @@
+{
+ "at": "2026-10-17T01:42:27.726Z",
+ "phones": 30,
+ "changes": 6,
+ "jitterMs": 300,
+ "durationS": 121,
+ "joined": 30,
+ "pushesReceived": 90,
+ "withDelta": 60,
+ "reads": 131,
+ "retries": 41,
+ "status": {
+  "200": 89,
+  "429": 1,
+  "503": 41
+ },
+ "readMsP50": 533,
+ "readMsP95": 3004,
+ "structural": {
+  "reads": 30,
+  "failed": 0,
+  "signalToReadP50": 5147,
+  "signalToReadP95": 9392,
+  "max": 11572
+ }
+}

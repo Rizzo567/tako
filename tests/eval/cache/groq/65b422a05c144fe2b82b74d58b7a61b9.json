@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-5e8d74a9-b7ea-482f-ae4d-af88da0c505c",
+  "object": "chat.completion",
+  "created": 1792247964,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_hidden\",\n      \"item\": \"p10\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p10\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "Need to parse: user says \"rimettila\". Refers to previous item Gricia (p10) hidden, now wants to show. Intent change, action set_hidden false. item p10. reply_draft empty. No uncertainties."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055007831,
+   "prompt_tokens": 3345,
+   "prompt_time": 0.055135145,
+   "completion_tokens": 224,
+   "completion_time": 0.468989042,
+   "total_tokens": 3569,
+   "total_time": 0.524124187,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 50
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m554v87fe6mvwgr9hzc3j55b",
+   "seed": 671096550
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3345,
+  "completion_tokens": 224,
+  "total_tokens": 3569
+ },
+ "ms": 729,
+ "recordedAt": "2026-10-17T14:39:24.393Z",
+ "conv": "togli-005"
+}

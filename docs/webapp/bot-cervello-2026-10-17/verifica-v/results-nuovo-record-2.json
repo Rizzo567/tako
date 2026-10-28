@@ -1,0 +1,124 @@
+{
+ "bot": "nuovo-record-2",
+ "meta": {
+  "groq": "record",
+  "bot": "nuovo",
+  "tetto": 351447,
+  "conversazioni": 1
+ },
+ "summary": {
+  "total": {
+   "family": "TOTALE",
+   "n": 1,
+   "ok": 1,
+   "success": 1,
+   "grave": 0,
+   "medio": 0,
+   "basso": 0,
+   "safety": 0,
+   "clarRate": 0,
+   "unexpectedClar": 0,
+   "usedLlm": 1,
+   "llmMissConvs": 0,
+   "detN": 0,
+   "detSuccess": 0
+  },
+  "multi": {
+   "family": "multi-turno",
+   "n": 1,
+   "ok": 1,
+   "success": 1,
+   "grave": 0,
+   "medio": 0,
+   "basso": 0,
+   "safety": 0,
+   "clarRate": 0,
+   "unexpectedClar": 0,
+   "usedLlm": 1,
+   "llmMissConvs": 0,
+   "detN": 0,
+   "detSuccess": 0
+  },
+  "families": [
+   {
+    "family": "v-deixis",
+    "n": 1,
+    "ok": 1,
+    "success": 1,
+    "grave": 0,
+    "medio": 0,
+    "basso": 0,
+    "safety": 0,
+    "clarRate": 0,
+    "unexpectedClar": 0,
+    "usedLlm": 1,
+    "llmMissConvs": 0,
+    "detN": 0,
+    "detSuccess": 0
+   }
+  ],
+  "codes": {},
+  "latency": {
+   "harnessP50": 969.7,
+   "harnessP95": 969.7,
+   "withRecordedGroqP50": 1918.7,
+   "withRecordedGroqP95": 1918.7
+  },
+  "llm": {
+   "calls": 1,
+   "misses": 0,
+   "tokens": 3463
+  }
+ },
+ "groqStats": {
+  "calls": 1,
+  "hits": 0,
+  "misses": 0,
+  "recorded": 1,
+  "tokens": 3463,
+  "recordedMs": 949,
+  "refused": 0,
+  "rateLimited": 0,
+  "oracle": 0
+ },
+ "unknownSql": [],
+ "verdicts": [
+  {
+   "id": "v-deixis-013",
+   "family": "v-deixis",
+   "menu": "qa",
+   "success": true,
+   "fails": [],
+   "expected": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true"
+   ],
+   "actual": [
+    "hidden|boh|true",
+    "hidden|la parmigiana|true",
+    "hidden|tiramisù|true"
+   ],
+   "replies": [
+    "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\n*Confermato.* Ho aggiornato il menu.\n\n*boh*: *nascosto* dal menu\n\n*la parmigiana* è già in *Piatti di prova* a 10,00 €: non l’ho aggiunto di nuovo.\n*tiramisù* è già in *Piatti di prova* a 6,00 €: non l’ho aggiunto di nuovo.",
+    "*Confermato.* Ho aggiornato il menu.\n\n*la parmigiana*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu"
+   ],
+   "turns": [
+    "🎤 Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
+    "nascondi quei due piatti"
+   ],
+   "clarifications": 0,
+   "unexpectedClarifications": 0,
+   "llmCalls": 1,
+   "llmMisses": 0,
+   "llmTokens": 3463,
+   "latencyMs": [
+    30,
+    969.7
+   ],
+   "recordedLlmMs": 949,
+   "usedLlm": true,
+   "note": "«quei due» = parmigiana e tiramisù del messaggio prima (boh è già nascosto)"
+  }
+ ]
+}

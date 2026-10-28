@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-65369660-3b44-45a0-8e7a-dc6ac54c8e91",
+  "object": "chat.completion",
+  "created": 1792249875,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": 8,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to interpret. \"a caponata a ottu\" likely means set price? \"a\" maybe \"a\" = set price? \"ottu\" = eight euros. So change price of caponata (p1) to 8. Intent change. action set_price item p1 price 8. reply_draft empty. No other fields."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.052951416,
+   "prompt_tokens": 3259,
+   "prompt_time": 0.037827668,
+   "completion_tokens": 248,
+   "completion_time": 0.514355113,
+   "total_tokens": 3507,
+   "total_time": 0.552182781,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 76
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m556nhzpe73s3wrqdaz3zs3v",
+   "seed": 851622903
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3259,
+  "completion_tokens": 248,
+  "total_tokens": 3507
+ },
+ "ms": 796,
+ "recordedAt": "2026-10-17T15:11:14.999Z",
+ "conv": "vocale-032"
+}

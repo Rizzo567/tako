@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-eaafbe10-71f2-4041-b43d-a4ef409a4bba",
+  "object": "chat.completion",
+  "created": 1792284823,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"unavailable\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Al momento non ci sono piatti esauriti.\"\n}",
+     "reasoning": "We need to ask which items are finished. The menu has p4 hidden but not esaurito. No esaurito flags. So answer read unavailable: need list of items that are finito? None. Should reply that none are finished. That's valid. Maybe need item_refs empty okay. Server maybe expects read=unavailable and item_refs list of items? Could include none. Might need specify read=unavailable and item_refs empty is fine. But maybe need clarify? No. Provide same but maybe include reply asking which? Actually question: \"dimmi cosa è finito\" -> we can answer none. Should be fine. Maybe server expects read=unavailable and item_refs list of items that are unavailable. Since none, maybe still okay. I'll keep."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.097654247,
+   "prompt_tokens": 3432,
+   "prompt_time": 0.148819554,
+   "completion_tokens": 256,
+   "completion_time": 0.531925379,
+   "total_tokens": 3688,
+   "total_time": 0.680744933,
+   "completion_tokens_details": {
+    "reasoning_tokens": 157
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_267e812a3a",
+  "x_groq": {
+   "id": "req_01m56802reedyr0rgk36yap9yq",
+   "seed": 868822488
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3432,
+  "completion_tokens": 256,
+  "total_tokens": 3688
+ },
+ "ms": 943,
+ "recordedAt": "2026-10-18T00:53:43.001Z",
+ "conv": "bv-domande-008"
+}

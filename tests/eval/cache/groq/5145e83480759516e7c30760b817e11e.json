@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-20b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-40dce604-5bc1-4512-89f2-86f2a99ff4ac",
+  "object": "chat.completion",
+  "created": 1792247378,
+  "model": "openai/gpt-oss-20b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"clarify\",\"actions\":[],\"read\":\"none\",\"item_refs\":[],\"capability_ids\":[],\"clarify\":{\"question\":\"Quale piatto intendi con \\\"lasagna\\\"?\",\"item_refs\":[],\"missing\":[]},\"uncertain\":[],\"alias_used\":[],\"reply_draft\":\"Quale piatto intendi con \\\"lasagna\\\"?\"}",
+     "reasoning": "Need change price for p7 to 13, p? lasagna is not in menu; maybe p? lasagna not exist. So ambiguous: lasagna not present. So clarify."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.2046749,
+   "prompt_tokens": 3290,
+   "prompt_time": 0.20081702,
+   "completion_tokens": 126,
+   "completion_time": 0.127751542,
+   "total_tokens": 3416,
+   "total_time": 0.328568562,
+   "completion_tokens_details": {
+    "reasoning_tokens": 39
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_bb6a356524",
+  "x_groq": {
+   "id": "req_01m5549c3jerxa59v5n4ykra61",
+   "seed": 1833054045
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3290,
+  "completion_tokens": 126,
+  "total_tokens": 3416
+ },
+ "ms": 622,
+ "recordedAt": "2026-10-17T14:29:38.446Z",
+ "conv": "multipla-002"
+}

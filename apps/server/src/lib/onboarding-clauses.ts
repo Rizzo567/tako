@@ -129,6 +129,7 @@ export function onboardingUncoveredClauses(text:string,rows:OnboardingMenuRow[],
  const menuOf=(sentence:string)=>[...new Set([...menus.filter(m=>new RegExp(`(?<![\\p{L}])${m.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?![\\p{L}])`,'iu').test(sentence)),...[...sentence.matchAll(/(?<![\p{L}])men[uù]\s+(\p{L}{3,})/giu)].map(m=>m[1]!).filter(w=>!/^(?:di|del|della|dei|per|con|e)$/i.test(w))].map(m=>menus.find(k=>onboardingDishKey(k)===onboardingDishKey(m))??m))]
  for(const clause of onboardingClauses(text)){
   const priced=hasPrice(clause.text),acted=actionVerb.test(clause.text);if(!priced&&!acted)continue
+  if(markersIn(clause.text).at(-1)?.intent==='none')continue // «non aggiungere il Tiramisu a 6 euro»: nothing to do, nothing to ask
   if(!priced)continue // action without price (elimina/sposta/rinomina…) is handled on the whole message
   // Dish mentions in the clause, longest names first, without overlaps.
   const lower=clause.text.toLocaleLowerCase('it'),found:{name:string;at:number;end:number}[]=[]

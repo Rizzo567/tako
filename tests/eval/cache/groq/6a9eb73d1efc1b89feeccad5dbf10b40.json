@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-3c445fc3-9955-4120-9c9c-bb54f4749efa",
+  "object": "chat.completion",
+  "created": 1792248099,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p7\",\n      \"section\": null,\n      \"price\": 13,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need intent change, action set_price on p7 (Carbonara) price 13. No uncertainties. reply_draft empty. alias none. No read. capability empty. unclear? \"ah checco\" alias? phrase \"checco\" refers to owner, not item. No alias_used. So output."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.05475309,
+   "prompt_tokens": 3291,
+   "prompt_time": 0.011977404,
+   "completion_tokens": 237,
+   "completion_time": 0.552648727,
+   "total_tokens": 3528,
+   "total_time": 0.564626131,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 65
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m554zc46ebw8p05hnv5w5ccg",
+   "seed": 1493370358
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3291,
+  "completion_tokens": 237,
+  "total_tokens": 3528
+ },
+ "ms": 753,
+ "recordedAt": "2026-10-17T14:41:39.460Z",
+ "conv": "vocale-001"
+}

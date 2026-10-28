@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-addd8693-6feb-4d45-8db2-91cde1f83d2d",
+  "object": "chat.completion",
+  "created": 1792285375,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p2\",\n      \"section\": null,\n      \"price\": 15,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": 16,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 7,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"reply_draft\": \"Prezzi aggiornati.\",\n  \"uncertain\": []\n}",
+     "reasoning": "We need to produce owner_brain_plan JSON. Determine actions: set_price for p2 to 15, p3 to 16, p4 to 7, keep p5 unchanged, p1 unchanged. Also p2 price changed from 11 to 15, p3 from 13 to 16, p4 from 6 to7. No confirmation needed now as clarified. So intent change. reply_draft confirm? Already clarified, so reply_draft maybe short confirmation. \"Prezzi aggiornati.\" Provide actions list. No uncertain. alias none. capability ids maybe empty. read none. clarify none. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.304853583,
+   "prompt_tokens": 3457,
+   "prompt_time": 0.143992461,
+   "completion_tokens": 461,
+   "completion_time": 0.956268577,
+   "total_tokens": 3918,
+   "total_time": 1.100261038,
+   "completion_tokens_details": {
+    "reasoning_tokens": 130
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_5a93aea882",
+  "x_groq": {
+   "id": "req_01m568gxtwe32t7sdwvyyhbw19",
+   "seed": 173833728
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3457,
+  "completion_tokens": 461,
+  "total_tokens": 3918
+ },
+ "ms": 1511,
+ "recordedAt": "2026-10-18T01:02:55.636Z",
+ "conv": "bv-multiple-002"
+}

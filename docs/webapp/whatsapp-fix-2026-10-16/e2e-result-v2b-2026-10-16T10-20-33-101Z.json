@@ -1,0 +1,326 @@
+{
+  "set": "v2b",
+  "startedAt": "2026-10-16T10:20:33.101Z",
+  "steps": [
+    {
+      "n": 1,
+      "text": "Crea locale Verifica Avversaria Quattro. Nel menu Pranzo, categoria Panini, Burger classico a 12 euro. Nel menu Cena, categoria Panini, Burger classico a 12 euro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": "Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione."
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6540
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Quattro* · 2 piatti.\n\nFatto: aggiunto *Burger classico* (Pranzo · Panini) a 12 €; aggiunto *Burger classico* (Cena · Panini) a 12 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "b1a9a5d9-b6f4-4dfc-8b67-ec21990b1280"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "9dd434b3-8e98-4e64-984e-2e2fa29496b9"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 2,
+      "text": "Porta il Burger classico a 15 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6426
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Quattro* · 2 piatti.\n\nQuale *Burger classico* vuoi a 15 €: *Pranzo* o *Cena*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 3,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "b1a9a5d9-b6f4-4dfc-8b67-ec21990b1280"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "9dd434b3-8e98-4e64-984e-2e2fa29496b9"
+        }
+      ],
+      "unresolved": [
+        "Quale *Burger classico* vuoi a 15 €: *Pranzo* o *Cena*?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 3,
+      "text": "Aggiungi Sorbetto a 4 euro, categoria Dolci.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3435
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Quattro* · 2 piatti.\n\nIn quale *menu* va Sorbetto? *Pranzo* o *Cena*\nPuoi inviare il dato corretto?\nPoi c’è *un altro dato* da controllare.\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "b1a9a5d9-b6f4-4dfc-8b67-ec21990b1280"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "9dd434b3-8e98-4e64-984e-2e2fa29496b9"
+        }
+      ],
+      "unresolved": [
+        "In quale *menu* va Sorbetto? *Pranzo* o *Cena*",
+        "Quale *Burger classico* vuoi a 15 €: *Pranzo* o *Cena*?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 4,
+      "text": "Cena",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3517
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Quattro* · 3 piatti.\n\nFatto: aggiunto *Sorbetto* (Cena · Dolci) a 4 €.\n\nQuale *Burger classico* vuoi a 15 €: *Pranzo* o *Cena*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 5,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "b1a9a5d9-b6f4-4dfc-8b67-ec21990b1280"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "9dd434b3-8e98-4e64-984e-2e2fa29496b9"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Sorbetto",
+          "price": 4,
+          "id": "1210fc71-9592-4cc9-8be9-2d6068764d61"
+        }
+      ],
+      "unresolved": [
+        "Quale *Burger classico* vuoi a 15 €: *Pranzo* o *Cena*?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 5,
+      "text": "Mostrami il riepilogo dei menu e dei piatti.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3383
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Quattro* · 3 piatti.\n\n*Pranzo*\nPanini: Burger classico 12 €\n*Cena*\nPanini: Burger classico 12 €\nDolci: Sorbetto 4 €\n\nNessun contatto del titolare ancora raccolto.\n\nQuale *Burger classico* vuoi a 15 €: *Pranzo* o *Cena*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 5,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "b1a9a5d9-b6f4-4dfc-8b67-ec21990b1280"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "9dd434b3-8e98-4e64-984e-2e2fa29496b9"
+        },
+        {
+          "menu": "Cena",
+          "section": "Dolci",
+          "name": "Sorbetto",
+          "price": 4,
+          "id": "1210fc71-9592-4cc9-8be9-2d6068764d61"
+        }
+      ],
+      "unresolved": [
+        "Quale *Burger classico* vuoi a 15 €: *Pranzo* o *Cena*?"
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    }
+  ],
+  "before": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "qaLinkCreated": true,
+  "expected": {
+    "name": "Verifica Avversaria Quattro",
+    "dishes": [
+      "Cena/Dolci/Sorbetto/4",
+      "Cena/Panini/Burger classico/12",
+      "Pranzo/Panini/Burger classico/12"
+    ]
+  },
+  "actual": {
+    "dishes": [
+      "Cena/Dolci/Sorbetto/4",
+      "Cena/Panini/Burger classico/12",
+      "Pranzo/Panini/Burger classico/12"
+    ],
+    "name": "Verifica Avversaria Quattro",
+    "ownerName": null,
+    "everyStepAnswered": true,
+    "pastaAfterStep": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "recapReturned": true,
+    "failedJobs": []
+  },
+  "pass": true,
+  "errors": [],
+  "technicalCopy": 0,
+  "cleanup": {
+    "cancel": {
+      "status": "done",
+      "diagnostic": null,
+      "waitedMs": 3378
+    },
+    "openDraftAfter": false
+  },
+  "qaLinkRemoved": true,
+  "after": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "restaurantsChanged": [],
+  "restaurantsAdded": [],
+  "victoriaUnchanged": true,
+  "victoriaMatchesMorningBaseline": false,
+  "finishedAt": "2026-10-16T10:25:39.767Z"
+}

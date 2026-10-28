@@ -1,0 +1,25 @@
+{
+ "tokens": 2311,
+ "out": [
+  {
+   "text": "metti boh a 21 euro e la pasta al ragù è finita",
+   "turnMs": 612,
+   "groqMs": 739,
+   "afterGroqMs": 2460,
+   "totalMs": 3811,
+   "tokens": 1142,
+   "committed": true,
+   "reply": "*Confermato.* Ho aggiornato il menu.\n\n*boh*: prezzo da 20,00 € a *21,00 €*\n*pasta al ragù*"
+  },
+  {
+   "text": "Che ne sacc a 19 euro e boh torna disponibile",
+   "turnMs": 612,
+   "groqMs": 695,
+   "afterGroqMs": 802,
+   "totalMs": 2109,
+   "tokens": 1169,
+   "committed": false,
+   "reply": "Quale piatto intendi: *Che ne sacc*, *boh*? Scrivi il nome come appare nel menu."
+  }
+ ]
+}

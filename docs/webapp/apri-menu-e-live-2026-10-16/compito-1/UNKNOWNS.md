@@ -1,0 +1,10 @@
+# Compito 1 — UNKNOWNS (16/10/2026)
+
+| Sappiamo | Sappiamo di non sapere | Ipotesi da verificare (come / se falsa) | Punti ciechi |
+|---|---|---|---|
+| «Apri menu» (20-agency-dashboard.js) oggi fa `/web-locations/switch` e apre l'editor (route `menu`, anteprima nel riquadro). | Se Manuel vuole ancora un accesso diretto all'editor dalla card. | Il link pubblico giusto è `MW_CUSTOMER_PATH(id)` (14-customer-paths.js, generato da sync-customer-aliases) → `/<slug>`, fallback `/r/<id>/menu`. Verifica: verifier confronta con links.json. | Admin che apre il menu in una nuova scheda (cmd-clic): sessionStorage non passa → niente pulsante (accettato: in quella scheda basta chiuderla). |
+| Pagina pubblica = `apps/web-static` (worker `takomenu-public`, release/public-menus); `/api/*` (tranne `/api/customer/restaurant/*`) va a `takomenu-web` → read-edge. | Stato bfcache al «Indietro» del browser. | `GET /api/agency/me` (read-edge, già esistente) con cookie `tako_session` HttpOnly stessa origine dà `{agency:true}` solo agli UUID in `TAKOMENU_AGENCY_USER_IDS`; 401 anonimo; `false` ristoratore. Verifica: spike con sessione mia + QA owner. Se falsa → serve modifica edge → stop e chiedere. | Rate limit read-edge 100/min/IP: la chiamata parte solo con indizio locale → solo admin. |
+| Cookie staff HttpOnly: il JS non lo vede → serve un indizio locale (sessionStorage) per non chiamare il server per gli anonimi. | | Working tree = versione online (asset con hash identici al 16/10 ore 11) → il deploy porta solo le mie righe. Verifica: build baseline + diff asset prima del deploy. Se falsa → stop. | Altre sessioni che modificano staff/src o apps/web nel frattempo → ricontrollo diff subito prima del deploy. |
+| Dashboard salva la route in `tako-dash-route`; filtri in `window.__agencyFilters`. | | Il ritorno su `/staff/` riapre `agency`/`agency_tasks` con filtri e scroll ripristinati da sessionStorage. | |
+
+Decisione conservativa: nessuna modifica edge; nessun parametro URL; il pulsante si monta fuori dal renderer del menu (DigitalMenu/WorkspaceMenuRenderer non toccati, perimetro del Compito 2).

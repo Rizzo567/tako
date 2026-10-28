@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-73b74591-0ea9-4329-81c2-7097bde99420",
+  "object": "chat.completion",
+  "created": 1792282956,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"Piatti di prova\",\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"pasta al ragù\",\n      \"until\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"reply_draft\": \"Aggiungo pasta al ragù a 12 € nella sezione Piatti di prova.\",\n  \"uncertain\": []\n}",
+     "reasoning": "User wants to add pasta al ragù 12 euro to section \"Piatti di prova\" (c1). Need create_item. No price issues. Provide reply_draft confirming? Since action is create_item, reply_draft should be brief confirmation. According to spec, reply_draft always. For change: conferma breve senza prezzi. So \"Aggiungo pasta al ragù a 12 € nella sezione Piatti di prova.\" Also include actions array with create_item. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.215129205,
+   "prompt_tokens": 3269,
+   "prompt_time": 0.135040833,
+   "completion_tokens": 300,
+   "completion_time": 0.628011492,
+   "total_tokens": 3569,
+   "total_time": 0.763052325,
+   "completion_tokens_details": {
+    "reasoning_tokens": 102
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_9241e9962b",
+  "x_groq": {
+   "id": "req_01m56673zyet4tqnaf5zk7tyzt",
+   "seed": 1857846353
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3269,
+  "completion_tokens": 300,
+  "total_tokens": 3569
+ },
+ "ms": 1140,
+ "recordedAt": "2026-10-18T00:22:36.686Z",
+ "conv": "bv-semplici-006"
+}

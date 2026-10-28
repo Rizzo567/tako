@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-ce74418d-ea78-4612-972a-3c19d46c0991",
+  "object": "chat.completion",
+  "created": 1792283751,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p3\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Bruschetta Victoria segnata come finita.\"\n}",
+     "reasoning": "User says Bruschetta Victoria is finished. That's p3. Action set_available false. Need reply draft confirming. Intent change. No price. So actions: set_available item p3 value false. reply_draft: \"Bruschetta Victoria segnata come finita.\""
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.211047243,
+   "prompt_tokens": 3456,
+   "prompt_time": 0.157395083,
+   "completion_tokens": 240,
+   "completion_time": 0.495009693,
+   "total_tokens": 3696,
+   "total_time": 0.652404776,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 56
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_803c0ba83d",
+  "x_groq": {
+   "id": "req_01m566zcpaetjrj6awhhtfewvs",
+   "seed": 995505271
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3456,
+  "completion_tokens": 240,
+  "total_tokens": 3696
+ },
+ "ms": 1025,
+ "recordedAt": "2026-10-18T00:35:51.904Z",
+ "conv": "bv-semplici-019"
+}

@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-3cb63ea9-d0d7-405b-ab7b-a5a3592d92d5",
+  "object": "chat.completion",
+  "created": 1792247874,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"unavailable\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Quale vino della casa intendi?\",\n    \"item_refs\": [\"p26\", \"p27\"],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need intent read? It's a question about availability. So intent read, read=unavailable, item_refs? wine della casa? There are two: p26 red, p27 white. Ambiguous. So unclear which. Provide clarify with candidates p26,p27. No actions. reply_draft ask which one. uncertain none. alias none. capability empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.051888176,
+   "prompt_tokens": 3284,
+   "prompt_time": 0.013544218,
+   "completion_tokens": 183,
+   "completion_time": 0.381915052,
+   "total_tokens": 3467,
+   "total_time": 0.39545927,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 75
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m554rga2efc8zwgnnt4wh7pj",
+   "seed": 1308975055
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3284,
+  "completion_tokens": 183,
+  "total_tokens": 3467
+ },
+ "ms": 648,
+ "recordedAt": "2026-10-17T14:37:54.281Z",
+ "conv": "ambiguita-002"
+}

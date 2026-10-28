@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-d2c44f67-d6dd-447a-8a6f-490b1b793723",
+  "object": "chat.completion",
+  "created": 1792254287,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p5\",\n      \"section\": null,\n      \"price\": 15,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_featured\",\n      \"item\": \"p5\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": true,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p5\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. First message set price for p5 to 15 (already 15). Actually price unchanged but action set_price. Then second: also set_featured true for same item. Need intent change, actions two entries. reply_draft empty. No read, no clarify, etc. alias_used none. uncertain none. capability_ids empty. item_refs maybe list of items referenced: p5. Provide."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.05558416,
+   "prompt_tokens": 3099,
+   "prompt_time": 0.131705524,
+   "completion_tokens": 339,
+   "completion_time": 0.712248535,
+   "total_tokens": 3438,
+   "total_time": 0.843954059,
+   "completion_tokens_details": {
+    "reasoning_tokens": 87
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_02b0d31eca",
+  "x_groq": {
+   "id": "req_01m55aw6n4e16ajbyvh1k0wj0p",
+   "seed": 278142268
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3099,
+  "completion_tokens": 339,
+  "total_tokens": 3438
+ },
+ "ms": 1200,
+ "recordedAt": "2026-10-17T16:24:47.349Z",
+ "conv": "v-deixis-009"
+}

@@ -1,0 +1,286 @@
+{
+  "set": "v2b",
+  "startedAt": "2026-10-16T09:56:07.870Z",
+  "steps": [
+    {
+      "n": 1,
+      "text": "Crea locale Verifica Avversaria Quattro. Nel menu Pranzo, categoria Panini, Burger classico a 12 euro. Nel menu Cena, categoria Panini, Burger classico a 12 euro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": "Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione."
+      },
+      "job": {
+        "status": "failed",
+        "diagnostic": {
+          "cause": "quota"
+        },
+        "waitedMs": 98342
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: riprovo da solo tra poco, la richiesta *non è persa*."
+        },
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: non ho letto l’ultimo messaggio. *Rimandalo* tra qualche minuto, la bozza è salva."
+        }
+      ],
+      "revision": 1,
+      "items": [],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 2,
+      "text": "Porta il Burger classico a 15 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6251
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Come si chiama il *locale*? Se ha un sito, mandami anche il *link*.\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 2,
+      "items": [],
+      "unresolved": [
+        "Non trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo."
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 3,
+      "text": "Aggiungi Sorbetto a 4 euro, categoria Dolci.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 12433
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Come si chiama il *locale*? Se ha un sito, mandami anche il *link*.\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 3,
+      "items": [
+        {
+          "menu": "Menu",
+          "section": "Dolci",
+          "name": "Sorbetto",
+          "price": 4,
+          "id": "30bf42ed-dd55-4332-9141-b50bbabf413a"
+        }
+      ],
+      "unresolved": [
+        "Non trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo."
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 4,
+      "text": "Cena",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3213
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Cena* · 1 piatti.\n\nNon trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.\nPuoi inviare il dato corretto?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Menu",
+          "section": "Dolci",
+          "name": "Sorbetto",
+          "price": 4,
+          "id": "30bf42ed-dd55-4332-9141-b50bbabf413a"
+        }
+      ],
+      "unresolved": [
+        "Non trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo."
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 5,
+      "text": "Mostrami il riepilogo dei menu e dei piatti.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3167
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Cena* · 1 piatti.\n\n*Menu*\nDolci: Sorbetto 4 €\n\nNessun contatto del titolare ancora raccolto.\n\nNon trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo.\nPuoi inviare il dato corretto?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Menu",
+          "section": "Dolci",
+          "name": "Sorbetto",
+          "price": 4,
+          "id": "30bf42ed-dd55-4332-9141-b50bbabf413a"
+        }
+      ],
+      "unresolved": [
+        "Non trovo *Burger classico* nella bozza. Per aggiungerlo scrivi menu, categoria e prezzo."
+      ],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    }
+  ],
+  "before": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "qaLinkCreated": true,
+  "expected": {
+    "name": "Verifica Avversaria Quattro",
+    "dishes": [
+      "Cena/Dolci/Sorbetto/4",
+      "Cena/Panini/Burger classico/12",
+      "Pranzo/Panini/Burger classico/12"
+    ]
+  },
+  "actual": {
+    "dishes": [
+      "Menu/Dolci/Sorbetto/4"
+    ],
+    "name": "Cena",
+    "ownerName": null,
+    "everyStepAnswered": true,
+    "pastaAfterStep": [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "recapReturned": false,
+    "failedJobs": [
+      1
+    ]
+  },
+  "pass": false,
+  "errors": [
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 1/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T09:56:11.500Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 2/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T09:56:59.871Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T09:57:46.954Z"
+    }
+  ],
+  "technicalCopy": 0,
+  "cleanup": {
+    "cancel": {
+      "status": "done",
+      "diagnostic": null,
+      "waitedMs": 3160
+    },
+    "openDraftAfter": false
+  },
+  "qaLinkRemoved": true,
+  "after": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "restaurantsChanged": [],
+  "restaurantsAdded": [],
+  "victoriaUnchanged": true,
+  "victoriaMatchesMorningBaseline": false,
+  "finishedAt": "2026-10-16T10:01:51.051Z"
+}

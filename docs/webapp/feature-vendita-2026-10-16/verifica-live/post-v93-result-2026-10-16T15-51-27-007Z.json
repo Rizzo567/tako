@@ -1,0 +1,190 @@
+{
+ "tag": "post-v93",
+ "startedAt": "2026-10-16T15:50:40.574Z",
+ "mode": "live",
+ "rounds": 1,
+ "results": [
+  {
+   "path": "dashboard",
+   "type": "price",
+   "i": 0,
+   "t0": 1792165867166,
+   "api": {
+    "saveMs": 2711,
+    "publishMs": 2375
+   },
+   "commitAt": 1792165872230,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 6093,
+     "fromPublishMs": 3382,
+     "botMs": 5064,
+     "liveMs": 1029,
+     "before": {
+      "scrollY": 787,
+      "anchor": {
+       "id": "87ca317a-a543-4ddb-85f9-93a975c3b363",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 787,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 8690,
+     "fromPublishMs": 5979,
+     "botMs": 5064,
+     "liveMs": 3626,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 8500,
+     "fromPublishMs": 5789,
+     "botMs": 5064,
+     "liveMs": 3436,
+     "before": {
+      "scrollY": 787,
+      "anchor": {
+       "id": "87ca317a-a543-4ddb-85f9-93a975c3b363",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 787,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     }
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "checks": [
+  {
+   "name": "pagine aperte con socket live",
+   "ok": true,
+   "detail": "it-scroll:ws=1 en-lingue-aperte:ws=1 it-desktop:ws=1"
+  },
+  {
+   "name": "QA ripristinato identico (bozza, pubblicato, locale, piatti, categorie, menu, risposta pubblica it+en)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "name": "collegamento WhatsApp finto rimosso",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "console pulita (nessun errore/avviso) su tutte le pagine",
+   "ok": true,
+   "detail": "it-scroll:0 en-lingue-aperte:0 it-desktop:0"
+  },
+  {
+   "name": "dashboard/price: 1 giri, p95 totale ≤ 10 s",
+   "ok": true,
+   "detail": "p50 8500 p95 8690 (bot p95 5064, live p95 3626)"
+  },
+  {
+   "name": "dashboard/price: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  }
+ ],
+ "restore": {
+  "before": {
+   "draft": "1fbfd995bdae6625",
+   "published": "1fbfd995bdae6625",
+   "restaurant": "9c4079d025da2f3e",
+   "items": "9186a6f7fc49a237",
+   "menus": "2e07fe6544ebe672",
+   "sections": "71685d6d590957ae",
+   "public": "f01dc414b7a09b8b"
+  },
+  "after": {
+   "draft": "1fbfd995bdae6625",
+   "published": "1fbfd995bdae6625",
+   "restaurant": "9c4079d025da2f3e",
+   "items": "9186a6f7fc49a237",
+   "menus": "2e07fe6544ebe672",
+   "sections": "71685d6d590957ae",
+   "public": "f01dc414b7a09b8b"
+  },
+  "revisionBefore": 543,
+  "revisionAfter": 549
+ },
+ "console_it-scroll": [],
+ "console_en-lingue-aperte": [],
+ "console_it-desktop": [],
+ "summary": [
+  {
+   "path": "dashboard",
+   "type": "price",
+   "giri": 1,
+   "misure": 3,
+   "mancate": 0,
+   "total": {
+    "p50": 8500,
+    "p95": 8690,
+    "max": 8690
+   },
+   "bot": {
+    "p50": 5064,
+    "p95": 5064
+   },
+   "live": {
+    "p50": 3436,
+    "p95": 3626,
+    "max": 3626
+   },
+   "fromPublish": {
+    "p50": 5789,
+    "p95": 5979
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0
+  }
+ ],
+ "menuReads": {
+  "it-scroll": 2,
+  "en-lingue-aperte": 3,
+  "it-desktop": 3
+ },
+ "pass": 6,
+ "total": 6
+}

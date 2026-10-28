@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-56e94f9e-902d-4198-976f-92a69bfc0b16",
+  "object": "chat.completion",
+  "created": 1792284518,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"capability\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [\n    \"price\",\n    \"unavailable\",\n    \"available\",\n    \"hidden\",\n    \"description\",\n    \"tags\",\n    \"featured\",\n    \"create\",\n    \"special\",\n    \"photo\",\n    \"promo\",\n    \"scarcity\",\n    \"questions\",\n    \"fullmenu\",\n    \"voice\",\n    \"allergens\",\n    \"delete\",\n    \"rename\",\n    \"bulk\",\n    \"graphics\",\n    \"categories\",\n    \"translations\",\n    \"other\"\n  ],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Posso gestire gli allergeni dei piatti.\"\n}",
+     "reasoning": "User asks about allergens capability. Need reply with intent capability, list ids. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.053333192,
+   "prompt_tokens": 3526,
+   "prompt_time": 0.011923658,
+   "completion_tokens": 222,
+   "completion_time": 0.468436666,
+   "total_tokens": 3748,
+   "total_time": 0.480360324,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 19
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m567ps3fe8gb1721b6c7ywy4",
+   "seed": 774867984
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3526,
+  "completion_tokens": 222,
+  "total_tokens": 3748
+ },
+ "ms": 655,
+ "recordedAt": "2026-10-18T00:48:37.976Z",
+ "conv": "bv-domande-004"
+}

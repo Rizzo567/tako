@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-dcf7b5cc-c4db-4e69-9230-7a3e3a937add",
+  "object": "chat.completion",
+  "created": 1792285621,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p2\",\n      \"section\": null,\n      \"price\": 15,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": 16,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 7,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Prezzi aggiornati: Pasta collaudo 15 €, Pizza collaudo 16 €, Tiramisu collaudo 7 €. Acqua collaudo rimane 2 €.\"\n}",
+     "reasoning": "We need to produce owner_brain_plan JSON. The user says OK to previous question? Actually they responded \"OK\". The pending question was which price for Acqua collaudo, but they said OK meaning accept previous proposal? They want to keep Acqua price as is (2). So actions: set_price p2 to 15, p3 to 16, p4 to 7, leave p5 unchanged. Also earlier they wanted p2 14 then changed to 15. So final actions: set_price p2 15, set_price p3 16, set_price p4 7. No action for p5. reply_draft confirm. intent change. No uncertain. alias none. capability ids maybe empty. read none. clarify none. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.216667001,
+   "prompt_tokens": 3648,
+   "prompt_time": 0.149681924,
+   "completion_tokens": 529,
+   "completion_time": 1.093370481,
+   "total_tokens": 4177,
+   "total_time": 1.243052405,
+   "completion_tokens_details": {
+    "reasoning_tokens": 160
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_93703442d9",
+  "x_groq": {
+   "id": "req_01m568rdqseg8s6v21g1k8q32p",
+   "seed": 493985589
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3648,
+  "completion_tokens": 529,
+  "total_tokens": 4177
+ },
+ "ms": 1564,
+ "recordedAt": "2026-10-18T01:07:01.346Z",
+ "conv": "bv-multiple-003"
+}

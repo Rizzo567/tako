@@ -1,0 +1,485 @@
+{
+ "tag": "post-deploy-1016",
+ "startedAt": "2026-10-16T15:44:00.369Z",
+ "mode": "live",
+ "rounds": 2,
+ "results": [
+  {
+   "path": "dashboard",
+   "type": "price",
+   "i": 0,
+   "t0": 1792165467472,
+   "api": {
+    "saveMs": 1842,
+    "publishMs": 2387
+   },
+   "commitAt": 1792165471673,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 7164,
+     "fromPublishMs": 5322,
+     "botMs": 4201,
+     "liveMs": 2963,
+     "before": {
+      "scrollY": 787,
+      "anchor": {
+       "id": "3b4955d0-9eed-4a61-a435-38b50ae81cc4",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 787,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 6847,
+     "fromPublishMs": 5005,
+     "botMs": 4201,
+     "liveMs": 2646,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 7781,
+     "fromPublishMs": 5939,
+     "botMs": 4201,
+     "liveMs": 3580,
+     "before": {
+      "scrollY": 787,
+      "anchor": {
+       "id": "3b4955d0-9eed-4a61-a435-38b50ae81cc4",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 787,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "price",
+   "i": 1,
+   "t0": 1792165478504,
+   "api": {
+    "saveMs": 311,
+    "publishMs": 2322
+   },
+   "commitAt": 1792165481082,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 3804,
+     "fromPublishMs": 3493,
+     "botMs": 2578,
+     "liveMs": 1226,
+     "before": {
+      "scrollY": 787,
+      "anchor": {
+       "id": "3b4955d0-9eed-4a61-a435-38b50ae81cc4",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 787,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 6165,
+     "fromPublishMs": 5854,
+     "botMs": 2578,
+     "liveMs": 3587,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4361,
+     "fromPublishMs": 4050,
+     "botMs": 2578,
+     "liveMs": 1783,
+     "before": {
+      "scrollY": 787,
+      "anchor": {
+       "id": "3b4955d0-9eed-4a61-a435-38b50ae81cc4",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 787,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "soldout",
+   "i": 0,
+   "t0": 1792165487266,
+   "api": {
+    "saveMs": 0,
+    "publishMs": 1474
+   },
+   "commitAt": 1792165488784,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 2639,
+     "fromPublishMs": 2639,
+     "botMs": 1518,
+     "liveMs": 1121,
+     "before": {
+      "scrollY": 787,
+      "anchor": {
+       "id": "3b4955d0-9eed-4a61-a435-38b50ae81cc4",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 787,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 3430,
+     "fromPublishMs": 3430,
+     "botMs": 1518,
+     "liveMs": 1912,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4818,
+     "fromPublishMs": 4818,
+     "botMs": 1518,
+     "liveMs": 3300,
+     "before": {
+      "scrollY": 787,
+      "anchor": {
+       "id": "3b4955d0-9eed-4a61-a435-38b50ae81cc4",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 787,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     }
+    }
+   ]
+  },
+  {
+   "path": "dashboard",
+   "type": "soldout",
+   "i": 1,
+   "t0": 1792165497947,
+   "api": {
+    "saveMs": 0,
+    "publishMs": 2575
+   },
+   "commitAt": 1792165500505,
+   "pages": [
+    {
+     "page": "it-scroll",
+     "totalMs": 4014,
+     "fromPublishMs": 4014,
+     "botMs": 2558,
+     "liveMs": 1456,
+     "before": {
+      "scrollY": 787,
+      "anchor": {
+       "id": "3b4955d0-9eed-4a61-a435-38b50ae81cc4",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 787,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     }
+    },
+    {
+     "page": "en-lingue-aperte",
+     "totalMs": 4064,
+     "fromPublishMs": 4064,
+     "botMs": 2558,
+     "liveMs": 1506,
+     "before": {
+      "scrollY": 0,
+      "anchor": {
+       "id": "a438bc55-960d-4126-ace6-9aa5f7499816",
+       "top": 453.34375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     },
+     "after": {
+      "scrollY": 0,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "true"
+     }
+    },
+    {
+     "page": "it-desktop",
+     "totalMs": 4073,
+     "fromPublishMs": 4073,
+     "botMs": 2558,
+     "liveMs": 1515,
+     "before": {
+      "scrollY": 787,
+      "anchor": {
+       "id": "3b4955d0-9eed-4a61-a435-38b50ae81cc4",
+       "top": 319.59375
+      },
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     },
+     "after": {
+      "scrollY": 787,
+      "anchorDelta": 0,
+      "sameList": true,
+      "flash": 0,
+      "category": "84d1d0ab-818f-46c9-b6a3-84e4ca6786b5",
+      "languagesOpen": "false"
+     }
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "checks": [
+  {
+   "name": "pagine aperte con socket live",
+   "ok": true,
+   "detail": "it-scroll:ws=1 en-lingue-aperte:ws=1 it-desktop:ws=1"
+  },
+  {
+   "name": "QA ripristinato identico (bozza, pubblicato, locale, piatti, categorie, menu, risposta pubblica it+en)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "name": "collegamento WhatsApp finto rimosso",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "console pulita (nessun errore/avviso) su tutte le pagine",
+   "ok": true,
+   "detail": "it-scroll:0 en-lingue-aperte:0 it-desktop:0"
+  },
+  {
+   "name": "dashboard/price: 2 giri, p95 totale ≤ 10 s",
+   "ok": true,
+   "detail": "p50 6165 p95 7781 (bot p95 4201, live p95 3587)"
+  },
+  {
+   "name": "dashboard/price: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  },
+  {
+   "name": "dashboard/soldout: 2 giri, p95 totale ≤ 10 s",
+   "ok": true,
+   "detail": "p50 4014 p95 4818 (bot p95 2558, live p95 3300)"
+  },
+  {
+   "name": "dashboard/soldout: punto di lettura invariato (±1 px), lista non rimontata, nessun lampeggio, categoria e pannello lingue mantenuti",
+   "ok": true,
+   "detail": "{\"maxAnchorDelta\":0,\"rim\":0,\"lamp\":0,\"cat\":0,\"lingue\":0}"
+  }
+ ],
+ "restore": {
+  "before": {
+   "draft": "1fbfd995bdae6625",
+   "published": "1fbfd995bdae6625",
+   "restaurant": "9c4079d025da2f3e",
+   "items": "9186a6f7fc49a237",
+   "menus": "2e07fe6544ebe672",
+   "sections": "71685d6d590957ae",
+   "public": "f01dc414b7a09b8b"
+  },
+  "after": {
+   "draft": "1fbfd995bdae6625",
+   "published": "1fbfd995bdae6625",
+   "restaurant": "9c4079d025da2f3e",
+   "items": "9186a6f7fc49a237",
+   "menus": "2e07fe6544ebe672",
+   "sections": "71685d6d590957ae",
+   "public": "f01dc414b7a09b8b"
+  },
+  "revisionBefore": 535,
+  "revisionAfter": 543
+ },
+ "console_it-scroll": [],
+ "console_en-lingue-aperte": [],
+ "console_it-desktop": [],
+ "summary": [
+  {
+   "path": "dashboard",
+   "type": "price",
+   "giri": 2,
+   "misure": 6,
+   "mancate": 0,
+   "total": {
+    "p50": 6165,
+    "p95": 7781,
+    "max": 7781
+   },
+   "bot": {
+    "p50": 2578,
+    "p95": 4201
+   },
+   "live": {
+    "p50": 2646,
+    "p95": 3587,
+    "max": 3587
+   },
+   "fromPublish": {
+    "p50": 5005,
+    "p95": 5939
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0
+  },
+  {
+   "path": "dashboard",
+   "type": "soldout",
+   "giri": 2,
+   "misure": 6,
+   "mancate": 0,
+   "total": {
+    "p50": 4014,
+    "p95": 4818,
+    "max": 4818
+   },
+   "bot": {
+    "p50": 1518,
+    "p95": 2558
+   },
+   "live": {
+    "p50": 1506,
+    "p95": 3300,
+    "max": 3300
+   },
+   "fromPublish": {
+    "p50": 4014,
+    "p95": 4818
+   },
+   "maxAnchorDelta": 0,
+   "listaRimontata": 0,
+   "lampeggi": 0,
+   "categoriaCambiata": 0,
+   "linguePannelloChiuso": 0
+  }
+ ],
+ "menuReads": {
+  "it-scroll": 8,
+  "en-lingue-aperte": 9,
+  "it-desktop": 8
+ },
+ "pass": 8,
+ "total": 8
+}

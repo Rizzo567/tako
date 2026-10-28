@@ -1,0 +1,10 @@
+import {build} from 'esbuild';import {readFile} from 'node:fs/promises';import {resolve,dirname} from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url'
+const here=dirname(fileURLToPath(import.meta.url)),repo=resolve(here,'../../../../..')
+const {loadLocalEnvironment}=await import(repo+'/scripts/start-webapp.mjs');const env=await loadLocalEnvironment(repo)
+const out=resolve(repo,'apps/server/node_modules/.tako-harness-'+process.pid+'.mjs')
+await build({entryPoints:[resolve(here,'turn.ts')],bundle:true,platform:'node',format:'esm',outfile:out,packages:'external',absWorkingDir:resolve(repo,'apps/server'),logLevel:'error',alias:{'@tako/db':resolve(repo,'packages/db/src/index.ts'),'@tako/types':resolve(repo,'packages/types/src/index.ts')}})
+const u=new URL(env.DATABASE_URL);u.searchParams.delete('sslmode');const ca=env.DATABASE_CA_CERT?.trim()||(env.DATABASE_CA_CERT_PATH?await readFile(env.DATABASE_CA_CERT_PATH,'utf8'):undefined)
+Object.assign(process.env,env)
+const {run}=await import(pathToFileURL(out).href)
+const [mode,...words]=process.argv.slice(2);const r=await run(u.toString(),ca,mode,words.join(' '))
+console.log(JSON.stringify({ms:r.ms,queries:r.queries,result:r.result}));if(process.env.LOG)console.log(r.log.join('\n'))

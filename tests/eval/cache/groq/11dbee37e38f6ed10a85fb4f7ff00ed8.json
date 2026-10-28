@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-31dfb5a0-804b-4a57-99ab-1a08f6906550",
+  "object": "chat.completion",
+  "created": 1792254491,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_hidden\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p3\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. Intent is change, action set_hidden false for p3. reply_draft empty. No uncertainties. alias none. item_refs include p3. read none. capability empty. clarify empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.30439008,
+   "prompt_tokens": 3110,
+   "prompt_time": 0.142485414,
+   "completion_tokens": 219,
+   "completion_time": 0.456599581,
+   "total_tokens": 3329,
+   "total_time": 0.599084995,
+   "completion_tokens_details": {
+    "reasoning_tokens": 45
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_4727af4560",
+  "x_groq": {
+   "id": "req_01m55b2dwjexqr2swtbpcz3nz9",
+   "seed": 1624015685
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3110,
+  "completion_tokens": 219,
+  "total_tokens": 3329
+ },
+ "ms": 1120,
+ "recordedAt": "2026-10-17T16:28:11.417Z",
+ "conv": "v-coerenza-006"
+}

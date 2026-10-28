@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-bdd31910-3c07-41f2-a971-bc449d86ab72",
+  "object": "chat.completion",
+  "created": 1792282527,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_hidden\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": true,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Polpo rucola e patate nascosto dal menu.\"\n}",
+     "reasoning": "We need to output JSON owner_brain_plan. Intent change, action set_hidden on item p1 value true. reply_draft confirm? For hide action immediate? No confirmation needed. reply_draft short confirmation. No uncertain. alias_used empty. capability_ids maybe list of capabilities? Could be empty. read none. clarify empty. Provide actions array with one action."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054876454,
+   "prompt_tokens": 3454,
+   "prompt_time": 0.041289922,
+   "completion_tokens": 259,
+   "completion_time": 0.539647837,
+   "total_tokens": 3713,
+   "total_time": 0.580937759,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 75
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m565t0zneeqsrk844nxkyznm",
+   "seed": 1599571589
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3454,
+  "completion_tokens": 259,
+  "total_tokens": 3713
+ },
+ "ms": 807,
+ "recordedAt": "2026-10-18T00:15:27.316Z",
+ "conv": "bv-semplici-003"
+}

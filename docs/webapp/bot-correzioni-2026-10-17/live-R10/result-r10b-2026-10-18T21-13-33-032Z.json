@@ -1,0 +1,73 @@
+{
+ "at": "2026-10-18T21:13:33.033Z",
+ "results": [
+  {
+   "turn": 1,
+   "msg": "[vocale 16:05] Togli tutti i piatti dalla sezione altre proposte",
+   "status": 200,
+   "ms": 5508,
+   "reply": "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nNon ancora pubblicato, da confermare con OK:\n1. *pasta al ragù*: *nascosto* dal menu\n2. *tiramisù*: *nascosto* dal menu\n3. *Pasta al sugo*: *nascosto* dal menu\n4. *Pasta al pesto e lasagna*: *nascosto* dal menu",
+   "published": [],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 8881
+  },
+  {
+   "turn": 2,
+   "msg": "ok",
+   "status": 200,
+   "ms": 4780,
+   "reply": "Confermi le modifiche?\n\n*pasta al ragù*: *nascosto* dal menu\n*tiramisù*: *nascosto* dal menu\n*Pasta al sugo*: *nascosto* dal menu\n*Pasta al pesto e lasagna*: *nascosto* dal menu",
+   "published": [
+    "hidden|Pasta al pesto e lasagna|true",
+    "hidden|Pasta al sugo|true",
+    "hidden|pasta al ragù|true",
+    "hidden|tiramisù|true"
+   ],
+   "wrote": true,
+   "pending": 0,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 17205
+  }
+ ],
+ "stopped": null,
+ "twilio": {
+  "before": 0,
+  "after": 0,
+  "manuelBefore": 0,
+  "manuelAfter": 0
+ },
+ "errors": {
+  "before": 56,
+  "after": 56
+ },
+ "tokens": 17205,
+ "restore": {
+  "before": {
+   "draft": "ff26d47781b2f3c5",
+   "published": "ff26d47781b2f3c5",
+   "items": "56bc15e7ce7e8e14",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "ff0a12e00d2036f5",
+   "translations": "4f53cda18c2baa0c",
+   "public": "b065edd2ae64f9fc"
+  },
+  "after": {
+   "draft": "ff26d47781b2f3c5",
+   "published": "ff26d47781b2f3c5",
+   "items": "56bc15e7ce7e8e14",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "ff0a12e00d2036f5",
+   "translations": "4f53cda18c2baa0c",
+   "public": "b065edd2ae64f9fc"
+  },
+  "ok": true,
+  "extraRows": [],
+  "memory": true
+ }
+}

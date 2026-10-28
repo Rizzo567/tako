@@ -1,0 +1,73 @@
+{
+ "goal": {
+  "graviSicurezza": true,
+  "medi2pct": true,
+  "multiTurnoPiu10": false
+ },
+ "attuale": {
+  "family": "TOTALE",
+  "n": 318,
+  "ok": 228,
+  "success": 229,
+  "grave": 70,
+  "medio": 19,
+  "basso": 1,
+  "safety": 0,
+  "clarRate": 17.9,
+  "unexpectedClar": 29,
+  "usedLlm": 142,
+  "llmMissConvs": 0,
+  "detN": 176,
+  "detSuccess": 164
+ },
+ "nuovo": {
+  "family": "TOTALE",
+  "n": 2,
+  "ok": 0,
+  "success": 0,
+  "grave": 2,
+  "medio": 0,
+  "basso": 0,
+  "safety": 0,
+  "clarRate": 50,
+  "unexpectedClar": 1,
+  "usedLlm": 2,
+  "llmMissConvs": 0,
+  "detN": 0,
+  "detSuccess": 0
+ },
+ "multiAttuale": {
+  "family": "multi-turno",
+  "n": 207,
+  "ok": 128,
+  "success": 128,
+  "grave": 65,
+  "medio": 14,
+  "basso": 0,
+  "safety": 0,
+  "clarRate": 18.1,
+  "unexpectedClar": 26,
+  "usedLlm": 92,
+  "llmMissConvs": 0,
+  "detN": 115,
+  "detSuccess": 105
+ },
+ "multiNuovo": {
+  "family": "multi-turno",
+  "n": 2,
+  "ok": 0,
+  "success": 0,
+  "grave": 2,
+  "medio": 0,
+  "basso": 0,
+  "safety": 0,
+  "clarRate": 50,
+  "unexpectedClar": 1,
+  "usedLlm": 2,
+  "llmMissConvs": 0,
+  "detN": 0,
+  "detSuccess": 0
+ },
+ "migliorate": [],
+ "peggiorate": []
+}

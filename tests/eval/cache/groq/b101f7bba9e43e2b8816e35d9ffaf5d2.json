@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-7259877f-2d1a-4e60-ac1a-aaa7979ef13b",
+  "object": "chat.completion",
+  "created": 1792283507,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": 50,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p3\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Prezzo del piatto \\\"boh\\\" aggiornato a 50 €.\"\n}",
+     "reasoning": "User wants change price of \"Bo\". Menu has p3|boh|20. \"Bo\" likely refers to \"boh\". So change price to 50. Action set_price item p3 price 50. Need confirm? It's one change, price given, no extra. Reply draft confirm brief."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.05448331,
+   "prompt_tokens": 3280,
+   "prompt_time": 0.012411314,
+   "completion_tokens": 255,
+   "completion_time": 0.623259337,
+   "total_tokens": 3535,
+   "total_time": 0.635670651,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 64
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_dee443f41b",
+  "x_groq": {
+   "id": "req_01m566qxwee3arqv2t2k55w92c",
+   "seed": 440185060
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3280,
+  "completion_tokens": 255,
+  "total_tokens": 3535
+ },
+ "ms": 844,
+ "recordedAt": "2026-10-18T00:31:47.193Z",
+ "conv": "bv-semplici-015"
+}

@@ -7,11 +7,16 @@ import { fileURLToPath } from 'node:url'
 import { imageBufferForPdf } from './image-store.js'
 import { downloadRemoteImage, remoteStorageEnabled, imageObjectKey } from './remote-image-store.js'
 import { publicWorkspace } from './menu-workspace-schedule.js'
+import { salesLabel, validPromoPrice } from './menu-sales.js'
 import { foodCatalogs } from './menu-workspace-catalogs.js'
 import type { Workspace } from './menu-workspace-contract.js'
 const pdfEuro=(value:number)=>new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(value)
 /** Prezzo stampato sul PDF: testo libero se presente, altrimenti solo prezzi > 0 (mai "0,00 €"). Le varianti a pagamento si stampano sotto il piatto. */
 export function pdfItemPrice(item:{price:number;priceDisplay?:string|null}):string{const text=item.priceDisplay?.trim();if(text)return text;return Number.isFinite(item.price)&&item.price>0?pdfEuro(item.price):''}
+/** F3: promo già risolta da publicWorkspace (scadute tolte). Con un «prezzo mostrato» libero la promo non si stampa: il testo del titolare vince. */
+export function pdfPromoPrices(item:{price:number;priceDisplay?:string|null;promo?:{price:number}|null}):{full:string,promo:string}|null{if(item.priceDisplay?.trim()||!item.promo||!validPromoPrice(item.promo.price,item.price))return null;return{full:pdfEuro(item.price),promo:pdfEuro(item.promo.price)}}
+/** F3+F4: etichette sobrie sotto il piatto, tradotte con il catalogo statico (mai LLM). */
+export function pdfSalesLabels(item:{promo?:{price:number}|null;priceDisplay?:string|null;price:number;scarcity?:{lastPortions?:boolean;onlyToday?:string|null}|null},language:string):string{return [pdfPromoPrices(item)?salesLabel('promo',language):'',item.scarcity?.lastPortions?salesLabel('lastPortions',language):'',item.scarcity?.onlyToday?salesLabel('onlyToday',language):''].filter(Boolean).join(' · ')}
 // Arabic shaping remains in fontkit; adjacent Latin words/numbers form one LTR run.
 // Keep logical Arabic order: PDFKit/fontkit performs glyph reversal inside each run.
 export function pdfDirectionalRuns(value:string):string[]{
@@ -29,11 +34,11 @@ type Element='name'|'price'|'description'|'category'|'menu'|'footer'|'legend'|'s
 type Area='menu'|'category'|'subcategory'|'item'|'description'|'legend'|'logo'
 type Style={font:Workspace['pdf']['font'];fontSize:number;color:string;bold:boolean;italic:boolean;underline:boolean;align:'left'|'center'|'right';rtl?:boolean}
 export type PdfRuntimeAssets={fonts:ReadonlyMap<string,Buffer>}
-export async function renderWorkspacePdf(workspace:Workspace,menuIds:string[],language:string,title:string,restaurantId:string,runtimeAssets?:PdfRuntimeAssets):Promise<Buffer>{
+export async function renderWorkspacePdf(workspace:Workspace,menuIds:string[],language:string,title:string,restaurantId:string,runtimeAssets?:PdfRuntimeAssets,options:{timezone?:string|null,now?:Date}={}):Promise<Buffer>{
  const [{default:PDFDocument},{default:QRCode},fontkit]=await Promise.all([import('pdfkit'),import('qrcode'),import('fontkit')]);
  if(!workspace.languages.includes(language))throw new Error('Unsupported PDF language')
  const cfg=workspace.pdf,lang=cfg.translationActive===false?workspace.defaultLanguage:language
- const w=publicWorkspace(cfg.includeUnavailable?{...workspace,menus:workspace.menus.map(m=>({...m,sections:m.sections.map(s=>({...s,items:s.items.map(i=>({...i,available:true}))}))}))}:workspace)
+ const w=publicWorkspace(cfg.includeUnavailable?{...workspace,menus:workspace.menus.map(m=>({...m,sections:m.sections.map(s=>({...s,items:s.items.map(i=>({...i,available:true}))}))}))}:workspace,options.now??new Date(),{timezone:options.timezone})
  const top=cfg.marginTop??cfg.margin,right=cfg.marginRight??cfg.margin,bottom=cfg.marginBottom??cfg.margin,left=cfg.marginLeft??cfg.margin
  const doc=new PDFDocument({size:cfg.format,layout:cfg.orientation,margins:{top,right,bottom,left},bufferPages:true,info:{Title:title,Creator:'Tako'}})
  const chunks:Buffer[]=[];const completed=new Promise<Buffer>((resolve,reject)=>{doc.on('data',c=>chunks.push(Buffer.from(c)));doc.on('end',()=>resolve(Buffer.concat(chunks)));doc.on('error',reject)})
@@ -81,6 +86,10 @@ export async function renderWorkspacePdf(workspace:Workspace,menuIds:string[],la
   if(!(s.rtl??/[\u0590-\u06ff]/.test(value))){choose(value,s);return doc.widthOfString(value)}
   const runs=pdfDirectionalRuns(value);return runs.reduce((sum,run)=>{choose(run,s);return sum+doc.widthOfString(run)},0)+Math.max(0,runs.length-1)*s.fontSize*.3
  }
+ // Promo: prezzo pieno barrato (attenuato) e prezzo promo accanto, allineati a destra nella colonna prezzo.
+ const drawPromo=(p:{full:string,promo:string},px:number,py:number,available:number,s:Style)=>{const promoWidth=measureText(p.promo,s),fullStyle={...s,bold:false},fullWidth=measureText(p.full,fullStyle),gapWidth=s.fontSize*.6,end=px+available,promoX=Math.max(px,end-promoWidth),fullX=Math.max(px,promoX-gapWidth-fullWidth)
+  drawText(p.full,fullX,py,fullWidth+1,{...fullStyle,align:'left'});choose(p.full,fullStyle);const mid=py+doc.currentLineHeight()*.55;doc.save().lineWidth(Math.max(.5,s.fontSize*.06)).strokeColor(s.color).moveTo(fullX,mid).lineTo(fullX+fullWidth,mid).stroke().restore()
+  drawText(p.promo,promoX,py,promoWidth+1,{...s,align:'left'})}
  const linesFor=(value:string,s:Style,available:number)=>{choose(value,s);const lines:string[]=[];for(const paragraph of value.split('\n')){let line='';for(const wholeWord of paragraph.split(/\s+/)){if(!wholeWord)continue;const words:string[]=[];let part='';for(const ch of wholeWord){if(part&&measureText(part+ch,s)>available){words.push(part);part=ch}else part+=ch}if(part)words.push(part);for(const word of words){const candidate=line?`${line} ${word}`:word;if(measureText(candidate,s)>available&&line){lines.push(line);line=word}else line=candidate}}lines.push(line)}return lines}
  const write=(value:string,element:Element,spacing=6,area:Area='item',override:Partial<Style>={})=>{
   const s={...style(element),...override,rtl:/[\u0590-\u06ff]/.test(value)},a=space(area),available=Math.max(24,columnWidth-a.left-a.right)
@@ -105,14 +114,15 @@ export async function renderWorkspacePdf(workspace:Workspace,menuIds:string[],la
     const translatedName=cfg.translationNamesPolicy==='auto'&&(item.description||t?.description)?item.name:t?.name??item.name
     const description=cfg.showDescriptions?t?.description??item.description??'':''
     const align=cfg.alignment,ns={...style('name'),align:cfg.typography?.name?.align??align,rtl:/[\u0590-\u06ff]/.test(translatedName)},ps={...style('price'),align:cfg.typography?.price?.align??'right' as const}
-    const price=cfg.showPrices?pdfItemPrice(item):''
+    const promo=cfg.showPrices?pdfPromoPrices(item):null,price=promo?promo.full+'  '+promo.promo:cfg.showPrices?pdfItemPrice(item):''
     const a=space('item'),available=Math.max(24,columnWidth-a.left-a.right),priceWidth=price?Math.min(available*.45,Math.max(45,price.length*ps.fontSize*.65)):0,nameWidth=Math.max(24,available-priceWidth-(price?8:0))
     const nameLines=linesFor(translatedName,ns,nameWidth),priceLines=price?linesFor(price,ps,priceWidth):[],lineCount=Math.max(nameLines.length,priceLines.length);choose(translatedName,ns);const nameHeight=doc.currentLineHeight()+2;choose(price,ps);const rowHeight=Math.max(nameHeight,doc.currentLineHeight()+2)
     const needed=lineCount*rowHeight+(description?style('description').fontSize*2:0)+a.top+a.bottom+24;if(y+needed>bodyBottom&&needed<bodyBottom-top)advance()
     if(cfg.showImages){const bytes=await image(item.imageUrl);if(bytes){if(y+90>bodyBottom)advance();const px=x(),py=y;add(80,offset=>doc.image(pdfImage(bytes),px,py+offset,{fit:[columnWidth,80]}));y+=8}}
     y+=a.top
-    for(let n=0;n<lineCount;n++){if(y+rowHeight>bodyBottom)advance();const px=x()+a.left,py=y,text=nameLines[n]??'';add(rowHeight,offset=>{drawText(text,px,py+offset,nameWidth,ns);if(priceLines[n])drawText(priceLines[n]!,px+available-priceWidth,py+offset,priceWidth,ps)})}y+=4+a.bottom
+    for(let n=0;n<lineCount;n++){if(y+rowHeight>bodyBottom)advance();const px=x()+a.left,py=y,text=nameLines[n]??'';add(rowHeight,offset=>{drawText(text,px,py+offset,nameWidth,ns);if(promo&&n===0)drawPromo(promo,px+available-priceWidth,py+offset,priceWidth,ps);else if(priceLines[n]&&!promo)drawText(priceLines[n]!,px+available-priceWidth,py+offset,priceWidth,ps)})}y+=4+a.bottom
     if(description)write(description,'description',4,'description',{align:cfg.typography?.description?.align??align})
+    {const labels=pdfSalesLabels(item,lang);if(labels)write(labels,'traits',4,'legend')}
     if(cfg.showAllergens&&item.allergens.length)write(`${w.foodTranslations[lang]?.allergens??'Allergeni'}: ${item.allergens.map(id=>w.foodTranslations[lang]?.[id]??id).join(', ')}`,'allergens',4,'legend')
     if(item.tags.length)write(item.tags.map(id=>w.foodTranslations[lang]?.[id]??foodCatalogs.traits.find(t=>t.id===id)?.label??id).join(', '),'traits',4,'legend')
     if(item.additives.length)write(item.additives.map(id=>w.foodTranslations[lang]?.[id]??foodCatalogs.additives.find(t=>t.id===id)?.label??id).join(', '),'additives',4,'legend')

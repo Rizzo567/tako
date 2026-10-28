@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-d8f75792-b44b-42fb-9c16-6591d89a3622",
+  "object": "chat.completion",
+  "created": 1792254471,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p5\",\n      \"section\": null,\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"item_refs\": [\"p6\"],\n  \"read\": \"items\",\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need intent change for price change and read for tiramisù price. Since both in one message, ambiguous? It's clear: set_price p5 to 12. Also ask price of tiramisù -> read item_refs p6, read items? intent? Probably need both? Might be two intents; but we can set intent=change and also include read? Probably intent=change and also include read? Schema has single intent. Might choose clarify? No. Probably intent=change and include read? But spec: question is read. So maybe intent=read? But also change. Might need both? Might set intent=change and include actions, and reply_draft empty, and also include read? Might set read=\"items\"? Actually read expects type. For price query, read maybe items? Not sure. Could set intent=read and include item_refs p6. But then price change ignored. Probably need two intents not allowed. Might choose intent=change and include actions, and reply_draft empty, and also include read? Schema has read field separate. Could set read=\"items\". And item_refs include p6 for read. actions for p5. So intent maybe \"change\"? But includes read too. Might set intent=change. Let's do that."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054456824,
+   "prompt_tokens": 3036,
+   "prompt_time": 0.157672044,
+   "completion_tokens": 433,
+   "completion_time": 0.897846842,
+   "total_tokens": 3469,
+   "total_time": 1.055518886,
+   "completion_tokens_details": {
+    "reasoning_tokens": 258
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_fe269835c7",
+  "x_groq": {
+   "id": "req_01m55b1tevefa8fwbayb1g7mbf",
+   "seed": 980732450
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3036,
+  "completion_tokens": 433,
+  "total_tokens": 3469
+ },
+ "ms": 1418,
+ "recordedAt": "2026-10-17T16:27:51.702Z",
+ "conv": "v-misti-002"
+}

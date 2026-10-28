@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-60fdbe4a-e425-4633-bb00-710550f2d282",
+  "object": "chat.completion",
+  "created": 1792283935,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [\"p3\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Il piatto boh costa 20 €.\"\n}",
+     "reasoning": "User asks price. Intent read. Need reply_draft asking? Actually read intent, item_refs = [p3]. read = items? They want price. So reply_draft should answer price. Provide price from menu: 20. So intent read, reply_draft \"Il piatto boh costa 20 €.\" No actions. uncertain empty. alias_used empty. capability_ids maybe list of capabilities? Could be empty. Provide required fields."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.100031406,
+   "prompt_tokens": 3269,
+   "prompt_time": 0.198278262,
+   "completion_tokens": 196,
+   "completion_time": 0.411753414,
+   "total_tokens": 3465,
+   "total_time": 0.610031676,
+   "completion_tokens_details": {
+    "reasoning_tokens": 91
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_998410db10",
+  "x_groq": {
+   "id": "req_01m56750f5ecs98ssajne06c7v",
+   "seed": 1462323501
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3269,
+  "completion_tokens": 196,
+  "total_tokens": 3465
+ },
+ "ms": 761,
+ "recordedAt": "2026-10-18T00:38:55.840Z",
+ "conv": "bv-semplici-024"
+}

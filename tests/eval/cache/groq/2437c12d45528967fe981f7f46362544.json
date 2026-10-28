@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-1f6d3108-644c-4176-b8b4-1a1b7f879949",
+  "object": "chat.completion",
+  "created": 1792239687,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\"intent\":\"read\",\"read\":\"items\",\"item_ids\":[\"p10\"]}",
+     "reasoning": "User gave catalog and message \"anche la gricia\". Means they want the dish \"Gricia\". Likely request to add to order? But intents are change/read etc. \"anche la grcia\" likely means they want it (maybe add). That's a request to set something? Probably they want to order, but system only handles menu modifications, not orders. Might be read? Could be they ask availability? It's ambiguous. Probably they want to know if it's available. That's a read question about item. So intent read items? Could be read availability. I'd output read intent for item p10. {\"intent\":\"read\",\"read\":\"items\",\"item_ids\":[\"p10\"]}."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.295318753,
+   "prompt_tokens": 1618,
+   "prompt_time": 0.065904625,
+   "completion_tokens": 163,
+   "completion_time": 0.341278079,
+   "total_tokens": 1781,
+   "total_time": 0.407182704,
+   "completion_tokens_details": {
+    "reasoning_tokens": 138
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_27194a498a",
+  "x_groq": {
+   "id": "req_01m54wyngmeevrggypwxhcsw36",
+   "seed": 1493316160
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 1618,
+  "completion_tokens": 163,
+  "total_tokens": 1781
+ },
+ "ms": 787,
+ "recordedAt": "2026-10-17T12:21:27.746Z",
+ "conv": "scaduto-004"
+}

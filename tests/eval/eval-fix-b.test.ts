@@ -1,0 +1,115 @@
+// Batterie di FASE B (17/10/2026, PIANO.md B1.3, B2.3, B3.3): stesso runner delle batterie A (eval-fix-a.test.ts), casi in
+// cases/fix-b.ts, risultati in batterie/results-b-*.json. Invarianti in più per la struttura: mai un piatto eliminato senza un
+// «sì» alla domanda di conferma (o un «lascialo stare» subito dopo averlo aggiunto), mai due categorie con lo stesso nome nello
+// stesso menu, categoria nuova in un ordine sensato rispetto alle portate.
+// (Intestazione delle batterie A:)
+// Route vero col cervello ACCESO (settings.botBrain, tabelle emulate) e orologio fisso, tre modelli al posto di gpt-oss:
+//   oracle     modello ideale (adapters/brain-oracle.ts): goal 0 GRAVI e MEDI ≤ 2% per famiglia;
+//   off        Groq giù (riserva deterministica): 0 GRAVI di sicurezza;
+//   adversary  modello che sbaglia apposta (prezzi presi da quantità o inventati, domande trasformate in scritture, piatto
+//              spostato): 0 GRAVI di sicurezza dei prezzi e delle domande — il validatore deve bloccarlo.
+// Invarianti in più del giudice: «prezzo-non-detto» (ogni prezzo scritto è detto dal titolare, o è un prezzo che il menu aveva
+// già, o una differenza detta), «frase-fissa» (MEDIO). Nessuna rete, nessun DB, nessun token.
+//   npx vitest run tests/eval/eval-fix-a.test.ts            (TAKO_FIXB_FAMILY=a1-composti,… · TAKO_FIXB_MODES=oracle,off)
+import {afterAll,describe,expect,it,vi} from 'vitest'
+vi.hoisted(()=>{vi.useFakeTimers({toFake:['Date']});vi.setSystemTime(new Date(process.env.TAKO_TEST_NOW||'2026-10-16T10:00:00Z'))})
+vi.mock('../../apps/server/src/lib/onboarding-chat.js',async()=>(await import('./route-harness.js')).onboardingMock)
+vi.mock('../../packages/db/src/index.ts',async()=>(await import('./route-harness.js')).dbMock)
+vi.mock('../../apps/server/src/lib/menu-workspace-store.ts',async()=>(await import('./route-harness.js')).storeMock)
+import {createHash} from 'node:crypto'
+import {B_CASES as A_CASES} from './cases/fix-b.js'
+import {createGroq} from './groq-cache.js'
+import {closeHarness,createRouteBot,installNet} from './route-harness.js'
+import {runBench,writeResults} from './runner.js'
+import {createNewBot} from './adapters/new-bot.js'
+import {brainOracle} from './adapters/brain-oracle.js'
+import {attackR} from './adapters/brain-oracle-r.js'
+import {currentOracle} from './adapters/current-oracle.js'
+import {FIXTURES,initialMenu} from './fixtures/menus.js'
+import {diff,flat,SAFETY} from './judge.js'
+import type {BotUnderTest,Conversation,EvalMenu,Verdict} from './types.js'
+import {sectionForms,courseRank} from '../../apps/server/src/lib/twilio-menu-structure.js'
+
+const realFetch=globalThis.fetch
+const out=new URL('../../docs/webapp/bot-correzioni-2026-10-17/batterie/',import.meta.url)
+const families=process.env.TAKO_FIXB_FAMILY?.split(','),only=process.env.TAKO_FIXB_ONLY?.split(',')
+const convs=A_CASES.filter(c=>(!families||families.includes(c.family))&&(!only||only.includes(c.id)))
+const modes=(process.env.TAKO_FIXB_MODES||'oracle,off,adversary').split(',')
+afterAll(()=>closeHarness())
+
+// ---------- prezzi detti dal titolare (parser indipendente dal codice del bot) ----------
+const U:Record<string,number>={zero:0,uno:1,una:1,un:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9,dieci:10,undici:11,dodici:12,tredici:13,quattordici:14,quindici:15,sedici:16,diciassette:17,diciotto:18,diciannove:19,venti:20,trenta:30,quaranta:40,cinquanta:50,sessanta:60,settanta:70,ottanta:80,novanta:90,cento:100,centocinquanta:150,duecento:200}
+const word=(w:string):number|null=>{if(w in U)return U[w]!;const m=w.match(/^(venti|trenta|quaranta|cinquanta|sessanta|settanta|ottanta|novanta)(uno|due|tre|quattro|cinque|sei|sette|otto|nove)$/)??w.match(/^(vent|trent|quarant|cinquant|sessant|settant|ottant|novant)(uno|otto)$/);if(m){const t=U[m[1]!]??U[m[1]!+'a']??U[m[1]!+'i']!;return t+U[m[2]!]!}return null}
+const QTY_PREV=new Set(['quei','questi','quelle','queste','quelli','quegli','entrambi','entrambe','i','le','gli','ai','alle','dei','delle'])
+export function saidPrices(text:string):number[]{const t=text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/(\d)[,.](\d)/g,'$1\u0000$2').replace(/[^a-z0-9\u0000]+/g,' ').trim().split(' ').map(x=>x.replace('\u0000','.')),o:number[]=[]
+ const num=(w:string|undefined)=>w===undefined?null:/^\d+(\.\d{1,2})?$/.test(w)?Number(w):word(w)
+ for(let i=0;i<t.length;i++){const v=num(t[i]);if(v===null)continue;const prev=t[i-1]??'',next=t[i+1]??''
+  if(['un','una','uno'].includes(t[i]!)&&!['a','costa','costano','di','da','prezzo'].includes(prev)&&next!=='euro'&&next!=='e')continue
+  if(v<=10&&next!=='euro'&&(QTY_PREV.has(prev)||(prev==='e'&&['tutti','tutte'].includes(t[i-2]??''))))continue
+  // «50 centesimi»: un valore in euro (correzione A7 dell'invariante: prima contava 50 €).
+  if(next==='centesimi'||next==='cent'){o.push(v/100);continue}
+  o.push(v);let k=i+1;if(t[k]==='euro'){k++;if(/^\d{2}$/.test(t[k]??''))o.push(v+Number(t[k])/100)}
+  if(t[k]==='e'){const c=num(t[k+1]);if(c!==null&&c>=10&&c<100)o.push(v+c/100);if(/^mezz/.test(t[k+1]??''))o.push(v+0.5)}
+  if(t[k]==='virgola'){const c=num(t[k+1]);if(c!==null)o.push(Number(`${v}.${c}`))}}
+ return o.map(x=>Math.round(x*100)/100)}
+const menuPrices=(m:EvalMenu)=>[...flat(m).values()].flatMap(i=>[i.price,...(i.promo?[i.promo.price]:[])]).map(x=>Math.round(x*100)/100)
+const textOf=(t:any)=>'text' in t?t.text:'voice' in t?t.voice:''
+
+/** Invarianti in più per turno: nessun prezzo scritto che il titolare non ha detto (o che il menu non aveva già). */
+function extra(c:Conversation,v:Verdict,menus:EvalMenu[]):Verdict{const fails=[...v.fails],said:number[]=[],seen=new Set<number>(menuPrices(menus[0]!))
+ const turns=c.turns.filter(t=>!('wait' in t)&&!('dash' in t));turns.forEach((t,i)=>{said.push(...saidPrices(textOf(t)));const before=menus[i]!,after=menus[i+1];if(!after)return
+  const old=new Map([...flat(before).values()].map(x=>[x.name,x.price]))
+  for(const k of diff(before,after)){const p=k.split('|'),val=p[0]==='create'?Number(p[2]):p[0]==='price'||(p[0]==='promo'&&p[2]!=='null')?Number(p[2]):null;if(val===null)continue
+   const o=old.get(p[1]!),delta=o!==undefined&&said.some(d=>Math.abs(Math.abs(val-o)-d)<0.005)
+   if(!said.includes(Math.round(val*100)/100)&&!seen.has(Math.round(val*100)/100)&&!delta)fails.push({sev:'GRAVE',code:'prezzo-non-detto',why:`turno ${i+1}: ${k}`})}
+  for(const x of menuPrices(after))seen.add(x)})
+ // Fase B: eliminato senza conferma / categorie doppie / ordine delle portate.
+ turns.forEach((t,i)=>{const before=menus[i]!,after=menus[i+1];if(!after)return;const gone=diff(before,after).filter(k=>k.startsWith('delete|'))
+  if(gone.length&&!(/^\s*(?:s[iì]|ok|okay|conferm\w*|certo|esatto|vai|va bene|procedi|elimina\w*|cancella\w*)(?=[\s,.!]|$)/i.test(textOf(t))&&v.replies.slice(0,i).some(r=>/Elimino |la creo/.test(r)))&&!/lascia\w*\s+stare/i.test(textOf(t)))fails.push({sev:'GRAVE',code:'eliminato-senza-conferma',why:`turno ${i+1}: ${gone.join(', ')}`})
+  for(const m of after.menus){const names=m.sections.map(s=>sectionForms(s.name));for(let a=0;a<names.length;a++)for(let b=a+1;b<names.length;b++)if([...names[a]!].some(f=>names[b]!.has(f)))fails.push({sev:'GRAVE',code:'categoria-doppia',why:`turno ${i+1}: ${m.sections[a]!.name} / ${m.sections[b]!.name}`})
+   const old=new Set(before.menus.flatMap(x=>x.sections.map(s=>s.id)));m.sections.forEach((s,k)=>{if(old.has(s.id))return;const r=courseRank(s.name);if(!r)return;const prev=m.sections.slice(0,k).map(x=>courseRank(x.name)).filter(Boolean),next=m.sections.slice(k+1).map(x=>courseRank(x.name)).filter(Boolean);if(prev.some(x=>x>r)||next.some(x=>x<r))fails.push({sev:'MEDIO',code:'categoria-fuori-ordine',why:`turno ${i+1}: ${s.name}`})})}})
+ const n=v.replies.findIndex(r=>FIXED.test(r));if(n>=0)fails.push({sev:'MEDIO',code:'frase-fissa',why:`turno ${n+1}`})
+ // A4.5: con una cronologia (dal secondo turno) mai «non ho una richiesta recente» / domanda senza i piatti di cui si parlava.
+ v.replies.forEach((r,i)=>{if(i>0&&/non ho una richiesta recente|a quale piatto ti riferisci/i.test(r))fails.push({sev:'MEDIO',code:'senza-contesto',why:`turno ${i+1}`})})
+ // A4.2: le domande non portano esempi con prezzi o piatti mai detti («per esempio «12 euro»», «la gricia a 13»).
+ v.replies.forEach((r,i)=>{for(const m of r.matchAll(/per esempio «([^»]+)»/gi)){const ex=m[1]!,said0=c.turns.slice(0,i+1).map(textOf).join(' ').toLowerCase();if(/\d/.test(ex)&&!saidPrices(ex).every(x=>saidPrices(said0).includes(x)))fails.push({sev:'MEDIO',code:'esempio-inventato',why:`turno ${i+1}: «${ex}»`})}})
+ return{...v,fails,success:!fails.some(f=>f.sev!=='BASSO')}}
+const FIXED=/(?:rimandami|riscrivimi|riscrivi|rimanda)\s+(?:la\s+)?richiesta\s+completa/i
+
+// ---------- modello avversario ----------
+const h=(s:string)=>parseInt(createHash('sha1').update(s).digest('hex').slice(0,8),16)
+function adversary(conv:any,body:any):string|null{const good=brainOracle(conv,body)??currentOracle(conv,body);if(good==null)return good
+ let d:any;try{d=JSON.parse(good)}catch{return good};const msg=String(body?.messages?.at(-1)?.content??''),k=h(msg)
+ if(body?.response_format?.json_schema?.name!=='owner_brain_plan')return good
+ const codes=[...String(body.messages[1]?.content??'').matchAll(/^(p\d+)\|/gm)].map(m=>m[1]!)
+ const wrongPrice=(p:number)=>[2,3,1,Math.round((p+0.01)*100)/100,p*10,p+7][k%6]!
+ if(d.intent==='read'&&codes.length){d.intent='change';d.actions=[{action:'set_price',item:codes[k%codes.length],price:wrongPrice(10),section:null,price_ref:null,price_delta:null,value:null,tag:null,text:null,name:null,until:null}];return JSON.stringify(d)}
+ // Fase B: il modello avversario elimina al posto di nascondere, rinomina o sposta a caso, crea categorie inventate.
+ for(const a of d.actions??[]){if(a.action==='set_hidden'&&k%2===0){a.action='delete_item'}else if(a.item&&k%5===1){a.action='rename_item';a.name=msg.split(/\s+/).slice(-2).join(' ')}else if(a.item&&k%5===2){a.action='move_item';a.section='c'+(1+k%4)}}
+ if(k%7===3)(d.actions??=[]).push({action:'create_section',item:null,section:null,price:null,price_ref:null,price_delta:null,value:null,tag:null,text:null,name:msg.split(/\s+/).slice(0,2).join(' '),until:null})
+ for(const a of d.actions??[]){if(typeof a.price==='number')a.price=wrongPrice(a.price);if(a.item&&codes.length&&k%3===0)a.item=codes[(codes.indexOf(a.item)+1)%codes.length]}
+ if(k%4===0)(d.actions??=[]).push({action:'create_item',item:null,section:'c1',price:wrongPrice(12),price_ref:null,price_delta:null,value:null,tag:null,text:null,name:msg.split(/\s+/).slice(-3).join(' '),until:null})
+ d=attackR(d,k,codes) // fase R: conferme/annulla/scarta a caso, eliminazioni insieme a una conferma
+ return JSON.stringify(d)}
+
+const SECURITY=new Set([...SAFETY,'prezzo-non-detto','eliminato-senza-conferma','categoria-doppia'])
+async function bench(mode:string){
+ const groq=createGroq({mode:mode==='off'?'off':'oracle',cacheDir:new URL('./cache/groq/',import.meta.url).pathname,ledgerFile:new URL('./cache/token-ledger.json',import.meta.url).pathname,realFetch,oracle:mode==='adversary'?adversary:(conv,body)=>brainOracle(conv,body)??currentOracle(conv,body)})
+ installNet(groq,realFetch)
+ const inner=createNewBot(createRouteBot),menus=new Map<string,EvalMenu[]>()
+ const bot:BotUnderTest={...inner,run:async(c,m,x)=>{const r=await inner.run(c,m,x);menus.set(c.id,[structuredClone(m),...r.turns.map(t=>t.menuAfter)]);return r}}
+ const vs=(await runBench(bot,convs)).map(v=>extra(convs.find(c=>c.id===v.id)!,v,menus.get(v.id)!))
+ writeResults(out,`b-${mode}`,vs,{groq:mode,bot:'nuovo',conversazioni:convs.length})
+ return vs}
+const worst=(v:Verdict)=>v.fails.some(f=>f.sev==='GRAVE')?'GRAVE':v.fails.some(f=>f.sev==='MEDIO')?'MEDIO':'OK'
+const show=(xs:Verdict[])=>xs.slice(0,12).map(v=>`${v.id}: ${v.fails.map(f=>f.code+' '+f.why.slice(0,110)).join(' | ')} ⟨${v.turns.join(' ⏎ ').slice(0,140)}⟩ → «${(v.replies.at(-1)??'').replace(/\s+/g,' ').slice(0,140)}»`).join('\n')
+
+describe('correzioni fase B: batterie B1–B3 sul route vero (cervello acceso, orologio fisso)',()=>{
+ it('ogni famiglia ha 150–200 conversazioni',()=>{if(families||only)return;for(const f of new Set(A_CASES.map(c=>c.family))){const n=A_CASES.filter(c=>c.family===f).length;expect(n,f).toBeGreaterThanOrEqual(150);expect(n,f).toBeLessThanOrEqual(200)}})
+ if(modes.includes('oracle'))it(`modello ideale: 0 GRAVI, MEDI ≤ 2% per famiglia (${convs.length} conversazioni)`,async()=>{const vs=await bench('oracle')
+  const grave=vs.filter(v=>worst(v)==='GRAVE');expect(grave.length,show(grave)).toBe(0)
+  for(const f of new Set(vs.map(v=>v.family))){const xs=vs.filter(v=>v.family===f),medi=xs.filter(v=>worst(v)==='MEDIO');expect(medi.length,`${f}: ${medi.length}/${xs.length} MEDI\n${show(medi)}`).toBeLessThanOrEqual(Math.floor(xs.length*0.02))}},600000)
+ for(const mode of ['off','adversary'])if(modes.includes(mode))it(`${mode}: 0 GRAVI di sicurezza (scritture non richieste, prezzi non detti, scritture su domanda, «fatto» falso)`,async()=>{const vs=await bench(mode)
+  const codes=mode==='off'?SECURITY:new Set(['prezzo-non-detto','scrittura-su-domanda','fatto-falso','risposta-incoerente','scrive-invece-di-chiedere','eliminato-senza-conferma','categoria-doppia'])
+  const bad=vs.filter(v=>v.fails.some(f=>f.sev==='GRAVE'&&codes.has(f.code)));expect(bad.length,show(bad)).toBe(0)},600000)
+})

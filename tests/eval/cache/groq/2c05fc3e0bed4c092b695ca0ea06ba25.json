@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-c505d26e-cc99-40e1-b23b-2d73421c2a3f",
+  "object": "chat.completion",
+  "created": 1792283323,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"create_item\",\n      \"item\": null,\n      \"section\": \"Piatti di prova\",\n      \"price\": 9,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": \"Piatto test QA\",\n      \"until\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"reply_draft\": \"Aggiungo Piatto test QA a 9 € nella categoria Piatti di prova.\",\n  \"uncertain\": []\n}",
+     "reasoning": "We need to create action create_item in section Piatti di prova, name Piatto test QA, price 9. No uncertainties. Reply draft confirm. Since it's a change, reply draft short confirmation. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.317551582,
+   "prompt_tokens": 3282,
+   "prompt_time": 0.142407904,
+   "completion_tokens": 244,
+   "completion_time": 0.504626056,
+   "total_tokens": 3526,
+   "total_time": 0.64703396,
+   "completion_tokens_details": {
+    "reasoning_tokens": 46
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_4727af4560",
+  "x_groq": {
+   "id": "req_01m566ja43efbafns83ta27vzf",
+   "seed": 1095579146
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3282,
+  "completion_tokens": 244,
+  "total_tokens": 3526
+ },
+ "ms": 1055,
+ "recordedAt": "2026-10-18T00:28:43.393Z",
+ "conv": "bv-semplici-012"
+}

@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-754dabee-e11e-4e72-93e7-af9a3ab6234f",
+  "object": "chat.completion",
+  "created": 1792247057,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p10\",\n      \"section\": null,\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. Intent change, action set_price for p10 price 12. reply_draft empty. No uncertainties."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.052840851,
+   "prompt_tokens": 4634,
+   "prompt_time": 0.003777737,
+   "completion_tokens": 194,
+   "completion_time": 0.457211345,
+   "total_tokens": 4828,
+   "total_time": 0.460989082,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 28
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_dee443f41b",
+  "x_groq": {
+   "id": "req_01m553zjpkegytd7xexnhzk8sd",
+   "seed": 21285825
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 4634,
+  "completion_tokens": 194,
+  "total_tokens": 4828
+ },
+ "ms": 630,
+ "recordedAt": "2026-10-17T14:24:17.539Z",
+ "conv": "ripristino-005"
+}

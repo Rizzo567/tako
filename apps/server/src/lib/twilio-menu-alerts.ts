@@ -6,6 +6,8 @@ import {alertCopy,fill} from './twilio-menu-copy.js'
 import {phoneTail} from './whatsapp-phone.js'
 // Guasti del bot WhatsApp: ogni errore va in tako_whatsapp_errors (i log edge non sono leggibili);
 // un avviso WhatsApp a Manuel al massimo una volta all'ora, con claim atomico su tako_whatsapp_alerts.
+/** Numeri in verifica dal vivo sincrona (campo TakoSyncTest firmato col token Twilio, solo QA): niente avvisi WhatsApp. */
+export const quietPhones=new Set<string>()
 export const alertPhone=process.env.TAKO_WHATSAPP_ALERT_PHONE||''
 /** Un messaggio di un numero collegato è rimasto senza risposta: avviso subito (se l'ora è libera). */
 export const unansweredKinds=new Set(['job_timeout','job_failed','webhook_error','send_failed','test_fault'])
@@ -25,6 +27,8 @@ export async function reportFailure(f:Failure,opts:{pollMs?:number[]}={}):Promis
  try{
   const id=await insertError(f);recorded=true;console.error(JSON.stringify({event:'whatsapp_failure',kind:f.kind}))
   if(!alertPhone||selfKinds.includes(f.kind))return{recorded,alerted:false}
+  // Verifica dal vivo sincrona (numero di prova con il marcatore firmato): nessun avviso a nessuno.
+  if(f.phone&&quietPhones.has(f.phone))return{recorded,alerted:false}
   let reason=unansweredKinds.has(f.kind)?f.kind:''
   if(!reason){const rows=await db.execute(sql`SELECT count(*)::int AS n FROM tako_whatsapp_errors WHERE created_at>now()-interval '10 minutes' AND kind NOT IN ('alert_send_failed','alert_undelivered','alert_failed')`),n=Number(rows[0]?.n??0);if(n>=burstThreshold)reason='burst:'+n}
   if(!reason)return{recorded,alerted:false}

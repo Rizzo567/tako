@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-9f3899cc-9eeb-4d57-a429-c20ab406a1a5",
+  "object": "chat.completion",
+  "created": 1792283874,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"unavailable\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Al momento non ci sono piatti esauriti.\"\n}",
+     "reasoning": "User asks \"cosa è finito?\" That's a read intent about unavailable items. Need reply_draft asking? Actually read intent: read=unavailable, item_refs maybe none. reply_draft should answer list? We just need to output JSON. reply_draft: \"Sono finiti: ...\" list items with status esaurito. Currently none marked esaurito. So reply \"Nessun piatto è finito.\" Provide intent read, read=unavailable, item_refs empty. No actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055902513,
+   "prompt_tokens": 3268,
+   "prompt_time": 0.031404558,
+   "completion_tokens": 210,
+   "completion_time": 0.43743542,
+   "total_tokens": 3478,
+   "total_time": 0.468839978,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 105
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_8ea50c0161",
+  "x_groq": {
+   "id": "req_01m56734jnem5thyhd7mr8t3gt",
+   "seed": 1309848181
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3268,
+  "completion_tokens": 210,
+  "total_tokens": 3478
+ },
+ "ms": 581,
+ "recordedAt": "2026-10-18T00:37:54.327Z",
+ "conv": "bv-semplici-022"
+}

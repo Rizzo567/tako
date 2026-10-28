@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-1ec5e703-30af-4c8d-ae5a-87005b9ff947",
+  "object": "chat.completion",
+  "created": 1792284150,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Quale tagliata vuoi conoscere? (p7, p8, p9)\",\n    \"item_refs\": [\"p7\", \"p8\", \"p9\"],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Quale tagliata vuoi conoscere? (Tagliata rucola e grana, Tagliata con funghi porcini e panna, Tagliata di orata o branzino)\"\n}",
+     "reasoning": "We need include at least one action for read? For read intent no actions needed but maybe need read field not \"items\"? Actually read intent expects read field maybe \"items\". But actions empty is okay. However server said no valid actions. Maybe need include a read action? Probably need include action with item? For read intent we can set action null? Might need include a dummy action? Better change intent to clarify since ambiguous which tagliata. So intent=clarify, actions empty, clarify fields set, reply_draft. No actions needed. Ensure required fields present. Provide actions empty array."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.094983747,
+   "prompt_tokens": 3666,
+   "prompt_time": 0.147132893,
+   "completion_tokens": 279,
+   "completion_time": 0.588914276,
+   "total_tokens": 3945,
+   "total_time": 0.736047169,
+   "completion_tokens_details": {
+    "reasoning_tokens": 122
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_05e76be18c",
+  "x_groq": {
+   "id": "req_01m567bhx5ebstw079tb76p7mf",
+   "seed": 1588118907
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3666,
+  "completion_tokens": 279,
+  "total_tokens": 3945
+ },
+ "ms": 1007,
+ "recordedAt": "2026-10-18T00:42:30.458Z",
+ "conv": "bv-domande-001"
+}

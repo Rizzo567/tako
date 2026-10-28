@@ -1,0 +1,59 @@
+{
+ "senzaNormalizzatore": {
+  "ok": 16,
+  "total": 27,
+  "per10": 5.9,
+  "categorieEsplicite": "13/13",
+  "perVocale": [
+   "W1-euro-in-lettere: 10/10",
+   "W2-senza-euro-e-cinquanta: 0/9",
+   "W3-cifre-miste-e-categorie-implicite: 6/8"
+  ],
+  "scartati": [
+   "W2 bruschetta -> *bruschetta*: qual è il prezzo corretto?",
+   "W2 tagliere -> *tagliere*: qual è il prezzo corretto?",
+   "W2 spaghetti alle vongole -> *spaghetti alle vongole*: qual è il prezzo corretto?",
+   "W2 penne all arrabbiata -> *penne all arrabbiata*: qual è il prezzo corretto?",
+   "W2 lasagna -> *lasagna*: qual è il prezzo corretto?",
+   "W2 tagliata -> *tagliata*: qual è il prezzo corretto?",
+   "W2 cotoletta -> *cotoletta*: qual è il prezzo corretto?",
+   "W2 tiramisù -> *tiramisù*: qual è il prezzo corretto?",
+   "W2 panna cotta -> *panna cotta*: qual è il prezzo corretto?",
+   "W3 sorbetto al limone -> *sorbetto al limone*: qual è il prezzo corretto?",
+   "W3 pizza quattro formaggi -> *pizza quattro formaggi*: qual è il prezzo corretto?"
+  ]
+ },
+ "normalizzaTuttoIlTesto": {
+  "ok": 19,
+  "total": 27,
+  "per10": 7,
+  "categorieEsplicite": "14/14",
+  "perVocale": [
+   "W1-euro-in-lettere: 10/10",
+   "W2-senza-euro-e-cinquanta: 1/9",
+   "W3-cifre-miste-e-categorie-implicite: 8/8"
+  ],
+  "scartati": [
+   "W2 bruschetta -> *bruschetta*: non riesco a verificare il nome nel menu.",
+   "W2 tagliere -> *tagliere*: non riesco a verificare il nome nel menu.",
+   "W2 spaghetti alle vongole -> *spaghetti alle vongole*: non riesco a verificare il nome nel menu.",
+   "W2 penne all arrabbiata -> *penne all arrabbiata*: non riesco a verificare il nome nel menu.",
+   "W2 lasagna -> *lasagna*: non riesco a verificare il nome nel menu.",
+   "W2 tagliata -> *tagliata*: non riesco a verificare il nome nel menu.",
+   "W2 cotoletta -> *cotoletta*: non riesco a verificare il nome nel menu.",
+   "W2 tiramisù -> *tiramisù*: non riesco a verificare il nome nel menu."
+  ]
+ },
+ "normalizzaSoloLeCitazioni": {
+  "ok": 27,
+  "total": 27,
+  "per10": 10,
+  "categorieEsplicite": "22/22",
+  "perVocale": [
+   "W1-euro-in-lettere: 10/10",
+   "W2-senza-euro-e-cinquanta: 9/9",
+   "W3-cifre-miste-e-categorie-implicite: 8/8"
+  ],
+  "scartati": []
+ }
+}

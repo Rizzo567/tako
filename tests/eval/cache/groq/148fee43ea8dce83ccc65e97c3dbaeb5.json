@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-b867690a-b0e5-4750-9cc9-a0928ab2c1b0",
+  "object": "chat.completion",
+  "created": 1792282318,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"Cosa devo confermare?\",\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Cosa devo confermare?\"\n}",
+     "reasoning": "We need to see message: \"IL SERVER HA RIFIUTATO IL PIANO: non c’è nessuna proposta in sospeso da confermare. Rifai il JSON: correggi il piano se il messaggio lo permette, altrimenti intent=clarify con la domanda per il titolare in reply_draft.\"\n\nThe last user message: they say there is no pending proposal, so we need to see if the message allows an action. The message just says \"conferma\". But no pending. So we need to ask clarification? Probably ask what to do. So intent=clarify, ask question. No actions. reply_draft with question. Let's ask: \"Cosa devo confermare?\" Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.21110206,
+   "prompt_tokens": 3593,
+   "prompt_time": 0.174022179,
+   "completion_tokens": 249,
+   "completion_time": 0.516213418,
+   "total_tokens": 3842,
+   "total_time": 0.690235597,
+   "completion_tokens_details": {
+    "reasoning_tokens": 150
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_ca5edfaab2",
+  "x_groq": {
+   "id": "req_01m565kmhweecsdm83pq2myehn",
+   "seed": 1169987836
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3593,
+  "completion_tokens": 249,
+  "total_tokens": 3842
+ },
+ "ms": 1004,
+ "recordedAt": "2026-10-18T00:11:58.218Z",
+ "conv": "bv-semplici-001"
+}

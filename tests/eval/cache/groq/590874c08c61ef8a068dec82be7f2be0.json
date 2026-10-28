@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-f1555b42-4fe6-4ff8-8b5f-7b589b5c9bd6",
+  "object": "chat.completion",
+  "created": 1792246832,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p10\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": \"p7\",\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need to output JSON. The user says \"e la gricia uguale\". Means set price of Gricia same as Carbonara? Carbonara price is 13 now. So set price of p10 (Gricia) to same as p7. Use price_ref to p7. Intent change. actions list with set_price for p10 price_ref p7. reply_draft empty. No uncertainties. alias none. read none. capability empty. clarify empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.210636293,
+   "prompt_tokens": 3354,
+   "prompt_time": 0.201227156,
+   "completion_tokens": 269,
+   "completion_time": 0.559814331,
+   "total_tokens": 3623,
+   "total_time": 0.761041487,
+   "completion_tokens_details": {
+    "reasoning_tokens": 96
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_e5b4e54fbb",
+  "x_groq": {
+   "id": "req_01m553rp79ecfrnyvn4b8d2kky",
+   "seed": 210655268
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3354,
+  "completion_tokens": 269,
+  "total_tokens": 3623
+ },
+ "ms": 1115,
+ "recordedAt": "2026-10-17T14:20:32.239Z",
+ "conv": "anche-002"
+}

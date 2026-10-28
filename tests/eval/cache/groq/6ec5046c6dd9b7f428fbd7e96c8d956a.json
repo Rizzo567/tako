@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-69d193f4-ca09-4c76-ad9f-306522bd1d49",
+  "object": "chat.completion",
+  "created": 1792249475,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p9\",\n      \"section\": null,\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p8\",\n      \"section\": null,\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p9\", \"p8\"],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need parse: \"la cacio, l'amatriciana a dodici\". Means set price of cacio e pepe (p9) and amatriciana (p8) to 12 euros. Both items. So actions two set_price with price=12. item_refs? intent change. reply_draft empty. No unclear. alias none. uncertain empty. capability empty. read none. item_refs list? maybe include items referenced: p9, p8. Provide."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.025237089,
+   "prompt_tokens": 3364,
+   "prompt_time": 0.00574239,
+   "completion_tokens": 356,
+   "completion_time": 0.739381144,
+   "total_tokens": 3720,
+   "total_time": 0.745123534,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 100
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_49bfac06f1",
+  "x_groq": {
+   "id": "req_01m5569b5ze3c8k1vn1s8wfr9x",
+   "seed": 1666345350
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3364,
+  "completion_tokens": 356,
+  "total_tokens": 3720
+ },
+ "ms": 853,
+ "recordedAt": "2026-10-17T15:04:34.882Z",
+ "conv": "negazione-004"
+}

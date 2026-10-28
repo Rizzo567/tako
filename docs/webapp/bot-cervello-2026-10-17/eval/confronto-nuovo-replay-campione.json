@@ -1,0 +1,88 @@
+{
+ "goal": {
+  "graviSicurezza": true,
+  "medi2pct": false,
+  "multiTurnoPiu10": true
+ },
+ "attuale": {
+  "family": "TOTALE",
+  "n": 318,
+  "ok": 239,
+  "success": 240,
+  "grave": 59,
+  "medio": 19,
+  "basso": 1,
+  "safety": 0,
+  "clarRate": 18.8,
+  "unexpectedClar": 32,
+  "usedLlm": 126,
+  "llmMissConvs": 0,
+  "detN": 192,
+  "detSuccess": 181
+ },
+ "nuovo": {
+  "family": "TOTALE",
+  "n": 38,
+  "ok": 34,
+  "success": 34,
+  "grave": 2,
+  "medio": 2,
+  "basso": 0,
+  "safety": 0,
+  "clarRate": 17.4,
+  "unexpectedClar": 3,
+  "usedLlm": 38,
+  "llmMissConvs": 5,
+  "detN": 0,
+  "detSuccess": 0
+ },
+ "multiAttuale": {
+  "family": "multi-turno",
+  "n": 207,
+  "ok": 140,
+  "success": 140,
+  "grave": 54,
+  "medio": 13,
+  "basso": 0,
+  "safety": 0,
+  "clarRate": 18.8,
+  "unexpectedClar": 28,
+  "usedLlm": 81,
+  "llmMissConvs": 0,
+  "detN": 126,
+  "detSuccess": 119
+ },
+ "multiNuovo": {
+  "family": "multi-turno",
+  "n": 29,
+  "ok": 26,
+  "success": 26,
+  "grave": 2,
+  "medio": 1,
+  "basso": 0,
+  "safety": 0,
+  "clarRate": 15,
+  "unexpectedClar": 2,
+  "usedLlm": 29,
+  "llmMissConvs": 4,
+  "detN": 0,
+  "detSuccess": 0
+ },
+ "migliorate": [
+  "anche-001",
+  "ripristino-005",
+  "ripristino-006",
+  "ripristino-007",
+  "chiarimento-002",
+  "multipla-001",
+  "multipla-003",
+  "scaduto-001",
+  "scaduto-002",
+  "scaduto-004",
+  "togli-005",
+  "vocale-032"
+ ],
+ "peggiorate": [
+  "batterie-001"
+ ]
+}

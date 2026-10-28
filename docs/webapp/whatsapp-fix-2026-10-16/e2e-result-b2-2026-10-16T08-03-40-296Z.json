@@ -1,0 +1,380 @@
+{
+  "set": "b2",
+  "startedAt": "2026-10-16T08:03:40.296Z",
+  "steps": [
+    {
+      "n": 1,
+      "text": "Crea locale Collaudo Mattina Sedici. Crea due menu: Pranzo, categoria Primi, Pasta al pomodoro a 10 euro; Cena, categoria Panini, Burger classico a 12 euro. È solo una bozza privata: non pubblicare e non inviare inviti.",
+      "webhook": {
+        "status": 200,
+        "ack": "Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione."
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6231
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Collaudo Mattina Sedici* · 2 piatti.\n\nFatto: aggiunto *Pasta al pomodoro* (Pranzo · Primi) a 10 €; aggiunto *Burger classico* (Cena · Panini) a 12 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "68205d8c-3ce5-46de-bbe4-af1558d39cb3"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "f8b72218-b31b-44a7-8be3-f9ae413e3cba"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 2,
+      "text": "Nel menu Cena, categoria Panini, cambia il prezzo del Burger classico da 12 a 13 euro. Non aggiungere un nuovo piatto. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6370
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Collaudo Mattina Sedici* · 2 piatti.\n\nFatto: *Burger classico* (Cena) 12 € → 13 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 3,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "68205d8c-3ce5-46de-bbe4-af1558d39cb3"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 13,
+          "id": "f8b72218-b31b-44a7-8be3-f9ae413e3cba"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 3,
+      "text": "Nel menu Cena, categoria Panini, il prezzo corretto del Burger classico è 14 euro. Aggiorna il piatto esistente. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3154
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Collaudo Mattina Sedici* · 2 piatti.\n\nFatto: *Burger classico* (Cena) 13 € → 14 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 4,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "68205d8c-3ce5-46de-bbe4-af1558d39cb3"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 14,
+          "id": "f8b72218-b31b-44a7-8be3-f9ae413e3cba"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 4,
+      "text": "Porta il Burger classico a 15 euro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6247
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Collaudo Mattina Sedici* · 2 piatti.\n\nFatto: *Burger classico* (Cena) 14 € → 15 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 5,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "68205d8c-3ce5-46de-bbe4-af1558d39cb3"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "f8b72218-b31b-44a7-8be3-f9ae413e3cba"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 5,
+      "text": "Nel menu Pranzo, categoria Primi, aggiungi Gnocchi al pesto a 11 euro. Mantieni Burger classico a 12 euro e Pasta al pomodoro a 10 euro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6340
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Collaudo Mattina Sedici* · 3 piatti.\n\nFatto: aggiunto *Gnocchi al pesto* (Pranzo · Primi) a 11 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 6,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "68205d8c-3ce5-46de-bbe4-af1558d39cb3"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "36ee55fb-18b0-4f11-b3a8-05658bff0c79"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "f8b72218-b31b-44a7-8be3-f9ae413e3cba"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 6,
+      "text": "Non cambiare prezzi, non aggiungere piatti e non pubblicare. Mostrami soltanto il riepilogo dei menu e dei piatti della bozza.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3219
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Collaudo Mattina Sedici* · 3 piatti.\n\n*Pranzo*\nPrimi: Pasta al pomodoro 10 €, Gnocchi al pesto 11 €\n*Cena*\nPanini: Burger classico 15 €\n\nNessun contatto del titolare ancora raccolto.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 6,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "68205d8c-3ce5-46de-bbe4-af1558d39cb3"
+        },
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Gnocchi al pesto",
+          "price": 11,
+          "id": "36ee55fb-18b0-4f11-b3a8-05658bff0c79"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 15,
+          "id": "f8b72218-b31b-44a7-8be3-f9ae413e3cba"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    }
+  ],
+  "before": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 25,
+      "publishedRevision": 25,
+      "draftHash": "dd6456633302d1f0d4207d0a9f3b611437f58355ee887511432c44defd09aec9",
+      "publishedHash": "dd6456633302d1f0d4207d0a9f3b611437f58355ee887511432c44defd09aec9"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "qaLinkCreated": true,
+  "expected": {
+    "dishes": [
+      "Cena/Panini/Burger classico/15",
+      "Pranzo/Primi/Gnocchi al pesto/11",
+      "Pranzo/Primi/Pasta al pomodoro/10"
+    ],
+    "burgerSameId": true,
+    "design": {
+      "background": "#f8f5ef",
+      "primary": "#ed725b",
+      "text": "#242628",
+      "font": "sans"
+    },
+    "burgerPriceAfterStep": [
+      12,
+      13,
+      14,
+      15,
+      15,
+      15
+    ]
+  },
+  "actual": {
+    "dishes": [
+      "Cena/Panini/Burger classico/15",
+      "Pranzo/Primi/Gnocchi al pesto/11",
+      "Pranzo/Primi/Pasta al pomodoro/10"
+    ],
+    "burgerSameId": true,
+    "design": {
+      "background": "#f8f5ef",
+      "primary": "#ed725b",
+      "text": "#242628",
+      "font": "sans"
+    },
+    "recapReturned": true,
+    "burgerPriceAfterStep": [
+      12,
+      13,
+      14,
+      15,
+      15,
+      15
+    ],
+    "burgerIdsPerStep": 1
+  },
+  "pass": true,
+  "errors": [],
+  "technicalCopy": 0,
+  "cleanup": {
+    "cancel": {
+      "status": "done",
+      "diagnostic": null,
+      "waitedMs": 3357
+    },
+    "openDraftAfter": false
+  },
+  "qaLinkRemoved": true,
+  "after": {
+    "restaurantCount": 25,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 25,
+      "publishedRevision": 25,
+      "draftHash": "dd6456633302d1f0d4207d0a9f3b611437f58355ee887511432c44defd09aec9",
+      "publishedHash": "dd6456633302d1f0d4207d0a9f3b611437f58355ee887511432c44defd09aec9"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "restaurantsChanged": [],
+  "restaurantsAdded": [],
+  "victoriaUnchanged": true,
+  "victoriaMatchesMorningBaseline": true,
+  "finishedAt": "2026-10-16T08:07:03.992Z"
+}

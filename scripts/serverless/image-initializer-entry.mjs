@@ -11,7 +11,11 @@ export async function readPinnedWasm(response,expectedBytes=15447097){
  }finally{await reader.cancel().catch(()=>{})}
 }
 /** Packaging source: caller's bundler pins bare package imports to installed versions. */
-export function imageInitializerEntry({initializerEntry,databaseEntry}){
+/** Modulo JS di magick-wasm 0.0.44 copiato dal pacchetto npm (dist/index.js, Apache-2.0, sha256 qui sotto): dentro il bundle
+ * al posto di `npm:@imagemagick/magick-wasm`, che portava nel pacchetto Edge anche i due magick.wasm (31 MB) e costava
+ * ~0,3-0,45 s a OGNI richiesta all'edge operativa. Il wasm resta scaricato da jsDelivr con verifica sha256, come prima. */
+export const magickModuleSha256='cf1db24f7e63f560118ef434fd581dc9ef66ad099dc417184765cd6076fb4a1b';
+export function imageInitializerEntry({initializerEntry,databaseEntry,magickEntry=null}){
  return `import process from 'node:process';
 import postgres from 'postgres';
 import {databaseOptions} from ${JSON.stringify(databaseEntry)};
@@ -44,7 +48,7 @@ export function initializeEdgeImages(){
   const connection=postgres(env.DATABASE_URL,databaseOptions(env));
   milestone('image_after_postgres_construct');
   try{
-   const magick=await import('npm:@imagemagick/magick-wasm@0.0.44');const wasm=await boundedWasm();
+   const magick=await import(${JSON.stringify(magickEntry??'npm:@imagemagick/magick-wasm@0.0.44')});const wasm=await boundedWasm();
    return await initialize({env,runtime:magick,runtimeVersion:'0.0.44',wasm,expectedWasmSha256:digest,seeds,milestone,query:async(statement,parameters)=>await connection.unsafe(statement,[...parameters])});
   }catch(error){await connection.end({timeout:1}).catch(()=>{});throw error}
  })();

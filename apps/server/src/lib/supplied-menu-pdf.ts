@@ -4,6 +4,8 @@ import {Buffer} from 'node:buffer'
 const suppliedPdfs:Readonly<Record<string,{url:string;filename:string;bytes:number;sha256:string}>>={
  '528e263c-634e-4695-9632-6c5cc6a3302f':{url:'https://takoitalia.com/takomenu-public/victoria-menu.pdf',filename:'victoria-menu.pdf',bytes:6334256,sha256:'d145165d47a3058e8f1c6d16c00d8ed0f3b6617d8d03dc245eb665c8ecd60c93'},
 }
+/** Il locale usa un PDF caricato a mano (non generato dal menu): serve per avvisare il titolare. */
+export const hasSuppliedMenuPdf=(tenant:string)=>Object.prototype.hasOwnProperty.call(suppliedPdfs,tenant)
 export class SuppliedPdfError extends Error {
  readonly statusCode=503
  readonly code='SUPPLIED_PDF_UNAVAILABLE'

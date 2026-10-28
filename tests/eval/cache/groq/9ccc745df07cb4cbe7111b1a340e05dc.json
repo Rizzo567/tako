@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-65f4479c-1b7f-4e03-aa79-33938c31f4a3",
+  "object": "chat.completion",
+  "created": 1792285006,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": 13.5,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Prezzo aggiornato a 13,5 € per il Piatto di verifica.\"\n}",
+     "reasoning": "We need to produce owner_brain_plan. Intent change. Action set_price for p1 to 13.5. Also \"non cambiare boh\" means do not change boh (p3). So no action on p3. Provide actions list with one action. No uncertain. reply_draft confirm. Probably \"Prezzo aggiornato.\" but per spec reply_draft simple. Let's output."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.054758393,
+   "prompt_tokens": 3279,
+   "prompt_time": 0.030603998,
+   "completion_tokens": 274,
+   "completion_time": 0.609311337,
+   "total_tokens": 3553,
+   "total_time": 0.639915335,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 81
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_f640395b96",
+  "x_groq": {
+   "id": "req_01m5685nxte12bjx9hg4mhwcp4",
+   "seed": 1064972212
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3279,
+  "completion_tokens": 274,
+  "total_tokens": 3553
+ },
+ "ms": 828,
+ "recordedAt": "2026-10-18T00:56:46.418Z",
+ "conv": "bv-domande-010"
+}

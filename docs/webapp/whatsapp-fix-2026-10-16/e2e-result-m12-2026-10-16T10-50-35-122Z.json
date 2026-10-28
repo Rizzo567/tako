@@ -1,0 +1,333 @@
+{
+  "set": "m12",
+  "startedAt": "2026-10-16T10:50:35.122Z",
+  "steps": [
+    {
+      "n": 1,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Crea locale Verifica Avversaria Sedici. Crea due menu: Pranzo, categoria Primi, Pasta al pomodoro a 10 euro; Cena, categoria Panini, Burger classico a 12 euro. È solo una bozza privata: non pubblicare e non inviare inviti.",
+      "webhook": {
+        "status": 200,
+        "ack": "Sto preparando il *nuovo locale*. Resta privato fino alla tua approvazione."
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 6243
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 2 piatti.\n\nFatto: aggiunto *Pasta al pomodoro* (Pranzo · Primi) a 10 €; aggiunto *Burger classico* (Cena · Panini) a 12 €.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]"
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "d67977d3-ed81-4099-9459-1d310e848764"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "cd2a3813-663b-4ba9-ab84-223dc9b8979a"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 2,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Nel menu Pranzo, categoria Primi, aggiungi Risotto ai funghi a quattordici euro. Nel menu Cena cambia il Burger classico da dodici a tredici euro. Non cambiare la Pasta al pomodoro. Non pubblicare.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "failed",
+        "diagnostic": {
+          "cause": "quota"
+        },
+        "waitedMs": 100493
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: riprovo da solo tra poco, la richiesta *non è persa*."
+        },
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: non ho letto l’ultimo messaggio. *Rimandalo* tra qualche minuto, la bozza è salva."
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "d67977d3-ed81-4099-9459-1d310e848764"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "cd2a3813-663b-4ba9-ab84-223dc9b8979a"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 3,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Metti il Risotto ai funghi a 15 euro.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "failed",
+        "diagnostic": {
+          "cause": "quota"
+        },
+        "waitedMs": 96995
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: riprovo da solo tra poco, la richiesta *non è persa*."
+        },
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "Il servizio è *occupato*: non ho letto l’ultimo messaggio. *Rimandalo* tra qualche minuto, la bozza è salva."
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "d67977d3-ed81-4099-9459-1d310e848764"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "cd2a3813-663b-4ba9-ab84-223dc9b8979a"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    },
+    {
+      "n": 4,
+      "name": "Verifica Avversaria Sedici",
+      "owner": null,
+      "text": "Mostrami il riepilogo dei menu e dei piatti.",
+      "webhook": {
+        "status": 200,
+        "ack": ""
+      },
+      "job": {
+        "status": "done",
+        "diagnostic": null,
+        "waitedMs": 3216
+      },
+      "replies": [
+        {
+          "status": "undelivered",
+          "errorCode": 63024,
+          "body": "*Verifica Avversaria Sedici* · 2 piatti.\n\n*Pranzo*\nPrimi: Pasta al pomodoro 10 €\n*Cena*\nPanini: Burger classico 12 €\n\nNessun contatto del titolare ancora raccolto.\n\nCome si chiama il *titolare*?\n\n*Anteprima privata*:\nhttps://takoitalia.com/onboarding-preview/[private-token]\n\nLa bozza si elimina dopo *10 minuti senza attività*."
+        }
+      ],
+      "revision": 2,
+      "items": [
+        {
+          "menu": "Pranzo",
+          "section": "Primi",
+          "name": "Pasta al pomodoro",
+          "price": 10,
+          "id": "d67977d3-ed81-4099-9459-1d310e848764"
+        },
+        {
+          "menu": "Cena",
+          "section": "Panini",
+          "name": "Burger classico",
+          "price": 12,
+          "id": "cd2a3813-663b-4ba9-ab84-223dc9b8979a"
+        }
+      ],
+      "unresolved": [],
+      "design": {
+        "background": "#f8f5ef",
+        "primary": "#ed725b",
+        "text": "#242628",
+        "font": "sans"
+      }
+    }
+  ],
+  "before": {
+    "restaurantCount": 35,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "qaLinkCreated": true,
+  "expected": {
+    "name": "Verifica Avversaria Sedici",
+    "dishes": [
+      "Cena/Panini/Burger classico/13",
+      "Pranzo/Primi/Pasta al pomodoro/10",
+      "Pranzo/Primi/Risotto ai funghi/15"
+    ]
+  },
+  "actual": {
+    "dishes": [
+      "Cena/Panini/Burger classico/12",
+      "Pranzo/Primi/Pasta al pomodoro/10"
+    ],
+    "name": "Verifica Avversaria Sedici",
+    "ownerName": null,
+    "everyStepAnswered": true,
+    "pastaAfterStep": [
+      10,
+      10,
+      10,
+      10
+    ],
+    "recapReturned": true,
+    "failedJobs": [
+      2,
+      3
+    ],
+    "nameAfterStep": [
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici",
+      "Verifica Avversaria Sedici"
+    ],
+    "ownerAfterStep": [
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "pass": false,
+  "errors": [
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 1/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T10:51:39.870Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 2/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T10:52:28.364Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T10:53:15.595Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 1/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T10:54:09.690Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "retry 2/2 · provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T10:54:57.796Z"
+    },
+    {
+      "kind": "onboarding_quota",
+      "detail": "provider rate limit retry-after 120s",
+      "alerted": false,
+      "created_at": "2026-10-16T10:55:44.972Z"
+    }
+  ],
+  "technicalCopy": 0,
+  "cleanup": {
+    "cancel": {
+      "status": "done",
+      "diagnostic": null,
+      "waitedMs": 3156
+    },
+    "openDraftAfter": false
+  },
+  "qaLinkRemoved": true,
+  "after": {
+    "restaurantCount": 35,
+    "victoria": {
+      "name": "Victoria Bar",
+      "revision": 29,
+      "publishedRevision": 29,
+      "draftHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016",
+      "publishedHash": "3c363a794669292df518d7fb7d1d2c98372fb7e9397f7a1de90324d4cfcec016"
+    },
+    "ownerLink": [
+      {
+        "phoneTail": "927",
+        "restaurant": "528e263c-634e-4695-9632-6c5cc6a3302f"
+      }
+    ]
+  },
+  "restaurantsChanged": [
+    "26050ecd-2e55-4057-a4c5-bff2b449cd47"
+  ],
+  "restaurantsAdded": [],
+  "victoriaUnchanged": true,
+  "victoriaMatchesMorningBaseline": false,
+  "finishedAt": "2026-10-16T10:56:52.174Z"
+}

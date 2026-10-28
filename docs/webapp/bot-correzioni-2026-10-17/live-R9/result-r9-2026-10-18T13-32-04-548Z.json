@@ -1,0 +1,52 @@
+{
+ "at": "2026-10-18T13:32:04.548Z",
+ "results": [
+  {
+   "turn": 1,
+   "msg": "[vocale 12:30] Ora nei primi aggiungi pasta al pesto, pasta al ragù, pasta carbonara e riso giallo…",
+   "status": 200,
+   "ms": 7546,
+   "reply": "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nC’è già \"pasta al ragù\" a 20,00 €: lo aggiorno al prezzo di 10 € e lo rendo visibile, oppure ne creo un altro?\n\nNon ancora pubblicato:\n1. Nuovo piatto *pasta al pesto* in *Primi*: *10,00 €*\n2. Nuovo piatto *pasta carbonara* in *Primi*: *10,00 €*\n3. Nuovo piatto *riso giallo* in *Primi*: *8,00 €*\n\nGià nel menu:\n1. *pasta al ragù* (20,00 €)",
+   "published": [],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 8488
+  }
+ ],
+ "stopped": "tetto token raggiunto prima del turno 2",
+ "twilio": {
+  "before": 0,
+  "after": 0
+ },
+ "errors": {
+  "before": 56,
+  "after": 56
+ },
+ "tokens": 8488,
+ "restore": {
+  "before": {
+   "draft": "229cc4f6b288291b",
+   "published": "229cc4f6b288291b",
+   "items": "a63abc98501e21e5",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "ff0a12e00d2036f5",
+   "translations": "4f53cda18c2baa0c",
+   "public": "f6dec7315fd88a32"
+  },
+  "after": {
+   "draft": "229cc4f6b288291b",
+   "published": "229cc4f6b288291b",
+   "items": "a63abc98501e21e5",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "ff0a12e00d2036f5",
+   "translations": "4f53cda18c2baa0c",
+   "public": "f6dec7315fd88a32"
+  },
+  "ok": true,
+  "extraRows": [],
+  "memory": true
+ }
+}

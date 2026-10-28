@@ -1,0 +1,11 @@
+import {build} from 'esbuild';import {readFile,writeFile} from 'node:fs/promises';import {resolve,dirname} from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url'
+const here=dirname(fileURLToPath(import.meta.url)),repo=resolve(here,'../../../../..')
+const {loadLocalEnvironment}=await import(repo+'/scripts/start-webapp.mjs');const env=await loadLocalEnvironment(repo)
+const out=resolve(repo,'apps/server/node_modules/.tako-eq-'+process.pid+'.mjs')
+await build({entryPoints:[resolve(here,'equivalence.ts')],bundle:true,platform:'node',format:'esm',outfile:out,packages:'external',absWorkingDir:resolve(repo,'apps/server'),logLevel:'error',alias:{'@tako/db':resolve(repo,'packages/db/src/index.ts'),'@tako/types':resolve(repo,'packages/types/src/index.ts')}})
+const u=new URL(env.DATABASE_URL);u.searchParams.delete('sslmode');const ca=env.DATABASE_CA_CERT?.trim()||(env.DATABASE_CA_CERT_PATH?await readFile(env.DATABASE_CA_CERT_PATH,'utf8'):undefined)
+Object.assign(process.env,env)
+const {run}=await import(pathToFileURL(out).href);const r=await run(u.toString(),ca)
+for(const x of r.results)console.log((x.equal===true?'UGUALE ':x.equal===false?'DIVERSO':'       '),x.name,x.err??'',x.equal!==undefined?JSON.stringify({old:[x.oldSaveQ,x.oldPubQ,x.oldSaveMs,x.oldPubMs],new:[x.newSaveQ,x.newPubQ,x.newSaveMs,x.newPubMs],n:x.new?.n,errOld:x.old?.err,errNew:x.new?.err}):'')
+console.log('revisione QA prima/dopo (deve restare uguale: tutto annullato)',r.base,r.revisionAfter)
+await writeFile(resolve(here,'../evidence/equivalence-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json'),JSON.stringify(r,null,1))

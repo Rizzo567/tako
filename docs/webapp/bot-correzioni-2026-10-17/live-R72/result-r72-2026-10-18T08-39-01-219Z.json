@@ -1,0 +1,178 @@
+{
+ "at": "2026-10-18T08:39:01.219Z",
+ "results": [
+  {
+   "turn": 1,
+   "msg": "Ciao, cosa sai fare?",
+   "status": 200,
+   "ms": 3514,
+   "reply": "Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona.\n\nPosso gestire prezzi, disponibilità, nascondere o mostrare piatti, aggiungere descrizioni, tag, evidenziare, creare, modificare o eliminare voci, gestire promozioni, speciali, foto, allergeni e molto altro.",
+   "published": [],
+   "wrote": false,
+   "pending": 0,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 3611
+  },
+  {
+   "turn": 2,
+   "msg": "[vocale 15:27] Aggiungi la parmigiana a 10 euro, il tiramisù a 6 euro e togli bo.",
+   "status": 200,
+   "ms": 6031,
+   "reply": "Elimino 'boh' dal menu? Rispondi sì.\n\n1. *la parmigiana* (15,00 €)\n2. *tiramisù* (15,00 €)\n3. *boh* (20,00 €)",
+   "published": [],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 11781
+  },
+  {
+   "turn": 3,
+   "msg": "va bene così",
+   "status": 200,
+   "ms": 2818,
+   "reply": "Sono momentaneamente non disponibile, riprova tra un minuto.",
+   "published": [],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": false,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 11781
+  },
+  {
+   "turn": 4,
+   "msg": "[vocale 15:27] Ok, cambia i prezzi di quei due prodotti e mettili entrambi a 15 euro.",
+   "status": 200,
+   "ms": 3983,
+   "reply": "Sono momentaneamente non disponibile, riprova tra un minuto.",
+   "published": [],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 11781
+  },
+  {
+   "turn": 5,
+   "msg": "sì",
+   "status": 200,
+   "ms": 2119,
+   "reply": "Sono momentaneamente non disponibile, riprova tra un minuto.",
+   "published": [],
+   "wrote": false,
+   "pending": 1,
+   "checkOk": false,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 11781
+  },
+  {
+   "turn": 6,
+   "msg": "annulla",
+   "status": 200,
+   "ms": 10809,
+   "reply": "Operazione annullata.",
+   "published": [],
+   "wrote": false,
+   "pending": 0,
+   "checkOk": false,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 15660
+  },
+  {
+   "turn": 7,
+   "msg": "elimina Pasta al sugo",
+   "status": 200,
+   "ms": 2377,
+   "reply": "Sono momentaneamente non disponibile, riprova tra un minuto.",
+   "published": [],
+   "wrote": false,
+   "pending": 0,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": false,
+   "tokensSoFar": 15660
+  },
+  {
+   "turn": 8,
+   "msg": "sì",
+   "status": 200,
+   "ms": 2112,
+   "reply": "Sono momentaneamente non disponibile, riprova tra un minuto.",
+   "published": [],
+   "wrote": false,
+   "pending": 0,
+   "checkOk": false,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 15660
+  },
+  {
+   "turn": 9,
+   "msg": "la birra +10%",
+   "status": 200,
+   "ms": 2056,
+   "reply": "Sono momentaneamente non disponibile, riprova tra un minuto.",
+   "published": [],
+   "wrote": false,
+   "pending": 0,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 15660
+  },
+  {
+   "turn": 10,
+   "msg": "la carbonara a tre dici",
+   "status": 200,
+   "ms": 1823,
+   "reply": "Sono momentaneamente non disponibile, riprova tra un minuto.",
+   "published": [],
+   "wrote": false,
+   "pending": 0,
+   "checkOk": true,
+   "aiOk": true,
+   "reOk": true,
+   "tokensSoFar": 15660
+  }
+ ],
+ "stopped": null,
+ "twilio": {
+  "before": 0,
+  "after": 0
+ },
+ "errors": {
+  "before": 56,
+  "after": 56
+ },
+ "tokens": 15660,
+ "restore": {
+  "before": {
+   "draft": "df579269fbafc22b",
+   "published": "df579269fbafc22b",
+   "items": "43502077b7b22394",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "public": "86cf91eb3e4c66a5"
+  },
+  "after": {
+   "draft": "df579269fbafc22b",
+   "published": "df579269fbafc22b",
+   "items": "43502077b7b22394",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "public": "86cf91eb3e4c66a5"
+  },
+  "ok": true,
+  "extraRows": [],
+  "memory": true
+ }
+}

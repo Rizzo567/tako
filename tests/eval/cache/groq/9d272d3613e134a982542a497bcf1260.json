@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-59e43501-b20f-4178-a7ae-c620ce61a537",
+  "object": "chat.completion",
+  "created": 1792249795,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p7\",\n      \"section\": null,\n      \"price\": 13,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "We need intent change, action set_price for item p7, price 13. No other. reply_draft empty. No alias. No clarify. No uncertain. capability empty. read none. item_refs maybe list? Probably empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.300014962,
+   "prompt_tokens": 3622,
+   "prompt_time": 0.005429058,
+   "completion_tokens": 221,
+   "completion_time": 0.465413571,
+   "total_tokens": 3843,
+   "total_time": 0.470842629,
+   "prompt_tokens_details": {
+    "cached_tokens": 3328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 49
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_69334c0be3",
+  "x_groq": {
+   "id": "req_01m556k3tne38a5d1rfm47wfe4",
+   "seed": 642717642
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3622,
+  "completion_tokens": 221,
+  "total_tokens": 3843
+ },
+ "ms": 862,
+ "recordedAt": "2026-10-17T15:09:55.029Z",
+ "conv": "vocale-001"
+}

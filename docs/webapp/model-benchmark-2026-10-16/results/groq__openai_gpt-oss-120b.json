@@ -1,0 +1,1439 @@
+{
+ "provider": "groq",
+ "model": "openai/gpt-oss-120b",
+ "sample": 45,
+ "totale": {
+  "n": 45,
+  "esatti": 95.6,
+  "innocui": 4.4,
+  "gravi": 0,
+  "jsonNonValido": 0,
+  "jsonRitentato": 0,
+  "p50ms": 1261,
+  "p95ms": 3444,
+  "tokenInMedi": 889,
+  "tokenOutMedi": 377,
+  "costoUsdPer1000": 0.36
+ },
+ "facile": {
+  "n": 15,
+  "esatti": 100,
+  "innocui": 0,
+  "gravi": 0,
+  "jsonNonValido": 0,
+  "jsonRitentato": 0,
+  "p50ms": 925,
+  "p95ms": 4982,
+  "tokenInMedi": 885,
+  "tokenOutMedi": 279,
+  "costoUsdPer1000": 0.3
+ },
+ "medio": {
+  "n": 15,
+  "esatti": 100,
+  "innocui": 0,
+  "gravi": 0,
+  "jsonNonValido": 0,
+  "jsonRitentato": 0,
+  "p50ms": 1340,
+  "p95ms": 5001,
+  "tokenInMedi": 889,
+  "tokenOutMedi": 368,
+  "costoUsdPer1000": 0.354
+ },
+ "difficile": {
+  "n": 15,
+  "esatti": 86.7,
+  "innocui": 13.3,
+  "gravi": 0,
+  "jsonNonValido": 0,
+  "jsonRitentato": 0,
+  "p50ms": 1581,
+  "p95ms": 3444,
+  "tokenInMedi": 893,
+  "tokenOutMedi": 485,
+  "costoUsdPer1000": 0.425
+ },
+ "parserNo": {
+  "n": 14,
+  "esatti": 92.9,
+  "innocui": 7.1,
+  "gravi": 0,
+  "jsonNonValido": 0,
+  "jsonRitentato": 0,
+  "p50ms": 1581,
+  "p95ms": 3339,
+  "tokenInMedi": 902,
+  "tokenOutMedi": 435,
+  "costoUsdPer1000": 0.397
+ },
+ "casi": [
+  {
+   "id": "c001",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 3231,
+   "messaggio": "Crea due menu: Pranzo, categoria Primi, Pasta al pomodoro a 10 euro; Cena, categoria Panini, Burger classico a 12 euro. È solo una bozza privata: non pubblicare e non inviare inviti.",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Pasta al pomodoro",
+     "prezzo": 10,
+     "menu": "Pranzo",
+     "categoria": "Primi"
+    },
+    {
+     "op": "add",
+     "piatto": "Burger classico",
+     "prezzo": 12,
+     "menu": "Cena",
+     "categoria": "Panini"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "Pasta al pomodoro",
+     "prezzo": 10,
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "Pasta al pomodoro a 10 euro"
+    },
+    {
+     "op": "add",
+     "piatto": "Burger classico",
+     "prezzo": 12,
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "Burger classico a 12 euro"
+    },
+    {
+     "op": "none",
+     "citazione": "non pubblicare"
+    }
+   ]
+  },
+  {
+   "id": "c005",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 4982,
+   "messaggio": "Porta il Burger classico a 13.",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13,
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "Porta il Burger classico a 13"
+    }
+   ]
+  },
+  {
+   "id": "c008",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 695,
+   "messaggio": "Mostra il riepilogo",
+   "atteso": [
+    {
+     "op": "none"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "none",
+     "citazione": "Mostra il riepilogo"
+    }
+   ]
+  },
+  {
+   "id": "c016",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 855,
+   "messaggio": "Elimina il Tiramisu.",
+   "atteso": [
+    {
+     "op": "remove",
+     "piatto": "Tiramisu"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "remove",
+     "piatto": "Tiramisu",
+     "menu": "Pranzo",
+     "categoria": "Dolci",
+     "citazione": "Elimina il Tiramisu"
+    }
+   ]
+  },
+  {
+   "id": "c027",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1055,
+   "messaggio": "Nel menu Cena, categoria Panini, alza il Burger classico a 13 euro.",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13,
+     "menu": "Cena"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "alza il Burger classico a 13 euro"
+    }
+   ]
+  },
+  {
+   "id": "c030",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 814,
+   "messaggio": "Cambia il Burger classico da 12,50 a 13 euro.",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "Burger classico da 12,50 a 13"
+    }
+   ]
+  },
+  {
+   "id": "c033",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 730,
+   "messaggio": "Il Burger classico passa da 12 a 13 euro.",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "Burger classico passa da 12 a 13"
+    }
+   ]
+  },
+  {
+   "id": "c040",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1252,
+   "messaggio": "Porta il Burger classico a 13 euro e non cambiare la Pasta al pomodoro.",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13,
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "Porta il Burger classico a 13 euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "non cambiare la Pasta al pomodoro"
+    }
+   ]
+  },
+  {
+   "id": "c062",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 626,
+   "messaggio": "Nel menu Pranzo, categoria Pizze, aggiungi Pizza 4 formaggi a 11 euro.",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Pizza 4 formaggi",
+     "prezzo": 11,
+     "menu": "Pranzo",
+     "categoria": "Pizze"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "Pizza 4 formaggi",
+     "prezzo": 11,
+     "menu": "Pranzo",
+     "categoria": "Pizze",
+     "citazione": "Pizza 4 formaggi a 11 euro"
+    }
+   ]
+  },
+  {
+   "id": "c070",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 842,
+   "messaggio": "Porta il Burger classico a 12,50 euro.",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 12.5
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 12.5,
+     "citazione": "Porta il Burger classico a 12,50 euro"
+    }
+   ]
+  },
+  {
+   "id": "c080",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 925,
+   "messaggio": "STATO ONBOARDING",
+   "atteso": [
+    {
+     "op": "none"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "none"
+    }
+   ]
+  },
+  {
+   "id": "c083",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1852,
+   "messaggio": "aggiungi la bufalina a 9 euro nelle pizze",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Bufalina",
+     "prezzo": 9,
+     "menu": "Menu",
+     "categoria": "Pizze"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "Bufalina",
+     "prezzo": 9,
+     "menu": "Menu",
+     "categoria": "Pizze",
+     "citazione": "bufalina a 9 euro nelle pizze"
+    }
+   ]
+  },
+  {
+   "id": "c089",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 723,
+   "messaggio": "come faccio a pubblicare il menu?",
+   "atteso": [
+    {
+     "op": "unsupported",
+     "valore": "pubblicare"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "unsupported",
+     "valore": "pubblicare il menu",
+     "citazione": "come faccio a pubblicare il menu"
+    }
+   ]
+  },
+  {
+   "id": "c107",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 932,
+   "messaggio": "il cappuccino adesso è 1,70",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Cappuccino",
+     "prezzo": 1.7
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Cappuccino",
+     "prezzo": 1.7,
+     "menu": "Colazione",
+     "categoria": "Caffetteria",
+     "citazione": "cappuccino adesso è 1,70"
+    }
+   ]
+  },
+  {
+   "id": "c123",
+   "difficolta": "facile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 2904,
+   "messaggio": "l'acqua costa 2,50",
+   "atteso": [
+    {
+     "op": "ask",
+     "piatto": "Acqua"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "ask",
+     "piatto": "Acqua",
+     "citazione": "l'acqua costa 2,50"
+    }
+   ]
+  },
+  {
+   "id": "c002",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1675,
+   "messaggio": "Nel menu Pranzo, categoria Primi, aggiungi Gnocchi al pesto a 11 euro. Mantieni Burger classico a 12 euro e Pasta al pomodoro a 10 euro. Non pubblicare.",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Gnocchi al pesto",
+     "prezzo": 11,
+     "menu": "Pranzo",
+     "categoria": "Primi"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "Gnocchi al pesto",
+     "prezzo": 11,
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "Gnocchi al pesto a 11 euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico",
+     "citazione": "Burger classico a 12 euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "citazione": "Pasta al pomodoro a 10 euro"
+    },
+    {
+     "op": "none",
+     "citazione": "Non pubblicare"
+    }
+   ]
+  },
+  {
+   "id": "c015",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1240,
+   "messaggio": "Nel menu Cena, categoria Dolci, elimina il Tiramisu a 6 euro.",
+   "atteso": [
+    {
+     "op": "ask",
+     "piatto": "Tiramisu"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "ask",
+     "piatto": "Tiramisu",
+     "menu": "Cena",
+     "categoria": "Dolci",
+     "citazione": "elimina il Tiramisu a 6 euro"
+    }
+   ]
+  },
+  {
+   "id": "c023",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1261,
+   "messaggio": "Nel menu Pranzo, categoria Primi, aggiungi Gnocchi al pesto a 11 euro. Il Burger classico a 12 euro va bene così.",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Gnocchi al pesto",
+     "prezzo": 11,
+     "menu": "Pranzo",
+     "categoria": "Primi"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "Gnocchi al pesto",
+     "prezzo": 11,
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "Gnocchi al pesto a 11 euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "citazione": "Burger classico a 12 euro va bene così"
+    }
+   ]
+  },
+  {
+   "id": "c038",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1715,
+   "messaggio": "Non cambiare la pasta e il Burger classico lo porto a 13 euro.",
+   "atteso": [
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro"
+    },
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "citazione": "Non cambiare la pasta"
+    },
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13,
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "il Burger classico lo porto a 13 euro"
+    }
+   ]
+  },
+  {
+   "id": "c048",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1340,
+   "messaggio": "Aggiungi il Tiramisu e mostra il riepilogo",
+   "atteso": [
+    {
+     "op": "ask",
+     "piatto": "Tiramisu"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "ask",
+     "piatto": "Tiramisu",
+     "citazione": "Aggiungi il Tiramisu"
+    }
+   ]
+  },
+  {
+   "id": "c065",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 913,
+   "messaggio": "Nel menu Cena, categoria Bevande, aggiungi Caffè a un euro.",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Caffè",
+     "prezzo": 1,
+     "menu": "Cena",
+     "categoria": "Bevande"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "Caffè",
+     "prezzo": 1,
+     "menu": "Cena",
+     "categoria": "Bevande",
+     "citazione": "Caffè a un euro"
+    }
+   ]
+  },
+  {
+   "id": "c076",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1387,
+   "messaggio": "Menu di prova:\nAntipasti\nBruschetta al pomodoro — 8,00 €\nPrimi\nPasta al pomodoro — 10,00 €",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Bruschetta al pomodoro",
+     "prezzo": 8,
+     "categoria": "Antipasti"
+    },
+    {
+     "op": "add",
+     "piatto": "Pasta al pomodoro",
+     "prezzo": 10,
+     "categoria": "Primi"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "Bruschetta al pomodoro",
+     "prezzo": 8,
+     "menu": "Menu di prova",
+     "categoria": "Antipasti",
+     "citazione": "Bruschetta al pomodoro — 8,00 €"
+    },
+    {
+     "op": "add",
+     "piatto": "Pasta al pomodoro",
+     "prezzo": 10,
+     "menu": "Menu di prova",
+     "categoria": "Primi",
+     "citazione": "Pasta al pomodoro — 10,00 €"
+    }
+   ]
+  },
+  {
+   "id": "c090",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 750,
+   "messaggio": "si possono mettere gli allergeni?",
+   "atteso": [
+    {
+     "op": "unsupported",
+     "valore": "allergeni"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "unsupported",
+     "valore": "allergeni",
+     "citazione": "allergeni"
+    }
+   ]
+  },
+  {
+   "id": "c102",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1480,
+   "messaggio": "metti la crocchè a 2 e il montanara lo tolgo",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Crocchè",
+     "prezzo": 2
+    },
+    {
+     "op": "remove",
+     "piatto": "Montanara"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Crocchè",
+     "prezzo": 2,
+     "menu": "Menu",
+     "categoria": "Fritti",
+     "citazione": "crocchè a 2"
+    },
+    {
+     "op": "remove",
+     "piatto": "Montanara",
+     "menu": "Menu",
+     "categoria": "Fritti",
+     "citazione": "montanara lo tolgo"
+    }
+   ]
+  },
+  {
+   "id": "c112",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1051,
+   "messaggio": "aggiungi spremuta d'arancia 3 euro",
+   "atteso": [
+    {
+     "op": "ask",
+     "piatto": "Spremuta d'arancia"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "ask",
+     "piatto": "spremuta d'arancia",
+     "citazione": "spremuta d'arancia 3 euro"
+    }
+   ]
+  },
+  {
+   "id": "c124",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1161,
+   "messaggio": "l'acqua di cena va a 3",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Acqua",
+     "prezzo": 3,
+     "menu": "Cena"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Acqua",
+     "menu": "Cena",
+     "categoria": "Bevande",
+     "prezzo": 3,
+     "citazione": "l'acqua di cena va a 3"
+    }
+   ]
+  },
+  {
+   "id": "c136",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 453,
+   "messaggio": "non pubblicare ancora, ci sentiamo domani",
+   "atteso": [
+    {
+     "op": "none"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "none",
+     "citazione": "non pubblicare"
+    }
+   ]
+  },
+  {
+   "id": "c148",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1526,
+   "messaggio": "crea due menu pranzo categoria primi pasta al pomodoro a dieci euro cena categoria panini burger classico a dodici euro è solo una bozza privata non pubblicare e non inviare inviti",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Pasta al pomodoro",
+     "prezzo": 10,
+     "menu": "Pranzo",
+     "categoria": "Primi"
+    },
+    {
+     "op": "add",
+     "piatto": "Burger classico",
+     "prezzo": 12,
+     "menu": "Cena",
+     "categoria": "Panini"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "pasta al pomodoro",
+     "prezzo": 10,
+     "menu": "pranzo",
+     "categoria": "primi",
+     "citazione": "pasta al pomodoro a dieci euro"
+    },
+    {
+     "op": "add",
+     "piatto": "burger classico",
+     "prezzo": 12,
+     "menu": "cena",
+     "categoria": "panini",
+     "citazione": "burger classico a dodici euro"
+    }
+   ]
+  },
+  {
+   "id": "c170",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1504,
+   "messaggio": "nel menu cena categoria panini abbassa il burger classico a undici euro",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 11,
+     "menu": "Cena"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 11,
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "abbassa il burger classico a undici euro"
+    }
+   ]
+  },
+  {
+   "id": "c182",
+   "difficolta": "medio",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 5001,
+   "messaggio": "porta il burger classico a tredici euro e non cambiare la pasta al pomodoro",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13,
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "burger classico a tredici euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "non cambiare la pasta al pomodoro"
+    }
+   ]
+  },
+  {
+   "id": "c006",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 3444,
+   "messaggio": "Aggiungi Risotto ai funghi a quattordici euro nel Pranzo, categoria Primi; cambia Burger classico da dodici a tredici; non cambiare Pasta al pomodoro.",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Risotto ai funghi",
+     "prezzo": 14,
+     "menu": "Pranzo",
+     "categoria": "Primi"
+    },
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "Risotto ai funghi",
+     "prezzo": 14,
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "Risotto ai funghi a quattordici euro nel Pranzo, categoria Primi"
+    },
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13,
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "cambia Burger classico da dodici a tredici"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "non cambiare Pasta al pomodoro"
+    }
+   ]
+  },
+  {
+   "id": "c051",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1025,
+   "messaggio": "Nel menu Cena, categoria Cocktail, aggiungi Lascia o raddoppia a 8 euro.",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Lascia o raddoppia",
+     "prezzo": 8,
+     "menu": "Cena",
+     "categoria": "Cocktail"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "Lascia o raddoppia",
+     "prezzo": 8,
+     "menu": "Cena",
+     "categoria": "Cocktail",
+     "citazione": "Lascia o raddoppia a 8 euro"
+    }
+   ]
+  },
+  {
+   "id": "c059",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1258,
+   "messaggio": "Aggiungi Caffè a 1,50 euro al Pranzo e alla Cena, categoria Bevande.",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Caffè",
+     "prezzo": 1.5,
+     "menu": "Pranzo",
+     "categoria": "Bevande"
+    },
+    {
+     "op": "add",
+     "piatto": "Caffè",
+     "prezzo": 1.5,
+     "menu": "Cena",
+     "categoria": "Bevande"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "Caffè",
+     "prezzo": 1.5,
+     "menu": "Pranzo",
+     "categoria": "Bevande",
+     "citazione": "Caffè a 1,50 euro al Pranzo e alla Cena, categoria Bevande"
+    },
+    {
+     "op": "add",
+     "piatto": "Caffè",
+     "prezzo": 1.5,
+     "menu": "Cena",
+     "categoria": "Bevande",
+     "citazione": "Caffè a 1,50 euro al Pranzo e alla Cena, categoria Bevande"
+    }
+   ]
+  },
+  {
+   "id": "c085",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 2338,
+   "messaggio": "e la capricciosa mettila a nove e cinquanta, la diavola invece rimane uguale, togli la marinara e aggiungi la ortolana a otto",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Capricciosa",
+     "prezzo": 9.5
+    },
+    {
+     "op": "keep",
+     "piatto": "Diavola"
+    },
+    {
+     "op": "remove",
+     "piatto": "Marinara"
+    },
+    {
+     "op": "add",
+     "piatto": "Ortolana",
+     "prezzo": 8,
+     "menu": "Menu",
+     "categoria": "Pizze"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Capricciosa",
+     "menu": "Menu",
+     "categoria": "Pizze",
+     "prezzo": 9.5,
+     "citazione": "capricciosa mettila a nove e cinquanta"
+    },
+    {
+     "op": "keep",
+     "piatto": "Diavola",
+     "menu": "Menu",
+     "categoria": "Pizze",
+     "citazione": "diavola invece rimane uguale"
+    },
+    {
+     "op": "remove",
+     "piatto": "Marinara",
+     "menu": "Menu",
+     "categoria": "Pizze",
+     "citazione": "togli la marinara"
+    },
+    {
+     "op": "add",
+     "piatto": "Ortolana",
+     "menu": "Menu",
+     "categoria": "Pizze",
+     "prezzo": 8,
+     "citazione": "aggiungi la ortolana a otto"
+    }
+   ]
+  },
+  {
+   "id": "c105",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 694,
+   "messaggio": "traduci il menu in inglese",
+   "atteso": [
+    {
+     "op": "unsupported",
+     "valore": "traduzioni"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "unsupported",
+     "valore": "traduzione",
+     "citazione": "traduci il menu in inglese"
+    }
+   ]
+  },
+  {
+   "id": "c126",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1581,
+   "messaggio": "il risotto lo sposto a cena nei secondi",
+   "atteso": [
+    {
+     "op": "move",
+     "piatto": "Risotto ai funghi",
+     "categoria": "Secondi",
+     "menu": "Cena"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "move",
+     "piatto": "Risotto ai funghi",
+     "menu": "Cena",
+     "categoria": "Secondi",
+     "citazione": "il risotto lo sposto a cena nei secondi"
+    }
+   ]
+  },
+  {
+   "id": "c138",
+   "difficolta": "difficile",
+   "esito": "innocuo",
+   "motivo": [
+    "add Risotto alla milanese → domanda"
+   ],
+   "ms": 1479,
+   "messaggio": "aggiungi il risotto alla milanese a 15",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Risotto alla milanese",
+     "prezzo": 15,
+     "menu": "Pranzo",
+     "categoria": "Primi"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "ask",
+     "piatto": "Risotto alla milanese",
+     "citazione": "aggiungi il risotto alla milanese a 15"
+    }
+   ]
+  },
+  {
+   "id": "c149",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 2848,
+   "messaggio": "nel menu pranzo categoria primi aggiungi gnocchi al pesto a undici euro mantieni burger classico a dodici euro e pasta al pomodoro a dieci euro non pubblicare",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Gnocchi al pesto",
+     "prezzo": 11,
+     "menu": "Pranzo",
+     "categoria": "Primi"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "gnocchi al pesto",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "prezzo": 11,
+     "citazione": "gnocchi al pesto a undici euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 12,
+     "citazione": "mantieni burger classico a dodici euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "prezzo": 10,
+     "citazione": "pasta al pomodoro a dieci euro"
+    }
+   ]
+  },
+  {
+   "id": "c158",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 3339,
+   "messaggio": "mantieni il burger classico a dodici e cinquanta euro panna cotta a cinque euro nel menu pranzo categoria dolci",
+   "atteso": [
+    {
+     "op": "keep",
+     "piatto": "Burger classico"
+    },
+    {
+     "op": "add",
+     "piatto": "Panna cotta",
+     "prezzo": 5,
+     "menu": "Pranzo",
+     "categoria": "Dolci"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "keep",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "mantieni il burger classico a dodici e cinquanta euro"
+    },
+    {
+     "op": "add",
+     "piatto": "Panna cotta",
+     "prezzo": 5,
+     "menu": "Pranzo",
+     "categoria": "Dolci",
+     "citazione": "panna cotta a cinque euro nel menu pranzo categoria dolci"
+    }
+   ]
+  },
+  {
+   "id": "c164",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1590,
+   "messaggio": "nel menu pranzo categoria primi aggiungi gnocchi al pesto a undici euro il burger classico a dodici euro resta com'è",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Gnocchi al pesto",
+     "prezzo": 11,
+     "menu": "Pranzo",
+     "categoria": "Primi"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "add",
+     "piatto": "gnocchi al pesto",
+     "prezzo": 11,
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "gnocchi al pesto a undici euro"
+    },
+    {
+     "op": "keep",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "resta com'è"
+    }
+   ]
+  },
+  {
+   "id": "c174",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 918,
+   "messaggio": "il burger classico non costa dodici ma tredici euro",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13,
+     "menu": "Cena",
+     "categoria": "Panini",
+     "citazione": "non costa dodici ma tredici"
+    }
+   ]
+  },
+  {
+   "id": "c181",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 1431,
+   "messaggio": "non toccare la pasta ma il burger classico mettilo a tredici euro",
+   "atteso": [
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro"
+    },
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "prezzo": 13
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "keep",
+     "piatto": "Pasta al pomodoro",
+     "menu": "Pranzo",
+     "categoria": "Primi",
+     "citazione": "non toccare la pasta"
+    },
+    {
+     "op": "set_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "prezzo": 13,
+     "citazione": "mettilo a tredici euro"
+    }
+   ]
+  },
+  {
+   "id": "c188",
+   "difficolta": "difficile",
+   "esito": "innocuo",
+   "motivo": [
+    "add Lascia o raddoppia → domanda"
+   ],
+   "ms": 2128,
+   "messaggio": "nel menu cena categoria cocktail aggiungi lascia o raddoppia a otto euro",
+   "atteso": [
+    {
+     "op": "add",
+     "piatto": "Lascia o raddoppia",
+     "prezzo": 8,
+     "menu": "Cena",
+     "categoria": "Cocktail"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "ask",
+     "menu": "Cena",
+     "categoria": "cocktail",
+     "citazione": "aggiungi lascia o raddoppia a otto euro"
+    }
+   ]
+  },
+  {
+   "id": "c193",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 775,
+   "messaggio": "nel menu cena categoria bevande aggiungi acqua a tre euro",
+   "atteso": [
+    {
+     "op": "set_price",
+     "piatto": "Acqua",
+     "prezzo": 3,
+     "menu": "Cena"
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "set_price",
+     "piatto": "Acqua",
+     "menu": "Cena",
+     "categoria": "Bevande",
+     "prezzo": 3,
+     "citazione": "acqua a tre euro"
+    }
+   ]
+  },
+  {
+   "id": "c200",
+   "difficolta": "difficile",
+   "esito": "esatto",
+   "motivo": [],
+   "ms": 2145,
+   "messaggio": "il burger classico costa uno euro in più",
+   "atteso": [
+    {
+     "op": "delta_price",
+     "piatto": "Burger classico",
+     "delta": 1
+    }
+   ],
+   "ottenuto": [
+    {
+     "op": "delta_price",
+     "piatto": "Burger classico",
+     "menu": "Cena",
+     "categoria": "Panini",
+     "delta": 1,
+     "citazione": "burger classico costa uno euro in più"
+    }
+   ]
+  }
+ ]
+}

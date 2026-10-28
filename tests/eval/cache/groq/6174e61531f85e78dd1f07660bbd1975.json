@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-1719e68a-3894-462c-972a-11e36e92ae89",
+  "object": "chat.completion",
+  "created": 1792247514,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"A quale piatto ti riferisci con \\\"14\\\"?\",\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [\n    {\n      \"phrase\": \"14\",\n      \"candidates\": [],\n      \"action\": \"set_price\",\n      \"value\": null,\n      \"price\": 14\n    }\n  ],\n  \"alias_used\": [],\n  \"reply_draft\": \"A quale piatto ti riferisci con \\\"14\\\"?\"\n}",
+     "reasoning": "User says \"no scusa 14\". Likely they want to correct something: maybe price? \"no scusa 14\" means \"no sorry 14\". Could be they want price 14 for something? ambiguous. No clear item. So intent=clarify? They say \"no scusa 14\" maybe they reject previous suggestion and give price 14. Unclear which item. So uncertain part: phrase \"14\", candidates none, action maybe set_price? but item unknown. So we put uncertain with phrase \"14\", candidates [], action set_price, price 14, value null. No other info. reply_draft ask which dish. alias_used empty. intent=clarify. read none. capability empty. actions empty."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.05469779,
+   "prompt_tokens": 3282,
+   "prompt_time": 0.014140386,
+   "completion_tokens": 310,
+   "completion_time": 0.930587978,
+   "total_tokens": 3592,
+   "total_time": 0.944728364,
+   "prompt_tokens_details": {
+    "cached_tokens": 3072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 153
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_dee443f41b",
+  "x_groq": {
+   "id": "req_01m554dgkre2ht9g61azqnew7r",
+   "seed": 571271030
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3282,
+  "completion_tokens": 310,
+  "total_tokens": 3592
+ },
+ "ms": 1151,
+ "recordedAt": "2026-10-17T14:31:54.652Z",
+ "conv": "scaduto-002"
+}

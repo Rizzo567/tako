@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-768c09fc-2bfe-417d-a4d6-80a2c601f166",
+  "object": "chat.completion",
+  "created": 1792254411,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"restore\",\n      \"item\": \"p5\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p6\",\n      \"section\": null,\n      \"price\": 12,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"reply_draft\": \"\"\n}",
+     "reasoning": "Need to produce JSON. User says no, intended tiramisù. Previous action was change price of parmigiana. Now restore that and apply same change to tiramisù. So intent change, actions: restore on p5, set_price on p6 price 12. reply_draft empty. No unclear."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.055498213,
+   "prompt_tokens": 3101,
+   "prompt_time": 0.154735858,
+   "completion_tokens": 312,
+   "completion_time": 0.656276149,
+   "total_tokens": 3413,
+   "total_time": 0.811012007,
+   "completion_tokens_details": {
+    "reasoning_tokens": 65
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_02b0d31eca",
+  "x_groq": {
+   "id": "req_01m55azzsvepsvhedwhznzgx70",
+   "seed": 348985401
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3101,
+  "completion_tokens": 312,
+  "total_tokens": 3413
+ },
+ "ms": 1094,
+ "recordedAt": "2026-10-17T16:26:51.342Z",
+ "conv": "v-correzioni-002"
+}

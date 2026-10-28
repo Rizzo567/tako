@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-32fe921a-6577-44b9-9c64-6b2e965e7f10",
+  "object": "chat.completion",
+  "created": 1792285313,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [],\n  \"alias_used\": [],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": \"Confermi i nuovi prezzi per tutti i piatti?\"\n  },\n  \"read\": \"none\",\n  \"item_refs\": [],\n  \"uncertain\": [],\n  \"reply_draft\": \"Confermi i nuovi prezzi per tutti i piatti?\"\n}",
+     "reasoning": "We need ask clarification? All prices given, so just need confirmation. So intent=clarify with question. reply_draft question. No actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.300443662,
+   "prompt_tokens": 3839,
+   "prompt_time": 0.06143879,
+   "completion_tokens": 142,
+   "completion_time": 0.588913551,
+   "total_tokens": 3981,
+   "total_time": 0.650352341,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 31
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_69334c0be3",
+  "x_groq": {
+   "id": "req_01m568f1xteet8r6a66a9h7kyx",
+   "seed": 132009531
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3839,
+  "completion_tokens": 142,
+  "total_tokens": 3981
+ },
+ "ms": 1133,
+ "recordedAt": "2026-10-18T01:01:53.922Z",
+ "conv": "bv-multiple-002"
+}

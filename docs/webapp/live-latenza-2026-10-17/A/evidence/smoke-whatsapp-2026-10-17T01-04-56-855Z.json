@@ -1,0 +1,97 @@
+{
+ "tag": "smoke",
+ "results": [
+  {
+   "type": "price",
+   "i": 0,
+   "tReply": 3291,
+   "tCommit": 3469,
+   "status": 200,
+   "st": "app;dur=1100.8,boot;dur=281.1",
+   "text": "*Confermato.* Ho aggiornato il menu. *pasta al ragù*: prezzo da 12,00 € a *13,00 €*"
+  },
+  {
+   "type": "price",
+   "i": 1,
+   "tReply": 2549,
+   "tCommit": 2611,
+   "status": 200,
+   "st": "app;dur=1041.9,boot;dur=150.8",
+   "text": "*Confermato.* Ho aggiornato il menu. *pasta al ragù*: prezzo da 13,00 € a *14,00 €*"
+  },
+  {
+   "type": "soldout",
+   "i": 0,
+   "tReply": 2198,
+   "tCommit": 2196,
+   "status": 200,
+   "st": "app;dur=948.9,boot;dur=0.0",
+   "text": "*Confermato.* Ho aggiornato il menu. *boh*: *finito*"
+  },
+  {
+   "type": "soldout",
+   "i": 1,
+   "tReply": 2045,
+   "tCommit": 15564,
+   "status": 200,
+   "st": "app;dur=562.6,boot;dur=150.2",
+   "text": "Il menu è *già aggiornato* così. Non serve cambiare nulla."
+  },
+  {
+   "type": "hide",
+   "i": 0,
+   "tReply": 2493,
+   "tCommit": 2637,
+   "status": 200,
+   "st": "app;dur=1040.3,boot;dur=0.0",
+   "text": "*Confermato.* Ho aggiornato il menu. *Che ne sacc*: *nascosto* dal menu"
+  },
+  {
+   "type": "hide",
+   "i": 1,
+   "tReply": 2823,
+   "tCommit": 2990,
+   "status": 200,
+   "st": "app;dur=1212.8,boot;dur=145.6",
+   "text": "*Confermato.* Ho aggiornato il menu. *Che ne sacc*: *nascosto* dal menu"
+  }
+ ],
+ "summary": {
+  "price": {
+   "tCommit": 2611,
+   "tReply": 2549
+  },
+  "soldout": {
+   "tCommit": 2196,
+   "tReply": 2045
+  },
+  "hide": {
+   "tCommit": 2637,
+   "tReply": 2493
+  }
+ },
+ "errors": [],
+ "restore": {
+  "before": {
+   "draft": "037da7a320c35cc9",
+   "published": "037da7a320c35cc9",
+   "items": "8ef29eab357d5047",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "variants": "e926c2e2165c7a6a",
+   "public": "2af5b587eca18e25"
+  },
+  "after": {
+   "draft": "037da7a320c35cc9",
+   "published": "037da7a320c35cc9",
+   "items": "8ef29eab357d5047",
+   "menus": "43dd2c25b1bed37c",
+   "sections": "49f7ca912b80e8b3",
+   "translations": "4f53cda18c2baa0c",
+   "variants": "e926c2e2165c7a6a",
+   "public": "2af5b587eca18e25"
+  },
+  "ok": true
+ }
+}

@@ -1,0 +1,84 @@
+{
+ "at": "2026-10-17T10:27:18.786Z",
+ "totalTokens": 4820,
+ "out": [
+  {
+   "text": "metti il piatto di verifica a 13,50 come boh",
+   "message": "metti il piatto di verifica a 13,50 come boh",
+   "exclude": [],
+   "tokens": 1154,
+   "plan": {
+    "type": "clarify",
+    "actions": [
+     {
+      "kind": "price",
+      "dish": "Piatto di verifica",
+      "price": 13.5
+     }
+    ],
+    "ids": [
+     "Piatto di verifica",
+     "boh"
+    ]
+   },
+   "pass": true,
+   "problem": null
+  },
+  {
+   "text": "non cambiare il prezzo del piatto di verifica, mettilo in promo a 12",
+   "message": "non cambiare il prezzo del piatto di verifica, mettilo in promo a 12",
+   "exclude": [
+    "Piatto di verifica(price)"
+   ],
+   "tokens": 1202,
+   "plan": {
+    "type": "change",
+    "actions": [
+     {
+      "kind": "promo",
+      "dish": "Piatto di verifica",
+      "price": 12
+     }
+    ]
+   },
+   "pass": true,
+   "problem": null
+  },
+  {
+   "text": "non cambiare boh, mettilo a 25",
+   "message": "non cambiare boh, mettilo a 25",
+   "exclude": [],
+   "tokens": 1122,
+   "plan": {
+    "type": "change",
+    "actions": [
+     {
+      "kind": "price",
+      "dish": "boh",
+      "price": 25
+     }
+    ]
+   },
+   "pass": false,
+   "problem": "boh cambiato"
+  },
+  {
+   "text": "metti in promo a 9 tutti i piatti di prova tranne boh e che ne sacc, la pasta al ragù a 8",
+   "message": "metti in promo a 9 tutti i piatti di prova tranne boh e che ne sacc, la pasta al ragù a 8",
+   "exclude": [
+    "boh",
+    "Che ne sacc"
+   ],
+   "tokens": 1342,
+   "plan": {
+    "type": "clarify",
+    "ids": [
+     "Piatto di verifica",
+     "pasta al ragù"
+    ]
+   },
+   "pass": true,
+   "problem": null
+  }
+ ]
+}

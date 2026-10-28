@@ -36,7 +36,7 @@ export function createFetchBridge(app, {maxBodyBytes=11*1024*1024,gateway=null,p
     const headers={};
     // Preserve authentication and CSRF headers; never trust identity/proxy headers
     // supplied by a browser. Verified remote IP must be passed by a separate gateway.
-    for(const name of ['accept','authorization','cookie','content-type','origin','user-agent','if-none-match','if-modified-since','x-twilio-signature']) {
+    for(const name of ['accept','authorization','cookie','content-type','origin','user-agent','if-none-match','if-modified-since','x-twilio-signature','x-tako-cron-secret']) {
       const value=request.headers.get(name);if(value!==null)headers[name]=value;
     }
     headers.host=url.host;

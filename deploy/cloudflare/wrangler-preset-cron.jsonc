@@ -1,0 +1,16 @@
+// F2 — Worker del cron dei preset. NON deployato. Al deploy (dopo l'OK di Manuel e dopo la migrazione):
+//   wrangler secret put TAKO_GATEWAY_SECRET --config deploy/cloudflare/wrangler-preset-cron.jsonc
+//   wrangler secret put TAKO_PRESET_CRON_SECRET --config deploy/cloudflare/wrangler-preset-cron.jsonc (uguale a quello del backend)
+{
+  "name": "takomenu-preset-cron",
+  "main": "preset-cron.mjs",
+  "account_id": "6978af99fd8949fba8ddb1d721e2a351",
+  "compatibility_date": "2026-06-18",
+  "workers_dev": false,
+  "triggers": { "crons": ["*/5 * * * *"] },
+  "vars": {
+    "TAKO_BACKEND_READY": "true",
+    "TAKO_WEB_ORIGIN": "https://takoitalia.com",
+    "TAKO_EDGE_URL": "https://tcfccmvpycivxuxkoqpw.supabase.co/functions/v1/tako-operational-candidate"
+  }
+}

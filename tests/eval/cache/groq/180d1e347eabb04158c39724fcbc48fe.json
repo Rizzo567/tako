@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-624cbc36-2ecb-4128-a693-e587c95fa531",
+  "object": "chat.completion",
+  "created": 1792286050,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p1\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": 1,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p2\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": 1,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": 1,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    },\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": 1,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"item_refs\": [],\n    \"missing\": [],\n    \"question\": null\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Aumento di 1 € tutti i piatti della categoria Piatti di prova. Rispondi OK per pubblicare.\"\n}",
+     "reasoning": "We need to produce owner_brain_plan. Increase all items in section \"Piatti di prova\" (code c1) by 1 euro. Items p1-p4 are in that section? Actually menu shows c1 Piatti di prova, then items p1-p4 listed. So apply set_price with price_delta 1 to each item. No confirmation needed unless >3 modifications? It's 4 items, >3 modifications, so need server wait OK. So we should propose actions and reply_draft asking for OK. Intent change. actions list each set_price. uncertain empty. reply_draft: \"Aumento di 1 € tutti i piatti della categoria Piatti di prova. Rispondi OK per pubblicare.\" capability_ids maybe empty. alias_used empty. clarify none. read none."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.217083017,
+   "prompt_tokens": 3278,
+   "prompt_time": 0.146546946,
+   "completion_tokens": 593,
+   "completion_time": 1.250354982,
+   "total_tokens": 3871,
+   "total_time": 1.3969019280000001,
+   "completion_tokens_details": {
+    "reasoning_tokens": 165
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_8655ddce88",
+  "x_groq": {
+   "id": "req_01m5695h15et58q5nh2mzzpp5v",
+   "seed": 530576035
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3278,
+  "completion_tokens": 593,
+  "total_tokens": 3871
+ },
+ "ms": 1716,
+ "recordedAt": "2026-10-18T01:14:10.855Z",
+ "conv": "bv-multiple-006"
+}

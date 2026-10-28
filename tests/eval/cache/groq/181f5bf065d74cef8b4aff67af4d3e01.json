@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-6f70534a-6911-4bd2-9fd6-a8ceb48540fd",
+  "object": "chat.completion",
+  "created": 1792283446,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p4\",\n      \"section\": null,\n      \"price\": 20,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p4\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Prezzo aggiornato.\"\n}",
+     "reasoning": "User wants change: set price of pasta al ragù (p4) to 20. Action set_price. No other. Need reply_draft confirming. Since price change only one, no need confirm pending? It's a change, reply_draft should be brief confirmation without price? Actually change: conferma breve senza prezzi. So reply: \"Prezzo aggiornato.\" JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.315200774,
+   "prompt_tokens": 3276,
+   "prompt_time": 0.164563382,
+   "completion_tokens": 258,
+   "completion_time": 0.539204913,
+   "total_tokens": 3534,
+   "total_time": 0.703768295,
+   "completion_tokens_details": {
+    "reasoning_tokens": 78
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_5a93aea882",
+  "x_groq": {
+   "id": "req_01m566p1w8edebps8njcyz3pmv",
+   "seed": 1980986173
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3276,
+  "completion_tokens": 258,
+  "total_tokens": 3534
+ },
+ "ms": 1198,
+ "recordedAt": "2026-10-18T00:30:46.145Z",
+ "conv": "bv-semplici-014"
+}

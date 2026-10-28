@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-78a2407d-3500-4d93-bd6b-1a9adf33ff43",
+  "object": "chat.completion",
+  "created": 1792283996,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"read\",\n  \"actions\": [],\n  \"read\": \"items\",\n  \"item_refs\": [\"p3\"],\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"La Bruschetta Victoria costa 8 €.\"\n}",
+     "reasoning": "User asks price. Intent read. Need reply_draft asking? Actually read query: ask price. So intent read, item_refs = [p3]. read = items? Actually want price, so read items. reply_draft \"La Bruschetta Victoria costa 8 €.\" No actions."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.096249371,
+   "prompt_tokens": 3458,
+   "prompt_time": 0.13705706,
+   "completion_tokens": 167,
+   "completion_time": 0.35436998,
+   "total_tokens": 3625,
+   "total_time": 0.49142704,
+   "completion_tokens_details": {
+    "reasoning_tokens": 61
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_69dbc96c74",
+  "x_groq": {
+   "id": "req_01m5676w3qegpt4gdxzg7mnvzr",
+   "seed": 1584503852
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3458,
+  "completion_tokens": 167,
+  "total_tokens": 3625
+ },
+ "ms": 803,
+ "recordedAt": "2026-10-18T00:39:56.846Z",
+ "conv": "bv-semplici-025"
+}

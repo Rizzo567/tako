@@ -1,0 +1,49 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-233c0264-f95b-438a-9dd8-c6d58f9df902",
+  "object": "chat.completion",
+  "created": 1792283690,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"change\",\n  \"actions\": [\n    {\n      \"action\": \"set_available\",\n      \"item\": \"p3\",\n      \"section\": null,\n      \"price\": null,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": false,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [\"p3\"],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": null,\n    \"item_refs\": [],\n    \"missing\": []\n  },\n  \"uncertain\": [],\n  \"alias_used\": [],\n  \"reply_draft\": \"Imposto la Bruschetta Victoria come finita.\"\n}",
+     "reasoning": "User says Bruschetta Victoria is finished. That's p3. Action set_available false. Need reply_draft confirming. Intent change. No uncertain. Provide JSON."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.317403142,
+   "prompt_tokens": 3456,
+   "prompt_time": 0.143194653,
+   "completion_tokens": 219,
+   "completion_time": 0.458028752,
+   "total_tokens": 3675,
+   "total_time": 0.601223405,
+   "completion_tokens_details": {
+    "reasoning_tokens": 34
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_c3da0d4bb9",
+  "x_groq": {
+   "id": "req_01m566xgrte1ksb644pf27gh0s",
+   "seed": 962770384
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3456,
+  "completion_tokens": 219,
+  "total_tokens": 3675
+ },
+ "ms": 1086,
+ "recordedAt": "2026-10-18T00:34:50.676Z",
+ "conv": "bv-semplici-018"
+}

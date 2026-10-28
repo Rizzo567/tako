@@ -1,0 +1,52 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "status": 200,
+ "body": {
+  "id": "chatcmpl-d639be46-a102-4be4-947b-90005565cab7",
+  "object": "chat.completion",
+  "created": 1792249153,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+   {
+    "index": 0,
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"intent\": \"clarify\",\n  \"actions\": [\n    {\n      \"action\": \"set_price\",\n      \"item\": \"p7\",\n      \"section\": null,\n      \"price\": 13,\n      \"price_ref\": null,\n      \"price_delta\": null,\n      \"value\": null,\n      \"tag\": null,\n      \"text\": null,\n      \"name\": null,\n      \"until\": null\n    }\n  ],\n  \"item_refs\": [],\n  \"read\": \"none\",\n  \"capability_ids\": [],\n  \"clarify\": {\n    \"question\": \"In quale sezione vuoi inserire la lasagna?\",\n    \"item_refs\": [],\n    \"missing\": [\"section\"]\n  },\n  \"uncertain\": [\n    {\n      \"phrase\": \"la lasagna\",\n      \"candidates\": [],\n      \"action\": \"none\",\n      \"value\": null,\n      \"price\": null\n    }\n  ],\n  \"alias_used\": [],\n  \"reply_draft\": \"In quale sezione vuoi inserire la lasagna?\"\n}",
+     "reasoning": "We need to parse. Carbonara is p7, set price to 13. Lasagna? Not in menu. No lasagna code. So ambiguous/incomplete: new item? It's not present, so missing name and price and section. Should be clarify missing. intent=clarify with missing name,price,section? Actually user wants add lasagna at 12. That's create_item. But we don't have section for lasagna; likely c2 Primi. But ambiguous. So we need clarify missing section. Provide clarify with missing section. Also action for carbonara set_price. So actions include set_price for p7 price=13. Also uncertain for lasagna phrase \"la lasagna\" candidates empty, action none, missing name,price,section. Provide clarify. reply_draft ask for section."
+    },
+    "logprobs": null,
+    "finish_reason": "stop"
+   }
+  ],
+  "usage": {
+   "queue_time": 0.020978803,
+   "prompt_tokens": 3365,
+   "prompt_time": 0.078509246,
+   "completion_tokens": 402,
+   "completion_time": 0.902479259,
+   "total_tokens": 3767,
+   "total_time": 0.980988505,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 166
+   }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_49bfac06f1",
+  "x_groq": {
+   "id": "req_01m555zhdbemcrgnv842raz1kc",
+   "seed": 328387784
+  },
+  "service_tier": "on_demand"
+ },
+ "usage": {
+  "prompt_tokens": 3365,
+  "completion_tokens": 402,
+  "total_tokens": 3767
+ },
+ "ms": 1168,
+ "recordedAt": "2026-10-17T14:59:13.897Z",
+ "conv": "multipla-002"
+}
