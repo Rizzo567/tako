@@ -50,7 +50,24 @@ il bot capiva male.
 - Nota ambiente: un worktree nuovo con `pnpm install --offline` non ha i symlink manuali in `node_modules` (drizzle-orm, fastify, zod,
   bcryptjs → apps/server/node_modules) presenti negli altri worktree; senza, 6 file di test non si caricano.
 
-## Deploy
-Non eseguito: AGENTS.md vieta deploy di produzione impliciti e questo incarico autorizza il fix, non il rilascio. Unico passaggio:
-riscaricare la funzione online e verificare che sia ancora v192 (`ezbr 995a40da…`, sorgente `d4c9de9d…`), poi deploy del candidato con
-`magick-wasm-0.0.44.js` invariato e controllo della nuova versione ACTIVE. Se l'online non è più v192: rifare il merge sulla nuova base.
+## Rilascio e dati (autorizzati da Manuel la sera del 28/10)
+- **v193** (20:10): v192 + correzioni sopra. **v194** (20:20): v193 + correzioni dalla batteria (sotto). Ogni volta: online
+  riscaricato e confrontato (hash) prima del deploy, sorgente online riscaricato dopo = candidato. Ricevute e sorgenti di rollback in
+  `~/.config/tako-webapp/bot-luisa-20261028/` (v192: `migration-access-20261028/candidate-index.ts`; v193: `candidate-v193-deployed.ts`).
+- **Menu Cena di Victoria** riscritto come chiesto da Luisa in chat (API dashboard, controllo revisione, rev 203): Primi Tagliolini cozze e
+  pomodori, Gnocchi sorrentina, Orecchiette broccoli e pancetta; Secondi Impepata di cozze, Fritto di anelli con verdure, Scaloppine al
+  vino bianco, Nodino alla griglia; Contorni Zucchine trifolate, Insalata mista, Patate al forno. Altri Menu e design identici. Backup
+  prima/dopo nella stessa cartella. Menu Giorno non toccato (Luisa ci stava lavorando).
+- **Prove dal vivo solo QA** (numero finto, copia del menu di Victoria, firma Twilio, modello vero): due copioni, tutto come atteso, PDF
+  scaricato (200, application/pdf). QA ripristinato identico al salvataggio, numero finto scollegato.
+
+## Batteria «prossimi problemi» (56 conversazioni nel route vero) → corretti in v194
+Sottomenu già vuoto senza contesto; «grazie» che faceva perdere il contesto; refuso «elimna»; «no sono 3: a, b, c» letto come «no»;
+proposta che univa «tagliata orata al forno»; PDF di due Menu nello stesso messaggio. Tutti in `tests/bot-luisa-1028.test.ts` (31 casi).
+Scelta: dopo un inserimento il contesto NON si riattiva (il prossimo «inserisci» senza sottomenu chiede conferma): meglio una domanda che
+un piatto nel sottomenu sbagliato. Suite: 4004 test, 279 rossi identici alla base.
+
+## Limiti noti
+- Comandi su singoli piatti («togli le scaloppine», «il pollo è finito») passano dal modello: non coperti da questa batteria.
+- Contorni: «patate e zucchine al forno» = due piatti (regola del 23/10 per i Contorni).
+- Elenco senza virgole = una conferma in più per Luisa.

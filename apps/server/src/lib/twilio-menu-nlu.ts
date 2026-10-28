@@ -313,8 +313,8 @@ export function pdfIntent(raw:string,menus:readonly {id:string,name:string}[],di
   if(pad.includes(' '+k+' '))return true
   // «menu del giorno» / «di oggi» / «giornaliero» per il Menu che si chiama Giorno.
   return /\bgiorn\w*\b/.test(k)&&/\b(?:del giorno|di oggi|giornaliero|giornata)\b/.test(t)})
- // nessun nome intero: la parola del pasto risolta come nelle modifiche («menù sera» → Menu Cena)
- if(!hits.length&&o.alias){const ids=new Set(o.alias(raw));hits.push(...menus.filter(m=>ids.has(m.id)))}
+ // la parola del pasto risolta come nelle modifiche («menù sera» → Menu Cena), insieme ai nomi interi
+ if(o.alias){const ids=new Set([raw,...raw.split(/\s+(?:e|ed)\s+|,/i)].flatMap(x=>o.alias!(x)));hits.push(...menus.filter(m=>ids.has(m.id)&&!hits.includes(m)))} // anche «menù cena e menù pranzo»
  // Tolti verbo, Menu, parole da stampa e riempitivi non deve restare altro: altrimenti è un messaggio di lavoro sul menu.
  const g=(r:RegExp)=>new RegExp(r.source,'g'),rest=t.replace(g(pdfAsk),' ').replace(g(pdfWord),' ').replace(g(pdfWant),' ').split(' ').filter(x=>x&&x!=='menu'&&x!=='e'&&!menuWords.has(x)&&!pdfFiller.has(x)&&!pdfMeal.test(x)&&!pdfPreview.test(x)&&!/^(?:giorno|giornaliero|giornata|stampa\w*|mandar\w*|inviar\w*)$/.test(x))
  if(rest.length>3||/\d/.test(rest.join(' ')))return null

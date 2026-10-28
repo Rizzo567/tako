@@ -681,6 +681,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     else if(rr.kind==='confirm'){const acts=rr.actions;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true,why:'delete'})});preReply=rr.question+'\n\n'+pendingFacts('delete',acts,refs,sections);closePend=false}
     else if(rr.kind==='delete_menu'){const q=deleteMenuQuestion(rr),act={kind:'delete_menu',menuId:rr.menu.id,name:rr.menu.name,withItems:true,items:rr.items} as MenuAction;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:[act],requiresTypedOk:true,why:'delete'})});preReply=q;closePend=false}
     else{const q=rr.question,w=rr.wait;if(ruleLearn.length)await saveSplitRules(db as any,ctx.tenant,ruleLearn,'clarify');await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,rule:w} as any)});preReply=q;closePend=false}}
+   // 28/10 sera (batteria): un «grazie/ok» dopo «elimina X» non fa perdere il sottomenu svuotato (l'attesa resta, scade da sola)
+   else if(ruleWait?.kind==='names'&&(ruleWait as any).ctx&&/^(?:grazie(?: mille)?|ok(?:ay)?|perfetto|va bene|bene|ottimo|top|si|sì|👍)[!. ]*$/i.test(text.trim())){/* resta in attesa */}
    else if(ruleWait){closePend=true;pend=null;answered=false;(base as any).pendingCommand=null
     // batteria v183 (GRAVE, come QA v153): «no / scusa / lascia stare» alla domanda della regola chiude SOLO la domanda; senza
     // questo il modello, senza più nulla in sospeso, annullava la modifica di prima.

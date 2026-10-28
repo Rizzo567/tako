@@ -156,3 +156,37 @@ describe('6) messaggi consecutivi: contesto e conferme in ordine, nessun doppion
   expect(CENA(w,'Contorni')).toEqual(['Insalata mista','Zucchine trifolate','Patate al forno'])
   expect(r.replies[6]).toMatch(PDF_CENA)
   for(const m of ['Menu Giorno','Alla carta','Drinks'])expect(JSON.stringify(M(w,m))).toBe(JSON.stringify(M(r.menus[0],m)))})})
+
+// ======================= 7) batteria «prossimi problemi» (28/10 sera, prova dal vivo sul QA + 56 conversazioni) =======================
+describe('7) casi trovati dalla batteria',()=>{
+ it('sottomenu già vuoto: «elimina primi» di nuovo tiene il contesto, il prossimo «inserisci» va lì',async()=>{
+  const r=await play(['Elimina secondi menù sera','Elimina secondi menù sera','inserisci tagliata'])
+  expect(r.replies[1]).toMatch(/già vuoti/);expect(CENA(r.menus[3],'Secondi')).toEqual(['Tagliata'])})
+ it('un «grazie» dopo lo svuotamento non fa perdere il sottomenu',async()=>{
+  const r=await play(['Elimina secondi menù sera','grazie','inserisci tagliata'])
+  expect(CENA(r.menus[3],'Secondi')).toEqual(['Tagliata']);expect(r.replies[2]).not.toMatch(/Ho capito così/)})
+ it('refuso «elimna»: svuota lo stesso',async()=>{
+  const r=await play(['elimna secondi menu sera','inserici tagliata, orata'])
+  expect(CENA(r.menus[1],'Secondi')).toEqual([]);expect(CENA(r.menus[2],'Secondi')).toEqual(['Tagliata','Orata'])})
+ it('proposta + «no sono 3: a, b, c» = l’elenco giusto scritto',async()=>{
+  const r=await play(['Elimina primi menù sera','inserisci pasta al pesto rigatoni al sugo','no sono 3: pasta al pesto, rigatoni, sugo'])
+  expect(CENA(r.menus[3],'Primi')).toEqual(['Pasta al pesto','Rigatoni','Sugo'])})
+ it('proposta + «no» / «annulla»: niente scritto',async()=>{
+  for(const x of ['no','annulla']){const r=await play(['Elimina primi menù sera','inserisci pasta al pesto rigatoni al sugo',x]);expect(CENA(r.menus[3],'Primi'),x).toEqual([])}})
+ it('proposta + PDF in mezzo: il PDF arriva e la proposta resta valida per il «sì»',async()=>{
+  const r=await play(['Elimina primi menù sera','inserisci pasta al pesto rigatoni al sugo','Mandami menù sera','sì'])
+  expect(r.replies[2]).toMatch(PDF_CENA);expect(CENA(r.menus[4],'Primi')).toEqual(['Pasta al pesto','Rigatoni al sugo'])})
+ it('proposta + nuovo comando: la proposta decade, il comando nuovo si esegue col suo contesto',async()=>{
+  const r=await play(['Elimina primi menù sera','inserisci pasta al pesto rigatoni al sugo','Elimina secondi menù sera','inserisci tagliata, orata'])
+  expect(CENA(last(r),'Primi')).toEqual([]);expect(CENA(last(r),'Secondi')).toEqual(['Tagliata','Orata'])})
+ it('vocale senza virgole con piatti «da soli»: proposta divisa bene, nessuna scrittura',async()=>{
+  const r=await play(['Elimina secondi menù sera',{voice:'allora nei secondi stasera mettiamo tagliata orata al forno e salsiccia'} as any])
+  expect(r.replies[1]).toMatch(/• Tagliata\n• Orata al forno\n• Salsiccia/);expect(CENA(r.menus[2],'Secondi')).toEqual([])})
+ it('PDF di due Menu in un messaggio',async()=>{
+  const r=await play(['mandami menù cena e menù pranzo']);expect(r.replies[0]).toMatch(/\*Menu Cena\* e \*Menu Giorno\*/)})
+ it('Menu Giorno «alla Luisa»: «Nel menù pranzo da 12 elimina i primi» + «Inserisci lasagna, pasta al forno»',async()=>{
+  const r=await play(['Nel menù pranzo da 12 elimina i primi','Inserisci lasagna, pasta al forno'])
+  expect(secItems(r.menus[2],'Menu Giorno','Primi')).toEqual(['Lasagna','Pasta al forno']);expect(CENA(r.menus[2],'Primi')).toEqual(CENA(r.menus[0],'Primi'))})
+ it('maiuscole ovunque e Title Case: nessuna divisione, nomi in forma normale',async()=>{
+  const r=await play(['Elimina primi menù sera','Inserisci Spaghetti Alla Carbonara, Penne Al Pomodoro'])
+  expect(CENA(r.menus[2],'Primi')).toEqual(['Spaghetti alla carbonara','Penne al pomodoro'])})})

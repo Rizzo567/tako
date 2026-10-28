@@ -38,6 +38,8 @@ const SOFT=new Set(['poi','anche','pure','mentre','invece','allora','quindi','ok
 /** Sezione dei contorni (lì ogni ortaggio/contorno semplice è un piatto a sé). */
 export const isContorniSection=(name:string|null|undefined)=>!!name&&CONTORNI_SEC.test(plain(name))
 export const isContornoWord=(w:string)=>CONTORNO.has(w)
+/** 28/10 sera: parola che è un piatto da sola («tagliata», «orata», «nodino»): indizio di confine, solo per le proposte da confermare. */
+export const isStandaloneWord=(w:string)=>STANDALONE.has(w)
 const CONTORNI_SEC=/\b(?:contorn\w*|verdur\w*|insalat\w*)\b/
 const stem=(w:string)=>w.length>4?w.replace(/[aeiou]$/,''):w
 const isE=(w:string)=>w==='e'||w==='ed'
