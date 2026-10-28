@@ -21,6 +21,10 @@ Le modifiche grosse te le faccio confermare prima. Scrivi *cosa sai fare* quando
  // La password in chiaro esiste solo in questi messaggi (mai salvata né ripetuta nella cache delle risposte).
  ownerDashboard:'La tua dashboard: {link}\nUtente: {utente}\nPassword: {password}',
  ownerMenu:'Il tuo menu digitale, quello che vedono i clienti dal QR: {link}',
+ // 28/10: PDF del menu in chat (allegato).
+ pdfSent:'Ecco il PDF da stampare: {menu}. Contiene il menu pubblicato in questo momento.',
+ pdfWhich:'Quale menu ti mando in PDF?\n{menu}\n\nScrivi per esempio *mandami il menu {esempio}*.',
+ pdfFailed:'Non riesco a preparare il PDF adesso. Puoi scaricarlo dalla dashboard, oppure contatta l’agenzia.',
  // Richiesta «dashboard» / «link del menu» in qualunque momento.
  // Niente gestione password in chat (19/10): si recupera dalla pagina di accesso o si cambia dalla dashboard.
  dashboardLink:'La tua dashboard: {link}\nUtente: {utente}\n\nPassword dimenticata? Usa il tasto nella pagina di accesso.',

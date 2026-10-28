@@ -271,3 +271,46 @@ export function linkIntent(raw:string,dishNames:readonly string[]=[]):LinkIntent
  if(/^(?:fammi vedere|fammelo vedere|voglio vedere|posso vedere|mostrami|mandami|dammi|passami) (?:il )?(?:mio )?menu$/.test(t))return 'menu'
  return null
 }
+// 28/10 (richiesta Manuel, decisione PDF A4): «mandami il menu giorno» / «il pdf da stampare» → il bot allega il PDF del Menu.
+// Scatta solo con una richiesta rivolta al bot («mandami», «mi mandi»…) o con «pdf» / «da stampare»; «voglio/mi serve» solo con il pdf.
+// Senza il nome di un Menu e senza parole da stampa resta il link del menu digitale («mandami il menu» → linkIntent).
+// Mai su modifiche, lamentele, link/QR o domande sul contenuto («cosa c è nel menu giorno»).
+export type PdfIntent={menuIds:string[]}|{ask:string[]}
+const pdfKey=(name:string)=>{const k=plainText(name).replace(/[,.]/g,' ').replace(/^menu\s+(?:del\s+|di\s+|della\s+|delle\s+|dei\s+)?/,'').replace(/\s+/g,' ').trim();return k==='menu'?'':k}
+// Revisione 28/10: solo richieste rivolte al bot («mandami», «mi mandi», «puoi inviarmi»), mai «ti mando / ho mandato / ai clienti».
+const pdfAsk=/\b(?:mandami|mandamelo|mandameli|mandarmi|mandarmelo|inviami|inviamelo|inviameli|inviarmi|inviarmelo|girami|giramelo|girarmi|passami|passamelo|passarmi|dammi|dammelo|stampami|stampamelo|fammi avere|mi (?:mandi|manderesti|mandate|invii|invieresti|giri|passi|dai)|me (?:lo|li|la) (?:mandi|manderesti|invii|giri|passi|dai))\b/
+const pdfWord=/\b(?:pdf|da stampare|stampabile|stampami|stampamelo)\b/
+const pdfWant=/\b(?:voglio|vorrei|mi serve|mi servirebbe|ho bisogno)\b/
+const pdfFiller=new Set('il lo la i gli le l un una uno del dello della dei degli delle di da a al allo alla ai agli alle in per con me mi ce ci ne lo e anche pure oggi adesso ora subito gia appena per favore piacere grazie ciao tako puoi potresti riesci riusciresti si quello quella nuovo nuova aggiornato aggiornata ultimo ultima definitivo come ha hai chiesto detto che cosi stampo stampare stamparlo stamparla appendere tavoli tavolo cucina sala'.split(' '))
+export function pdfIntent(raw:string,menus:readonly {id:string,name:string}[],dishNames:readonly string[]=[]):PdfIntent|null{
+ let t=plainText(raw).replace(/[,.]/g,' ').replace(/\s+/g,' ').trim()
+ if(!t||!/\b(?:menu|pdf|stamp\w*)\b/.test(t)||t.split(' ').length>16||!menus.length)return null
+ // «che ho appena cambiato / modificato»: racconta una modifica già fatta, non ne chiede una.
+ t=t.replace(/\b(?:che |quello che |come )?(?:ho|abbiamo|hai|avete|ha) (?:appena |gia |ora |adesso )?\w+(?:at|ut|it)[oaie]\b/g,' ').replace(/\s+/g,' ').trim()
+ const w=t.split(' ').filter(Boolean),pad=' '+t+' '
+ const change=/\b(mett\w*|aggiung\w*|togli\w*|tolg\w*|cambi\w*|elimin\w*|spost\w*|nascond\w*|rimett\w*|cancell\w*|inserisc\w*|lev\w*|modific\w*|aggiorn[aio]|aggiornare|pubblic\w*|rinomin\w*|scriv\w*|carica\w*|svuot\w*|finit\w*|esaurit\w*|prezz\w*|rimuov\w*|sostitu\w*|disattiv\w*|attiv\w*|crea\w*|rifa\w*|rifar\w*|traduc\w*|tradur\w*|tradott\w*|duplic\w*|chiud\w*|ordin\w*|sistem\w*|ripristin\w*|copi\w*|foto\w*|immagin\w*|ricevut\w*|clienti|lista|elenco|testo|scritto|vedere|sapere|visibil\w*)\b/
+ const complaint=/\b(lent\w*|non (?:si )?(?:apre|funziona|va|carica|vede|parte|entra|stampa|riesco|esce|arriva)|blocc\w*|error\w*|rott\w*|sbagliat\w*|problem\w*|manca\w*|bianc\w*|vuot\w*|brutt\w*|piccol\w*)\b/
+ if(change.test(t)||complaint.test(t))return null
+ if(/\b(?:ti|vi|lo|li|la) (?:mando|invio|giro|passo|mandiamo|inviamo)\b|\b(?:ho|abbiamo) (?:mandato|inviato)\b/.test(t))return null
+ const ask=pdfAsk.test(t),paper=pdfWord.test(t)
+ if(!ask&&!(paper&&(pdfWant.test(t)||/\b(?:pdf|da stampare)\b/.test(t))))return null
+ if(/\b(link|indirizz\w*|url|sito|digitale|online|on line|qr|dashboard|pannello|password)\b/.test(t)&&!paper)return null
+ if(/\b(?:nel|nei|sul|dal) menu\b/.test(t)||/\b(?:cosa|che cosa|quali|quanto|quanti)\b/.test(t))return null
+ // Come per i link: se la frase nomina un piatto del catalogo non è una richiesta di PDF («mandami la carbonara nel menu giorno»).
+ const menuWords=new Set(menus.flatMap(m=>pdfKey(m.name).split(' ').filter(Boolean)))
+ if(dishNames.length){const dishes=dishWords(dishNames);if(w.some(x=>dishes.has(x)&&!menuWords.has(x)))return null}
+ const hits=menus.filter(m=>{const k=pdfKey(m.name);if(!k)return false
+  if(pad.includes(' '+k+' '))return true
+  // «menu del giorno» / «di oggi» / «giornaliero» per il Menu che si chiama Giorno.
+  return /\bgiorn\w*\b/.test(k)&&/\b(?:del giorno|di oggi|giornaliero|giornata)\b/.test(t)})
+ // Tolti verbo, Menu, parole da stampa e riempitivi non deve restare altro: altrimenti è un messaggio di lavoro sul menu.
+ const g=(r:RegExp)=>new RegExp(r.source,'g'),rest=t.replace(g(pdfAsk),' ').replace(g(pdfWord),' ').replace(g(pdfWant),' ').split(' ').filter(x=>x&&x!=='menu'&&x!=='e'&&!menuWords.has(x)&&!pdfFiller.has(x)&&!/^(?:giorno|giornaliero|giornata|stampa\w*|mandar\w*|inviar\w*)$/.test(x))
+ if(rest.length>3||/\d/.test(rest.join(' ')))return null
+ if(!/\bmenu\b/.test(t)&&!paper)return null
+ // «Cena» e «Cena di Natale»: con «menu cena di natale» vale solo il nome più lungo.
+ const best=hits.filter(m=>{const k=pdfKey(m.name);return !hits.some(o=>o!==m&&pdfKey(o.name)!==k&&(' '+pdfKey(o.name)+' ').includes(' '+k+' '))})
+ if(best.length)return {menuIds:best.map(m=>m.id)}
+ if(!paper)return null
+ if(menus.length===1)return {menuIds:[menus[0]!.id]}
+ return {ask:menus.map(m=>m.name)}
+}

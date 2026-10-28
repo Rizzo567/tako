@@ -134,6 +134,12 @@ export async function publicMenuPdfRoutes(fastify:FastifyInstance){
   if(etagMatches(req.headers['if-none-match'],head.etag))return reply.code(304).send()
   const result=await renderPdfDocument(restaurant.id,row,doc,language,restaurant);if('error' in result)return notFound()
   return reply.header('ETag',result.etag).header('Content-Disposition',`inline; filename="${documentFilename(doc.name)}"`).type('application/pdf').send(result.bytes)})
+ // 28/10: allegato PDF che il bot WhatsApp manda al titolare («mandami il menu giorno»). Token firmato a scadenza, nessun dato salvato.
+ fastify.get('/whatsapp-pdf/:file',{config:{rateLimit:{max:30,timeWindow:60000}}},async(req,reply)=>{const {file}=req.params as {file?:string},token=(req.query as {k?:unknown}|undefined)?.k;const notFound=()=>reply.code(404).header('Cache-Control','no-store').send({error:{code:'NOT_FOUND',message:'PDF non trovato'}})
+  const {readMenuPdfToken,renderChatMenuPdf,menuPdfSecret}=await import('../lib/whatsapp-menu-pdf.js')
+  const claim=typeof token==='string'?readMenuPdfToken(token,menuPdfSecret()):null;if(!claim||!/^[a-z0-9-]{1,60}\.pdf$/.test(String(file??'')))return notFound()
+  const result=await renderChatMenuPdf(claim);if(!result)return notFound()
+  return reply.header('Cache-Control','private, no-store').header('X-Robots-Tag','noindex, nofollow').header('Referrer-Policy','no-referrer').header('Content-Disposition',`inline; filename="${file}"`).type('application/pdf').send(result.bytes)})
 }
 /** Public event entry: parent registers this on customer scope after public tenant/menu validation. */
 export {recordMenuEvent,recordMenuEvents} from '../lib/menu-workspace-events.js'

@@ -7,6 +7,7 @@ import {isSalesAction,salesActionKey,salesActionChanged,applySalesAction,describ
 import {businessDate} from './menu-sales.js'
 import {priceAlternatives,priceAlternativeDish,isExcluded,type Excluded} from './twilio-menu-clarify.js'
 import {removeVerbRe,spokenCents,spokenDecimals} from './twilio-menu-nlu.js'
+import {splitMedia} from './twilio-menu-command.js'
 import {isStructAction,applyStructAction,orderActions,DELETE_VERB,RENAME_VERB,MOVE_VERB,SECTION_WORD,sameSection,menuForSection,type StructAction} from './twilio-menu-structure.js'
 export type MenuRef={id:string,name:string,price:number,available:boolean,hidden:boolean,menu:string,section?:string,sectionId?:string,hasImage?:boolean,featured?:boolean,tags?:string[]}
 export type SectionRef={id:string,name:string,menu:string,pub?:string}
@@ -403,8 +404,11 @@ export async function transcribeAudio(bytes:Uint8Array,type:string,key:string,op
 }
 export function splitWhatsAppText(text:string,max=1400){const parts:string[]=[];let rest=text;while(rest.length>max){const boundary=rest.lastIndexOf('\n',max),end=boundary>max/2?boundary:max;parts.push(rest.slice(0,end));rest=rest.slice(end).replace(/^\n/,'')}if(rest)parts.push(rest);return parts}
 export async function sendWhatsApp(accountSid:string,token:string,from:string,to:string,text:string){
- const parts=splitWhatsAppText(text);if(parts.length>1){let last:{sid?:string,status?:string}={};for(const part of parts)last=await sendWhatsApp(accountSid,token,from,to,part);return last}
- const response=await fetch(`${twilioBase()}/2010-04-01/Accounts/${accountSid}/Messages.json`,{method:'POST',headers:{Authorization:'Basic '+Buffer.from(accountSid+':'+token).toString('base64'),'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({From:from,To:to,Body:text}).toString(),signal:AbortSignal.timeout(10000)})
+ // 28/10: messaggio con allegato (PDF del menu): testo + MediaUrl in un solo invio, senza dividere.
+ const attached=splitMedia(text);text=attached.text
+ const parts=attached.media?[text]:splitWhatsAppText(text);if(parts.length>1){let last:{sid?:string,status?:string}={};for(const part of parts)last=await sendWhatsApp(accountSid,token,from,to,part);return last}
+ const form=new URLSearchParams({From:from,To:to,Body:attached.media?text.slice(0,1400):text});if(attached.media)form.set('MediaUrl',attached.media)
+ const response=await fetch(`${twilioBase()}/2010-04-01/Accounts/${accountSid}/Messages.json`,{method:'POST',headers:{Authorization:'Basic '+Buffer.from(accountSid+':'+token).toString('base64'),'Content-Type':'application/x-www-form-urlencoded'},body:form.toString(),signal:AbortSignal.timeout(10000)})
  if(!response.ok){let code='';try{code=String((await response.json() as any)?.code??'')}catch{}throw new Error('Twilio send '+response.status+(code?' '+code:''))}
  let data:any=null;try{data=await response.json()}catch{}
  return{sid:typeof data?.sid==='string'?data.sid as string:undefined,status:typeof data?.status==='string'?data.status as string:undefined}

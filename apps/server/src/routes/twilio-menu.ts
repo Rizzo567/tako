@@ -14,7 +14,7 @@ import {g9DishMentioned,plain,withNewSections,describeAction,priceChoice,effecti
 import {copy,helpWords,fill} from '../lib/twilio-menu-copy.js'
 import {createStep,createQuestion,followUp,undoFor,categoryWordItems,revertTarget,groupCommand,type CreateDraft,type LastApplied} from '../lib/twilio-menu-create.js'
 import {words,exactPick,politeCommand,spokenDecimals,spokenCents,parseIntent,findDishes,diminutiveRivals,preselect,candidatesFor,resolveChoice,capabilityFromText,isThanks,compoundIntents,looksLikeQuestion,wantsCreateText,wantsSpecialText,isCompoundMessage,type Intent} from '../lib/twilio-menu-nlu.js'
-import {validTwilioSignature,shouldHandleInTako,replyIntent,forwardTwilioWebhook,parseMenuCommand,normalizeMenuText,twiml,nextMessage,lateReply,beginWrite,raceDeadline,whatsappAudioType,type MenuCommand} from '../lib/twilio-menu-command.js'
+import {validTwilioSignature,shouldHandleInTako,replyIntent,forwardTwilioWebhook,parseMenuCommand,normalizeMenuText,twiml,nextMessage,withMedia,withoutMedia,lateReply,beginWrite,raceDeadline,whatsappAudioType,type MenuCommand} from '../lib/twilio-menu-command.js'
 import {reportFailure,inBackground,quietPhones,type FailureKind} from '../lib/twilio-menu-alerts.js'
 import {normalizeOwnerPhone,whatsappAddress} from '../lib/whatsapp-phone.js'
 import {fullMenuTurn,type FullMenuJob} from '../lib/twilio-menu-fullmenu.js'
@@ -38,7 +38,9 @@ import {sqlBrainStore} from '../lib/owner-brain-memory.js'
 import {readBotBrain,readBotSettings,engineKey,botEngineOf,type BotEngine} from '../lib/owner-brain-switch.js'
 import {phoneticHits,looseSoundAlike,spelledAlike} from '../lib/twilio-menu-phonetic.js'
 import {HAIKU_MODEL} from '../lib/owner-brain-anthropic.js'
-import {linkIntent,botQuestion} from '../lib/twilio-menu-nlu.js'
+import {linkIntent,botQuestion,pdfIntent} from '../lib/twilio-menu-nlu.js'
+import {signMenuPdfToken,menuPdfUrl,menuPdfSecret,chatPdfAvailable} from '../lib/whatsapp-menu-pdf.js'
+import {readWorkspace} from '../lib/menu-workspace-store.js'
 import {linkMarkers,noHide} from '../lib/twilio-menu-ai.js'
 import {ownerAccount,ownerEmailSchema,dashboardUrl,publicMenuUrl,markPasswordDelivered} from '../lib/whatsapp-owner-account.js'
 import {webEmailEnabled} from '../lib/web-email-enabled.js'
@@ -111,6 +113,20 @@ async function linkTurn(tx:Tx,ctx:Ctx,body:string):Promise<{say:string,secret?:s
  const current=await readBotWorkspace(ctx.tenant,tx),names=current?catalogOf(workspaceSchema.parse(current.draft)).refs.map(r=>r.name):[]
  if(names.length&&!linkIntent(body,names))return null
  return intent==='menu'?{say:menuLinkText(ctx.tenant)}:dashboardTurn(tx,ctx)}
+/** 28/10 (decisione Manuel «PDF A4»): «mandami il menu giorno» / «il pdf da stampare» → PDF del Menu dal menu PUBBLICATO, allegato al
+ * messaggio. Si guarda il pubblicato perché è quello che vedono i clienti e che il bot modifica. null = il messaggio va avanti.
+ * Revisione 28/10: il PDF parte in un messaggio a sé dopo il testo (se Twilio non riesce a scaricarlo, il testo arriva comunque) e
+ * solo se il locale lo può servire (la route darebbe 404 a locale spento, in prova o rimosso). */
+async function pdfTurn(tx:Tx,ctx:Ctx,body:string):Promise<string|null>{
+ if(!/\b(?:men[uù]|pdf|stamp\w*)\b/i.test(body))return null
+ const row=await readWorkspace(ctx.tenant,tx),pub=row?.published as Workspace|null|undefined
+ const menus=(pub?.menus??[]).filter(m=>m.sections.some(s=>s.items.length)).map(m=>({id:m.id,name:m.name,active:(m as {active?:boolean}).active!==false}))
+ const intent=pdfIntent(body,menus,pub?catalogOf(pub).refs.map(r=>r.name):[]);if(!intent)return null
+ if('ask' in intent){const shown=menus.filter(m=>m.active).map(m=>m.name),list=shown.length?shown:intent.ask;return fill(copy.pdfWhich,{menu:list.map(n=>'• '+safe(n)).join('\n'),esempio:safe(list[0]!)})}
+ if(!await chatPdfAvailable(ctx.tenant,tx))return copy.pdfFailed
+ const chosen=intent.menuIds.map(id=>menus.find(m=>m.id===id)!).filter(Boolean),label=chosen.map(m=>m.name).join(' + ')
+ let url:string;try{url=menuPdfUrl(signMenuPdfToken({tenant:ctx.tenant,menuIds:chosen.map(m=>m.id)},menuPdfSecret()),label)}catch(error){await reportFailure({kind:'webhook_error',tenant:ctx.tenant,phone:ctx.phone,detail:'pdf link: '+(error instanceof Error?error.message:'Error')});return copy.pdfFailed}
+ return fill(copy.pdfSent,{menu:chosen.map(m=>'*'+(/^men[uù]\b/i.test(m.name.trim())?safe(m.name):'Menu '+safe(m.name))+'*').join(' e ')})+nextMessage+withMedia('',url)}
 // 19/10 sera: un invio fallito non ferma i messaggi successivi (il link del menu parte comunque); la password del primo messaggio
 // si segna consegnata solo se Twilio l'ha accettata, altrimenti al prossimo «dashboard» il bot la rigenera e la rimanda.
 async function sendSecrets(ctx:Ctx,out:FollowUps,afterReply:boolean){const accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'',from=process.env.TWILIO_WHATSAPP_NUMBER||''
@@ -1591,10 +1607,11 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  // 19/10 (richiesta Manuel): «sei un bot?» / «sei una persona?» → la riga «assistente automatico», una volta sola anche al primo messaggio.
  if(media===0&&botQuestion(body))return answer(copy.aiDisclosure)
  // 19/10: link della dashboard / del menu digitale. Le credenziali (account creato ora) partono a parte (REST), mai nel TwiML in cache.
+ if(media===0){const pdf=await pdfTurn(tx,ctx,body);if(pdf)return say(pdf)}
  if(media===0){const link=await linkTurn(tx,ctx,body);if(link){if(link.secret)return{kind:'secret' as const,say:await say(link.say),secret:[(link.say||!disclose?'':copy.aiDisclosure+'\n\n')+link.secret],ctx,...(link.deliver?{deliver:link.deliver}:{})};return say(link.say)}}
  if(media>0){const type=form.MediaContentType0||'',job=whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null;if(!job)return say(copy.mediaOnly);await reserve(tx,sid);await enqueueTurn(tx,phone,sid);return{job,ctx,ack:'',prefix}}
  if(!body&&!(await readBotBrain(tx,ctx.tenant)))return say(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return say(turn);if('llm' in turn&&!aiKeyFor(turn,await readBotSettings(tx,ctx.tenant)))return say((turn as any).brain?copy.brainDown:copy.noAi);await reserve(tx,sid);await enqueueTurn(tx,phone,sid);return{job:'text' as const,ctx,ack:'upload' in turn?prefix+copy.photoWorking:'',prefix:'upload' in turn?'':prefix}}).catch(async error=>{if(error instanceof WorkspaceTrialLocked)return error.message;req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
- if(typeof result==='string'){if(scope.tenant&&!scope.cached&&result&&body)await rememberTurn(db,scope.tenant,phone,body,result);return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(scope.cached?twiml(result):out(result))}
+ if(typeof result==='string'){if(scope.tenant&&!scope.cached&&result&&body)await rememberTurn(db,scope.tenant,phone,body,withoutMedia(result));return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(scope.cached?twiml(result):out(result))}
  // 19/10: messaggi riservati (credenziali) e messaggi dopo l'attivazione: via REST, in ordine, con una breve pausa dopo la risposta.
  // Verifica dal vivo sincrona sul QA (TakoSyncTest): tutto nello stesso TwiML, niente REST.
  if('kind' in result){const r=result as Secret,sync=r.ctx.tenant===qaTenant&&form.TakoSyncTest==='1'

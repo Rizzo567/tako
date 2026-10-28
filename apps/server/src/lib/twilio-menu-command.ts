@@ -18,7 +18,14 @@ export function parseMenuCommand(raw:string):MenuCommand|null{
 }
 /** Separatore tra più messaggi nella stessa risposta (es. benvenuto + «cosa sai fare»): ognuno diventa un <Message>. */
 export const nextMessage='\u0002'
-export function twiml(text:string){const escape=(t:string)=>t.replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]!));return `<?xml version="1.0" encoding="UTF-8"?><Response>${text.split(nextMessage).filter(Boolean).flatMap(t=>{const parts:string[]=[];while(t.length>1400){const cut=t.lastIndexOf('\n',1400),end=cut>700?cut:1400;parts.push(t.slice(0,end));t=t.slice(end).replace(/^\n/,'')}if(t)parts.push(t);return parts}).map(t=>`<Message>${escape(t)}</Message>`).join('')}</Response>`}
+/** 28/10: allegato di un messaggio (PDF del menu). Il testo del messaggio finisce con mediaMark + URL https; twiml e sendWhatsApp
+ * lo spediscono come <Media>/MediaUrl. Un solo allegato, sempre in fondo al proprio messaggio. */
+export const mediaMark='\u0004'
+export function withMedia(text:string,url:string){return text+mediaMark+url}
+export function splitMedia(part:string):{text:string,media?:string}{const i=part.indexOf(mediaMark);if(i<0)return{text:part};const url=part.slice(i+1).trim();return /^https:\/\/[^\s<>"']+$/.test(url)?{text:part.slice(0,i),media:url}:{text:part.slice(0,i)}}
+/** Testo senza allegato (memoria del turno, log). */
+export function withoutMedia(text:string){return text.split(nextMessage).map(p=>splitMedia(p).text).join(nextMessage)}
+export function twiml(text:string){const escape=(t:string)=>t.replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]!));return `<?xml version="1.0" encoding="UTF-8"?><Response>${text.split(nextMessage).filter(Boolean).flatMap(t=>{const m=splitMedia(t);if(m.media)return [`<Message><Body>${escape(m.text.slice(0,1400))}</Body><Media>${escape(m.media)}</Media></Message>`];t=m.text;const parts:string[]=[];while(t.length>1400){const cut=t.lastIndexOf('\n',1400),end=cut>700?cut:1400;parts.push(t.slice(0,end));t=t.slice(end).replace(/^\n/,'')}if(t)parts.push(t);return parts.map(x=>`<Message>${escape(x)}</Message>`)}).join('')}</Response>`}
 /** WhatsApp sends voice notes as audio/*; an audio file sent as a document may arrive as a generic type with its file name as Body. */
 export function whatsappAudioType(type:unknown,body:unknown):string|null{
  const t=typeof type==='string'?type.split(';')[0]!.trim().toLowerCase():'',name=typeof body==='string'?body.trim().toLowerCase():''
