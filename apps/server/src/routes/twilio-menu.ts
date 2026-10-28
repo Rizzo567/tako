@@ -118,7 +118,8 @@ async function linkTurn(tx:Tx,ctx:Ctx,body:string):Promise<{say:string,secret?:s
  * Revisione 28/10: il PDF parte in un messaggio a sé dopo il testo (se Twilio non riesce a scaricarlo, il testo arriva comunque) e
  * solo se il locale lo può servire (la route darebbe 404 a locale spento, in prova o rimosso). */
 async function pdfTurn(tx:Tx,ctx:Ctx,body:string):Promise<string|null>{
- if(!/\b(?:men[uù]|pdf|stamp\w*)\b/i.test(body))return null
+ // 28/10 sera (chat di Luisa): «Mandami menù giorno» non passava: in JS «ù» non è una lettera per \b. Si filtra sul testo senza accenti.
+ if(!/\b(?:menu|pdf|stamp\w*)\b/.test(normalizeMenuText(body)))return null
  const row=await readWorkspace(ctx.tenant,tx),pub=row?.published as Workspace|null|undefined
  const menus=(pub?.menus??[]).filter(m=>m.sections.some(s=>s.items.length)).map(m=>({id:m.id,name:m.name,active:(m as {active?:boolean}).active!==false}))
  const intent=pdfIntent(body,menus,pub?catalogOf(pub).refs.map(r=>r.name):[]);if(!intent)return null

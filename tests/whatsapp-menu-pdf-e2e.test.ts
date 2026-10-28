@@ -69,6 +69,10 @@ expect(pdf.statusCode).toBe(200);expect(pdf.headers['content-type']).toContain('
   const raw=victoriaWithGiorno();raw.menus.find(m=>m.id===I.pranzo)!.sections[0]!.items.push({...raw.menus.find(m=>m.id===I.pranzo)!.sections[0]!.items[0]!,id:'00000000-0000-4000-8000-000000009999',name:'Lasagna della casa'});S.published=workspaceSchema.parse(raw)
   const u=new URL(media);expect(await pdfText((await a.inject({method:'GET',url:u.pathname+u.search})).rawPayload)).toContain('Lasagna della casa')
   await a.close()})
+ it('con l accento («Mandami menù giorno», chat di Luisa) manda il PDF come senza',async()=>{const a=await app()
+  for(const t of ['Mandami menù giorno','Mandami il menù giorno','Inviami il MENÙ GIORNO']){const res=await post(a,t);expect(res.body,t).toMatch(/Ecco il PDF da stampare: \*Menu Giorno\*/);expect(res.body,t).toContain('<Media>')}
+  const ask=await post(a,'Mandami il menù');expect(ask.body).toContain('Quale menu ti mando in PDF?')
+  await a.close()})
  it('«mandami il pdf» con più Menu chiede quale, senza allegato',async()=>{const a=await app()
   const res=await post(a,'mandami il pdf');expect(res.body).not.toContain('<Media>')
   expect(res.body).toContain('Quale menu ti mando in PDF?');expect(res.body).toContain('• Menu Giorno');expect(res.body).toContain('• Alla carta')
