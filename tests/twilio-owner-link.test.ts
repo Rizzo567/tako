@@ -104,7 +104,7 @@ describe('collegamento del titolare dalla dashboard',()=>{
   const saved=await save(a,OWNER_QA,QA,'+39 000 000 0041');expect(saved.statusCode).toBe(200);expect(saved.json().data).toMatchObject({phone:'+390000000041',status:'pending'});expect(db.links.get('whatsapp:+390000000041')).toMatchObject({restaurant_id:QA,actor_id:OWNER_QA,activated_at:null});expect(sent).toHaveLength(0)
   const first=await post(a,'whatsapp:+390000000041','ciao');const out=messages(first.body);expect(out).toHaveLength(1);expect(out[0]).toContain('il menu digitale di *Tako · Verifica web*');expect(out[0]).toContain('🍝 «');
   // 19/10: dopo il benvenuto, due messaggi via REST: account creato con l'email del pannello (utente = email, password a tre parole)
-  expect(sent.map(m=>m.To)).toEqual(['whatsapp:+390000000041','whatsapp:+390000000041']);expect(sent[0]!.Body).toContain('Utente: t390000000041@test.invalid');expect(sent[0]!.Body).toMatch(/Password: [a-z]+\.[a-z]+\.[a-z]+$/);expect(sent[1]!.Body).toContain('/r/'+QA+'/menu');sent=[]
+  expect(sent.map(m=>m.To)).toEqual(['whatsapp:+390000000041','whatsapp:+390000000041']);expect(sent[0]!.Body).toContain('Utente: t390000000041@test.invalid');expect(sent[0]!.Body).toMatch(/Password: [A-Z][a-z]+-[A-Z][a-z]+\d{2}$/);expect(sent[1]!.Body).toContain('/r/'+QA+'/menu');sent=[]
   const again=messages((await post(a,'whatsapp:+390000000041','ciao')).body).join('\n');expect(again).not.toContain('menu digitale di');expect(db.forwarded).toBe(0)
   expect((await get(a,OWNER_QA,QA)).json().data).toMatchObject({phone:'+390000000041',status:'linked'})
   expect(messages((await post(a,'whatsapp:+390000000041','cosa sai fare')).body)).toEqual([copy.help]);expect(db.forwarded).toBe(0);expect(sent).toHaveLength(0);await a.close()})
@@ -199,7 +199,7 @@ describe('dashboard e menu digitale del titolare su WhatsApp',()=>{
  it('primo messaggio: benvenuto, poi due messaggi separati e in ordine (credenziali con utente = email, menu); una sola volta; nel DB solo l’hash',async()=>{const a=await app()
   const{phone,first}=await activate(a,'3330000061','mario.rossi@example.com');const out=messages(first.body);expect(out).toHaveLength(1);expect(out[0]).toContain('menu digitale di *Tako · Verifica web*');expect(out[0]).not.toContain('Password')
   expect(sent.map(m=>m.To)).toEqual([phone,phone])
-  const m=sent[0]!.Body!.match(/^La tua dashboard: https:\/\/takoitalia\.com\/staff\/\nUtente: mario\.rossi@example\.com\nPassword: ([a-z]+\.[a-z]+\.[a-z]+)$/);expect(m).not.toBeNull()
+  const m=sent[0]!.Body!.match(/^La tua dashboard: https:\/\/takoitalia\.com\/staff\/\nUtente: mario\.rossi@example\.com\nPassword: ([A-Z][a-z]+-[A-Z][a-z]+\d{2})$/);expect(m).not.toBeNull()
   expect(sent[1]!.Body).toBe(fill(copy.ownerMenu,{link:menuQA}))
   const[id,u]=account('mario.rossi@example.com')!;expect(id).not.toBe(AGENCY);expect(u).toMatchObject({restaurant_id:QA,role:'owner',phone:'+393330000061',active:true});expect(u.password_hash).not.toContain(m![1]);expect(await bcrypt.compare(m![1]!,u.password_hash!)).toBe(true)
   for(const v of db.messages.values())expect(v).not.toContain(m![1])
@@ -231,7 +231,7 @@ describe('dashboard e menu digitale del titolare su WhatsApp',()=>{
   expect(messages((await post(a,'whatsapp:+393330000067','dashboard')).body)).toEqual([fill(copy.dashboardNoAccount,{link:dash})]);expect(users[ALIEN]!.password_hash).toBe('h0');expect(users[ALIEN]!.restaurant_id).toBe(OTHER);await a.close()})
 
  // 19/10 sera: revisioni v119
- const regen=(b:string)=>b.match(/Password: ([a-z]+\.[a-z]+\.[a-z]+)$/)?.[1]
+ const regen=(b:string)=>b.match(/Password: ([A-Z][a-z]+-[A-Z][a-z]+\d{2})$/)?.[1]
  it('(1) account già esistente mai entrato: password rigenerata e mandata; sessioni chiuse; nome «Titolare di <locale>» per gli account nuovi',async()=>{const a=await app()
   const{phone}=await activate(a,'3330000070','owner-qa@test.invalid');const pw=regen(sent[0]!.Body!);expect(pw).toBeTruthy();expect(await bcrypt.compare(pw!,users[OWNER_QA]!.password_hash!)).toBe(true);expect(db.sessionsDeleted).toContain(OWNER_QA)
   expect(users[OWNER_QA]!.delivered).toBeInstanceOf(Date);sent=[]
@@ -274,7 +274,7 @@ describe('due numeri del titolare per locale',()=>{
   await save(a,AGENCY,QA,'3330000081',undefined,'primo@example.com');await post(a,A,'ciao');sent=[]
   expect((await save(a,AGENCY,QA,'3330000082',undefined,'secondo@example.com')).statusCode).toBe(200);expect(sent).toHaveLength(0)
   const first=await post(a,B,'ciao');expect(messages(first.body)[0]).toContain('menu digitale di *Tako · Verifica web*')
-  expect(sent.map(m=>m.To)).toEqual([B,B]);expect(sent[0]!.Body).toContain('Utente: secondo@example.com');expect(sent[0]!.Body).toMatch(/Password: [a-z]+\.[a-z]+\.[a-z]+$/)
+  expect(sent.map(m=>m.To)).toEqual([B,B]);expect(sent[0]!.Body).toContain('Utente: secondo@example.com');expect(sent[0]!.Body).toMatch(/Password: [A-Z][a-z]+-[A-Z][a-z]+\d{2}$/)
   const[idA]=account('primo@example.com')!,[idB]=account('secondo@example.com')!;expect(idA).not.toBe(idB);expect(db.links.get(A)!.actor_id).toBe(idA);expect(db.links.get(B)!.actor_id).toBe(idB)
   expect((await get(a,AGENCY,QA)).json().data.numbers).toMatchObject([{phone:'+393330000081',email:'primo@example.com',status:'linked'},{phone:'+393330000082',email:'secondo@example.com',status:'linked'}]);await a.close()})
  it('ogni numero ha la sua email: quella (o l’account) dell’altro numero è rifiutata',async()=>{const a=await app()

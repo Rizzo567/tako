@@ -1,0 +1,195 @@
+
+[MEDIO] luisa-giornata
+   - MEDIO turno 4: risposta vuota
+   - MEDIO turno 15: risposta vuota
+     > "Buongiorno"
+       Buongiorno! Dimmi pure cosa vuoi aggiornare nel menu.
+     > "Menù mezzogiorno da 12 euro togli tutti i primi"
+       *Menu Giorno aggiornato* /  / *Primi* / • nessun piatto /  / Eliminati: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca. /  / Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carb
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → 
+     > "Metti nei primi lasagna al forno  pasta e fagioli  risotto ai funghi"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna al forno (nuovo) / • Pasta e fagioli (nuovo) / • Risotto ai funghi (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi:  → Lasagna al forno, Pasta e fagioli, Risotto ai funghi
+     > "Togli tutti i secondi"
+       *Menu Giorno aggiornato* /  / *Secondi* / • nessun piatto /  / Eliminati: Cotoletta, Arrosto. /  / Ora scrivimi i piatti nuovi, per esempio «nei secondi inserisci lasagna, carbonara». /  / Per tornare come prima scrivi *
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → 
+     > "Nei secondi metti"
+       
+       Δ Menu Giorno›Secondi:  → Cotoletta alla milanese, Scaloppine al limone, Polpette al sugo
+     > "Cotoletta alla milanese  scaloppine al limone polpette al sugo"
+       Cosa inserisco nei *Secondi* del *Menu Giorno*? Scrivimi i piatti, per esempio «carbonara, lasagne». / *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta alla milanese (nuovo) / • Scaloppine al limone (nuovo) / • Polp
+     > "Togli tutti i contorni"
+       *Menu Giorno aggiornato* /  / *Contorni* / • nessun piatto /  / Eliminati: Patate al forno, Spinaci. /  / Ora scrivimi i piatti nuovi, per esempio «nei contorni inserisci lasagna, carbonara». /  / Per tornare come prima 
+       Δ Menu Giorno›Contorni: Patate al forno, Spinaci → 
+     > "Metti nei contorni patate al forno insalata"
+       *Menu Giorno aggiornato* /  / *Contorni* / • Patate al forno (nuovo) / • Insalata (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Contorni:  → Patate al forno, Insalata
+     > "Scusa la pasta e fagioli è finita"
+       Ok, segno *Pasta e fagioli* come esaurita. /  / *Pasta e fagioli*: *finito*
+       Δ Menu Giorno›Primi: Lasagna al forno, Pasta e fagioli, Risotto ai funghi → Lasagna al forno, Pasta e fagioli (finito), Risotto ai funghi
+     > "Rinomina risotto ai funghi in risotto ai porcini"
+       *Risotto ai funghi*: nuovo nome *Risotto ai porcini* /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna al forno, Pasta e fagioli (finito), Risotto ai funghi → Lasagna al forno, Pasta e fagioli (finito), Risotto ai porcini
+     > "Il primo del menu da 12 costa 9"
+       Il *Solo primo* del *Menu Giorno* è già *9,00 €*: non ho cambiato nulla.
+     > "Il solo secondo a pranzo mettilo a 11"
+       *Solo secondo* del *Menu Giorno*: da 10,00 € a *11,00 €*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›opzione Solo secondo: 10 → 11
+     > "Si"
+       Ok, ho registrato. Vuoi aggiungere altro al menu?
+     > "Quanto costa il menu sera"
+       Il *Menu Cena* è a prezzo fisso. Opzioni: *Completo* 16,90 € · *Solo primo* 12,00 € · *Solo secondo* 14,00 €. Compreso: ¼ di vino oppure ½ litro d’acqua + caffè.
+     > "Stasera togli i primi"
+       *Menu Cena aggiornato* /  / *Primi* / • nessun piatto /  / Eliminati: tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara. /  / Ora scrivimi i piatti nuovi
+       Δ Menu Cena›Primi: tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara → 
+     > "E inserisci"
+       
+       Δ Menu Cena›Primi:  → Tagliatelle al ragù, Gnocchi alla sorrentina, Spaghetti alle vongole
+     > "Tagliatelle al ragù  gnocchi alla sorrentina spaghetti alle vongole"
+       Cosa inserisco nei *Primi* del *Menu Cena*? Scrivimi i piatti, per esempio «lasagna, carbonara». / *Menu Cena aggiornato* /  / *Primi* / • Tagliatelle al ragù (nuovo) / • Gnocchi alla sorrentina (nuovo) / • Spaghetti all
+     > "Togli tutti i secondi della cena"
+       *Menu Cena aggiornato* /  / *Secondi* / • nessun piatto /  / Eliminati: branzino al forno, scaloppine al vino bianco, pollo al forno. /  / Ora scrivimi i piatti nuovi, per esempio «nei secondi inserisci lasagna, carbonar
+       Δ Menu Cena›Secondi: branzino al forno, scaloppine al vino bianco, pollo al forno → 
+     > "Metti nei secondi tagliata di manzo  branzino al forno"
+       *Menu Cena aggiornato* /  / *Secondi* / • Tagliata di manzo (nuovo) / • Branzino al forno (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Cena›Secondi:  → Tagliata di manzo, Branzino al forno
+     > "Annulla"
+       Ok, annullo l’ultima modifica. /  / *Tagliata di manzo*: tolto (era stato aggiunto) / *Branzino al forno*: tolto (era stato aggiunto)
+       Δ Menu Cena›Secondi: Tagliata di manzo, Branzino al forno → 
+     > "Metti nei secondi tagliata di manzo  orata al forno"
+       *Menu Cena aggiornato* /  / *Secondi* / • Tagliata di manzo (nuovo) / • Orata al forno (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Cena›Secondi:  → Tagliata di manzo, Orata al forno
+     > "Togli la melanzana al forno dalla cena"
+       Tolgo *melanzana al forno* dal Menu Cena. /  / *melanzana al forno*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Cena›Contorni: Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno → Patate al forno, Insalata mista, insalata verde, patate al forno
+     > "allora nei contorni della cena aggiungi anche spinaci al burro"
+       *Menu Cena aggiornato* /  / *Contorni* / • Patate al forno / • Insalata mista / • insalata verde / • patate al forno / • Spinaci al burro (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Cena›Contorni: Patate al forno, Insalata mista, insalata verde, patate al forno → Patate al forno, Insalata mista, insalata verde, patate al forno, Spinaci al burro
+     > "Il completo della cena mettilo a 17"
+       *Completo* del *Menu Cena*: da 16,90 € a *17,00 €*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Cena›opzione Completo: 16.9 → 17
+     > "Si"
+       Non c'è nulla da confermare adesso. Dimmi quale modifica vuoi fare nel *Menu Cena*.
+     > "Nei primi del pranzo inserici anche carbonara"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna al forno / • Pasta e fagioli / • Risotto ai porcini / • Carbonara (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna al forno, Pasta e fagioli (finito), Risotto ai porcini → Lasagna al forno, Pasta e fagioli (finito), Risotto ai porcini, Carbonara
+     > "No la carbonara toglila"
+       *Carbonara*: tolto (l’avevo appena aggiunto) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna al forno, Pasta e fagioli (finito), Risotto ai porcini, Carbonara → Lasagna al forno, Pasta e fagioli (finito), Risotto ai porcini
+     > "Quanto costa il menu sera"
+       Il *Menu Cena* è a prezzo fisso. Opzioni: *Completo* 17,00 € · *Solo primo* 12,00 € · *Solo secondo* 14,00 €. Compreso: ¼ di vino oppure ½ litro d’acqua + caffè.
+     > "Grazie"
+       Di niente! Se serve altro, scrivimi pure.
+
+[GRAVE] scrive-malissimo
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Carbonara, Amatriciana] ottenuto [Carbonara, Amatriciana, Lasagna]
+     > "ciao"
+       Ciao! Dimmi pure cosa vuoi aggiornare nel menu.
+     > "aiuto"
+       Scrivimi come a un collega, anche con un vocale. Per esempio: / • «togli i primi del pranzo», poi «inserisci lasagna, carbonara» / • «la carbonara è finita» / • «aggiungi la panna cotta a 5 nei dolci» / • «annulla» per t
+     > "come si fa?"
+       Scrivimi come a un collega, anche con un vocale. Per esempio: / • «togli i primi del pranzo», poi «inserisci lasagna, carbonara» / • «la carbonara è finita» / • «aggiungi la panna cotta a 5 nei dolci» / • «annulla» per t
+     > "x pranzo togli tutti i primi"
+       *Menu Giorno aggiornato* /  / *Primi* / • nessun piatto /  / Eliminati: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca. /  / Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carb
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → 
+     > "nei primi metti carbo amatri e lasagna"
+       *Menu Giorno aggiornato* /  / *Primi* / • Carbonara (nuovo) / • Amatriciana (nuovo) / • Lasagna (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi:  → Carbonara, Amatriciana, Lasagna
+     > "si si"
+       Non ho modifiche in sospeso da confermare: Carbonara, Amatriciana e Lasagna sono già nel Menu Giorno. Cosa vuoi fare adesso?
+     > "anzi no la lasagna nn la mettere"
+       Ok, lascio stare.
+     > "x pranzo secondo cotoletta e polpette"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Polpette / • Cotoletta /  / Eliminati: Arrosto /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Polpette
+     > "ok"
+       Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12».
+     > "👍"
+       Non c’è niente da confermare: dimmi pure cosa vuoi cambiare, per esempio «la carbonara a 12».
+     > "x pranzo contorni patate al forno e insalata"
+       *Menu Giorno aggiornato* /  / *Contorni* / • Insalata / • Patate al forno /  / Eliminati: Spinaci /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Contorni: Patate al forno, Spinaci → Patate al forno, Insalata
+     > "il completo a pranzo dodici euro"
+       Il *Completo* del *Menu Giorno* è già *12,00 €*: non ho cambiato nulla.
+     > "no aspetta tredici"
+       *Completo* del *Menu Giorno*: da 12,00 € a *13,00 €*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›opzione Completo: 12 → 13
+     > "si si"
+       Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12».
+     > "nn capisco"
+       Scrivimi come a un collega, anche con un vocale. Per esempio: / • «togli i primi del pranzo», poi «inserisci lasagna, carbonara» / • «la carbonara è finita» / • «aggiungi la panna cotta a 5 nei dolci» / • «annulla» per t
+     > "stasera via tutti i secondi"
+       *Menu Cena aggiornato* /  / *Secondi* / • nessun piatto /  / Eliminati: branzino al forno, scaloppine al vino bianco, pollo al forno. /  / Ora scrivimi i piatti nuovi, per esempio «nei secondi inserisci lasagna, carbonar
+       Δ Menu Cena›Secondi: branzino al forno, scaloppine al vino bianco, pollo al forno → 
+     > "metti tagliata  orata"
+       *Menu Cena aggiornato* /  / *Secondi* / • Tagliata (nuovo) / • Orata (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Cena›Secondi:  → Tagliata, Orata
+     > "quanto costa il menu sera"
+       Il *Menu Cena* è a prezzo fisso. Opzioni: *Completo* 16,90 € · *Solo primo* 12,00 € · *Solo secondo* 14,00 €. Compreso: ¼ di vino oppure ½ litro d’acqua + caffè.
+     > "togli la carbo"
+       *Carbonara*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Carbonara, Amatriciana, Lasagna → Amatriciana, Lasagna
+     > "annulla"
+       Ok, annullo l’ultima modifica. /  / *Carbonara*: com’era prima
+       Δ Menu Giorno›Primi: Amatriciana, Lasagna → Carbonara, Amatriciana, Lasagna
+     > "va bene"
+       Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12».
+     > "grazie ciao"
+       Grazie a te, a presto!
+
+[MEDIO] sost-giornata
+   - MEDIO turno 13: testo vietato «A quale piatto metto» in «A quale piatto metto *5,00 €*? Scrivimi il nome, per esempio «la carbonara a 5».»
+     > "nel menu pranzo togli i primi"
+       *Menu Giorno aggiornato* /  / *Primi* / • nessun piatto /  / Eliminati: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca. /  / Ora scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carb
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → 
+     > "togli anche i secondi e i contorni"
+       *Menu Giorno aggiornato* /  / *Secondi* / • nessun piatto /  / *Contorni* / • nessun piatto /  / Eliminati: Cotoletta, Arrosto, Patate al forno, Spinaci. /  / Ora scrivimi i piatti nuovi, per esempio «nei secondi inseris
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto →  ; Menu Giorno›Contorni: Patate al forno, Spinaci → 
+     > "ok primi metti lasagna , strozzapreti con zola e pistacchio orecchiette con zucca"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna (nuovo) / • Strozzapreti con zola e pistacchio (nuovo) / • Orecchiette con zucca (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi:  → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca
+     > "come secondi metti cotoletta arrosto e contorni patate al forno e spinaci"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta (nuovo) / • Arrosto (nuovo) /  / *Contorni* / • Patate al forno (nuovo) / • Spinaci (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi:  → Cotoletta, Arrosto ; Menu Giorno›Contorni:  → Patate al forno, Spinaci
+     > "menu mezzogirno togli lasagna metti rigatoni"
+       *Menu Giorno aggiornato* /  / *Primi* / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Rigatoni (nuovo) /  / Tolto: *Lasagna*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni
+     > "la cotoletta è finita"
+       *Cotoletta*: *finito*
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta (finito), Arrosto
+     > "rimettila"
+       Ok, rimetto *Cotoletta* disponibile. /  / *Cotoletta*: di nuovo *disponibile*
+       Δ Menu Giorno›Secondi: Cotoletta (finito), Arrosto → Cotoletta, Arrosto
+     > "al posto delle orechiette metti gnocchi al pomodoro"
+       *Menu Giorno aggiornato* /  / *Primi* / • Strozzapreti con zola e pistacchio / • Rigatoni / • Gnocchi al pomodoro (nuovo) /  / Tolto: *Orecchiette con zucca*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni → Strozzapreti con zola e pistacchio, Rigatoni, Gnocchi al pomodoro
+     > "togli patate al forno metti patate fritte"
+       *Menu Giorno aggiornato* /  / *Contorni* / • Spinaci / • Patate fritte (nuovo) /  / Tolto: *Patate al forno*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Contorni: Patate al forno, Spinaci → Spinaci, Patate fritte
+     > "1"
+       Non mi è chiaro cosa vuoi fare con «1». Cosa intendi cambiare?
+     > "cambia gli spinaci con la cicoria"
+       *Menu Giorno aggiornato* /  / *Contorni* / • Patate fritte / • Cicoria (nuovo) /  / Tolto: *Spinaci*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Contorni: Spinaci, Patate fritte → Patate fritte, Cicoria
+     > "x stasera togli il pollo al forno e metti la salsiccia alla griglia"
+       *Menu Cena aggiornato* /  / *Secondi* / • branzino al forno / • scaloppine al vino bianco / • Salsiccia alla griglia (nuovo) /  / Tolto: *pollo al forno*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Cena›Secondi: branzino al forno, scaloppine al vino bianco, pollo al forno → branzino al forno, scaloppine al vino bianco, Salsiccia alla griglia
+     > "porta il tiramisu a 6 euro"
+       Non trovo il *Tiramisù* nel menu. Intendi un altro piatto?
+     > "la cotoletta mettila a 5 euro"
+       A quale piatto metto *5,00 €*? Scrivimi il nome, per esempio «la carbonara a 5».
+     > "togli gli strozapreti metti i ravioli"
+       *Menu Giorno aggiornato* /  / *Primi* / • Rigatoni / • Gnocchi al pomodoro / • Ravioli (nuovo) /  / Tolto: *Strozzapreti con zola e pistacchio*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Primi: Strozzapreti con zola e pistacchio, Rigatoni, Gnocchi al pomodoro → Rigatoni, Gnocchi al pomodoro, Ravioli
+     > "nei secondi del pranzo metti salsiccia alla griglia  funghi misti e peperoni"
+       Ho capito così, nei *Secondi* del *Menu Giorno*: /  / • Salsiccia alla griglia / • Funghi misti / • Peperoni /  / Va bene? Rispondi *sì* oppure scrivimi cosa correggere.
+     > "si"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Cotoletta / • Arrosto / • Salsiccia alla griglia (nuovo) / • Funghi misti (nuovo) / • Peperoni (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Salsiccia alla griglia, Funghi misti, Peperoni
+     > "elimina l arrosto"
+       Elimino *Arrosto* dal menu? Rispondi *sì*. /  / Da eliminare, serve il tuo sì: / 1. *Arrosto*: da eliminare
+     > "si"
+       *Arrosto*: *eliminato* dal menu
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto, Salsiccia alla griglia, Funghi misti, Peperoni → Cotoletta, Salsiccia alla griglia, Funghi misti, Peperoni
+
+TOTALE 3 casi: ok 0 (0%), GRAVI 1, MEDI 2

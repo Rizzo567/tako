@@ -1,0 +1,4 @@
+[
+ {"id":"anzi-no-sisi","turns":["x pranzo togli tutti i primi","nei primi metti carbo amatri e lasagna","si si","anzi no la lasagna nn la mettere"],"expect":{"final":{"Menu Giorno›Primi":["Carbonara","Amatriciana"]},"alt":[],"noAsk":[],"forbid":[]},"note":""},
+ {"id":"cotoletta-ctx","turns":["porta il tiramisu a 6 euro","la cotoletta mettila a 5 euro"],"expect":{"final":{},"alt":[],"noAsk":[],"forbid":["A quale piatto metto","intendi"]},"note":""}
+]

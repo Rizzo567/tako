@@ -42,8 +42,11 @@ describe('account titolare: email, password e link',()=>{
   for(const bad of['','mario','mario@','@gmail.com','mario@gmail','ma rio@gmail.com',null,42,'a@b.c','mario..rossi@gmail.com','.mario@gmail.com'])expect(ownerEmailSchema(bad as any)).toBeNull()})
  it('password: tre parole diverse, minuscole, separate da punto, dalla lista',()=>{
   expect(passwordWords.length).toBeGreaterThanOrEqual(190);expect(new Set(passwordWords).size).toBe(passwordWords.length)
-  for(let i=0;i<200;i++){const p=simplePassword(),parts=p.split('.');expect(parts).toHaveLength(3);expect(new Set(parts).size).toBe(3);for(const w of parts){expect(passwordWords).toContain(w);expect(w).toMatch(/^[a-z]+$/)}}
-  const seq=[0,1,1,2];expect(simplePassword(()=>seq.shift()!)).toBe(passwordWords.slice(0,3).join('.'))})
+  // 27/10 (v188): «Parola-Parola00», due parole diverse, cifre 00–99.
+  for(let i=0;i<500;i++){const p=simplePassword(),m=p.match(/^([A-Z][a-z]+)-([A-Z][a-z]+)(\d{2})$/);expect(m,p).not.toBeNull();const [a,b]=[m![1]!.toLowerCase(),m![2]!.toLowerCase()];expect(a).not.toBe(b);expect(passwordWords).toContain(a);expect(passwordWords).toContain(b)}
+  const cap=(w:string)=>w[0]!.toUpperCase()+w.slice(1)
+  let seq=[0,0,7];expect(simplePassword(()=>seq.shift()!)).toBe(cap(passwordWords[0]!)+'-'+cap(passwordWords[1]!)+'07')
+  seq=[5,2,99];expect(simplePassword(()=>seq.shift()!)).toBe(cap(passwordWords[5]!)+'-'+cap(passwordWords[2]!)+'99')})
  it('link: dashboard /staff/ e menu pubblico del locale (slug se c’è, altrimenti /r/<id>/menu)',()=>{
   expect(dashboardUrl()).toMatch(/^https:\/\/[^/]+\/staff\/$/)
   expect(publicMenuUrl('528e263c-634e-4695-9632-6c5cc6a3302f')).toMatch(/\/victoria-bar$/)

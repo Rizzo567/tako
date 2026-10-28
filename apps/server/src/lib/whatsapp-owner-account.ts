@@ -29,7 +29,8 @@ export const passwordWords=('acqua alba alce abete alga alpe ambra amico ancora 
  'tavolo tazza teatro tela tetto tigre timo topo torre torta trave treno tromba tulipano uovo uva vaso vela vento verde vetro viola vite volpe zaino '+
  'zebra zucca').split(' ')
 /** Tre parole diverse separate da punto, es. «pane.sole.mare». */
-export function simplePassword(pick:(n:number)=>number=randomInt):string{const out:string[]=[];while(out.length<3){const w=passwordWords[pick(passwordWords.length)]!;if(!out.includes(w))out.push(w)}return out.join('.')}
+// 27/10 (decisione Manuel, online dalla v188): due parole diverse con iniziale maiuscola, trattino, due cifre 00–99 («Barca-Ape07»).
+export function simplePassword(pick:(n:number)=>number=randomInt):string{const first=pick(passwordWords.length),secondIndex=pick(passwordWords.length-1),second=secondIndex>=first?secondIndex+1:secondIndex,title=(w:string)=>w.charAt(0).toUpperCase()+w.slice(1);return title(passwordWords[first]!)+'-'+title(passwordWords[second]!)+String(pick(100)).padStart(2,'0')}
 export type OwnerAccount={id:string,username:string,created:boolean,password?:string}|{blocked:true}
 type Link={phone:string,tenant:string,actor:string}
 /** 19/10 sera: stessa regola del login (auth.ts: z.string().trim().email()), così il pannello non accetta email che il login rifiuta. */

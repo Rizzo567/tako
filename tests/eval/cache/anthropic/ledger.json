@@ -17618,7 +17618,406 @@
    "usd": 0.015607,
    "usdEquivalent": 0.015607,
    "finished": true
+  },
+  {
+   "id": "2026-10-28T11:45:31.559Z-sost-1024-record",
+   "at": "2026-10-28T11:45:33.650Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 0,
+   "real": 0,
+   "hits": 0,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:45:55.051Z-sost-1024-record",
+   "at": "2026-10-28T11:47:09.451Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 30,
+   "real": 30,
+   "hits": 0,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 28350,
+    "output": 5102,
+    "cacheRead": 315218,
+    "cacheWrite": 50684
+   },
+   "usd": 0.014874,
+   "usdEquivalent": 0.014874,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:47:10.401Z-sost-1024-record",
+   "at": "2026-10-28T11:47:52.204Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 38,
+   "real": 15,
+   "hits": 23,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 38221,
+    "output": 6889,
+    "cacheRead": 419836,
+    "cacheWrite": 44076
+   },
+   "usd": 0.006276,
+   "usdEquivalent": 0.016974,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:48:17.767Z-sost-1024-record",
+   "at": "2026-10-28T11:48:30.790Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 5,
+   "real": 4,
+   "hits": 1,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 1227,
+    "output": 2134,
+    "cacheRead": 60975,
+    "cacheWrite": 0
+   },
+   "usd": 0.00143,
+   "usdEquivalent": 0.001799,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:49:40.901Z-sost-1024-record",
+   "at": "2026-10-28T11:49:52.522Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 7,
+   "real": 4,
+   "hits": 3,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 3201,
+    "output": 1678,
+    "cacheRead": 85305,
+    "cacheWrite": 0
+   },
+   "usd": 0.001086,
+   "usdEquivalent": 0.002012,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:50:22.289Z-sost-1024-replay",
+   "at": "2026-10-28T11:50:22.974Z",
+   "set": "sost-1024",
+   "mode": "replay",
+   "calls": 3,
+   "real": 0,
+   "hits": 3,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 866,
+    "output": 947,
+    "cacheRead": 36585,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0.000926,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:50:51.257Z-sost-1024-replay",
+   "at": "2026-10-28T11:50:52.311Z",
+   "set": "sost-1024",
+   "mode": "replay",
+   "calls": 7,
+   "real": 0,
+   "hits": 7,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 3201,
+    "output": 1678,
+    "cacheRead": 85305,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0.002012,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:51:12.646Z-sost-1024-replay",
+   "at": "2026-10-28T11:51:13.440Z",
+   "set": "sost-1024",
+   "mode": "replay",
+   "calls": 4,
+   "real": 0,
+   "hits": 4,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 2335,
+    "output": 731,
+    "cacheRead": 48720,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0.001086,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:51:22.741Z-sost-1024-replay",
+   "at": "2026-10-28T11:51:23.504Z",
+   "set": "sost-1024",
+   "mode": "replay",
+   "calls": 4,
+   "real": 0,
+   "hits": 4,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 2335,
+    "output": 731,
+    "cacheRead": 48720,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0.001086,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:51:49.496Z-sost-1024-replay",
+   "at": "2026-10-28T11:51:50.428Z",
+   "set": "sost-1024",
+   "mode": "replay",
+   "calls": 5,
+   "real": 0,
+   "hits": 5,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 1947,
+    "output": 1309,
+    "cacheRead": 60945,
+    "cacheWrite": 0
+   },
+   "usd": 0,
+   "usdEquivalent": 0.001459,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:52:16.486Z-sost-1024-record",
+   "at": "2026-10-28T11:52:51.197Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 62,
+   "real": 0,
+   "hits": 62,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 12957,
+    "output": 19635,
+    "cacheRead": 719225,
+    "cacheWrite": 36920
+   },
+   "usd": 0,
+   "usdEquivalent": 0.02292,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:52:59.164Z-sost-1024-record",
+   "at": "2026-10-28T11:53:45.115Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 14,
+   "real": 0,
+   "hits": 14,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 2018,
+    "output": 4646,
+    "cacheRead": 153062,
+    "cacheWrite": 17718
+   },
+   "usd": 0,
+   "usdEquivalent": 0.00627,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:53:48.207Z-sost-1024-record",
+   "at": "2026-10-28T11:54:24.289Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 28,
+   "real": 9,
+   "hits": 19,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 26503,
+    "output": 4733,
+    "cacheRead": 290803,
+    "cacheWrite": 50640
+   },
+   "usd": 0.003983,
+   "usdEquivalent": 0.014255,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T11:54:25.476Z-sost-1024-record",
+   "at": "2026-10-28T11:56:15.641Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 23,
+   "real": 23,
+   "hits": 0,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 4277,
+    "output": 15592,
+    "cacheRead": 264023,
+    "cacheWrite": 16461
+   },
+   "usd": 0.012922,
+   "usdEquivalent": 0.012922,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T12:04:15.481Z-sost-1024-record",
+   "at": "2026-10-28T12:04:24.644Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 22,
+   "real": 0,
+   "hits": 22,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 4228,
+    "output": 14783,
+    "cacheRead": 251828,
+    "cacheWrite": 16461
+   },
+   "usd": 0,
+   "usdEquivalent": 0.01239,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T12:04:25.609Z-sost-1024-record",
+   "at": "2026-10-28T12:04:52.577Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 62,
+   "real": 0,
+   "hits": 62,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 12957,
+    "output": 19635,
+    "cacheRead": 719225,
+    "cacheWrite": 36920
+   },
+   "usd": 0,
+   "usdEquivalent": 0.02292,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T12:04:53.588Z-sost-1024-record",
+   "at": "2026-10-28T12:05:00.056Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 14,
+   "real": 0,
+   "hits": 14,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 2018,
+    "output": 4646,
+    "cacheRead": 153062,
+    "cacheWrite": 17718
+   },
+   "usd": 0,
+   "usdEquivalent": 0.00627,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T12:05:00.864Z-sost-1024-record",
+   "at": "2026-10-28T12:05:12.961Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 28,
+   "real": 0,
+   "hits": 28,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 26503,
+    "output": 4733,
+    "cacheRead": 290803,
+    "cacheWrite": 50640
+   },
+   "usd": 0,
+   "usdEquivalent": 0.014255,
+   "finished": true
+  },
+  {
+   "id": "2026-10-28T12:05:37.300Z-sost-1024-record",
+   "at": "2026-10-28T12:05:42.057Z",
+   "set": "sost-1024",
+   "mode": "record",
+   "calls": 5,
+   "real": 0,
+   "hits": 5,
+   "misses": 0,
+   "refused": 0,
+   "rateLimited": 0,
+   "tokens": {
+    "input": 5436,
+    "output": 928,
+    "cacheRead": 52759,
+    "cacheWrite": 8246
+   },
+   "usd": 0,
+   "usdEquivalent": 0.002566,
+   "finished": true
   }
  ],
- "totalUsd": 2.900949
+ "totalUsd": 2.94152
 }

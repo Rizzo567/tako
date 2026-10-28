@@ -1,0 +1,1279 @@
+[
+ {
+  "id": "luisa-giornata",
+  "turns": [
+   {
+    "said": "Buongiorno",
+    "reply": "Buongiorno! Dimmi pure cosa vuoi aggiornare nel menu.",
+    "ms": 354,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "Menù mezzogiorno da 12 euro togli tutti i primi",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• nessun piatto\n\nEliminati: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca.\n\nOra scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carbonara».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 294.6,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → "
+    ]
+   },
+   {
+    "said": "Metti nei primi lasagna al forno  pasta e fagioli  risotto ai funghi",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Lasagna al forno (nuovo)\n• Pasta e fagioli (nuovo)\n• Risotto ai funghi (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 211.6,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi:  → Lasagna al forno, Pasta e fagioli, Risotto ai funghi"
+    ]
+   },
+   {
+    "said": "Togli tutti i secondi",
+    "reply": "*Menu Giorno aggiornato*\n\n*Secondi*\n• nessun piatto\n\nEliminati: Cotoletta, Arrosto.\n\nOra scrivimi i piatti nuovi, per esempio «nei secondi inserisci lasagna, carbonara».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 336.1,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Cotoletta, Arrosto → "
+    ]
+   },
+   {
+    "said": "Nei secondi metti",
+    "reply": "",
+    "ms": 0,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi:  → Cotoletta alla milanese, Scaloppine al limone, Polpette al sugo"
+    ]
+   },
+   {
+    "said": "Cotoletta alla milanese  scaloppine al limone polpette al sugo",
+    "reply": "Cosa inserisco nei *Secondi* del *Menu Giorno*? Scrivimi i piatti, per esempio «carbonara, lasagne».\n*Menu Giorno aggiornato*\n\n*Secondi*\n• Cotoletta alla milanese (nuovo)\n• Scaloppine al limone (nuovo)\n• Polpette al sugo (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 1622.4,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "Togli tutti i contorni",
+    "reply": "*Menu Giorno aggiornato*\n\n*Contorni*\n• nessun piatto\n\nEliminati: Patate al forno, Spinaci.\n\nOra scrivimi i piatti nuovi, per esempio «nei contorni inserisci lasagna, carbonara».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 109,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Contorni: Patate al forno, Spinaci → "
+    ]
+   },
+   {
+    "said": "Metti nei contorni patate al forno insalata",
+    "reply": "*Menu Giorno aggiornato*\n\n*Contorni*\n• Patate al forno (nuovo)\n• Insalata (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 116.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Contorni:  → Patate al forno, Insalata"
+    ]
+   },
+   {
+    "said": "Scusa la pasta e fagioli è finita",
+    "reply": "Ok, segno *Pasta e fagioli* come esaurita.\n\n*Pasta e fagioli*: *finito*",
+    "ms": 343.8,
+    "llm": 1,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna al forno, Pasta e fagioli, Risotto ai funghi → Lasagna al forno, Pasta e fagioli (finito), Risotto ai funghi"
+    ]
+   },
+   {
+    "said": "Rinomina risotto ai funghi in risotto ai porcini",
+    "reply": "*Risotto ai funghi*: nuovo nome *Risotto ai porcini*\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 231,
+    "llm": 1,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna al forno, Pasta e fagioli (finito), Risotto ai funghi → Lasagna al forno, Pasta e fagioli (finito), Risotto ai porcini"
+    ]
+   },
+   {
+    "said": "Il primo del menu da 12 costa 9",
+    "reply": "Il *Solo primo* del *Menu Giorno* è già *9,00 €*: non ho cambiato nulla.",
+    "ms": 65.6,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "Il solo secondo a pranzo mettilo a 11",
+    "reply": "*Solo secondo* del *Menu Giorno*: da 10,00 € a *11,00 €*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 135.4,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›opzione Solo secondo: 10 → 11"
+    ]
+   },
+   {
+    "said": "Si",
+    "reply": "Ok, ho registrato. Vuoi aggiungere altro al menu?",
+    "ms": 213.7,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "Quanto costa il menu sera",
+    "reply": "Il *Menu Cena* è a prezzo fisso. Opzioni: *Completo* 16,90 € · *Solo primo* 12,00 € · *Solo secondo* 14,00 €. Compreso: ¼ di vino oppure ½ litro d’acqua + caffè.",
+    "ms": 141,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "Stasera togli i primi",
+    "reply": "*Menu Cena aggiornato*\n\n*Primi*\n• nessun piatto\n\nEliminati: tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara.\n\nOra scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carbonara».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 115.7,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Primi: tagliatelle vongole totano zucchine e pomodorini, tortiglioni alla norma con ricotta salata, linguine alla carbonara → "
+    ]
+   },
+   {
+    "said": "E inserisci",
+    "reply": "",
+    "ms": 0,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Primi:  → Tagliatelle al ragù, Gnocchi alla sorrentina, Spaghetti alle vongole"
+    ]
+   },
+   {
+    "said": "Tagliatelle al ragù  gnocchi alla sorrentina spaghetti alle vongole",
+    "reply": "Cosa inserisco nei *Primi* del *Menu Cena*? Scrivimi i piatti, per esempio «lasagna, carbonara».\n*Menu Cena aggiornato*\n\n*Primi*\n• Tagliatelle al ragù (nuovo)\n• Gnocchi alla sorrentina (nuovo)\n• Spaghetti alle vongole (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 1326.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "Togli tutti i secondi della cena",
+    "reply": "*Menu Cena aggiornato*\n\n*Secondi*\n• nessun piatto\n\nEliminati: branzino al forno, scaloppine al vino bianco, pollo al forno.\n\nOra scrivimi i piatti nuovi, per esempio «nei secondi inserisci lasagna, carbonara».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 143,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Secondi: branzino al forno, scaloppine al vino bianco, pollo al forno → "
+    ]
+   },
+   {
+    "said": "Metti nei secondi tagliata di manzo  branzino al forno",
+    "reply": "*Menu Cena aggiornato*\n\n*Secondi*\n• Tagliata di manzo (nuovo)\n• Branzino al forno (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 129,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Secondi:  → Tagliata di manzo, Branzino al forno"
+    ]
+   },
+   {
+    "said": "Annulla",
+    "reply": "Ok, annullo l’ultima modifica.\n\n*Tagliata di manzo*: tolto (era stato aggiunto)\n*Branzino al forno*: tolto (era stato aggiunto)",
+    "ms": 196,
+    "llm": 1,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Secondi: Tagliata di manzo, Branzino al forno → "
+    ]
+   },
+   {
+    "said": "Metti nei secondi tagliata di manzo  orata al forno",
+    "reply": "*Menu Cena aggiornato*\n\n*Secondi*\n• Tagliata di manzo (nuovo)\n• Orata al forno (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 132.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Secondi:  → Tagliata di manzo, Orata al forno"
+    ]
+   },
+   {
+    "said": "Togli la melanzana al forno dalla cena",
+    "reply": "Tolgo *melanzana al forno* dal Menu Cena.\n\n*melanzana al forno*: *eliminato* dal menu\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 247.9,
+    "llm": 1,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Contorni: Patate al forno, Insalata mista, melanzana al forno, insalata verde, patate al forno → Patate al forno, Insalata mista, insalata verde, patate al forno"
+    ]
+   },
+   {
+    "said": "allora nei contorni della cena aggiungi anche spinaci al burro",
+    "reply": "*Menu Cena aggiornato*\n\n*Contorni*\n• Patate al forno\n• Insalata mista\n• insalata verde\n• patate al forno\n• Spinaci al burro (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 133,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Contorni: Patate al forno, Insalata mista, insalata verde, patate al forno → Patate al forno, Insalata mista, insalata verde, patate al forno, Spinaci al burro"
+    ]
+   },
+   {
+    "said": "Il completo della cena mettilo a 17",
+    "reply": "*Completo* del *Menu Cena*: da 16,90 € a *17,00 €*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 136.4,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›opzione Completo: 16.9 → 17"
+    ]
+   },
+   {
+    "said": "Si",
+    "reply": "Non c'è nulla da confermare adesso. Dimmi quale modifica vuoi fare nel *Menu Cena*.",
+    "ms": 223.8,
+    "llm": 2,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "Nei primi del pranzo inserici anche carbonara",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Lasagna al forno\n• Pasta e fagioli\n• Risotto ai porcini\n• Carbonara (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 129.4,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna al forno, Pasta e fagioli (finito), Risotto ai porcini → Lasagna al forno, Pasta e fagioli (finito), Risotto ai porcini, Carbonara"
+    ]
+   },
+   {
+    "said": "No la carbonara toglila",
+    "reply": "*Carbonara*: tolto (l’avevo appena aggiunto)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 144.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna al forno, Pasta e fagioli (finito), Risotto ai porcini, Carbonara → Lasagna al forno, Pasta e fagioli (finito), Risotto ai porcini"
+    ]
+   },
+   {
+    "said": "Quanto costa il menu sera",
+    "reply": "Il *Menu Cena* è a prezzo fisso. Opzioni: *Completo* 17,00 € · *Solo primo* 12,00 € · *Solo secondo* 14,00 €. Compreso: ¼ di vino oppure ½ litro d’acqua + caffè.",
+    "ms": 132,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "Grazie",
+    "reply": "Di niente! Se serve altro, scrivimi pure.",
+    "ms": 127.8,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna al forno",
+    "Pasta e fagioli (finito)",
+    "Risotto ai porcini"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta alla milanese",
+    "Scaloppine al limone",
+    "Polpette al sugo"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Insalata"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "11"
+   ],
+   "Menu Cena›Primi": [
+    "Tagliatelle al ragù",
+    "Gnocchi alla sorrentina",
+    "Spaghetti alle vongole"
+   ],
+   "Menu Cena›Secondi": [
+    "Tagliata di manzo",
+    "Orata al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "insalata verde",
+    "patate al forno",
+    "Spinaci al burro"
+   ],
+   "Menu Cena›opzione Completo": [
+    "17"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 11469
+ },
+ {
+  "id": "scrive-malissimo",
+  "turns": [
+   {
+    "said": "ciao",
+    "reply": "Ciao! Dimmi pure cosa vuoi aggiornare nel menu.",
+    "ms": 82,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "aiuto",
+    "reply": "Scrivimi come a un collega, anche con un vocale. Per esempio:\n• «togli i primi del pranzo», poi «inserisci lasagna, carbonara»\n• «la carbonara è finita»\n• «aggiungi la panna cotta a 5 nei dolci»\n• «annulla» per tornare indietro",
+    "ms": 53.6,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "come si fa?",
+    "reply": "Scrivimi come a un collega, anche con un vocale. Per esempio:\n• «togli i primi del pranzo», poi «inserisci lasagna, carbonara»\n• «la carbonara è finita»\n• «aggiungi la panna cotta a 5 nei dolci»\n• «annulla» per tornare indietro",
+    "ms": 62.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "x pranzo togli tutti i primi",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• nessun piatto\n\nEliminati: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca.\n\nOra scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carbonara».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 130.1,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → "
+    ]
+   },
+   {
+    "said": "nei primi metti carbo amatri e lasagna",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Carbonara (nuovo)\n• Amatriciana (nuovo)\n• Lasagna (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 135,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi:  → Carbonara, Amatriciana, Lasagna"
+    ]
+   },
+   {
+    "said": "si si",
+    "reply": "Non ho modifiche in sospeso da confermare: Carbonara, Amatriciana e Lasagna sono già nel Menu Giorno. Cosa vuoi fare adesso?",
+    "ms": 185.8,
+    "llm": 2,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "anzi no la lasagna nn la mettere",
+    "reply": "*Lasagna*: tolto (l’avevo appena aggiunto)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 124.8,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Carbonara, Amatriciana, Lasagna → Carbonara, Amatriciana"
+    ]
+   },
+   {
+    "said": "x pranzo secondo cotoletta e polpette",
+    "reply": "*Menu Giorno aggiornato*\n\n*Secondi*\n• Polpette\n• Cotoletta\n\nEliminati: Arrosto\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 132.2,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Polpette"
+    ]
+   },
+   {
+    "said": "ok",
+    "reply": "Ci sto lavorando…\nOk, ho capito. Vuoi confermare le ultime modifiche al *Menu Giorno*?",
+    "ms": 6446.8,
+    "llm": 2,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "👍",
+    "reply": "Non c’è niente da confermare: dimmi pure cosa vuoi cambiare, per esempio «la carbonara a 12».",
+    "ms": 56.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "x pranzo contorni patate al forno e insalata",
+    "reply": "*Menu Giorno aggiornato*\n\n*Contorni*\n• Insalata\n• Patate al forno\n\nEliminati: Spinaci\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 134.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Contorni: Patate al forno, Spinaci → Patate al forno, Insalata"
+    ]
+   },
+   {
+    "said": "il completo a pranzo dodici euro",
+    "reply": "Il *Completo* del *Menu Giorno* è già *12,00 €*: non ho cambiato nulla.",
+    "ms": 61.8,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "no aspetta tredici",
+    "reply": "*Completo* del *Menu Giorno*: da 12,00 € a *13,00 €*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 143.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›opzione Completo: 12 → 13"
+    ]
+   },
+   {
+    "said": "si si",
+    "reply": "Non c’è niente in sospeso: dimmi pure cosa vuoi cambiare.",
+    "ms": 3369.9,
+    "llm": 2,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "nn capisco",
+    "reply": "Scrivimi come a un collega, anche con un vocale. Per esempio:\n• «togli i primi del pranzo», poi «inserisci lasagna, carbonara»\n• «la carbonara è finita»\n• «aggiungi la panna cotta a 5 nei dolci»\n• «annulla» per tornare indietro",
+    "ms": 58.6,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "stasera via tutti i secondi",
+    "reply": "*Menu Cena aggiornato*\n\n*Secondi*\n• nessun piatto\n\nEliminati: branzino al forno, scaloppine al vino bianco, pollo al forno.\n\nOra scrivimi i piatti nuovi, per esempio «nei secondi inserisci lasagna, carbonara».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 146.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Secondi: branzino al forno, scaloppine al vino bianco, pollo al forno → "
+    ]
+   },
+   {
+    "said": "metti tagliata  orata",
+    "reply": "*Menu Cena aggiornato*\n\n*Secondi*\n• Tagliata (nuovo)\n• Orata (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 135.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Secondi:  → Tagliata, Orata"
+    ]
+   },
+   {
+    "said": "quanto costa il menu sera",
+    "reply": "Il *Menu Cena* è a prezzo fisso. Opzioni: *Completo* 16,90 € · *Solo primo* 12,00 € · *Solo secondo* 14,00 €. Compreso: ¼ di vino oppure ½ litro d’acqua + caffè.",
+    "ms": 1718.8,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "togli la carbo",
+    "reply": "*Carbonara*: *eliminato* dal menu\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 141.7,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Carbonara, Amatriciana → Amatriciana"
+    ]
+   },
+   {
+    "said": "annulla",
+    "reply": "Ok, annullo l’ultima modifica.\n\n*Carbonara*: com’era prima",
+    "ms": 2334.1,
+    "llm": 1,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Amatriciana → Carbonara, Amatriciana"
+    ]
+   },
+   {
+    "said": "va bene",
+    "reply": "Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12».",
+    "ms": 4281.5,
+    "llm": 2,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "grazie ciao",
+    "reply": "Figurati, a presto! Se serve qualcosa scrivimi pure.",
+    "ms": 1866.3,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Carbonara",
+    "Amatriciana"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Polpette"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Insalata"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "13"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "Tagliata",
+    "Orata"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": {
+   "kind": "brain_ask",
+   "question": "Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12».",
+   "ids": [],
+   "actions": [],
+   "source": "va bene",
+   "origin": "va bene",
+   "rounds": 1,
+   "draft": null
+  },
+  "ms": 21833
+ },
+ {
+  "id": "sost-giornata",
+  "turns": [
+   {
+    "said": "nel menu pranzo togli i primi",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• nessun piatto\n\nEliminati: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca.\n\nOra scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carbonara».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 134.2,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → "
+    ]
+   },
+   {
+    "said": "togli anche i secondi e i contorni",
+    "reply": "*Menu Giorno aggiornato*\n\n*Secondi*\n• nessun piatto\n\n*Contorni*\n• nessun piatto\n\nEliminati: Cotoletta, Arrosto, Patate al forno, Spinaci.\n\nOra scrivimi i piatti nuovi, per esempio «nei secondi inserisci lasagna, carbonara».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 138.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Cotoletta, Arrosto → ",
+     "Menu Giorno›Contorni: Patate al forno, Spinaci → "
+    ]
+   },
+   {
+    "said": "ok primi metti lasagna , strozzapreti con zola e pistacchio orecchiette con zucca",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Lasagna (nuovo)\n• Strozzapreti con zola e pistacchio (nuovo)\n• Orecchiette con zucca (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 130.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi:  → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca"
+    ]
+   },
+   {
+    "said": "come secondi metti cotoletta arrosto e contorni patate al forno e spinaci",
+    "reply": "*Menu Giorno aggiornato*\n\n*Secondi*\n• Cotoletta (nuovo)\n• Arrosto (nuovo)\n\n*Contorni*\n• Patate al forno (nuovo)\n• Spinaci (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 123.8,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi:  → Cotoletta, Arrosto",
+     "Menu Giorno›Contorni:  → Patate al forno, Spinaci"
+    ]
+   },
+   {
+    "said": "menu mezzogirno togli lasagna metti rigatoni",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Strozzapreti con zola e pistacchio\n• Orecchiette con zucca\n• Rigatoni (nuovo)\n\nTolto: *Lasagna*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 129.1,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni"
+    ]
+   },
+   {
+    "said": "la cotoletta è finita",
+    "reply": "*Cotoletta*: *finito*",
+    "ms": 117.1,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta (finito), Arrosto"
+    ]
+   },
+   {
+    "said": "rimettila",
+    "reply": "Ok, rimetto *Cotoletta* disponibile.\n\n*Cotoletta*: di nuovo *disponibile*",
+    "ms": 315.3,
+    "llm": 1,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Cotoletta (finito), Arrosto → Cotoletta, Arrosto"
+    ]
+   },
+   {
+    "said": "al posto delle orechiette metti gnocchi al pomodoro",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Strozzapreti con zola e pistacchio\n• Rigatoni\n• Gnocchi al pomodoro (nuovo)\n\nTolto: *Orecchiette con zucca*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 156.6,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni → Strozzapreti con zola e pistacchio, Rigatoni, Gnocchi al pomodoro"
+    ]
+   },
+   {
+    "said": "togli patate al forno metti patate fritte",
+    "reply": "*Menu Giorno aggiornato*\n\n*Contorni*\n• Spinaci\n• Patate fritte (nuovo)\n\nTolto: *Patate al forno*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 125.1,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Contorni: Patate al forno, Spinaci → Spinaci, Patate fritte"
+    ]
+   },
+   {
+    "said": "1",
+    "reply": "Non mi è chiaro cosa vuoi fare con «1». Cosa intendi cambiare?",
+    "ms": 118,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "cambia gli spinaci con la cicoria",
+    "reply": "*Menu Giorno aggiornato*\n\n*Contorni*\n• Patate fritte\n• Cicoria (nuovo)\n\nTolto: *Spinaci*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 115.8,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Contorni: Spinaci, Patate fritte → Patate fritte, Cicoria"
+    ]
+   },
+   {
+    "said": "x stasera togli il pollo al forno e metti la salsiccia alla griglia",
+    "reply": "*Menu Cena aggiornato*\n\n*Secondi*\n• branzino al forno\n• scaloppine al vino bianco\n• Salsiccia alla griglia (nuovo)\n\nTolto: *pollo al forno*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 119.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Cena›Secondi: branzino al forno, scaloppine al vino bianco, pollo al forno → branzino al forno, scaloppine al vino bianco, Salsiccia alla griglia"
+    ]
+   },
+   {
+    "said": "porta il tiramisu a 6 euro",
+    "reply": "Non trovo il *Tiramisù* nel menu. Intendi un altro piatto?",
+    "ms": 158.7,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "la cotoletta mettila a 5 euro",
+    "reply": "A quale piatto metto *5,00 €*? Scrivimi il nome, per esempio «la carbonara a 5».",
+    "ms": 334.2,
+    "llm": 2,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "togli gli strozapreti metti i ravioli",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Rigatoni\n• Gnocchi al pomodoro\n• Ravioli (nuovo)\n\nTolto: *Strozzapreti con zola e pistacchio*.\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 146.4,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Strozzapreti con zola e pistacchio, Rigatoni, Gnocchi al pomodoro → Rigatoni, Gnocchi al pomodoro, Ravioli"
+    ]
+   },
+   {
+    "said": "nei secondi del pranzo metti salsiccia alla griglia  funghi misti e peperoni",
+    "reply": "Ho capito così, nei *Secondi* del *Menu Giorno*:\n\n• Salsiccia alla griglia\n• Funghi misti\n• Peperoni\n\nVa bene? Rispondi *sì* oppure scrivimi cosa correggere.",
+    "ms": 58.9,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "si",
+    "reply": "*Menu Giorno aggiornato*\n\n*Secondi*\n• Cotoletta\n• Arrosto\n• Salsiccia alla griglia (nuovo)\n• Funghi misti (nuovo)\n• Peperoni (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 136.7,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Salsiccia alla griglia, Funghi misti, Peperoni"
+    ]
+   },
+   {
+    "said": "elimina l arrosto",
+    "reply": "Elimino *Arrosto* dal menu? Rispondi *sì*.\n\nDa eliminare, serve il tuo sì:\n1. *Arrosto*: da eliminare",
+    "ms": 54.5,
+    "llm": 0,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "si",
+    "reply": "*Arrosto*: *eliminato* dal menu",
+    "ms": 135.4,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Secondi: Cotoletta, Arrosto, Salsiccia alla griglia, Funghi misti, Peperoni → Cotoletta, Salsiccia alla griglia, Funghi misti, Peperoni"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Rigatoni",
+    "Gnocchi al pomodoro",
+    "Ravioli"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Salsiccia alla griglia",
+    "Funghi misti",
+    "Peperoni"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate fritte",
+    "Cicoria"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "Salsiccia alla griglia"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 2772
+ }
+]

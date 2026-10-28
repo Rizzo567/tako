@@ -1,0 +1,478 @@
+[
+ {
+  "id": "anzi-no-sisi",
+  "turns": [
+   {
+    "said": "x pranzo togli tutti i primi",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• nessun piatto\n\nEliminati: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca.\n\nOra scrivimi i piatti nuovi, per esempio «nei primi inserisci lasagna, carbonara».\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 72.7,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → "
+    ]
+   },
+   {
+    "said": "nei primi metti carbo amatri e lasagna",
+    "reply": "*Menu Giorno aggiornato*\n\n*Primi*\n• Carbonara (nuovo)\n• Amatriciana (nuovo)\n• Lasagna (nuovo)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 48.3,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi:  → Carbonara, Amatriciana, Lasagna"
+    ]
+   },
+   {
+    "said": "si si",
+    "reply": "Cosa vuoi cambiare? Scrivimi il piatto e la modifica, per esempio «la carbonara a 12».",
+    "ms": 106.8,
+    "llm": 2,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "anzi no la lasagna nn la mettere",
+    "reply": "*Lasagna*: tolto (l’avevo appena aggiunto)\n\nPer tornare come prima scrivi *annulla* entro 10 minuti.",
+    "ms": 39.1,
+    "llm": 0,
+    "miss": 0,
+    "diff": [
+     "Menu Giorno›Primi: Carbonara, Amatriciana, Lasagna → Carbonara, Amatriciana"
+    ]
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Carbonara",
+    "Amatriciana"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": null,
+  "ms": 778
+ },
+ {
+  "id": "cotoletta-ctx",
+  "turns": [
+   {
+    "said": "porta il tiramisu a 6 euro",
+    "reply": "Non trovo il *Tiramisù* nel menu. Lo aggiungo come nuovo piatto a 6 €? In quale Sottomenu?",
+    "ms": 55.8,
+    "llm": 1,
+    "miss": 0,
+    "diff": []
+   },
+   {
+    "said": "la cotoletta mettila a 5 euro",
+    "reply": "*Cotoletta* è nel *Menu Giorno* a prezzo fisso: il piatto non ha un prezzo suo, si paga l’opzione (*Completo* 12,00 € · *Solo primo* 9,00 € · *Solo secondo* 10,00 €). Per cambiarla scrivi per esempio «il completo del pranzo a 13». Non ho cambiato nulla.",
+    "ms": 89.1,
+    "llm": 2,
+    "miss": 0,
+    "diff": []
+   }
+  ],
+  "final": {
+   "Menu Giorno›Primi": [
+    "Lasagna",
+    "Strozzapreti con zola e pistacchio",
+    "Orecchiette con zucca"
+   ],
+   "Menu Giorno›Secondi": [
+    "Cotoletta",
+    "Arrosto"
+   ],
+   "Menu Giorno›Contorni": [
+    "Patate al forno",
+    "Spinaci"
+   ],
+   "Menu Giorno›opzione Completo": [
+    "12"
+   ],
+   "Menu Giorno›opzione Solo primo": [
+    "9"
+   ],
+   "Menu Giorno›opzione Solo secondo": [
+    "10"
+   ],
+   "Menu Cena›Primi": [
+    "tagliatelle vongole totano zucchine e pomodorini",
+    "tortiglioni alla norma con ricotta salata",
+    "linguine alla carbonara"
+   ],
+   "Menu Cena›Secondi": [
+    "branzino al forno",
+    "scaloppine al vino bianco",
+    "pollo al forno"
+   ],
+   "Menu Cena›Contorni": [
+    "Patate al forno",
+    "Insalata mista",
+    "melanzana al forno",
+    "insalata verde",
+    "patate al forno"
+   ],
+   "Menu Cena›opzione Completo": [
+    "16.9"
+   ],
+   "Menu Cena›opzione Solo primo": [
+    "12"
+   ],
+   "Menu Cena›opzione Solo secondo": [
+    "14"
+   ],
+   "Drinks›Birre": [
+    "Birra piccola alla spina HELL/LAGER 3.5",
+    "Birra media alla spina HELL/LAGER 5.5",
+    "Josefi lager scura 50 cl 5.5 gradi 5",
+    "Red doppio malto rossa 33 cl 8.5 gradi 5.5",
+    "Birra 66 cl 5",
+    "Birra 33 cl 3.5"
+   ],
+   "Drinks›Amari e distillati": [
+    "Amari 3.5",
+    "Grappe 3.5",
+    "Whisky 5",
+    "Limoncello/Mirto/Liquirizia 3.5"
+   ],
+   "Drinks›Bevande": [
+    "Acqua ½ L 2",
+    "Acqua 1 L 3",
+    "Bibita 3.5"
+   ],
+   "Drinks›Caffetteria": [
+    "Caffè 1.5",
+    "Decaffeinato 2",
+    "Corretto 2.5"
+   ],
+   "Alla carta›Antipasti di terra": [
+    "Affettato misto 10",
+    "Bruschetta 6",
+    "Caprese 10",
+    "Prosciutto crudo e melone di stagione 10",
+    "Antipasto misto terra + Formaggi 13"
+   ],
+   "Alla carta›Primi piatti": [
+    "Linguine allo scoglio 16",
+    "Linguine alla carbonara di mare 16",
+    "Spaghetti alla carbonara 10",
+    "Spaghetti alle vongole 14",
+    "Paccheri alla pescatora 15",
+    "Paccheri alla Totò 10",
+    "Gnocchi alla sorrentina al forno 10",
+    "Penne alla Victoria 12",
+    "Penne all'arrabbiata 10",
+    "Penne alla corsara 14",
+    "Pasta al pesto 8",
+    "Tortellini Prosciutto e Panna 10",
+    "Strozzapreti zucchine e speck 12",
+    "Paccheri al pomodoro 10",
+    "Penne cremose con rucola, carne e zafferano 12",
+    "Spaghetti o linguine con cozze 14",
+    "Tagliatelle con cozze e pomodorini 14",
+    "Tagliatelle zucchine e gamberi 14"
+   ],
+   "Alla carta›Antipasti di mare": [
+    "Bruschetta Victoria 8",
+    "Antipasto della casa caldo 15",
+    "Impepate di cozze 10",
+    "Zuppa di cozze 12",
+    "Cocktail di gamberi 10",
+    "Polpo rucola e patate 12",
+    "Capesante gratinate 4"
+   ],
+   "Alla carta›Secondi di pesce": [
+    "Orata o branzino al forno 16",
+    "Orata al forno con patate olive pomodorini 20",
+    "Tagliata di orata o branzino con rucola e grana 20",
+    "Fritto misto con verdure 18",
+    "Fritto solo totani 19",
+    "Gran misto di pesce gratinato per due 40",
+    "Gamberoni gratinati con carciofi 20",
+    "Gamberoni alla griglia 18"
+   ],
+   "Alla carta›Secondi di carne": [
+    "Tagliata rucola e grana 20",
+    "Tagliata con funghi porcini e panna 24",
+    "Scaloppine al limone 10",
+    "Scaloppine al marsala 12",
+    "Scaloppine con funghi porcini e panna 15",
+    "Gran misto di carne per due 40",
+    "Stinco di maiale al forno con contorno 16",
+    "Coppa di maiale con zucchine 14",
+    "Cotoletta di pollo con contorno 12",
+    "Cotoletta di nodino con contorno 14"
+   ],
+   "Alla carta›Contorni": [
+    "Insalata verde 3",
+    "Insalata mista 4",
+    "Patatine fritte 4"
+   ],
+   "Alla carta›Pizze e calzoni": [
+    "Focaccia bianca 5",
+    "Focaccia rossa 5",
+    "Marinara 6",
+    "Focaccia farcita 6",
+    "Margherita 7",
+    "Siciliana 7",
+    "Wurstel 8",
+    "Pulcinella 8",
+    "Pugliese 8",
+    "Tonno 9",
+    "Paoletta 8",
+    "Campagnola 8",
+    "Napoletana 9",
+    "Romana 9",
+    "Crudo 9",
+    "Zola 9",
+    "Ortolana 9",
+    "Calabrese 9",
+    "Fantasia 9",
+    "Parmigiana 9",
+    "Capricciosa 9.5",
+    "4 Stagioni 9.5",
+    "Tirolese 9.5",
+    "Bismarck 9",
+    "Primavera 10",
+    "4 Formaggi 9",
+    "Bufala 10",
+    "Porcini 10",
+    "Valtellinese 10",
+    "Salmone 12",
+    "Gamberetti 12",
+    "Garden 12",
+    "Porcini e salsiccia 14",
+    "Scoglio 14",
+    "Turbolenti 12",
+    "Pirata 15",
+    "Calzone 8",
+    "Calzone farcito 10",
+    "Mezzo metro Margherita 20",
+    "Mezzo metro farcita 26"
+   ],
+   "Alla carta›Insalatone": [
+    "Insalatona della casa 10",
+    "Insalatona della casa+gamberetti o tonno 12",
+    "Insalatona della casa+bufala 12"
+   ],
+   "Alla carta›Formaggi": [
+    "Formaggi misti 10",
+    "Porzione di grana 7"
+   ],
+   "Alla carta›Dolci": [
+    "Dolce della casa 5",
+    "Tartufo bianco 4",
+    "Tartufo al cioccolato 4",
+    "Torroncino 4",
+    "Meringa 4",
+    "Meringa con cioccolata calda 6",
+    "Sorbetto al limone/frutta 4",
+    "Sorbetto alla vodka 5",
+    "Torta della Nonna 4"
+   ]
+  },
+  "pending": {
+   "kind": "brain_ask",
+   "question": "*Cotoletta* è nel *Menu Giorno* a prezzo fisso: il piatto non ha un prezzo suo, si paga l’opzione (*Completo* 12,00 € · *Solo primo* 9,00 € · *Solo secondo* 10,00 €). Per cambiarla scrivi per esempio «il completo del pranzo a 13». Non ho cambiato nulla.",
+   "ids": [
+    "ce961515-7a53-4aec-9d11-f26ed935fab2"
+   ],
+   "actions": [],
+   "source": "porta il tiramisu a 6 euro \n la cotoletta mettila a 5 euro",
+   "origin": "porta il tiramisu a 6 euro",
+   "rounds": 2,
+   "draft": null
+  },
+  "ms": 151
+ }
+]

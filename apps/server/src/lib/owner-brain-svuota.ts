@@ -630,8 +630,9 @@ function swapClauses(t:Tok[]):SwapCl[]|null{
  const W=t.map(x=>x.w),cls:SwapCl[]=[]
  let i=0
  const skipLead=()=>{while(i<W.length&&(SW_LEAD.has(W[i]!)||COURSES.includes(W[i]!)||(PREP.has(W[i]!)&&W[i+1]!=='posto')||W[i]==='a'||[',',';',':'].includes(W[i]!)))i++}
- const findIn=(from:number)=>{for(let k=from;k<W.length;k++){if(SW_IN.test(W[k]!))return k;if(SW_OUT.test(W[k]!)&&k>from)return -1}return -1}
- const nextOut=(from:number)=>{for(let k=from;k<W.length;k++){if(SW_OUT.test(W[k]!)||SW_SUB.test(W[k]!)||(W[k]==='al'&&W[k+1]==='posto')||(W[k]==='invece'&&k>from))return k}return W.length}
+ // 28/10 (frasi nuove 010: «via lasagna e via arrosto, metti rigatoni e salsiccia»): «e via / , togli» continua l'elenco da togliere.
+ const findIn=(from:number)=>{for(let k=from;k<W.length;k++){if(SW_IN.test(W[k]!))return k;if(SW_OUT.test(W[k]!)&&k>from&&!['e','ed',','].includes(W[k-1]!))return -1}return -1}
+ const nextOut=(from:number)=>{for(let k=from;k<W.length;k++){if(SW_OUT.test(W[k]!)&&!(['e','ed',','].includes(W[k-1]??'')&&findIn(k+1)>k)||SW_SUB.test(W[k]!)||(W[k]==='al'&&W[k+1]==='posto')||(W[k]==='invece'&&k>from))return k}return W.length}
  const isSecW=(w:string)=>COURSES.includes(w)
  const trimTail=(a:number,b:number)=>{let e=b;while(e>a&&(SW_LEAD.has(W[e-1]!)||isSecW(W[e-1]!)||PREP.has(W[e-1]!)||[',',';',':','e','ed'].includes(W[e-1]!)))e--;return e}
  while(i<W.length){skipLead();if(i>=W.length)break
@@ -641,13 +642,17 @@ function swapClauses(t:Tok[]):SwapCl[]|null{
    inA=k+1}
   else if(W[i]==='al'&&W[i+1]==='posto'||W[i]==='invece'){outA=i+(W[i]==='al'?2:1);const k=findIn(outA);if(k>=0){outB=k;inA=k+1}else{outB=-1;inA=-1;boundary=true}}
   else if(SW_SUB.test(W[i]!)){outA=i+1;boundary=true}
+  else if(SW_IN.test(W[i]!)){// 28/10 (frasi nuove 004/008): «metti i ravioli al posto delle orecchiette», «metti le polpette invece della cotoletta»
+   let k=-1;for(let j=i+1;j<W.length&&j<i+10;j++){if(W[j]==='al'&&W[j+1]==='posto'||W[j]==='invece'){k=j;break}if(SW_OUT.test(W[j]!)||SW_IN.test(W[j]!)||SW_SUB.test(W[j]!))break}
+   if(k<0)return cls.length?cls:null
+   const oA=k+(W[k]==='al'?2:1),oEnd=trimTail(oA,nextOut(oA));cls.push({out:t.slice(oA,oEnd),in:t.slice(i+1,trimTail(i+1,k))});i=oEnd;continue}
   else{// «X no (,) metti Y»
    const k=W.indexOf('no',i);if(k>i&&k<i+8&&(SW_IN.test(W[k+1]??'')||[',',';'].includes(W[k+1]??'')&&SW_IN.test(W[k+2]??''))){outA=i;outB=k;inA=k+(SW_IN.test(W[k+1]!)?2:3)}else return cls.length?cls:null}
   if(boundary){// confine da trovare dopo: «al posto di X Y», «cambia X con Y»
    const end=trimTail(outA,nextOut(outA+1));cls.push({out:t.slice(outA,end),in:[]});(cls[cls.length-1] as any).open=true;i=end;continue}
   const end=trimTail(inA,nextOut(inA));cls.push({out:t.slice(outA,outB),in:t.slice(inA,end)});i=end}
  return cls.length?cls:null}
-const swNameToks=(x:Tok[])=>{let a=0,b=x.length;while(a<b&&(SW_ART.has(x[a]!.w)||SW_LEAD.has(x[a]!.w)))a++;while(b>a&&(SW_ART.has(x[b-1]!.w)||[',',';',':'].includes(x[b-1]!.w)))b--;return x.slice(a,b)}
+const swNameToks=(x:Tok[])=>{let a=0,b=x.length;while(a<b&&(SW_ART.has(x[a]!.w)||SW_LEAD.has(x[a]!.w)||SW_OUT.test(x[a]!.w)))a++;while(b>a&&(SW_ART.has(x[b-1]!.w)||[',',';',':'].includes(x[b-1]!.w)))b--;return x.slice(a,b)}
 /** Piatti esistenti con quel nome detto: nome intero → inizio del nome / parole contenute → refuso; il primo livello che trova vince. */
 function swapFind(said:string,items:MenuRef[]):MenuRef[]{
  const s=sig(said);if(!s.length||said.length<3)return[]
@@ -690,7 +695,11 @@ export function swapTurn(o:RuleInput,forced:Record<string,string>={}):RuleResult
   for(const sc of scopes){outs=swapOuts(outT,sc);if(outs)break}
   if(!outs)return null
   const resolved:MenuRef[]=[]
+  // 28/10 (frasi nuove 032: «togli spinaci e patate al forno metti insalata»): un piatto con omonimi in più Menu segue il Menu degli
+  // altri piatti della stessa frase che hanno un solo riscontro.
+  const anchor=[...new Set(outs.filter(x=>x.hits.length===1).map(x=>x.hits[0]!.menu))]
   for(const x of outs){let hits=x.hits
+   if(hits.length>1&&anchor.length===1){const am=hits.filter(h=>h.menu===anchor[0]);if(am.length===1)hits=am}
    if(forced[plain(x.said)]){const f=o.refs.find(r=>r.id===forced[plain(x.said)]);if(f)hits=[f]}
    if(hits.length>1){const vis=hits.filter(h=>!h.hidden);if(vis.length===1)hits=vis}
    if(hits.length>1){const fx=hits.filter(h=>o.menus.some(m=>m.name===h.menu&&m.pricing==='fisso'));if(fx.length===1)hits=fx}
@@ -698,7 +707,9 @@ export function swapTurn(o:RuleInput,forced:Record<string,string>={}):RuleResult
     return{kind:'ask',question:'Quale *'+capW(x.said)+'* tolgo?\n'+opts.map((h,k)=>(k+1)+'. *'+h.name+'* ('+h.menu+(h.section?' › '+h.section:'')+')').join('\n')+'\n\nRispondi col numero.',wait:{kind:'swap',text:o.text.slice(0,600),word:plain(x.said),options:opts.map(h=>h.id)} as any}}
    resolved.push(hits[0]!)}
   const nt=swNameToks(inT);if(!nt.length)return null
-  const ins=splitNames(nt,vocab,{lexicon:o.lexicon??null}).map(n=>n.trim()).filter(Boolean)
+  // 28/10 (frasi nuove 012: «mettimi il pollo arrosto» → «Pollo»): fino a 3 parole senza «e»/virgole è UN piatto, anche se una parola è
+  // il nome di un altro piatto del menu.
+  const ins=(nt.length<=3&&!nt.some(z=>['e','ed',',',';'].includes(z.w))?[capW(nt.map(z=>z.raw).join(' ').replace(/' /g,"'"))]:splitNames(nt,vocab,{lexicon:o.lexicon??null})).map(n=>n.trim()).filter(Boolean)
   if(!ins.length||ins.some(n=>NOT_DISH.test(plain(n))||n.split(' ').length>8))return null
   pairs.push({out:resolved,in:ins})}
  // tutto nello stesso Menu (mai sostituzioni a cavallo di più Menu in un messaggio)

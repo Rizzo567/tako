@@ -1,0 +1,74 @@
+
+[MEDIO] nuova-001
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "oggi x pranzo niente lasagna mettiamo i cannelloni"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «oggi x pranzo niente lasagna mettiamo i cannelloni» intendi *Lasagna*? Rispondi sì oppure dimmi il n
+
+[MEDIO] nuova-003
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / P»
+     > "pranzo: fuori la cotoletta, dentro le polpette"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Per «pranzo: fuori la cotoletta, dentro le polpette» intendi *Cotoletta*? Rispondi sì oppure dimmi il nom
+
+[GRAVE] nuova-004
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Ravioli] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Ravioli al pesto delle orecchiette]
+     > "menu di mezzogiorno metti i ravioli al posto delle orecchiette"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Ravioli al pesto delle orecchiette (nuovo) /  / Per tornare come prima scrivi *annulla* entro 10 minu
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Ravioli al pesto delle orecchiette
+
+[MEDIO] nuova-005
+   - MEDIO turno 0: domanda inutile «Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Q»
+     > "stasera niente pollo al forno, facciamo la tagliata"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Quale tagliata metto nel Menu cena al posto del *Pollo al forno*: *Tagliata rucola e grana* o *Tagliata c
+
+[GRAVE] nuova-008
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Cotoletta, Arrosto]
+   - MEDIO turno 0: domanda inutile «Intendi la *Cotoletta* del Menu Giorno o una di quelle alla carta? /  / 1. *Cotoletta* / 2. *Cotoletta di pollo con »
+     > "metti le polpette invece della cotoletta"
+       Intendi la *Cotoletta* del Menu Giorno o una di quelle alla carta? /  / 1. *Cotoletta* / 2. *Cotoletta di pollo con contorno* (12,00 €) / 3. *Cotoletta di nodino con contorno* (14,00 €)
+
+[GRAVE] nuova-010
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Via lasagna e via, Rigatoni] ; Menu Giorno›Secondi: voluto [Cotoletta, Salsiccia] ottenuto [Cotoletta, Arrosto, Salsiccia]
+     > "menu mezzogiorno via lasagna e via arrosto, metti rigatoni e salsiccia"
+       *Menu Giorno aggiornato* /  / *Primi* / • Lasagna / • Strozzapreti con zola e pistacchio / • Orecchiette con zucca / • Via lasagna e via (nuovo) / • Rigatoni (nuovo) /  / *Secondi* / • Cotoletta / • Arrosto / • Salsiccia
+       Δ Menu Giorno›Primi: Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca → Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Via lasagna e via, Rigatoni ; Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta, Arrosto, Salsiccia
+
+[GRAVE] nuova-012
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Pollo arrosto] ottenuto [Arrosto, Pollo]
+     > "toglimi la cotoletta e mettimi il pollo arrosto"
+       *Menu Giorno aggiornato* /  / *Secondi* / • Arrosto / • Pollo (nuovo) /  / Tolto: *Cotoletta*. /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Arrosto, Pollo
+
+[GRAVE] nuova-017
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Arrosto]
+     > "togli la cotoletta"
+       *Cotoletta*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Arrosto
+     > "metti le polpette al suo posto"
+       A che prezzo metto le *Polpette* nei *Secondi di carne*?
+
+[GRAVE] nuova-019
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Arrosto]
+     > "la cotoletta è finita"
+       *Cotoletta*: *finito*
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta (finito), Arrosto
+     > "toglila e metti le polpette"
+       Ci sto lavorando… / Ok, tolgo la *Cotoletta* dal menu. /  / *Cotoletta*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta (finito), Arrosto → Arrosto
+
+[GRAVE] nuova-027
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+     > "non togliere la lasagna, aggiungi solo i rigatoni nei primi del pranzo"
+       Ci sto lavorando… / Sono l’*assistente automatico* di Takomenu: rispondo in automatico, non sono una persona. /  / Quale piatto tolgo dal menu? Scrivimi il nome, per esempio «togli la carbonara». /  / Non ancora pubblica
+
+[MEDIO] nuova-028
+   - MEDIO turno 0: domanda inutile «Non trovo il *Tiramisù* nel menu: intendi un altro piatto da togliere?»
+     > "togli il tiramisu metti la panna cotta"
+       Non trovo il *Tiramisù* nel menu: intendi un altro piatto da togliere?
+
+[GRAVE] nuova-032
+   - GRAVE menu finale: Menu Giorno›Contorni: voluto [Insalata] ottenuto [Patate al forno, Spinaci]
+   - MEDIO turno 0: domanda inutile «Quale *Patate al forno* tolgo? / 1. *Patate al forno* (Menu Giorno › Contorni) / 2. *Patate al forno* (Menu Cena ›»
+     > "togli spinaci e patate al forno metti insalata"
+       Quale *Patate al forno* tolgo? / 1. *Patate al forno* (Menu Giorno › Contorni) / 2. *Patate al forno* (Menu Cena › Contorni) / 3. *patate al forno* (Menu Cena › Contorni) /  / Rispondi col numero.
+
+TOTALE 42 casi: ok 30 (71.4%), GRAVI 8, MEDI 4

@@ -1,0 +1,5 @@
+[
+ {"id":"vuoto","turns":["Togli tutti i secondi","Nei secondi metti","Cotoletta alla milanese  scaloppine al limone polpette al sugo"],"expect":{"final":{"Menu Giorno›Secondi":["Cotoletta alla milanese","Scaloppine al limone","Polpette al sugo"]},"alt":[],"noAsk":[],"forbid":[]},"note":""},
+ {"id":"anzi-no","turns":["x pranzo togli tutti i primi","nei primi metti carbo amatri e lasagna","anzi no la lasagna nn la mettere"],"expect":{"final":{"Menu Giorno›Primi":["Carbonara","Amatriciana"]},"alt":[],"noAsk":[],"forbid":[]},"note":""},
+ {"id":"dopo-nontrovo","turns":["porta il tiramisu a 6 euro","la cotoletta mettila a 5 euro"],"expect":{"final":{},"alt":[],"noAsk":[],"forbid":["A quale piatto metto"]},"note":""}
+]

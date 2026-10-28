@@ -1,0 +1,6 @@
+[
+ {"id":"aperto-1","turns":["togli patate al forno metti patate fritte","1"],"expect":{"final":{"Menu Giorno›Contorni":["Spinaci","Patate fritte"]},"alt":[],"noAsk":[1],"forbid":["A quale piatto metto"]},"note":"omonimo in due Menu, scelta 1"},
+ {"id":"aperto-2","turns":["elimina l arrosto","si"],"expect":{"final":{"Menu Giorno›Secondi":["Cotoletta"]},"alt":[],"noAsk":[1],"forbid":[]},"note":"conferma eliminazione"},
+ {"id":"aperto-3","turns":["la cotoletta mettila a 5 euro"],"expect":{"final":{},"alt":[],"noAsk":[],"forbid":["A quale piatto metto"]},"note":"pronome + nome + prezzo"},
+ {"id":"aperto-4","turns":["togli la lasagna aggiungi rigatoni e l arrosto è finito"],"expect":{"final":{"Menu Giorno›Primi":["Strozzapreti con zola e pistacchio","Orecchiette con zucca","Rigatoni"]},"alt":[],"noAsk":[0],"forbid":[]},"note":"aggiungi + finito"}
+]

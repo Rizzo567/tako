@@ -1,0 +1,44 @@
+
+[MEDIO] nuova-001
+   - MEDIO turno 0: domanda inutile «Per «oggi x pranzo niente lasagna mettiamo i cannelloni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome g»
+     > "oggi x pranzo niente lasagna mettiamo i cannelloni"
+       Per «oggi x pranzo niente lasagna mettiamo i cannelloni» intendi *Lasagna*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *Lasagna*
+
+[MEDIO] nuova-003
+   - MEDIO turno 0: domanda inutile «Per «pranzo: fuori la cotoletta, dentro le polpette» intendi *Cotoletta*? Rispondi sì oppure dimmi il nome giu»
+     > "pranzo: fuori la cotoletta, dentro le polpette"
+       Per «pranzo: fuori la cotoletta, dentro le polpette» intendi *Cotoletta*? Rispondi sì oppure dimmi il nome giusto. /  / 1. *Cotoletta*
+
+[MEDIO] nuova-005
+   - MEDIO turno 0: domanda inutile «Quale tagliata metto nel Menu cena al posto del *Pollo al forno*: *Tagliata rucola e grana* o *Tagliata con fu»
+     > "stasera niente pollo al forno, facciamo la tagliata"
+       Quale tagliata metto nel Menu cena al posto del *Pollo al forno*: *Tagliata rucola e grana* o *Tagliata con funghi porcini e panna*?
+
+[GRAVE] nuova-017
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Arrosto]
+     > "togli la cotoletta"
+       *Cotoletta*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Arrosto
+     > "metti le polpette al suo posto"
+       A che prezzo metto le *Polpette* nei *Secondi di carne*?
+
+[GRAVE] nuova-019
+   - GRAVE menu finale: Menu Giorno›Secondi: voluto [Arrosto, Polpette] ottenuto [Arrosto]
+     > "la cotoletta è finita"
+       *Cotoletta*: *finito*
+       Δ Menu Giorno›Secondi: Cotoletta, Arrosto → Cotoletta (finito), Arrosto
+     > "toglila e metti le polpette"
+       Ok, tolgo la *Cotoletta* dal menu. /  / *Cotoletta*: *eliminato* dal menu /  / Per tornare come prima scrivi *annulla* entro 10 minuti.
+       Δ Menu Giorno›Secondi: Cotoletta (finito), Arrosto → Arrosto
+
+[GRAVE] nuova-027
+   - GRAVE menu finale: Menu Giorno›Primi: voluto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca, Rigatoni] ottenuto [Lasagna, Strozzapreti con zola e pistacchio, Orecchiette con zucca]
+     > "non togliere la lasagna, aggiungi solo i rigatoni nei primi del pranzo"
+       Quale piatto tolgo dal menu? Scrivimi il nome, per esempio «togli la carbonara». /  / Non ancora pubblicato: / 1. Nuovo piatto *Rigatoni* in *Primi*: senza prezzo (Menu a prezzo fisso)
+
+[MEDIO] nuova-028
+   - MEDIO turno 0: domanda inutile «Non trovo il *Tiramisù* nel menu: intendi un altro piatto da togliere?»
+     > "togli il tiramisu metti la panna cotta"
+       Non trovo il *Tiramisù* nel menu: intendi un altro piatto da togliere?
+
+TOTALE 42 casi: ok 35 (83.3%), GRAVI 3, MEDI 4
