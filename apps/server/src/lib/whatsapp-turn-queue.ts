@@ -40,4 +40,8 @@ export async function waitTurn(db:Exec,phone:string,sid:string,o:{maxWaitMs:numb
   if(!st.mine||!st.before.length||o.isExpired?.()||Date.now()-start>=o.maxWaitMs)return{key:st.mine,waitedMs:Date.now()-start}
   await new Promise(r=>setTimeout(r,poll))}}
 
+/** 28/10 sera (chat di Luisa): il numero ha messaggi ancora in lavorazione (biglietti non scaduti). Una richiesta da evadere subito
+ * (PDF del menu) in quel caso va in fila: risposte nell'ordine dei messaggi e PDF fatto DOPO le modifiche chieste prima. */
+export async function turnsBusy(db:Exec,phone:string,now=Date.now()):Promise<boolean>{
+ try{return (await tickets(db,phone)).some(k=>{const t=at(k,phone);return Number.isFinite(t)&&now-t<=TURN_STALE_MS})}catch{return false}}
 export async function releaseTurn(db:Exec,key:string|null){if(key)await db.execute(sql`DELETE FROM tako_whatsapp_messages WHERE sid=${key}`).catch(()=>{})}

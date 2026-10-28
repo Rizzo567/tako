@@ -260,13 +260,15 @@ export const BATTERIA:Case[]=[
  {id:'i03',turns:['svuota il menu cena','nei secondi metti tagliata di manzo con rucola e grana e orata al forno'],menu:'Menu Cena',exact:{Secondi:['Tagliata di manzo con rucola e grana','Orata al forno'],Primi:[]}},
  {id:'i04',turns:['svuota il menu cena','nei contorni aggiungi patate al forno e insalata mista'],menu:'Menu Cena',exact:{Contorni:['Patate al forno','Insalata mista']}},
  {id:'i05',turns:['svuota il menu cena','nei primi inserisci carbonara e amatriciana, nei secondi cotoletta e polpette, nei contorni patatine fritte'],menu:'Menu Cena',exact:{Primi:['Carbonara','Amatriciana'],Secondi:['Cotoletta','Polpette'],Contorni:['Patatine fritte']}},
- {id:'i06',turns:['svuota il menu cena',V('nei primi inserisci pasta alla carbonara linguine e tagliatelle nei secondi orata al forno')],menu:'Menu Cena',exact:{Primi:['Pasta alla carbonara','Linguine','Tagliatelle'],Secondi:['Orata al forno']}},
+ // 28/10 sera (chat di Luisa): vocale senza virgole = confini indovinati → proposta, scritto al «sì»
+ {id:'i06',turns:['svuota il menu cena',V('nei primi inserisci pasta alla carbonara linguine e tagliatelle nei secondi orata al forno'),'sì'],menu:'Menu Cena',exact:{Primi:['Pasta alla carbonara','Linguine','Tagliatelle'],Secondi:['Orata al forno']}},
  {id:'i07',turns:['svuota il menu cena','nei primi inserisci pasta e fagioli'],menu:'Menu Cena',exact:{Primi:['Pasta e fagioli']}},
  {id:'i08',turns:['svuota il menu cena','nei primi inserisci spaghetti aglio olio e peperoncino e pasta e ceci'],menu:'Menu Cena',exact:{Primi:['Spaghetti aglio olio e peperoncino','Pasta e ceci']}},
  {id:'i09',turns:['svuota il menu cena','inserisci carbonara e amatriciana nei primi'],menu:'Menu Cena',exact:{Primi:['Carbonara','Amatriciana']}},
  {id:'i10',turns:['svuota il menu cena','inserisci la carbonara nei primi e la tagliata di manzo con rucola e grana nei secondi'],menu:'Menu Cena',exact:{Primi:['Carbonara'],Secondi:['Tagliata di manzo con rucola e grana']}},
  {id:'i11',turns:['svuota il menu cena','nel primo inserisci carbonara','come secondo metti orata al forno','nei contorno metti insalata mista'],menu:'Menu Cena',exact:{Primi:['Carbonara'],Secondi:['Orata al forno'],Contorni:['Insalata mista']}},
- {id:'i12',turns:['svuota il menu cena','nei primi inserisci risoto ai funghi porcini'],menu:'Menu Cena',exact:{Primi:['Risotto ai funghi porcini']}},
+ // 28/10 sera (chat di Luisa «tagliolini» → «Fagiolini»): il nome nuovo resta quello scritto, mai corretto sul vocabolario
+ {id:'i12',turns:['svuota il menu cena','nei primi inserisci risoto ai funghi porcini'],menu:'Menu Cena',exact:{Primi:['Risoto ai funghi porcini']}},
  {id:'i13',turns:['svuota il menu cena','nei primi inserisci','carbonara e lasagne'],menu:'Menu Cena',exact:{Primi:['Carbonara','Lasagne']},ask:[2]},
  {id:'i14',turns:['nei primi inserisci carbonara','cena'],menu:'Menu Cena',has:{Primi:['Carbonara','Risotto ai funghi porcini']},ask:[1]},
  {id:'i15',turns:['nel menu cena nei primi inserisci carbonara'],menu:'Menu Cena',keepVisible:true,has:{Primi:['Carbonara']}},
@@ -284,7 +286,8 @@ export const BATTERIA:Case[]=[
  {id:'i26',turns:['svuota il menu cena','inserisci nel menu cena primi: carbonara, lasagne; secondi: orata al forno'],menu:'Menu Cena',exact:{Primi:['Carbonara','Lasagne'],Secondi:['Orata al forno']}},
  {id:'i27',turns:['nel menu cena nei primi inserisci gnocchi alla sorrentina','nei secondi aggiungi salsiccia alla griglia'],menu:'Menu Cena',keepVisible:true,has:{Primi:['Gnocchi alla sorrentina'],Secondi:['Salsiccia alla griglia']}},
  {id:'i28',turns:['aggiungi nei contorni della cena le zucchine fritte'],menu:'Menu Cena',keepVisible:true,has:{Contorni:['Zucchine fritte']}},
- {id:'i29',turns:['nel menu cena inserisci carbonara'],menu:'Menu Cena',keepVisible:true,has:{Primi:['Carbonara']}},
+ // 28/10 sera: senza sottomenu detto il sottomenu per portata si fa confermare (proposta), scritto al «sì»
+ {id:'i29',turns:['nel menu cena inserisci carbonara','sì'],menu:'Menu Cena',keepVisible:true,has:{Primi:['Carbonara']}},
  {id:'i30',turns:['nel menu cena inserisci il tiramisù'],menu:'Menu Cena',noWrite:true,said:['tiramisù']},
  {id:'i31',turns:['nel menu cena nei secodi inserisci orata al forno'],menu:'Menu Cena',noWrite:true,reply:/già nel/},
  {id:'i32',turns:['svuota il menu cena',V('svuota il menù della cena e poi nei primi metti risotto ai funghi porcini e pappardelle al cinghiale nei secondi tagliata di manzo con rucola e grana')],menu:'Menu Cena',exact:{Primi:['Risotto ai funghi porcini','Pappardelle al cinghiale'],Secondi:['Tagliata di manzo con rucola e grana'],Contorni:[]}},

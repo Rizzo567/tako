@@ -124,10 +124,12 @@ describe('5) «Lasagna strozzapreti con Zola e pistacchio  orecchiette con zucca
   const ip=parseInsert('nei primi Lasagna strozzapreti con Zola e pistacchio  orecchiette con zucca',secs,MENUS,CAT.refs.map(r=>r.name))
   expect(ip.lists[0]!.names.map(x=>x.toLowerCase())).toEqual(['lasagna','strozzapreti con zola e pistacchio','orecchiette con zucca'])})
  it('risposta a «Cosa inserisco nei Primi…?» → i 3 piatti creati (nomi con l’iniziale maiuscola)',async()=>{
-  const r=await play(['nel menu pranzo elimina i primi','E inserisci','Lasagna strozzapreti con Zola e pistacchio  orecchiette con zucca'])
+  // 28/10 sera: «Lasagna strozzapreti» senza virgola = confine indovinato → proposta coi 3 piatti, nessuna scrittura; il «sì» li crea
+  const r=await play(['nel menu pranzo elimina i primi','E inserisci','Lasagna strozzapreti con Zola e pistacchio  orecchiette con zucca','sì'])
   expect(r.replies[1]).toMatch(/Cosa inserisco nei \*Primi\* del \*Menu Giorno\*/)
+  expect(r.replies[2]).toMatch(/Ho capito così[\s\S]*• Lasagna\n• Strozzapreti con zola e pistacchio\n• Orecchiette con zucca/);expect(secItems(r.menus[3],'Menu Giorno','Primi')).toEqual([])
   expect(secItems(last(r),'Menu Giorno','Primi')).toEqual(['Lasagna','Strozzapreti con zola e pistacchio','Orecchiette con zucca'])
-  expect(r.replies[2]).toMatch(/• Lasagna \(nuovo\)\n• Strozzapreti con zola e pistacchio \(nuovo\)\n• Orecchiette con zucca \(nuovo\)/)})})
+  expect(r.replies[3]).toMatch(/• Lasagna \(nuovo\)\n• Strozzapreti con zola e pistacchio \(nuovo\)\n• Orecchiette con zucca \(nuovo\)/)})})
 
 // ======================= 6) togli + inserisci in un giro =======================
 describe('6) «elimina i primi e inserisci A, B» e «sì» seguito da «e inserisci A, B»: entrambe, nell’ordine',()=>{
@@ -190,10 +192,11 @@ describe('«a prova di chiunque»: abbreviazioni, numeri a parole, «metti» dop
  it('«metti tagliata e orata» subito dopo «stasera via tutti i secondi» → nei Secondi della cena',()=>{const r=rt('metti tagliata  orata al forno',[['owner','stasera via tutti i secondi'],['bot','*Menu Cena aggiornato*\n\n*Secondi*\n• nessun piatto\n\nOra scrivimi i piatti nuovi, per esempio «nei secondi inserisci lasagna, carbonara».']]);expect(r.kind).toBe('apply');expect(r.menu.name).toBe('Menu Cena');expect(JSON.stringify(r.actions)).toMatch(/Tagliata.*Orata al forno/)})})
 
 describe('persona «scrive malissimo» (route)',()=>{
- it('«anzi no la lasagna nn la mettere» subito dopo: Lasagna tolta senza domande',async()=>{const r=await play(['nel menu pranzo elimina i primi','nei primi metti carbo amatri e lasagna','anzi no la lasagna nn la mettere'])
-  expect(secItems(last(r),'Menu Giorno','Primi')).toEqual(['Carbonara','Amatriciana']);expect(r.replies[2]).not.toMatch(/\?/)})
- it('«togli la carbo» con una sola Carbonara: eliminata subito; «annulla» la rimette',async()=>{const r=await play(['nel menu pranzo elimina i primi','nei primi metti carbo amatri','togli la carbo','annulla'])
-  expect(secItems(r.menus[3],'Menu Giorno','Primi')).toEqual(['Amatriciana']);expect(secItems(r.menus[4],'Menu Giorno','Primi')).toEqual(['Carbonara','Amatriciana'])})
+ it('«anzi no la lasagna nn la mettere» subito dopo: Lasagna tolta senza domande',async()=>{// 28/10 sera: senza virgole proposta + «sì» (prima scritto subito)
+  const r=await play(['nel menu pranzo elimina i primi','nei primi metti carbo amatri e lasagna','sì','anzi no la lasagna nn la mettere'])
+  expect(secItems(last(r),'Menu Giorno','Primi')).toEqual(['Carbonara','Amatriciana']);expect(r.replies[3]).not.toMatch(/\?/)})
+ it('«togli la carbo» con una sola Carbonara: eliminata subito; «annulla» la rimette',async()=>{const r=await play(['nel menu pranzo elimina i primi','nei primi metti carbo amatri','sì','togli la carbo','annulla'])
+  expect(secItems(r.menus[4],'Menu Giorno','Primi')).toEqual(['Amatriciana']);expect(secItems(r.menus[5],'Menu Giorno','Primi')).toEqual(['Carbonara','Amatriciana'])})
  it('«no aspetta tredici» dopo «il completo a pranzo dodici euro» → Completo 13',async()=>{const r=await play(['il completo a pranzo dodici euro','no aspetta tredici'])
   expect(M(last(r),'Menu Giorno').formulas.find((f:any)=>f.name==='Completo').price).toBe(13)})
  it('«ok» a una domanda «aggiungere o togliere?» con candidati: MAI eliminati',async()=>{

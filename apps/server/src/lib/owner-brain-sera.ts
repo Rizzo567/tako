@@ -301,13 +301,15 @@ export function dishInSection(said:string,inSec:MenuRef[]):MenuRef|null{const k=
  {const ws=k.split(' ').filter(w=>w.length>=3&&!['alla','allo','alle','agli','con','del','della'].includes(w)),fz=inSec.filter(r=>{const rw=plain(r.name).split(' ');return ws.length>0&&ws.every(w=>rw.some(x=>near(x,w)||(w.length>=4&&x.startsWith(w))))});if(fz.length===1)return fz[0]!}
  const rev=inSec.filter(r=>{const rw=plain(r.name).split(' ').filter(w=>w.length>=3);return rw.length>0&&rw.every(w=>k.split(' ').some(x=>x===w||(w.length>=5&&lev1s(w,x))||(w.length>4&&x.startsWith(w.slice(0,-1)))))})
  return rev.length===1?rev[0]!:null}
-/** Nome come va nel menu: il piatto esistente del sottomenu, altrimenti il detto con i refusi corretti (prezzo «Nome 12» tolto). */
+/** Nome come va nel menu: il piatto esistente del sottomenu, altrimenti il detto così com'è (prezzo «Nome 12» tolto). */
 export function sessionName(said:string,inSec:MenuRef[],vocab:string[]):{name:string,existing:MenuRef|null,price:number|null}{
  const m=said.match(/^(.*?)\s+(?:a\s+)?(\d+(?:[.,]\d{1,2})?)\s*(?:€|euro)?$/),base=(m?m[1]!:said).trim(),price=m?Number(m[2]!.replace(',','.')):null
  const hit=dishInSection(base,inSec);if(hit)return{name:hit.name,existing:hit,price}
  // Accenti come nei nomi del locale («ragu» → «ragù» se c'è un piatto con «ragù»).
  const acc=new Map(vocab.flatMap(v=>v.split(/\s+/)).filter(w=>plain(w)!==w.toLowerCase()).map(w=>[plain(w),w.toLowerCase()] as const))
- return{name:capW(fixSpelling(base,vocab).split(' ').map(w=>acc.get(plain(w))??w).join(' ')),existing:null,price}}
+ // 28/10 sera (chat di Luisa «tagliolini» → «Fagiolini»): il nome NUOVO resta quello scritto (solo iniziale maiuscola e accenti del
+ // locale); i refusi servono solo a ritrovare un piatto che c'è già (dishInSection sopra), mai a rinominare quello detto.
+ return{name:capW(base.split(' ').map(w=>acc.get(plain(w))??w).join(' ')),existing:null,price}}
 /** Azioni della sostituzione di un sottomenu (riusa gli esistenti, crea i nuovi — a 0 € nei menu fissi —, ELIMINA gli altri: 22/10 notte).
  *  `noPrice` = piatti nuovi alla carta senza prezzo (la sessione li chiede prima di applicare). */
 export function sectionReplace(secId:string,names:string[],refs:MenuRef[],fixed:boolean,prices:Record<string,number>={}):{actions:MenuAction[],noPrice:string[]}{

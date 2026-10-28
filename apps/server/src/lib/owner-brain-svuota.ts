@@ -12,14 +12,16 @@
  * segnalato nella risposta, prezzi fissi intatti, «annulla» rimette esattamente com'era (undo generico della pubblicazione). */
 import {plain,g9Prices,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
 import {sameSection} from './twilio-menu-structure.js'
-import {namedMenus,dishCourse,fixSpelling,singlePrice} from './owner-brain-sera.js'
+import {namedMenus,dishCourse,singlePrice} from './owner-brain-sera.js'
 import {isAffirmative} from './owner-brain-r.js'
 import {splitPieces,doubtReadings,doubtQuestion,isContorniSection,isContornoWord,doubtAnswer,parseCorrection,correctionPlan,correctionReply,ruleFromAnswer,type Lexicon,type SplitRule} from './dish-split.js'
 
 export type RuleMenu={id:string,name:string,pricing?:'carta'|'fisso',active?:boolean,formulas?:{name:string,price:number}[]}
 export type Doubt={text:string,one:string,parts:string[]}
 /** 23/10: `split` = domanda «"X e Y": 1 piatto o 2?» su un pezzo dubbio (gli altri piatti del messaggio sono già scritti). */
-export type RuleWait={kind:'menu',text:string,options:string[],del?:boolean}|{kind:'names',menuId:string,secId:string}|{kind:'propose',menuId:string,clearIds:string[],lists:{secId:string,names:string[]}[]}|{kind:'split',menuId:string,items:(Doubt&{secId:string})[]}|{kind:'swap',text:string,word:string,options:string[]}
+/** `names.ctx` (28/10 sera, chat di Luisa): sottomenu appena svuotato («elimina secondi menù sera» → «Ora scrivimi i piatti nuovi»), il
+ * prossimo «inserisci …» senza sottomenu va lì; non è una domanda (`RuleAsk.silent`). */
+export type RuleWait={kind:'menu',text:string,options:string[],del?:boolean}|{kind:'names',menuId:string,secId:string,ctx?:boolean}|{kind:'propose',menuId:string,clearIds:string[],lists:{secId:string,names:string[]}[]}|{kind:'split',menuId:string,items:(Doubt&{secId:string})[]}|{kind:'swap',text:string,word:string,options:string[]}
 export type RuleSection={secId:string,name:string,created:string[],shown:string[],already:string[]}
 export type RuleReport={menu:string,fixed:boolean,cleared:string[],deleteWord:boolean,sections:RuleSection[],unknownSecs:{word:string,names:string[]}[],notPlaced:string[],notFound?:string[],kept?:string[],
  /** 23/10 (chat Luisa): sottomenu svuotati («elimina i primi»), non il Menu intero */
@@ -28,7 +30,7 @@ export type RuleReport={menu:string,fixed:boolean,cleared:string[],deleteWord:bo
  swapOut?:string[],
  /** 24/10: piatti segnati finiti nella stessa frase della sostituzione */
  soldOut?:string[]}
-export type RuleAsk={question:string,wait:RuleWait}
+export type RuleAsk={question:string,wait:RuleWait,silent?:boolean}
 /** `learn` = regole di divisione da salvare nel lessico del locale (23/10); `ask` = domanda sul pezzo dubbio DOPO aver scritto il resto;
  * `fix` = correzione della divisione («coppa è un piatto a parte»), testo già pronto. */
 export type RuleResult={kind:'delete_menu',menu:RuleMenu,items:number,sections:string[]}|{kind:'apply',menu:RuleMenu,actions:MenuAction[],report:RuleReport,ask?:RuleAsk|null,learn?:SplitRule[]}|{kind:'ask',question:string,wait:RuleWait,learn?:SplitRule[]}|{kind:'info',text:string,learn?:SplitRule[]}|{kind:'fix',actions:MenuAction[],reply:string,learn:SplitRule[]}
@@ -67,8 +69,9 @@ export function stripMenuPrice(text:string,menus:{name:string}[]):string{
   return hit?all.replace(/\s*da\s+\d{1,3}(?:[.,]\d{1,2})?\s*(?:euro|eur|€)?\s*$/i,' '):all}).trim()}
 /** Ultimo Menu nominato nella conversazione (turni più recenti prima): un turno del titolare con più Menu = ambiguo (null). */
 export function contextMenu<T extends {name:string}>(turns:{role:string,text:string,at:number}[],menus:T[],recent?:number):T|null{
- const all=[...turns].sort((a,b)=>b.at-a.at),now=all[0]?.at??0
- // `recent` (23/10, batteria v181): solo gli ultimi N turni degli ultimi 10 minuti (mai il Menu di una conversazione di prima)
+ const all=[...turns].sort((a,b)=>b.at-a.at),now=Date.now()
+ // `recent` (23/10, batteria v181): solo gli ultimi N turni degli ultimi 10 minuti (mai il Menu di una conversazione di prima).
+ // 28/10 sera: i 10 minuti contano da adesso, non dall'ultimo turno salvato.
  for(const t of recent?all.slice(0,recent).filter(x=>now-x.at<=10*60*1000):all){const m=menusIn(t.text,menus);if(m.length===1)return m[0]!;if(m.length>1&&t.role==='owner')return null}
  return null}
 const mLabel=(n:string)=>/^men[uù]\b/i.test(n.trim())?'*'+n.trim()+'*':'Menu *'+n.trim()+'*'
@@ -83,6 +86,8 @@ const STRONG_INSERT=/\b(?:inser(?:isc|ic|is|isci|iamo|ire|ite)\w*|ag+iung\w*)\b/
 const NOT_DISH=/\b(?:capisc\w*|capit[oa]|aiut\w*|grazie|ciao|zero|gratis|tutto|niente|nulla|prezz\w*|restan\w*|resta|rimang\w*|uguali|uguale|togli\w*|nascond\w*|lascia\w*|cambi\w*|elimin\w*|cancell\w*|annull\w*|aspett\w*|scusa|sbagliat\w*|prezz\w*|cost[ao]|costano|euro|finit\w*|esaurit\w*|svuot\w*|leva\w*|rimuov\w*|cosa|quale|quali|perche|come prima|com era)\b/
 /** 24/10: parole di domanda («cosa c'è nei primi a pranzo», «quali secondi ci sono stasera») */
 const QUESTION_W=/^(?:(?:ma|e|allora|senti|scusa|ok)\s+)*(?:cosa|che cosa|che|quali?|quant\w*|come|dove|perche|mi dici|dimmi|fammi vedere|mostrami|leggimi|c e|ci sono|hai|abbiamo)\b|\b(?:c e|ci sono|cosa)\b/
+/** 28/10 sera: comandi che non sono un elenco di piatti (dopo «Ora scrivimi i piatti nuovi» senza «inserisci»). */
+const CTX_OTHER=/\b(?:rimett\w*|mostr\w*|spost\w*|cambi\w*|rinomin\w*|mand\w*|invi\w*|manda\w*|dimmi|scriv\w*|vorrei|voglio|puoi|ricord\w*|annull\w*|anteprim\w*|stamp\w*|pdf|link|grazie|ok|perfetto|fatto|basta)\b/
 const DAILY=/\b(?:oggi|stasera|stassera|stamattina|domani|stamani)\b/
 const NEG=/\b(?:non|nun)\s+(?:(?:li|le|lo|la|ci|mi|piu)\s+)?(?:togli|lev|nascond|svuot|elimin|cancell|rimuov|mett|inser|aggiung)/
 /** Altri comandi nello stesso messaggio: prezzi, esaurito, foto, eliminazione di un piatto, rinomina → non è la regola (resta il resto). */
@@ -149,6 +154,7 @@ function menuSpans(t:Tok[],menus:{name:string}[]):Set<number>{const out=new Set<
   if(W[i]==='menu'&&!out.has(i)){out.add(i);let s=i;while(s>0&&PREP.has(W[s-1]!)){s--;out.add(s)}}}
  return out}
 type Mention={i:number,n:number,secId:string|null,word:string}
+const NOT_SEC_W=new Set(['prima','prime','seconda','seconde','primavera'])
 /** Parole di sottomenu nel testo: i sottomenu del Menu (anche al singolare) e le portate comuni che nel Menu non ci sono. */
 function mentions(t:Tok[],secs:SectionRef[],skip:Set<number>):Mention[]{const out:Mention[]=[],W=t.map(x=>x.w)
  const words=(n:string)=>plain(n).split(' ').filter(Boolean)
@@ -156,7 +162,10 @@ function mentions(t:Tok[],secs:SectionRef[],skip:Set<number>):Mention[]{const ou
   const multi=secs.find(s=>{const ws=words(s.name);return ws.length>1&&ws.every((x,k)=>W[i+k]===x||(k===0&&sameSection(x,W[i+k]??'')))})
   if(multi){const n=words(multi.name).length;out.push({i,n,secId:multi.id,word:multi.name});i+=n-1;continue}
   // anche con una lettera sbagliata nei vocali («secodi», «contormi»): parole di almeno 5 lettere
-  const single=secs.filter(x=>words(x.name).length===1&&(sameSection(x.name,w)||(w.length>=5&&!PREP.has(w)&&!FILL.has(w)&&!['prima','prime','seconda','seconde','primavera'].includes(w)&&(lev1(plain(x.name),w)||lev1(plain(x.name).replace(/i$/,'o'),w)))))
+  // 28/10 sera (chat di Luisa): «prima/seconda» non sono mai un sottomenu, nemmeno per sameSection: «Per tornare come prima scrivi
+  // annulla» in fondo alla risposta del bot diventava l'ultimo sottomenu nominato (Primi) e l'«inserisci» seguente finiva nei Primi.
+  if(NOT_SEC_W.has(w))continue
+  const single=secs.filter(x=>words(x.name).length===1&&(sameSection(x.name,w)||(w.length>=5&&!PREP.has(w)&&!FILL.has(w)&&(lev1(plain(x.name),w)||lev1(plain(x.name).replace(/i$/,'o'),w)))))
   if(single.length){out.push({i,n:1,secId:single[0]!.id,word:single[0]!.name});continue}
   if(!COURSES.includes(w))continue
   // «nei primi» con un sottomenu «Primi piatti»: la prima parola basta se è l'unico del Menu
@@ -171,13 +180,19 @@ const isHead=(t:string[],k:number)=>HEAD.has(t[k]!)||(VEG.has(t[k]!)&&VEG_NEXT.t
  * locuzioni, indizi; 23/10), e nei vocali senza virgole un nuovo piatto comincia quando compare una parola che apre un piatto
  * («pasta alla carbonara linguine»). `ask`: i pezzi dubbi NON diventano nomi, tornano in `doubts` (si chiede «1 piatto o 2?»). */
 export type SplitOpts={lexicon?:Lexicon|null,section?:string|null,ask?:boolean}
-export function splitNamesX(seg:Tok[],known:string[],o:SplitOpts={}):{names:string[],doubts:Doubt[]}{
+/** `guessed` (28/10 sera): almeno un confine tra piatti è stato indovinato da una parola che apre un piatto, senza virgola né a capo. */
+export function splitNamesX(seg:Tok[],known:string[],o:SplitOpts={}):{names:string[],doubts:Doubt[],guessed:boolean}{
  const W=seg.map(x=>x.w),R=seg.map(x=>x.raw),lex:Lexicon={names:[...new Set([...known,...(o.lexicon?.names??[])])],rules:o.lexicon?.rules??[]}
- const out:string[]=[],doubts:Doubt[]=[],txt=(ix:number[])=>ix.map(x=>R[x]).join(' ').replace(/' /g,"'")
+ const out:string[]=[],doubts:Doubt[]=[],txt=(ix:number[])=>ix.map(x=>R[x]).join(' ').replace(/' /g,"'");let guessed=false
  // nei Contorni anche un ortaggio/contorno semplice apre un piatto nuovo («insalata funghi misti e peperoni» detto a voce)
  const ctn=isContorniSection(o.section),hd=(k:number)=>isHead(W,k)||(ctn&&isContornoWord(W[k]!))
+ // 28/10 sera (chat di Luisa «impepata di cozze Fritto di anelli…  Scaloppine al vino bianco Nodino alla griglia»): una maiuscola a metà
+ // pezzo dopo una parola piena in minuscolo (mai il Title Case «Insalata Mista») è il probabile inizio di un altro piatto. È solo un indizio: il confine risulta indovinato (`guessed`) e
+ // l'elenco si fa confermare prima di scrivere.
+ const capStart=(p:number[],j:number)=>j>0&&/^\p{Lu}\p{Ll}/u.test(R[p[j]!]??'')&&/^\p{Ll}/u.test(R[p[j-1]!]??'')&&!PREP.has(W[p[j-1]!]??'')&&!['e','ed','con','di','da','a','in'].includes(W[p[j-1]!]??'')
  const headCut=(p:number[])=>{let cut:number[]=[];for(let j=0;j<p.length;j++){const k=p[j]!
-   if(cut.length&&hd(k)&&cut.some(x=>hd(x))&&!PREP.has(W[p[j-1]!]??'')&&W[p[j-1]!]!=='e'&&W[p[j-1]!]!=='ed'&&W[p[j-1]!]!=='con'&&!known.some(n=>norm(n)===cut.map(x=>W[x]).concat(W[k]!).join(' '))){out.push(txt(cut));cut=[]}
+   if(cut.length&&capStart(p,j)&&cut.some(x=>!FILL.has(W[x]!)&&!INSERT_V.test(W[x]!)&&!SKIP.has(W[x]!))){out.push(txt(cut));cut=[];guessed=true}
+   else if(cut.length&&hd(k)&&cut.some(x=>hd(x))&&!PREP.has(W[p[j-1]!]??'')&&W[p[j-1]!]!=='e'&&W[p[j-1]!]!=='ed'&&W[p[j-1]!]!=='con'&&!known.some(n=>norm(n)===cut.map(x=>W[x]).concat(W[k]!).join(' '))){out.push(txt(cut));cut=[];guessed=true}
    cut.push(k)}
   if(cut.length)out.push(txt(cut))}
  const flushPart=(ix:number[])=>{if(!ix.length)return;const Wp=ix.map(k=>W[k]!)
@@ -188,7 +203,7 @@ export function splitNamesX(seg:Tok[],known:string[],o:SplitOpts={}):{names:stri
  let cur:number[]=[]
  for(let k=0;k<W.length;k++){if(W[k]===','||W[k]===';'||W[k]===':'){flushPart(cur);cur=[];continue}cur.push(k)}
  flushPart(cur)
- return{names:out.map(clean).filter(n=>!!n&&!SKIP.has(plain(n))),doubts}}
+ return{names:out.map(clean).filter(n=>!!n&&!SKIP.has(plain(n))),doubts,guessed}}
 export function splitNames(seg:Tok[],known:string[],o:Omit<SplitOpts,'ask'>={}):string[]{return splitNamesX(seg,known,{...o,ask:false}).names}
 const clean=(n:string)=>{let ws=n.replace(/\s+/g,' ').trim().split(' ').filter(Boolean)
  // «secodi inserisci orata»: un verbo d'inserimento dentro il nome = quello che c'è prima non è il piatto
@@ -197,17 +212,18 @@ const clean=(n:string)=>{let ws=n.replace(/\s+/g,' ').trim().split(' ').filter(B
  while(ws.length&&(FILL.has(plain(ws[ws.length-1]!))||PREP.has(plain(ws[ws.length-1]!))))ws.pop()
  return ws.join(' ').replace(/' /g,"'").replace(/^l'\s*/i,'').trim()}
 
-export type InsertParse={lists:{secId:string|null,word:string,names:string[],doubts?:Doubt[]}[],loose:string[]}
+export type InsertParse={lists:{secId:string|null,word:string,names:string[],doubts?:Doubt[]}[],loose:string[],guessed?:boolean}
 /** Liste per sottomenu del testo (già tolte le parole del Menu): «nei primi inserisci A, B e C e nei secondi D», «inserisci A e B nei
  * primi», «primi: A, B; secondi: C». `loose` = nomi senza sottomenu detto. */
 export function parseInsert(text:string,secs:SectionRef[],menus:{name:string}[],known:string[],so:{lexicon?:Lexicon|null,ask?:boolean}={}):InsertParse{
  const t=tokens(text),skip=menuSpans(t,menus),ms=mentions(t,secs,skip),W=t.map(x=>x.w)
  const keepTok=(k:number)=>!skip.has(k)&&!ms.some(m=>k>=m.i&&k<m.i+m.n)
  const seg=(a:number,b:number)=>{const ix:number[]=[];for(let k=a;k<b;k++)if(keepTok(k))ix.push(k);return ix.map(k=>t[k]!)}
- const namesOf=(x:Tok[],sec:string|null=null)=>splitNames(x,known,{lexicon:so.lexicon,section:sec})
+ let guessed=false
+ const namesOf=(x:Tok[],sec:string|null=null)=>{const r=splitNamesX(x,known,{lexicon:so.lexicon,section:sec,ask:false});if(r.guessed)guessed=true;return r.names}
  // 23/10: dentro un sottomenu i pezzi dubbi («funghi misti e peperoni» fuori dai Contorni) si chiedono (so.ask) invece di indovinarli
- const namesSec=(x:Tok[],m:Mention)=>splitNamesX(x,known,{lexicon:so.lexicon,section:m.word,ask:!!so.ask&&!!m.secId})
- if(!ms.length)return{lists:[],loose:namesOf(seg(0,t.length))}
+ const namesSec=(x:Tok[],m:Mention)=>{const r=splitNamesX(x,known,{lexicon:so.lexicon,section:m.word,ask:!!so.ask&&!!m.secId});if(r.guessed)guessed=true;return r}
+ if(!ms.length){const loose=namesOf(seg(0,t.length));return{lists:[],loose,...(guessed?{guessed}:{})}}
  const verbBefore=t.slice(0,ms[0]!.i).some((x,k)=>!skip.has(k)&&INSERT_V.test(x.w)),before=verbBefore?namesOf(seg(0,ms[0]!.i)):[]
  // «inserisci A e B nei primi e C nei secondi»: i nomi stanno PRIMA del loro sottomenu (preposizione davanti alla parola).
  const prepBefore=(m:Mention)=>m.i>0&&/^(?:nei|negli|nelle|nel|nella|tra|fra|in|ai|agli|alle|al|alla|come|sotto|dentro)$/.test(W[m.i-1]!)||(m.i>1&&/^(?:i|gli|le)$/.test(W[m.i-1]!)&&/^(?:tra|fra|in)$/.test(W[m.i-2]!))
@@ -220,11 +236,11 @@ export function parseInsert(text:string,secs:SectionRef[],menus:{name:string}[],
   ms.forEach((m,j)=>{pushSeg(m,seg(start,m.i));start=m.i+m.n})
   // coda senza sottomenu dopo: «… nei secondi e anche C» → all'ultimo sottomenu detto
   pushSeg(ms[ms.length-1]!,seg(start,t.length))
-  return{lists:lists.filter(l=>l.names.length||l.doubts?.length),loose:[]}}
+  return{lists:lists.filter(l=>l.names.length||l.doubts?.length),loose:[],...(guessed?{guessed}:{})}}
  // stile «sottomenu → nomi»
  ms.forEach((m,j)=>{const end=j+1<ms.length?ms[j+1]!.i:t.length;pushSeg(m,seg(m.i+m.n,end))})
  // nomi prima del primo sottomenu senza preposizione davanti («carbonara e amatriciana primi»): restano senza sottomenu
- return{lists,loose:before}}
+ return{lists,loose:before,...(guessed?{guessed}:{})}}
 
 // ---------- azioni ----------
 type MenuInfo={menu:RuleMenu,secs:SectionRef[],items:MenuRef[]}
@@ -233,7 +249,9 @@ function findExisting(name:string,secId:string|null,items:MenuRef[]):MenuRef|nul
  const pick=(xs:MenuRef[])=>xs.find(r=>!r.hidden)??xs[0]??null
  return pick(all.filter(r=>r.sectionId===secId))??pick(all)}
 const accentize=(n:string,vocab:string[])=>{const acc=new Map(vocab.flatMap(v=>v.split(/\s+/)).filter(w=>plain(w)!==w.toLowerCase()).map(w=>[plain(w),w.toLowerCase()] as const));return n.split(' ').map(w=>acc.get(plain(w))??w).join(' ')}
-const newName=(said:string,vocab:string[])=>capW(accentize(fixSpelling(expandAbbr(said).toLowerCase(),vocab),vocab))
+// 28/10 sera (chat di Luisa «tagliolini» → «Fagiolini», «pancetta» → «paoletta»): il nome nuovo è quello scritto. Nessuna correzione dei
+// refusi sul vocabolario del locale (che rinominava i piatti): solo abbreviazioni note, accenti del locale e iniziale maiuscola.
+const newName=(said:string,vocab:string[])=>capW(accentize(expandAbbr(said).toLowerCase(),vocab))
 /** Sottomenu del Menu adatto a un piatto senza sottomenu detto (portata dal nome). */
 function courseSection(name:string,secs:SectionRef[]):SectionRef|null{const c=dishCourse(name);if(!c)return null;const f=secs.filter(s=>sameSection(s.name,c));return f.length===1?f[0]!:null}
 
@@ -295,14 +313,19 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
   if(hit){if((o.wait as any).del)return delMenuResult(hit,o);const sc=sectionClearParse(stripMenuPrice(o.wait.text,o.menus),o);return sc?runSectionClear(hit,sc,o):runOn(hit,o.wait.text,o,true)}
   return null}
  if(o.wait?.kind==='swap')return swapAnswer(o,o.wait as SwapWait)
- if(o.wait?.kind==='names'){const m=o.menus.find(x=>x.id===(o.wait as any).menuId),s=o.sections.find(x=>x.id===(o.wait as any).secId)
-  if(m&&s&&!OTHER.test(p)&&!hasDigits(p)&&!CLEAR_V.test(p)&&!/\?/.test(text)){const info=infoOf(m,o.sections,o.refs),toks=tokens(text),sk=menuSpans(toks,o.menus),ms=mentions(toks,info.secs,sk)
+ if(o.wait?.kind==='names'){const w=o.wait,m=o.menus.find(x=>x.id===w.menuId),s=o.sections.find(x=>x.id===w.secId)
+  // 28/10 sera (chat di Luisa): vale solo per QUEL Menu (un altro Menu detto = messaggio nuovo) e, se è il contesto di un sottomenu appena
+  // svuotato, solo per un elenco di piatti (un altro comando senza «inserisci» non diventa un piatto).
+  const said=menusIn(text0,o.menus),otherMenu=said.length>0&&!said.some(x=>x.id===w.menuId),otherCmd=!!w.ctx&&!INSERT_V.test(p)&&CTX_OTHER.test(p)
+  if(m&&s&&!otherMenu&&!otherCmd&&!OTHER.test(p)&&!hasDigits(p)&&!CLEAR_V.test(p)&&!/\?/.test(text)){const info=infoOf(m,o.sections,o.refs),toks=tokens(text),sk=menuSpans(toks,o.menus),ms=mentions(toks,info.secs,sk)
    // 23/10 (chat Luisa «Lasagna strozzapreti con Zola e pistacchio  orecchiette con zucca»): virgole, doppio spazio e parole che aprono un
    // piatto dividono; un pezzo con la «e» dubbia si chiede («1 piatto o 2?»), gli altri si scrivono subito. Un sottomenu detto vale.
-   if(ms.some(x=>x.secId)){const ip=parseInsert(text,info.secs,o.menus,vocab,{lexicon:o.lexicon,ask:true});if(ip.lists.length||ip.loose.length)return applyResult(info,{lists:[...ip.lists,...(ip.loose.length?[{secId:s.id,word:s.name,names:ip.loose}]:[])],loose:[]},null,vocab,text,o.lexicon??null)}
+   // 28/10 sera: un confine indovinato (senza virgola) = proposta da confermare, nessuna scrittura.
+   if(ms.some(x=>x.secId)){const ip=parseInsert(text,info.secs,o.menus,vocab,{lexicon:o.lexicon,ask:true});if(ip.lists.length||ip.loose.length)return applyResult(info,{lists:[...ip.lists,...(ip.loose.length?[{secId:s.id,word:s.name,names:ip.loose}]:[])],loose:[],...(ip.guessed?{guessed:true}:{})},null,vocab,text,o.lexicon??null)}
    const r=splitNamesX(toks.filter((x,i)=>!sk.has(i)),vocab,{lexicon:o.lexicon,section:s.name,ask:true})
-   if(r.names.length||r.doubts.length)return applyResult(info,{lists:[{secId:s.id,word:s.name,names:r.names,...(r.doubts.length?{doubts:r.doubts}:{})}],loose:[]},null,vocab,text,o.lexicon??null)}
-  return null}
+   if(r.names.length||r.doubts.length)return applyResult(info,{lists:[{secId:s.id,word:s.name,names:r.names,...(r.doubts.length?{doubts:r.doubts}:{})}],loose:[],...(r.guessed?{guessed:true}:{})},null,vocab,text,o.lexicon??null)}
+  // non è la risposta (un altro comando, un altro Menu): si legge come un messaggio nuovo
+  return ruleTurn({...o,wait:null})}
  // 23/10 sera: risposta alla proposta «Ho capito così …: • A • B — Va bene?». «sì» = applica; una correzione («funghi misti e peperoni sono
  // due piatti», «pasta e fagioli è un piatto solo») o un elenco nuovo = applicati sulla proposta; «no/annulla» = niente.
  if(o.wait?.kind==='propose'){const w=o.wait,m=o.menus.find(x=>x.id===w.menuId);if(!m)return null
@@ -320,6 +343,9 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
    if(hit){const parts=corr.phrase.split(/\s+(?:e|ed)\s+/i).map(x=>x.trim()).filter(Boolean),r=applyProposal(info,w,lists,vocab),learn=parts.length>1?[ruleFromAnswer(corr.phrase,parts,corr.kind==='split'?'split':'one')]:[];return r.kind==='apply'?{...r,learn}:{...r,learn} as RuleResult}}
   if(!OTHER.test(pp)&&!hasDigits(pp)&&!CLEAR_V.test(pp)&&!/\?/.test(text)&&w.lists.length===1){const s0=info.secs.find(x=>x.id===w.lists[0]!.secId);if(s0){const toks=tokens(text),sk=menuSpans(toks,o.menus),r=splitNamesX(toks.filter((x,i)=>!sk.has(i)),vocab,{lexicon:o.lexicon,section:s0.name,ask:false})
    if(r.names.length&&!r.names.some(n=>NOT_DISH.test(plain(n))))return applyProposal(info,w,[{secId:s0.id,names:r.names}],vocab)}}
+  // 28/10 sera (chat di Luisa): non è una risposta alla proposta (per esempio «elimina secondi menù sera»): la proposta decade e il
+  // messaggio si legge come nuovo (prima andava al modello, che non svuotava nulla).
+  if(CLEAR_V.test(pp)||INSERT_V.test(pp)||sectionClearParse(text,o))return ruleTurn({...o,wait:null})
   return null}
  // 23/10: risposta a «"funghi misti e peperoni": 1 piatto o 2?» (gli altri piatti del messaggio erano già scritti). Si impara la risposta.
  if(o.wait?.kind==='split'){const w=o.wait,it=w.items[0],ans=doubtAnswer(text),m=o.menus.find(x=>x.id===w.menuId),s=it?o.sections.find(x=>x.id===it.secId):undefined
@@ -412,13 +438,13 @@ function runOn(menu:RuleMenu,text:string,o:RuleInput,answer:boolean,fromCtx=fals
  if(insText.trim()&&(INSERT_V.test(p)||clr||answer)){parse=parseInsert(insText,info.secs,o.menus,vocab,{lexicon:o.lexicon,ask:true})
   // «nei primi inserisci» senza nomi: si chiedono i nomi (una riga)
   if(!clr&&!parse.loose.length&&parse.lists.length===1&&!parse.lists[0]!.names.length&&!parse.lists[0]!.doubts?.length&&parse.lists[0]!.secId){const s=info.secs.find(x=>x.id===parse.lists[0]!.secId)!;return{kind:'ask',question:'Cosa inserisco nei *'+s.name+'* del '+mLabel(menu.name)+'? Scrivimi i piatti, per esempio «carbonara, lasagne».',wait:{kind:'names',menuId:menu.id,secId:s.id}}}
-  parse={lists:parse.lists.filter(l=>l.names.length||l.doubts?.length||!l.secId),loose:parse.loose}}
+  parse={lists:parse.lists.filter(l=>l.names.length||l.doubts?.length||!l.secId),loose:parse.loose,...(parse.guessed?{guessed:true}:{})}}
  // 23/10 (chat Luisa «E inserisci» dopo «elimina i primi»): inserire senza dire il sottomenu = il sottomenu di cui si parlava
  // (ultimo messaggio del titolare che lo nomina, nello stesso Menu). Senza nomi: UNA domanda che chiede i piatti (con lo stato salvato).
- const justCleared=/Ora scrivimi i piatti nuovi|Cosa inserisco/.test([...o.history].filter(t=>t.role==='bot').sort((a,b)=>b.at-a.at)[0]?.text??'')
+ const lastBotT=[...o.history].filter(t=>t.role==='bot').sort((a,b)=>b.at-a.at)[0],justCleared=!!lastBotT&&Date.now()-lastBotT.at<=10*60*1000&&/Ora scrivimi i piatti nuovi|Cosa inserisco/.test(lastBotT.text) // 28/10 sera: solo entro 10 minuti
  const defSec=!clr&&!parse.lists.length&&(STRONG_INSERT.test(p)||justCleared&&INSERT_V.test(p))&&(menusIn(text,o.menus).some(m=>m.id===menu.id)||contextMenu(o.history,o.menus,4)?.id===menu.id)?contextSection(o.history,info,o.menus):null // solo «inserisci/aggiungi» (batteria v181: «metti tutto a zero» diventava un piatto)
  if(defSec&&!parse.loose.length&&INSERT_V.test(p)&&!/\?/.test(text))return{kind:'ask',question:'Cosa inserisco nei *'+defSec.name+'* del '+mLabel(menu.name)+'? Scrivimi i piatti, per esempio «lasagna, carbonara».',wait:{kind:'names',menuId:menu.id,secId:defSec.id}}
- if(defSec&&parse.loose.length){const toSec=parse.loose.filter(n=>!findExisting(n,null,info.items)&&!courseSection(n,info.secs));if(toSec.length){parse={lists:[{secId:defSec.id,word:defSec.name,names:toSec}],loose:parse.loose.filter(n=>!toSec.includes(n))}}}
+ if(defSec&&parse.loose.length){const toSec=parse.loose.filter(n=>!findExisting(n,null,info.items)&&(justCleared||!courseSection(n,info.secs)));if(toSec.length){parse={lists:[{secId:defSec.id,word:defSec.name,names:toSec}],loose:parse.loose.filter(n=>!toSec.includes(n)),...(parse.guessed?{guessed:true}:{})}}}
  // Menu preso dalla conversazione ma il sottomenu detto è di un ALTRO Menu («aggiungi il tiramisù nei dolci» dopo la cena): non è la regola
  if(fromCtx&&parse.lists.some(l=>!l.secId&&o.sections.some(x=>x.menu!==menu.name&&sameSection(x.name,l.word))))return null
  if(!clr){if(!parse.lists.length&&!parse.loose.length)return null
@@ -431,8 +457,11 @@ function applyResult(info:MenuInfo,parse:InsertParse,clear:{deleteWord:boolean,k
  // 23/10: pezzi dubbi («"funghi misti e peperoni": 1 piatto o 2?») → una domanda di una riga; tutto il resto si scrive subito
  const doubts=parse.lists.flatMap(l=>l.secId?(l.doubts??[]).map(d=>({...d,secId:l.secId!})):[])
  // 23/10 sera (Manuel): con un pezzo dubbio niente «1 piatto o 2?»: UNA domanda che mostra la proposta intera (lettura più probabile).
- if(doubts.length&&info.menu.pricing==='fisso'){const keepIds=new Set<string>();for(const n of clear?.keep??[]){const ex=findExisting(n,null,info.items);if(ex)keepIds.add(ex.id)}
-  return proposeFrom(info,parse,clear?info.items.filter(r=>!keepIds.has(r.id)).map(r=>r.id):[],vocab,lexicon)}
+ // 28/10 sera (chat di Luisa): lo stesso se i confini tra i piatti o i sottomenu sono indovinati (elenco senza virgole, piatti messi
+ // per portata): nessuna scrittura finché il titolare non conferma.
+ const gp=info.menu.pricing==='fisso'?guessedPlan(info,parse):null
+ if(gp){const keepIds=new Set<string>();for(const n of clear?.keep??[]){const ex=findExisting(n,null,info.items);if(ex)keepIds.add(ex.id)}
+  return proposeFrom(info,{lists:gp.lists,loose:[],guessed:parse.guessed},clear?info.items.filter(r=>!keepIds.has(r.id)).map(r=>r.id):[],vocab,lexicon,gp.unplaced)}
  const ask:RuleAsk|null=doubts.length?{question:doubtQuestion(doubts[0]!.text,doubts[0]!.parts.length),wait:{kind:'split',menuId:info.menu.id,items:doubts}}:null
  const b=buildInsert(info,parse,vocab)
  // Menu alla carta: un piatto nuovo vuole il prezzo → resta il percorso di prima (domanda del prezzo), salvo lo svuotamento
@@ -468,7 +497,8 @@ export function sectionClearParse(text:string,o:{menus:RuleMenu[],sections:Secti
  return words.length?{words,clear,insert:hasIns?sp.insert:''}:null}
 /** Sottomenu di cui si parla adesso: gli ultimi 2 scambi (titolare e bot, entro 10 minuti) che nominano un sottomenu di QUESTO Menu. */
 function contextSection(history:{role:string,text:string,at:number}[],info:MenuInfo,menus:{name:string}[]):SectionRef|null{
- const now=Math.max(0,...history.map(h=>h.at))
+ // 28/10 sera: i 10 minuti contano da ADESSO (prima dall'ultimo messaggio salvato: un contesto vecchio valeva ancora)
+ const now=Date.now()
  for(const h of [...history].sort((a,b)=>b.at-a.at).slice(0,4).filter(x=>now-x.at<=10*60*1000)){const t=tokens(h.text),ms=mentions(t,info.secs,menuSpans(t,menus)).filter(m=>m.secId);if(ms.length)return info.secs.find(x=>x.id===ms[ms.length-1]!.secId)??null}
  return null}
 function runSectionClear(menu:RuleMenu,scp:{words:string[],clear:string,insert:string},o:RuleInput):RuleResult|null{
@@ -477,15 +507,16 @@ function runSectionClear(menu:RuleMenu,scp:{words:string[],clear:string,insert:s
  let parse:InsertParse={lists:[],loose:[]}
  if(scp.insert.trim()){parse=parseInsert(scp.insert,info.secs,o.menus,vocab,{lexicon:o.lexicon,ask:true})
   // nomi senza sottomenu detto = nel sottomenu appena svuotato (uno solo), altrimenti per portata
-  if(parse.loose.length&&secs.length===1)parse={lists:[...parse.lists,{secId:secs[0]!.id,word:secs[0]!.name,names:parse.loose}],loose:[]}
-  parse={lists:parse.lists.filter(l=>l.names.length||l.doubts?.length||!l.secId),loose:parse.loose}}
+  const g=parse.guessed?{guessed:true}:{}
+  if(parse.loose.length&&secs.length===1)parse={lists:[...parse.lists,{secId:secs[0]!.id,word:secs[0]!.name,names:parse.loose}],loose:[],...g}
+  parse={lists:parse.lists.filter(l=>l.names.length||l.doubts?.length||!l.secId),loose:parse.loose,...g}}
  if([...parse.lists.flatMap(l=>[...l.names,...(l.doubts??[]).map(d=>d.one)]),...parse.loose].some(n=>NOT_DISH.test(plain(n))))return null
  const b=buildInsert(info,parse,vocab)
  if(b.needsPrice.length)return null // alla carta i piatti nuovi vogliono il prezzo: resta il percorso di prima
  const ids=new Set(secs.map(x=>x.id)),old=info.items.filter(r=>ids.has(r.sectionId??'')&&!b.touched.has(r.id))
  const dels=old.map(r=>({kind:'delete',id:r.id,soft:true}) as MenuAction),actions=[...dels,...b.actions]
  const doubts=parse.lists.flatMap(l=>l.secId?(l.doubts??[]).map(d=>({...d,secId:l.secId!})):[])
- if(doubts.length&&menu.pricing==='fisso')return proposeFrom(info,parse,old.map(r=>r.id),vocab,o.lexicon??null)
+ if(menu.pricing==='fisso'){const gp=guessedPlan(info,parse);if(gp)return proposeFrom(info,{lists:gp.lists,loose:[],guessed:parse.guessed},old.map(r=>r.id),vocab,o.lexicon??null,gp.unplaced)}
  const ask:RuleAsk|null=doubts.length?{question:doubtQuestion(doubts[0]!.text,doubts[0]!.parts.length),wait:{kind:'split',menuId:menu.id,items:doubts}}:null
  if(!actions.length){
   if(ask)return{kind:'ask',question:ask.question,wait:ask.wait}
@@ -494,7 +525,10 @@ function runSectionClear(menu:RuleMenu,scp:{words:string[],clear:string,insert:s
  if(menu.pricing!=='fisso'){if(b.actions.length)return null
   return{kind:'confirm',menu,actions:dels,question:'Elimino '+(old.length===1?'il piatto':'tutti i '+old.length+' piatti')+' dei '+andList(secs.map(x=>'*'+x.name+'*'))+' del '+mLabel(menu.name)+'? Il sottomenu resta. Rispondi *sì* per eliminarli, oppure *no*.'}}
  const report:RuleReport={menu:menu.name,fixed:true,cleared:old.map(r=>r.name),deleteWord:true,sections:b.sections,unknownSecs:b.unknownSecs,notPlaced:[...b.notPlaced],clearedSecs:secs.map(x=>({secId:x.id,name:x.name}))}
- return{kind:'apply',menu,actions,report,ask}}
+ // 28/10 sera (chat di Luisa): «elimina secondi menù sera» da solo → «Ora scrivimi i piatti nuovi». Il sottomenu svuotato resta il contesto
+ // (salvato col Menu e il numero, scade come ogni attesa): il prossimo «inserisci …» senza sottomenu va lì, mai per portata.
+ const ctxAsk:RuleAsk|null=!ask&&!scp.insert.trim()&&secs.length===1?{question:'Cosa inserisco nei *'+secs[0]!.name+'* del '+mLabel(menu.name)+'?',wait:{kind:'names',menuId:menu.id,secId:secs[0]!.id,ctx:true},silent:true}:null
+ return{kind:'apply',menu,actions,report,ask:ask??ctxAsk}}
 
 // ---------- scrittura da telefono (23/10, «a prova di chiunque») ----------
 /** Abbreviazioni comuni → parole intere, solo per la lettura delle regole (il modello riceve il messaggio originale). */
@@ -519,14 +553,29 @@ function formulaPrice(text:string,text0:string,o:RuleInput):RuleResult|null{
 // ---------- proposta con la lettura più probabile (23/10 sera, Manuel: domande intelligenti) ----------
 /** Il pezzo dubbio letto nel modo più probabile (stessa regola della divisione senza domanda). */
 function guessNames(d:Doubt,section:string|null,lexicon:Lexicon|null):string[]{const W=plain(d.one).split(' ').filter(Boolean),pcs=splitPieces(W,{lexicon,section},false);return pcs.length>1?d.parts:[d.one]}
-function proposeFrom(info:MenuInfo,parse:InsertParse,clearIds:string[],vocab:string[],lexicon:Lexicon|null):RuleResult{
+/** 28/10 sera: piano da far confermare quando la lettura indovina qualcosa: un pezzo dubbio, un confine senza virgola (`guessed`) o un
+ * piatto NUOVO senza sottomenu detto (messo per portata). Ogni nome finisce in una lista col suo sottomenu; `unplaced` = senza sottomenu.
+ * null = niente da indovinare (si scrive subito). Mai con un sottomenu sconosciuto (lo segnala la risposta normale). */
+function guessedPlan(info:MenuInfo,parse:InsertParse):{lists:InsertParse['lists'],unplaced:string[]}|null{
+ if(parse.lists.some(l=>!l.secId))return null
+ const fresh=parse.loose.filter(n=>!findExisting(n,null,info.items))
+ if(!parse.guessed&&!parse.lists.some(l=>l.doubts?.length)&&!fresh.length)return null
+ const lists=parse.lists.map(l=>({...l,names:[...l.names]})),unplaced:string[]=[]
+ const add=(secId:string,word:string,n:string)=>{let l=lists.find(x=>x.secId===secId);if(!l){l={secId,word,names:[]};lists.push(l)}if(!l.names.includes(n))l.names.push(n)}
+ for(const n of parse.loose){const ex=findExisting(n,null,info.items),s=ex?info.secs.find(x=>x.id===ex.sectionId)??null:courseSection(n,info.secs)??(info.secs.length===1?info.secs[0]!:null)
+  if(s)add(s.id,s.name,n);else unplaced.push(n)}
+ return{lists,unplaced}}
+function proposeFrom(info:MenuInfo,parse:InsertParse,clearIds:string[],vocab:string[],lexicon:Lexicon|null,unplaced:string[]=[]):RuleResult{
  const lists=parse.lists.filter(l=>l.secId).map(l=>{const sec=info.secs.find(x=>x.id===l.secId);return{secId:l.secId!,names:[...l.names,...(l.doubts??[]).flatMap(d=>guessNames(d,sec?.name??null,lexicon))].map(n=>newName(n,vocab))}}).filter(l=>l.names.length)
  const ids=new Set(clearIds),secs=info.secs.filter(x=>info.items.some(r=>ids.has(r.id)&&r.sectionId===x.id))
  const head=lists.length===1&&!secs.some(x=>x.id!==lists[0]!.secId)?'Ho capito così, nei *'+info.secs.find(x=>x.id===lists[0]!.secId)!.name+'* del '+mLabel(info.menu.name)+':':'Ho capito così, nel '+mLabel(info.menu.name)+':'
  const out=[head]
  if(clearIds.length)out.push('Tolgo '+andList(info.items.filter(r=>ids.has(r.id)).map(r=>r.name))+'.')
  for(const l of lists){const sec=info.secs.find(x=>x.id===l.secId)!;out.push((lists.length>1||!head.includes('nei *')?'*'+sec.name+'*\n':'')+l.names.map(n=>'• '+n).join('\n'))}
- out.push('Va bene? Rispondi *sì* oppure scrivimi cosa correggere.')
+ if(unplaced.length)out.push('Non so in quale sottomenu mettere '+andList(unplaced.map(n=>'*'+newName(n,vocab)+'*'))+': scrivimelo, per esempio «nei secondi inserisci '+newName(unplaced[0]!,vocab).toLowerCase()+'».')
+ // nessun piatto da proporre (solo nomi senza sottomenu): una domanda, nessuna scrittura
+ if(!lists.length)return{kind:'info',text:'Non ho cambiato nulla. '+out.slice(1).join(' ')}
+ out.push(parse.guessed?'Va bene? Rispondi *sì*, oppure riscrivimi i piatti separati da una virgola.':'Va bene? Rispondi *sì* oppure scrivimi cosa correggere.')
  return{kind:'ask',question:out.join('\n\n'),wait:{kind:'propose',menuId:info.menu.id,clearIds,lists}}}
 function applyProposal(info:MenuInfo,w:{clearIds:string[]},lists:{secId:string,names:string[]}[],vocab:string[]):RuleResult{
  const b=buildInsert(info,{lists:lists.map(l=>({secId:l.secId,word:info.secs.find(x=>x.id===l.secId)?.name??'',names:l.names})),loose:[]},vocab)

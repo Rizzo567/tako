@@ -284,9 +284,17 @@ const pdfAsk=/\b(?:mandami|mandamelo|mandameli|mandarmi|mandarmelo|inviami|invia
 const pdfWord=/\b(?:pdf|da stampare|stampabile|stampami|stampamelo)\b/
 const pdfWant=/\b(?:voglio|vorrei|mi serve|mi servirebbe|ho bisogno)\b/
 const pdfFiller=new Set('il lo la i gli le l un una uno del dello della dei degli delle di da a al allo alla ai agli alle in per con me mi ce ci ne lo e anche pure oggi adesso ora subito gia appena per favore piacere grazie ciao tako puoi potresti riesci riusciresti si quello quella nuovo nuova aggiornato aggiornata ultimo ultima definitivo come ha hai chiesto detto che cosi stampo stampare stamparlo stamparla appendere tavoli tavolo cucina sala'.split(' '))
-export function pdfIntent(raw:string,menus:readonly {id:string,name:string}[],dishNames:readonly string[]=[]):PdfIntent|null{
- let t=plainText(raw).replace(/[,.]/g,' ').replace(/\s+/g,' ').trim()
- if(!t||!/\b(?:menu|pdf|stamp\w*)\b/.test(t)||t.split(' ').length>16||!menus.length)return null
+/** 28/10 sera (chat di Luisa, «Mandami menù sera» → «Quale menu?» tre volte): opzioni della richiesta di PDF.
+ * `alias` = la STESSA risoluzione dei Menu usata dalle modifiche (menusIn: «sera/stasera» → Cena, «pranzo/mezzogiorno» → Giorno);
+ * `current` = il Menu di cui si parla nella conversazione, usato solo per «mandami l'anteprima» senza nome. */
+export type PdfOptions={alias?:(text:string)=>string[],current?:string|null}
+/** Parole del pasto: indicano un Menu (tramite `alias`), mai «altro» nel messaggio. */
+const pdfMeal=/^(?:sera|serale|stasera|cena|pranzo|mezzogiorno|giorno|oggi)$/
+const pdfPreview=/\banteprim\w*\b/
+export function pdfIntent(raw:string,menus:readonly {id:string,name:string}[],dishNames:readonly string[]=[],o:PdfOptions={}):PdfIntent|null{
+ // «manda mi», «invia mi» (dettatura vocale) = «mandami», «inviami»
+ let t=plainText(raw).replace(/[,.]/g,' ').replace(/\b(manda|invia|gira|passa) mi\b/g,'$1mi').replace(/\s+/g,' ').trim()
+ if(!t||!/\b(?:menu|pdf|stamp\w*|anteprim\w*)\b/.test(t)||t.split(' ').length>16||!menus.length)return null
  // «che ho appena cambiato / modificato»: racconta una modifica già fatta, non ne chiede una.
  t=t.replace(/\b(?:che |quello che |come )?(?:ho|abbiamo|hai|avete|ha) (?:appena |gia |ora |adesso )?\w+(?:at|ut|it)[oaie]\b/g,' ').replace(/\s+/g,' ').trim()
  const w=t.split(' ').filter(Boolean),pad=' '+t+' '
@@ -294,7 +302,7 @@ export function pdfIntent(raw:string,menus:readonly {id:string,name:string}[],di
  const complaint=/\b(lent\w*|non (?:si )?(?:apre|funziona|va|carica|vede|parte|entra|stampa|riesco|esce|arriva)|blocc\w*|error\w*|rott\w*|sbagliat\w*|problem\w*|manca\w*|bianc\w*|vuot\w*|brutt\w*|piccol\w*)\b/
  if(change.test(t)||complaint.test(t))return null
  if(/\b(?:ti|vi|lo|li|la) (?:mando|invio|giro|passo|mandiamo|inviamo)\b|\b(?:ho|abbiamo) (?:mandato|inviato)\b/.test(t))return null
- const ask=pdfAsk.test(t),paper=pdfWord.test(t)
+ const ask=pdfAsk.test(t),preview=pdfPreview.test(t),paper=pdfWord.test(t)||preview
  if(!ask&&!(paper&&(pdfWant.test(t)||/\b(?:pdf|da stampare)\b/.test(t))))return null
  if(/\b(link|indirizz\w*|url|sito|digitale|online|on line|qr|dashboard|pannello|password)\b/.test(t)&&!paper)return null
  if(/\b(?:nel|nei|sul|dal) menu\b/.test(t)||/\b(?:cosa|che cosa|quali|quanto|quanti)\b/.test(t))return null
@@ -305,8 +313,10 @@ export function pdfIntent(raw:string,menus:readonly {id:string,name:string}[],di
   if(pad.includes(' '+k+' '))return true
   // «menu del giorno» / «di oggi» / «giornaliero» per il Menu che si chiama Giorno.
   return /\bgiorn\w*\b/.test(k)&&/\b(?:del giorno|di oggi|giornaliero|giornata)\b/.test(t)})
+ // nessun nome intero: la parola del pasto risolta come nelle modifiche («menù sera» → Menu Cena)
+ if(!hits.length&&o.alias){const ids=new Set(o.alias(raw));hits.push(...menus.filter(m=>ids.has(m.id)))}
  // Tolti verbo, Menu, parole da stampa e riempitivi non deve restare altro: altrimenti è un messaggio di lavoro sul menu.
- const g=(r:RegExp)=>new RegExp(r.source,'g'),rest=t.replace(g(pdfAsk),' ').replace(g(pdfWord),' ').replace(g(pdfWant),' ').split(' ').filter(x=>x&&x!=='menu'&&x!=='e'&&!menuWords.has(x)&&!pdfFiller.has(x)&&!/^(?:giorno|giornaliero|giornata|stampa\w*|mandar\w*|inviar\w*)$/.test(x))
+ const g=(r:RegExp)=>new RegExp(r.source,'g'),rest=t.replace(g(pdfAsk),' ').replace(g(pdfWord),' ').replace(g(pdfWant),' ').split(' ').filter(x=>x&&x!=='menu'&&x!=='e'&&!menuWords.has(x)&&!pdfFiller.has(x)&&!pdfMeal.test(x)&&!pdfPreview.test(x)&&!/^(?:giorno|giornaliero|giornata|stampa\w*|mandar\w*|inviar\w*)$/.test(x))
  if(rest.length>3||/\d/.test(rest.join(' ')))return null
  if(!/\bmenu\b/.test(t)&&!paper)return null
  // «Cena» e «Cena di Natale»: con «menu cena di natale» vale solo il nome più lungo.
@@ -316,5 +326,7 @@ export function pdfIntent(raw:string,menus:readonly {id:string,name:string}[],di
  // digitale solo se lo si chiede («mandami il link», «link del menu», «menu digitale»: filtrati sopra).
  if(!paper&&!(ask&&/\bmenu\b/.test(t)))return null
  if(menus.length===1)return {menuIds:[menus[0]!.id]}
+ // «mandami l'anteprima» senza nome: il Menu di cui si sta parlando, se è uno solo; altrimenti si chiede quale.
+ if(preview&&o.current&&menus.some(m=>m.id===o.current))return {menuIds:[o.current]}
  return {ask:menus.map(m=>m.name)}
 }

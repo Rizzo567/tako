@@ -49,8 +49,8 @@ import {fixTruncatedNumbers,undoRequested,explicitUndoRequested,ignoredInQuestio
 import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,groupPercent,priceSheet,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,sectionGroupWord,pureDrop,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
-import {enqueueTurn,waitTurn,releaseTurn} from '../lib/whatsapp-turn-queue.js'
-import {menusIn,ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,insertForQuestion,shorthand,type RuleWait,type RuleReport,type RuleAsk} from '../lib/owner-brain-svuota.js'
+import {enqueueTurn,waitTurn,releaseTurn,turnsBusy} from '../lib/whatsapp-turn-queue.js'
+import {menusIn,contextMenu,ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,insertForQuestion,shorthand,type RuleWait,type RuleReport,type RuleAsk} from '../lib/owner-brain-svuota.js'
 import {loadLexicon,saveSplitRules} from '../lib/dish-lexicon.js'
 import type {Lexicon,SplitRule} from '../lib/dish-split.js'
 /** 24/10: un piatto di un Menu a prezzo fisso non ha prezzo suo: il testo lo dice con le opzioni e un esempio. */
@@ -119,10 +119,14 @@ async function linkTurn(tx:Tx,ctx:Ctx,body:string):Promise<{say:string,secret?:s
  * solo se il locale lo può servire (la route darebbe 404 a locale spento, in prova o rimosso). */
 async function pdfTurn(tx:Tx,ctx:Ctx,body:string):Promise<string|null>{
  // 28/10 sera (chat di Luisa): «Mandami menù giorno» non passava: in JS «ù» non è una lettera per \b. Si filtra sul testo senza accenti.
- if(!/\b(?:menu|pdf|stamp\w*)\b/.test(normalizeMenuText(body)))return null
+ if(!/\b(?:menu|pdf|stamp\w*|anteprim\w*)\b/.test(normalizeMenuText(body)))return null
  const row=await readWorkspace(ctx.tenant,tx),pub=row?.published as Workspace|null|undefined
- const menus=(pub?.menus??[]).filter(m=>m.sections.some(s=>s.items.length)).map(m=>({id:m.id,name:m.name,active:(m as {active?:boolean}).active!==false}))
- const intent=pdfIntent(body,menus,pub?catalogOf(pub).refs.map(r=>r.name):[]);if(!intent)return null
+ const full=(pub?.menus??[]).filter(m=>m.sections.some(s=>s.items.length)),menus=full.map(m=>({id:m.id,name:m.name,active:(m as {active?:boolean}).active!==false}))
+ // 28/10 sera: stessa risoluzione dei Menu delle modifiche («menù sera» → Cena) e, per «anteprima» senza nome, il Menu della conversazione.
+ const alias=(t:string)=>menusIn(t,full as any[]).map((m:any)=>String(m.id))
+ let current:string|null=null
+ if(/\banteprim/.test(normalizeMenuText(body))){try{const hist=await sqlBrainStore(tx).readHistory(ctx.tenant,ctx.phone,Date.now());current=(contextMenu(hist,full as any[],4) as any)?.id??null}catch{/* senza cronologia: si chiede quale */}}
+ const intent=pdfIntent(body,menus,pub?catalogOf(pub).refs.map(r=>r.name):[],{alias,current});if(!intent)return null
  if('ask' in intent){const shown=menus.filter(m=>m.active).map(m=>m.name),list=shown.length?shown:intent.ask;return fill(copy.pdfWhich,{menu:list.map(n=>'• '+safe(n)).join('\n'),esempio:safe(list[0]!)})}
  if(!await chatPdfAvailable(ctx.tenant,tx))return copy.pdfFailed
  const chosen=intent.menuIds.map(id=>menus.find(m=>m.id===id)!).filter(Boolean),label=chosen.map(m=>m.name).join(' + ')
@@ -1181,7 +1185,8 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    if(pre?.why==='regola'&&ruleRep){const txt=ruleReply(ruleRep,refs.filter(x=>x.menu===ruleRep!.menu),effective,true,r.inherited+(r.allOk?'':'\n\n'+r.facts))
     if(!ruleAsk)return txt
     const q=ruleAsk.question,w=ruleAsk.wait;await propose(tx,ctx,r.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,rule:w} as any)
-    return txt+'\n\n'+q}
+    // 28/10 sera: contesto del sottomenu svuotato (silent): la risposta dice già «Ora scrivimi i piatti nuovi», nessuna domanda in più
+    return ruleAsk.silent?txt:txt+'\n\n'+q}
    // Prova dal vivo 21/10: aumento/ribasso uniforme applicato subito → solo il testo del server (la bozza prometteva un riepilogo e
    // nominava come «lasciati fuori» piatti che invece erano stati cambiati).
    if(engine==='haiku'&&r.allOk){const dl=uniformDelta(effective,refs);if(dl!==null)return [uniformReply(dl,effective.length,r.facts),already,UNDO_HINT].filter(Boolean).join('\n\n')
@@ -1441,7 +1446,9 @@ async function runJob(kind:'audio'|'text'|'image',ctx:Ctx,sid:string,body:string
  const problem:FailureKind|null=budget.expired?'job_timeout':budget.failed?'job_failed':null
  if(process.env.TAKO_BRAIN_DEBUG)void import('node:fs').then(fs=>fs.appendFileSync(String(process.env.TAKO_BRAIN_DEBUG),'JOB '+JSON.stringify({kind,body:body.slice(0,60),message:String(message).slice(0,120),problem})+'\n'))
  if(!message){if(problem)await reportFailure({kind:problem,tenant:ctx.tenant,phone:ctx.phone,detail:kind});return}if(lead)message=lead+message;const accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'',from=process.env.TWILIO_WHATSAPP_NUMBER||''
- try{await sendWhatsApp(accountSid,token,from,ctx.phone,message)}catch{await new Promise(r=>setTimeout(r,1500));try{await sendWhatsApp(accountSid,token,from,ctx.phone,message)}catch(error){await reportFailure({kind:'send_failed',tenant:ctx.tenant,phone:ctx.phone,detail:error instanceof Error?error.message:'Error'});return}}
+ // 28/10 sera: un messaggio in più parti (PDF del menu: testo, poi l'allegato) parte in invii separati e in ordine, come nel TwiML.
+ for(const part of message.split(nextMessage).filter(Boolean)){
+  try{await sendWhatsApp(accountSid,token,from,ctx.phone,part)}catch{await new Promise(r=>setTimeout(r,1500));try{await sendWhatsApp(accountSid,token,from,ctx.phone,part)}catch(error){await reportFailure({kind:'send_failed',tenant:ctx.tenant,phone:ctx.phone,detail:error instanceof Error?error.message:'Error'});return}}}
  await db.execute(sql`UPDATE tako_whatsapp_messages SET response=${sent+message} WHERE sid=${sid}`)
  if(problem)await reportFailure({kind:problem,tenant:ctx.tenant,phone:ctx.phone,detail:kind})
 }
@@ -1469,10 +1476,15 @@ async function jobMessageCore(kind:'audio'|'text'|'image',ctx:Ctx,body:string,fo
      const {onboardingTransport,queueOnboardingChat}=await import('../lib/onboarding-chat.js');const agency=await onboardingTransport(ctx.phone,text);
      if(agency){await queueOnboardingChat(agency.actor,ctx.phone,form.MessageSid!,text,{...form,OnboardingVoice:'1',NumMedia:'0'});return ''}
     }
-   }if(budget.expired)return '';const turn=await turnFor(ctx,text,{voice:kind==='audio',isExpired:()=>budget.expired,beginWrite:()=>beginWrite(budget)});if(kind==='audio')budget.voice=true;response=typeof turn==='string'?turn:await resolveTurn(ctx,text,turn,key,ai,budget)}}
+   }if(budget.expired)return ''
+   // 28/10 sera (vocali di Luisa «mandami menù cena da stampare»): testo scritto e trascrizione passano dalla STESSA richiesta di PDF,
+   // prima del percorso che modifica i piatti (che con un PDF non deve mai partire).
+   const pdf=await db.transaction(tx=>pdfTurn(tx,ctx,text))
+   if(pdf)response=pdf
+   else{const turn=await turnFor(ctx,text,{voice:kind==='audio',isExpired:()=>budget.expired,beginWrite:()=>beginWrite(budget)});if(kind==='audio')budget.voice=true;response=typeof turn==='string'?turn:await resolveTurn(ctx,text,turn,key,ai,budget)}}}
  }catch(error){if(!(error instanceof GroqBusy))budget.failed=true;response=brainOn&&!(error instanceof WorkspaceTrialLocked)?copy.brainDown:error instanceof GroqBusy?copy.busy:kind==='audio'&&!prefix?copy.voiceFailed:kind==='image'?copy.photoDownload:/^Groq 5\d\d$/.test(String((error as any)?.message??''))?copy.aiDown:copy.failed}
  if(response)response=await resolveLinks(db,ctx,response).catch(()=>response)
- if(response&&kind!=='image'&&!budget.expired)await rememberTurn(db,ctx.tenant,ctx.phone,text,prefix+response)
+ if(response&&kind!=='image'&&!budget.expired)await rememberTurn(db,ctx.tenant,ctx.phone,text,withoutMedia(prefix+response))
  return response?prefix+response:''
 }
 export async function twilioMenuRoutes(app:FastifyInstance){
@@ -1616,7 +1628,9 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  // 19/10 (richiesta Manuel): «sei un bot?» / «sei una persona?» → la riga «assistente automatico», una volta sola anche al primo messaggio.
  if(media===0&&botQuestion(body))return answer(copy.aiDisclosure)
  // 19/10: link della dashboard / del menu digitale. Le credenziali (account creato ora) partono a parte (REST), mai nel TwiML in cache.
- if(media===0){const pdf=await pdfTurn(tx,ctx,body);if(pdf)return say(pdf)}
+ // 28/10 sera (chat di Luisa 19:03): con messaggi dello stesso numero ancora in lavorazione il PDF va in fila (risposta e PDF dopo le
+ // modifiche chieste prima, mai un PDF del menu di prima davanti alla loro conferma). Lo serve il job (jobMessageCore → pdfTurn).
+ if(media===0){const pdf=await pdfTurn(tx,ctx,body);if(pdf){if(!await turnsBusy(tx,phone))return say(pdf);await reserve(tx,sid);await enqueueTurn(tx,phone,sid);return{job:'text' as const,ctx,ack:'',prefix}}}
  if(media===0){const link=await linkTurn(tx,ctx,body);if(link){if(link.secret)return{kind:'secret' as const,say:await say(link.say),secret:[(link.say||!disclose?'':copy.aiDisclosure+'\n\n')+link.secret],ctx,...(link.deliver?{deliver:link.deliver}:{})};return say(link.say)}}
  if(media>0){const type=form.MediaContentType0||'',job=whatsappAudioType(type,body)?'audio' as const:/^image\//i.test(type)?'image' as const:null;if(!job)return say(copy.mediaOnly);await reserve(tx,sid);await enqueueTurn(tx,phone,sid);return{job,ctx,ack:'',prefix}}
  if(!body&&!(await readBotBrain(tx,ctx.tenant)))return say(copy.help);const turn=await menuTurn(tx,ctx,body);if(typeof turn==='string')return say(turn);if('llm' in turn&&!aiKeyFor(turn,await readBotSettings(tx,ctx.tenant)))return say((turn as any).brain?copy.brainDown:copy.noAi);await reserve(tx,sid);await enqueueTurn(tx,phone,sid);return{job:'text' as const,ctx,ack:'upload' in turn?prefix+copy.photoWorking:'',prefix:'upload' in turn?'':prefix}}).catch(async error=>{if(error instanceof WorkspaceTrialLocked)return error.message;req.log.error({error:error instanceof Error?error.message.slice(0,80):'Error'},'WhatsApp turn failed');await inBackground(reportFailure({kind:error instanceof TestFault?'test_fault':'webhook_error',tenant:scope.tenant??null,phone,detail:error instanceof Error?error.message:'Error'}));return copy.failed});
