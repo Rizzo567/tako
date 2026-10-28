@@ -1,3 +1,4 @@
+import {passwordChangeAllowed} from '../lib/migration-access/core.js'
 import {isAgencyUser} from '../lib/agency-access.js'
 import {resolveWebLocation,menuEditorAllowed} from '../lib/web-location-scope.js'
 import type { FastifyRequest, FastifyReply } from 'fastify'
@@ -26,6 +27,8 @@ export async function requireAuth(req: FastifyRequest, reply: FastifyReply) {
 
   if (!session) return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Invalid or expired token' } })
 
+  if(session.user.mustChangePassword&&!passwordChangeAllowed(req.url,req.method))return reply.code(403).send({error:{code:'PASSWORD_CHANGE_REQUIRED',message:'Scegli una nuova password prima di continuare.'}})
+
   // Refresh ROLLING della sessione staff: finché usi l'app, la scadenza si sposta
   // avanti (login persistente). Rinnova al più una volta al giorno per non scrivere
   // a ogni richiesta. Best-effort: un errore qui non deve bloccare la richiesta.
@@ -51,7 +54,7 @@ export async function requireAuth(req: FastifyRequest, reply: FastifyReply) {
   const scope = await resolveWebLocation(token,session.user)
   if (!scope) return reply.code(401).send({error:{code:'LOCATION_ACCESS_REVOKED',message:'Accesso al locale revocato.'}})
   if(!isAgencyUser(session.user.id)&&scope.role==='menu_editor'&&!menuEditorAllowed(req.url,req.method)) return reply.code(403).send({error:{code:'FORBIDDEN',message:'Permesso riservato alla gestione menu.'}})
-  req.user = { id: session.user.id, restaurantId: scope.restaurantId, name: session.user.name, email: session.user.email, role: scope.role, agency:isAgencyUser(session.user.id) }
+  req.user = { id: session.user.id, restaurantId: scope.restaurantId, name: session.user.name, email: session.user.email, role: scope.role, agency:isAgencyUser(session.user.id), username:session.user.username, mustChangePassword:session.user.mustChangePassword }
 }
 
 export function requireRole(...roles: string[]) {
@@ -67,6 +70,6 @@ export function requireRole(...roles: string[]) {
 
 declare module '@fastify/jwt' {
   interface FastifyJWT {
-    user: { id: string; restaurantId: string; name: string; email: string; role: string; agency?:boolean }
+    user: { id: string; restaurantId: string; name: string; email: string; role: string; agency?:boolean; username?:string|null; mustChangePassword?:boolean }
   }
 }

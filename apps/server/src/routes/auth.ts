@@ -1,3 +1,4 @@
+import {migrationAccess} from '../lib/migration-access/runtime.js'
 import { optionalLoginGuard } from '../lib/durable-login.js'
 import {isAgencyUser} from '../lib/agency-access.js'
 import { webOrigin } from '../lib/web-runtime.js'
@@ -12,7 +13,7 @@ import { requireAuth, requireRole } from '../middleware/auth.js'
 import { SESSION_COOKIE, authCookieOptions, STAFF_SESSION_MAX_AGE } from '../lib/cookies.js'
 
 const loginSchema = z.object({
-  email: z.string().trim().email().transform(value => value.toLowerCase()),
+  email: z.string().trim().min(3).max(254).transform(value => value.toLowerCase()),
   password: z.string().min(6),
 })
 
@@ -76,6 +77,7 @@ function hashEnrollCode(code: string): string {
 }
 
 export async function authRoutes(fastify: FastifyInstance) {
+  await migrationAccess().register(fastify)
   const durableLogin=optionalLoginGuard()
   // Il controllo brute-force è applicato direttamente in /login (per ip+email),
   // dove l'email è disponibile. Vedi checkBruteForce/recordFailedLogin sopra.
@@ -184,7 +186,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     // Legacy imports can retain mixed casing. Reject ambiguous legacy identities
     // rather than picking one tenant arbitrarily if duplicates differ only by case.
     const candidates = await db.select().from(users)
-      .where(and(sql`lower(${users.email}) = ${body.data.email}`, eq(users.active, true))).limit(2)
+      .where(and(sql`(lower(${users.email}) = ${body.data.email} OR lower(${users.username}) = ${body.data.email})`, eq(users.active, true))).limit(2)
     const user = candidates.length === 1 ? candidates[0] : undefined
     // Un utente è autenticabile se ha una password locale classica (staff/owner storico)
     // OPPURE, per l'owner sincronizzato dal cloud, una credenziale owner LOCALE dedicata
@@ -210,6 +212,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     // Login riuscito: azzera il contatore per questa coppia. NON azzeriamo ipKey:
     // l'IP aggrega email diverse dietro NAT, quindi lasciamo scadere la finestra
     // naturalmente (15 min) anziché ricaricare il budget di uno spraying in corso.
+    if(user.mustChangePassword&&(!user.temporaryPasswordExpiresAt||user.temporaryPasswordExpiresAt.getTime()<=Date.now())){if(durableLogin)await settle('failure');else{recordFailedLogin(key);recordFailedLogin(ipKey)};return reply.code(403).send({error:{code:'TEMP_PASSWORD_EXPIRED',message:'La password provvisoria è scaduta. Contatta Tako.'}})}
     if(durableLogin)await settle('success')
     else loginAttempts.delete(key)
 
@@ -221,7 +224,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, user.restaurantId!)).limit(1)
 
     reply.setCookie(SESSION_COOKIE, token, authCookieOptions(STAFF_SESSION_MAX_AGE))
-    return { data: { user: { id: user.id, name: user.name, email: user.email, role: user.role, agency:isAgencyUser(user.id) }, restaurant } }
+    return { data: { user: { id: user.id, name: user.name, email: user.email, role: user.role, agency:isAgencyUser(user.id),username:user.username,mustChangePassword:user.mustChangePassword }, restaurant } }
     } finally {if(reservation&&!settled)await settle('abandon')}
   })
 
@@ -232,7 +235,7 @@ export async function authRoutes(fastify: FastifyInstance) {
   })
 
   // One authenticated bootstrap avoids repeating authentication for user and restaurant.
-  fastify.get('/bootstrap',{preHandler:requireAuth},async(req,reply)=>{const [restaurant]=await db.select().from(restaurants).where(eq(restaurants.id,req.user!.restaurantId)).limit(1);if(!restaurant)return reply.code(404).send({error:{code:'NOT_FOUND',message:'Restaurant not found'}});return {data:{user:req.user,restaurant:req.user!.role==='menu_editor'?{id:restaurant.id,name:restaurant.name}:restaurant}}})
+  fastify.get('/bootstrap',{preHandler:requireAuth},async(req,reply)=>{const [restaurant]=await db.select().from(restaurants).where(eq(restaurants.id,req.user!.restaurantId)).limit(1);if(!restaurant)return reply.code(404).send({error:{code:'NOT_FOUND',message:'Restaurant not found'}});return {data:{user:req.user,restaurant:req.user!.mustChangePassword||req.user!.role==='menu_editor'?{id:restaurant.id,name:restaurant.name}:restaurant}}})
   // Get current user
   fastify.get('/me', { preHandler: requireAuth }, async (req) => {
     return { data: req.user }
