@@ -75,7 +75,7 @@ expect(pdf.statusCode).toBe(200);expect(pdf.headers['content-type']).toContain('
   await a.close()})
  it('«mandami il pdf» con più Menu chiede quale, senza allegato',async()=>{const a=await app()
   const res=await post(a,'mandami il pdf');expect(res.body).not.toContain('<Media>')
-  expect(res.body).toContain('Quale menu ti mando in PDF?');expect(res.body).toContain('• Menu Giorno');expect(res.body).toContain('• Alla carta')
+  expect(res.body).toContain('Quale menu ti mando in PDF?');expect(res.body).toMatch(/\d\. Menu Giorno/);expect(res.body).toMatch(/\d\. Alla carta/)
   await a.close()})
  it('«mandami il menu» chiede quale PDF; «mandami il link» dà il link del menu digitale',async()=>{const a=await app()
   const pdf=await post(a,'mandami il menu');expect(pdf.body).not.toContain('<Media>');expect(pdf.body).toContain('Quale menu ti mando in PDF?')

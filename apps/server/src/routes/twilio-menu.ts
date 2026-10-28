@@ -10,7 +10,7 @@ import {readBotWorkspace,applyBotChange} from '../lib/menu-workspace-bot.js'
 import {inheritPhotos,inheritedNote,photoTargetsByName,groupOf} from '../lib/menu-photo-inherit.js'
 import {workspaceSchema,type Workspace} from '../lib/menu-workspace-contract.js'
 import {Buffer} from 'node:buffer'
-import {g9DishMentioned,plain,withNewSections,describeAction,priceChoice,effectiveMenuActions,mergeMenuActions,appliedMenuText,groqPendingMenuPlan,validatePendingMenuPlan,validateMenuPlan,groqMenuPlan,groqDishPick,validateDishPick,dishMatches,itemLabel,photoProblem,downscaleSourcePixels,applyActions,planText,welcomeText,safe,localDate,capabilityText,readText,GroqBusy,type GroqOptions,type UsageEvent,downloadTwilioMedia,transcribeAudio,whisperPrompt,sendWhatsApp,proposalText,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from '../lib/twilio-menu-ai.js'
+import {stripMenuSuffix,g9DishMentioned,plain,withNewSections,describeAction,priceChoice,effectiveMenuActions,mergeMenuActions,appliedMenuText,groqPendingMenuPlan,validatePendingMenuPlan,validateMenuPlan,groqMenuPlan,groqDishPick,validateDishPick,dishMatches,itemLabel,photoProblem,downscaleSourcePixels,applyActions,planText,welcomeText,safe,localDate,capabilityText,readText,GroqBusy,type GroqOptions,type UsageEvent,downloadTwilioMedia,transcribeAudio,whisperPrompt,sendWhatsApp,proposalText,type MenuRef,type SectionRef,type MenuAction,type MenuPlan} from '../lib/twilio-menu-ai.js'
 import {copy,helpWords,fill} from '../lib/twilio-menu-copy.js'
 import {createStep,createQuestion,followUp,undoFor,categoryWordItems,revertTarget,groupCommand,type CreateDraft,type LastApplied} from '../lib/twilio-menu-create.js'
 import {words,exactPick,politeCommand,spokenDecimals,spokenCents,parseIntent,findDishes,diminutiveRivals,preselect,candidatesFor,resolveChoice,capabilityFromText,isThanks,compoundIntents,looksLikeQuestion,wantsCreateText,wantsSpecialText,isCompoundMessage,type Intent} from '../lib/twilio-menu-nlu.js'
@@ -50,7 +50,7 @@ import {verifyApplied} from '../lib/owner-brain-plan.js'
 import {yesToAsk,visibleOnly,allChosen,newCommandOverAsk,nextAskSource,askOrigin,ASK_MAX_ROUNDS,namedMenus,dishCourse,suitableSection,groupCommand as seraGroup,groupPercent,priceSheet,uniformTarget,uniformTargetReply,UNDO_HINT,parseStructRename,renameAskText,clearCommand,specificQuestion,sectionGroupWord,pureDrop,fullyNamed,onlyPrice,singlePrice,answerSectionName,parseSession,sessionName,sectionReplace,dishInSection,sessionStart,sessionRest,sessionExit,sessionDone,keptSections,newCommandInSession,sessionMissing,sessionOpening,sessionAsk,SESSION_MAX_ROUNDS,type SessState} from '../lib/owner-brain-sera.js'
 import {publicNames,unknownSectionPhrase,namedSections,sectionListText} from '../lib/owner-brain-sections.js'
 import {enqueueTurn,waitTurn,releaseTurn,turnsBusy} from '../lib/whatsapp-turn-queue.js'
-import {menusIn,contextMenu,ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,insertForQuestion,shorthand,type RuleWait,type RuleReport,type RuleAsk} from '../lib/owner-brain-svuota.js'
+import {menusIn,menusAll,contextMenu,ruleTurn,ruleReply,dailyReplaceParse,deleteMenuQuestion,insertForQuestion,shorthand,type RuleWait,type RuleReport,type RuleAsk} from '../lib/owner-brain-svuota.js'
 import {loadLexicon,saveSplitRules} from '../lib/dish-lexicon.js'
 import type {Lexicon,SplitRule} from '../lib/dish-split.js'
 /** 24/10: un piatto di un Menu a prezzo fisso non ha prezzo suo: il testo lo dice con le opzioni e un esempio. */
@@ -119,19 +119,40 @@ async function linkTurn(tx:Tx,ctx:Ctx,body:string):Promise<{say:string,secret?:s
  * solo se il locale lo può servire (la route darebbe 404 a locale spento, in prova o rimosso). */
 async function pdfTurn(tx:Tx,ctx:Ctx,body:string):Promise<string|null>{
  // 28/10 sera (chat di Luisa): «Mandami menù giorno» non passava: in JS «ù» non è una lettera per \b. Si filtra sul testo senza accenti.
- if(!/\b(?:menu|pdf|stamp\w*|anteprim\w*)\b/.test(normalizeMenuText(body)))return null
+ const nb0=normalizeMenuText(body);if(!/\b(?:menu|pdf|stamp\w*|anteprim\w*|foto)\b/.test(nb0)&&nb0.split(' ').filter(Boolean).length>5)return null
  const row=await readWorkspace(ctx.tenant,tx),pub=row?.published as Workspace|null|undefined
  const full=(pub?.menus??[]).filter(m=>m.sections.some(s=>s.items.length)),menus=full.map(m=>({id:m.id,name:m.name,active:(m as {active?:boolean}).active!==false}))
  // 28/10 sera: stessa risoluzione dei Menu delle modifiche («menù sera» → Cena) e, per «anteprima» senza nome, il Menu della conversazione.
  const alias=(t:string)=>menusIn(t,full as any[]).map((m:any)=>String(m.id))
- let current:string|null=null
- if(/\banteprim/.test(normalizeMenuText(body))){try{const hist=await sqlBrainStore(tx).readHistory(ctx.tenant,ctx.phone,Date.now());current=(contextMenu(hist,full as any[],4) as any)?.id??null}catch{/* senza cronologia: si chiede quale */}}
- const intent=pdfIntent(body,menus,pub?catalogOf(pub).refs.map(r=>r.name):[],{alias,current});if(!intent)return null
- if('ask' in intent){const shown=menus.filter(m=>m.active).map(m=>m.name),list=shown.length?shown:intent.ask;return fill(copy.pdfWhich,{menu:list.map(n=>'• '+safe(n)).join('\n'),esempio:safe(list[0]!)})}
+ let current:string|null=null,hist:{role:string,text:string,at:number}[]=[]
+ const nb=normalizeMenuText(body),short=nb.split(' ').filter(Boolean).length<=5
+ if(/\banteprim/.test(nb)||short){try{hist=await sqlBrainStore(tx).readHistory(ctx.tenant,ctx.phone,Date.now())}catch{/* senza cronologia */}}
+ if(/\banteprim/.test(nb))current=(contextMenu(hist,full as any[],4) as any)?.id??null
+ const shown=menus.filter(m=>m.active).length?menus.filter(m=>m.active):menus
+ // 28/10 sera (audit: «mandami il menu» → «Quale menu?» → «cena» rispondeva «Cosa cambio?»): la risposta alla domanda del PDF (nome,
+ // numero, «tutti») manda il PDF. Vale solo subito dopo quella domanda (ultimo messaggio del bot, entro 10 minuti) e per risposte brevi.
+ const lastBot=[...hist].filter(h=>h.role==='bot').sort((a,b)=>b.at-a.at)[0]
+ let intent:ReturnType<typeof pdfIntent>=null
+ if(short&&lastBot&&Date.now()-lastBot.at<=10*60*1000&&lastBot.text.includes('Quale menu ti mando in PDF?')){
+  const n=nb.match(/^(?:il |la |numero |n )?(\d)$/)?.[1]??({primo:'1',secondo:'2',terzo:'3',quarto:'4',uno:'1',due:'2',tre:'3',quattro:'4'} as Record<string,string>)[nb.replace(/^(?:il |la )/,'')]
+  if(n&&shown[Number(n)-1])intent={menuIds:[shown[Number(n)-1]!.id]}
+  else if(/^(?:tutti|tutti e (?:due|tre|quattro)|entrambi|tutte)$/.test(nb))intent={menuIds:shown.map(m=>m.id)}
+  else{const ids=new Set([...alias(body),...menus.filter(m=>(' '+nb+' ').includes(' '+normalizeMenuText(m.name).replace(/^menu /,'')+' ')).map(m=>m.id)])
+   // solo parole di Menu: «cena finito il branzino», «elimina primi menù sera» non sono una risposta alla domanda del PDF
+   const keys=new Set(menus.flatMap(m=>normalizeMenuText(m.name).split(' ')))
+   const rest=nb.split(' ').filter(w=>w&&!keys.has(w)&&!/^(?:menu|il|la|lo|quello|quella|del|della|di|da|per|sera|stasera|cena|pranzo|mezzogiorno|giorno|oggi|e|ed|grazie|ok|si|allora|mandami|quello|carta|alla)$/.test(w))
+   if(ids.size&&!rest.length)intent={menuIds:[...ids]}}}
+ if(!intent){if(!/\b(?:menu|pdf|stamp\w*|anteprim\w*|foto)\b/.test(nb))return null;intent=pdfIntent(body,menus,pub?catalogOf(pub).refs.map(r=>r.name):[],{alias,current})}
+ // 28/10 sera (verifica: «elimina il menu cena» → «mandami il pdf» → «sì» eliminava il Menu): dopo un turno PDF una conferma di
+ // eliminazione ancora aperta decade (il «sì» seguente non deve mai riferirsi a lei)
+ if(intent){try{const pend=(await tx.execute(sql`SELECT command FROM tako_whatsapp_proposals WHERE phone=${ctx.phone} AND actor_id=${ctx.actor} AND restaurant_id=${ctx.tenant} AND expires_at>now()`))[0]?.command as any
+  if(pend&&pend.kind==='batch'&&pend.why==='delete')await tx.execute(sql`DELETE FROM tako_whatsapp_proposals WHERE phone=${ctx.phone}`)}catch{/* nessuna attesa */}}
+ if(!intent)return null
+ if('ask' in intent){const list=shown.map(m=>m.name);return fill(copy.pdfWhich,{menu:list.map((n,k)=>(k+1)+'. '+safe(n)).join('\n'),esempio:safe(list[0]!)})}
  if(!await chatPdfAvailable(ctx.tenant,tx))return copy.pdfFailed
  const chosen=intent.menuIds.map(id=>menus.find(m=>m.id===id)!).filter(Boolean),label=chosen.map(m=>m.name).join(' + ')
  let url:string;try{url=menuPdfUrl(signMenuPdfToken({tenant:ctx.tenant,menuIds:chosen.map(m=>m.id)},menuPdfSecret()),label)}catch(error){await reportFailure({kind:'webhook_error',tenant:ctx.tenant,phone:ctx.phone,detail:'pdf link: '+(error instanceof Error?error.message:'Error')});return copy.pdfFailed}
- return fill(copy.pdfSent,{menu:chosen.map(m=>'*'+(/^men[uù]\b/i.test(m.name.trim())?safe(m.name):'Menu '+safe(m.name))+'*').join(' e ')})+nextMessage+withMedia('',url)}
+ return fill(copy.pdfSent,{menu:chosen.map(m=>'*'+safe(m.name)+'*').join(' e ')})+nextMessage+withMedia('',url)}
 // 19/10 sera: un invio fallito non ferma i messaggi successivi (il link del menu parte comunque); la password del primo messaggio
 // si segna consegnata solo se Twilio l'ha accettata, altrimenti al prossimo «dashboard» il bot la rigenera e la rimanda.
 async function sendSecrets(ctx:Ctx,out:FollowUps,afterReply:boolean){const accountSid=process.env.TWILIO_ACCOUNT_SID||'',token=process.env.TWILIO_AUTH_TOKEN||'',from=process.env.TWILIO_WHATSAPP_NUMBER||''
@@ -659,11 +680,22 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   if(delM&&base.menus.some(m=>m.id===delM.menuId)){const pt=plain(text)
    if(/^(?:s[iì]|si si|sì sì|si confermo|confermo|si elimina|si eliminalo|elimina|eliminalo|si cancellalo|cancellalo|ok si|si ok|si certo|certo)(?:\s+(?:grazie|pure|dai|tutto))?$/.test(pt)){pre={actions:[delM],why:'regola-elimina'};ruleDone=true}
    else if(/^(?:ok|okay|oki|va bene|perfetto|vai|procedi|d accordo|esatto|giusto|fallo|confermo tutto)$/.test(pt)){preReply='Per eliminare il '+mLab(delM.name)+' intero mi serve un *sì* scritto: rispondi *sì* per eliminarlo, oppure *no*.';ruleDone=true}
-   else if(/^(?:no|non|annulla|lascia stare|lascia perdere|niente|fermo|aspetta|no grazie|no no|non eliminare|non eliminarlo|no lascia stare)\b/.test(pt)){preReply='Ok, non elimino niente: il '+mLab(delM.name)+' resta com\u2019è.';closePend=true;ruleDone=true}}
+   else if(/^(?:no|non|annulla|lascia stare|lascia perdere|niente|fermo|aspetta|no grazie|no no|non eliminare|non eliminarlo|no lascia stare|anzi no|anzi|ho sbagliato|scusa)\b/.test(pt)){preReply='Ok, non elimino niente: il '+mLab(delM.name)+' resta com\u2019è.';closePend=true;ruleDone=true}
+   // 28/10 sera (audit: «elimina il menu cena» → «sì ma tieni i primi» / «grazie» / «?» → «sì» eliminava tutto): qualunque altra risposta
+   // chiude la richiesta di eliminazione; il messaggio si legge come nuovo e un «sì» dopo non elimina più nulla.
+   else{closePend=true;pend=null;answered=false;(base as any).pendingCommand=null}}
   // 23/10 (chat Luisa, invariante «ogni domanda sì/no ha una proposta salvata e consumabile»): un «sì» scritto a una proposta in attesa
   // (eliminazione, riepilogo, prezzo strano) la applica deciso dal SERVER, senza passare dal modello. Per eliminare serve un sì vero
   // («sì», «elimina», «conferma»), non un «ok» o un pollice.
-  if(!ruleDone&&!delM&&pend?.kind==='batch'&&isAffirmative(text)&&(pend.why!=='delete'||/\b(?:si|elimin\w*|cancell\w*|conferm\w*|procedi)\b/.test(plain(text)))){pre={actions:[],why:'conferma'};ruleDone=true}
+  // 28/10 sera (audit): eliminazione in attesa (sottomenu alla carta): solo un «sì» pulito elimina; «no/anzi no» la chiude; ogni altra
+  // risposta («sì ma lascia il tartufo», «ok», «non lo so», «grazie») la chiude senza eliminare.
+  if(!ruleDone&&!delM&&pend?.kind==='batch'&&pend.why==='delete'){const pt=plain(text)
+   // «sì», «si va bene», «sì sì eliminali», «certo, eliminali», «va bene eliminali», «ok eliminali», «sì vai»
+   if(/^(?:(?:s[iì]+|certo|ok|okay|va bene|vai|procedi|confermo|d accordo)\s*)*(?:s[iì]+|eliminal[io]|elimina\w*|cancellal[io]|cancella\w*|procedi|vai|confermo)(?:\s+(?:grazie|pure|dai|tutto|tutti|va bene|vai))*$/.test(pt)&&/\b(?:s[iì]+|elimin\w*|cancell\w*|procedi|confermo)\b/.test(pt)){pre={actions:[],why:'conferma'};ruleDone=true}
+   else if(/^(?:ok|okay|va bene|perfetto|vai|d accordo|esatto|giusto|certo|fallo|👍)$/.test(pt)||(!pt&&/[👍👌]/u.test(text))){preReply='Per eliminarli mi serve un *sì* scritto: rispondi *sì* per eliminarli, oppure *no*.';ruleDone=true}
+   else if(/^(?:no|non|annulla|lascia stare|lascia perdere|niente|anzi no|anzi|no grazie|no no|ho sbagliato|scusa|aspetta)\b/.test(pt)){preReply='Ok, non elimino niente: resta tutto com\u2019è.';closePend=true;ruleDone=true}
+   else{closePend=true;pend=null;answered=false;(base as any).pendingCommand=null}}
+  if(!ruleDone&&!delM&&pend?.kind==='batch'&&pend.why!=='delete'&&isAffirmative(text)){pre={actions:[],why:'conferma'};ruleDone=true}
   if(!ruleDone&&(!sess||sess.applied)){const ruleWait=((askP as any)?.rule??null) as RuleWait|null
    let hist:{role:string,text:string,at:number}[]=[];try{hist=await sqlBrainStore(db).readHistory(ctx.tenant,ctx.phone,Date.now())}catch{/* senza cronologia: solo il Menu detto */}
    const draftName=askP?.draft?.name&&!askP.draft.sectionId?String(askP.draft.name):null
@@ -678,7 +710,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
     else if(rr.kind==='info'){preReply=rr.text;if(ruleLearn.length)await saveSplitRules(db as any,ctx.tenant,ruleLearn,'correction')}
     // «elimina il menu pranzo» (correzione Manuel 22/10): il Menu intero, SOLO col «sì» scritto (proposta di eliminazione in attesa)
     // 23/10: sottomenu di un Menu alla carta da svuotare: proposta di eliminazione (il «sì» la applica, letto dal server).
-    else if(rr.kind==='confirm'){const acts=rr.actions;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true,why:'delete'})});preReply=rr.question+'\n\n'+pendingFacts('delete',acts,refs,sections);closePend=false}
+    else if(rr.kind==='confirm'){const acts=rr.actions;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:acts,requiresTypedOk:true,why:'delete'})});preReply=rr.question+(acts.length<=12?'\n\n'+pendingFacts('delete',acts,refs,sections):'');closePend=false}
     else if(rr.kind==='delete_menu'){const q=deleteMenuQuestion(rr),act={kind:'delete_menu',menuId:rr.menu.id,name:rr.menu.name,withItems:true,items:rr.items} as MenuAction;await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'batch',actions:[act],requiresTypedOk:true,why:'delete'})});preReply=q;closePend=false}
     else{const q=rr.question,w=rr.wait;if(ruleLearn.length)await saveSplitRules(db as any,ctx.tenant,ruleLearn,'clarify');await db.transaction(async tx=>{await lock(tx,ctx.phone);await propose(tx,ctx,row.revision,{kind:'brain_ask',question:q,ids:[],actions:[],source:text.slice(0,600),origin:text.slice(0,600),rounds:1,rule:w} as any)});preReply=q;closePend=false}}
    // 28/10 sera (batteria): un «grazie/ok» dopo «elimina X» non fa perdere il sottomenu svuotato (l'attesa resta, scade da sola)
@@ -1048,7 +1080,7 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    const rd2=relativeDelta(text),acts=fin?ids2.map(id=>({kind:'available',id,value:false}) as MenuAction):hide?ids2.map(id=>({kind:'hidden',id,value:true}) as MenuAction):rd2?ids2.flatMap(id=>{const r=refs.find(x=>x.id===id)!;const v=Math.round((r.price+rd2.delta)*100)/100;return r.price>0&&v>0?[{kind:'price',id,price:v} as MenuAction]:[]}):sp!==null&&sp>0&&/\d/.test(text)&&!/\b(?:alz|abbass|aument|diminu|scont)\w*/.test(p2)?ids2.map(id=>({kind:'price',id,price:sp}) as MenuAction):[]
    if(acts.length){out={kind:'change',actions:acts};noDraft=true;(run.decision as any).draft=''}}}
  if(engine==='haiku'&&!pre&&!sessNow){
-  const p0=plain(text),wantAdd=/\b(?:aggiung\w*|inserisc\w*|nuov[oa]|metti(?:mi|ci)?)\b/.test(p0)
+  const p0=plain(text),wantAdd=/\b(?:aggiung\w*|inserisc\w*|nuov[oa]|metti(?:mi|ci)?)\b/.test(p0)&&!/\b(?:togli\w*|tolg\w*|lev[ai]\w*|elimin\w*|cancell\w*|rimuov\w*|posto|invece|cambi\w*|sostitu\w*)\b/.test(p0) // 28/10 sera (audit): «togli X dal menu alla carta e metti Y» creava X
   const named=namedMenus(text,base.menus).filter(m=>m.pricing!=='fisso'),M=named.length===1?named[0]!:null
   const onePrice=singlePrice(text)
   const mSecs=M?sections.filter(x=>x.menu===M.name):[]
@@ -1139,6 +1171,10 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
   const pricesOf=(acts:MenuAction[])=>acts.flatMap(a=>'price' in a&&typeof (a as any).price==='number'?[(a as any).price as number]:[]).concat(acts.flatMap(a=>'id' in a?[refs.find(r=>r.id===(a as any).id)?.price??-1]:[]))
   // Scrive e pubblica, poi rilegge dal DB: i fatti della risposta sono quelli riletti.
   const applyNow=async(effective:MenuAction[],label:[string,string]=['WhatsApp: aggiornamento automatico','WhatsApp: pubblicazione automatica']):Promise<{facts:string,allOk:boolean,revision:number,inherited:string}>=>{
+   // 28/10 sera (prova dal vivo: «aggiungi tiramisù nei dolci alla carta» → «Tiramisù alla carta»): il nome del Menu in coda al nome di un
+   // piatto nuovo non fa parte del nome, da qualunque percorso arrivi l'azione
+   effective=effective.map(a=>a.kind==='create'?{...a,name:stripMenuSuffix((a as any).name,sections)??(a as any).name} as MenuAction:a)
+
    wroteActs=[...wroteActs,...effective]
    const beforeW=structuredClone(workspace);applyActions(workspace,effective,{uploads:new Map(),timezone:String(settings?.timezone??'Europe/Rome')});const next=workspaceSchema.parse(workspace)
    const inh=inheritPhotos(beforeW,next);if(!beginWrite(budget))throw new Error('WhatsApp turn expired');const saved=await applyBotChange(ctx.tenant,ctx.actor,[label[0],label[1]],{expectedPublishedRevision:live.revision,next},tx as unknown as DB);if(budget.expired)throw new Error('WhatsApp turn expired')
@@ -1320,7 +1356,14 @@ async function brainTurnR(ctx:Ctx,text0:string,key:string,ai:GroqOptions,budget:
    else if(follow&&wroteActs.some(a=>a.kind==='create_section')){const q='A che prezzo metto *'+safe(follow.name)+'* nei *'+safe(follow.sectionName)+'*?'
     await propose(tx,ctx,lastRev,{kind:'brain_ask',question:q,ids:[],actions:[],source:follow.origin,origin:follow.origin,rounds:1,draft:{name:follow.name,price:null,sectionId:follow.sectionId,sectionName:null,fresh:true} as any} satisfies BrainAsk);res=res+'\n\n'+q}
    else if(!wroteActs.length&&out.kind!=='cancel'&&out.kind!=='undo'){const blocks=res.split('\n\n'),first=blocks[0]!.trim()
-    const cands=(out.kind==='ask'?out.ids:[]).map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r).slice(0,8)
+    const cands0=(out.kind==='ask'?out.ids:[]).map(id=>refs.find(r=>r.id===id)).filter((r):r is MenuRef=>!!r).slice(0,8)
+    // 28/10 sera (prova dal vivo: «togli le scaloppine dal menu cena» elencava quelle Alla carta; «il nodino è tornato» elencava piatti
+    // sempre disponibili): candidati solo del Menu detto e, per finito/tornato, solo quelli nello stato opposto. Se ne resta uno, una
+    // domanda sì/no su quello.
+    const cands=((xs:MenuRef[])=>{let c=xs;const ms=menusAll(text,base.menus);if(ms.length===1){const f=c.filter(r=>r.menu===ms[0]!.name);if(f.length)c=f}
+     const pt=plain(text);if(/\b(?:tornat\w*|di nuovo|rimett\w*|disponibil\w*|riattiv\w*)\b/.test(pt)){const f=c.filter(r=>r.available===false);if(f.length)c=f}
+     else if(/\b(?:finit\w*|esaurit\w*|terminat\w*|non c e piu)\b/.test(pt)){const f=c.filter(r=>r.available!==false&&!r.hidden);if(f.length)c=f}
+     return c})(cands0)
     if(/^Non ho cambiato nulla\.?$/.test(first)&&!pend&&isAffirmative(text))res=['Non c\u2019è niente in sospeso: dimmi pure cosa vuoi cambiare.',...blocks.slice(1)].join('\n\n')
     // 24/10 (chat Manuel 18:10 «si» → «Non ho cambiato nulla. 1. *Lasagna*»): il sì alla TUA domanda che il server non riesce a eseguire non
     // ripete la lista: lo dice e chiede la richiesta intera (la domanda si chiude, mai un secondo «sì» a vuoto).
@@ -1606,7 +1649,9 @@ export async function twilioMenuRoutes(app:FastifyInstance){
  }
  if(lifecycleCommand)return reply.code(400).send('Invalid onboarding message');
  const linked=await db.execute(sql`SELECT 1 FROM tako_whatsapp_links WHERE phone=${form.From||''}`);if(!shouldHandleInTako(linked.length>0,form.Body||''))try{const forwarded=await forwardTwilioWebhook(process.env.MENUSMART_WHATSAPP_WEBHOOK_URL||menusmartWebhook,process.env.TWILIO_AUTH_TOKEN||'',form);if(forwarded.contentType)reply.header('Content-Type',forwarded.contentType);return reply.code(forwarded.status).send(forwarded.body)}catch(error){req.log.error({error:error instanceof Error?error.name:'Error'},'MenuSmart WhatsApp forward failed');await inBackground(reportFailure({kind:'menusmart_forward',detail:error instanceof Error?error.name:'Error'}));return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(''))}
- const phone=form.From||'',sid=form.MessageSid||'',body=(form.Body||'').trim(),media=Number(form.NumMedia||0);if(form.TakoSyncTest==='1'){quietPhones.add(phone);setTimeout(()=>quietPhones.delete(phone),120000)}if(!/^whatsapp:\+\d{8,15}$/.test(phone)||!(/^SM[a-f0-9]{32}$/i.test(sid)||linked.length>0&&/^MM[a-f0-9]{32}$/i.test(sid))||body.length>2000)return reply.code(400).send('Invalid message');
+ const phone=form.From||'',sid=form.MessageSid||'',body=(form.Body||'').trim(),media=Number(form.NumMedia||0);if(form.TakoSyncTest==='1'){quietPhones.add(phone);setTimeout(()=>quietPhones.delete(phone),120000)}if(!/^whatsapp:\+\d{8,15}$/.test(phone)||!(/^SM[a-f0-9]{32}$/i.test(sid)||linked.length>0&&/^MM[a-f0-9]{32}$/i.test(sid)))return reply.code(400).send('Invalid message');
+ // 28/10 sera (audit): un messaggio lunghissimo riceveva un errore muto; ora una risposta che spiega cosa fare
+ if(body.length>2000)return reply.type('text/xml; charset=utf-8').header('Cache-Control','no-store').send(twiml(linked.length?'Il messaggio è troppo lungo per me. Mandamelo in due o tre pezzi più corti, per esempio un sottomenu alla volta.':''));
  const scope:{tenant?:string,cached?:boolean}={};const result=await db.transaction(async tx=>{await lock(tx,phone);const cached=await tx.execute(sql`SELECT response FROM tako_whatsapp_messages WHERE sid=${sid}`);if(cached.length){scope.cached=true;const text=String(cached[0]!.response);return text.startsWith(sent)?'':text}
  const answer=async(text:string)=>{await tx.execute(sql`INSERT INTO tako_whatsapp_messages(sid,response) VALUES(${sid},${text}) ON CONFLICT DO NOTHING`);return text};
  const pair=body.match(/^collega tako ([a-f0-9]{24})$/i);if(pair){const codes=await tx.execute(sql`DELETE FROM tako_whatsapp_codes WHERE code_hash=${digest(pair[1]!.toLowerCase())} AND expires_at>now() RETURNING restaurant_id,actor_id`);const code=codes[0];if(!code||!await permitted(tx,String(code.actor_id),String(code.restaurant_id)))return answer(copy.codeInvalid);await lock(tx,'tako-owner-link:'+String(code.restaurant_id))

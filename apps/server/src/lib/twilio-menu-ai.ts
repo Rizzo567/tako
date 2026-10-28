@@ -98,6 +98,17 @@ export function g9Prices(message:string,cents=true):number[]{
 const g9Said=(price:number,message:string,current?:number)=>{const said=g9Prices(message);if(said.includes(Math.round(price*100)/100))return true;const r=relativeDelta(message);if(current!==undefined&&r)return Math.abs(price-(current+r.delta))<0.005;return false}
 const finishWords=/\b(?:finit\w*|esaurit\w*|fernut\w*|finid\w*|finia|terminat\w*|non c e piu|non ce piu|nun ce sta|un c e piu|non abbiamo piu|non ce n e piu)\b/
 const g9ActionName=/\b(aggiung\w*|inserisc\w*|costa|costano|euro|prezzo|il piatto|tra i|tra le|tra gli|nei|nelle|negli|metti\w*|che costa|cambia|finit\w*|esaurit\w*|nascondi|togli)\b/
+/** 28/10 sera (prova dal vivo: «aggiungi tiramisù nei dolci alla carta a 5 euro» → piatto «Tiramisù alla carta»): il nome del Menu in coda
+ * al nome di un piatto nuovo è dove va, non come si chiama. Si toglie solo il nome intero di un Menu del locale («alla carta», «menu
+ * cena»), con la preposizione davanti; «zuppa del giorno» resta (manca «menu»). */
+export function stripMenuSuffix(name:string|null,sections:{menu?:string}[]):string|null{
+ if(!name)return name;const menus=[...new Set(sections.map(s=>s.menu).filter((m):m is string=>!!m))]
+ for(const m of menus){const full=plain(m),bare=full.replace(/^menu\s+/,'');const keys=[...new Set([full,'menu '+bare])].filter(Boolean)
+  for(const k of keys){const esc=k.split(' ').map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('\\s+'),selfPrep=/^(?:alla|al|del|della|di|a|per)\s/.test(k)||/^menu\s/.test(k)
+   // il nome del Menu si toglie solo con una preposizione davanti («nei dolci del menu cena») o se è già «alla carta» / «menu X»: «offerta cena» resta
+   const re=new RegExp('^(.+?)\\s+'+(selfPrep?'(?:(?:del|della|dello|nel|nella|dal|dalla|al|alla|per il|per la|sul|sulla|in|a|di)\\s+)?':'(?:del|della|dello|nel|nella|dal|dalla|al|alla|per il|per la|sul|sulla|in|a|di)\\s+')+esc+'$','i')
+   const pn=plain(name),mm=pn.match(re);if(mm&&mm[1]!.trim()){const words=name.trim().split(/\s+/),keep=mm[1]!.trim().split(/\s+/).length;return words.slice(0,keep).join(' ')}}}
+ return name}
 export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:SectionRef[],message?:string,checkCompleteness?:boolean,trustedIds?:Set<string>,exclude?:Excluded[],verbText?:string,
  /** Fase R: categoria nuova anche senza la parola «categoria» (il route chiede sempre il «sì» al titolare). */
  implicitSections?:boolean,
@@ -129,7 +140,7 @@ export function validateMenuPlan(raw:unknown,refs:MenuRef[],opts:{sections?:Sect
  for(const a of data.actions){if(!a||typeof a!=='object')return clarify(valid)
   if(a.action==='create_section')continue
   if(a.action==='rename_section'){const name=cleanText(a.name,120);if(typeof a.section_id!=='string'||!sectionIds.has(a.section_id)||!name||!verbatim(name,vt)||!RENAME_VERB.test(pm)||sections.some(x=>x.id!==a.section_id&&sameSection(x.name,name)))return clarify(valid);actions.push({kind:'rename_section',sectionId:a.section_id,name:name.charAt(0).toLocaleUpperCase('it')+name.slice(1)});continue}
-  if(a.action==='create_item'||a.action==='create_daily_special'){if(++created>200||!(a.action==='create_item'?wantsCreate(message):wantsSpecial(message)))return clarify(valid);const name=cleanText(a.name,300),price=priceOf(a.price),description=a.description==null||a.description===''?null:cleanText(a.description,4000)
+  if(a.action==='create_item'||a.action==='create_daily_special'){if(++created>200||!(a.action==='create_item'?wantsCreate(message):wantsSpecial(message)))return clarify(valid);const name=stripMenuSuffix(cleanText(a.name,300),sections),price=priceOf(a.price),description=a.description==null||a.description===''?null:cleanText(a.description,4000)
    if(a.action==='create_item'&&!okSection(a.section_id))return{type:'missing',missing:['section'],name:name&&verbatim(name,message)?name:null,sectionIds:[]}
    const fixedSec=a.action==='create_item'&&!!opts.fixedSectionIds?.has(a.section_id),price0=price===null&&fixedSec?0:price
    if(!name||price0===null||(a.description!=null&&a.description!==''&&!description))return{type:'missing',missing:[...(!name?['name' as const]:[]),...(price0===null?['price' as const]:[])],name:name&&verbatim(name,message)?name:null,sectionIds:[]}
@@ -273,7 +284,12 @@ export function proposalText(restaurant:string,actions:MenuAction[],refs:MenuRef
 export function readText(plan:Extract<MenuPlan,{type:'read'}>,refs:MenuRef[]){
  // Menu a prezzo fisso (21/10): le opzioni di prezzo le scrive il server dal menu riletto (il testo è già composto dal pianificatore).
  if(plan.read==='formulas')return plan.text
- if(plan.read==='items')return plan.ids.map(id=>{const r=refs.find(x=>x.id===id)!;return fill(line.read,{piatto:itemLabel(r,refs),prezzo:r.price>0?euro(r.price):'senza prezzo',stato:r.available?'disponibile':'finito',extra:(r.hidden?' · nascosto':'')+(r.featured?' · in evidenza':'')})}).join('\n')
+ // 28/10 sera (prova dal vivo «cosa c'è stasera?»): nei Menu a prezzo fisso i piatti non hanno prezzo: dieci righe «senza prezzo ·
+ // disponibile» confondono. Si elencano solo i piatti con qualcosa da dire (prezzo, finito, nascosto, in evidenza).
+ if(plan.read==='items'){const rs=plan.ids.map(id=>refs.find(x=>x.id===id)!).filter(Boolean),plainOnes=rs.filter(r=>r.price<=0&&r.available&&!r.hidden&&!r.featured)
+  const lines=rs.filter(r=>!plainOnes.includes(r)).map(r=>fill(line.read,{piatto:itemLabel(r,refs),prezzo:r.price>0?euro(r.price):'senza prezzo',stato:r.available?'disponibile':'finito',extra:(r.hidden?' · nascosto':'')+(r.featured?' · in evidenza':'')}))
+  if(plainOnes.length&&plainOnes.length===rs.length)return rs.length===1?'*'+itemLabel(rs[0]!,refs)+'*: c’è, disponibile.':'Tutti disponibili.'
+  return lines.join('\n')}
  const list=refs.filter(r=>plan.read==='hidden'?r.hidden:!r.available).map(r=>'- '+itemLabel(r,refs));if(!list.length)return copy.readNone[plan.read]
  return fill(copy.readList[plan.read],{n:list.length,elenco:list.slice(0,40).join('\n')+(list.length>40?'\n…':'')})
 }

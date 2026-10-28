@@ -113,14 +113,14 @@ export function andVerdicts(W:string[],ctx:SplitCtx={}):Map<number,AndVerdict>{
    else if(conFree)v='keep'
    else if(R.length===1&&(STANDALONE.has(r0)||(dishWord(r0)&&!HEADW.has(r0)&&!CONTORNO.has(r0)&&!DISHES.filter(d=>HEADW.has(d)||CONTORNO.has(d)).some(d=>lev1(d,r0))))&&!INGREDIENT.has(r0))v='split'
    else if(STANDALONE2.has(W.slice(e+1,Math.min(nextE,e+6)).filter(w=>!SOFT.has(w)).slice(0,2).join(' ')))v='split'
+   // 28/10 sera (chat di Luisa «tagliolini cozze e pomodori», anche seguito da «gnocchi alla sorrentina» senza virgola): fuori dai
+   // Contorni un ortaggio dopo un INGREDIENTE («… cozze e pomodori») è un condimento del piatto, non un piatto a parte; il piatto dopo lo
+   // separa la parola che apre un piatto (confine indovinato → proposta). «funghi misti e peperoni», «arrosto di vitello e patate» restano dubbi.
+   else if(CONTORNO.has(r0)&&L.length>=2&&INGREDIENT.has(L[L.length-1]!))v='keep'
    else if(R.length>=2&&(dishWord(r0)||STANDALONE.has(r0))&&(dishWord(l0)||STANDALONE.has(l0)||L.length>=2))v='split'
    // dopo la «e» un piatto intero con la sua locuzione («… e gamberetti sale e pepe»): si divide
    else if(R.length>=3&&locSpans.some(h=>h.a>e+1&&h.b<nextE)&&(L.length>=2||dishWord(l0)||STANDALONE.has(l0)))v='split'
    else if(INGREDIENT.has(r0)&&(R.length===1||!dishWord(r0)))v='keep'
-   // 28/10 sera (chat di Luisa «tagliolini cozze e pomodori»): fuori dai Contorni un ortaggio da solo dopo un INGREDIENTE («… cozze e
-   // pomodori») è un altro condimento del piatto, non un piatto a parte (prima: dubbio → ipotesi «divido» → «Pomodori» creato da solo).
-   // «funghi misti e peperoni», «arrosto di vitello e patate» restano dubbi (si chiede).
-   else if(R.length===1&&CONTORNO.has(r0)&&L.length>=2&&INGREDIENT.has(L[L.length-1]!))v='keep'
    else v='doubt'
    // 5. un nome conosciuto che contiene proprio questa «e» la tiene (ma mai sopra un indizio certo di separazione)
    if((v==='doubt'||v==='keep')&&acrossKnown)v='keep'}

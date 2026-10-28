@@ -11,6 +11,8 @@
  * Invarianti (batteria avversaria 22/10): mai sottomenu o Menu eliminati/nascosti (senza il «sì»), mai piatti di altri Menu, mai «hidden» prodotto, ogni nome detto è inserito o
  * segnalato nella risposta, prezzi fissi intatti, «annulla» rimette esattamente com'era (undo generico della pubblicazione). */
 import {plain,g9Prices,type MenuRef,type SectionRef,type MenuAction} from './twilio-menu-ai.js'
+import {wordNumber} from './twilio-menu-nlu.js'
+import {foodish} from './food-words.js'
 import {sameSection} from './twilio-menu-structure.js'
 import {namedMenus,dishCourse,singlePrice} from './owner-brain-sera.js'
 import {isAffirmative} from './owner-brain-r.js'
@@ -53,6 +55,12 @@ export function menusIn<T extends {name:string}>(text:string,menus:T[]):T[]{
  if(byPrice.length&&out.length&&byPrice.some(m=>out.includes(m)))return out.filter(m=>byPrice.includes(m))
  out.push(...byPrice)
  return [...new Set(out)]}
+/** 28/10 sera (audit): TUTTI i Menu nominati, anche misti nome/pasto («i primi della cena e i secondi del pranzo»). */
+export function menusAll<T extends {name:string}>(text:string,menus:T[]):T[]{const t=fixMealWords(text),out=[...namedMenus(t,menus)],p=' '+plain(t)+' '
+ if(LUNCH.test(p))out.push(...menus.filter(isLunch));if(DINNER.test(p))out.push(...menus.filter(isDinner));return [...new Set(out)]}
+/** Due Menu nello stesso comando («… della cena e … del pranzo»), non un confronto o un «lascia stare l'altro». */
+const twoMenuCommand=(text:string,ms:{name:string}[])=>ms.length>1&&/\b(?:e|ed)\b/.test(plain(text))&&!/\b(?:come|restano|resta|rimangono|lascia\w*|invece|uguale|uguali|tranne)\b/.test(plain(text))
+const oneAtATime=(ms:{name:string}[])=>({kind:'info' as const,text:'Una cosa alla volta: nello stesso messaggio ci sono il '+ms.slice(0,2).map(m=>mLabel(m.name)).join(' e il ')+'. Non ho cambiato nulla. Scrivimi prima per uno, poi per l’altro, per esempio «elimina i primi della cena».'})
 /** «menu da 12», «pranzo da 12 euro», «menù da 16,90 €»: il Menu a prezzo fisso il cui *Completo* costa quella cifra (se un Menu non ha
  * un'opzione «Completo», vale la sua opzione più cara). Serve una parola di Menu/pasto subito prima di «da N». */
 const MENU_PRICE=/(?:^|[^a-zà-ù])(?:men[uù]|pranzo|cena|mezzogiorno|giorno|sera|fisso)\s+(?:[a-zà-ù']+\s+){0,2}?da\s+(\d{1,3}(?:[.,]\d{1,2})?)\s*(?:euro|eur|€)?/gi
@@ -83,11 +91,18 @@ const COURSES=['primi','primo','secondi','secondo','contorni','contorno','dolci'
 const CLEAR_V=/\b(?:svuot\w*|togli\w*|toglie\w*|lev[ai]\w*|levare|levamo|levate|nascond\w*|rimuov\w*|elimin\w*|elim[nu]\w*|cancell\w*|cancel[ai]\w*|sgombr\w*)\b/ // 28/10 sera: anche «elimna», «cancela»
 const INSERT_V=/\b(?:inser(?:isc|ic|is|isci|iamo|ire|ite)\w*|ag+iung\w*|metti|mettici|mettete|mettiamo|mettere|mettimi|ci vanno|ci va)\b/
 const STRONG_INSERT=/\b(?:inser(?:isc|ic|is|isci|iamo|ire|ite)\w*|ag+iung\w*)\b/
-const NOT_DISH=/\b(?:capisc\w*|capit[oa]|aiut\w*|grazie|ciao|zero|gratis|tutto|niente|nulla|prezz\w*|restan\w*|resta|rimang\w*|uguali|uguale|togli\w*|nascond\w*|lascia\w*|cambi\w*|elimin\w*|cancell\w*|annull\w*|aspett\w*|scusa|sbagliat\w*|prezz\w*|cost[ao]|costano|euro|finit\w*|esaurit\w*|svuot\w*|leva\w*|rimuov\w*|cosa|quale|quali|perche|come prima|com era)\b/
+const NOT_DISH=/\b(?:capisc\w*|capit[oa]|aiut\w*|grazie|ciao|zero|gratis|tutto|niente|nulla|prezz\w*|restan\w*|resta|rimang\w*|uguali|uguale|togli\w*|nascond\w*|lascia\w*|cambi\w*|elimin\w*|cancell\w*|annull\w*|aspett\w*|scusa|sbagliat\w*|prezz\w*|cost[ao]|costano|euro|finit\w*|esaurit\w*|svuot\w*|leva\w*|rimuov\w*|cosa|quale|quali|perche|come prima|com era|mandami|mandamelo|mandarmi|mandarlo|mandarla|manda|mandi|mandate|invia\w*|inviami|fammi|vedere|vedi|guarda\w*|stamp\w*|pdf|link|foto\w*|descrizion\w*|posto|suo|sua|anzi|volevo|dire|ieri|stess[oaie]|quell[oaie]|quest[oaie]|boh|dopo|mille|ecc|eccetera|attimo|penso|pensarci|oddio|casino|mamma mia|indietro|ripristin\w*|anull\w*|annul\w*|non|cosi|brav[oaie]|buon[ae]?(?:sera|giorno|notte|pomeriggio)|ok|okay|no|nessun\w*|so|sapere|chiam\w*|tempo|funzion\w*|spariti|sparit[oaie]|scompars\w*|troppi|troppo|pochi|perfett\w*|vuot[oaie]|mettil[oaie]|mettel[oaie]|ma|sono|anche|poi|stop|ferm\w*|basta|dove|domani|forse|dunque|insomma|prova|provo|proviamo|test|mancano|manca|c erano|erano|noo+|nono|nope|mannaggia|uffa|hmm+|mmm+|ahah\w*|lol|eccomi|pronto|vediamo|cazzo|sogno|assolutamente|neanche|controllo|ridammi|bravissim\w*)\b/
 /** 24/10: parole di domanda («cosa c'è nei primi a pranzo», «quali secondi ci sono stasera») */
 const QUESTION_W=/^(?:(?:ma|e|allora|senti|scusa|ok)\s+)*(?:cosa|che cosa|che|quali?|quant\w*|come|dove|perche|mi dici|dimmi|fammi vedere|mostrami|leggimi|c e|ci sono|hai|abbiamo)\b|\b(?:c e|ci sono|cosa)\b/
 /** 28/10 sera: comandi che non sono un elenco di piatti (dopo «Ora scrivimi i piatti nuovi» senza «inserisci»). */
 const CTX_OTHER=/\b(?:rimett\w*|mostr\w*|spost\w*|cambi\w*|rinomin\w*|mand\w*|invi\w*|manda\w*|dimmi|scriv\w*|vorrei|voglio|puoi|ricord\w*|annull\w*|anteprim\w*|stamp\w*|pdf|link|grazie|ok|perfetto|fatto|basta)\b/
+/** 28/10 sera (audit): ipotesi e domande senza «?» */
+const HEDGE=/^(?:(?:ma|e|allora|senti|scusa|ok|ciao)\s+)*(?:posso|si puo|si potrebbe|come (?:faccio|si fa|devo|posso)|sai|sapresti|potrei|vorrei sapere|e possibile|se (?:elimino|tolgo|metto|inserisco|aggiungo|cancello))\b|\b(?:non so come|ma non so|non ci riesco|vero|non costava|dice che|dicono che|ha detto che|hanno detto che)\b\s*$|\b(?:non so come|ma non so)\b/
+/** 28/10 sera (audit): saluti e cortesie intorno al comando («buonasera elimina i primi… grazie mille») */
+export function politeStrip(t:string):string{let x=t.trim()
+ for(let i=0;i<4;i++){const y=x.replace(/^(?:ciao|buonasera|buona sera|buongiorno|buon giorno|buon pomeriggio|salve|allora|senti|dunque|ecco|comunque|per favore|perfavore|gentilmente|ok|okay)\b[\s,!.:;-]*/i,'');if(y===x||!y.trim())break;x=y}
+ for(let i=0;i<4;i++){const y=x.replace(/[\s,!.;-]*\b(?:grazie(?: mille)?|ciao|per favore|perfavore|gentilissim[aoie]|un bacio|buona serata|buonanotte)[\s!.]*$/i,'');if(y===x||!y.trim())break;x=y}
+ return x}
 const DAILY=/\b(?:oggi|stasera|stassera|stamattina|domani|stamani)\b/
 const NEG=/\b(?:non|nun)\s+(?:(?:li|le|lo|la|ci|mi|piu)\s+)?(?:togli|lev|nascond|svuot|elimin|cancell|rimuov|mett|inser|aggiung)/
 /** Altri comandi nello stesso messaggio: prezzi, esaurito, foto, eliminazione di un piatto, rinomina → non è la regola (resta il resto). */
@@ -126,6 +141,8 @@ export function clearIntent(text:string,secNames:string[]=[]):boolean{
  // «svuota primi», «svuota i secondi della cena»: un sottomenu, non il Menu intero (resta il percorso di prima)
  if(/\bsvuot\w*\b/.test(p))return !p.split(' ').some(w=>COURSES.includes(w)||secNames.some(x=>plain(x).split(' ').length===1&&sameSection(x,w)))
  if(!CLEAR_V.test(p)||!/\btutt[oaie]\b/.test(p))return false
+ // 28/10 sera (audit: «i primi … toglili tutti dal menu della sera» → proposta di svuotare TUTTO il Menu): con una portata detta no
+ if(p.split(' ').some(w=>['primi','secondi','contorni','dolci','antipasti','pizze','insalate','panini','bevande'].includes(w)))return false
  if(/\btutt[oaie] e (?:due|tre|2|3)\b|\bentramb\w*/.test(p))return false
  return !notWholeMenu(p,secNames)}
 
@@ -143,7 +160,7 @@ export function deleteMenuQuestion(r:{menu:RuleMenu,items:number,sections:string
 type Tok={w:string,raw:string}
 // 23/10 (chat Luisa): il doppio spazio fra due parole è un separatore tra piatti (come la virgola).
 const tokens=(text:string):Tok[]=>{const s=text.replace(/[🎤*_~`"“”«»]/gu,' ').replace(/(\S)[ \t\u00a0]{2,}(?=\S)/g,'$1 , ').replace(/[’`]/g,"'").replace(/\n+/g,' ; ').replace(/([,;:.!?])/g,' $1 ').replace(/\s+/g,' ').trim()
- return s.split(' ').filter(Boolean).flatMap(raw=>{if(/^[,;:.!?]$/.test(raw))return[{w:raw===':'?':':raw==='.'||raw==='!'||raw==='?'?';':raw,raw}];const parts=raw.split("'");return parts.map((x,i)=>({w:plain(x),raw:i<parts.length-1?x+"'":x})).filter(t=>t.w)})}
+ return s.split(' ').filter(Boolean).flatMap(raw=>{if(/^[,;:.!?]$/.test(raw))return[{w:raw===':'?':':raw==='.'||raw==='!'||raw==='?'?';':raw,raw}];const parts=raw.split("'");return parts.map((x,i)=>({w:/^pur[eè]$/i.test(x)&&/è/i.test(x)?'puree':plain(x),raw:i<parts.length-1?x+"'":x})).filter(t=>t.w)})} // 28/10 sera: «purè» non è «pure»
 /** Posizioni del testo che nominano un Menu («nel menu cena», «a pranzo», «per stasera»): non sono nomi di piatti. */
 function menuSpans(t:Tok[],menus:{name:string}[]):Set<number>{const out=new Set<number>(),W=t.map(x=>x.w)
  const mark=(i:number,n:number)=>{let s=i;while(s>0&&PREP.has(W[s-1]!))s--;if(s>0&&W[s-1]==='menu')s--;while(s>0&&PREP.has(W[s-1]!))s--;for(let k=s;k<i+n;k++)out.add(k)}
@@ -161,6 +178,8 @@ function mentions(t:Tok[],secs:SectionRef[],skip:Set<number>):Mention[]{const ou
  for(let i=0;i<W.length;i++){if(skip.has(i))continue;const w=W[i]!
   const multi=secs.find(s=>{const ws=words(s.name);return ws.length>1&&ws.every((x,k)=>W[i+k]===x||(k===0&&sameSection(x,W[i+k]??'')))})
   if(multi){const n=words(multi.name).length;out.push({i,n,secId:multi.id,word:multi.name});i+=n-1;continue}
+  // 28/10 sera (verifica): primo/secondo/contorno/dolce al SINGOLARE dentro un nome non sono un sottomenu (solo «nel secondo», «secondo:»)
+  if(/^(?:primo|secondo|contorno|dolce|antipasto)$/.test(w)&&i>0&&!(/^(?:nel|nei|tra|fra|come|per|x|pranzo|cena|sera|stasera|oggi|giorno|menu|mezzogiorno)$/.test(W[i-1]??'')||[',',';',':'].includes(W[i-1]??'')||[',',';',':'].includes(W[i+1]??'')))continue
   // anche con una lettera sbagliata nei vocali («secodi», «contormi»): parole di almeno 5 lettere
   // 28/10 sera (chat di Luisa): «prima/seconda» non sono mai un sottomenu, nemmeno per sameSection: «Per tornare come prima scrivi
   // annulla» in fondo alla risposta del bot diventava l'ultimo sottomenu nominato (Primi) e l'«inserisci» seguente finiva nei Primi.
@@ -192,10 +211,11 @@ export function splitNamesX(seg:Tok[],known:string[],o:SplitOpts={}):{names:stri
  const capStart=(p:number[],j:number)=>j>0&&/^\p{Lu}\p{Ll}/u.test(R[p[j]!]??'')&&/^\p{Ll}/u.test(R[p[j-1]!]??'')&&!PREP.has(W[p[j-1]!]??'')&&!['e','ed','con','di','da','a','in'].includes(W[p[j-1]!]??'')
  const headCut=(p:number[])=>{let cut:number[]=[];for(let j=0;j<p.length;j++){const k=p[j]!
    // 28/10 sera (vocale «tagliata orata al forno e salsiccia»): due piatti che stanno in piedi da soli in fila = probabile confine (proposta)
-   const sa=(x:number)=>isStandaloneWord(W[x]!)
-   if(cut.length&&sa(k)&&cut.some(x=>sa(x)||hd(x))&&!PREP.has(W[p[j-1]!]??'')&&!['e','ed','con','di'].includes(W[p[j-1]!]??'')&&!known.some(n=>norm(n)===cut.map(x=>W[x]).concat(W[k]!).join(' '))){out.push(txt(cut));cut=[];guessed=true}
+   const sa=(x:number)=>isStandaloneWord(W[x]!),PART=/^(?:fritt\w*|arrost\w*|grigliat\w*|bollit\w*|lessat\w*|impanat\w*|ripien\w*|gratinat\w*|saltat\w*|trifolat\w*|marinat\w*|affumicat\w*|stufat\w*|brasat\w*)$/,OR=['o','oppure','od']
+   if(OR.includes(W[p[j-1]!]??'')){/* «orata o branzino»: mai un confine */}
+   else if(cut.length&&!PART.test(W[k]!)&&sa(k)&&cut.some(x=>sa(x)||hd(x))&&!PREP.has(W[p[j-1]!]??'')&&!['e','ed','con','di'].includes(W[p[j-1]!]??'')&&!known.some(n=>norm(n)===cut.map(x=>W[x]).concat(W[k]!).join(' '))){out.push(txt(cut));cut=[];guessed=true}
    else if(cut.length&&capStart(p,j)&&cut.some(x=>!FILL.has(W[x]!)&&!INSERT_V.test(W[x]!)&&!SKIP.has(W[x]!))){out.push(txt(cut));cut=[];guessed=true}
-   else if(cut.length&&hd(k)&&cut.some(x=>hd(x))&&!PREP.has(W[p[j-1]!]??'')&&W[p[j-1]!]!=='e'&&W[p[j-1]!]!=='ed'&&W[p[j-1]!]!=='con'&&!known.some(n=>norm(n)===cut.map(x=>W[x]).concat(W[k]!).join(' '))){out.push(txt(cut));cut=[];guessed=true}
+   else if(cut.length&&!PART.test(W[k]!)&&hd(k)&&cut.some(x=>hd(x))&&!PREP.has(W[p[j-1]!]??'')&&W[p[j-1]!]!=='e'&&W[p[j-1]!]!=='ed'&&W[p[j-1]!]!=='con'&&!known.some(n=>norm(n)===cut.map(x=>W[x]).concat(W[k]!).join(' '))){out.push(txt(cut));cut=[];guessed=true}
    cut.push(k)}
   if(cut.length)out.push(txt(cut))}
  const flushPart=(ix:number[])=>{if(!ix.length)return;const Wp=ix.map(k=>W[k]!)
@@ -211,8 +231,9 @@ export function splitNames(seg:Tok[],known:string[],o:Omit<SplitOpts,'ask'>={}):
 const clean=(n:string)=>{let ws=n.replace(/\s+/g,' ').trim().split(' ').filter(Boolean)
  // «secodi inserisci orata»: un verbo d'inserimento dentro il nome = quello che c'è prima non è il piatto
  {const k=ws.map(w=>plain(w)).reduce((a,w,i)=>INSERT_V.test(w)?i:a,-1);if(k>=0)ws=ws.slice(k+1)}
- while(ws.length&&FILL.has(plain(ws[0]!)))ws.shift()
- while(ws.length&&(FILL.has(plain(ws[ws.length-1]!))||PREP.has(plain(ws[ws.length-1]!))))ws.pop()
+ const fill=(x:string)=>FILL.has(plain(x))&&!/è/i.test(x) // 28/10 sera: «purè» non è il riempitivo «pure»
+ while(ws.length&&fill(ws[0]!))ws.shift()
+ while(ws.length&&(fill(ws[ws.length-1]!)||PREP.has(plain(ws[ws.length-1]!))))ws.pop()
  return ws.join(' ').replace(/' /g,"'").replace(/^l'\s*/i,'').trim()}
 
 export type InsertParse={lists:{secId:string|null,word:string,names:string[],doubts?:Doubt[]}[],loose:string[],guessed?:boolean}
@@ -305,39 +326,66 @@ function splitClearInsert(text:string,secNames:string[]):{clear:string,insert:st
 
 /** Il turno della regola: null = non è la regola (il messaggio va avanti come prima). */
 export function ruleTurn(o:RuleInput):RuleResult|null{
- const text0=fixMealWords(shorthand(o.text.replace(/[🎤]/gu,' '))).trim();if(!plain(text0))return null // 24/10: refusi del pasto e «da 12 …»
+ const text0=politeStrip(fixMealWords(shorthand(o.text.replace(/[🎤]/gu,' ')))).trim();if(!plain(text0))return null
+ // 28/10 sera (audit): «posso aggiungere…», «come faccio a inserire…», «il completo costa 20 vero», «volevo… ma non so come» sono
+ // domande o racconti, mai comandi: niente scrittura dalla regola (risponde il modello). Le attese in corso restano sotto.
+ if(!o.wait&&HEDGE.test(plain(text0)))return null
+ // 28/10 sera (verifica: «inserisci lasagna e svuota i secondi» → nomi spazzatura e Contorni eliminati): inserire e POI togliere nello
+ // stesso messaggio non si indovina
+ if(!o.wait&&/\b(?:inser\w*|aggiung\w*)\b.*\b(?:svuot\w*|togli\w*|elimin\w*|cancell\w*|lev[ai]\w*)\b/.test(plain(text0)))return{kind:'info',text:'Una cosa alla volta: non ho cambiato nulla. Scrivimi prima cosa togliere (per esempio «elimina i secondi del menu cena»), poi cosa inserire.'}
+ // 28/10 sera (prova dal vivo: «c'è la carbonara nel menu cena?» → «Cosa vuoi cambiare?»): domanda sulla presenza di un piatto, risposta
+ // dal menu (sola lettura). Solo per un nome di piatto, mai per un sottomenu («ci sono i primi?» resta al modello).
+ if(!o.wait){const pr=presenceAnswer(text0,o);if(pr)return pr} // 24/10: refusi del pasto e «da 12 …»
  // 23/10 (chat Luisa): «menu pranzo da 12 (euro)» = il Menu, non un prezzo: si toglie «da 12 euro» prima di leggere il comando.
  const text=o.wait?.kind==='menu'?text0:stripMenuPrice(text0,o.menus)||text0,p=plain(text)
  const allSecNames=[...new Set(o.sections.map(s=>s.name))]
  const vocab=o.refs.map(r=>r.name)
  // 1) risposta alla domanda della regola
  if(o.wait?.kind==='menu'){const opts=o.menus.filter(m=>o.wait!.kind==='menu'&&(o.wait as any).options.includes(m.id)),num=p.match(/^(?:il |la |nel |numero )?(\d)$/)
-  const hit=num?opts[Number(num[1])-1]:menusIn(text,opts).length===1?menusIn(text,opts)[0]:(()=>{const m=menusIn(text,o.menus);return m.length===1?m[0]:undefined})()
-  if(hit){if((o.wait as any).del)return delMenuResult(hit,o);const sc=sectionClearParse(stripMenuPrice(o.wait.text,o.menus),o);return sc?runSectionClear(hit,sc,o):runOn(hit,o.wait.text,o,true)}
+  const part=opts.filter(m=>plain(m.name).split(' ').some(x=>x.length>=4&&x!=='menu'&&p.split(' ').includes(x)))
+  const hit=num?opts[Number(num[1])-1]:menusIn(text,opts).length===1?menusIn(text,opts)[0]:part.length===1?part[0]:(()=>{const m=menusIn(text,o.menus);return m.length===1?m[0]:undefined})()
+  // 28/10 sera (audit): vale come risposta solo un messaggio breve (nome del Menu, numero, «quello della sera»); un comando completo
+  // («elimina il menu cena», «nel menu cena nei secondi inserisci tagliata») è un messaggio nuovo e la domanda decade.
+  const tq=stripMenuPrice(text,o.menus)||text,pq=plain(tq),tk=tokens(tq),sk=menuSpans(tk,o.menus),extra=tk.filter((x,i)=>!sk.has(i)&&!PREP.has(x.w)&&!FILL.has(x.w)&&![',',';',':'].includes(x.w)&&!/^(?:menu|quello|quella|il|la|del|della|di|si|ok|allora|nel|numero|euro)$/.test(x.w))
+  const command=CLEAR_V.test(pq)||INSERT_V.test(pq)||OTHER.test(pq)||/\?/.test(text)||extra.length>1
+  if(hit&&!command){if((o.wait as any).del)return delMenuResult(hit,o);const sc=sectionClearParse(stripMenuPrice(o.wait.text,o.menus),o);return sc?runSectionClear(hit,sc,o):runOn(hit,o.wait.text,o,true)}
+  if(!hit&&!command&&(COURTESY.test(p)||!p)){const ms=opts.length?opts:o.menus;return{kind:'ask',question:'Dimmi quale Menu: '+orList(ms.map(m=>mLabel(m.name)))+'?',wait:o.wait}}
+  if(command)return ruleTurn({...o,wait:null})
   return null}
  if(o.wait?.kind==='swap')return swapAnswer(o,o.wait as SwapWait)
  if(o.wait?.kind==='names'){const w=o.wait,m=o.menus.find(x=>x.id===w.menuId),s=o.sections.find(x=>x.id===w.secId)
+  // 28/10 sera (audit): cortesie/attese = la richiesta resta aperta; ripensamento subito dopo lo svuotamento = si spiega «annulla»
+  if(m&&s&&(COURTESY.test(p)||(!p&&/[👍👌🙏]/u.test(text))))return{kind:'ask',question:'Ok! Quando vuoi scrivimi i piatti nuovi per i *'+s.name+'* del '+mLabel(m.name)+', per esempio «'+exampleFor(s.name)+'».',wait:w}
+  {const pr=m&&s?presenceAnswer(text0,o):null;if(pr&&pr.kind==='info')return{kind:'ask',question:pr.text,wait:w}}
+  if(m&&s&&w.ctx&&/^(?:anzi|scusa intendevo|intendevo|ho sbagliato menu|volevo dire)\b/.test(p))return{kind:'ask',question:'Ho già svuotato i *'+s.name+'* del '+mLabel(m.name)+'. Per rimetterli com’erano scrivi *annulla* (entro 10 minuti), poi dimmi il Menu giusto.',wait:w}
+  if(m&&s&&w.ctx&&!INSERT_V.test(p)&&!CLEAR_V.test(p)&&!OTHER.test(p)&&!/\b(?:an+ul+\w*|ripristin\w*|rimett\w*)\b/.test(p)&&p.split(' ').length<=5&&NOT_DISH.test(p)&&!REGRET.test(p))return{kind:'ask',question:'Ok. Quando vuoi scrivimi i piatti nuovi per i *'+s.name+'* del '+mLabel(m.name)+', per esempio «'+exampleFor(s.name)+'». Se hai sbagliato scrivi *annulla*.',wait:w}
+  if(m&&s&&w.ctx&&REGRET.test(p))return{kind:'ask',question:'Adesso i *'+s.name+'* del '+mLabel(m.name)+' sono vuoti. Per rimettere i piatti di prima scrivi *annulla* (entro 10 minuti), oppure scrivimi i piatti nuovi.',wait:w}
   // 28/10 sera (chat di Luisa): vale solo per QUEL Menu (un altro Menu detto = messaggio nuovo) e, se è il contesto di un sottomenu appena
   // svuotato, solo per un elenco di piatti (un altro comando senza «inserisci» non diventa un piatto).
-  const said=menusIn(text0,o.menus),otherMenu=said.length>0&&!said.some(x=>x.id===w.menuId),otherCmd=!!w.ctx&&!INSERT_V.test(p)&&CTX_OTHER.test(p)
-  if(m&&s&&!otherMenu&&!otherCmd&&!OTHER.test(p)&&!hasDigits(p)&&!CLEAR_V.test(p)&&!/\?/.test(text)){const info=infoOf(m,o.sections,o.refs),toks=tokens(text),sk=menuSpans(toks,o.menus),ms=mentions(toks,info.secs,sk)
+  // 28/10 sera (verifica: «inserisci pescato del giorno» finiva nel Menu Giorno): un altro Menu conta solo detto davvero («nel menu …», «a pranzo»)
+  const explicitM=/\bmen[uù]\b|^(?:a|per|nel|del)\s+(?:pranzo|cena)\b|\b(?:a|per)\s+(?:pranzo|cena|mezzogiorno)\b|\bstasera\b/i.test(text0)
+  const said=explicitM?menusIn(text0,o.menus):[],otherMenu=said.length>0&&!said.some(x=>x.id===w.menuId),otherCmd=!!w.ctx&&!INSERT_V.test(p)&&CTX_OTHER.test(p)
+  if(m&&s&&!otherMenu&&!otherCmd&&!OTHER.test(p)&&!hasDigits(p)&&!CLEAR_V.test(p)&&!/\?/.test(text)){const info=infoOf(m,o.sections,o.refs),toks=tokens(text),sk=explicitM?menuSpans(toks,o.menus):new Set<number>(),ms=mentions(toks,info.secs,sk)
    // 23/10 (chat Luisa «Lasagna strozzapreti con Zola e pistacchio  orecchiette con zucca»): virgole, doppio spazio e parole che aprono un
    // piatto dividono; un pezzo con la «e» dubbia si chiede («1 piatto o 2?»), gli altri si scrivono subito. Un sottomenu detto vale.
    // 28/10 sera: un confine indovinato (senza virgola) = proposta da confermare, nessuna scrittura.
-   if(ms.some(x=>x.secId)){const ip=parseInsert(text,info.secs,o.menus,vocab,{lexicon:o.lexicon,ask:true});if(ip.lists.length||ip.loose.length)return applyResult(info,{lists:[...ip.lists,...(ip.loose.length?[{secId:s.id,word:s.name,names:ip.loose}]:[])],loose:[],...(ip.guessed?{guessed:true}:{})},null,vocab,text,o.lexicon??null)}
-   const r=splitNamesX(toks.filter((x,i)=>!sk.has(i)),vocab,{lexicon:o.lexicon,section:s.name,ask:true})
-   if(r.names.length||r.doubts.length)return applyResult(info,{lists:[{secId:s.id,word:s.name,names:r.names,...(r.doubts.length?{doubts:r.doubts}:{})}],loose:[],...(r.guessed?{guessed:true}:{})},null,vocab,text,o.lexicon??null)}
+   // un sottomenu detto che in questo Menu non c'è («nei dolci» nel Menu Cena): messaggio nuovo, mai nel sottomenu del contesto
+   const rearm=(r:RuleResult|null):RuleResult|null=>{if(!r)return null;if(w.ctx&&r.kind==='apply'&&!r.ask)return{...r,ask:{question:'Cosa inserisco nei *'+s.name+'* del '+mLabel(m.name)+'?',wait:{...w,again:true} as RuleWait,silent:true}};return r}
+   // dopo un primo inserimento il contesto resta, ma un piatto che per portata va chiaramente in un altro sottomenu non ci finisce in silenzio
+   const elsewhere=(names:string[])=>!!(w as any).again&&names.some(n=>{const c=courseSection(n,info.secs);return !!c&&c.id!==s.id&&!findExisting(n,null,info.items)})
+   if(!ms.some(x=>!x.secId)){let out:RuleResult|null=null
+    if(ms.some(x=>x.secId)){const ip=parseInsert(text,info.secs,o.menus,vocab,{lexicon:o.lexicon,ask:true});if(ip.lists.length||ip.loose.length)out=applyResult(info,{lists:[...ip.lists,...(ip.loose.length?[{secId:s.id,word:s.name,names:ip.loose}]:[])],loose:[],...(ip.guessed?{guessed:true}:{})},null,vocab,text,o.lexicon??null)}
+    else{const r=splitNamesX(toks.filter((x,i)=>!sk.has(i)),vocab,{lexicon:o.lexicon,section:s.name,ask:true})
+     if((r.names.length||r.doubts.length)&&!elsewhere(r.names))out=applyResult(info,{lists:[{secId:s.id,word:s.name,names:r.names,...(r.doubts.length?{doubts:r.doubts}:{})}],loose:[],...(r.guessed?{guessed:true}:{})},null,vocab,text,o.lexicon??null)}
+    if(out)return rearm(out)}}
   // non è la risposta (un altro comando, un altro Menu): si legge come un messaggio nuovo
   return ruleTurn({...o,wait:null})}
  // 23/10 sera: risposta alla proposta «Ho capito così …: • A • B — Va bene?». «sì» = applica; una correzione («funghi misti e peperoni sono
  // due piatti», «pasta e fagioli è un piatto solo») o un elenco nuovo = applicati sulla proposta; «no/annulla» = niente.
  if(o.wait?.kind==='propose'){const w=o.wait,m=o.menus.find(x=>x.id===w.menuId);if(!m)return null
-  const info=infoOf(m,o.sections,o.refs),pp=plain(text)
-  // 28/10 sera (batteria): «no sono 3: a, b, c» / «no, a, b, c» = la correzione con l'elenco giusto, non un «no» secco
-  {const m=text.match(/^\s*no\b[^,:]*?(?:sono\s+\w+\s*)?[:,]\s*(.+)$/i);if(m&&/,/.test(m[1]!)&&w.lists.length===1){const s0=info.secs.find(x=>x.id===w.lists[0]!.secId);if(s0){const toks=tokens(m[1]!),sk=menuSpans(toks,o.menus),r=splitNamesX(toks.filter((x,i)=>!sk.has(i)),vocab,{lexicon:o.lexicon,section:s0.name,ask:false})
-   if(r.names.length&&!r.guessed&&!r.names.some(n=>NOT_DISH.test(plain(n))))return applyProposal(info,w,[{secId:s0.id,names:r.names}],vocab)}}}
-  if(/^(?:no|annulla|lascia (?:stare|perdere)|niente|no grazie|non (?:farlo|fare niente))\b/.test(pp)&&!INSERT_V.test(pp))return{kind:'info',text:'Ok, non ho cambiato nulla.'}
-  if(isAffirmative(text)||(/^(?:s[iì]|ok|va bene|esatto|giusto|perfetto|certo|confermo)\b/.test(pp)&&!/\b(?:no|non|ma|pero|tranne|invece)\b/.test(pp)&&pp.split(' ').length<=6))return applyProposal(info,w,w.lists,vocab)
+  const info=infoOf(m,o.sections,o.refs),pp=plain(text),one=w.lists.length===1?info.secs.find(x=>x.id===w.lists[0]!.secId):undefined
+  const namesOf=(t:string,sec:SectionRef)=>{const toks=tokens(t),sk=menuSpans(toks,o.menus);return splitNamesX(toks.filter((x,i)=>!sk.has(i)),vocab,{lexicon:o.lexicon,section:sec.name,ask:false})}
+  // 1) correzione della divisione («X e Y sono due piatti», «… è un piatto solo»), anche dopo un «no»
   const corr=parseCorrection(text)
   if(corr){const ph=plain(corr.phrase);let hit=false
    const lists=w.lists.map(l=>{let names=[...l.names]
@@ -347,11 +395,37 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
     if(corr.kind==='split'&&!hit){const parts=corr.phrase.split(/\s+(?:e|ed)\s+/i).map(x=>plain(x));for(let i=0;i+parts.length<=names.length;i++)if(parts.every((x,k)=>plain(names[i+k]!)===x)){hit=true;break}}
     return{...l,names}})
    if(hit){const parts=corr.phrase.split(/\s+(?:e|ed)\s+/i).map(x=>x.trim()).filter(Boolean),r=applyProposal(info,w,lists,vocab),learn=parts.length>1?[ruleFromAnswer(corr.phrase,parts,corr.kind==='split'?'split':'one')]:[];return r.kind==='apply'?{...r,learn}:{...r,learn} as RuleResult}}
-  if(!OTHER.test(pp)&&!hasDigits(pp)&&!CLEAR_V.test(pp)&&!/\?/.test(text)&&w.lists.length===1){const s0=info.secs.find(x=>x.id===w.lists[0]!.secId);if(s0){const toks=tokens(text),sk=menuSpans(toks,o.menus),r=splitNamesX(toks.filter((x,i)=>!sk.has(i)),vocab,{lexicon:o.lexicon,section:s0.name,ask:false})
-   if(r.names.length&&!r.names.some(n=>NOT_DISH.test(plain(n))))return applyProposal(info,w,[{secId:s0.id,names:r.names}],vocab)}}
-  // 28/10 sera (chat di Luisa): non è una risposta alla proposta (per esempio «elimina secondi menù sera»): la proposta decade e il
-  // messaggio si legge come nuovo (prima andava al modello, che non svuotava nulla).
+  // 2) «no sono 3: a, b, c» / «no, a, b, c» = l'elenco giusto
+  {const mm=text.match(/^\s*no\b[^,:]*?(?:sono\s+\w+\s*)?[:,]\s*(.+)$/i);if(mm&&/,/.test(mm[1]!)&&one){const r=namesOf(mm[1]!,one)
+   if(r.names.length&&!r.guessed&&!r.names.some(n=>NOT_DISH.test(plain(n))))return applyProposal(info,w,[{secId:one.id,names:r.names}],vocab)}}
+  // 3) «rigatoni al sugo no», «no i rigatoni», «senza i rigatoni», «togli i rigatoni»: tolti dalla proposta, nuova proposta
+  {const mm=pp.match(/^(?:(?:no|senza|togli|leva|tranne)\s+(?:il |lo |la |l |i |gli |le )?(.+?)|(.+?)\s+no)$/);const said=(mm?.[1]??mm?.[2])?.trim()
+   if(said&&!/^(?:grazie|aspetta|non|niente|nulla|tutto|va bene)$/.test(said)){let hit=false;const lists=w.lists.map(l=>({...l,names:l.names.filter(n=>{const x=sameName(n,said)||plain(n)===said||plain(n).startsWith(said+' ');if(x)hit=true;return !x})})).filter(l=>l.names.length)
+    if(hit)return lists.length?reProposal(info,w,lists,'Ok, tolto. Adesso è così:'):{kind:'info',text:'Ok, non scrivo niente.'}}}
+  if(/^(?:no|annulla|lascia (?:stare|perdere)|niente|no grazie|non (?:farlo|fare niente)|anzi no)\b/.test(pp)&&!INSERT_V.test(pp))return{kind:'info',text:'Ok, non ho cambiato nulla.'}
+  // 4) «sì» = applica. «sì ma…», «sì, metti anche…» = non si indovina: niente scritto, la proposta resta
+  const yes=isAffirmative(text)||/^(?:s[iì]+|ok|okay|va bene|esatto|esattamente|giusto|perfetto|certo|confermo|d accordo)\b/.test(pp)
+  const pq=pp.replace(/^(?:s[iì]+|ok|okay)\b/,''),more=/\b(?:ma|pero|tranne|invece|anche|togli\w*|senza|manca|oltre|no|non)\b/.test(pq)||/\b(?:metti|aggiungi|inserisci|mettici)\s+(?:anche\s+)?(?:il|la|lo|l|i|gli|le|un|una|dei|delle)\b/.test(pq)
+  if(yes&&!more&&pp.split(' ').length<=6)return applyProposal(info,w,w.lists,vocab)
+  if(yes&&more)return reProposal(info,w,w.lists,'Non ho ancora scritto niente: con un «sì» scrivo esattamente questi.')
+  // 5) un nuovo «inserisci …» per lo stesso sottomenu mentre la proposta aspetta: si uniscono, nessuno si perde
+  if(one&&INSERT_V.test(pp)&&!CLEAR_V.test(pp)){const said=menusIn(text0,o.menus),toks=tokens(text),ms=mentions(toks,info.secs,menuSpans(toks,o.menus))
+   if((!said.length||said.some(x=>x.id===m.id))&&!ms.some(x=>x.secId!==one.id)){const r=namesOf(text,one);if(r.names.length&&!r.names.some(n=>NOT_DISH.test(plain(n)))){const names=[...w.lists[0]!.names];for(const n of r.names.map(x=>newName(x,vocab)))if(!names.some(y=>plain(y)===plain(n)))names.push(n)
+     return reProposal(info,w,[{secId:one.id,names}],'Ho aggiunto alla proposta. Adesso è così:')}}}
+  // 6) un altro comando: la proposta decade, il messaggio si legge come nuovo
   if(CLEAR_V.test(pp)||INSERT_V.test(pp)||sectionClearParse(text,o))return ruleTurn({...o,wait:null})
+  // «nei secondi», «sono secondi»: la proposta va in quel sottomenu (si rimostra, niente scritto); più sottomenu detti = si rispiega
+  if(one){const tk=tokens(text),sk=menuSpans(tk,o.menus),ms=mentions(tk,info.secs,sk).filter(x=>x.secId),ids=[...new Set(ms.map(x=>x.secId!))]
+   const rest=tk.filter((x,i)=>!sk.has(i)&&!ms.some(m=>i>=m.i&&i<m.i+m.n)&&!PREP.has(x.w)&&!FILL.has(x.w)&&!/^(?:sono|e|in|nei|negli|nelle|mettili|mettile|spostali|vanno|va|no|non|ma|li|le|i|gli)$/.test(x.w))
+   if(ids.length===1&&ids[0]!==one.id&&!rest.length)return reProposal(info,w,[{secId:ids[0]!,names:w.lists[0]!.names}],'Ok, li sposto. Adesso è così:')
+   if(ids.length&&!INSERT_V.test(pp)&&!CLEAR_V.test(pp))return reProposal(info,w,w.lists,'Non ho ancora scritto niente.')}
+  // un numero da solo («due», «2») non è un piatto: si rispiega
+  if(/^(?:sono\s+)?(?:uno|una|due|tre|quattro|cinque|sei|\d)(?:\s+piatti)?$/.test(pp)||/^\W*(?:ok|si|cosa|come)?\s*\?+\W*$/i.test(text.trim()))return reProposal(info,w,w.lists,'Non ho ancora scritto niente.')
+  // 7) un elenco nuovo con le virgole = quello giusto; senza virgole (confini indovinati) = nuova proposta
+  if(!OTHER.test(pp)&&!hasDigits(pp)&&!/\?/.test(text)&&one){const r=namesOf(text,one)
+   if(r.names.length&&!r.names.some(n=>NOT_DISH.test(plain(n)))){const fresh=r.names.filter(n=>!findExisting(n,null,info.items));if(fresh.length&&!fresh.some(n=>foodish(n,vocab)))return reProposal(info,w,w.lists,'Non ho ancora scritto niente.');if(fresh.some(n=>!foodish(n,vocab)))return reProposal(info,w,[{secId:one.id,names:r.names.map(n=>newName(n,vocab))}],'Ho capito così:');if(r.guessed)return reProposal(info,w,[{secId:one.id,names:r.names.map(n=>newName(n,vocab))}],'Ho capito così:');return applyProposal(info,w,[{secId:one.id,names:r.names}],vocab)}}
+  // 8) risposte vaghe («non lo so», «boh», «?», «due»): la proposta resta, si rispiega
+  if(!p||NOT_DISH.test(pp)&&pp.split(' ').length<=5||/^\?+$/.test(text.trim()))return reProposal(info,w,w.lists,'Non ho ancora scritto niente.')
   return null}
  // 23/10: risposta a «"funghi misti e peperoni": 1 piatto o 2?» (gli altri piatti del messaggio erano già scritti). Si impara la risposta.
  if(o.wait?.kind==='split'){const w=o.wait,it=w.items[0],ans=doubtAnswer(text),m=o.menus.find(x=>x.id===w.menuId),s=it?o.sections.find(x=>x.id===it.secId):undefined
@@ -370,6 +444,8 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
    const plan=correctionPlan(corr,o.refs,o.sections,o.menus,pref,o.lexicon??null),learn=plan.rule?[plan.rule]:[],reply=correctionReply(corr,plan,o.menus.length)
    return plan.actions.length?{kind:'fix',actions:plan.actions,reply,learn}:{kind:'info',text:reply,learn}}}
  if(NEG.test(p)||/\?\s*$/.test(text)||/\b(?:annull\w*|com e(?:ra)?|come prima|come era|indietro|ripristin\w*)\b/.test(p))return null
+ // 28/10 sera (audit: «domani inserisci la tagliata…» scritto subito): la programmazione non c'è, si dice prima di scrivere
+ if(/^(?:(?:da|per|a partire da)\s+)?(?:domani|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)\b|\b(?:per|da|a partire da)\s+(?:domani|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|la settimana prossima)\b/.test(p)&&(INSERT_V.test(p)||CLEAR_V.test(p)))return{kind:'info',text:'Le modifiche che mi scrivi vanno online subito: non posso programmarle per un altro giorno. Non ho cambiato nulla. Quando vuoi farla, riscrivimela senza il giorno.'}
  // 23/10 (test «alla Luisa»: «Il primo del menu da 12 costa 9», «Il solo secondo a pranzo mettilo a 11» → domanda senza azioni): il prezzo di
  // un'OPZIONE di un Menu a prezzo fisso detto con il Menu (anche «da 12», «a pranzo») lo legge il server: subito, «annulla» come rete.
  // 24/10 (chat Manuel 18:09): «togli X metti Y» e simili = UNA sostituzione nel sottomenu di X (prima che l'inserimento perda «togli X»)
@@ -383,7 +459,8 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
   if(ms.length===1&&!rest.length&&!CLEAR_V.test(p)&&!INSERT_V.test(p)){const info=infoOf(ms[0]!,o.sections,o.refs),empty=info.secs.filter(x=>!info.items.some(r=>r.sectionId===x.id&&!r.hidden))
    return{kind:'info',text:'Ok, il '+mLabel(ms[0]!.name)+(empty.length?': '+(empty.length===1?'i *'+empty[0]!.name+'* sono vuoti':andList(empty.map(x=>'*'+x.name+'*'))+' sono vuoti'):'')+'. Cosa cambio? Per esempio «'+(empty.length?'nei '+plain(empty[0]!.name)+' inserisci lasagna, carbonara':'togli i primi')+'».'}}}
  // 2) bozza in sospeso («In quale sottomenu metto Nodino…?») + un Menu a prezzo fisso detto («nono devi guardare menu cena»)
- if(o.draftName&&!/\b(?:lascia\w*|stare|perdere|niente|no|annull\w*|basta)\b/.test(p)){const ms=menusIn(text,o.menus);if(ms.length===1&&ms[0]!.pricing==='fisso'&&!hasDigits(p)){const info=infoOf(ms[0]!,o.sections,o.refs),ip=parseInsert(text,info.secs,o.menus,vocab),secId=ip.lists.find(l=>l.secId)?.secId??null
+ // 28/10 sera (dal vivo): «i contorni del menu cena sono buoni» non risponde a «In quale sottomenu metto…?»
+ if(o.draftName&&!/\b(?:lascia\w*|stare|perdere|niente|no|annull\w*|basta|sono|e|era|erano|buon\w*|bell\w*)\b/.test(p)&&p.split(' ').length<=7&&!/\?/.test(text)){const ms=menusIn(text,o.menus);if(ms.length===1&&ms[0]!.pricing==='fisso'&&!hasDigits(p)){const info=infoOf(ms[0]!,o.sections,o.refs),ip=parseInsert(text,info.secs,o.menus,vocab),secId=ip.lists.find(l=>l.secId)?.secId??null
    return applyResult(info,{lists:secId?[{secId,word:'',names:[o.draftName]}]:[],loose:secId?[]:[o.draftName]},null,vocab,text)}}
  // «elimina il menu pranzo» / «togli tutto il menu pranzo»: eliminazione del Menu (con il sì), mai lo svuotamento
  if(deleteMenuIntent(text)){const ms=menusIn(text,o.menus);if(ms.length===1)return delMenuResult(ms[0]!,o)
@@ -395,7 +472,8 @@ export function ruleTurn(o:RuleInput):RuleResult|null{
  {const scp=sectionClearParse(text,o)
   // Menu candidati: quelli con quel sottomenu PIENO (un sottomenu già vuoto non si propone), se nessuno è pieno quelli che lo hanno.
   if(scp){const hasS=(m:RuleMenu)=>o.sections.filter(x=>x.menu===m.name&&scp.words.some(w=>secMatch(x.name,w))),full=(m:RuleMenu)=>hasS(m).some(x=>o.refs.some(r=>r.sectionId===x.id)),anyFull=o.menus.some(full),has=(m:RuleMenu)=>anyFull?full(m):hasS(m).length>0
-   const said=menusIn(text0,o.menus)
+   const said=menusIn(text0,o.menus),all=menusAll(text0,o.menus)
+   if(twoMenuCommand(text0,all)&&said.length<=1)return oneAtATime(all)
    if(said.length===1)return runSectionClear(said[0]!,scp,o)
    const saidH=said.filter(has);if(saidH.length===1)return runSectionClear(saidH[0]!,scp,o);if(saidH.length>1)return askMenu(saidH,text)
    // il Menu della conversazione vale anche se quel sottomenu è già vuoto (si dice «sono già vuoti», mai la domanda su altri Menu)
@@ -462,6 +540,10 @@ function applyResult(info:MenuInfo,parse:InsertParse,clear:{deleteWord:boolean,k
  if([...parse.lists.flatMap(l=>[...l.names,...(l.doubts??[]).map(d=>d.one)]),...parse.loose].some(n=>NOT_DISH.test(plain(n))))return null
  // 23/10: pezzi dubbi («"funghi misti e peperoni": 1 piatto o 2?») → una domanda di una riga; tutto il resto si scrive subito
  const doubts=parse.lists.flatMap(l=>l.secId?(l.doubts??[]).map(d=>({...d,secId:l.secId!})):[])
+ // 28/10 sera (verifica «nuovi buchi»: «Marco», «mannaggia», «sei bravissima» scritti come piatti): un nome NUOVO che non contiene nessuna
+ // parola da cibo (né dei piatti del locale) non si scrive in silenzio: col verbo «inserisci» si fa confermare, senza verbo non è un elenco.
+ {const fresh=[...parse.lists.flatMap(l=>l.names),...parse.loose].filter(n=>!findExisting(n,null,info.items))
+  if(fresh.some(n=>!foodish(n,vocab))){if(!INSERT_V.test(plain(text))&&!fresh.some(n=>foodish(n,vocab)))return null;if(info.menu.pricing==='fisso'&&!parse.lists.some(l=>!l.secId))parse={...parse,guessed:true}}}
  // 23/10 sera (Manuel): con un pezzo dubbio niente «1 piatto o 2?»: UNA domanda che mostra la proposta intera (lettura più probabile).
  // 28/10 sera (chat di Luisa): lo stesso se i confini tra i piatti o i sottomenu sono indovinati (elenco senza virgole, piatti messi
  // per portata): nessuna scrittura finché il titolare non conferma.
@@ -475,6 +557,8 @@ function applyResult(info:MenuInfo,parse:InsertParse,clear:{deleteWord:boolean,k
  const keep=new Set(b.touched),notFound:string[]=[]
  for(const n of clear?.keep??[]){const ex=findExisting(n,null,info.items);if(ex)keep.add(ex.id);else notFound.push(newName(n,vocab))}
  const cl=clear?buildClear(info,keep):{actions:[],names:[]}
+ // 28/10 sera (verifica: «togli tutto dal menu alla carta» eliminava 105 piatti subito): svuotare un Menu alla carta chiede il «sì»
+ if(clear&&info.menu.pricing!=='fisso'&&cl.actions.length&&!b.actions.length)return{kind:'confirm',menu:info.menu,actions:cl.actions,question:'Elimino tutti i '+cl.actions.length+' piatti del '+mLabel(info.menu.name)+'? I sottomenu restano. Rispondi *sì* per eliminarli, oppure *no*.'}
  const actions=[...cl.actions,...b.actions]
  const report:RuleReport={menu:info.menu.name,fixed:info.menu.pricing==='fisso',cleared:cl.names,deleteWord:!!clear?.deleteWord,sections:b.sections,unknownSecs:b.unknownSecs,notPlaced:[...b.notPlaced,...b.needsPrice],notFound,kept:[...keep].filter(id=>!b.touched.has(id)).map(id=>info.items.find(r=>r.id===id)?.name??'').filter(Boolean)}
  if(!actions.length){
@@ -505,7 +589,10 @@ export function sectionClearParse(text:string,o:{menus:RuleMenu[],sections:Secti
 function contextSection(history:{role:string,text:string,at:number}[],info:MenuInfo,menus:{name:string}[]):SectionRef|null{
  // 28/10 sera: i 10 minuti contano da ADESSO (prima dall'ultimo messaggio salvato: un contesto vecchio valeva ancora)
  const now=Date.now()
- for(const h of [...history].sort((a,b)=>b.at-a.at).slice(0,4).filter(x=>now-x.at<=10*60*1000)){const t=tokens(h.text),ms=mentions(t,info.secs,menuSpans(t,menus)).filter(m=>m.secId);if(ms.length)return info.secs.find(x=>x.id===ms[ms.length-1]!.secId)??null}
+ for(const h of [...history].sort((a,b)=>b.at-a.at).slice(0,4).filter(x=>now-x.at<=10*60*1000)){const t=tokens(h.text),ms=mentions(t,info.secs,menuSpans(t,menus)).filter(m=>m.secId);if(!ms.length)continue
+  // 28/10 sera (audit: «svuota il menu sera» → «(Primi, Secondi e Contorni)» → tutto nei Primi): più sottomenu nello stesso turno = nessun contesto
+  if(new Set(ms.map(m=>m.secId)).size>1)return null
+  return info.secs.find(x=>x.id===ms[ms.length-1]!.secId)??null}
  return null}
 function runSectionClear(menu:RuleMenu,scp:{words:string[],clear:string,insert:string},o:RuleInput):RuleResult|null{
  const info=infoOf(menu,o.sections,o.refs),vocab=o.refs.map(r=>r.name),secs=info.secs.filter(x=>scp.words.some(w=>secMatch(x.name,w)))
@@ -540,18 +627,38 @@ function runSectionClear(menu:RuleMenu,scp:{words:string[],clear:string,insert:s
 
 // ---------- scrittura da telefono (23/10, «a prova di chiunque») ----------
 /** Abbreviazioni comuni → parole intere, solo per la lettura delle regole (il modello riceve il messaggio originale). */
-export function shorthand(t:string):string{return t.replace(/(^|\s)x(?=\s)/gi,'$1per').replace(/\bnn\b/gi,'non').replace(/\bcmq\b/gi,'comunque').replace(/\btt\b/gi,'tutti').replace(/\bxk[eèé]\b/gi,'perché').replace(/\bqst[io]?\b/gi,'questi').replace(/\bvia tutt([ieoa])\b/gi,'togli tutt$1').replace(/\bleva(?:mi|ci)? via\b/gi,'togli').replace(/[A-Za-zÀ-ú]+/g,w=>{const x=plain(w);for(const [re,full] of ABBR)if(re.test(x))return full;return w})}
+export function shorthand(t:string):string{return fixVerbs(t).replace(/(^|\s)x(?=\s)/gi,'$1per').replace(/\bnn\b/gi,'non').replace(/\bcmq\b/gi,'comunque').replace(/\btt\b/gi,'tutti').replace(/\bxk[eèé]\b/gi,'perché').replace(/\bqst[io]?\b/gi,'questi').replace(/\bvia tutt([ieoa])\b/gi,'togli tutt$1').replace(/\bleva(?:mi|ci)? via\b/gi,'togli').replace(/[A-Za-zÀ-ú]+/g,w=>{const x=plain(w);for(const [re,full] of ABBR)if(re.test(x))return full;return w})}
+/** 28/10 sera (audit): verbi storpiati a inizio comando («insersci», «isnerisci», «aggingi», «in serisci», «mettece», «elimna»), «annula»,
+ * «virgola»/«punto» detti a voce e la barra come separatori. Solo forme note o a una/due lettere da quelle giuste. */
+const VERB_FIX:[RegExp,string][]=[[/\bin\s+se\s*ri?sci\b/gi,'inserisci'],[/\binse\s+risci\b/gi,'inserisci'],[/\bin\s+serisci\b/gi,'inserisci'],[/\ba\s+ggiungi\b/gi,'aggiungi'],[/\ban+ul+a\b/gi,'annulla']]
+const lev2=(a:string,b:string)=>{const d=Array.from({length:a.length+1},(_,i)=>[i,...Array(b.length).fill(0)]);for(let j=1;j<=b.length;j++)d[0]![j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++){d[i]![j]=Math.min(d[i-1]![j]+1,d[i]![j-1]+1,d[i-1]![j-1]+(a[i-1]===b[j-1]?0:1));if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i]![j]=Math.min(d[i]![j],d[i-2]![j-2]+1)}return d[a.length]![b.length]!}
+export function fixVerbs(t:string):string{for(const [re,to] of VERB_FIX)t=t.replace(re,to)
+ t=t.replace(/(\S)\s+\/\s+(\S)/g,'$1, $2').replace(/\s+punto\s*$/i,'').replace(/\s+(?:virgola|punto e virgola)\s+/gi,', ').replace(/\s+punto\s+(?=\S)/gi,', ')
+ return t.replace(/[A-Za-zÀ-ú]+/g,w=>{const x=plain(w);if(x.length<5||x.length>11)return w
+  if(/^(?:inserisci|aggiungi|elimina|mettici|cancella|inserire|aggiungere|eliminare)$/.test(x))return w
+  if(/^(?:aggiunt|inserit|inserir|inseriment|aggiunger)/.test(x))return w
+  for(const v of ['inserisci','aggiungi']){if(lev2(x,v)<=1)return v}
+  if(/^(?:mettece|mettece|metteci|mettice)$/.test(x))return 'mettici'
+  return w})}
 /** Nomi abbreviati dei piatti più comuni («carbo», «amatri») → nome intero (solo parole intere, solo per piatti nuovi). */
 const ABBR:[RegExp,string][]=[[/^carbo$/,'carbonara'],[/^amatri(?:cia)?$/,'amatriciana'],[/^matriciana$/,'amatriciana'],[/^parmi(?:gia)?$/,'parmigiana'],[/^tira(?:mi)?$/,'tiramisù'],[/^cotol(?:etta)?$/,'cotoletta'],[/^polpet$/,'polpette'],[/^lasagn$/,'lasagna'],[/^insal$/,'insalata']]
 export const expandAbbr=(n:string)=>n.split(' ').map(w=>{const x=plain(w);for(const [re,full] of ABBR)if(re.test(x))return full;return w}).join(' ')
 
 // ---------- prezzo di un'opzione del Menu a prezzo fisso ----------
 const euroF=(n:number)=>n.toFixed(2).replace('.',',')+' €'
+function spokenPrice(text:string):number|null{const p=plain(text.replace(/(\d)\s*,\s*(\d{1,2})\b/g,'$1.$2'))
+ const num=(w:string)=>/^\d+$/.test(w)?Number(w):(wordNumber(w)??null)
+ const m=p.match(/\b(\d{1,3}|[a-z]+)\s+e\s+(mezzo|\d{1,2}|[a-z]+)(?:\s+(?:euro|centesimi))?\s*$/)??p.match(/\b(\d{1,3}|[a-z]+)\s+e\s+(mezzo|\d{1,2}|[a-z]+)\b/)
+ if(!m)return null;const a=num(m[1]!);if(a===null||!(a>0))return null;if(m[2]==='mezzo')return a+0.5
+ const b=num(m[2]!);if(b===null||b<0||b>99)return null;return Math.round((a+(b>=10?b/100:b/10))*100)/100}
 function formulaPrice(text:string,text0:string,o:RuleInput):RuleResult|null{
- const p=plain(text);if(!/\b(?:cost\w*|mett\w*|port\w*|fai|fallo|falla|a|prezzo|euro)\b/.test(p)||/\b(?:alz\w*|abbass\w*|aument\w*|diminu\w*|scont\w*|di un euro|in piu|in meno)\b|%/.test(p))return null
+ const p=plain(text);
+ // 28/10 sera (audit): «costa 20 vero», «dimmi il prezzo», «mandami il menu col completo a 20», «il cliente dice che»: mai una scrittura
+ if(/\?|-\s*\d/.test(text)||/\b(?:vero|dimmi|quanto|costava|dice|dicono|detto|chiede|chiedono|cliente|clienti)\b/.test(p)||INSERT_V.test(p)&&!/\b(?:metti|mettilo|mettila)\b/.test(p)||/\b(?:mand\w*|invia\w*)\b/.test(p)&&!/\b(?:metti\w*|porta\w*|fai|cambia\w*)\b/.test(p))return null
+ {const all=menusAll(text0,o.menus).filter(m=>m.pricing==='fisso');if(twoMenuCommand(text0,all))return oneAtATime(all)}if(!/\b(?:cost\w*|mett\w*|port\w*|fai|fallo|falla|a|prezzo|euro)\b/.test(p)||/\b(?:alz\w*|abbass\w*|aument\w*|diminu\w*|scont\w*|di un euro|in piu|in meno)\b|%/.test(p))return null
  const fm=p.match(/\b(?:(solo) )?(primo|secondo|completo)\b/);if(!fm)return null
  const ms=menusIn(text0,o.menus).filter(m=>m.pricing==='fisso');if(ms.length!==1)return null
- let nums=[...text.replace(/(\d)\s*,\s*(\d{1,2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(x=>Number(x[0]));if(!nums.length){const w=singlePrice(text)??g9Prices(text,false)[0]??null;if(w!==null)nums=[w]}if(nums.length!==1||!(nums[0]!>0)||nums[0]!>200)return null
+ const sp=spokenPrice(text);let nums=sp!==null?[sp]:[...text.replace(/(\d)\s*,\s*(\d{1,2})\b/g,'$1.$2').matchAll(/\d+(?:\.\d{1,2})?/g)].map(x=>Number(x[0]));if(!nums.length){const w=singlePrice(text)??g9Prices(text,false)[0]??null;if(w!==null)nums=[w]}if(nums.length!==1||!(nums[0]!>0)||nums[0]!>200)return null
  if(o.refs.some(r=>plain(r.name).length>=4&&(' '+p+' ').includes(' '+plain(r.name)+' ')))return null
  const m=ms[0]!,fs=(m.formulas??[]) as {name:string,price:number,id?:string}[],want=fm[2]==='completo'?'completo':'solo '+fm[2],f=fs.find(x=>plain(x.name)===want)??(fm[2]!=='completo'?fs.find(x=>plain(x.name).includes(fm[2]!)):undefined);if(!f||!(f as any).id)return null
  const price=Math.round(nums[0]!*100)/100
@@ -588,6 +695,33 @@ function proposeFrom(info:MenuInfo,parse:InsertParse,clearIds:string[],vocab:str
  if(!lists.length)return{kind:'info',text:'Non ho cambiato nulla. '+out.slice(1).join(' ')}
  out.push(parse.guessed?'Va bene? Rispondi *sì*, oppure riscrivimi i piatti separati da una virgola.':'Va bene? Rispondi *sì* oppure scrivimi cosa correggere.')
  return{kind:'ask',question:out.join('\n\n'),wait:{kind:'propose',menuId:info.menu.id,clearIds,lists}}}
+/** 28/10 sera (audit): la stessa proposta mostrata di nuovo (dopo una risposta che non è sì/no), con una riga davanti. Nessuna scrittura. */
+function reProposal(info:MenuInfo,w:{clearIds:string[]},lists:{secId:string,names:string[]}[],lead:string):RuleResult{
+ const ids=new Set(w.clearIds),out=[lead]
+ if(w.clearIds.length)out.push('Tolgo '+andList(info.items.filter(r=>ids.has(r.id)).map(r=>r.name))+'.')
+ for(const l of lists){const sec=info.secs.find(x=>x.id===l.secId);if(sec)out.push('*'+sec.name+'* del '+mLabel(info.menu.name)+'\n'+l.names.map(n=>'• '+n).join('\n'))}
+ out.push('Rispondi *sì* per scriverli, *no* per lasciare stare, oppure riscrivimeli separati da una virgola.')
+ return{kind:'ask',question:out.join('\n\n'),wait:{kind:'propose',menuId:info.menu.id,clearIds:w.clearIds,lists}}}
+/** «c'è la carbonara (nel menu cena)?», «avete il tiramisù?», «c'è ancora la coppa a pranzo?» → risposta dal menu. null = non è questa domanda. */
+function presenceAnswer(text:string,o:RuleInput):RuleResult|null{
+ const p=plain(text),m=p.match(/^(?:(?:ma|e|allora|scusa|senti|ciao)\s+)*(?:c e|ci sono|avete|c e ancora|ci sono ancora)\s+(?:ancora\s+)?(.+)$/)
+ // 28/10 sera (verifica): solo domande («?» o frase corta), mai annunci («abbiamo finito la coppa», «c'è un errore»)
+ if(!m||CLEAR_V.test(p)||INSERT_V.test(p)||hasDigits(p)||!(/\?\s*$/.test(text)||p.split(' ').length<=6)||/\b(?:finit\w*|esaurit\w*|terminat\w*|nuovo|visto|manca\w*|mett\w*|errore|sbagli\w*|problem\w*|capit\w*|fatto|fai|solo|rimast\w*)\b/.test(p))return null
+ const ms=menusAll(text,o.menus),t=tokens(m[1]!),sk=menuSpans(t,o.menus),said=swNameToks(t.filter((x,i)=>!sk.has(i)&&!['?','sera','pranzo','cena','stasera','oggi','mezzogiorno'].includes(x.w))).map(z=>z.raw).join(' ').replace(/\?+/g,'').trim()
+ const ps=plain(said);if(!ps||ps.split(' ').length>6||COURSES.includes(ps)||o.sections.some(s=>sameSection(s.name,ps))||/\b(?:qualcuno|qualcosa|niente|problem\w*|modo|tempo|posto|menu)\b/.test(ps))return null
+ const scope=o.refs.filter(r=>!ms.length||ms.some(x=>x.name===r.menu)),hits=scope.filter(r=>sameName(r.name,said)||(' '+plain(r.name)+' ').includes(' '+ps+' '))
+ const where=(r:MenuRef)=>'nei *'+(r.section??'')+'* del '+mLabel(r.menu)
+ const inM=ms.length===1?'nel '+mLabel(ms[0]!.name):'nel menu'
+ if(!hits.length){const sc=courseSection(said,o.sections.filter(x=>ms.length!==1||x.menu===ms[0]!.name));return{kind:'info',text:'No, '+inM+' non c’è *'+said+'*.'+(sc?' Se vuoi aggiungerlo scrivimi per esempio «nei '+plain(sc.name).split(' ')[0]+' inserisci '+said.toLowerCase()+'».':'')}}
+ const vis=hits.filter(r=>!r.hidden),av=vis.filter(r=>r.available!==false)
+ if(!vis.length)return{kind:'info',text:'*'+hits[0]!.name+'* c’è, ma è nascosto: i clienti non lo vedono.'}
+ if(!av.length)return{kind:'info',text:'*'+vis[0]!.name+'* c’è '+where(vis[0]!)+', ma è segnato *finito*. Se è tornato scrivimi «'+plain(vis[0]!.name)+' è tornato».'}
+ return{kind:'info',text:'Sì: '+av.slice(0,3).map(r=>'*'+r.name+'* '+where(r)).join('; ')+(av.length>3?'; e altri':'')+'.'}}
+/** Esempio di piatti adatto al sottomenu (mai «lasagna» nei Contorni). */
+export const exampleFor=(sec:string)=>{const k=plain(sec);return /contorn|verdur/.test(k)?'patate al forno, insalata mista':/second/.test(k)?'tagliata, orata al forno':/dolc|dessert/.test(k)?'tiramisù, panna cotta':/antipast/.test(k)?'bruschette, tagliere':/pizz/.test(k)?'margherita, diavola':'lasagna, carbonara'}
+/** 28/10 sera (audit): cortesie e attese dopo «Ora scrivimi i piatti nuovi» (la richiesta resta aperta) e ripensamenti (si spiega «annulla»). */
+const COURTESY=/^(?:(?:ok(?:ay)?|va bene|bene|perfetto|ottimo|grazie(?: mille)?|si|certo|d accordo|aspetta|un attimo|un momento|attimo|tra poco|dopo|adesso|ora|subito|arrivo|ci penso|fammi pensare|ora te li (?:mando|scrivo)|adesso te li (?:mando|scrivo)|te li (?:mando|scrivo))\s*)+$/
+const REGRET=/^(?:no|no no|ho sbagliato|scusa ho sbagliato|non volevo|no non volevo|no aspetta(?: non volevo)?|torna indietro|rimetti (?:tutto )?come prima|come prima|ripristina|errore|sbagliato)$/
 function applyProposal(info:MenuInfo,w:{clearIds:string[]},lists:{secId:string,names:string[]}[],vocab:string[]):RuleResult{
  const b=buildInsert(info,{lists:lists.map(l=>({secId:l.secId,word:info.secs.find(x=>x.id===l.secId)?.name??'',names:l.names})),loose:[]},vocab)
  const old=info.items.filter(r=>w.clearIds.includes(r.id)&&!b.touched.has(r.id)),actions=[...old.map(r=>({kind:'delete',id:r.id,soft:true}) as MenuAction),...b.actions]
@@ -657,12 +791,14 @@ export function ruleReply(r:RuleReport,itemsBefore:MenuRef[],actions:MenuAction[
 /** «stasera a cena metti primi: A e B, secondi C, contorni D» / «nel menu del giorno primi carbonara e pasta e fagioli»: Menu a prezzo
  * fisso DETTO nel messaggio + liste per sottomenu che sono tutte sottomenu di quel Menu, nessun altro comando. null = resta al modello. */
 export function dailyReplaceParse(text:string,menus:RuleMenu[],sections:SectionRef[],refs:MenuRef[],lexicon:Lexicon|null=null):{menu:RuleMenu,lists:{secId:string,names:string[]}[]}|null{
- const p=plain(text);if(STRONG_INSERT.test(p)||OTHER.test(p)||hasDigits(p)||NEG.test(p)||CLEAR_V.test(p)||/\?/.test(text)||QUESTION_W.test(p))return null
+ const p=plain(text);if(STRONG_INSERT.test(p)||OTHER.test(p)||hasDigits(p)||NEG.test(p)||CLEAR_V.test(p)||/\?/.test(text)||QUESTION_W.test(p)||HEDGE.test(p))return null // 28/10 sera: «potrei mettere la tagliata nei secondi…» sostituiva i Secondi
  const ms=menusIn(text,menus);if(ms.length!==1||ms[0]!.pricing!=='fisso')return null
  const m=ms[0]!,secs=sections.filter(s=>s.menu===m.name),ip=parseInsert(text,secs,menus,refs.map(r=>r.name),{lexicon})
  if(!ip.lists.length||ip.loose.length||ip.lists.some(l=>!l.secId||!l.names.length))return null
  // 24/10 (batteria: «cosa c è nei primi a pranzo» → Primi ELIMINATI e piatto «A»): una domanda o un pezzo che non è un piatto non è mai una sostituzione
  if(ip.lists.some(l=>l.names.some(n=>plain(n).length<3||NOT_DISH.test(plain(n)))))return null
+ // 28/10 sera: «i contorni del menu cena sono buoni» non è una sostituzione (nessun nome da cibo)
+ {const vocab=refs.map(r=>r.name);if(ip.lists.some(l=>l.names.some(n=>!foodish(n,vocab)&&!refs.some(r=>sameName(r.name,n)))))return null}
  return{menu:m,lists:ip.lists.map(l=>({secId:l.secId!,names:l.names}))}}
 
 // ---------- sostituzione in una frase (24/10, chat Manuel 18:09 «menu mezzogirno togli lasagna metti rigatoni») ----------
@@ -729,8 +865,10 @@ function swapOuts(x:Tok[],items:MenuRef[]):{said:string,hits:MenuRef[]}[]|null{
  return null}
 /** Risultato della sostituzione (null = non è una sostituzione o non la so leggere: decide il resto del flusso). */
 export function swapTurn(o:RuleInput,forced:Record<string,string>={}):RuleResult|null{
- const raw=fixMealWords(shorthand(o.text.replace(/[🎤]/gu,' '))).trim()
+ const raw=fixMealWords(shorthand(o.text.replace(/[🎤]/gu,' '))).trim().replace(/\b(?:al|a)\s+(?:suo|loro)\s+posto\b/gi,' ').replace(/\s+/g,' ')
  const text=stripMenuPrice(raw,o.menus)||raw,p=plain(text)
+ // 28/10 sera (audit): «… anzi no», due comandi nello stesso messaggio («… e aggiungi nei primi …», «… e nodino con bistecca»): non si indovina
+ if(/\banzi\b|\bvolevo dire\b/.test(p))return null
  if(!/\b(?:togli\w*|toglie\w*|lev[ai]\w*|via|elimin\w*|cancell\w*|rimuov\w*|butta\w*|posto|invece|cambi\w*|sostituisc\w*|scambia\w*|rimpiazz\w*|no)\b/.test(p))return null
  if(NEG.test(p)||/\?\s*$/.test(text)||/\btutt[ieoa]\b/.test(p))return null
  const said=menusIn(raw,o.menus),t0=tokens(text),skip=menuSpans(t0,o.menus),t=t0.filter((x,k)=>!skip.has(k)&&!['sera','pranzo','cena','mezzogiorno','stasera','giorno','x'].includes(x.w))
@@ -750,7 +888,8 @@ export function swapTurn(o:RuleInput,forced:Record<string,string>={}):RuleResult
     for(let j=v-1;j>=1;j--)if(['e','ed',',',';'].includes(inT[j]!.w)){const said=swNameToks(inT.slice(j+1,v)).map(z=>z.raw).join(' ').replace(/' /g,"'");let hit:MenuRef[]=[]
      for(const sc of scopes){hit=sc.filter(r=>!r.hidden&&sameName(r.name,said));if(hit.length)break}
      if(hit.length===1){soldOut.push(hit[0]!.id);inT=inT.slice(0,j);break}}}}
-  if(inT.some(x=>SW_STOP.test(x.w)||SW_OUT.test(x.w)))return null
+  if(inT.some(x=>SW_STOP.test(x.w)||SW_OUT.test(x.w)||SW_IN.test(x.w)||SW_SUB.test(x.w)))return null
+  {const ei=inT.findIndex(x=>x.w==='e'||x.w==='ed');if(ei>=0&&inT.slice(ei+1).some(x=>x.w==='con'||x.w==='in'))return null}
   let outs:{said:string,hits:MenuRef[]}[]|null=null
   for(const sc of scopes){outs=swapOuts(outT,sc);if(outs)break}
   if(!outs)return null
@@ -770,7 +909,7 @@ export function swapTurn(o:RuleInput,forced:Record<string,string>={}):RuleResult
   // 28/10 (frasi nuove 012: «mettimi il pollo arrosto» → «Pollo»): fino a 3 parole senza «e»/virgole è UN piatto, anche se una parola è
   // il nome di un altro piatto del menu.
   const ins=(nt.length<=3&&!nt.some(z=>['e','ed',',',';'].includes(z.w))?[capW(nt.map(z=>z.raw).join(' ').replace(/' /g,"'"))]:splitNames(nt,vocab,{lexicon:o.lexicon??null})).map(n=>n.trim()).filter(Boolean)
-  if(!ins.length||ins.some(n=>NOT_DISH.test(plain(n))||n.split(' ').length>8))return null
+  if(!ins.length||ins.some(n=>NOT_DISH.test(plain(n))||n.split(' ').length>8||!foodish(n,vocab)&&!o.refs.some(r=>sameName(r.name,n))))return null
   pairs.push({out:resolved,in:ins})}
  // tutto nello stesso Menu (mai sostituzioni a cavallo di più Menu in un messaggio)
  const menuName=pairs[0]!.out[0]!.menu;if(pairs.some(pp=>pp.out.some(r=>r.menu!==menuName)))return null
@@ -781,7 +920,8 @@ export function swapTurn(o:RuleInput,forced:Record<string,string>={}):RuleResult
  const lists:InsertParse['lists']=[]
  for(const pp of pairs){const n=pp.in.length,m=pp.out.length
   pp.in.forEach((name,k)=>{const r=pp.out[n===m?k:Math.min(k,m-1)]!,sec=info.secs.find(s=>s.id===r.sectionId);if(!sec)return;const l=lists.find(x=>x.secId===sec.id);if(l)l.names.push(name);else lists.push({secId:sec.id,word:sec.name,names:[name]})})}
- // Y uguale a X («cambia la lasagna con la lasagna»): niente
+ // Y uguale a X («cambia la lasagna con la lasagna»): niente (28/10 sera: prima eliminava e ricreava il piatto, perdendo foto e allergeni)
+ if(pairs.every(pp=>pp.in.length===pp.out.length&&pp.in.every((n,k)=>sameName(n,pp.out[k]!.name))))return{kind:'info',text:'È già così: '+andList(pairs.flatMap(pp=>pp.out.map(r=>'*'+r.name+'*')))+' resta com’è. Non ho cambiato nulla.'}
  const b=buildInsert({...info,items:info.items.filter(r=>!outIds.has(r.id))},{lists,loose:[]},vocab)
  const dels=[...outIds].map(id=>({kind:'delete',id,soft:true}) as MenuAction)
  const outNames=[...outIds].map(id=>o.refs.find(r=>r.id===id)!.name)

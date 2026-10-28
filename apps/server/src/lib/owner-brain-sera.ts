@@ -309,7 +309,8 @@ export function sessionName(said:string,inSec:MenuRef[],vocab:string[]):{name:st
  const acc=new Map(vocab.flatMap(v=>v.split(/\s+/)).filter(w=>plain(w)!==w.toLowerCase()).map(w=>[plain(w),w.toLowerCase()] as const))
  // 28/10 sera (chat di Luisa «tagliolini» → «Fagiolini»): il nome NUOVO resta quello scritto (solo iniziale maiuscola e accenti del
  // locale); i refusi servono solo a ritrovare un piatto che c'è già (dishInSection sopra), mai a rinominare quello detto.
- return{name:capW(base.split(' ').map(w=>acc.get(plain(w))??w).join(' ')),existing:null,price}}
+ const b0=/[a-zà-ù]/.test(base)?base:base.toLowerCase() // 28/10 sera (audit): tutto MAIUSCOLO → forma normale
+ return{name:capW(b0.split(' ').map(w=>acc.get(plain(w))??w).join(' ')),existing:null,price}}
 /** Azioni della sostituzione di un sottomenu (riusa gli esistenti, crea i nuovi — a 0 € nei menu fissi —, ELIMINA gli altri: 22/10 notte).
  *  `noPrice` = piatti nuovi alla carta senza prezzo (la sessione li chiede prima di applicare). */
 export function sectionReplace(secId:string,names:string[],refs:MenuRef[],fixed:boolean,prices:Record<string,number>={}):{actions:MenuAction[],noPrice:string[]}{

@@ -23,7 +23,7 @@ Le modifiche grosse te le faccio confermare prima. Scrivi *cosa sai fare* quando
  ownerMenu:'Il tuo menu digitale, quello che vedono i clienti dal QR: {link}',
  // 28/10: PDF del menu in chat (allegato).
  pdfSent:'Ecco il PDF da stampare: {menu}. Contiene il menu pubblicato in questo momento.',
- pdfWhich:'Quale menu ti mando in PDF?\n{menu}\n\nScrivi per esempio *mandami il menu {esempio}*.',
+ pdfWhich:'Quale menu ti mando in PDF?\n{menu}\n\nRispondi col numero o col nome, per esempio *{esempio}*. Per averli tutti scrivi *tutti*.',
  pdfFailed:'Non riesco a preparare il PDF adesso. Puoi scaricarlo dalla dashboard, oppure contatta l’agenzia.',
  // Richiesta «dashboard» / «link del menu» in qualunque momento.
  // Niente gestione password in chat (19/10): si recupera dalla pagina di accesso o si cambia dalla dashboard.
