@@ -30,3 +30,8 @@ Non toccare clienti reali per QA. Bozze private WhatsApp scadono dopo 10 minuti.
 ## Campagna iniziale
 
 Circa 50 ristoranti esclusivamente fuori Lombardia, priorità menu quotidiani o ogni 2–3 giorni con evidenza. Demo prima della chiamata; prova 30 giorni gratis; condizioni successive da definire. Niente contatti avviati nella ricerca. Non citare agency.
+
+
+## Migrazione clienti — 28 ottobre 2026
+
+Accesso provvisorio rilasciato online v192 dal bundle v191, adapter dashboard aggiunto preservando asset/binding. Prova WhatsApp reale sul solo Manuel PASS e collegamento Victoria ripristinato esattamente; nessun reset o avviso cliente. Contenuti italiani/ordine verificati sui 19 clienti dopo aggiornamento di cinque menu. Numeri mancanti attesi da Manuel; redirect QR ancora OFF e gate originale MenuSmart non installato. Handoff verificabile: docs/sessions/2026-10-28-manuel-migration-access.md. Branch personale codex/manuel-migration-access-1028, main integrato senza sovrascrivere il checkout principale.
